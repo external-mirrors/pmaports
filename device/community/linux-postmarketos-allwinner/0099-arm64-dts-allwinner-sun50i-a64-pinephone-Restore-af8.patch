@@ -1,0 +1,70 @@
+From dea3685a4e57a0448acda580c59c2d0040051118 Mon Sep 17 00:00:00 2001
+From: Arnav Singh <me@arnavion.dev>
+Date: Tue, 11 Feb 2025 18:45:03 -0800
+Subject: [PATCH] arm64: dts: allwinner: sun50i-a64-pinephone: Restore af8133j
+ magnetometer to PinePhone DTSI
+
+This reverts commit b4e858a24dfa8e1cc0b22fdcccf16ebbf13b28a0
+---
+ arch/arm64/boot/dts/allwinner/Makefile        |  1 -
+ .../allwinner/sun50i-a64-pinephone-1.2.dts    |  8 ++++++++
+ .../allwinner/sun50i-a64-pinephone-1.2b.dts   | 19 -------------------
+ 3 files changed, 8 insertions(+), 20 deletions(-)
+ delete mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2b.dts
+
+diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
+index 136ac0ba0caa..2f3575730dce 100644
+--- a/arch/arm64/boot/dts/allwinner/Makefile
++++ b/arch/arm64/boot/dts/allwinner/Makefile
+@@ -14,7 +14,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinebook.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.0.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.1.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.2.dtb
+-dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.2b.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab-early-adopter.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab-dev.dtb
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts
+index 57b651d695af..6972ef02ed8e 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dts
+@@ -110,3 +110,11 @@ &hdmi {
+ &ring_indicator {
+ 	gpios = <&r_pio 0 6 GPIO_ACTIVE_LOW>; /* PL6 */
+ };
++
++&lis3mdl {
++	status = "disabled";
++};
++
++&af8133j {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2b.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2b.dts
+deleted file mode 100644
+index f5ac2e9ca836..000000000000
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2b.dts
++++ /dev/null
+@@ -1,19 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+-// Copyright (C) 2020 Ondrej Jirman <megous@megous.com>
+-
+-/dts-v1/;
+-
+-#include "sun50i-a64-pinephone-1.2.dts"
+-
+-/ {
+-	model = "Pine64 PinePhone (1.2b)";
+-	compatible = "pine64,pinephone-1.2b", "pine64,pinephone", "allwinner,sun50i-a64";
+-};
+-
+-&lis3mdl {
+-	status = "disabled";
+-};
+-
+-&af8133j {
+-	status = "okay";
+-};
+-- 
+2.50.0
+

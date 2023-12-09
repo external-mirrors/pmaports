@@ -4,7 +4,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=6.15.6_git20250710
-pkgrel=1
+pkgrel=2
 _tag="orange-pi-6.15-20250710-2218"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -44,6 +44,7 @@ source="$pkgname-$_tag.tar.gz::https://codeberg.org/megi/linux/archive/$_tag.tar
 	0009-ARM-dts-sun6i-Add-Lark-FreeMe-70.2S-tablet.patch
 	0010-eMMC-workaround.patch
 	0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
+	0099-arm64-dts-allwinner-sun50i-a64-pinephone-Restore-af8.patch
 	"
 builddir="$srcdir/linux"
 
@@ -94,4 +95,5 @@ a58b177a96e19fe1412731c7ffa4be8669727f2ced592e17e1fb1a9fd20304cdfb0b0861ebe37683
 416f27aa8bbf3747fb209c490e4047166f4c753b4ad155172d044a39817c346e806bdd88c22a2b18f76e386e2901bb0d0203bb149663760ea9a3c90b96d60fe2  0009-ARM-dts-sun6i-Add-Lark-FreeMe-70.2S-tablet.patch
 100cc52413fc34f1a78363183e8a2ae07cbe93af6d18386ee93d11fd5b8db7d2b43f22c1bb63bc6f4e8e86645194216463937b70e89fb4c999a0c180560f91dc  0010-eMMC-workaround.patch
 cea41b21579db7df50d0ef49cb5644c83d3a5ce70a1d5d9748b33667844f2915e69280e0bb56a53670d16c69b2bee62baf0283b20a94a3fd448d28c8a9cc715a  0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
+26d99a366f0db367ecf183c81e0ba7f02f403319a8b2b3cc0d15cceefcaac7bacb68dc52cc2c07be8522a337a22c3bfd25e29f3d411d7a822803cb226a34fefd  0099-arm64-dts-allwinner-sun50i-a64-pinephone-Restore-af8.patch
 "
