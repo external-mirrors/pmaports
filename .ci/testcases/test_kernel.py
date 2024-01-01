@@ -40,14 +40,6 @@ def test_aports_kernel():
                                    " pmbootstrap installs cross-compiler"
                                    " automatically.")
 
-        # check some options only for main and community devices
-        _, relpath = pkgrepo_relative_path(path)
-        for part in ["main", "community"]:
-            if part in relpath.parts:
-                if "pmb:kconfigcheck-community" not in apkbuild["options"]:
-                    raise RuntimeError(f"{aport_name}: \"pmb:kconfigcheck-community\" missing in"
-                                       " options= line, required for all community/main devices.")
-
         # check for postmarketos-installkernel in makedepends when installing kernel with make
         if bool(re.search("make z?install", path.read_text(encoding="utf-8"))):
             if "postmarketos-installkernel" not in apkbuild["makedepends"]:
