@@ -1,0 +1,32 @@
+# Maintainer: Arnav Singh <me@arnavion.dev>
+pkgname=hwtop
+pkgver=0.1.0
+pkgrel=0
+_commit='15b43674a7359191c7c0df859369c64dfeb3604f'
+pkgdesc="TUI monitor for CPU usage, thermal and fan sensors, and network usage"
+url="https://github.com/Arnavion/hwtop"
+arch="all !s390x"
+license="AGPL-3.0-only"
+makedepends_host="
+	cargo
+	make
+	"
+options="!check"
+source="$pkgname.tar.gz::https://github.com/Arnavion/hwtop/archive/$_commit.tar.gz"
+builddir="$srcdir/$pkgname-$_commit"
+install="hwtop.post-install"
+
+build() {
+	make
+}
+
+package() {
+	install -D "$builddir/target/release/hwtop" "$pkgdir/usr/bin/hwtop"
+	install -D "$builddir/target/release/sensord" "$pkgdir/usr/bin/sensord"
+	install -D "$builddir/sensord/data/openrc/sensord.init" "$pkgdir/etc/init.d/sensord"
+	install -D "$builddir/sensord/data/sensord.dbus" "$pkgdir/etc/dbus-1/system.d/sensord.conf"
+}
+
+sha512sums="
+cacddc38351badf5697a6b9ac6597280632beca5615d3198ae80f69adebad05773217fb0565d4702d82950c3615e3608f36350c1bcf96d1b62fa5637769d1a15  hwtop.tar.gz
+"
