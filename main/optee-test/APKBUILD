@@ -1,0 +1,69 @@
+# Maintainer: Caleb Connolly <caleb@postmarketos.org>
+pkgname=optee-test
+pkgver=4.4.0
+pkgrel=0
+pkgdesc="OP-TEE test"
+url="https://github.com/OP-TEE/optee_test"
+arch="aarch64"
+license="GPL-2.0 OR BSD-2-Clause"
+depends="python3 openssl optee-client"
+# bsd-compat-headers for sys/queue.h
+makedepends="
+	make
+	bash
+	coreutils
+	cmake
+	openssl-dev
+	py3-cryptography
+	py3-elftools
+	ninja
+	optee-client-dev
+	bsd-compat-headers
+"
+options="!check"
+_commit_optee_os="8568a733313b9a6199ef6222339780f45390bae9"
+source="
+	optee_os-${_commit_optee_os}.tar.gz::https://github.com/calebccff/optee_os/archive/${_commit_optee_os}.tar.gz
+	optee_test-${pkgver}.tar.gz::https://github.com/OP-TEE/optee_test/archive/refs/tags/${pkgver}.tar.gz
+	fix-build.patch
+"
+builddir="$srcdir/"
+
+osdir="$srcdir/optee_os-${_commit_optee_os}"
+testdir="$srcdir/optee_test-${pkgver}"
+
+patch_args="-p1 -d $testdir"
+
+# prepare() {
+# 	ln -s
+# }
+
+build() {
+	unset LDFLAGS
+	# First build optee_os for /some/ platform, it provides some parts which
+	# are needed by optee_test
+	echo "=> Building OP-TEE OS"
+	# OP-TEE can't tell when we're not cross compiling...
+	make -C "$osdir" PLATFORM=qcom-qcm6490 CROSS_COMPILE64= V=1
+	# Now we can build the tests lol
+	echo "=> Building OP-TEE test"
+	cd "$testdir"
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCFG_TEE_CLIENT_LOG_FILE=/var/log/tee/teec.log \
+		-DBUILD_SHARED_LIBS=ON \
+		-DOPTEE_TEST_SDK="$osdir"/out/arm-plat-qcom/export-ta_arm64
+	cmake --build build
+}
+
+package() {
+	cd "$testdir"
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+d49e472e362b667cf99c9d911f50ddc0548f662776f4c91bddcbbef092c67e6b0c21c931344ad7c0a420742a6860a3482a586a457e241716f84b2a1e32c97fcc  optee_os-8568a733313b9a6199ef6222339780f45390bae9.tar.gz
+b8db64afbdb06ecaa78a0a72f8626f5b3d2a6319b403640fe3eb02881bde3e8c262f27a6c8ba15daa9ecc437e9c709d716c10751c9dac06e1ebb115d53814c37  optee_test-4.4.0.tar.gz
+d35ca254a3d287e8d1883d25aadc9603517f65100617c821f64b48e50c003f09d58c692b9757ce64b13c8c5e18661a637772a99569db0e9daf339542596b54a4  fix-build.patch
+"
