@@ -149,7 +149,7 @@ build-x86_64:
 
 build-aarch64:
   extends: .build
-  resource_group: qemu
+  tags: [arm64]
   script:
     - .ci/build-aarch64.sh
 
