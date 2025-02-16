@@ -1,0 +1,108 @@
+# data/meson.build:
+# syscall_filter = [
+#        '@basic-io',
+#        '@file-system',
+#        '@io-event',
+#        '@ipc',
+#        '@network-io',
+#        '@process',
+#        '@sync',
+#        '@signal',  # for g_local_file_monitor_new
+#        '@timer',   # for usbi_create_timer
+#        '@chown',   # for sqlite3Step
+#        'ioctl',
+#        'uname',
+#        'fadvise64',
+#        'sysinfo',  # for sysconf
+#        'madvise',  # for mtrim
+#        'mremap',   # for g_realloc
+#        'splice', 'vmsplice', 'copy_file_range', # for g_file_copy
+#      ]
+# @raw-io # for allow_flash_rom
+# 
+# rw_directories:
+#   '-/boot/efi', '-/efi/EFI', '-/boot/EFI', '-/boot/grub' # for uefi_capsule
+#   /etc/fwupd # sysconfdir/fwupd
+#
+# device_allows = [
+#   'block-sd',
+#   'char-aux',
+#   'char-cpu/*',
+#   'char-drm',
+#   'char-gpiochip',
+#   'char-hidraw',
+#   'char-usb',
+#   'char-usb_device',
+# ]
+# char-mem # flashrom
+# char-nvme # plugin_nvme
+# char-tpm # plugin_tpm
+# char-mei # plugin_intel_me
+# block-blkext # plugin_uefi_capsule
+# 
+
+# dynamic options not used here:
+# - RestrictAddressFamilies
+# dynamic options used here:
+# - ReadWritePaths=
+# - DeviceAllow= .. rw
+# - Environment="FWUPD_SYSCALL_FILTER=systemd
+# - SystemCallErrorNumber=EPERM
+# - SystemCallFilter=@syscall_filter@
+
+[Unit]
+Description=Firmware update daemon
+Documentation=https://fwupd.org/
+Wants=modprobe@sd_mod.service
+After=modprobe@sd_mod.service dbus.service
+Before=display-manager.service
+ConditionVirtualization=!container
+
+[Service]
+Type=dbus
+TimeoutSec=180
+# disabling RUNTIME_DIRECTORY will use FU_PATH_KIND_CACHEDIR_PKG
+# src/fu-engine-helper.c
+#RuntimeDirectory=@motd_dir@
+#RuntimeDirectoryPreserve=yes
+BusName=org.freedesktop.fwupd
+#ExecStart=@libexecdir@/fwupd/fwupd
+ExecStart=/usr/libexec/fwupd/fwupd
+KeyringMode=private
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=no
+PrivateDevices=no
+PrivateTmp=true
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectProc=invisible
+ProtectSystem=full
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+SystemCallArchitectures=native
+Environment="GLIBC_TUNABLES=glibc.cpu.hwcaps=SHSTK"
+# @dynamic_options@
+ReadWritePaths=-/boot/efi -/efi/EFI -/boot/EFI -/boot/grub /etc/fwupd
+DeviceAllow=block-sd rw
+DeviceAllow=char-aux rw
+DeviceAllow=char-cpu/* rw
+DeviceAllow=char-drm rw
+DeviceAllow=char-gpiochip rw
+DeviceAllow=char-hidraw rw
+DeviceAllow=char-usb rw
+DeviceAllow=char-usb_device rw
+DeviceAllow=char-mem rw
+DeviceAllow=char-nvme rw
+DeviceAllow=char-tpm rw
+DeviceAllow=char-mei rw
+DeviceAllow=block-blkext rw
+Environment="FWUPD_SYSCALL_FILTER=systemd
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@basic-io @file-system @io-event @ipc @network-io @process @sync @signal @timer @chown ioctl uname fadivse64 sysinfo madvise mremap splice vmsplice copy_file_range @raw-io
