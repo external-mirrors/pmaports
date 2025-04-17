@@ -27,19 +27,6 @@ workflow:
     # Run scheduled pipeline for autoupdate or manually triggered pipeline
     - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
 
-# device documentation
-wiki:
-  stage: lint
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_REF_PROTECTED == "false"
-      changes:
-        - .ci/**/*
-        - .gitlab-ci.yml
-        - device/*/device-*/*
-  script:
-    - .ci/lib/gitlab_prepare_ci.sh
-    - .ci/wiki.sh
-
 # testcases linting
 ruff:
   stage: lint
