@@ -2,7 +2,7 @@
 
 pkgname=gnome-shell-mobile
 pkgver=48.0
-pkgrel=1
+pkgrel=2
 pkgdesc="GNOME shell"
 url="https://wiki.gnome.org/Projects/GnomeShell"
 # gjs / riscv64: mutter-mobile
@@ -63,7 +63,7 @@ checkdepends="
 	mesa-dri-gallium
 	"
 	# gdm is also needed but introduces circular dep
-provides="gnome-shell=$pkgver-r$pkgrel"
+depends="$depends !gnome-shell"
 subpackages="
 	$pkgname-dbg
 	$pkgname-doc
@@ -100,9 +100,8 @@ check() {
 }
 
 extensions_app() {
-	provides="gnome-extensions-app=$pkgver-r$pkgrel"
 	pkgdesc="Manage GNOME Shell extensions"
-	depends="gnome-shell-mobile libadwaita"
+	depends="gnome-shell-mobile libadwaita !gnome-extensions-app"
 	replaces="gnome-shell-mobile"
 
 	amove usr/bin/gnome-extensions-app
@@ -114,8 +113,7 @@ extensions_app() {
 
 schemas() {
 	pkgdesc="GNOME Shell gsetting schemas"
-	depends=""
-	provides="gnome-shell-schemas=$pkgver-r$pkgrel"
+	depends="!gnome-shell-schemas"
 
 	amove usr/share/glib-2.0/schemas
 	amove usr/share/gnome-control-center/keybindings
@@ -123,7 +121,7 @@ schemas() {
 
 lang() {
 	default_lang
-	provides="gnome-shell-lang=$pkgver-r$pkgrel"
+	depends="$depends !gnome-shell-lang"
 }
 
 package() {
@@ -131,6 +129,11 @@ package() {
 
 	# owned by postmarketos-hidden-desktop-entries
 	rm $pkgdir/usr/share/applications/org.gnome.Extensions.desktop
+}
+
+doc() {
+	default_doc
+	depends="$depends !gnome-shell-doc"
 }
 
 sha512sums="

@@ -3,14 +3,13 @@
 pkgname=gnome-settings-daemon-mobile
 pkgver=99948.0
 _pkgver=48.0
-pkgrel=0
+pkgrel=1
 pkgdesc="GNOME settings daemon"
 url="https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile"
 arch="all"
 options="!check" # tests fail on builders
 license="GPL-2.0-only AND LGPL-2.1-only"
 depends="pulseaudio"
-provides="gnome-settings-daemon=$pkgver-r$pkgrel"
 depends_dev="
 	alsa-lib-dev
 	colord-dev
@@ -69,18 +68,18 @@ build() {
 }
 
 dev() {
-	provides="gnome-settings-daemon-dev=$pkgver-r$pkgrel"
+	depends="$depends !gnome-settings-daemon-dev"
 	default_dev
 }
 
 systemd() {
-	provides="gnome-settings-daemon-systemd=$pkgver-r$pkgrel"
 	default_systemd
+	depends="$depends !gnome-settings-daemon-systemd"
 }
 
 lang() {
-	provides="gnome-settings-daemon-lang=$pkgver-r$pkgrel"
 	default_lang
+	depends="$depends !gnome-settings-daemon-lang"
 }
 
 check() {
@@ -88,6 +87,7 @@ check() {
 }
 
 package() {
+	depends="$depends !gnome-settings-daemon"
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
