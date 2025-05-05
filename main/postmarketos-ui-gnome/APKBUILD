@@ -2,7 +2,7 @@
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=postmarketos-ui-gnome
 pkgver=3
-pkgrel=10
+pkgrel=11
 pkgdesc="(Wayland) Gnome Shell"
 url="https://gnome.org/"
 # armhf blocked by gnome-shell -> gjs -> mozjs102
@@ -37,7 +37,7 @@ package() {
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="gdm-openrc"
+	depends="gdm-openrc openrc"
 
 	mkdir -p "$subpkgdir"
 }

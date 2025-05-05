@@ -1,6 +1,6 @@
 pkgname=postmarketos-base
 pkgver=38
-pkgrel=2
+pkgrel=3
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -126,7 +126,7 @@ nftables() {
 
 nftables_openrc() {
 	install_if="$pkgname-openrc=$pkgver-r$pkgrel nftables"
-	depends="nftables-openrc"
+	depends="nftables-openrc openrc"
 	install="$subpkgname.post-install"
 
 	mkdir -p "$subpkgdir"
@@ -144,6 +144,7 @@ openrc() {
 	depends="
 		eudev-openrc
 		logbookd-openrc
+		openrc
 		openssh-server-common-openrc
 		udev-init-scripts-openrc
 		zram-init-openrc
