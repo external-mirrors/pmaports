@@ -1,17 +1,16 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=breeze
-pkgver=99999_git20250404
+pkgver=99999_git20250407
 pkgrel=0
-_commit="fc2659099a7284cd7eaadded7772d0c029efa2b3"
+_commit="b3f25a3bc6c325e4a6e597bfa42421785672cdd6"
 pkgdesc="Artwork, styles and assets for the Breeze visual style for the Plasma Desktop"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
+depends="$pkgname-cursors=$pkgver-r$pkgrel"
 depends_dev="
 	frameworkintegration-dev
 	frameworkintegration5-dev
@@ -47,9 +46,13 @@ case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
+subpackages="
+	$pkgname-dev
+	$pkgname-lang
+	$pkgname-cursors::noarch
+	"
 _repo_url="https://invent.kde.org/plasma/breeze.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-06/breeze-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/breeze-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/breeze-$_commit"
@@ -69,6 +72,14 @@ check() {
 package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
+
+cursors() {
+	pkgdesc="$pkgdesc (cursors)"
+	depends=""
+	amove usr/share/icons/Breeze_Light
+	amove usr/share/icons/breeze_cursors
+}
+
 sha512sums="
-d764fd92813dca8c2efa07d64bd44a866db76c6c7f049cf0d1505ee0c88129908e35c6998c9ba64ca497a8bee9acdf525edebb7139cb145e53809355bea07aad  breeze-fc2659099a7284cd7eaadded7772d0c029efa2b3.tar.xz
+e80ebbbd4bcb59f4c079dccac3dab66649f3ebbbb84d69c853faaab56374548bf994936fa7ef433fe61bee791161daceaffd0e0f5848a0b629af9cd8e1b3cc30  breeze-b3f25a3bc6c325e4a6e597bfa42421785672cdd6.tar.xz
 "
