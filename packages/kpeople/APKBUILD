@@ -1,14 +1,13 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpeople
-pkgver=99999_git20250324
+pkgver=99999_git20250504
 pkgrel=0
-_commit="1a62aa2a679592fa2eaaa2a75e55cf87af705808"
+_commit="540bb173727e36d9ca96994123e877617bbaf14a"
 pkgdesc="A library that provides access to all contacts and the people who hold them"
-arch="all !armhf" # armhf blocked by qt6-qtdeclarative
+# arhmf blocked by qt6-qtdeclarative -> ki18n
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-or-later"
 depends="qt6-qtbase-sqlite"
@@ -24,24 +23,29 @@ depends_dev="
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qttools-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kpeople.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kpeople-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kpeople-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 
 options="!check"
 builddir="$srcdir/kpeople-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -51,8 +55,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-2f51ae3a0e2e6cc9bf71548eadd0ffba355255a347e2004212565fbc86267a1226e4d3734b9fddf8eccfc1a44b071dd1727809b72fe7f9a3b146a6c44234af18  kpeople-1a62aa2a679592fa2eaaa2a75e55cf87af705808.tar.xz
+916aec93da8b928f6532ce74da938f0227a358b68be3b403ffb149a707c3b9f128eae00cbe5e37c831b5f9999ed7da2354e99937ab447301d0728ca3102ae932  kpeople-540bb173727e36d9ca96994123e877617bbaf14a.tar.xz
 "

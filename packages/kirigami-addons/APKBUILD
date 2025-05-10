@@ -2,12 +2,12 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kirigami-addons
-pkgver=99999_git20250407
+pkgver=99999_git20250506
 pkgrel=0
-_commit="c3e8480500e4c1dc5262285a8db23160a19b7ed4"
+_commit="27b76ac914fe4cc82691ee850c3f31c6fc1d47c4"
 pkgdesc="Add-ons for the Kirigami framework"
 url="https://invent.kde.org/libraries/kirigami-addons"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 license="LGPL-2.0-or-later AND GPL-2.0-or-later"
 depends="
@@ -26,13 +26,13 @@ makedepends="
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/libraries/kirigami-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kirigami-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kirigami-addons-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kirigami-addons-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-e96c03cedf496ec1599003b7e7a42fff731d7c046f1f9fc6ce685a4673bc20a73cdd16deab7c666b2aedfffb85c5bd030ed8e4cea11d3b9d79efd1f7b30b2ba7  kirigami-addons-c3e8480500e4c1dc5262285a8db23160a19b7ed4.tar.xz
+9ba61dd82f1a283f4d8e9c4a3a63c209a44e4711c78bec4c8aa039bccb8aa8d4ad505a9aabd7b3584da6f4f297fc2015ccae94249e30e5479d2c6549ea3f25b9  kirigami-addons-27b76ac914fe4cc82691ee850c3f31c6fc1d47c4.tar.xz
 "

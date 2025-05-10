@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcoreaddons
-pkgver=99999_git20250407
+pkgver=99999_git20250506
 pkgrel=0
-_commit="a387c9bdb07dd1dc00518c0229eabc29a4a506aa"
+_commit="513a4f694011602b97640e550b4e324ec11a5709"
 pkgdesc="Addons to QtCore"
-arch="all !armhf" # armhf blocked by extra-cmake-modules
+arch="all"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
 depends_dev="qt6-qtbase-dev"
@@ -17,25 +15,31 @@ makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	graphviz
+	kde-qdoc-common
+	qt6-qttools
 	qt6-qttools-dev
 	samurai
 	shared-mime-info
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcoreaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kcoreaddons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kcoreaddons-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang kde-default-icon-theme:icons:noarch"
 
 options="!check"
 builddir="$srcdir/kcoreaddons-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -50,6 +54,8 @@ check() {
 }
 
 package() {
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 	DESTDIR="$pkgdir" cmake --install build
 }
 
@@ -62,5 +68,5 @@ icons() {
 }
 
 sha512sums="
-9fbce5e787d5a10d44c30af3b83d78df3e612d9392696f130cf04121e0cfb886db47dedf5fa76b4c9dd72a912e85db7a7763b5ad86d4013758edc5975591ea17  kcoreaddons-a387c9bdb07dd1dc00518c0229eabc29a4a506aa.tar.xz
+71b1242d1d1cc659763f96174d18f5c65d518d4b9c5c34f0f9b2bcd19887ce18d287d7c527b18735ee81c2a180efd4f8269324d0bed3a10f5f56fcbddbd93cbc  kcoreaddons-513a4f694011602b97640e550b4e324ec11a5709.tar.xz
 "

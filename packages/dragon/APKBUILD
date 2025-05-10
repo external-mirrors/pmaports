@@ -1,15 +1,13 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=dragon
-pkgver=99999_git20250327
+pkgver=99999_git20250504
 pkgrel=0
-_commit="282c933882e9596369d444befb4d09cb0443172f"
+_commit="f43caba2703398618926d5c9fbcb20d959a0ba0a"
 pkgdesc="A multimedia player where the focus is on simplicity, instead of features"
 url="https://kde.org/applications/multimedia/org.kde.dragonplayer"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 license="GPL-2.0-only OR GPL-3.0-only"
 depends="phonon-backend-vlc"
@@ -23,6 +21,7 @@ makedepends="
 	kdoctools-dev
 	ki18n-dev
 	kio-dev
+	kirigami-dev
 	kjobwidgets-dev
 	knotifications-dev
 	kparts-dev
@@ -35,15 +34,15 @@ makedepends="
 	solid-dev
 	"
 _repo_url="https://invent.kde.org/multimedia/dragon.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/dragon-$_commit.tar.xz"
-subpackages="$pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/dragon-$_commit.tar.xz"
+subpackages="$pkgname-lang"
 options="!check" # No tests
 
 options="!check"
 builddir="$srcdir/dragon-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -59,5 +58,5 @@ package() {
 }
 
 sha512sums="
-2742e3837c704b68fcb113c726b24d891b385a0c1320251f7eb7caad67530d1313db379ea895251970a90bdd367e423df7edb901ce97fdc91458fbf8f7711625  dragon-282c933882e9596369d444befb4d09cb0443172f.tar.xz
+0d3895a049c01cb559f6ee62f1a0e47535639ad019f0af7302ba9480cb8b499fe04a4ef9490da6c958bc6e7b945a6e7ff4eab9149639425f62e15fd5d0657ca7  dragon-f43caba2703398618926d5c9fbcb20d959a0ba0a.tar.xz
 "

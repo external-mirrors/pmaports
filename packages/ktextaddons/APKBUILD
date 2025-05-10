@@ -1,12 +1,9 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=ktextaddons
-pkgver=99999_git20250407
+pkgver=99999_git20250506
 pkgrel=0
-_commit="533bafe5e29a4b95fef61ace6ac6598976285615"
+_commit="0e023b4e24efc1b3a37eaf2613b7c6dbed94489a"
 pkgdesc="Various text handling addons"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -31,19 +28,19 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/libraries/ktextaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/ktextaddons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/ktextaddons-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/ktextaddons-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DBUILD_DESIGNERPLUGIN=ON \
-		-DBUILD_QCH=OFF # Currently broken
+		-DBUILD_QCH=ON
 	cmake --build build
 }
 
@@ -68,5 +65,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-4e85ddd324ca3eb27bb2c049e72efdaca1c19178cd39a5a1d2b63a9f645f7a06973f0f70521005bbc3a38574573ceb7f50f24615615519be350cb78316e007c6  ktextaddons-533bafe5e29a4b95fef61ace6ac6598976285615.tar.xz
+b58021480e4b55d26beb1cedd7f2c7bd47b0988814078ac7b2f1720da1db4226ced67f1d4940f8f172f168d01c0021fd784c87d02dab13391e3862a64d975c5c  ktextaddons-0e023b4e24efc1b3a37eaf2613b7c6dbed94489a.tar.xz
 "

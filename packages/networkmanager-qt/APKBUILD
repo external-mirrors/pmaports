@@ -1,14 +1,11 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=networkmanager-qt
-pkgver=99999_git20250323
+pkgver=99999_git20250504
 pkgrel=0
-_commit="14d13fa19291d5a2f5b2f8aa8dc0a473a5ff9517"
+_commit="1433155828c8594bec2647beb6071237f8ae6638"
 pkgdesc="Qt wrapper for NetworkManager API"
-# armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only OR LGPL-3.0-only"
@@ -17,23 +14,28 @@ depends_dev="networkmanager-dev"
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qttools-dev
 	samurai
 	"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/networkmanager-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/networkmanager-qt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/networkmanager-qt-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/networkmanager-qt-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -43,8 +45,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-c1714885d18f7679403f5607453353a35433fd61bd6e7a84029e2edc4fe551305819b3ccc98dca93f9894777cc4dc4ca2119a8b17f0c45ff87fa1f52b6f28bfe  networkmanager-qt-14d13fa19291d5a2f5b2f8aa8dc0a473a5ff9517.tar.xz
+108ad6fdf049a57fac833f7988ed54f2de8c1ec25581d5b38dbf6b6ad4d27a45968c045ed251f46c47ea9fdce320dd5db8f8c421b725b1517aea81626fa82877  networkmanager-qt-1433155828c8594bec2647beb6071237f8ae6638.tar.xz
 "

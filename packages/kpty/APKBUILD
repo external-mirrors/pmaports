@@ -1,14 +1,13 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpty
-pkgver=99999_git20250323
+pkgver=99999_git20250505
 pkgrel=0
-_commit="e8468144fea6bc2cc7905cd026b30902ee15299c"
+_commit="bc05c82cdb0c345f7b076007a4c459bd7a2dfa58"
 pkgdesc="Pty abstraction"
-arch="all !armhf" # armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-or-later"
 depends_dev="
@@ -20,11 +19,12 @@ depends_dev="
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qttools-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kpty.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kpty-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kpty-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="!check" # The one test it has fails: "Can't open a pseudo teletype"
 
@@ -32,12 +32,16 @@ options="!check"
 builddir="$srcdir/kpty-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -46,8 +50,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-f7d777c4bf38aa37aa02c7f7c5def8ff541cc4ab787335264c81d2c16c0f718c706417088940ad5e62793c7f235e202901fd71a272c238808d7f83bbfe05864b  kpty-e8468144fea6bc2cc7905cd026b30902ee15299c.tar.xz
+960259d2120cfe3b770fad3c7ad02a50dcf7ec80da07615c9a4ddb6473a96494f63301cf057a6f91ce46ba4d0cf2d19bab04c27715e21e6c2a499242f64ffe33  kpty-bc05c82cdb0c345f7b076007a4c459bd7a2dfa58.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpublictransport
-pkgver=99999_git20250407
+pkgver=99999_git20250504
 pkgrel=0
-_commit="8b93a4922aa5d4e8ea6c15ef7a84c2a298312f9a"
+_commit="9dba8d2a27a61c83f08444bba285888d18de97a0"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://invent.kde.org/libraries/kpublictransport"
@@ -12,6 +12,7 @@ pkgdesc="Library to assist with accessing public transport timetables and other 
 license="BSD-3-Clause AND LGPL-2.0-or-later AND MIT"
 depends_dev="
 	ki18n-dev
+	kirigami-addons-dev
 	networkmanager-qt-dev
 	protobuf-dev
 	qt6-qt5compat-dev
@@ -25,7 +26,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/libraries/kpublictransport.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kpublictransport-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kpublictransport-$_commit.tar.xz"
 options="!check" # Broken for now
 subpackages="$pkgname-dev"
 
@@ -49,5 +50,5 @@ package() {
 }
 
 sha512sums="
-7f37da53f48ce0123399360e3138f76c0ab570403f0f65399733af93de759d52b5d2606c7f9c3121d05060c4259601d13462782457ad3e0c98a879912f9ed07e  kpublictransport-8b93a4922aa5d4e8ea6c15ef7a84c2a298312f9a.tar.xz
+c480838c6915f730fd79ebd5b9ba495c74a78a25ab6139319742a2cf494a2a091cb316e613df3d1ccd29be9e85dc3c2be0185e77c2bb2a00520435d228cee2ae  kpublictransport-9dba8d2a27a61c83f08444bba285888d18de97a0.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ki18n
-pkgver=99999_git20250330
+pkgver=99999_git20250504
 pkgrel=0
-_commit="b8c4b6a2f05fa46b8427aed862de1cfaf6f481f0"
+_commit="cdd1876c5d8d49d25758a0e3f2399c4b461fa7f4"
 pkgdesc="Advanced internationalization framework"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -18,25 +18,30 @@ makedepends="$depends_dev
 	extra-cmake-modules
 	doxygen
 	graphviz
+	kde-qdoc-common
 	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ki18n.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/ki18n-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/ki18n-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/ki18n-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -46,8 +51,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-5d8a8c2959734cbb9a94960fae0821b63785812beb6c889a1d99488890d14aad71f660f06a15c878b11ab812bc30e74ba1eb2c76e5e9a922fbef8b598a9a7b2f  ki18n-b8c4b6a2f05fa46b8427aed862de1cfaf6f481f0.tar.xz
+3feca1a4757b7a584642b20706140fb29f917736648a70886963b9d5c01cfcd8bb0005857b968eabbee7e98958dc695dcb162d23c5c78a1b918dfc580052e827  ki18n-cdd1876c5d8d49d25758a0e3f2399c4b461fa7f4.tar.xz
 "

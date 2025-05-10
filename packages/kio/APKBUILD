@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kio
-pkgver=99999_git20250407
+pkgver=99999_git20250506
 pkgrel=0
-_commit="f936a2dab0db1661fb42342be03a524b4b4d81fa"
+_commit="9b64ad0af4fc97b105dac62f232d5fd092983774"
 pkgdesc="Resource and network access abstraction"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only AND LGPL-2.1-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
@@ -37,6 +35,7 @@ depends_dev="
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	kdoctools-dev
 	libxml2-dev
 	libxslt-dev
@@ -45,20 +44,29 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kio.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kio-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-dbg $pkgname-doc $pkgname-lang $pkgname-kwallet"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kio-$_commit.tar.xz"
+subpackages="
+	$pkgname-dev
+	$pkgname-dbg
+	$pkgname-lang
+	$pkgname-kwallet
+	"
 options="!check" # Fails due to requiring physical devices not normally available and test 14 hangs
 
 options="!check"
 builddir="$srcdir/kio-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -67,6 +75,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 kwallet() {
@@ -76,5 +86,5 @@ kwallet() {
 }
 
 sha512sums="
-f248787ab89032105a8acd52514943f46a1b289a89a690a34b40b45780cb12e4af9347b6a32c2496f1ea9c7ad90e3ba8469f84e75faf68b4e872cf6ec5b966b4  kio-f936a2dab0db1661fb42342be03a524b4b4d81fa.tar.xz
+6a57e1a78d4583359b60626ab9b8e396605a3c56c923bd062195ffa2657aa5e1e51f8d208ac6867ea90e5acf9d86ba5520262ec3af41adba217ef7f9a7f4d114  kio-9b64ad0af4fc97b105dac62f232d5fd092983774.tar.xz
 "

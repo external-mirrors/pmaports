@@ -1,15 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this apkbuild by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kguiaddons
-pkgver=99999_git20250402
+pkgver=99999_git20250504
 pkgrel=0
-_commit="cf6ba6ba4614f3060aa9ebeb279e580121ad7d66"
+_commit="1a87d7881b74b7d9b95db30f47dcf6749743d2c3"
 pkgdesc="Addons to QtGui"
-# armhf blocked by extra-cmake-modules
-arch="all !armhf"
+arch="all"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only OR LGPL-3.0-only"
 depends_dev="
@@ -22,23 +19,28 @@ makedepends="$depends_dev
 	extra-cmake-modules
 	doxygen
 	graphviz
+	kde-qdoc-common
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kguiaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kguiaddons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kguiaddons-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-bin"
 
 options="!check"
 builddir="$srcdir/kguiaddons-$_commit"
 
 build() {
+	export KDE_DOCS=/usr/share/kde/documentation
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -47,6 +49,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 bin() {
@@ -55,5 +59,5 @@ bin() {
 }
 
 sha512sums="
-31841c6a5d6303bf621d485f12ca14fc19c9f21b5d6f9590cd92b71f8ecba056337c6a35c935053d284dd308f05a137b329625d417c9811da834a7ee6eb4d9d2  kguiaddons-cf6ba6ba4614f3060aa9ebeb279e580121ad7d66.tar.xz
+49297a695b1d17dea790c0eec475aa6e7232c8feac61b7a92407d8689206f8f68f1e4ab81393ee4821f63ef944ef7844e1ffe5629baa4a7866264ee039cf22c8  kguiaddons-1a87d7881b74b7d9b95db30f47dcf6749743d2c3.tar.xz
 "

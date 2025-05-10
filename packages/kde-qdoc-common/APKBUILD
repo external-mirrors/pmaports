@@ -1,0 +1,34 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=kde-qdoc-common
+pkgver=99999_git20250505
+pkgrel=0
+_commit="72bc47a0d5eda4193bc905a082aab97ebd41e055"
+pkgdesc="Common files for KDE's API documentation (using QDoc)"
+arch="noarch"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends="
+	doxygen
+	graphviz
+	qt6-qttools
+	"
+makedepends="
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/sdk/kde-qdoc-common.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/kde-qdoc-common-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/kde-qdoc-common-$_commit"
+
+package() {
+	mkdir -p "$pkgdir"/usr/share/kde/documentation
+	cp -r * "$pkgdir"/usr/share/kde/documentation/
+}
+
+sha512sums="
+eef262435c48f2d993e9d0def1963d11af34fd912644f1a0f0c322d2c181f3ec1af1ed48381805eacb344d0fec5251f220ee63a64a0ad456f062b8f6b053c7c8  kde-qdoc-common-72bc47a0d5eda4193bc905a082aab97ebd41e055.tar.xz
+"

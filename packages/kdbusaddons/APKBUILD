@@ -2,18 +2,18 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdbusaddons
-pkgver=99999_git20250323
+pkgver=99999_git20250503
 pkgrel=0
-_commit="288a9441ba653c0519cce2b722daa9f5334e4d32"
+_commit="ba8c48a604f09c7410f3ed41baf09d0430986f49"
 pkgdesc="Addons to QtDBus"
-# armhf blocked by extra-cmake-modules
-arch="all !armhf"
+arch="all"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only OR LGPL-3.0-only"
 makedepends="
 	doxygen
 	extra-cmake-modules
 	graphviz
+	kde-qdoc-common
 	qt6-qtbase-private-dev
 	qt6-qttools-dev
 	shared-mime-info
@@ -21,19 +21,23 @@ makedepends="
 	"
 checkdepends="dbus"
 _repo_url="https://invent.kde.org/frameworks/kdbusaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kdbusaddons-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kdbusaddons-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kdbusaddons-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -42,8 +46,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-b7e3d6d109621059a10ee3441a1185dad17ffdb6f65e22b20b1e29c8e83b35ff7730206b7691111b45306da04f4e855310dbe5673db283df829a86c072876a69  kdbusaddons-288a9441ba653c0519cce2b722daa9f5334e4d32.tar.xz
+c547b85b03c1c1ca173788fef5f383e0299f190c8b2346c5d47fff7c51682594bb33cdda2d2aced72677a93b4504fdd940e2468bd0ce7edfc201b98b219ab8cf  kdbusaddons-ba8c48a604f09c7410f3ed41baf09d0430986f49.tar.xz
 "

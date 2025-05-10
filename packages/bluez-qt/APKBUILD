@@ -2,10 +2,11 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=bluez-qt
-pkgver=99999_git20250324
+pkgver=99999_git20250505
 pkgrel=0
-_commit="83ba1bf5ee4b457dbde4250da46fbfa8f5e49a13"
-arch="all !armhf" # armhf blocked by qt6-qtdeclarative
+_commit="a7bd1d2c8634723d63ba5d9265bf6cec2100966e"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
 pkgdesc="Qt wrapper for Bluez 5 DBus API"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-or-later"
@@ -17,25 +18,30 @@ makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	graphviz
+	kde-qdoc-common
 	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/bluez-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/bluez-qt-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/bluez-qt-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 options="!check" # Multiple tests either hang or fail completely
 
 options="!check"
 builddir="$srcdir/bluez-qt-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -44,8 +50,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-5ef25b84c03b92099ede0e3595cb2905571e2fd2a4165ce3e86f533cf571d65364b37b534cacde75fe556dd82cd3efcfd64e783b00b054eda5b460bd02618eed  bluez-qt-83ba1bf5ee4b457dbde4250da46fbfa8f5e49a13.tar.xz
+e17ed4a90cb470c2adb198cbde654ba93bc6148d8a87c9627d53413b661b122f3b689cbe98da93899cd8e8e85d85f95089349eb884143dc53c500f4fd412a1df  bluez-qt-a7bd1d2c8634723d63ba5d9265bf6cec2100966e.tar.xz
 "

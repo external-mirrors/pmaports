@@ -1,14 +1,12 @@
-# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
-
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcolorscheme
-pkgver=99999_git20250323
+pkgver=99999_git20250504
 pkgrel=0
-_commit="9019dacc6d17754abdf098eca501172ff7fc20ec"
+_commit="2ee42596148edac6c56a2d8348e0f42b1e184b24"
 pkgdesc="Classes to read and interact with KColorScheme"
-arch="all !armhf" # armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later"
 makedepends="
@@ -16,6 +14,7 @@ makedepends="
 	extra-cmake-modules
 	graphviz
 	kconfig-dev
+	kde-qdoc-common
 	kguiaddons-dev
 	ki18n-dev
 	qt6-qtbase-dev
@@ -23,19 +22,23 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kcolorscheme.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kcolorscheme-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kcolorscheme-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kcolorscheme-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -44,7 +47,9 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-b375c4b1924161dbc5ca346f914131f2fb965902f3b91b46adf809afaa349a1a7eaa099ba0989a3410d5066f6e9e85b6c38b512b64edb9dc8df846c7f3227126  kcolorscheme-9019dacc6d17754abdf098eca501172ff7fc20ec.tar.xz
+7ab683d6a08ff6fa462fa11234ac14a2bd7627b93bfabf8743d2d79ac2363e3a141868f1e4c981436a67820f26508e657da57a31bd1fe63e28080c66ac024b6f  kcolorscheme-2ee42596148edac6c56a2d8348e0f42b1e184b24.tar.xz
 "

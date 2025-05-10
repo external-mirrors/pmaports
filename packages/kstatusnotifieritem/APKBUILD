@@ -1,39 +1,42 @@
-# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
-
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kstatusnotifieritem
-pkgver=99999_git20250406
+pkgver=99999_git20250505
 pkgrel=0
-_commit="354fda058b3f1d7a067709bbd5c615ea5d3253ba"
+_commit="591acbf5fee8b844b92c684fb47c616b00004d55"
 pkgdesc="Implementation of Status Notifier Items"
-arch="all !armhf" # armhf blocked by extra-cmake-modules
+arch="all"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later"
 makedepends="
 	doxygen
 	extra-cmake-modules
 	graphviz
+	kde-qdoc-common
 	kwindowsystem-dev
 	qt6-qtbase-dev
 	qt6-qttools-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kstatusnotifieritem.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kstatusnotifieritem-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kstatusnotifieritem-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kstatusnotifieritem-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -42,7 +45,9 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-a95a81a50111d7f87c2bcd49e75a6010aad8d0ac05fc4de17f61e4136e6fa3a01b96d4d8bf4d776c7e36cf22a7b7eaa756e5199c01ec9e6b0dbaf7985c98a54b  kstatusnotifieritem-354fda058b3f1d7a067709bbd5c615ea5d3253ba.tar.xz
+7f65dff3395ff830436d44875ad479b271783440c23d0efde8102bd2f82cf5372d8b99ce47334ec7bef1d8c59c507f952a21d13b3654d2909d90b7d8950caa05  kstatusnotifieritem-591acbf5fee8b844b92c684fb47c616b00004d55.tar.xz
 "

@@ -1,38 +1,41 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kplotting
-pkgver=99999_git20250323
+pkgver=99999_git20250504
 pkgrel=0
-_commit="ee51a59e882410cc7c18d52eb4f16a19d7d197b0"
+_commit="795fcd6dcf562173b026a0d00c9033a10290b54b"
 pkgdesc="Lightweight plotting framework"
-arch="all !armhf" # armhf blocked by extra-cmake-modules
+arch="all"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-or-later"
 depends_dev="qt6-qtbase-dev"
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qttools-dev
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kplotting.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kplotting-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kplotting-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc"
 
 options="!check"
 builddir="$srcdir/kplotting-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -41,8 +44,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-bb2921b78261440b09d77c9dc7c2c863bc5803d47e2d214f3b13bf3702228c8fcc37e6b0009539f196a4a932ba346b7a16af43a49d7607391263fa959ff2f8a6  kplotting-ee51a59e882410cc7c18d52eb4f16a19d7d197b0.tar.xz
+3e226ec304761f73493392d8026e4f3701cf2f85fc501caae306550261db155ae0a45cee8fdcabe5057ed685f221175e725ab8bacaee6c896fb4bffedd12ec25  kplotting-795fcd6dcf562173b026a0d00c9033a10290b54b.tar.xz
 "

@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=krunner
-pkgver=99999_git20250404
+pkgver=99999_git20250504
 pkgrel=0
-_commit="8892b8fa8754dbdae5bb23f26033aedb4adc9cee"
+_commit="6dd9a126e04e26d360e9df57a63f3f6e61a907fa"
 pkgdesc="Framework for providing different actions given a string query"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only AND LGPL-2.1-or-later"
@@ -25,6 +23,7 @@ depends_dev="
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qttools-dev
 	samurai
 	"
@@ -33,19 +32,23 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/frameworks/krunner.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/krunner-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/krunner-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc"
 
 options="!check"
 builddir="$srcdir/krunner-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	cmake --build build --target prepare_docs
+	cmake --build build --target generate_docs
+	cmake --build build --target generate_qch
 }
 
 check() {
@@ -55,8 +58,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-2e1998380385d72edb5aa786249df5f4a4647d07b5c5357b148ac519e49068e01fa83458c07041ed756c437a99521126c0655519439d0152eed614683fba1879  krunner-8892b8fa8754dbdae5bb23f26033aedb4adc9cee.tar.xz
+ddb9729de7d15e756adb6d01911463d8fea4bec7448b81b907469b179b1711e6b883b1fc5c64377b7657b48cd9da31d44bdb24aa39d193c8587cb2dfafd22713  krunner-6dd9a126e04e26d360e9df57a63f3f6e61a907fa.tar.xz
 "

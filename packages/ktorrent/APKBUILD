@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ktorrent
-pkgver=99999_git20250407
+pkgver=99999_git20250504
 pkgrel=0
-_commit="247e0e08671199e34f9da5ca67efe5bbb6a99d09"
-# armhf blocked by extra-cmake-modules
-# ppc64le, s390x and riscv64 blocked by qt5-qtwebengine
+_commit="f215982261415d654da93c469e7f4c03b88a91dd"
+# armhf blocked by qt6-qtdeclarative -> ki18n
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
 url="https://kde.org/applications/internet/org.kde.ktorrent"
 pkgdesc="A powerful BitTorrent client for KDE"
@@ -54,13 +52,13 @@ checkdepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/network/ktorrent.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/ktorrent-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/ktorrent-$_commit.tar.xz"
 
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
 	# The infowidget plugin is disabled due to an incompatibility with musl
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
@@ -78,5 +76,5 @@ package() {
 }
 
 sha512sums="
-4bb01fd1bd03a72ec58c87ffbbabc07811f5a5d3edb548d08b7c917ea5a681cc1f4d865865ec9e106193ab18ef5af8537c86832fcb1ac5efb40580126ef6c84a  ktorrent-247e0e08671199e34f9da5ca67efe5bbb6a99d09.tar.xz
+afb5220eb165df03d616b484e514424b81b837f83bbb9e21412382ff82613998b041a77ed518cc29dfda5cbd466c13cd578df10931df0fa6a4658b7de380df21  ktorrent-f215982261415d654da93c469e7f4c03b88a91dd.tar.xz
 "

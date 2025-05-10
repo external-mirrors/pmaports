@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=systemsettings
-pkgver=99999_git20250331
+pkgver=99999_git20250506
 pkgrel=0
-_commit="379f1354117c04adee85ee02a90deadd063ad82b"
+_commit="8e2b7f7cd9e2eb1e1d391529d10a3b3dbfce6b6b"
 pkgdesc="Plasma system manager for hardware, software, and workspaces"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -42,7 +42,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/systemsettings.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/systemsettings-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/systemsettings-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-zsh-completion $pkgname-lang"
 
 options="!check"
@@ -65,5 +65,5 @@ package() {
 }
 
 sha512sums="
-9ca75b12dab5751b8b5f5f13864e301b2e4985c91169a24d7af8b9aac86dc63d7ceb717251c5fa34ed0591877bf9dd2a5538ca867056d22d0e56129c9cb642eb  systemsettings-379f1354117c04adee85ee02a90deadd063ad82b.tar.xz
+fc85a9906ba1a1d604dfaddc6e962332ac7ddcf3033f318e75d40f8563f76a0e894c780015fb42f951c0df018298019defe3daafb82d4a6f002a15120784d115  systemsettings-8e2b7f7cd9e2eb1e1d391529d10a3b3dbfce6b6b.tar.xz
 "

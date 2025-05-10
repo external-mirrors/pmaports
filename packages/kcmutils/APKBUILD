@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcmutils
-pkgver=99999_git20250407
+pkgver=99999_git20250504
 pkgrel=0
-_commit="40defe7fbd88455f9d0e629bde9c46139442c93f"
+_commit="2f1e3d3960c62a553ba14ae1d5f1528438e8927b"
 pkgdesc="Utilities for interacting with KCModules"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -23,25 +23,30 @@ depends_dev="
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
+	kde-qdoc-common
 	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcmutils.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-04-07/kcmutils-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/kcmutils-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kcmutils-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	export KDE_DOCS=/usr/share/kde/documentation
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -50,8 +55,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-664a476cb21937aa961f9bcd7315604a2e59ac13d2888e6f69b1aa50fff67ac250e6894050e9dc72ff33b8fcf66d9fa6aa957c836a2597fb7c1a4f9996785014  kcmutils-40defe7fbd88455f9d0e629bde9c46139442c93f.tar.xz
+55528aae8219d6ea46ff10869f9fdb4e3888bdbeb56e6eabb46b0c9e134d37f7816558cb7729e3f9fd55e9e42a9a88a1288d7d69812452a16bbdffc7a31b4292  kcmutils-2f1e3d3960c62a553ba14ae1d5f1528438e8927b.tar.xz
 "
