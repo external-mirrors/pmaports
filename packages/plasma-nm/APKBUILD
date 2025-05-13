@@ -1,12 +1,10 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-nm
-pkgver=99999_git20250506
+pkgver=99999_git20250507
 pkgrel=0
-_commit="a0e646f2536074512431c6e20eb1496a38ef736c"
+_commit="49c7f0a1479a4dc31ba9c2389af7f993b4c1db33"
 pkgdesc="Plasma applet written in QML for managing network connections"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -51,8 +49,10 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-nm.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/plasma-nm-$_commit.tar.xz"
-subpackages="$pkgname-lang "
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/plasma-nm-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+
+replaces="plasma-mobile<=6.4.0-r0"
 
 options="!check"
 builddir="$srcdir/plasma-nm-$_commit"
@@ -61,7 +61,7 @@ build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib	
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 }
 
@@ -82,5 +82,5 @@ mobile() {
 }
 
 sha512sums="
-55b4f7ec0907e1503992af323e8979b4214dc82d5d37349b9a183564560c265e5c9977eac54661e0b498ac72b2bfb9cb4ee64eb90cf7baa5b953da99b4f8f9c2  plasma-nm-a0e646f2536074512431c6e20eb1496a38ef736c.tar.xz
+2328772ae71047a15daedfad2344751907e04e1099900d985b277b6a7e04fd23bfbe03acb64b538613692ab984a9ca3d322d934d8130468dd86215d488ad2404  plasma-nm-49c7f0a1479a4dc31ba9c2389af7f993b4c1db33.tar.xz
 "

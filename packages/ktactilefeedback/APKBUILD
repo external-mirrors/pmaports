@@ -1,0 +1,50 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=ktactilefeedback
+pkgver=99999_git20250425
+pkgrel=0
+_commit="b74a9abf322695eb4cd1b9a7d36e6698155004fb"
+pkgdesc="Qt6 fork of QtFeedback"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="(LGPL-2.1-only OR LGPL-3.0-only) AND LGPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	feedbackd-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtmultimedia-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/jbbgameich/ktactilefeedback.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/ktactilefeedback-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/ktactilefeedback-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+f2966a3dec8923f745584584a30a46eaa645837064e8ff3d35509f218ca36e68da500bdeb37464f0c83870b2adb6c79a91f8dc1dfe8d10bb1202683c6515368c  ktactilefeedback-b74a9abf322695eb4cd1b9a7d36e6698155004fb.tar.xz
+"

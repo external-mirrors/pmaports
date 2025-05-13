@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=plasma-camera
-pkgver=99999_git20250305
+pkgver=99999_git20250507
 pkgrel=0
-_commit="0782ac3334df0979a27ea59f6925cf3ee3a9e52c"
+_commit="247b6cd8f5d296c922b4a45dba88430ec475ebad"
 pkgdesc="Camera application for Plasma Mobile"
 # armhf blocked by qt5-qtdeclarative
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="
 checkdepends="appstream"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/plasma-mobile/plasma-camera.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-06/plasma-camera-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/plasma-camera-$_commit.tar.xz"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-69c2362e3464da816ba205ac9ba682224af734a40f818bfb70b0d444e8bb5f59c03d43e7c3bc9b4a7e8e1afa08824eafaaa328121ced316fbb4b433f8fc7e15c  plasma-camera-0782ac3334df0979a27ea59f6925cf3ee3a9e52c.tar.xz
+28dcb8ef41cb634ce243685fc95bb92c37c887946cb71dd941bf72e4db3e21a41e52f96e7625e796162e3ca21d756a27f6a3e8763c20ff30e3322e4b27f6ce78  plasma-camera-247b6cd8f5d296c922b4a45dba88430ec475ebad.tar.xz
 "
