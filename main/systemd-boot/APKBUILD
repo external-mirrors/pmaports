@@ -13,7 +13,7 @@
 #   is an acceptable price to pay for not having to rebase a bunch of stuff.
 #
 pkgname=systemd-boot
-pkgver=257.1
+pkgver=257.5
 pkgrel=0
 pkgdesc="systemd's EFI boot manager and stub"
 url="https://systemd.io/"
@@ -39,7 +39,7 @@ source="
 	0002-fix-wchar-for-compiling-on-musl.patch
 	cross-x86.meson
 	"
-options="!check"  # no tests
+options="!check pmb:strict"  # no tests
 subpackages="ukify"
 # TODO: cross-native fails on, e.g. aarch64, elf2efi gets an "unknown section
 # with name '' " ...
@@ -74,7 +74,7 @@ build() {
 	# (setting meson "efi_arch_alt"). The check for that currently fails
 	# because the linker can't find the i586/32-bit stuff. Setting
 	# LIBRARY_PATH=/usr/lib/gcc/i586-alpine-linux-musl didn't work.
-	if [ "$CARCH" == "x86_64" ]; then
+	if [ "$CARCH" = "x86_64" ]; then
 		abuild-meson \
 			-Dsbat-distro="postmarketOS" \
 			-Dsbat-distro-pkgname="$pkgname" \
@@ -95,7 +95,7 @@ package() {
 	mv output/src/boot/systemd*.efi \
 		"$pkgdir"/usr/lib/systemd/boot/efi/
 
-	if [ "$CARCH" == "x86_64" ]; then
+	if [ "$CARCH" = "x86_64" ]; then
 		mv output.32/src/boot/linux*.efi.stub \
 			"$pkgdir"/usr/lib/systemd/boot/efi/
 		mv output.32/src/boot/systemd*.efi \
@@ -111,7 +111,7 @@ ukify() {
 }
 
 sha512sums="
-dded7555077f85d0f8106b72cc46604fbe4249452be6b2d55800770b6deb2a3a122697c5a5f23b22dab416e8c050e53fc30d59dfd3bfd7c9fbbdab3162e8ebe5  systemd-257.1.tar.gz
+9e5352c20c9edac53f302a534532035185139998628ed0a85411f440df47f1dd7cce6651aec787484809bb1aa2825008d062714c37936cbfd08451fbe29a998f  systemd-257.5.tar.gz
 67ec8d16d678eb1358ccaa75a173b2fc9f91254b1a0b72912bdacc11da54ea6967dfc90ac852c776ce769b9d6b3fb0dbbf1aaab410a6ffca3d07b70c29419fef  0001-meson-minimal-configure-for-building-systemd-boot.patch
 b8ff5a93bb3e394605e81f40f4054e9e3be73e7b26f6aad4e2019da7254217dcf12a63082115041bb20fc528b52989db29f444d502d8f6962b2227d352641b47  0002-fix-wchar-for-compiling-on-musl.patch
 ad54e2c7e7a21bfa9b5f9e8db1b6af6a6d78a3e5dfe2dafcec77488f6224865ab4d4c8a8c8ee1c54c99d1741361e9fb3a51e5d36bcbc7a1c3fdcc4d0c1672132  cross-x86.meson
