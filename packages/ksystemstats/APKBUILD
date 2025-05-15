@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=ksystemstats
-pkgver=99999_git20250504
+pkgver=99999_git20250513
 pkgrel=0
-_commit="4ce4fdfa98b26f11b996921993c90cf7879b645c"
+_commit="9830910691796ad16c214837056380ba875630a9"
 pkgdesc="A plugin based system monitoring daemon"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -32,7 +32,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/ksystemstats.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/ksystemstats-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/ksystemstats-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # Broken, requires specific sensor setup
 
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-a9108eae63ccba87e7ec11c0534233840fcc34d1bfbc50cf53d3d4dc97063635012a5ad27e6c38a3b2e946ce8485cb6ccedf6d41c35325bb3bd8a35926ebf7d5  ksystemstats-4ce4fdfa98b26f11b996921993c90cf7879b645c.tar.xz
+4b23ea233da86cb16d23d123fbfa029b5f7d74a525302ba3cba6aa4b936963f4fec524b8ff92f5bec8300344a0703ce64377db9e699996c950fad8ef23f95fb7  ksystemstats-9830910691796ad16c214837056380ba875630a9.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=powerdevil
-pkgver=99999_git20250510
+pkgver=99999_git20250513
 pkgrel=0
-_commit="6a2efcd8b2d2898742a7962b2f97f0328ad9af0f"
+_commit="7860551aeaeed400fb8db9f2535bfa493ce06e53"
 pkgdesc="Manages the power consumption settings of a Plasma Shell"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,8 +47,8 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/powerdevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/powerdevil-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/powerdevil-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang $pkgname-systemd"
 
 options="!check"
 builddir="$srcdir/powerdevil-$_commit"
@@ -71,15 +71,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-
-	# We don't ship systemd
-	rm -r "$pkgdir"/usr/lib/systemd
-
-	# org_kde_powerdevil has CAP_WAKE_ALARM set and this breaks dbus
-	# Remove CAP_WAKE_ALARM from org_kde_powerdevil to make it work again
-	setcap -r "$pkgdir"/usr/lib/libexec/org_kde_powerdevil
 }
 
 sha512sums="
-cc905ceda7c467c5bd07cc7023e6f771f3fc79ac487765a2de43df21645a88f9d2958d79336fdd5e3ef250c0f1ed8a0b1e89f26421af85e5eccc44c2e26f58ff  powerdevil-6a2efcd8b2d2898742a7962b2f97f0328ad9af0f.tar.xz
+259627d00176132e1699b7cffd565fe734df27cffa250f1b079cca1ff0a5986e8aecef612bf998d2da9493bec8bfe5fbb27a32352c9f9fe67aa73ef105b08dfd  powerdevil-7860551aeaeed400fb8db9f2535bfa493ce06e53.tar.xz
 "

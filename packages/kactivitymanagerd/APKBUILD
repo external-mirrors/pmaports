@@ -6,7 +6,7 @@
 pkgname=kactivitymanagerd
 pkgver=99999_git20250510
 pkgrel=0
-_commit="cd4f4ca9524bcf6bb1ed16547964b4fa9e6176c7"
+_commit="f28e2c315162947b7cf41e0e78c964bbd5b7e328"
 pkgdesc="System service to manage user's activities and track the usage patterns"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -33,7 +33,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kactivitymanagerd.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-10/kactivitymanagerd-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/kactivitymanagerd-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -58,5 +58,5 @@ package() {
 	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
-1b40479547d7d964d7cea5d8cd05cfdbeddbb6d43541d5a493a657e7d457d8df65ef4205081d5c2dbad98c5d2b320c3de641159829b02599ec1f831aee1330b4  kactivitymanagerd-cd4f4ca9524bcf6bb1ed16547964b4fa9e6176c7.tar.xz
+a960e7d01e69fb3ac5a9f44dfeb6bec463aef8c8b0169255b59737259353cb3d2da16df71afbdee7d780e0421bc2765b8fedefd082d77345be0bf4104542703d  kactivitymanagerd-f28e2c315162947b7cf41e0e78c964bbd5b7e328.tar.xz
 "
