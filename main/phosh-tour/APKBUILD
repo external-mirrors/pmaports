@@ -1,0 +1,38 @@
+# Maintainer: fossdd <fossdd@pwned.life>
+pkgname=phosh-tour
+pkgver=0.46.0
+pkgrel=0
+pkgdesc="Simple introduction to Phosh"
+url="https://gitlab.gnome.org/World/Phosh/phosh-tour"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="
+	meson
+	gtk4.0-dev
+	libadwaita-dev
+	gmobile-dev
+	desktop-file-utils
+	"
+subpackages="$pkgname-lang $pkgname-systemd"
+source="https://sources.phosh.mobi/releases/phosh-tour/phosh-tour-${pkgver/_/.}.tar.xz"
+builddir="$srcdir/$pkgname-${pkgver/_/.}"
+
+build() {
+	abuild-meson \
+		-Dvendor="postmarketOS" \
+		-Durl="<a href=\"https://postmarketos.org/contribute/\">Where to Contribute</a>" \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+fb6c592aedfecc894e01e05bff75585747b623ebdc25512048ee3facb72382b62afa90fb683bd5306474861044cf681e3a07d9b29d3d4d39500d6fc27fd8fbc2  phosh-tour-0.46.0.tar.xz
+"
