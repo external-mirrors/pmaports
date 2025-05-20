@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kate
-pkgver=99999_git20250513
+pkgver=99999_git20250515
 pkgrel=0
-_commit="55bd1091c669ffc2734f39996547054a6a88f37f"
+_commit="e231e46eb055370b8e64d41c9540da79b44e253e"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/utilities/org.kde.kate"
@@ -37,7 +37,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/kate.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/kate-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/kate-$_commit.tar.xz"
 subpackages="kate-common:kate_common kwrite:kwrite kwrite-doc:kwrite_doc kwrite-lang:kwrite_lang $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -111,5 +111,5 @@ kwrite_lang() {
 }
 
 sha512sums="
-30eedaf6add1ba8d52498c4120688eb9c36d6cb9eebc7821b1c46b7fda72e26c453fe03471cd1176d5b7d1a6d8dcd47c9b774522e3d6918fb4b791af2b587265  kate-55bd1091c669ffc2734f39996547054a6a88f37f.tar.xz
+b79200c5226c3e6395301b1234e65c244d0ec73df9199867d9c6921f01aff57e9b3a4c437c90e9f0d1497fa8d27332942d00969357175cfed594c8a60ab865e0  kate-e231e46eb055370b8e64d41c9540da79b44e253e.tar.xz
 "

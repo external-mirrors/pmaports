@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kmenuedit
-pkgver=99999_git20250513
+pkgver=99999_git20250515
 pkgrel=0
-_commit="146df4d45b93f99a9fdad4b9041d20229fc932e7"
+_commit="d3a7e783224d955378c32e07d674c9c0983c6c96"
 pkgdesc="KDE menu editor"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -33,7 +33,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kmenuedit.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/kmenuedit-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/kmenuedit-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-8ae40475c8e614fdd8be07f0e6d3f640a1b40a4f0d262b0d3ccac19423f936da135167f92ba8831444d0e357aaaef8b41e89e8121f109544b7120af1ddd8f41a  kmenuedit-146df4d45b93f99a9fdad4b9041d20229fc932e7.tar.xz
+d3a1de3ba484b7c740379de23b5744b8a46d803080623ee9a79aee5dd6a13d508fc27b333235bd90b5cb13e31affe5cff21b25c56cb479f2c7955df4a013a284  kmenuedit-d3a7e783224d955378c32e07d674c9c0983c6c96.tar.xz
 "

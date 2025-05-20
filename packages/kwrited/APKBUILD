@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kwrited
-pkgver=99999_git20250326
+pkgver=99999_git20250515
 pkgrel=0
-_commit="46e8803651053cc2247734509d000778422a73b7"
+_commit="de73806ffb8798dba61b8a793514d1210bebb678"
 pkgdesc="KDE daemon listening for wall and write messages"
 arch="all !armhf" # qt6-qtdeclarative-dev  unavilable on armhf
 url="https://kde.org/plasma-desktop/"
@@ -27,7 +27,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kwrited.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-13/kwrited-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/kwrited-$_commit.tar.xz"
 options="!check" # No tests available
 
 options="!check"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-2eebef0c405f48eaf7542c5667f7d7203df63d443f282335e543cc599fcd122c884b8e0fa544689eba05f6931f4a62f234233392b27a5d8854a5007112049c5b  kwrited-46e8803651053cc2247734509d000778422a73b7.tar.xz
+68154dc347f5503c22570d485783adc35930636b73445a6601811552ebb487e34619cfee1c5ccad44d5a93cf7582014299918f00e31848a934b7afab1a4738b8  kwrited-de73806ffb8798dba61b8a793514d1210bebb678.tar.xz
 "
