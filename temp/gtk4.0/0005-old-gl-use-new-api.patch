@@ -1,0 +1,34 @@
+From 35d00624bb03edc93f5a45efa15f906ee79af510 Mon Sep 17 00:00:00 2001
+From: Jane Rachinger <jane400@postmarketos.org>
+Date: Mon, 2 Jun 2025 19:13:59 +0200
+Subject: [PATCH 5/5] old-gl: use new api
+
+---
+ gsk/gl/gskglrenderer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gsk/gl/gskglrenderer.c b/gsk/gl/gskglrenderer.c
+index 8f005bf7e9..fababad982 100644
+--- a/gsk/gl/gskglrenderer.c
++++ b/gsk/gl/gskglrenderer.c
+@@ -290,7 +290,7 @@ get_render_region (GdkSurface   *surface,
+   /* Damage does not have scale factor applied so we can compare it to
+    * @whole_surface which also doesn't have the scale factor applied.
+    */
+-  damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (context));
++  damage = gdk_draw_context_get_render_region (GDK_DRAW_CONTEXT (context));
+ 
+   if (cairo_region_contains_rectangle (damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
+     return NULL;
+@@ -414,7 +414,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
+       return texture;
+     }
+ 
+-  /* Don't use float textures for SRGB or node-editor turns on high 
++  /* Don't use float textures for SRGB or node-editor turns on high
+    * depth unconditionally. */
+   if (gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_NONE &&
+       gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8 &&
+-- 
+2.49.0
+

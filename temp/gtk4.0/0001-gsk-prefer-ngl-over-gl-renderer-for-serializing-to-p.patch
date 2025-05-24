@@ -1,0 +1,52 @@
+From 4ba622bf93a8bf7199cbb68d2d564acad154baec Mon Sep 17 00:00:00 2001
+From: Jane Rachinger <jane400@postmarketos.org>
+Date: Sun, 25 May 2025 13:29:11 +0200
+Subject: [PATCH 1/5] gsk: prefer ngl over gl renderer for serializing to png
+
+The commit `Revert "gsk: Use the ngl renderer for serializing to png"`
+only uses one backend for rendering with OpenGL, but we want to keep
+the behavior for devices that support the new GL renderer near to
+upstream.
+---
+ gsk/gskrendernodeimpl.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/gsk/gskrendernodeimpl.c b/gsk/gskrendernodeimpl.c
+index d1c24b6f26..b94e5fb189 100644
+--- a/gsk/gskrendernodeimpl.c
++++ b/gsk/gskrendernodeimpl.c
+@@ -9018,16 +9018,25 @@ gsk_render_node_png_serializer (GdkContentSerializer *serializer)
+ 
+   node = gsk_value_get_render_node (gdk_content_serializer_get_value (serializer));
+ 
++  // in opposition to all gobject/c code i ever saw
++  // the success case is the goto statement
++  renderer = gsk_ngl_renderer_new ();
++  if (gsk_renderer_realize (renderer, NULL, NULL))
++    goto label_got_renderer;
++  g_object_unref (renderer);
++
+   renderer = gsk_gl_renderer_new ();
++  if (gsk_renderer_realize (renderer, NULL, NULL))
++    goto label_got_renderer;
++  g_object_unref (renderer);
++
++  renderer = gsk_cairo_renderer_new ();
+   if (!gsk_renderer_realize (renderer, NULL, NULL))
+     {
+-      g_object_unref (renderer);
+-      renderer = gsk_cairo_renderer_new ();
+-      if (!gsk_renderer_realize (renderer, NULL, NULL))
+-        {
+-          g_assert_not_reached ();
+-        }
++      g_assert_not_reached ();
+     }
++
++label_got_renderer:
+   texture = gsk_renderer_render_texture (renderer, node, NULL);
+   gsk_renderer_unrealize (renderer);
+   g_object_unref (renderer);
+-- 
+2.49.0
+

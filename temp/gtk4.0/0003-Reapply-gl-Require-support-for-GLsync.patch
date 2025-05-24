@@ -1,0 +1,177 @@
+From 0f8e3b8c89166a733ac6af621c3d28aa7d2a6ccb Mon Sep 17 00:00:00 2001
+From: Jane Rachinger <jane400@postmarketos.org>
+Date: Sun, 25 May 2025 15:30:26 +0200
+Subject: [PATCH 3/5] Reapply "gl: Require support for GLsync"
+
+This reverts commit d31bf6375ca50ff91406a5c2d6f0cee0eb036ed1.
+---
+ gdk/gdkglcontext.c         |  6 ------
+ gdk/gdkglcontextprivate.h  |  5 ++---
+ gdk/gdkgltexture.c         |  3 +--
+ gsk/gl/gskgldriver.c       |  3 +--
+ gsk/gpu/gskglframe.c       |  4 +---
+ gsk/gpu/gskgpudownloadop.c | 10 ++++------
+ gtk/gtkglarea.c            |  4 +---
+ testsuite/gdk/gltexture.c  |  5 +----
+ 8 files changed, 11 insertions(+), 29 deletions(-)
+
+diff --git a/gdk/gdkglcontext.c b/gdk/gdkglcontext.c
+index 4eb40b9f38..313340f3da 100644
+--- a/gdk/gdkglcontext.c
++++ b/gdk/gdkglcontext.c
+@@ -106,7 +106,6 @@ const GdkDebugKey gdk_gl_feature_keys[] = {
+   { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
+   { "unpack-subimage", GDK_GL_FEATURE_UNPACK_SUBIMAGE, "GL_EXT_unpack_subimage" },
+   { "half-float", GDK_GL_FEATURE_VERTEX_HALF_FLOAT, "GL_OES_vertex_half_float" },
+-  { "sync", GDK_GL_FEATURE_SYNC, "GL_ARB_sync" },
+   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
+   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
+ };
+@@ -1718,11 +1717,6 @@ gdk_gl_context_check_features (GdkGLContext *context)
+       epoxy_has_gl_extension ("GL_OES_vertex_half_float"))
+     features |= GDK_GL_FEATURE_VERTEX_HALF_FLOAT;
+ 
+-  if (gdk_gl_context_check_version (context, "3.2", "3.0") ||
+-      epoxy_has_gl_extension ("GL_ARB_sync") ||
+-      epoxy_has_gl_extension ("GL_APPLE_sync"))
+-    features |= GDK_GL_FEATURE_SYNC;
+-
+   if (gdk_gl_context_check_version (context, "4.2", "9.9") ||
+       epoxy_has_gl_extension ("GL_EXT_base_instance") ||
+       epoxy_has_gl_extension ("GL_ARB_base_instance"))
+diff --git a/gdk/gdkglcontextprivate.h b/gdk/gdkglcontextprivate.h
+index 727a96b3a8..fb9a87a080 100644
+--- a/gdk/gdkglcontextprivate.h
++++ b/gdk/gdkglcontextprivate.h
+@@ -32,9 +32,8 @@ typedef enum {
+   GDK_GL_FEATURE_DEBUG                      = 1 << 0,
+   GDK_GL_FEATURE_UNPACK_SUBIMAGE            = 1 << 1,
+   GDK_GL_FEATURE_VERTEX_HALF_FLOAT          = 1 << 2,
+-  GDK_GL_FEATURE_SYNC                       = 1 << 3,
+-  GDK_GL_FEATURE_BASE_INSTANCE              = 1 << 4,
+-  GDK_GL_FEATURE_BUFFER_STORAGE             = 1 << 5,
++  GDK_GL_FEATURE_BASE_INSTANCE              = 1 << 3,
++  GDK_GL_FEATURE_BUFFER_STORAGE             = 1 << 4,
+ } GdkGLFeatures;
+ 
+ #define GDK_GL_N_FEATURES 3
+diff --git a/gdk/gdkgltexture.c b/gdk/gdkgltexture.c
+index 6f0c6649e1..5230c27fea 100644
+--- a/gdk/gdkgltexture.c
++++ b/gdk/gdkgltexture.c
+@@ -277,8 +277,7 @@ gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
+   self->id = gdk_gl_texture_builder_get_id (builder);
+   GDK_TEXTURE (self)->format = gdk_gl_texture_builder_get_format (builder);
+   self->has_mipmap = gdk_gl_texture_builder_get_has_mipmap (builder);
+-  if (gdk_gl_context_has_feature (self->context, GDK_GL_FEATURE_SYNC))
+-    self->sync = gdk_gl_texture_builder_get_sync (builder);
++  self->sync = gdk_gl_texture_builder_get_sync (builder);
+   self->destroy = destroy;
+   self->data = data;
+ 
+diff --git a/gsk/gl/gskgldriver.c b/gsk/gl/gskgldriver.c
+index f5439fe58e..1d0a154245 100644
+--- a/gsk/gl/gskgldriver.c
++++ b/gsk/gl/gskgldriver.c
+@@ -1843,8 +1843,7 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver     *self,
+   state = g_new0 (GskGLTextureState, 1);
+   state->texture_id = texture_id;
+   state->context = g_object_ref (self->shared_command_queue->context);
+-  if (gdk_gl_context_has_feature (self->shared_command_queue->context, GDK_GL_FEATURE_SYNC))
+-    state->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
++  state->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+ 
+   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
+ 
+diff --git a/gsk/gpu/gskglframe.c b/gsk/gpu/gskglframe.c
+index 015182990b..23fc55d15d 100644
+--- a/gsk/gpu/gskglframe.c
++++ b/gsk/gpu/gskglframe.c
+@@ -199,9 +199,7 @@ gsk_gl_frame_submit (GskGpuFrame       *frame,
+       op = gsk_gpu_op_gl_command (op, frame, &state);
+     }
+ 
+-  if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+-                                  GDK_GL_FEATURE_SYNC))
+-    self->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
++  self->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+ }
+ 
+ static void
+diff --git a/gsk/gpu/gskgpudownloadop.c b/gsk/gpu/gskgpudownloadop.c
+index e6eabd02f3..25e1c95a47 100644
+--- a/gsk/gpu/gskgpudownloadop.c
++++ b/gsk/gpu/gskgpudownloadop.c
+@@ -169,7 +169,7 @@ gsk_gpu_download_op_vk_sync_semaphore (GskGpuDownloadOp *self)
+                                              &sync_file_fd) == VK_SUCCESS)
+     {
+       gdk_dmabuf_import_sync_file (fd, DMA_BUF_SYNC_WRITE, sync_file_fd);
+-
++      
+       close (sync_file_fd);
+     }
+ 
+@@ -306,16 +306,16 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
+   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+   GdkGLTextureBuilder *builder;
+   GskGLTextureData *data;
+-  GdkGLContext *context;
+   guint texture_id;
+ #ifdef HAVE_DMABUF
++  GdkGLContext *context;
+   Texture *texture;
+ #endif
+ 
+-  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+   texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image));
+ 
+ #ifdef HAVE_DMABUF
++  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+   texture = g_new0 (Texture, 1);
+ 
+   if (gdk_gl_context_export_dmabuf (context, texture_id, &texture->dmabuf))
+@@ -348,9 +348,7 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
+    * the texture might survive the frame and its surface */
+   data->context = g_object_ref (gdk_display_get_gl_context (gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame))));
+   data->texture_id = texture_id;
+-
+-  if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
+-    data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
++  data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+ 
+   builder = gdk_gl_texture_builder_new ();
+   gdk_gl_texture_builder_set_context (builder, data->context);
+diff --git a/gtk/gtkglarea.c b/gtk/gtkglarea.c
+index 56498de9d8..9460af7342 100644
+--- a/gtk/gtkglarea.c
++++ b/gtk/gtkglarea.c
+@@ -815,9 +815,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
+       priv->texture = NULL;
+       priv->textures = g_list_prepend (priv->textures, texture);
+ 
+-      if (gdk_gl_context_has_feature (priv->context, GDK_GL_FEATURE_SYNC))
+-        sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+-
++      sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+       gdk_gl_texture_builder_set_sync (texture->builder, sync);
+ 
+       texture->gl_texture = gdk_gl_texture_builder_build (texture->builder,
+diff --git a/testsuite/gdk/gltexture.c b/testsuite/gdk/gltexture.c
+index 15ee00fb4d..860b2c5a3b 100644
+--- a/testsuite/gdk/gltexture.c
++++ b/testsuite/gdk/gltexture.c
+@@ -183,10 +183,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
+ 
+   id = make_gl_texture (context, surface);
+ 
+-  if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
+-    sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+-  else
+-    sync = NULL;
++  sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+ 
+   update_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 10, 10, 32, 32 });
+ 
+-- 
+2.49.0
+

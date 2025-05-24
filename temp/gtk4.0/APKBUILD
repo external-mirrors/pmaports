@@ -1,0 +1,155 @@
+# Forked from Alpine to re-add the deprecated and removed
+# old GL renderer for pine64-pinephone and purism-librem5
+
+# Notes:
+# (purism-librem5 => etnaviv ; pine64-pinephone => lima)
+# glFenceSync:
+# - lima: supported
+# - etnaviv: supported since 2017 in the kernel
+# OpenGL 3.0 or OpenGLES 3.0 isn't reached by either etnaviv and lima,
+# - lima: will never reach GLES3.0, the mali 400 mp2 is just too old
+# - etnaviv: supported by hardware and propitary drivers,
+# 	     the amazing @austriancoder@fosstodon.org works on GLES3.0 support
+#
+# TLDR: This is temporary fix for the Librem 5 until drivers are ready, but the
+# hardware of the original PinePhone isn't capable of more :/.
+
+maintainer="jane400 <jane400@postmarketos.org>"
+pkgname=gtk4.0
+pkgver=9999
+pkgrel=0
+_pkgver=4.18.5
+provider_priority=0
+_commit="f175be44c60ffc0cb2810ae12b80c2365bf9582d" # HEAD of gtk-4-18-5-gl2 branch
+pkgdesc="The GTK Toolkit (v4) (the fork from kkofler for the old GL Renderer)"
+url="https://www.gtk.org/"
+arch="all"
+options="!check" # Test suite is known to fail upstream
+license="LGPL-2.1-or-later"
+subpackages="$pkgname-dbg $pkgname-demo $pkgname-dev $pkgname-doc $pkgname-lang"
+depends="shared-mime-info gtk-update-icon-cache tzdata iso-codes"
+depends_dev="
+	at-spi2-core-dev
+	gdk-pixbuf-dev
+	glib-dev
+	libepoxy-dev
+	libxext-dev
+	libxi-dev
+	libxinerama-dev
+	libxkbcommon-dev
+	vulkan-headers
+	wayland-dev
+	wayland-protocols
+	"
+makedepends="
+	$depends_dev
+	cairo-dev
+	colord-dev
+	cups-dev
+	expat-dev
+	fontconfig-dev
+	gettext-dev
+	gi-docgen
+	gnutls-dev
+	gobject-introspection-dev
+	graphene-dev
+	gst-plugins-bad-dev
+	gstreamer-dev
+	iso-codes-dev
+	libice-dev
+	libx11-dev
+	libxcomposite-dev
+	libxcursor-dev
+	libxdamage-dev
+	libxfixes-dev
+	libxrandr-dev
+	meson
+	pango-dev
+	perl
+	py3-docutils
+	sassc
+	shaderc
+	tiff-dev
+	vulkan-loader-dev
+	zlib-dev
+	"
+source="https://github.com/kkofler/gtk/archive/$_commit/gtk-$_commit.tar.gz
+	0001-gsk-prefer-ngl-over-gl-renderer-for-serializing-to-p.patch
+	0002-dmabuf-prefer-NGL-over-GL-renderer.patch
+	0003-Reapply-gl-Require-support-for-GLsync.patch
+	0004-gsk-Drop-GskProfiler-in-gskcairorenderer.patch
+	0005-old-gl-use-new-api.patch
+"
+builddir="$srcdir/gtk-$_commit"
+
+build() {
+	CFLAGS="$CFLAGS -O2" \
+	CPPFLAGS="$CPPFLAGS -O2" \
+	abuild-meson \
+		-Ddocumentation=false \
+		-Dintrospection=enabled \
+		-Dman-pages=true \
+		-Dbroadway-backend=false \
+		-Dbuild-tests=false \
+		-Dbuild-testsuite=false \
+		. output
+	meson compile -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	# use gtk-update-icon-cache from gtk+3.0 for now. The icon cache is forward
+	# compatible so this is fine.
+	# do the same for gtk4-update-icon-cache
+	rm -f "$pkgdir"/usr/bin/gtk-update-icon-cache
+	rm -f "$pkgdir"/usr/bin/gtk4-update-icon-cache
+	rm -f "$pkgdir"/usr/share/man/man1/gtk-update-icon-cache.1
+}
+
+demo() {
+	pkgdesc="$pkgdesc (demonstration application)"
+	provides="$_pkgname-demo=$pkgver-r9999"
+	amove \
+		usr/bin/gtk4-demo \
+		usr/bin/gtk4-demo-application \
+		usr/bin/gtk4-node-editor \
+		usr/bin/gtk4-print-editor \
+		usr/bin/gtk4-widget-factory \
+		usr/share/applications/org.gtk.Demo4.desktop \
+		usr/share/applications/org.gtk.PrintEditor4.desktop \
+		usr/share/applications/org.gtk.WidgetFactory4.desktop \
+		usr/share/applications/org.gtk.gtk4.NodeEditor.desktop \
+		usr/share/glib-2.0/schemas/org.gtk.Demo4.gschema.xml \
+		usr/share/gtk-4.0/gtk4builder.rng \
+		usr/share/icons \
+		usr/share/metainfo
+}
+
+dev() {
+	provides="$_pkgname-dev=$pkgver-r9999"
+	default_dev
+
+	amove \
+		usr/bin/gtk4-builder-tool \
+		usr/bin/gtk4-encode-symbolic-svg \
+		usr/bin/gtk4-query-settings \
+		usr/share/gtk-4.0/valgrind
+}
+
+lang() {
+	provides="$_pkgname-lang=$pkgver-r9999"
+	default_lang
+
+	# These are some localized emoji labels.
+	amove usr/share/gtk-4.0/emoji
+}
+
+sha512sums="
+3f66e990e07f39b442b53299fbd8c8a620d04a6b521786c3b616839dd9705f5a60df51b7e5ce5103dee0fc67170bd823195613aab6fb41342a52a268cea5aa34  gtk-f175be44c60ffc0cb2810ae12b80c2365bf9582d.tar.gz
+3b2871b0713391b052b57aa5c3c2b1abfa67aa41b753c387cfd34d7b5860b3516f0c803ea1cd8cc56984f66677e1483c3a4bb2869bc93d2c1eeec0f4ee9a06d7  0001-gsk-prefer-ngl-over-gl-renderer-for-serializing-to-p.patch
+71c71ca7aebe38841f61b0493c60ecb58252ab29b1adec40a0162675106ce6249f72651b3dd2fb1f25c78cccb8f1f0edb4764b3f1bbb173c79b0b4b95cf6ae7a  0002-dmabuf-prefer-NGL-over-GL-renderer.patch
+e993722baee3aeb3fd80c5d7d549941a0e998fd69dd2cdd98aeb49332835c6d0a20359c0072edc68031311eefece297d1998220e451492c6299ca8881085c281  0003-Reapply-gl-Require-support-for-GLsync.patch
+fa529fd67eeb17618ea650caf67129a6ae5fa7d551cef5b6b115fb2d2ca87c3f0971c28275cc72278914e4a5d6c87669480bbb7165b24f06ad6d6f151f7177e7  0004-gsk-Drop-GskProfiler-in-gskcairorenderer.patch
+9aed3fa334e581611f2a7402ba9a77dc0a3a8733c534bffb6d37e33cc7feeffb0fdeee9bf9c1131710126bfb12db96a4f9b01d05d0deb9229368b9b350cbddab  0005-old-gl-use-new-api.patch
+"
