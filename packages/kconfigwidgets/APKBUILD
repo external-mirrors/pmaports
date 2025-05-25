@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kconfigwidgets
-pkgver=99999_git20250513
+pkgver=99999_git20250516
 pkgrel=0
-_commit="35070e59149304adb5de1f6a5ec40bf6a4f2b61e"
+_commit="8027165cabb31b10c8a0851e11755495cf28bb77"
 pkgdesc="Widgets for KConfig"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kconfigwidgets.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/kconfigwidgets-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-22/kconfigwidgets-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-da55fcc134cfcf28b3d413420da68c548ffcb1e2e7b1ff3e80765e2f27ab71fd10c1b5902253f23a4b3270fd2c0f712df87d953f63c4b4502031ffc4d2def725  kconfigwidgets-35070e59149304adb5de1f6a5ec40bf6a4f2b61e.tar.xz
+46dea7e13e6fd104eb31364da9c32a20f4358bac6878a0b559168c685b844b77bbb707a886860b60ba66844aaa47f09b6ec9124f13b3bcb4f654cf4c860f93b0  kconfigwidgets-8027165cabb31b10c8a0851e11755495cf28bb77.tar.xz
 "

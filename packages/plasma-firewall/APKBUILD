@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-firewall
-pkgver=99999_git20250515
+pkgver=99999_git20250519
 pkgrel=0
-_commit="1a93275b62c7f2f3f62cbbb73be6786812170135"
+_commit="a4f9b64f9d992bb56ce7218c68dacf20e6730b59"
 pkgdesc="Control Panel for your system firewall"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -34,7 +34,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-firewall.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/plasma-firewall-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-22/plasma-firewall-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-f4fabb96df48d13c30b50d097faef3ebb8fa5d6cbfe7f4a92c5f0dcbfebcbbd3387144adf9251d3d8d6d8afd85dd45e07009afa521fd49ba7f2f9492211ee023  plasma-firewall-1a93275b62c7f2f3f62cbbb73be6786812170135.tar.xz
+dabcb38a17f127ad375ca82c6a4923f3740dd558d7919653d50804b7ce14f7c10b9dc084c9533fc9d5c97899d94c494b7c83e86d7f8c03e3f9711b4d1704bacf  plasma-firewall-a4f9b64f9d992bb56ce7218c68dacf20e6730b59.tar.xz
 "

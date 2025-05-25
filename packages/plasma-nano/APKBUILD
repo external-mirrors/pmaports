@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-nano
-pkgver=99999_git20250515
+pkgver=99999_git20250519
 pkgrel=0
-_commit="d334583cc48fc82e749d1164b7f21bd66083367a"
+_commit="5ac7521ccc1124328e688a85bccda9a272e1a7d1"
 pkgdesc="A minimal Plasma shell package intended for embedded devices"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -26,7 +26,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-nano.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-16/plasma-nano-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-22/plasma-nano-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-4f7061820ab7db4c1479c3423237aac1b799c8d75f1196cf0897b5955baaf6cce9618a82235683a41cfa3d57bf522cec881321c08aa810e36694208120447791  plasma-nano-d334583cc48fc82e749d1164b7f21bd66083367a.tar.xz
+5c4254e666fda406d00633a5cde97121faecb0c46e2ca8e22edffe904d556d183041fbc02cf4c33a8312f6ab6672b9e4059605f96fd7dcad098c739bb46b0b59  plasma-nano-5ac7521ccc1124328e688a85bccda9a272e1a7d1.tar.xz
 "
