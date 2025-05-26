@@ -45,14 +45,6 @@ build-x86_64:
   script:
     - .ci/build-x86_64.sh
 
-build-x86:
-{% if ('x86' in archs) %}
-  when: always
-{% endif %}
-  extends: .build
-  script:
-    - .ci/build-x86.sh
-
 build-aarch64:
 {% if ('aarch64' in archs) %}
   when: always
@@ -70,21 +62,3 @@ build-armv7:
   tags: [qemu]
   script:
     - .ci/build-armv7.sh
-
-build-armhf:
-{% if ('armhf' in archs) %}
-  when: always
-{% endif %}
-  extends: .build
-  tags: [qemu]
-  script:
-    - .ci/build-armhf.sh
-
-build-riscv64:
-{% if ('riscv64' in archs) %}
-  when: always
-{% endif %}
-  extends: .build
-  tags: [qemu]
-  script:
-    - .ci/build-riscv64.sh
