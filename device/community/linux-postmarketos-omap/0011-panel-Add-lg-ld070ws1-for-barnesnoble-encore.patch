@@ -32,14 +32,12 @@ index 7dcf72646..2a9a835a3 100644
  obj-$(CONFIG_DRM_PANEL_MAGNACHIP_D53E6EA8966) += panel-magnachip-d53e6ea8966.o
 diff --git a/drivers/gpu/drm/panel/panel-lg-ld070ws1.c b/drivers/gpu/drm/panel/panel-lg-ld070ws1.c
 new file mode 100644
-index 000000000..bef966d49
+index 000000000..b671571cc
 --- /dev/null
 +++ b/drivers/gpu/drm/panel/panel-lg-ld070ws1.c
-@@ -0,0 +1,498 @@
+@@ -0,0 +1,483 @@
 +/*
 + * Panel Driver for panel on Barnes & Noble Nook Color, which is a LG LD070WS1
-+ *
-+ * Based on the ....... driver
 + *
 + * Author: Scott C <>
 + */
@@ -51,13 +49,17 @@ index 000000000..bef966d49
 +#include <linux/regulator/consumer.h>
 +#include <linux/spi/spi.h>
 +
++#include <video/display_timing.h>
++#include <video/of_display_timing.h>
++#include <video/videomode.h>
++
 +#include <drm/drm_modes.h>
 +#include <drm/drm_of.h>
 +#include <drm/drm_panel.h>
 +#include <drm/drm_print.h>
 +
 +
-+#define LD070WS1_WIDTH_MM  153
++#define LD070WS1_WIDTH_MM  154
 +#define LD070WS1_HEIGHT_MM 90
 +
 +#define LD070WS1_BUS_FORMAT MEDIA_BUS_FMT_RGB888_1X7X4_SPWG
@@ -70,48 +72,49 @@ index 000000000..bef966d49
 +
 +	struct regulator *vlcd_reg;
 +
++	bool has_dts_mode;
++	struct drm_display_mode dmode_dts;
++
 +	u32 bus_format;
 +
-+	bool first_boot;
++	enum drm_panel_orientation orientation;
 +};
 +
 +#define panel_to_ld070ws1(p) container_of(p, struct ld070ws1_panel, panel)
 +
 +static int ld070ws1_spi_write(struct ld070ws1_panel *panel_ctx,
-+				u8 reg_addr, u8 reg_data)
++				u8 reg_addr, u8 data)
 +{
 +	int ret;
 +
-+	u16 msg = (reg_addr << 10) | reg_data;
++	u8 tx_buf[2];
 +
-+	u8 panel_spi_command[2];
++	/*
++	 * To compose message for panel:
++	 * Messages are 16 bits, in this format:
++	 * top 6 (MSB) bits indicate register address
++	 * for writes, other 2 bits of MSB are 0
++	 * bottom 8 (LSB) bits indicate data
++	 */
 +
-+	dev_info(&panel_ctx->spi->dev, "SPI write: reg 0x%02x = 0x%02x\n", reg_addr, reg_data);
++	/* The register address goes in the top 6 bits of one of the bytes
++	 * Other two (least significant bits of this byte) are 0. */
++	u8 reg_addr_byte = ((u8) reg_addr << 2) & 0xfc;
++	
++	/* The data goes in the lower / least significant 8 bits */
++	u8 data_byte = (u8) data & 0xff;
++	
++	tx_buf[0] = data_byte;
++	tx_buf[1] = reg_addr_byte;
 +
++	dev_dbg(panel_ctx->dev,
++		"SPI write: Set register 0x%02x to 0x%02x (tx: [%02x %02x])\n",
++		reg_addr, data, tx_buf[0], tx_buf[1]);
 +
-+	// To compose message for panel:
-+	// Messages are 16 bits, in this format:
-+	// top 6 (MSB) bits indicate register address
-+	// bottom 8 (LSB) bits indicate data
-+	// for writes, other 2 bits are 0
-+
-+	//panel_spi_command[0] = reg_addr << 2;
-+	//panel_spi_command[1] = (reg_data) & 0xff;
-+
-+	panel_spi_command[0] = (msg >> 8) & 0xFF;
-+	panel_spi_command[1] = msg & 0xFF;
-+
-+
-+	dev_info(&panel_ctx->spi->dev,
-+		"SPI write: reg 0x%02x = 0x%02x (tx: [%02x %02x])\n",
-+		reg_addr, reg_data, panel_spi_command[0], panel_spi_command[1]);
-+
-+	//msg = (reg_addr << 10) | reg_data;
-+
-+	ret = spi_write(panel_ctx->spi, panel_spi_command, 2);
++	ret = spi_write(panel_ctx->spi, tx_buf, 2);
 +
 +	if (ret)
-+		dev_err(&panel_ctx->spi->dev, "SPI write to %u failed: %d\n",
++		dev_err(panel_ctx->dev, "SPI write to %u failed: %d\n",
 +			reg_addr, ret);
 +
 +	udelay(10);
@@ -119,90 +122,60 @@ index 000000000..bef966d49
 +	return ret;
 +}
 +
-+static int ld070ws1_spi_write_old(struct ld070ws1_panel *panel_ctx,
-+					unsigned char reg_addr, unsigned char reg_data)
-+{
-+	int ret;
-+	uint16_t msg = 0;
-+
-+	dev_info(&panel_ctx->spi->dev, "SPI write: reg 0x%02x = 0x%02x\n", reg_addr, reg_data);
-+
-+	msg = (reg_addr << 10) | reg_data;
-+
-+	ret = spi_write(panel_ctx->spi, (unsigned char *) &msg, 2);
-+
-+	if (ret)
-+		dev_err(&panel_ctx->spi->dev, "SPI write to %u failed: %d\n",
-+				reg_addr, ret);
-+
-+	udelay(10);
-+
-+	return ret;
-+}
-+
-+static int ld070ws1_init_w_newspi(struct ld070ws1_panel *panel_ctx)
-+{
-+	printk(KERN_INFO "Using %s to run init commands.\n", __func__);
-+
-+	// This first write command appears in u-boot code and
-+	// earlier/ BN kernel code, but not in cyanogenmod code.
-+	// ld070ws1_spi_write(panel_ctx, 0x00, 0x00);
-+
-+	ld070ws1_spi_write(panel_ctx, 0x00, 0xad);
-+	ld070ws1_spi_write(panel_ctx, 0x01, 0x30);
-+	ld070ws1_spi_write(panel_ctx, 0x02, 0x40);
-+	ld070ws1_spi_write(panel_ctx, 0x0e, 0x5f);
-+	ld070ws1_spi_write(panel_ctx, 0x0f, 0xa4);
-+	ld070ws1_spi_write(panel_ctx, 0x0d, 0x00);
-+	ld070ws1_spi_write(panel_ctx, 0x02, 0x43);
-+	ld070ws1_spi_write(panel_ctx, 0x0a, 0x28);
-+	ld070ws1_spi_write(panel_ctx, 0x10, 0x41);
-+
-+	return 0;
-+}
-+
-+static int ld070ws1_init_w_oldspi(struct ld070ws1_panel *panel_ctx)
-+{
-+	printk(KERN_INFO "Using %s to run init commands.\n", __func__);
-+
-+	// This first write command appears in u-boot code and
-+	// earlier/ BN kernel code, but not in cyanogenmod code.
-+	// ld070ws1_spi_write(panel_ctx, 0x00, 0x00);
-+
-+	ld070ws1_spi_write_old(panel_ctx, 0x00, 0xad);
-+	ld070ws1_spi_write_old(panel_ctx, 0x01, 0x30);
-+	ld070ws1_spi_write_old(panel_ctx, 0x02, 0x40);
-+	ld070ws1_spi_write_old(panel_ctx, 0x0e, 0x5f);
-+	ld070ws1_spi_write_old(panel_ctx, 0x0f, 0xa4);
-+	ld070ws1_spi_write_old(panel_ctx, 0x0d, 0x00);
-+	ld070ws1_spi_write_old(panel_ctx, 0x02, 0x43);
-+	ld070ws1_spi_write_old(panel_ctx, 0x0a, 0x28);
-+	ld070ws1_spi_write_old(panel_ctx, 0x10, 0x41);
-+
-+	return 0;
-+}
-+
 +static int ld070ws1_init(struct ld070ws1_panel *panel_ctx)
 +{
 +	int ret;
 +
-+	printk(KERN_INFO "In %s, line %d, now run init commands\n", __func__, __LINE__);
++	dev_dbg(panel_ctx->dev, "Sending SPI init sequence to panel\n");
 +
-+	ret = ld070ws1_init_w_oldspi(panel_ctx);
++	ret = ld070ws1_spi_write(panel_ctx, 0x00, 0xad);
 +	if (ret < 0)
 +		return ret;
 +
-+	printk(KERN_INFO "In %s, finished init commands.\n", __func__);
++	ret = ld070ws1_spi_write(panel_ctx, 0x01, 0x30);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x02, 0x40);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x0e, 0x5f);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x0f, 0xa4);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x0d, 0x00);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x02, 0x43);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x0a, 0x28);
++	if (ret < 0)
++		return ret;
++
++	ret = ld070ws1_spi_write(panel_ctx, 0x10, 0x41);
++	if (ret < 0)
++		return ret;
++
++	dev_dbg(panel_ctx->dev, "Completed init sequence\n");
 +
 +	return 0;
 +}
 +
 +static int ld070ws1_disable(struct drm_panel *panel)
 +{
-+	// struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
++	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
 +
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
++	dev_dbg(panel_ctx->dev, "%s called\n", __func__);
 +
++	/* Sleep before turning off video signal, per panel datasheet. */
 +	msleep(200);
 +
 +	return 0;
@@ -213,50 +186,15 @@ index 000000000..bef966d49
 +	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
 +	int ret;
 +
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
-+
-+	dev_info(panel_ctx->dev, "Powering on panel in %s...\n", __func__);
-+
-+	dev_info(panel_ctx->dev, "boxer first_boot is %s.\n",
-+			panel_ctx->first_boot ? "true" : "false");
-+
-+	/* Enable Regulator */
-+
-+	if (!panel_ctx->vlcd_reg)
-+		dev_warn(panel_ctx->dev, "No regulator available at panel_ctx->vlcd_reg.\n");
-+
-+	int reg_enabled_status;
-+
-+	reg_enabled_status = regulator_is_enabled(panel_ctx->vlcd_reg);
-+
-+	dev_info(panel_ctx->dev, "Boxer -> %s -> Regulator Status: %d\n",
-+		__func__, reg_enabled_status);
-+
-+	if (!reg_enabled_status)
-+		dev_info(panel_ctx->dev, "Boxer -> ld070ws1_prepare -> Regulator not enabled, enabling...\n");
-+	else
-+		dev_info(panel_ctx->dev, "Boxer -> ld070ws1_prepare -> Regulator already enabled, still calling regulator enable...\n");
++	dev_info(panel_ctx->dev, "Powering on panel\n");
 +
 +	ret = regulator_enable(panel_ctx->vlcd_reg);
-+	//if (ret < 0)
-+	//	return ret;
++	if (ret < 0) {
++		dev_err(panel_ctx->dev, "failed to enable supply: %d\n", ret);
++		return ret;
++	}
 +
-+	if (ret < 0)
-+		printk(KERN_INFO "Error enabling regulator in ld070ws1_prepare! - %s called , line %d\n", __func__, __LINE__);
-+	else
-+		printk(KERN_INFO "Enabled regulator in ld070ws1_prepare!! - %s called , line %d\n", __func__, __LINE__);
-+
-+
-+	int sleeptime_post_regenable_old_driver = 100;
-+	int sleeptime_post_regenable_my_adjustment = 0;
-+
-+	printk(KERN_INFO "In %s, line %d, running msleep( %d )\n", __func__, __LINE__,
-+			sleeptime_post_regenable_old_driver + sleeptime_post_regenable_my_adjustment);
-+
-+	msleep(sleeptime_post_regenable_old_driver + sleeptime_post_regenable_my_adjustment);
-+
-+	printk(KERN_INFO "In %s, done post-regulator enable sleeping\n", __func__);
-+
++	msleep(15);
 +
 +	/* Send SPI Init Sequence */
 +
@@ -264,16 +202,7 @@ index 000000000..bef966d49
 +	if (ret < 0)
 +		dev_err(panel_ctx->dev, "Panel init failed: %d\n", ret);
 +
-+	int sleeptime_post_initseq_old_driver = 200;
-+	int sleeptime_post_initseq_my_adjustment = 0;
-+
-+	printk(KERN_INFO "In %s, line %d, running msleep( %d )\n", __func__, __LINE__,
-+			sleeptime_post_initseq_old_driver + sleeptime_post_initseq_my_adjustment);
-+
-+	msleep(sleeptime_post_initseq_old_driver + sleeptime_post_initseq_my_adjustment);
-+
-+	printk(KERN_INFO "In %s, done sleeping\n", __func__);
-+
++	msleep(5);
 +
 +	return 0;
 +}
@@ -282,13 +211,13 @@ index 000000000..bef966d49
 +{
 +	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
 +
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
++	dev_info(panel_ctx->dev, "Powering off panel\n");
 +
 +	msleep(30);
 +
 +	regulator_disable(panel_ctx->vlcd_reg);
 +
-+	msleep(405);
++	msleep(400);
 +
 +	return 0;
 +}
@@ -297,38 +226,20 @@ index 000000000..bef966d49
 +{
 +	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
 +
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
++	dev_dbg(panel_ctx->dev,
++		"%s called. Sleeping before backlight is enabled\n", __func__);
 +
++	/* Sleep before backlight turns on */
 +	msleep(200);
-+
-+	panel_ctx->first_boot = false;
 +
 +	return 0;
 +}
 +
-+
 +static const struct drm_display_mode ld070ws1_modes[] = {
++	/* The first two modes listed here were pulled from kernel code
++	 * for CyanogenMod 11 for the Nook Color. */
 +	{
-+		// This mode was pulled from the kernel from Barnes & Noble
-+		.name = "1024x600@60Hz",
-+		.clock = 48000,
-+		.hdisplay = 1024,
-+		.hsync_start = 1024 + 70,
-+		.hsync_end = 1024 + 70 + 40,
-+		.htotal = 1024 + 70 + 40 + 200,
-+		.vdisplay = 600,
-+		.vsync_start = 600 + 10,
-+		.vsync_end = 600 + 10 + 10,
-+		.vtotal = 600 + 10 + 10 + 11,
-+		.width_mm = LD070WS1_WIDTH_MM,
-+		.height_mm = LD070WS1_HEIGHT_MM,
-+		.type = DRM_MODE_TYPE_DRIVER,
-+		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-+	},
-+	{
-+		// This and the following two modes were pulled from
-+		// the CyanogenMod 11 kernel.
-+		.name = "1024x600@54Hz",
++		.name = "1024x600-54Hz",
 +		.clock = 43200,
 +		.hdisplay = 1024,
 +		.hsync_start = 1024 + 64,
@@ -338,13 +249,10 @@ index 000000000..bef966d49
 +		.vsync_start = 600 + 12,
 +		.vsync_end = 600 + 12 + 8,
 +		.vtotal = 600 + 12 + 8 + 20,
-+		.width_mm = LD070WS1_WIDTH_MM,
-+		.height_mm = LD070WS1_HEIGHT_MM,
-+		.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
 +		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
 +	},
 +	{
-+		.name = "1024x600@60Hz-CM11",
++		.name = "1024x600-60Hz-CM11",
 +		.clock = 43200,
 +		.hdisplay = 1024,
 +		.hsync_start = 1024 + 34,
@@ -354,51 +262,92 @@ index 000000000..bef966d49
 +		.vsync_start = 600 + 12,
 +		.vsync_end = 600 + 12 + 8,
 +		.vtotal = 600 + 12 + 8 + 20,
-+		.width_mm = LD070WS1_WIDTH_MM,
-+		.height_mm = LD070WS1_HEIGHT_MM,
-+		.type = DRM_MODE_TYPE_DRIVER,
 +		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
 +	},
++	/* Commenting/ removing since the clock of this mode is too high for the
++	 * fck/pck >= 4 rule required by the dss driver and device with which this
++	 * panel driver was initially implemented. However this mode was used by
++	 * by initial vendor code and likely works in other contexts.
++	{
++		// This mode was pulled from the kernel from Barnes & Noble
++		.name = "1024x600-60Hz",
++		.clock = 48000,
++		.hdisplay = 1024,
++		.hsync_start = 1024 + 70,
++		.hsync_end = 1024 + 70 + 40,
++		.htotal = 1024 + 70 + 40 + 200,
++		.vdisplay = 600,
++		.vsync_start = 600 + 10,
++		.vsync_end = 600 + 10 + 10,
++		.vtotal = 600 + 10 + 10 + 11,
++		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
++	},
++	*/
 +};
 +
 +static int ld070ws1_get_modes(struct drm_panel *panel,
-+			    struct drm_connector *connector)
++				struct drm_connector *connector)
 +{
 +	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
-+
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
-+
 +	struct drm_display_mode *mode;
++	int num = 0;
++
++	dev_dbg(panel_ctx->dev, "%s called\n", __func__);
++
++	if (panel_ctx->has_dts_mode) {
++		mode = drm_mode_duplicate(connector->dev, &panel_ctx->dmode_dts);
++		if (!mode) {
++			dev_err(panel->dev,
++				"failed to duplicate / bad mode or failed to add mode\n");
++			return -EINVAL;
++		}
++		
++		mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
++		
++		drm_mode_probed_add(connector, mode);
++		num++;
++	}
++
 +
 +	for (int i = 0; i < ARRAY_SIZE(ld070ws1_modes); i++) {
 +		mode = drm_mode_duplicate(connector->dev, &ld070ws1_modes[i]);
-+
 +		if (!mode) {
-+			dev_err(panel->dev, "failed to duplicate / bad mode or failed to add mode\n");
++			dev_err(panel->dev,
++				"failed to duplicate / bad mode or failed to add mode\n");
 +			return -EINVAL;
 +		}
 +
++		if (!panel_ctx->has_dts_mode && i == 0)
++			mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
++		else
++			mode->type = DRM_MODE_TYPE_DRIVER;
++		
 +		drm_mode_probed_add(connector, mode);
++		num++;
 +	}
 +
++	connector->display_info.bpc = 8;
 +	connector->display_info.width_mm = LD070WS1_WIDTH_MM;
 +	connector->display_info.height_mm = LD070WS1_HEIGHT_MM;
 +	drm_display_info_set_bus_formats(&connector->display_info,
 +						&panel_ctx->bus_format, 1);
 +
-+	/* First tried this setting. Think I need opposite way, but
-+	 * pixdata_sample and sync_sample should be opposites I'm fairly
-+	 * sure.
-+	connector->display_info.bus_flags = DRM_BUS_FLAG_DE_HIGH
-+					  | DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE
-+					  | DRM_BUS_FLAG_SYNC_SAMPLE_POSEDGE;
-+	*/
++	connector->display_info.bus_flags = DRM_BUS_FLAG_DE_HIGH;
 +
-+	connector->display_info.bus_flags = DRM_BUS_FLAG_DE_HIGH
-+					  | DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE
-+					  | DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE;
++	/*
++	 * TODO: Remove once all drm drivers call
++	 * drm_connector_set_orientation_from_panel()
++	 */
++	drm_connector_set_panel_orientation(connector, panel_ctx->orientation);
 +
-+	return ARRAY_SIZE(ld070ws1_modes);
++	return num;
++}
++
++static enum drm_panel_orientation ld070ws1_get_orientation(struct drm_panel *panel)
++{
++	struct ld070ws1_panel *panel_ctx = panel_to_ld070ws1(panel);
++
++	return panel_ctx->orientation;
 +}
 +
 +static const struct drm_panel_funcs ld070ws1_funcs = {
@@ -407,25 +356,78 @@ index 000000000..bef966d49
 +	.prepare = ld070ws1_prepare,
 +	.unprepare = ld070ws1_unprepare,
 +	.get_modes = ld070ws1_get_modes,
++	.get_orientation = ld070ws1_get_orientation,
 +};
++
++/* Code to read a display timing / mode from device tree, if present.
++ * Wanted to move mode to device tree after discovering that the pixel
++ * clock needs to be less than 1/4 of the functional clock for an OMAP
++ * device. Therefore it seemed quite device-specific.
++ */
++static int ld070ws1_parse_dt_panel_timings(struct ld070ws1_panel *panel_ctx,
++							struct device_node *np)
++{
++	struct display_timing timing;
++	struct videomode vm;
++	u32 bus_flags = 0;
++	int ret = 0;
++
++	ret = of_get_display_timing(np, "panel-timing", &timing);
++	if (ret < 0) {
++		dev_err(panel_ctx->dev, "%pOF: problems parsing panel-timing (%d)\n",
++			np, ret);
++		return ret;
++	}
++
++	videomode_from_timing(&timing, &vm);
++	drm_display_mode_from_videomode(&vm, &panel_ctx->dmode_dts);
++
++	drm_bus_flags_from_videomode(&vm, &bus_flags);
++
++	if (bus_flags) {
++		dev_err(panel_ctx->dev, "Overriding bus_flags from devicetree not supported\n");
++		return -EINVAL;
++	}
++
++	panel_ctx->has_dts_mode = true;
++	dev_info(panel_ctx->dev, "Using panel-timing from device tree\n");
++
++	return 0;
++}
 +
 +static int ld070ws1_parse_dt(struct ld070ws1_panel *panel_ctx)
 +{
 +	struct device_node *np = panel_ctx->dev->of_node;
-+
 +	u32 bus_format_data_mapping = LD070WS1_BUS_FORMAT;
++	int ret;
++
++	ret = of_drm_get_panel_orientation(np, &panel_ctx->orientation);
++	if (ret < 0) {
++		dev_err(panel_ctx->dev, 
++			"%pOF: failed to get orientation %d\n", np, ret);
++		return ret;
++	}
++
++
++	if (of_get_child_by_name(np, "panel-timing")) {
++		ret = ld070ws1_parse_dt_panel_timings(panel_ctx, np);
++		if (ret < 0)
++			return ret;
++	}
 +
 +	if (of_property_present(np, "data-mapping")) {
 +		bus_format_data_mapping = drm_of_lvds_get_data_mapping(np);
 +		if (bus_format_data_mapping < 0) {
-+			dev_err(panel_ctx->dev, "%pOF: invalid or missing %s DT property\n",
++			dev_err(panel_ctx->dev,
++				"%pOF: invalid %s DT property\n",
 +				np, "data-mapping");
 +			return bus_format_data_mapping;
 +		}
 +	}
 +
 +	if (bus_format_data_mapping != LD070WS1_BUS_FORMAT) {
-+		dev_err(panel_ctx->dev, "LVDS Data Mapping (data-mapping) must be vesa-24 for this device.\n");
++		dev_err(panel_ctx->dev,
++			"LVDS Data Mapping (data-mapping) must be vesa-24 for this device.\n");
 +		return -EINVAL;
 +	}
 +
@@ -439,13 +441,11 @@ index 000000000..bef966d49
 +	struct ld070ws1_panel *panel_ctx;
 +	int ret;
 +
-+	printk(KERN_INFO " boxer : %s called , line %d\n", __func__, __LINE__);
++	dev_dbg(&spi->dev, "SPI probe called\n");
 +
 +	panel_ctx = devm_kzalloc(&spi->dev, sizeof(*panel_ctx), GFP_KERNEL);
 +	if (!panel_ctx)
 +		return -ENOMEM;
-+
-+	panel_ctx->first_boot = true;
 +
 +	spi_set_drvdata(spi, panel_ctx);
 +	panel_ctx->spi = spi;
@@ -454,50 +454,35 @@ index 000000000..bef966d49
 +	spi->bits_per_word = 16;
 +
 +	ret = spi_setup(spi);
-+	printk(KERN_INFO "boxer: spi setup returned : %d\n", ret);
++	dev_dbg(&spi->dev, "spi_setup() returned: %d\n", ret);
 +
 +	if (ret < 0) {
 +		dev_err(&spi->dev, "failed to setup SPI: %d\n", ret);
 +		return ret;
 +	}
 +
-+	// panel_ctx->panel.dev = &spi->dev;
 +	panel_ctx->dev = &spi->dev;
 +
-+	// also check on definition of devm_regulator_get, there is an ..._optional
-+	// as well, maybe the devm_regulator_get is requiring it and I dont
-+	// need errors below.
-+	panel_ctx->vlcd_reg = devm_regulator_get(&spi->dev, "vlcd");
-+
++	panel_ctx->vlcd_reg = devm_regulator_get(panel_ctx->dev, "vlcd");
 +	if (IS_ERR(panel_ctx->vlcd_reg))
-+		printk(KERN_INFO "Error getting regulator! - %s called , line %d\n", __func__, __LINE__);
-+	else
-+		printk(KERN_INFO "Got regulator!! - %s called , line %d\n", __func__, __LINE__);
-+
++		return dev_err_probe(panel_ctx->dev, PTR_ERR(panel_ctx->vlcd_reg),
++					"Failed to get VLCD regulator\n");
 +
 +	ret = ld070ws1_parse_dt(panel_ctx);
 +	if (ret < 0)
 +		return ret;
 +
-+	// PLACEHOLDER: If/When regulator enable/spi init added back, add here.
-+
-+	drm_panel_init(&panel_ctx->panel, &panel_ctx->spi->dev, &ld070ws1_funcs,
-+		       DRM_MODE_CONNECTOR_LVDS);
++	drm_panel_init(&panel_ctx->panel, panel_ctx->dev, &ld070ws1_funcs,
++			DRM_MODE_CONNECTOR_LVDS);
 +
 +	ret = drm_panel_of_backlight(&panel_ctx->panel);
-+
-+	// try not to fail if no backlight property in dts, courtesy of chatgpt:
-+	if (ret == -ENODEV) {
-+		dev_warn(&spi->dev, "No backlight found in DT, continuing without\n");
-+	} else if (ret) {
-+		dev_err(&spi->dev, "Failed to attach backlight: %d\n", ret);
-+		return ret;
-+	}
-+	// other drivers are using these two lines instead of the above:
-+	//if (ret)
-+	//	return dev_err_probe(dev, ret, "failed to add backlight\n");
++	if (ret)
++		return dev_err_probe(panel_ctx->dev, ret,
++					"Failed to add backlight from device tree\n");
 +
 +	drm_panel_add(&panel_ctx->panel);
++
++	dev_info(panel_ctx->dev, "Probe complete\n");
 +
 +	return 0;
 +}
