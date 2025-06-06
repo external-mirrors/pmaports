@@ -9,7 +9,6 @@ import pathlib
 import common
 
 # pmbootstrap
-import add_pmbootstrap_to_import_path
 import pmb.core
 import pmb.parse
 import pmb.parse._apkbuild
