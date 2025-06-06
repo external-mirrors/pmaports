@@ -27,7 +27,6 @@ placeholder:
     # The other build jobs run natively in docker on latest alpine stable and
     # those should always have whatever we need
     - apk upgrade -U
-    - .ci/lib/gitlab_prepare_ci.sh
   after_script:
     - cp -r /home/pmos/.local/var/pmbootstrap/packages/ packages/ || true
     - .ci/lib/move_logs.sh $CI_PROJECT_DIR

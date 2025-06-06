@@ -149,8 +149,6 @@ mr-settings:
 # be set to "parent_pipeline", and only the jobs that extend .build will run
 generate-build-jobs:
   stage: prepare
-  before_script:
-    - .ci/lib/gitlab_prepare_ci.sh
   needs: []
   script:
     - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
