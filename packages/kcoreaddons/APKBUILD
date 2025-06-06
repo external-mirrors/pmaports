@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcoreaddons
-pkgver=99999_git20250525
+pkgver=99999_git20250602
 pkgrel=0
-_commit="d77afd0fd4b5ac5ab9ac2c14724dc8f11a00893f"
+_commit="dc19e779d300938adfb1a88a34fbdb2e415d8548"
 pkgdesc="Addons to QtCore"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -16,6 +16,11 @@ makedepends="$depends_dev
 	extra-cmake-modules
 	graphviz
 	kde-qdoc-common
+	py3-build
+	py3-setuptools
+	py3-shiboken6
+	pyside6-dev
+	python3-dev
 	qt6-qttools
 	qt6-qttools-dev
 	samurai
@@ -23,8 +28,14 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcoreaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-25/kcoreaddons-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang kde-default-icon-theme:icons:noarch"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kcoreaddons-$_commit.tar.xz"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-lang
+	kde-default-icon-theme:icons:noarch
+	py3-$pkgname:_py3
+	"
 
 options="!check"
 builddir="$srcdir/kcoreaddons-$_commit"
@@ -59,6 +70,10 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 
+_py3() {
+	amove usr/lib/python*
+}
+
 icons() {
 	pkgdesc="Virtual to automatically pull in breeze icons by default for KDE apps"
 	install_if="$pkgname=$pkgver-r$pkgrel"
@@ -68,5 +83,5 @@ icons() {
 }
 
 sha512sums="
-7c3ca6a708f53deb124a68b4aaab8821013ed7f9d7e7556df46c0cc5322d5515416f033829399e4dfc38e0878cd6c437dd3426843ce604e72c8e99108c479028  kcoreaddons-d77afd0fd4b5ac5ab9ac2c14724dc8f11a00893f.tar.xz
+23df4f916b8200de0e0e2cb693ae5b3838d55cd8e17a5780ca93c205ec692bb2d5e0cd391307ac30a882eac9317554ce7eac9e40e4a10c13e8738902dea90b6b  kcoreaddons-dc19e779d300938adfb1a88a34fbdb2e415d8548.tar.xz
 "

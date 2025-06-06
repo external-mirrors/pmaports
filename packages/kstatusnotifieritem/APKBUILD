@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kstatusnotifieritem
-pkgver=99999_git20250524
+pkgver=99999_git20250601
 pkgrel=0
-_commit="d0ceb6c9b61437fff603f3accd38bd39e4bea091"
+_commit="0b6cc07ffb5defcff7125b560ee2d2d22e8a476a"
 pkgdesc="Implementation of Status Notifier Items"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -15,28 +15,28 @@ makedepends="
 	graphviz
 	kde-qdoc-common
 	kwindowsystem-dev
+	py3-build
+	py3-setuptools
+	py3-shiboken6
+	pyside6-dev
+	python3-dev
 	qt6-qtbase-dev
 	qt6-qttools-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kstatusnotifieritem.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-25/kstatusnotifieritem-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kstatusnotifieritem-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang py3-$pkgname:_py3"
 
 options="!check"
 builddir="$srcdir/kstatusnotifieritem-$_commit"
 
 build() {
-	export KDE_DOCS=/usr/share/kde/documentation
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
-
-	#cmake --build build --target prepare_docs
-	#cmake --build build --target generate_docs
-	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -45,9 +45,12 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
+
+_py3() {
+	amove usr/lib/python*
+}
+
 sha512sums="
-6651f335121bb9de57a8537af3885e9b9b85b5dd63ce63f2572fa860a8cc63fa49fa8260a90250cea96a36fe843f44ef8cb02e7e28a7292ba2e08d7f6f92977a  kstatusnotifieritem-d0ceb6c9b61437fff603f3accd38bd39e4bea091.tar.xz
+efc0712bda154f7de154ab0590af7d37cac65d6bda6c0837f090decab33e51a75fc011a9c574c85e3513c327b752041bd2f8f3a596d3f41149dccaa1695246c9  kstatusnotifieritem-0b6cc07ffb5defcff7125b560ee2d2d22e8a476a.tar.xz
 "

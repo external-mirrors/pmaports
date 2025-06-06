@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kguiaddons
-pkgver=99999_git20250524
+pkgver=99999_git20250531
 pkgrel=0
-_commit="e4383b86c17127588bf4acb351e072f4da2e1aa1"
+_commit="cd71da1a64ed158db39a882e64d5ff5c05c4de51"
 pkgdesc="Addons to QtGui"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -16,16 +16,21 @@ depends_dev="
 	wayland-dev
 	"
 makedepends="$depends_dev
-	extra-cmake-modules
 	doxygen
+	extra-cmake-modules
 	graphviz
 	kde-qdoc-common
+	py3-build
+	py3-setuptools
+	py3-shiboken6
+	pyside6-dev
+	python3-dev
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kguiaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-25/kguiaddons-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-bin"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kguiaddons-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-bin py3-$pkgname:_py3"
 
 options="!check"
 builddir="$srcdir/kguiaddons-$_commit"
@@ -58,6 +63,10 @@ bin() {
 	amove usr/share/applications
 }
 
+_py3() {
+	amove usr/lib/python*
+}
+
 sha512sums="
-32ea1e9985a44412ef0cea9187322bd0aa26003e59e8595cf7cb1c714bac8d969e73563a2722cb08a43abf505f932015a5d17ac2115880f8cfe10ce8e5443957  kguiaddons-e4383b86c17127588bf4acb351e072f4da2e1aa1.tar.xz
+bc28279f85158e8942c107dcd314dc09c7480d5e23841b193164d7935f9b4d56d0d2c3e704756f422719995c528ab97715149a5e99014e45de48d588a71f3323  kguiaddons-cd71da1a64ed158db39a882e64d5ff5c05c4de51.tar.xz
 "

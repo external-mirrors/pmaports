@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=bluedevil
-pkgver=99999_git20250525
+pkgver=99999_git20250603
 pkgrel=0
-_commit="73d7e579d8c197647a21bdcab7af0b0ae4d17259"
+_commit="ea54912180c048900f05355f4a873701d2ec704a"
 pkgdesc="Integrate the Bluetooth technology within KDE workspace and applications"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -42,7 +42,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/bluedevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-25/bluedevil-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/bluedevil-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -65,5 +65,5 @@ package() {
 }
 
 sha512sums="
-3d2bac576b1d3e4629fa494112246dd507c580cb5e045df47d428ddadd0d0ac9452a052fd439fc6ecab866273da9e09aa7e295f1562043b8ddd59c343daade0c  bluedevil-73d7e579d8c197647a21bdcab7af0b0ae4d17259.tar.xz
+869963e7f04cc4a6a1ff88a501d82deff6ec1115c2227e3ec67d94f2088627540d68bc377ad5779832aa533a63b643931a755ece0f2c3d876f6675d5d4357762  bluedevil-ea54912180c048900f05355f4a873701d2ec704a.tar.xz
 "

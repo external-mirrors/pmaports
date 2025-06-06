@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kamoso
-pkgver=99999_git20250505
+pkgver=99999_git20250602
 pkgrel=0
-_commit="c78dec8f7825aa0a2b02881c9824c3e220b2e746"
+_commit="b303d81858316f2a4dcc7d0a12187db78ea9c067"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x, riscv64 and loongarch64 blocked by qt5-qtwebengine -> purpose
 arch="all !armhf !ppc64le !s390x !riscv64 !loongarch64"
@@ -37,7 +37,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/multimedia/kamoso.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-05-25/kamoso-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kamoso-$_commit.tar.xz"
 options="!check" # Broken
 
 builddir="$srcdir/$pkgname-$_commit"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-be679b69936f7dd917604424b95545e77d2c614ee3ad4a81a9d96567a17e0e4b075b4840252604bf57aadd05a3bc59773ae07e4fd946bca6e4297a8874dc5102  kamoso-c78dec8f7825aa0a2b02881c9824c3e220b2e746.tar.xz
+ca5f8bcdc26778118338ebfbb4b482ce3c9d3fe2265f7dce12f19042601acda6781569ea3dc01e49918230d1b1edb7f6d6a5fb990c2e29df0fcb011afacbd0c3  kamoso-b303d81858316f2a4dcc7d0a12187db78ea9c067.tar.xz
 "
