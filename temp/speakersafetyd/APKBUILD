@@ -6,7 +6,12 @@ pkgdesc="asahi linux speaker safety daemon"
 url="https://github.com/AsahiLinux/speakersafetyd"
 arch="aarch64"
 license="MIT"
-depends="alsa-ucm-conf-asahi"
+# HACK: for some reason pmbootstrap tried to build alsa-ucm-conf-asahi for
+# x86_64 with the depend set here. I need to finish up the initial bootstrap of
+# the v25.06 branch, so let's comment it out for now, the 1 device using this
+# already pulls in alsa-ucm-conf-asahi anyway.
+# https://builds.sr.ht/~postmarketos/job/1506459
+# depends="alsa-ucm-conf-asahi"
 makedepends="alsa-lib-dev cargo cargo-auditable"
 install="$pkgname.pre-install"
 subpackages="$pkgname-openrc"
