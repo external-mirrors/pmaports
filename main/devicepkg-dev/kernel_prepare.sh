@@ -19,38 +19,109 @@ apply_jinja_template() {
 		"$filepath" > "$builddir"/kernel/configs/"${filename%.j2}"
 }
 
-# $1: config fragment name
-validate_config() {
-	_fragment="$1"
-	# builddir is defined at APKBUILD
-	# shellcheck disable=SC2154
-	_fragment_file="$builddir"/kernel/configs/"$_fragment"
-	# shellcheck disable=SC2154
-	_config_file="$builddir"/.config
+validate_all_configs() {
+    local _config_file="$builddir"/.config
 
-	# validate =y and =m values
-	while IFS= read -r line; do
-		if ! grep -q "$line" "$_config_file"; then
-			echo "ERROR: $line must be set! Please fix $_fragment fragment!"
-			EXIT_CODE=1
-		fi
-	done < <(grep -Eo "^CONFIG.*=[ym]" "$_fragment_file")
+    set -x
+    # Collect all requirements from all fragments
+    local all_requirements=""
+    for fragment in ${kernel_configs//.j2/}; do
+        fragment_file="$builddir/kernel/configs/$fragment"
+        if [ -f "$fragment_file" ]; then
+            all_requirements="$all_requirements $(cat "$fragment_file")"
+        fi
+    done
 
-	# validate =n values
-	while IFS= read -r line; do
-		if ! grep -q "# ${line%=n} is not set" "$_config_file"; then
-			echo "ERROR: ${line%=n} must NOT be set! Please fix $_fragment fragment!"
-			EXIT_CODE=1
-		fi
-	done < <(grep -Eo "^CONFIG.*=n" "$_fragment_file")
+    # Process =y and =m requirements with dependency analysis
+    while IFS= read -r line; do
+        option="${line%=*}"
+        value="${line#*=}"
 
-	# validate ="something" values
-	while IFS= read -r line; do
-		if ! grep -q "$line" "$_config_file"; then
-			echo "ERROR: ${line%=*} must be set to ${line#*=}! Please fix $_fragment fragment!"
-			EXIT_CODE=1
-		fi
-	done < <(grep -Eo "^CONFIG.*=\".*\"" "$_fragment_file")
+        if ! grep -q "^$line$" "$_config_file"; then
+            echo "ERROR: $line not set in final config!"
+            EXIT_CODE=1
+
+            # Do dependency analysis for missing options
+            if [ "$value" = "y" ] || [ "$value" = "m" ]; then
+                # Check if this option exists but with different value
+                actual_value=$(grep "^${option}=" "$_config_file" | cut -d= -f2)
+                if [ -n "$actual_value" ]; then
+                    echo "  Note: $option is =$actual_value instead of =$value"
+
+                    # Check for =y depending on =m issue
+                    if [ "$value" = "y" ] && [ "$actual_value" = "m" ]; then
+                        echo "  Hint: Built-in options can't depend on modules"
+                    fi
+                else
+                    # Option is completely missing - check dependencies
+                    analyze_missing_option "$option" "$value" "$all_requirements"
+                fi
+            fi
+        fi
+    done < <(echo "$all_requirements" | grep -E "^CONFIG_[A-Z0-9_]+=[ym]" | cut -d'#' -f1 | tr -d ' ' | sort -u)
+
+    # Process =n requirements
+    while IFS= read -r line; do
+        option="${line%=n}"
+        if ! grep -q "# $option is not set" "$_config_file"; then
+            echo "ERROR: $option must NOT be set!"
+            EXIT_CODE=1
+        fi
+    done < <(echo "$all_requirements" | grep -E "^CONFIG_[A-Z0-9_]+=n" | cut -d'#' -f1 | tr -d ' ')
+
+    # Process string requirements
+    while IFS= read -r line; do
+        if ! grep -q "^$line$" "$_config_file"; then
+            echo "ERROR: $line not found in final config!"
+            EXIT_CODE=1
+        fi
+    done < <(echo "$all_requirements" | grep -E "^CONFIG_[A-Z0-9_]+=\".*\"" | cut -d'#' -f1 | tr -d ' ')
+
+    return $EXIT_CODE
+}
+
+# Helper function to analyze why an option is missing
+analyze_missing_option() {
+    local option="$1"
+    local wanted_value="$2"
+    local all_requirements="$3"
+    local config_name="${option#CONFIG_}"
+
+    # Find Kconfig file for this option
+    local kconfig
+    kconfig=$(find . -name 'Kconfig*' -type f -exec grep -l "^config $config_name$" {} \; 2>/dev/null | head -n1)
+
+    if [ -z "$kconfig" ]; then
+        echo "  WARNING: Could not find Kconfig definition for $option"
+        return
+    fi
+
+    # Extract dependencies from Kconfig
+    local deps
+    deps=$(awk -v opt="$config_name" '
+    /^config / { 
+        if (in_block) exit
+        in_block = ($2 == opt)
+    }
+    in_block && /depends on/ {
+        sub(/.*depends on[[:space:]]+/, "")
+        print
+    }
+    ' "$kconfig" | grep -oE '[A-Z][A-Z0-9_]+' | sed 's/^/CONFIG_/' | sort -u)
+
+    if [ -n "$deps" ]; then
+        echo "  Missing dependencies:"
+        for dep in $deps; do
+            if ! echo "$all_requirements" | grep -q "^$dep="; then
+                echo "    - $dep (not in any fragment)"
+            elif [ "$wanted_value" = "y" ]; then
+                dep_value=$(echo "$all_requirements" | grep "^$dep=" | cut -d= -f2 | head -n1)
+                if [ "$dep_value" = "m" ]; then
+                    echo "    - $dep is =m but needs to be =y (for built-in $option)"
+                fi
+            fi
+        done
+    fi
 }
 
 # if full config is supplied instead of defconfig, copy it.
@@ -127,7 +198,7 @@ make ARCH="$_carch" $_pmos_defconfig ${kernel_configs//.j2/}
 EXIT_CODE=0
 for config in ${kernel_configs//.j2/};
 do
-	validate_config "$config"
+	validate_all_configs
 done
 
 if [ "$EXIT_CODE" -ne 0 ]; then
