@@ -8,7 +8,7 @@ _commit="a9cd6cda46ab81b1ec1d687d40ff0933dc6e6915"
 pkgdesc="Generic kernel for Qualcomm laptops"
 arch="aarch64"
 _carch="arm64"
-_flavor="postmarketos-qcom-laptop"
+_flavor="${pkgname#linux-}"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip
@@ -44,23 +44,16 @@ replaces="linux-lenovo-21bx"
 _repository="linux"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/jhovold/$_repository/archive/$_commit.tar.gz
+	config-postmarketos-qcom-laptop.aarch64
 	misc.config
 	pmos.config
 "
 builddir="$srcdir/linux-$_commit"
-_outdir="out"
 _defconfig="johan_defconfig"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/pmos.config" "$builddir"/arch/"$_carch"/configs/
-	cp "$srcdir/misc.config" "$builddir"/arch/"$_carch"/configs/
-
-	# Generate .config
-	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
-		"$_defconfig" pmos.config misc.config
+	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
 
 build() {
@@ -89,6 +82,7 @@ package() {
 
 sha512sums="
 147ff8e664ef809ad45de839947ead5ac006c67f5d63bb3199d0064102aab97671f477a1a6a0ef4df7512a1c560e40e31b2b8735990d5310c107e3ce880a35c4  linux-postmarketos-qcom-laptop-a9cd6cda46ab81b1ec1d687d40ff0933dc6e6915.tar.gz
-e7a651b3780b1cfa68ca65b9e62f77db4273cf5b9162514318c347790d961b4668d0c6eb51604aaaf15a15c9f370fe03b4b977163293af379fda9a08d5f7e73d  misc.config
-b26371a4208c79f301b7c398445e5d3503b8477be8d23d513bd5fd5746d1245980a914986203d205f986e4b58587c9a1243d8bfb1c27bc65685f1d3af186eb44  pmos.config
+dd1fd6071831ab89f19f29c60fd71239a3e1c6af3c57e62e8bb5f54f58de78b5da98dc175b9e5c2a1ab16fb0dec82305ff3db40ea2d07c1cda94722bd2a1a439  config-postmarketos-qcom-laptop.aarch64
+8302d7f7bf0ca42628ddc4e4a5c17cc8c6090f6bf37122a6473bc99b4b6083f8ebda4f0774987f6c541188ffe937710c3761631741bee6cda1bfeea26dc21d74  misc.config
+7f9337044a7174f311c1116e9bacaf7a3820b5c74dc616e3a5a6c7479f2b03cfd38ef19bf6afd2cc6a017a0a9ac3ad7fc8c32abc64f755a82e7548bf32617707  pmos.config
 "
