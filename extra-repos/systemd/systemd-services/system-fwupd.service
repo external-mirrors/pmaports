@@ -1,0 +1,57 @@
+[Unit]
+Description=Firmware update daemon
+Documentation=https://fwupd.org/
+Wants=modprobe@sd_mod.service
+After=modprobe@sd_mod.service dbus.service
+Before=display-manager.service
+ConditionVirtualization=!container
+
+[Service]
+Type=dbus
+TimeoutSec=180
+RuntimeDirectory=motd.d
+RuntimeDirectoryPreserve=yes
+BusName=org.freedesktop.fwupd
+ExecStart=/usr/libexec/fwupd/fwupd
+KeyringMode=private
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=no
+PrivateDevices=no
+PrivateTmp=true
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectProc=invisible
+ProtectSystem=full
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+SystemCallArchitectures=native
+Environment="GLIBC_TUNABLES=glibc.cpu.hwcaps=SHSTK"
+RestrictAddressFamilies=AF_NETLINK AF_UNIX AF_INET AF_INET6
+ReadWritePaths=-/boot/efi -/boot/EFI -/boot/grub -/efi/EFI -/sys/firmware/efi/efivars
+ConfigurationDirectory=fwupd
+StateDirectory=fwupd
+CacheDirectory=fwupd
+DeviceAllow=block-sd rw
+DeviceAllow=char-aux rw
+DeviceAllow=char-cpu/* rw
+DeviceAllow=char-drm rw
+DeviceAllow=char-gpiochip rw
+DeviceAllow=char-hidraw rw
+DeviceAllow=char-mei rw
+DeviceAllow=char-tpm rw
+DeviceAllow=char-usb rw
+DeviceAllow=char-usb_device rw
+DeviceAllow=char-mem rw
+DeviceAllow=char-nvme rw
+DeviceAllow=block-blkext rw
+DeviceAllow=char-wwan_port rw
+SystemCallFilter=@basic-io @file-system @io-event @ipc @network-io @process @sync @signal @timer @chown ioctl uname fadvise64 sysinfo madvise mremap splice vmsplice copy_file_range @raw-io
+Environment="FWUPD_SYSCALL_FILTER=systemd"
+SystemCallErrorNumber=EPERM

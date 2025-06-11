@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=72
+pkgver=73
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -40,6 +40,7 @@ subpackages="
 	flatpak-systemd:_service
 	fnott-systemd:_service
 	fprintd-systemd:_service
+	fwupd-systemd:_service
 	geoclue-systemd:_service
 	gnome-clocks-systemd:_service
 	gnome-terminal-systemd:_service
@@ -145,6 +146,7 @@ _flatpak_sources="
 # - https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
 _fnott_sources="user/fnott.service"
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
+_fwupd_sources="system/fwupd.service system/fwupd-refresh.service system/fwupd-refresh.timer" # From https://github.com/fwupd/fwupd/blob/main/data
 _geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
 _gnome_clocks_sources="user/gnome-clocks.service"
 _gnome_terminal_sources="user/gnome-terminal-server.service" # From https://gitlab.gnome.org/GNOME/gnome-terminal/-/blob/master/src/gnome-terminal-server.service.in
@@ -234,6 +236,7 @@ source="$(flatpath \
 	$_flatpak_sources \
 	$_fnott_sources \
 	$_fprintd_sources \
+	$_fwupd_sources \
 	$_geoclue_sources \
 	$_gnome_clocks_sources \
 	$_gnome_terminal_sources \
@@ -364,6 +367,9 @@ f73df99518af1fd13f96342f561d43b69ebf757cdfd4444cee61665d5bfaa715c5be458cb44feb4a
 ae2d20da95e519041f6eca39dd140895b2c46284f0894c60a29cf56b87704805146ddc2435e46e7fffbfc8bcab2cabceb32a10804ba1b648e2ed041c0b056102  tmpfiles.d-flatpak.conf
 0924315d4b7337edb42a2ecd7ba84d6a10437633028cd9c6ebd143c0668a6e6fea365d6644c336c70158e62d75a072db38bdee36cb677dfbfa609e9fdf43aca0  user-fnott.service
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
+7f1ce7bc76550d8c94a3bf403e2c6e9eecd0b09bdebce43ba6a12de7fcca30c47db1cf52bd3b38c77f3170e0fe3044faa8ecffb1ca70d7c5073c926420e81892  system-fwupd.service
+0676c52b2deb6f0a5e104689c73181bdbae16955d15773f5679119a75347ec61f1a4a7217a0dd517713ea250acd21cf12d034889c4ba2b466a84e53f2af05c18  system-fwupd-refresh.service
+d0a94f7caa61a6c195665a958ed8c77cc1b8f3e2ce6a8f596415fb7dd9717ecfe42a896eea4964347f9f7b52d3fbd399e3ee4751b0144808a86daee3c6691cec  system-fwupd-refresh.timer
 f3463b85ac47055b400dfd2e24694c5e1dc6ab039efac0fe54496fc027c0732cda5e52a362a497b372dea671dc615154e8abfea866728d243cbbcd25e68a91aa  system-geoclue.service
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
 ccf803ac6a764570a98845f0b0ddcde0529943472ce4cc3dc904501883a51fda482d7aef3b84fac89590e869fecdcec9142a6eac3db8ae73782a5e29f32eaae1  user-gnome-terminal-server.service
