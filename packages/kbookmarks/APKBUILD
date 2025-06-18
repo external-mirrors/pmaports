@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kbookmarks
-pkgver=99999_git20250524
+pkgver=99999_git20250609
 pkgrel=0
-_commit="617f8c23a48aad47e9272e96311338e53b6ff4c8"
+_commit="8a46b52edbc4f210f794d145e31e9ff4a9dcba33"
 pkgdesc="Support for bookmarks and the XBEL format"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -27,8 +27,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kbookmarks.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kbookmarks-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-11/kbookmarks-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kbookmarks-$_commit"
@@ -41,9 +41,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -52,10 +52,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-36b99ba4d6872252393c776e0a1e5d04486a1de4202d66ff93db2bc54e34cdb88f8676a6d085ade9dd7f040d24d85b6f747d7f0441f8f31d3ff7313707b05e28  kbookmarks-617f8c23a48aad47e9272e96311338e53b6ff4c8.tar.xz
+a672aca17bccfe4f79999c99c97c952c233490e063d429a42a5e6aca2972c96be066eebd0bab2608c16b762c812022012422e433ffd962f6675d85d4474f9443  kbookmarks-8a46b52edbc4f210f794d145e31e9ff4a9dcba33.tar.xz
 "

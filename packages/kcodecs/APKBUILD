@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcodecs
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="71e4e5dfef6a6e67eb012efa3a24501d34baef35"
+_commit="7948fa8643befa6728672dbd252f8932f3c04c5c"
 pkgdesc="Provide a collection of methods to manipulate strings using various encodings"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -21,8 +21,8 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcodecs.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kcodecs-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kcodecs-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kcodecs-$_commit"
@@ -35,9 +35,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+#	cmake --build build --target prepare_docs
+#	cmake --build build --target generate_docs
+#	cmake --build build --target generate_qch
 }
 
 check() {
@@ -46,10 +46,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+#	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+#	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-4095030cbcb8baabc765312e6c9ddca834ad04366b3eba6c608d57318b73d7af7e6d4af779ea73f5345b2b4b0d56236d2ce93974a7ea4c4cdc55f582a1152b98  kcodecs-71e4e5dfef6a6e67eb012efa3a24501d34baef35.tar.xz
+64cf597a81003b90d006d4ee80fd113ccb3830d497aa046bf5dac531d3737c02a922920028424167bc4de55fec38ff58d99048938f38a4a887e69f50844120db  kcodecs-7948fa8643befa6728672dbd252f8932f3c04c5c.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kxmlgui
-pkgver=99999_git20250603
+pkgver=99999_git20250611
 pkgrel=0
-_commit="cf19fcbb08a628add9ad8d012ab69d1443d4db54"
+_commit="9583c2ccae9c709f8644bc96c9b882a7ced03c06"
 pkgdesc="User configurable main windows"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -40,10 +40,9 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/frameworks/kxmlgui.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kxmlgui-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-11/kxmlgui-$_commit.tar.xz"
 subpackages="
 	$pkgname-dev
-	$pkgname-doc
 	$pkgname-lang
 	py3-$pkgname:_py3
 	"
@@ -60,8 +59,8 @@ build() {
 	cmake --build build
 
 	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -71,8 +70,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 _py3() {
@@ -80,5 +79,5 @@ _py3() {
 }
 
 sha512sums="
-3fbdddae535fe61d6d5584bb382e32cb567c39e3112bdc0ede6ad3432ef0a43e5c7992a6a65b335c8019fde5abe8b0bf645d39f12f5db80151052d655201c5de  kxmlgui-cf19fcbb08a628add9ad8d012ab69d1443d4db54.tar.xz
+c5cb47e81834f8da2b01d6d444006ceda2f6eff2426846404c4c26393bb5e4129ef242cc0c2df9cc661585f8545b553cf5bd07ad69be5f318c87310d7b79aaf3  kxmlgui-9583c2ccae9c709f8644bc96c9b882a7ced03c06.tar.xz
 "

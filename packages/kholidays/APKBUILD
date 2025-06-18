@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kholidays
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="3ad1e7099c85c6fa063d35bbdc50331e75d88632"
+_commit="f3919411e9f28a3917160705745fab3419d1b1ed"
 pkgdesc="Support for icon themes"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -21,8 +21,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kholidays.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kholidays-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kholidays-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kholidays-$_commit"
@@ -35,9 +35,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -46,10 +46,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-66df8be871ec5ea127bcff0ecb796b756132707230955cccd460eeeccea6379df1c29368c823a63d182a947661e26bb8cb004afd0091369c3109f03c404ee270  kholidays-3ad1e7099c85c6fa063d35bbdc50331e75d88632.tar.xz
+33288c662b6852eeea159941bf4df3c2b61c2ed401a7b1605307007a9a7b7b1fa1b56d50f275cf3803bb2f8f69d92d26da56ef9c9ec5a036ba7ca03db3b2b444  kholidays-f3919411e9f28a3917160705745fab3419d1b1ed.tar.xz
 "

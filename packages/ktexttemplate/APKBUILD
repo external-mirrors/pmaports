@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ktexttemplate
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="49571adc01f37d5942ceaa4f88770c29ed746ab0"
+_commit="29dfcde45b913ec9e79da1fee1ea0c37d3c3351f"
 pkgdesc="Library to allow application developers to separate the structure of documents from the data they contain"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -19,8 +19,8 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ktexttemplate.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/ktexttemplate-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc "
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/ktexttemplate-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 
 options="!check"
 builddir="$srcdir/ktexttemplate-$_commit"
@@ -33,9 +33,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -44,9 +44,9 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-75be4efc1f8974ddd1beb254bd9d8aa485a2794f38af347d587f0caa2bd7d85bf257096dd532894db9b96eb74a12a63f5bd11a20e7f664436939f27e9a5b2b29  ktexttemplate-49571adc01f37d5942ceaa4f88770c29ed746ab0.tar.xz
+f5c7b401f1d11d3f5c77cf6b42d5f8f31befd9cf5946f5b301a784f01da4c44f3dcb0da1d7914859d971b8afbadf6cbff75858ed7d8ed904406d69bf64900127  ktexttemplate-29dfcde45b913ec9e79da1fee1ea0c37d3c3351f.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kwidgetsaddons
-pkgver=99999_git20250603
+pkgver=99999_git20250609
 pkgrel=0
-_commit="e81243c81952db64d840c3dc8c0ee09866fef9c6"
+_commit="f4b061dc5b3a7d9db9a7c4e5025745d4705ec540"
 pkgdesc="Addons to QtWidgets"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -27,10 +27,9 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/frameworks/kwidgetsaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kwidgetsaddons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kwidgetsaddons-$_commit.tar.xz"
 subpackages="
 	$pkgname-dev
-	$pkgname-doc
 	$pkgname-lang
 	py3-$pkgname:_py3
 	"
@@ -46,9 +45,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+#	cmake --build build --target prepare_docs
+#	cmake --build build --target generate_docs
+#	cmake --build build --target generate_qch
 }
 
 check() {
@@ -58,8 +57,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+#	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+#	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 _py3() {
@@ -67,5 +66,5 @@ _py3() {
 }
 
 sha512sums="
-affb2660861d9bb2eb4f28609fb6015d23e0847fc2b445ff658a69b2276026c549aa32039fa2b416d44e712deb3269421796e210530540f00d47fe05c3775868  kwidgetsaddons-e81243c81952db64d840c3dc8c0ee09866fef9c6.tar.xz
+6304ab5527a29050d3979d92061d6ac3d87ae825743b0a4c2b976bfb4195df5561aff2af27a1f4a1ac49b825f724f881fff1daa32c81cb81475da0f445ad33ab  kwidgetsaddons-f4b061dc5b3a7d9db9a7c4e5025745d4705ec540.tar.xz
 "

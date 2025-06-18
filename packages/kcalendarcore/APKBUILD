@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcalendarcore
-pkgver=99999_git20250527
+pkgver=99999_git20250606
 pkgrel=0
-_commit="7c2685e54d5b6850582d52a8a7f804ff94745a6b"
+_commit="7e3c06d1bd8d61592a26f48d0459640e2a9acea4"
 pkgdesc="The KDE calendar access library"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -20,9 +20,9 @@ makedepends="$depends_dev
 	qt6-qttools-dev
 	samurai
 	"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/kcalendarcore.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kcalendarcore-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kcalendarcore-$_commit.tar.xz"
 options="!check" # RecursOn-ConnectDaily(2|3|6) make the builders stuck
 
 replaces="kcalcore"
@@ -38,9 +38,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -50,10 +50,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-2e08f0c4f71de69aaa6294163fcf5be764631826ba7417b0aef7fcc587b689ea19f2d4ad53218705cd7e95fea1b70ae073d3cfc04050b8dcbb1a5a54ced75e46  kcalendarcore-7c2685e54d5b6850582d52a8a7f804ff94745a6b.tar.xz
+236a351288731609623661146685bc7ff072d22db6c59d63c084e7ce1766d0e45a83fd28887267bc101bcdecef1dce1ae84c37f64a8f091241a1981692ea97df  kcalendarcore-7e3c06d1bd8d61592a26f48d0459640e2a9acea4.tar.xz
 "

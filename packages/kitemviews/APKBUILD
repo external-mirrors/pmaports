@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kitemviews
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="48c8a71f88d31003c355361a453bd8d06b4997c1"
+_commit="11b631217f2885ce07c35b6c53b6f312b98af945"
 pkgdesc="Widget addons for Qt Model/View"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -20,8 +20,8 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kitemviews.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kitemviews-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kitemviews-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kitemviews-$_commit"
@@ -34,9 +34,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -45,10 +45,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-365aaa84f449369a791a24e54d3c5f35d223e20914b60f7849ca2cb4be57e2051351417af6a997896673394521d6c1cfc95e98454f2d0ba5646f90e43d219d8d  kitemviews-48c8a71f88d31003c355361a453bd8d06b4997c1.tar.xz
+ca708a658f597f9841d26ed319d6109bcc30a69952a81f07082cdb7ea06143f215d94c87eeda68de1152847f0a6e345c29dec7fc1d24ef6bc4a2696a08cad848  kitemviews-11b631217f2885ce07c35b6c53b6f312b98af945.tar.xz
 "

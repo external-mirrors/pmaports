@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdesu
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="b8c29eccc91e3bf9a9ecbee8264d7d64bed691f6"
+_commit="938fe01180ae7d4fd5bcc38545c6f22e39272d7a"
 pkgdesc="Integration with su for elevated privileges"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -25,8 +25,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kdesu.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kdesu-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kdesu-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 # Since the goal of this library is to elevate privileges, suid being needed should be obvious
 options="suid"
 
@@ -43,9 +43,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -54,10 +54,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-4a7953aa08bc06ca728c50b9414a19dafe780d8c54ec2af6d2193ed3f874c064fe4fafb59af6c7142d96f8e36484077a11894f3b9cdc2cafd5a5e8d9bb7d3710  kdesu-b8c29eccc91e3bf9a9ecbee8264d7d64bed691f6.tar.xz
+60699d1ab0c1cc55460386c38c4ff55383a5256f789da9fde68471ca50e563a97db81c246ec1ed454d0c8488e5720250a7c249b3111c0e7bc56a1c590cac5783  kdesu-938fe01180ae7d4fd5bcc38545c6f22e39272d7a.tar.xz
 "

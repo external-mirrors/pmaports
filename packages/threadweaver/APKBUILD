@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=threadweaver
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="5723a0f270531ef320dd807db79b01f9cd5943ee"
+_commit="253523b478fa7425408fc711b082ec1d2a8c6467"
 pkgdesc="High-level multithreading framework"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -22,8 +22,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/threadweaver.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/threadweaver-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/threadweaver-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 
 options="!check"
 builddir="$srcdir/threadweaver-$_commit"
@@ -36,9 +36,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -47,10 +47,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-82bcf2a7541b46cfe166d0cd100c8e0ee26da5f16504306aaff340d7044dfc5c50152bbd52ccdd0b98823cef4a5c5d78f3909b570c53eee699e05845aacba080  threadweaver-5723a0f270531ef320dd807db79b01f9cd5943ee.tar.xz
+d82c79a96fd26e1a23e7235e9fa65751ad7ca79e77b21f8585feb7a98abc6ef5a43f30b989ebb4f8fddf5b480e6c373c3e85641768a272845c4157636bcf53c8  threadweaver-253523b478fa7425408fc711b082ec1d2a8c6467.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=syndication
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="cdb8a871eac548524637d684dab5be85e8f933a8"
+_commit="bc2eb37e8bfea0d4f73872962375893460a4aae6"
 pkgdesc="An RSS/Atom parser library"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -22,8 +22,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/syndication.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/syndication-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/syndication-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 
 options="!check"
 builddir="$srcdir/syndication-$_commit"
@@ -36,9 +36,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -47,10 +47,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-f5e50b806e9f0059351f3df4d5c83d50bfabfc79eeed78abaf2b9f5af124baf86b159a59caf8432db64da70e46c74d34cab448143abfe03789f7eb1011293865  syndication-cdb8a871eac548524637d684dab5be85e8f933a8.tar.xz
+f2d1c98c39bc6b8968e88427352cc41665eefaf1f84b4bb6102a3132771ec4085136dce33bec3c30240b76c977ac99a6b8985430d6b6520771997f9280b556d8  syndication-bc2eb37e8bfea0d4f73872962375893460a4aae6.tar.xz
 "

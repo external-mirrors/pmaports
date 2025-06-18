@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpackage
-pkgver=99999_git20250602
+pkgver=99999_git20250606
 pkgrel=0
-_commit="16dcc950f7f3123b32108a4eeb09112aed197064"
+_commit="2031aec6edf40df7071760cf0cbcd7c909f6806d"
 pkgdesc="Framework that lets applications manage user installable packages of non-binary assets"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kpackage.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kpackage-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kpackage-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="!check" # Fails due to requiring installed Plasma, which causes a circular dependency
 
@@ -40,9 +40,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -51,10 +51,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-4ececf00a6487268991c202ceb2057a35da9968d0a96390f84491b86da4e7735dfaf9f1676b7c1a3c15362efea23a12c1d1d284ec2ee577e047f65c2a07eed34  kpackage-16dcc950f7f3123b32108a4eeb09112aed197064.tar.xz
+9ffc1f4887e2cf18e95aec856e8d12bc6d7112e088edc87a4973eb5c9173bf75bf2644410646c1b585033ae900272eb1c6c070c8101a474f6200526be5a898a7  kpackage-2031aec6edf40df7071760cf0cbcd7c909f6806d.tar.xz
 "

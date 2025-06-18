@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kjobwidgets
-pkgver=99999_git20250602
+pkgver=99999_git20250606
 pkgrel=0
-_commit="144f6596979ee5f8901fc898d56b245c4046861e"
+_commit="f673da60e637b22784b14bf21884f7ba68ea9889"
 pkgdesc="Widgets for tracking KJob instances"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -28,8 +28,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kjobwidgets.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kjobwidgets-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang py3-$pkgname:_py3"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kjobwidgets-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang py3-$pkgname:_py3"
 
 options="!check"
 builddir="$srcdir/kjobwidgets-$_commit"
@@ -42,9 +42,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -53,8 +53,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 _py3() {
@@ -62,5 +62,5 @@ _py3() {
 }
 
 sha512sums="
-abf5a9b62c29c2a4ac59f126e781e62dceb5a5fe544b9ddd4bf440c72b7ee14a141981bf7ce3397acc61a4bf5596fb983839310a0f428af577f8cb60a011caba  kjobwidgets-144f6596979ee5f8901fc898d56b245c4046861e.tar.xz
+da8404905f0c814358fc5ee7e78d54cbb3da81ec93d4b4af65bd51382de752190ff41aa6ebfb1eea22d4018ae934a0f06a25cf6dc0fe7e4795cfbdeed4ede1db  kjobwidgets-f673da60e637b22784b14bf21884f7ba68ea9889.tar.xz
 "

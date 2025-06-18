@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kfilemetadata
-pkgver=99999_git20250529
+pkgver=99999_git20250609
 pkgrel=0
-_commit="a8cccd70963bf0cf896b47ca4a575b9254fbb643"
+_commit="be0c09c30f43c9a475d67bb4c1ff8ca82394befb"
 pkgdesc="A library for extracting file metadata"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -30,8 +30,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kfilemetadata.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kfilemetadata-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kfilemetadata-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kfilemetadata-$_commit"
@@ -44,9 +44,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -67,10 +67,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-9f937c17dc981228b7293b635a16d103ad2c1fb74d2776a64e406a96c566afbd6761f50a27530c80a5e08182504afdd15b401c45cfd1daa879cf877eb47418be  kfilemetadata-a8cccd70963bf0cf896b47ca4a575b9254fbb643.tar.xz
+18ebe2627554056b2fe0ef267fef608428be2a20f78f7f2d6d2232c513771685e802d719a93477bd435ffa954b56fd3d65fe9cc6295585d08c258a86a8ef5559  kfilemetadata-be0c09c30f43c9a475d67bb4c1ff8ca82394befb.tar.xz
 "

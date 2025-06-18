@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdav
-pkgver=99999_git20250528
+pkgver=99999_git20250606
 pkgrel=0
-_commit="8844408227b3466464600d87d1431c346575c821"
+_commit="03577edee0f416c762ef754a07b729c8f503f38d"
 pkgdesc="A DAV protocol implementation with KJobs"
 url="https://community.kde.org/Frameworks"
 # armhf blocked by qt6-qtdeclarative
@@ -24,9 +24,9 @@ makedepends="$depends_dev
 	samurai
 	"
 checkdepends="xvfb-run"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/frameworks/kdav.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kdav-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kdav-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kdav-$_commit"
@@ -39,9 +39,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -50,10 +50,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-52daec4d06d07b156577730d24f79cd2973eb264e62df16a4482fd8873bfff1f2b1961f1d42c9c54f138b9b90b1b1f022f69ae832b54de02d175da6dc71d830e  kdav-8844408227b3466464600d87d1431c346575c821.tar.xz
+2cb7fe207c739b1f65f53495264722bdac36e546dd2d4b0d4538937a9094252a2314fd536beb6ef5cb5a03cf418a9c0ea906c205bad439014f7a5193d4da3962  kdav-03577edee0f416c762ef754a07b729c8f503f38d.tar.xz
 "

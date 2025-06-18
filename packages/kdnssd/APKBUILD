@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdnssd
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="8f1cb20ab1014445c234fe1c8c9f3eb9bce273aa"
+_commit="d336287e24c8ae4b3d85fd5eb6b19dd8917a6bab"
 arch="all"
 pkgdesc="Network service discovery using Zeroconf"
 url="https://community.kde.org/Frameworks"
@@ -21,8 +21,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kdnssd.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kdnssd-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kdnssd-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kdnssd-$_commit"
@@ -35,9 +35,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -46,10 +46,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-fbdebf50b994cedc9579fc860543054d0d84382402ff296b61e15409f1cefeea4b0f59a43ac16911084fb94cf4c4cd2e9638ad901ee9a697ea10ff5e0ee52cf2  kdnssd-8f1cb20ab1014445c234fe1c8c9f3eb9bce273aa.tar.xz
+3f888038abb8c61b04057216c10f6c5e65e501fdd634876b795c9a2b4fe12c854becbecb00f4b7fb83011065f89f6161859f104bcee07915291cdc65a3b62c9a  kdnssd-d336287e24c8ae4b3d85fd5eb6b19dd8917a6bab.tar.xz
 "

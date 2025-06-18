@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kunitconversion
-pkgver=99999_git20250601
+pkgver=99999_git20250610
 pkgrel=0
-_commit="957f751028994b57c69e80bbca1aa9fec35f7630"
+_commit="6ce129eac8d6838685c5884eea3d8685931f352c"
 pkgdesc="Support for unit conversion"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -26,10 +26,9 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kunitconversion.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kunitconversion-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-10/kunitconversion-$_commit.tar.xz"
 subpackages="
 	$pkgname-dev
-	$pkgname-doc
 	$pkgname-lang
 	py3-$pkgname:_py3
 	"
@@ -46,9 +45,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -57,8 +56,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 _py3() {
@@ -66,5 +65,5 @@ _py3() {
 }
 
 sha512sums="
-37ff02d3205c518c059d328bba26bb6beb05cb3d8e155f22374bcc7bbdb23bd4c282fbec187368e3eac901110aaa3893c1bc49d4935aa09a32eb1c3bd37593a1  kunitconversion-957f751028994b57c69e80bbca1aa9fec35f7630.tar.xz
+67511e8fb6cf493a969047d05494a910cfee392e967bc5997a5f2c787a09b90776945464185c02aa1942d6c803a5955b33d43a32e3206aeafbf1c6496f58ba69  kunitconversion-6ce129eac8d6838685c5884eea3d8685931f352c.tar.xz
 "

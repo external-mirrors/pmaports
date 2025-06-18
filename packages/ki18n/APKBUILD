@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ki18n
-pkgver=99999_git20250603
+pkgver=99999_git20250606
 pkgrel=0
-_commit="1ada13a8eb4ce80babc103f9ed9e1fb4a9e17da0"
+_commit="c1ba013aaf57e287094c0bacd8d38082951a4e71"
 pkgdesc="Advanced internationalization framework"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -25,8 +25,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ki18n.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/ki18n-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/ki18n-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/ki18n-$_commit"
@@ -39,9 +39,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -51,10 +51,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-fc1a88ad419550870508f535e5bfca76bc880093d1892d2d11b71d0c6e6cd1e7a91d0d6c99df820dad9dfd1b196dab2ff07cba31e002d3f26399f60461eeec09  ki18n-1ada13a8eb4ce80babc103f9ed9e1fb4a9e17da0.tar.xz
+126bc72c82f7f2afa94829e923a2a1e29b5985bc1cb194f707a9fe76cbc8a7d259b0352151872175dea6bc4172396afd6bfa6e98ad045165d9dcf47f8dd48559  ki18n-c1ba013aaf57e287094c0bacd8d38082951a4e71.tar.xz
 "

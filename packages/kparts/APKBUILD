@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kparts
-pkgver=99999_git20250528
+pkgver=99999_git20250606
 pkgrel=0
-_commit="a348ee30e5147b6f4d60e5017b84a7e392e96493"
+_commit="85cb8099ec4b45ffa1a73e189867781051770791"
 pkgdesc="Document centric plugin system"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -32,8 +32,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kparts.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kparts-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kparts-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kparts-$_commit"
@@ -46,9 +46,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -57,10 +57,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-f8c7f6a23fcecbda55833e31b503079be6ccb8dd661824c500eea7bec75132ed871f40eea4a6390d72c601db8d8fba116b5884cbe403a323d6e7e9eb40ed4537  kparts-a348ee30e5147b6f4d60e5017b84a7e392e96493.tar.xz
+3e296a9e4610f0338f4fca79283473f48bd11b0f163b223259f0f720294dd61c8f1a9b934d02ae4e6cdb2418cabebc79327df5346a991f03aad6a43b7082e8b8  kparts-85cb8099ec4b45ffa1a73e189867781051770791.tar.xz
 "

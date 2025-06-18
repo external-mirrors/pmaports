@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=krunner
-pkgver=99999_git20250528
+pkgver=99999_git20250606
 pkgrel=0
-_commit="801d4efd0fe15b81d9948df9fd7258f41ee7b7ac"
+_commit="cde320088957bfd441d2cf6e4b87af8c3834a16a"
 pkgdesc="Framework for providing different actions given a string query"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -32,8 +32,8 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/frameworks/krunner.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/krunner-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/krunner-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 
 options="!check"
 builddir="$srcdir/krunner-$_commit"
@@ -46,9 +46,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -58,10 +58,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-353e184b774e47e3070b8bc6d0ab20e0f19aef1baa9b3df57222a61267d65a769b6d23860880a0f3c2ff287a70982968fe22a40111d1ded360c7f04358b0b137  krunner-801d4efd0fe15b81d9948df9fd7258f41ee7b7ac.tar.xz
+0e127607c99fc3ed410b3886630563625819253800fe3028d2ee17170fca61298ef1bf9476afc36c9bde03dcb7606619c58c6dc7d962701d0c0038a63bc94c69  krunner-cde320088957bfd441d2cf6e4b87af8c3834a16a.tar.xz
 "

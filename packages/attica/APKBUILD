@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=attica
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="e80c263356179ef7d927853c3bcfd0bd8f14dd8c"
+_commit="f1d300558d74614f1b1d6138c02ba677022d94dc"
 pkgdesc="Freedesktop OCS binding for Qt"
 url="https://www.kde.org/"
 arch="all"
@@ -17,9 +17,9 @@ makedepends="
 	qt6-qttools-dev
 	samurai
 	"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/attica.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/attica-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/attica-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/attica-$_commit"
@@ -32,9 +32,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -44,10 +44,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-f4ae1e483e340a115939bf9bea454f0ed5120a8a1275778789c972c48e2ae93a9165ffe56d1209f22b12ab4701493cd806a09dfb94685c58b02265ba6cf0048a  attica-e80c263356179ef7d927853c3bcfd0bd8f14dd8c.tar.xz
+59fcc22e32e1d412756a424bf13b022e79632f8c7824ea16b9fea279cceca16758785874381138a33083986861323b755c2c8e9bbef17ef4d059d5d82c33ae5a  attica-f1d300558d74614f1b1d6138c02ba677022d94dc.tar.xz
 "

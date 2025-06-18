@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kplotting
-pkgver=99999_git20250524
+pkgver=99999_git20250606
 pkgrel=0
-_commit="79c7c3580e0565f77a16ac7ed8a01b59b9cea16d"
+_commit="99b648c9a06e301862ddc0532039540e36e3c2e3"
 pkgdesc="Lightweight plotting framework"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -19,8 +19,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kplotting.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/kplotting-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/kplotting-$_commit.tar.xz"
+subpackages="$pkgname-dev"
 
 options="!check"
 builddir="$srcdir/kplotting-$_commit"
@@ -33,9 +33,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -44,10 +44,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-831b313f6a303bfd47557bfb8a9887f3f288a505a3e1b74999c5468d13acb477634410613230e8be20c8ad7ca4f14bc9242c1ea1fcf7165f52c821faa5c37174  kplotting-79c7c3580e0565f77a16ac7ed8a01b59b9cea16d.tar.xz
+5aebf7600ef3cf41f21357f1c6f7ea28b803c9ec770df7a1d0e90729674e77a7a138403ac8d4882301e429344fa870b675012cf17617ec109fe2cad5b37add85  kplotting-99b648c9a06e301862ddc0532039540e36e3c2e3.tar.xz
 "

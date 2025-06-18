@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ktexteditor
-pkgver=99999_git20250603
+pkgver=99999_git20250611
 pkgrel=0
-_commit="b3406b924019276606ba4edae4bc8ec2fa8f5f60"
+_commit="71ffbc94d9e4ef6bc1aafd99980a64fc47442981"
 pkgdesc="Advanced embeddable text editor"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -31,10 +31,8 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ktexteditor.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/ktexteditor-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
-
-replaces="ktexteditor5"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-11/ktexteditor-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/ktexteditor-$_commit"
@@ -47,9 +45,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -58,10 +56,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 sha512sums="
-ba2f9e7613e26db34c8a67b5cd04f9cae2e2fcd8ae8e7e961f5aa102c2b031c89261df9b758b93b20e49f6cf336835c20786537e5748fec2a8cc677b228a5271  ktexteditor-b3406b924019276606ba4edae4bc8ec2fa8f5f60.tar.xz
+5640e3e8e729c95fa7391d7255aecda3bd9051d27030be1f445ce5848873ec66f7c1bc46a216d66575a084a69e4b9c25b83c9067f544fafdb91a3d123f63df1b  ktexteditor-71ffbc94d9e4ef6bc1aafd99980a64fc47442981.tar.xz
 "

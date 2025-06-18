@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=knotifications
-pkgver=99999_git20250531
+pkgver=99999_git20250606
 pkgrel=0
-_commit="32fb4873643ae639f88a913b1f92587407cb3860"
+_commit="3042cc9bf676a5f6fc9425700f7b09d87463d85c"
 pkgdesc="Abstraction for system notifications"
 arch="all"
 url="https://community.kde.org/Frameworks"
@@ -31,8 +31,8 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/knotifications.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-03/knotifications-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang py3-$pkgname:_py3"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-09/knotifications-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang py3-$pkgname:_py3"
 
 options="!check"
 builddir="$srcdir/knotifications-$_commit"
@@ -45,9 +45,9 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 
-	cmake --build build --target prepare_docs
-	cmake --build build --target generate_docs
-	cmake --build build --target generate_qch
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -56,8 +56,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	DESTDIR="$pkgdir" cmake --build build --target install_html_docs
-	DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 
 _py3() {
@@ -65,5 +65,5 @@ _py3() {
 }
 
 sha512sums="
-3dedd25836d843de62216e4c7546da06a4aa549b031ac3bef8dff42ff26a87a715f4c3e35adc35fa4eb9a7975d15a2c745d66d704bfe6836e73d72d6adfa9294  knotifications-32fb4873643ae639f88a913b1f92587407cb3860.tar.xz
+ad7a36495880716f20bbc133fc893063f443082d379d914ef1a6457cd314bc509b3a47709cb93e41cbd4bd52440629b435af1234e2bd81392624edd8bc39f298  knotifications-3042cc9bf676a5f6fc9425700f7b09d87463d85c.tar.xz
 "
