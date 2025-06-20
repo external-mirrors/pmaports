@@ -1,11 +1,15 @@
 [Unit]
-Description=GNOME clocks
+Description=GNOME Clocks
+PartOf=gnome-session.target
+Requisite=gnome-session-initialized.target
+After=gnome-session-initialized.target
 
 [Service]
 Type=dbus
 BusName=org.gnome.clocks
 ExecStart=/usr/bin/gnome-clocks -b
-Restart=on-failure
+AmbientCapabilities=CAP_WAKE_ALARM
+Environment=ADW_DISABLE_PORTAL=1
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=gnome-session.target
