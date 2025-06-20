@@ -1,0 +1,51 @@
+# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
+
+pkgname=gnome-clocks
+pkgver=48.0
+pkgrel=2
+pkgdesc="Clock application designed for GNOME 3"
+url="https://apps.gnome.org/Clocks"
+arch="all"
+license="GPL-2.0-or-later"
+depends="gsettings-desktop-schemas"
+makedepends="
+	desktop-file-utils
+	geoclue-dev
+	geocode-glib-dev>=3.26.4-r1
+	gettext-dev
+	glib-dev
+	gnome-desktop-dev
+	gsound-dev
+	gtk4.0-dev
+	itstool
+	libadwaita-dev
+	libgweather4-dev
+	meson
+	vala
+	"
+checkdepends="appstream-glib"
+subpackages="$pkgname-lang $pkgname-doc"
+source="https://download.gnome.org/sources/gnome-clocks/${pkgver%.*}/gnome-clocks-$pkgver.tar.xz
+	gnome-clocks.desktop
+	"
+
+build() {
+	abuild-meson . output
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	install -Dm644 "$srcdir"/gnome-clocks.desktop \
+		"$pkgdir"/etc/xdg/autostart/gnome-clocks.desktop
+}
+
+sha512sums="
+6bf6c4c4b8827ccf04df8bf899098145566eeb9bcd5d4df437ef2193fa7c56d7309ab9447cecdd7bec56c2a247b7ed93b1ae4b7a2d099f8fcf34151b4eb11ecb  gnome-clocks-48.0.tar.xz
+c8439890965b8c81f61381559282935eafc86fcb6d3c537048ab9366249a3daabc50bce96218e2724e5740c06b029e3f9484977f615b0620117d333b0b010790  gnome-clocks.desktop
+"
