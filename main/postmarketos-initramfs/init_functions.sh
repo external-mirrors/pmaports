@@ -13,6 +13,8 @@ CONFIGFS_ACM_FUNCTION="acm.usb0"
 CONFIGFS_MASS_STORAGE_FUNCTION="mass_storage.0"
 HOST_IP="${unudhcpd_host_ip:-172.16.42.1}"
 
+IN_DEBUG_SHELL=""
+
 deviceinfo_getty="${deviceinfo_getty:-}"
 deviceinfo_name="${deviceinfo_name:-}"
 deviceinfo_codename="${deviceinfo_codename:-}"
@@ -1002,6 +1004,11 @@ setup_usb_storage_configfs() {
 }
 
 debug_shell() {
+	# We can't set the IN_DEBUG_SHELL variable before we might be running in a subshell
+	if [ "$IN_DEBUG_SHELL" = "y" ]; then
+		info "Already in debug shell"
+		return
+	fi
 	echo "Entering debug shell"
 	# if we have a UDC it's already been configured for USB networking
 	local have_udc
@@ -1051,6 +1058,7 @@ debug_shell() {
 	cat <<-EOF > /etc/profile
 	cat /README
 	. /init_functions.sh
+	export IN_DEBUG_SHELL=y
 	EOF
 
 	cat <<-EOF > /sbin/pmos_getty
@@ -1158,19 +1166,26 @@ debug_shell() {
 
 # Check if the user is pressing a key and either drop to a shell or halt boot as applicable
 check_keys() {
-	{
-		# If the user is pressing either the left control key or the volume down
-		# key then drop to a debug shell.
-		if iskey KEY_LEFTCTRL KEY_VOLUMEDOWN; then
-			debug_shell
-		# If instead they're pressing left shift or volume up, then fail boot
-		# and dump logs
-		elif iskey KEY_LEFTSHIFT KEY_VOLUMEUP; then
-			fail_halt_boot
-		fi
+	local action=""
 
+	# If the user is pressing either the left control key or the volume down
+	# key then drop to a debug shell.
+	if iskey KEY_LEFTCTRL KEY_VOLUMEDOWN; then
+		IN_DEBUG_SHELL="y"
+		action="debug_shell"
+	# If instead they're pressing left shift or volume up, then fail boot
+	# and dump logs
+	elif iskey KEY_LEFTSHIFT KEY_VOLUMEUP; then
+		action="fail_halt_boot"
+	fi
+
+	# Perform the selected action in a subshell and poll for completion
+	if [ -n "$action" ]; then
+	{
+		eval "$action"
 		touch /tmp/debug_shell_exited
 	} &
+	fi
 
 	while ! [ -e /tmp/debug_shell_exited ]; do
 		sleep 1
@@ -1323,6 +1338,10 @@ export_logs() {
 }
 
 fail_halt_boot() {
+	if [ "$IN_DEBUG_SHELL" = "y" ]; then
+		info "Boot fail while already in debug shell"
+		return
+	fi
 	export_logs
 	debug_shell
 	echo "Looping forever"
