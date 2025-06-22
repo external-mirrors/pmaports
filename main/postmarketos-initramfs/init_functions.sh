@@ -1224,6 +1224,7 @@ setup_framebuffer() {
 		echo "ERROR: /dev/fb0 did not appear after waiting 10 seconds!"
 		echo "If your device does not have a framebuffer, disable this with:"
 		echo "no_framebuffer=true in <https://postmarketos.org/deviceinfo>"
+		nosplash=y
 		return
 	fi
 
