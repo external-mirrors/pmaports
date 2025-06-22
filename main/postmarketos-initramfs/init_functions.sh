@@ -66,6 +66,8 @@ parse_cmdline_item() {
 			# used by init_2nd.sh
 			# shellcheck disable=SC2034
 			debug_shell=y
+			# Enable additional logging when booting to the debug shell
+			log_info=y
 			;;
 		pmos.force-partition-resize | PMOS_FORCE_PARTITION_RESIZE)
 			# used by init_functions_2nd.sh which is sourced
