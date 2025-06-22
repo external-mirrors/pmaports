@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=haruna
-pkgver=99999_git20250611
+pkgver=99999_git20250616
 pkgrel=0
-_commit="831d09431bbda1e5098b328ad5cc5d322452039f"
+_commit="87384cc751efa006fd349777a4c153f67d0cae26"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://invent.kde.org/multimedia/haruna"
@@ -21,6 +21,7 @@ makedepends="
 	kconfig-dev
 	kcoreaddons-dev
 	kdoctools-dev
+	kdsingleapplication-dev
 	kfilemetadata-dev
 	ki18n-dev
 	kiconthemes-dev
@@ -34,7 +35,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/multimedia/haruna.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-11/haruna-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-18/haruna-$_commit.tar.xz"
 subpackages="$pkgname-lang "
 
 options="!check"
@@ -57,5 +58,5 @@ package() {
 }
 
 sha512sums="
-2b1542c93abba6258001d5c183216db03e61c6449435d392a81eeb92f5e13068eb3d465a5e3e05bc8d40f629d8643db5d72f77ccb949e59baee1cab9a862fc4b  haruna-831d09431bbda1e5098b328ad5cc5d322452039f.tar.xz
+51f9c3ddb9efb2a000a15bf2370e23531203a2d628cd56335e8149aad5d26b1e6c012e2975870c93e353355913d5f45ae7f49b2ef118da398ec8992e0dcc15f0  haruna-87384cc751efa006fd349777a4c153f67d0cae26.tar.xz
 "

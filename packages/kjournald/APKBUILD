@@ -1,8 +1,8 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=kjournald
-pkgver=99999_git20250611
+pkgver=99999_git20250615
 pkgrel=0
-_commit="8becc1d97d97cd43de73f80912d875b50282b9f6"
+_commit="a2ac73f65ad8a9ac1952d14be5b7351dc96c5607"
 pkgdesc="Framework for interacting with systemd-journald"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -27,7 +27,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/system/kjournald.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-11/kjournald-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-18/kjournald-$_commit.tar.xz"
 
 build() {
 	cmake -B build -G Ninja \
