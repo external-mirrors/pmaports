@@ -1,8 +1,8 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-ui-console
-pkgver=0.1
-pkgrel=10
+pkgver=0.2
+pkgrel=0
 pkgdesc="Console environment, with no graphical/touch UI"
 url="https://postmarketos.org/"
 arch="noarch"
@@ -12,6 +12,8 @@ depends="
 	postmarketos-base-ui
 	postmarketos-base-ui-networkmanager
 	wireless-tools
+	zsh
+	zsh-completions
 	"
 options="!check pmb:systemd" # No testsuite
 subpackages="$pkgname-openrc:_openrc"
