@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-mobile
-pkgver=99999_git20250622
+pkgver=99999_git20250623
 pkgrel=0
-_commit="ae226561e2bdeecc1bf07cff8e622fb8e9445540"
+_commit="5ea804659d9913522971355b2ffa3e727b299757"
 pkgdesc="Modules providing phone functionality for Plasma"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -67,23 +67,22 @@ makedepends="
 provides="plasma-phone-components=$pkgver-r$pkgrel" # For backwards compatibility
 replaces="plasma-phone-components" # For backwards compatibility
 
-subpackages="$pkgname-lang"
+subpackages="$pkgname-dbg $pkgname-lang"
 
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-mobile.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-22/plasma-mobile-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-24/plasma-mobile-$_commit.tar.xz
 	99-flashlight.rules
 	"
-options="!check" # No tests
 
 options="!check"
 builddir="$srcdir/plasma-mobile-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -101,6 +100,6 @@ package() {
 }
 
 sha512sums="
-6ea3dab9b1bc3716177da78d8117a8d3b990c4dfda49f463e4f38d020ed774c883fabfc8db2f65a743da768c9849f05147bede26e623d533166c51c6a9f30d8c  plasma-mobile-ae226561e2bdeecc1bf07cff8e622fb8e9445540.tar.xz
+d97b7ee0ff8294a0ba17a2abe9c9130a0a66a15b1be5d7b5b9b3f95be25ab62b9866cfa0d6ac5077afc367e8fced6ae79e777b4df56cc1ed01223ae76f05f166  plasma-mobile-5ea804659d9913522971355b2ffa3e727b299757.tar.xz
 4badc25cbb7dc84d6af54cff5f3c09dcc37da86b7e930bdcab6d75f8dd90ef0dd9c8a3837ab696b1f4de9cad82d5e64ddd44904640a92e910a8f45524542be95  99-flashlight.rules
 "
