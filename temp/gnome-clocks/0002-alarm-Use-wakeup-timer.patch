@@ -1,0 +1,93 @@
+From a250912ff4d15aaf0992a9557bd78af7bbafcbeb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Wed, 16 Apr 2025 10:56:59 +0200
+Subject: [PATCH 2/2] alarm: Use wakeup timer
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This will take the system out of suspend when needed. If not activated
+via systemd (which allows to preserve CAP_WAKE_ALARM) it needs:
+
+sudo setcap 'cap_wake_alarm=ep' _build/src/gnome-clocks
+
+We use a static function with a weak-ref to avoid taking a strong
+ref on the item when adding the timer as we'd otherwise never dispose
+the timer. See https://gitlab.gnome.org/GNOME/vala/-/issues/957
+
+Signed-off-by: Guido Günther <agx@sigxcpu.org>
+---
+ src/alarm-item.vala | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/src/alarm-item.vala b/src/alarm-item.vala
+index 27968f7..20a89ac 100644
+--- a/src/alarm-item.vala
++++ b/src/alarm-item.vala
+@@ -16,6 +16,7 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
++using Gm;
+ 
+ namespace Clocks {
+ namespace Alarm {
+@@ -69,6 +70,27 @@ private class Item : Object, ContentItem {
+ 
+     public AlarmTime time { get; set; }
+     private GLib.DateTime? _ring_time;
++    private uint wakeup_id;
++
++    private static void add_wakeup_timer (Item this_) {
++        weak Item weak_this = this_;
++        var now = new GLib.DateTime.now ();
++        var seconds_left = (ulong)(this_.ring_time.difference (now)) / 1000 / 1000;
++        debug (@"Scheduling wakeup in $seconds_left seconds");
++        try {
++            // Use closure in a static method to not add a reference
++            // to this. Otherwise we'd never dispose the Item. See
++            // https://gitlab.gnome.org/GNOME/vala/-/issues/957)
++            weak_this.wakeup_id = Gm.wakeup_timeout_add_seconds_once_full (GLib.Priority.DEFAULT,
++                                                                           seconds_left,
++                                                                           () => {
++                                                                               debug ("Boottime alarm fired");
++                                                                               weak_this.wakeup_id = 0;
++                                                                           });
++        } catch (GLib.Error e) {
++            warning ("Failed to schedule wakeup for alarm: %s", e.message);
++        }
++    }
+ 
+     [CCode (notify = false)]
+     public GLib.DateTime? ring_time {
+@@ -87,6 +109,15 @@ private class Item : Object, ContentItem {
+                 notify_property ("active");
+             }
+             notify_property ("ring-time");
++
++            if (wakeup_id > 0) {
++                GLib.Source.remove (wakeup_id);
++                wakeup_id = 0;
++            }
++
++            if (_ring_time != null) {
++                add_wakeup_timer (this);
++            }
+         }
+     }
+ 
+@@ -187,6 +218,11 @@ private class Item : Object, ContentItem {
+         Object (id: guid);
+     }
+ 
++    ~Item () {
++        // Ensure we remove any wakeup timers
++        ring_time = null;
++    }
++
+     private void setup_bell () {
+         bell = new Utils.Bell (GLib.File.new_for_uri ("resource://org/gnome/clocks/sounds/alarm-clock-elapsed.oga"));
+         notification = new GLib.Notification (_("Alarm"));
+-- 
+2.51.0
+
