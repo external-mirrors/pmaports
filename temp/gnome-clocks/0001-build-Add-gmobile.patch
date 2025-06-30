@@ -1,0 +1,124 @@
+From 2394af1bd1188ae5037d99e5f17135c96331a570 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Wed, 16 Apr 2025 10:56:05 +0200
+Subject: [PATCH 1/2] build: Add gmobile
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Will be simpler once we can rely on a released version
+
+Signed-off-by: Guido Günther <agx@sigxcpu.org>
+---
+ .gitignore                              |  1 +
+ build-aux/flatpak/org.gnome.clocks.json | 18 ++++++++++++++++++
+ meson.build                             | 21 +++++++++++++++++++++
+ src/meson.build                         |  2 ++
+ subprojects/gmobile.wrap                |  5 +++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 subprojects/gmobile.wrap
+
+diff --git a/.gitignore b/.gitignore
+index 0b94280..778c350 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,3 +4,4 @@ _build
+ .vscode
+ .flatpak-builder/
+ .flatpak/
++subprojects/gmobile/
+diff --git a/build-aux/flatpak/org.gnome.clocks.json b/build-aux/flatpak/org.gnome.clocks.json
+index d0a5a73..c9dd09f 100644
+--- a/build-aux/flatpak/org.gnome.clocks.json
++++ b/build-aux/flatpak/org.gnome.clocks.json
+@@ -43,6 +43,24 @@
+                 }
+             ]
+         },
++        {
++            "name": "gmobile",
++            "buildsystem": "meson",
++            "config-opts": [
++                "-Dexamples=false",
++                "-Dintrospection=true",
++                "-Dvapi=true",
++                "-Dgtk_doc=true",
++                "-Dtests=false"
++            ],
++            "sources": [
++                {
++                    "type": "git",
++                    "url": "https://gitlab.gnome.org/World/Phosh/gmobile.git",
++                    "branch": "main"
++                }
++            ]
++        },
+         {
+             "name": "libgweather",
+             "buildsystem": "meson",
+diff --git a/meson.build b/meson.build
+index 1ff638c..8e9dddb 100644
+--- a/meson.build
++++ b/meson.build
+@@ -23,6 +23,27 @@ endif
+ gnomedesktop = dependency('gnome-desktop-4')
+ libgeoclue = dependency('libgeoclue-2.0', version: '>=2.4')
+ libadwaita = dependency ('libadwaita-1', version: '>=1.6.alpha')
++gmobile = dependency('gmobile', version: '>= 0.3.0', required: false)
++
++if not gmobile.found()
++  gmobile_project = subproject(
++    'gmobile',
++    version: '>= 0.3.0',
++    default_options:
++      [ 'examples=false',
++	'introspection=true',
++	'vapi=true',
++	'gtk_doc=false',
++	'tests=false'
++      ]
++  )
++  gmobile = declare_dependency(
++    dependencies: [
++      gmobile_project.get_variable('gmobile_dep'),
++      gmobile_project.get_variable('gmobile_vapi')
++    ]
++  )
++endif
+ 
+ cc = meson.get_compiler('c')
+ math = cc.find_library('m', required: false)
+diff --git a/src/meson.build b/src/meson.build
+index 344781c..a219326 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -56,6 +56,7 @@ clocks_vala_args = [
+ 
+ clocks_c_args = [
+   '-include', 'config.h',
++  '-DGMOBILE_USE_UNSTABLE_API',
+   '-DGWEATHER_I_KNOW_THIS_IS_UNSTABLE',
+   '-DGNOME_DESKTOP_USE_UNSTABLE_API',
+ ]
+@@ -63,6 +64,7 @@ clocks_c_args = [
+ clocks_dependencies = [
+   glib,
+   gio,
++  gmobile,
+   gobject,
+   gtk,
+   gweather,
+diff --git a/subprojects/gmobile.wrap b/subprojects/gmobile.wrap
+new file mode 100644
+index 0000000..e37ede7
+--- /dev/null
++++ b/subprojects/gmobile.wrap
+@@ -0,0 +1,5 @@
++[wrap-git]
++directory=gmobile
++url=https://gitlab.gnome.org/World/Phosh/gmobile.git
++revision=v0.3.0
++depth=1
+-- 
+2.51.0
+

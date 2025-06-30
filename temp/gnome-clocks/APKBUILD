@@ -1,0 +1,58 @@
+# Contributor: Rasmus Thomsen <oss@cogitri.dev>
+# Maintainer: team/gnome <pabloyoyoista@postmarketos.org>
+pkgname=gnome-clocks
+pkgver=49.0
+pkgrel=2
+pkgdesc="Keep track of time"
+url="https://apps.gnome.org/Clocks"
+arch="all"
+license="GPL-2.0-or-later"
+depends="gsettings-desktop-schemas"
+makedepends="
+	desktop-file-utils
+	geoclue-dev
+	geocode-glib-dev>=3.26.4-r1
+	gettext-dev
+	glib-dev
+	gmobile-dev
+	gnome-desktop-dev
+	gsound-dev
+	gtk4.0-dev
+	itstool
+	libadwaita-dev
+	libcap-setcap
+	libgweather4-dev
+	meson
+	vala
+	"
+checkdepends="appstream-glib"
+subpackages="$pkgname-lang $pkgname-doc"
+source="https://download.gnome.org/sources/gnome-clocks/${pkgver%.*}/gnome-clocks-$pkgver.tar.xz
+	0001-build-Add-gmobile.patch
+	0002-alarm-Use-wakeup-timer.patch
+	background.patch
+	"
+options="setcap" # see below
+
+build() {
+	abuild-meson . output
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	# for wakeup timer
+	setcap cap_wake_alarm+ep "$pkgdir"/usr/bin/gnome-clocks
+}
+
+sha512sums="
+598007600779b2aee369c7aec77391ce64f2b045e91508c6c2158c39b1bb084f20663ca2b6c89749acec85d23a7178361ce954084c1957b403b3c79a5793bd2a  gnome-clocks-49.0.tar.xz
+4c847354c8993673dd04f2da7f1e4c6acc9c46ede96a752e115ba56a02a08a4fdb1156f5155f2396db41c4e15403b3ad0b9327a3ad6ac7cdf498f40188979c8d  0001-build-Add-gmobile.patch
+d0b5dd5c2681b06e8ac68c3be35bc55bce0b77e3125f2ee28959226149d14d3fffcec67528f94fcf49c03a07578f228c20cc9286db8104dadd327e55e683f3a8  0002-alarm-Use-wakeup-timer.patch
+7cfe51ce3d6e5cd8abe3dd7ad2fd694aab13d69242125864b7e07af4b03e32207d7c25a413a94fabbd4c5657bbea1c554fb41e9eee9af3a4ec6c9bca63d39046  background.patch
+"
