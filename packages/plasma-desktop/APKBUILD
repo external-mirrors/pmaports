@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-desktop
-pkgver=99999_git20250624
+pkgver=99999_git20250630
 pkgrel=0
-_commit="bcc48f124ce0070eb81446f01024045630b40840"
+_commit="384fef574cfa42c23ed591860ff48f347675a2c5"
 pkgdesc="KDE Plasma Desktop"
 # armhf blocked by qt6-qtdeclarative
 # s390x blocked by plasma-workspace
@@ -78,7 +78,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-desktop.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-24/plasma-desktop-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-30/plasma-desktop-$_commit.tar.xz"
 subpackages="$pkgname-dbg $pkgname-doc $pkgname-lang knetattach"
 
 options="!check"
@@ -109,5 +109,5 @@ knetattach() {
 }
 
 sha512sums="
-0061ca4ee40feac3be349fbb580d44d4f1c6ec2da528e2ef9cfac22944c204a526718ff3108af30c032448d96f797e781ff6f87858fe413bbb4054f8ddbbeda6  plasma-desktop-bcc48f124ce0070eb81446f01024045630b40840.tar.xz
+9ff9f14b78dc6c973280ced7a6b4c5f3077426a350be2ded9a70e04b5be314e20c5e7f22f41155a9eaeac3e537311d4006020f90ef9fc5f0e9ddad8e549423bc  plasma-desktop-384fef574cfa42c23ed591860ff48f347675a2c5.tar.xz
 "

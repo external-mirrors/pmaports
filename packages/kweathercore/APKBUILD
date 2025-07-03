@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kweathercore
-pkgver=99999_git20250416
+pkgver=99999_git20250625
 pkgrel=0
-_commit="b22f79441d9e945a35d935bd1ba67ed6e49948fa"
+_commit="39400802b6d28581b99dd65242e12807cc61818f"
 pkgdesc="Library to facilitate retrieval of weather information including forecasts and alerts"
 url="https://invent.kde.org/libraries/kweathercore"
 # armhf blocked by qt6-qtdeclarative -> ki18n
@@ -23,7 +23,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/libraries/kweathercore.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-22/kweathercore-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-30/kweathercore-$_commit.tar.xz"
 options="!check" # No tests
 subpackages="$pkgname-dev $pkgname-doc"
 
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-2a7ea2fe5e20ee7a87279cfdd894f3f15c77d2fb165bdde3158852d8a381ca880a9911ad0ac6f4f0a1cb03d735540adc7d5ce16fe4605e7add62fd7aa226eb29  kweathercore-b22f79441d9e945a35d935bd1ba67ed6e49948fa.tar.xz
+a9bbf7936cf216e0517431dd87e004da03f6504aeb2684a7c847e8f621ec8498c09dcbfe288626bf7be7655d5cd23476fa992178351f858c0cfb298c22dd67a6  kweathercore-39400802b6d28581b99dd65242e12807cc61818f.tar.xz
 "
