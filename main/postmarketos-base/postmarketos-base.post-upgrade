@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# msm-firmware-loader<1.8.0 mounts things on /lib read-only, breaking the
+# migration. And it needs a reboot to take effect. Since we cannot warranty
+# upgrades are in a safe state, if there is something mounted on /lib, just
+# wait for the next -base upgrade for executing the /usr-merge.
+if mount | grep "on /lib" ; then
+    echo "WARNING: There is something mounted on /lib, skipping the /usr merge"
+    exit 0
+fi
+
+if [ -d /bin -a ! -L /bin ] || \
+       [ -d /sbin -a ! -L /sbin ] || \
+       [ -d /lib -a ! -L /lib ]; then
+    echo "INFO: /usr merge dryrun to check for errors"
+    if merge-usr --dryrun ; then
+        echo "INFO: Doing the /usr merge"
+        merge-usr
+        exit $?
+    else
+        echo "Error trying the /usr merge!"
+        exit 1
+    fi
+fi
