@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -d /bin -a ! -L /bin ] || \
+       [ -d /sbin -a ! -L /sbin ] || \
+       [ -d /lib -a ! -L /lib ]; then
+    echo "INFO: /usr merge dryrun to check for errors"
+    if merge-usr --dryrun ; then
+        echo "INFO: Doing the /usr merge"
+        merge-usr
+        exit $?
+    else
+        echo "Error trying the /usr merge!"
+        exit 1
+    fi
+fi
