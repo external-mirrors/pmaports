@@ -1,0 +1,13 @@
+[Unit]
+Description=Lightweight Wayland notification daemon
+Documentation=man:mako(1)
+PartOf=default.target
+After=default.target
+
+[Service]
+ExecCondition=/bin/sh -c '[ -n "$WAYLAND_DISPLAY" ]'
+ExecStart=/usr/bin/mako
+ExecReload=/usr/bin/makoctl reload
+
+[Install]
+WantedBy=default.target

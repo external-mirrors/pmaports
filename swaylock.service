@@ -1,0 +1,10 @@
+[Unit]
+Description=lock screen for sway
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
+
+[Install]
+WantedBy=graphical-sesion.target

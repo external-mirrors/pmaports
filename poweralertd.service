@@ -1,0 +1,14 @@
+[Unit]
+Description=UPower-powered power alerter
+Documentation=man:poweralertd(1)
+PartOf=default.target
+Requires=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/poweralertd
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+
