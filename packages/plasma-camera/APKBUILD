@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: Bart Ribbers <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-camera
-pkgver=99999_git20250521
+pkgver=99999_git20250709
 pkgrel=0
-_commit="54f5ea0281c5ceb3c7254c758b880e67f8c3459a"
+_commit="20be19f97169d0dec3b80123af36546618520abe"
 pkgdesc="Camera application for Plasma Mobile"
-# armhf blocked by qt5-qtdeclarative
+# armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://invent.kde.org/plasma-mobile/plasma-camera"
 license="GPL-3.0-or-later AND BSD-3-Clause"
@@ -16,22 +14,27 @@ depends="
 	gst-plugins-bad
 	gst-plugins-good
 	kirigami
+	libcamera
 	qt6-qtmultimedia
+	qt6-qtsensors
 	"
 makedepends="
 	extra-cmake-modules
 	kcoreaddons-dev
 	ki18n-dev
 	kirigami-dev
+	libcamera-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
+	qt6-qtmultimedia-dev
+	qt6-qtsensors-dev
 	qt6-qtsvg-dev
 	samurai
 	"
 checkdepends="appstream"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/plasma-mobile/plasma-camera.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-30/plasma-camera-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/plasma-camera-$_commit.tar.xz"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
@@ -51,5 +54,5 @@ package() {
 }
 
 sha512sums="
-3d51cdec2fcb20416be4d3859f582a2d2fa7002d7882f8b3522b0eb9f1a5a98f27d93a07b3848d416a3bace9c84118d05ff4b324945d025e130ffab34fef419a  plasma-camera-54f5ea0281c5ceb3c7254c758b880e67f8c3459a.tar.xz
+b106231a81a3248529cc256e5ec71c205e7af7953e4791e47486bad21b0fc6409951cca9c15de625bd7a61e21c59947337ada3e8ce181f22558555f6eaecb177  plasma-camera-20be19f97169d0dec3b80123af36546618520abe.tar.xz
 "

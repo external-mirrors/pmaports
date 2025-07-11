@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ktnef
-pkgver=99999_git20250627
+pkgver=99999_git20250706
 pkgrel=0
-_commit="32c12eef0cb0d5add8e9852817ccd8e9c4886a4a"
+_commit="e709f7ea5dc4c66538d23a21ebf5654627b34379"
 pkgdesc="API for handling TNEF data"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/ktnef.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-06-30/ktnef-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/ktnef-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -46,5 +46,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-53e4da1c4696853d1174d4c53daa9c3eecdc3b7e47e287d0cbb58c3db7338f91eccb19cb28a0e9d62245a55334c4444272bbfd84184c0f4650cfa27058f1eb14  ktnef-32c12eef0cb0d5add8e9852817ccd8e9c4886a4a.tar.xz
+f8edcf5902396d2ff158f2b74e90f4fd1dca3a8c835a52e244988408af2cdd3a683456e8c6664a36b7528772e375aeca1c4941e5c569a3b459667117cfa254eb  ktnef-e709f7ea5dc4c66538d23a21ebf5654627b34379.tar.xz
 "
