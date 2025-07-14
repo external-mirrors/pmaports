@@ -3,7 +3,7 @@
 
 pkgname=linux-next
 pkgver=6.16_git20250704
-pkgrel=0
+pkgrel=1
 _nextver="${pkgver#*_git}"
 pkgdesc="Linux next kernel"
 arch="armv7 aarch64"
@@ -64,6 +64,7 @@ prepare() {
 }
 
 build() {
+	export PATH="$PATH:/usr/lib/llvm20/bin" # TODO: https://gitlab.alpinelinux.org/alpine/aports/-/merge_requests/87006
 	unset LDFLAGS
 	make LLVM=1 O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
