@@ -1,0 +1,54 @@
+# tmpfiles configs for projects that install files outside /usr/
+
+maintainer="Aster Boese <asterboese@mailbox.org>"
+# How to add a new config (5 steps):
+pkgname=postmarketos-tmpfiles-configs
+# 1. bump pkgver
+pkgver=2
+pkgrel=0
+pkgdesc="systemd-tmpfiles configs"
+url="https://postmarketos.org"
+arch="noarch"
+options="!check"
+license="BSD-3-Clause"
+
+# 2. Add a new entry to subpackages in the format
+#    <pkgname>-tmpfiles:_tmpfiles where pkgname is the name
+#    of the package this tmpfile config should be part of
+#    ALPHABETICAL ORDER!!!
+subpackages="
+	mobile-config-firefox-tmpfiles:_tmpfiles
+	"
+
+# 3. Add a new entry below with the list of tmpfile configs
+#    to install for that package
+_mobile_config_firefox_sources="mobile-config-firefox.conf"
+
+# 4. Add the _sources variable to the list below
+source="
+	$_mobile_config_firefox_sources
+	"
+
+_tmpfiles() {
+	local name=$(echo ${subpkgname%%-tmpfiles})
+	local n=$(echo ${subpkgname%-tmpfiles} | sed s/-/_/g)
+	install_if="$pkgname=$pkgver-r$pkgrel $name systemd"
+
+	for f in $(eval "echo \$_${n}_sources"); do
+		prefix="$subpkgdir"
+		mode=644
+		prefix="$prefix/usr/lib/tmpfiles.d"
+		install -Dm"$mode" "$srcdir/$f" "$prefix/$f"
+	done
+
+	depends="systemd"
+	pkgdesc="$pkgdesc (tmpfiles configs)"
+}
+
+package() {
+	mkdir -p "$pkgdir"
+}
+
+sha512sums="
+8903fe38e8ce4734c8bffcd800a5d3bbf5c94fefd9b6d819957ac71d48111b8e29514fd86923c46d39689ad182e67a6fc8cd05b230c4ec7bcd92ec608d677e4c  mobile-config-firefox.conf
+"
