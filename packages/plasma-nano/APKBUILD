@@ -18,6 +18,7 @@ makedepends="
 	libplasma-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	samurai
 	"
 
@@ -29,11 +30,10 @@ _repo_url="https://invent.kde.org/plasma/plasma-nano.git"
 source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/plasma-nano-$_commit.tar.xz"
 options="!check" # No tests
 
-options="!check"
 builddir="$srcdir/plasma-nano-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib

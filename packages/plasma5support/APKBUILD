@@ -1,28 +1,34 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma5support
-pkgver=99999_git20250603
+pkgver=99999_git20250711
 pkgrel=0
-_commit="e32c8ef96b0fea01848cddc93fa3c6c0878dcc3f"
+_commit="cc86d34e2acfad0bda657bd62d79f779efbfe39f"
 pkgdesc="Support components for porting from KF5/Qt5 to KF6/Qt6"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
-makedepends="
-	extra-cmake-modules
-	doxygen
+depends_dev="
 	kconfig-dev
 	kcoreaddons-dev
+	kholidays-dev
 	ki18n-dev
 	kidletime-dev
 	kio-dev
 	kpackage-dev
 	kservice-dev
+	kunitconversion-dev
 	kxmlgui-dev
 	libksysguard-dev
+	networkmanager-qt-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	doxygen
+	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
@@ -32,7 +38,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma5support.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/plasma5support-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-11/plasma5support-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -45,7 +51,7 @@ build() {
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_TESTING=ON \
+		-DBUILD_TESTING="$(want_check && echo ON || echo OFF)" \
 		-DBUILD_QCH=ON
 	cmake --build build
 }
@@ -63,5 +69,5 @@ lang() {
 	default_lang
 }
 sha512sums="
-a4b09b616b00fcb230344203c11bbf10cf0b667ae103173f5bac4a18401bf167157dfb94679fa946879bdfa9daf5a91f525749eabd2252ecc78dd29588fbe223  plasma5support-e32c8ef96b0fea01848cddc93fa3c6c0878dcc3f.tar.xz
+659784d2aa111dc83b8134ce1f81c4059465e201cc7742188e00aee075496e89f438bc3248faf886a87003f7db218d5e0ae95114dbd9651ec3c6a5f6097d2198  plasma5support-cc86d34e2acfad0bda657bd62d79f779efbfe39f.tar.xz
 "

@@ -1,12 +1,10 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kscreen
-pkgver=99999_git20250709
+pkgver=99999_git20250711
 pkgrel=0
-_commit="7b034825c0a12dc3d7c9acf88585381e08b2149b"
+_commit="139b4b35de0b9f9a19325cfd086d3efb4b14d1ec"
 pkgdesc="KDE's screen management software"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -30,24 +28,26 @@ makedepends="
 	libkscreen-dev
 	libplasma-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qtsensors-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="wlheadless-run"
 
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kscreen.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/kscreen-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-11/kscreen-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kscreen-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -57,7 +57,7 @@ build() {
 check() {
 	# kscreen-kded-configtest is broken
 	# kscreen-kded-osdtest hangs
-	xvfb-run ctest --test-dir build -E "kscreen-kded-(config|osd)test"
+	wlheadless-run -- ctest --test-dir build -E "kscreen-kded-(config|osd)test"
 }
 
 package() {
@@ -68,5 +68,5 @@ package() {
 }
 
 sha512sums="
-cf1c25022c549cc8ea5481ae577b7eea840ea29a4b148de1ffc26c3164ab27ebb716b5e8d9eda08a9f333099ea501a7ae3bedfbf1a5405ad282ba0d21bd2fd99  kscreen-7b034825c0a12dc3d7c9acf88585381e08b2149b.tar.xz
+d4056e917a24c62d424f257ef6095e4c29c654eb953465d3acdf0cfce9f5cc0a4f1f9925be796333996d6e2cac8fb14e56a31273184f4456949eb79d938bac80  kscreen-139b4b35de0b9f9a19325cfd086d3efb4b14d1ec.tar.xz
 "

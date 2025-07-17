@@ -6,17 +6,20 @@ pkgver=99999_git20250706
 pkgrel=0
 _commit="e4663aaa8fe1dd7f68c438b81c070de21f9f8d38"
 pkgdesc="The KDE calendar access library"
-arch="all"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later"
 depends_dev="
 	libical-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
 	"
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	kde-qdoc-common
+	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"

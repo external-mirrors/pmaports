@@ -2,12 +2,12 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=dragon
-pkgver=99999_git20250709
+pkgver=99999_git20250711
 pkgrel=0
-_commit="8147fb075ec73e32c0af332357765bc80cf36859"
+_commit="b2afdcf16dc5a204f91a6507b5ca08cade827e52"
 pkgdesc="A multimedia player where the focus is on simplicity, instead of features"
 url="https://kde.org/applications/multimedia/org.kde.dragonplayer"
-# armhf blocked by qt6-qtdeclarative -> ki18n
+# armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 license="GPL-2.0-only OR GPL-3.0-only"
 depends="phonon-backend-vlc"
@@ -30,11 +30,13 @@ makedepends="
 	kxmlgui-dev
 	phonon-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	samurai
 	solid-dev
 	"
 _repo_url="https://invent.kde.org/multimedia/dragon.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/dragon-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-11/dragon-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -58,5 +60,5 @@ package() {
 }
 
 sha512sums="
-86b52aadfaaf78f1fbd41cca3ce550d6b845b2dc1262ecc3174b38d4971a048488f1b7d8b201c33bd49a3f756d34413176617858ee4d9a75a67dfe7ec1670e72  dragon-8147fb075ec73e32c0af332357765bc80cf36859.tar.xz
+c0660178de468209d431975d219716951a129299ee3767beb55ca4c1dfd99c44c53b099290d4b832f62a492d5247b4b09187629692fae8b64677ddbbe325ccae  dragon-b2afdcf16dc5a204f91a6507b5ca08cade827e52.tar.xz
 "

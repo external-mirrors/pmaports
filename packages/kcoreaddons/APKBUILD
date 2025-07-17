@@ -6,7 +6,8 @@ pkgver=99999_git20250704
 pkgrel=0
 _commit="c0fc74807c4efb995cea0f1602d06de14301eebf"
 pkgdesc="Addons to QtCore"
-arch="all"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
 depends_dev="qt6-qtbase-dev"
@@ -21,6 +22,8 @@ makedepends="$depends_dev
 	py3-shiboken6
 	pyside6-dev
 	python3-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qttools
 	qt6-qttools-dev
 	samurai

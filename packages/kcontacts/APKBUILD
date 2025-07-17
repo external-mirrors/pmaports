@@ -6,7 +6,7 @@ pkgver=99999_git20250704
 pkgrel=0
 _commit="03c3ff1bb952cfab16a1512c60a6067e32910319"
 pkgdesc="Address book API for KDE"
-# armhf blocked by qt6-qtdeclarative -> ki18n
+# armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-or-later"
@@ -21,12 +21,14 @@ depends_dev="
 	kcoreaddons-dev
 	ki18n-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
 	"
 makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	graphviz
 	kde-qdoc-common
+	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"

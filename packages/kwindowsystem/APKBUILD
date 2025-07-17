@@ -6,7 +6,8 @@ pkgver=99999_git20250704
 pkgrel=0
 _commit="b7595be239bf5444a07eaeb99e394a6b0271dfe2"
 pkgdesc="Access to the windowing system"
-arch="all"
+# armhf blocked by qt-6qtdeclarative
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="MIT AND (LGPL-2.1-only OR LGPL-3.0-only"
 depends_dev="
@@ -20,6 +21,8 @@ makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	kde-qdoc-common
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qttools
 	qt6-qttools-dev
 	samurai

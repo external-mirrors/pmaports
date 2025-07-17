@@ -6,7 +6,8 @@ pkgver=99999_git20250704
 pkgrel=0
 _commit="c083e465fe1ca0b717e90de207904f2e1cd94ad3"
 pkgdesc="Models for Qt Model/View system"
-arch="all"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.0-only AND LGPL-2.0-or-later"
 depends_dev="qt6-qtbase-dev"
@@ -16,6 +17,7 @@ makedepends="$depends_dev
 	graphviz
 	kde-qdoc-common
 	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"

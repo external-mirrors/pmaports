@@ -7,18 +7,22 @@ pkgrel=0
 _commit="bc9e54c6bdb39cde2c4dac59ce7938a1560803e3"
 pkgdesc="Library for parsing and evaluating OSM opening hours expressions"
 url="https://invent.kde.org/libraries/kopeninghours"
-# armhf blocked by qt6-qtdeclarative -> ki18n
+# armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 license="BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later"
-makedepends="
+depends_dev="
+	kholidays-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
 	bison
 	doxygen
 	extra-cmake-modules
 	flex
 	graphviz
-	kholidays-dev
-	ki18n-dev
-	qt6-qtbase-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
@@ -31,11 +35,11 @@ builddir="$srcdir/kopeninghours-$_commit"
 
 build() {
 	cmake -B build -G Ninja \
+		-DBUILD_WITH_QT6=ON \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON \
-		-DBUILD_WITH_QT6=ON
+		-DBUILD_QCH=ON
 	cmake --build build
 }
 

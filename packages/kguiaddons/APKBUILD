@@ -6,7 +6,8 @@ pkgver=99999_git20250704
 pkgrel=0
 _commit="6920ecdc537ad2477bdbeb98f2660d20432e37df"
 pkgdesc="Addons to QtGui"
-arch="all"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only OR LGPL-3.0-only"
 depends_dev="
@@ -25,6 +26,8 @@ makedepends="$depends_dev
 	py3-shiboken6
 	pyside6-dev
 	python3-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	samurai
 	"
 checkdepends="xvfb-run"
@@ -37,7 +40,7 @@ builddir="$srcdir/kguiaddons-$_commit"
 
 build() {
 	export KDE_DOCS=/usr/share/kde/documentation
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib

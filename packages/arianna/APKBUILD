@@ -1,15 +1,13 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=arianna
 pkgver=99999_git20250705
 pkgrel=0
 _commit="b24b6465cec727a1ea7df47106c70c2d7ce02dd0"
 pkgdesc="EPub Reader for mobile devices"
 url="https://invent.kde.org/graphics/arianna/"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
 license="(BSD-2-Clause OR BSD-3-Clause) AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.0-or-later OR LGPL-2.1-or-later OR LGPL-3.0-or-later)"
@@ -31,6 +29,8 @@ makedepends="
 	kwindowsystem-dev
 	qqc2-desktop-style-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
 	qt6-qthttpserver-dev
 	qt6-qtsvg-dev
 	qt6-qtwebengine-dev
@@ -46,7 +46,7 @@ options="!check"
 builddir="$srcdir/arianna-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
