@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=qrca
-pkgver=99999_git20250710
+pkgver=99999_git20250716
 pkgrel=0
-_commit="85d5a6b0dca639ce7ddf1b7706bb1ffe7023a85a"
+_commit="b69db97e01b798fed221afb018066e6a5a6f5652"
 pkgdesc="QR-Code scanner for Plasma Mobile"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x, riscv64 and loongarch64 blocked by qt6-qtwebengine -> purpose
@@ -34,7 +34,7 @@ makedepends="
 checkdepends="appstream"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/qrca.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-11/qrca-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-17/qrca-$_commit.tar.xz"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-7005124b65d75873937a0b1a3d580dd840be79013f9a41eaccd58adae713dcf10066194827d825173ada904bb62d906890dfb2bb9ab5aa269400baee6746a210  qrca-85d5a6b0dca639ce7ddf1b7706bb1ffe7023a85a.tar.xz
+0871b6e07e7c79e2f257bfe86f594fc44c82f211622967039f9ee62a2ccba02648a6b044b1f9c4348653af5563394bbfc1ddff2c1f846d851d103d54a936400e  qrca-b69db97e01b798fed221afb018066e6a5a6f5652.tar.xz
 "

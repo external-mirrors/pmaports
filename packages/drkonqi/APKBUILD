@@ -2,11 +2,11 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=drkonqi
-pkgver=99999_git20250702
+pkgver=99999_git20250717
 pkgrel=0
-_commit="fea5644282e64e27ab5e51f96c3fdff2b329eaa3"
+_commit="2c2bebd080e0cc391ad52fa2d0b0df886cca8e0f"
 pkgdesc="The KDE crash handler"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
@@ -35,6 +35,7 @@ makedepends="
 	qt6-qtbase-dev
 	samurai
 	syntax-highlighting-dev
+	systemd-dev
 	"
 
 case "$pkgver" in
@@ -42,7 +43,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/drkonqi.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/drkonqi-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-17/drkonqi-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -54,8 +55,7 @@ build() {
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_TESTING=ON \
-		-DCMAKE_DISABLE_FIND_PACKAGE_Systemd=ON
+		-DBUILD_TESTING=ON
 	cmake --build build
 }
 
@@ -69,5 +69,5 @@ package() {
 }
 
 sha512sums="
-59eb2249d148d9baf9a6d8e180dc86d4ed4fcc92a7d08de2be392cbfb145cf89e5f0dbf902900fec7b4975577b2dd8a5ccee3188b01e7d865bc7bd12347a7550  drkonqi-1d61ef3b2f076667c6c88172ce71ef64744bcdfb.tar.xz
+46df289075b0f886c4d872dbd2e3962b13f7a7c9c193378c01a0651d49bb6b23c23125500fe64845d6353273e011d8c0cac6415c1a1293640848e0c4277d1684  drkonqi-2c2bebd080e0cc391ad52fa2d0b0df886cca8e0f.tar.xz
 "

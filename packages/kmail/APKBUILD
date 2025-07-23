@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmail
-pkgver=99999_git20250709
+pkgver=99999_git20250719
 pkgrel=0
-_commit="56c615317c741b84bbaa2c8f164d0d22f96af34e"
+_commit="b6287e8be4356fbcf64c8cee3ec8201cca462c74"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -74,7 +74,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/kmail.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/kmail-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-19/kmail-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -113,5 +113,5 @@ package() {
 }
 
 sha512sums="
-8bc8e419f75f9f949753fc85fdd9c684509ff7ac228b22dbc3b56d340bde2392265c3989584696cb4b98a979541286351b3a9ba12d84ed2ea8a924507136bb71  kmail-56c615317c741b84bbaa2c8f164d0d22f96af34e.tar.xz
+c6f2813b67cb575675ebc06d1cd93b5ac0eab6cb9470eea59fdbc3a900c23b2a10a849784d4c5104344bf993b45e7c03e10d53393392e94b06e7bcde84ed2ffb  kmail-b6287e8be4356fbcf64c8cee3ec8201cca462c74.tar.xz
 "

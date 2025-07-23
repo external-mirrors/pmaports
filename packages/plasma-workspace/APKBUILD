@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-workspace
-pkgver=99999_git20250711
+pkgver=99999_git20250719
 pkgrel=0
-_commit="a5bd03d5a2f9f31f5abc53a8f93915c8080b595b"
+_commit="74a07566368b7b9029cf05a3590ec0b5f38e89e6"
 pkgdesc="KDE Plasma Workspace"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -113,9 +113,10 @@ subpackages="
 	$pkgname-doc
 	$pkgname-lang
 	$pkgname-zsh-completion
+	$pkgname-systemd
 	"
 _repo_url="https://invent.kde.org/plasma/plasma-workspace.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-11/plasma-workspace-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-19/plasma-workspace-$_commit.tar.xz"
 
 replaces="plasma5support"
 
@@ -169,5 +170,5 @@ package() {
 }
 
 sha512sums="
-8281b042874ee0dc6cdc6993242c8847e2e4a16c96300f3e57889a1cbbc9a6b07c2691dd9b937e66c053e6234236786be92c0a3a29b39f7a0e5a0219ba5aecfe  plasma-workspace-a5bd03d5a2f9f31f5abc53a8f93915c8080b595b.tar.xz
+8d18b844f17e5345efcecc0d7a9065eeebeae7f54f8b2fe2755e20542d165b3429824291a00aea1f7a901506c23b6884f16d1d37e45a37923ede559b461b2f38  plasma-workspace-74a07566368b7b9029cf05a3590ec0b5f38e89e6.tar.xz
 "

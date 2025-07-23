@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-sdk
-pkgver=99999_git20250701
+pkgver=99999_git20250716
 pkgrel=0
-_commit="78ea52e27dc7c5953cd448da4643f41217a2c603"
+_commit="59a8459fe6aae36776305af1b5316c99f29bb832"
 pkgdesc="Applications useful for Plasma Development"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -45,7 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-sdk.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/plasma-sdk-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-17/plasma-sdk-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang $pkgname-zsh-completion"
 
 options="!check"
@@ -69,5 +69,5 @@ package() {
 }
 
 sha512sums="
-2efa1a1418f1b2700787c2f9e6e0365c485871def758d12e858cc1493d572b8bea191591fc4f022c7a5d567cd8f00d835ab564d54532c38769a1e9a3fb773234  plasma-sdk-78ea52e27dc7c5953cd448da4643f41217a2c603.tar.xz
+b42102a7912a853257f15d2f0f7dc855efc824a40751eec4555efa2186349ce04846c30cd1f6e7d7a10aef435597fc2fdc9f05423f9a4f7e10f3423077beaa26  plasma-sdk-59a8459fe6aae36776305af1b5316c99f29bb832.tar.xz
 "

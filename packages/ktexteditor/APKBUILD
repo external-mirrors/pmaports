@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ktexteditor
-pkgver=99999_git20250709
+pkgver=99999_git20250716
 pkgrel=0
-_commit="18d8b82f5af1cfb064f705ecb0e337b49ea5119f"
+_commit="b4d54e16b23acc15b4824e6fe2f7e3ad7afa8cca"
 pkgdesc="Advanced embeddable text editor"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ktexteditor.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/ktexteditor-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-17/ktexteditor-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-8f4b350ec4bbe2a2ae7d765d9a4a01ba2edbc584976e7babf11bec13d0322907f4ad5bdc1d29f4840043ae8c18f371a500a5eab9679e66247cb9f07329901517  ktexteditor-18d8b82f5af1cfb064f705ecb0e337b49ea5119f.tar.xz
+c9fcb67c021553cc74caa0a291f796f32afe26ac7c2f4186fe75aa4054b3220ddd0b73f83e0cba4885aac793696f21b66b481236c66c37b482a5117e6f4d4bd2  ktexteditor-b4d54e16b23acc15b4824e6fe2f7e3ad7afa8cca.tar.xz
 "

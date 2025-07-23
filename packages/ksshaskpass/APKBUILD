@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=ksshaskpass
-pkgver=99999_git20250525
+pkgver=99999_git20250716
 pkgrel=0
-_commit="af31a8a88ff784e54ec5256c12760c5480674e0e"
+_commit="519d39b51625e1c17738c2c8d40c1fd7cba4486d"
 pkgdesc="ssh-add helper that uses kwallet and kpassworddialog"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -28,7 +28,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/ksshaskpass.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/ksshaskpass-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-17/ksshaskpass-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-13431b480ed3357438760e6fd80e262cb617910e07148c15effd1879db3f6823d2e093cc09a2b3d6b7be88886d9a35d68ea5826bd35dfe3f10ff5eedf75d59a9  ksshaskpass-af31a8a88ff784e54ec5256c12760c5480674e0e.tar.xz
+bde74c8b5321008e7335cb23409dfc34b379da19e25d404047befd24d2848a9dc4a8cdee4bded6d69170f562a6aebc1fa0cbaec6392be4c53c3e400a6ca300af  ksshaskpass-519d39b51625e1c17738c2c8d40c1fd7cba4486d.tar.xz
 "
