@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@lucaweiss.eu>
 pkgname=firmware-fairphone-fp6
 pkgver=20250606
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for The Fairphone (Gen. 6)"
 subpackages="
 	$pkgname-adreno
@@ -37,18 +37,18 @@ adreno() {
 	pkgdesc="The Fairphone (Gen. 6) adreno firmware"
 
 	install -Dm644 "$builddir"/gen80300_zap.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 adsp() {
 	pkgdesc="The Fairphone (Gen. 6) adsp firmware"
 
 	install -Dm644 "$builddir"/adsp*.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 	install -Dm644 "$builddir"/adsp*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 	install -Dm644 "$builddir"/battmgr.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 bluetooth() {
@@ -64,29 +64,29 @@ cdsp() {
 	pkgdesc="The Fairphone (Gen. 6) cdsp firmware"
 
 	install -Dm644 "$builddir"/cdsp*.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 	install -Dm644 "$builddir"/cdsp*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 ipa() {
 	pkgdesc="The Fairphone (Gen. 6) ipa firmware"
 
 	install -Dm644 "$builddir"/ipa_fws.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 modem() {
 	pkgdesc="The Fairphone (Gen. 6) modem firmware"
 
 	install -Dm644 "$builddir"/modem.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 	install -Dm644 "$builddir"/modem*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 
 	cp -r "$builddir"/modem_pr/ \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
-	find "$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/" \
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
+	find "$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/" \
 		-type f -exec chmod 0644 {} \;
 }
 
@@ -94,14 +94,14 @@ venus() {
 	pkgdesc="The Fairphone (Gen. 6) venus firmware"
 
 	install -Dm644 "$builddir"/vpu20_2v.mbn \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/venus.mbn"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/venus.mbn"
 }
 
 wpss() {
 	pkgdesc="The Fairphone (Gen. 6) wpss firmware"
 
 	install -Dm644 "$builddir"/wpss.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7635/fairphone/fp6/"
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 sha512sums="
