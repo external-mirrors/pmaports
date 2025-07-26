@@ -1,0 +1,77 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=postmarketos-duranium
+pkgver=1
+pkgrel=0
+pkgdesc="Configuration files for building and booting immutable postmarketOS images"
+url="https://postmarketos.org"
+options="!check"  # no tests
+depends="
+	f0rmz
+	shadow
+	tar
+	unl0kr
+"
+arch="noarch"
+license="GPL-2.0-or-later"
+replaces="systemd"  # For overwriting tmpfiles.d/{opt,var}.conf
+
+_source644="
+	usr/lib/repart.d/00-esp.conf
+	usr/lib/repart.d/10-usr-verity-sig.conf
+	usr/lib/repart.d/11-usr-verity.conf
+	usr/lib/repart.d/12-usr.conf
+	usr/lib/repart.d/20-usr-verity-sig.conf
+	usr/lib/repart.d/21-usr-verity.conf
+	usr/lib/repart.d/22-usr.conf
+	usr/lib/repart.d/30-root.conf
+	usr/lib/sysupdate.d/10-usr-verity-sig.transfer
+	usr/lib/sysupdate.d/11-usr-verify.transfer
+	usr/lib/sysupdate.d/12-usr.transfer
+	usr/lib/sysupdate.d/20-uki.transfer
+	usr/lib/sysusers.d/10-pmos-user.conf
+	usr/lib/tmpfiles.d/opt.conf
+	usr/lib/tmpfiles.d/var.conf
+	usr/share/f0rmz/f0rmz.conf.d/firstboot.conf
+	usr/share/mkinitfs/files/10-duranium-base.files
+	usr/share/mkinitfs/modules/10-duranium-base.modules
+"
+
+# Avoid filename based checksum conflicts by including the whole path:
+# https://gitlab.alpinelinux.org/alpine/abuild/-/issues/10013
+flatpath() {
+	local i
+	for i in $@; do
+		echo "rootfs-$i" | sed s./.-.g
+	done
+}
+source="$(flatpath $_source440 $_source600 $_source644 $_source755)"
+
+package() {
+	for i in $_source644; do
+		install -Dm644 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
+	done
+	for i in $_source755; do
+		install -Dm755 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
+	done
+}
+
+sha512sums="
+b0f320f2ea81c29fa9030abac998e725e098c74bb2ffb76ee2711da4c88615ad46a0e5359b98198648879551781580a0128b57a2ef1ca6a3e03448b01f533065  rootfs-usr-lib-repart.d-00-esp.conf
+845877dc798b84a08cbeb2362e8bba1c49a0170ea15e0553538849811957e40f49088d67a40fc4260394820c6f9ef4addde156c5e49064c06996db86b0c07b72  rootfs-usr-lib-repart.d-10-usr-verity-sig.conf
+44bc0e6035e22044f7f4c34b43f91b8586e308409ce570c35c9b5f20c3fa0138a07056ff5569019ab418d0a6f116da2f82d71f76b8c4461f9d346d398a3247cb  rootfs-usr-lib-repart.d-11-usr-verity.conf
+13e839af2f4a6c303d7b3b0920d3ce131da6ca3802ce15850c22cdd762e0213f0536bc50ca65c1687993f2ba52ed26b6acf4be4e4c9e52bec7db4078782159e2  rootfs-usr-lib-repart.d-12-usr.conf
+9aa66e6472ce58da316357c61b8a1538d0d8829f6568ec404efc58ea7ad5d06f5f806cb7e1bf726eb9941181971d0f7131c34a446a52eedc96f3388d1c31c18f  rootfs-usr-lib-repart.d-20-usr-verity-sig.conf
+730aa98894ec4586d5a97b2faed5ec30ae6679b9ebf4e6dd7e1d4f039279691040232ba30d0f88b4a2696131618b17753d0d8262b88d4ff6f1f120cbd0d22acd  rootfs-usr-lib-repart.d-21-usr-verity.conf
+dfb32f03618fea50006e8d4757473aaf80ebb1018b94f15d9f559278087e959867e0d0d7a44ee3990c55e5bea6111caa74f82eb8416820c43cc11981e7319de3  rootfs-usr-lib-repart.d-22-usr.conf
+ee77d7903f108ef3566ca99091e95aeefc70f19930fe635b6110c71566225beb9675356162628efeb5d4c5cc6e386127035d8c34fdbe5ca28b123b69f4e15ddc  rootfs-usr-lib-repart.d-30-root.conf
+d0d6e5a3a2eab97b5dea53749b0650cdf3d9dee1498c8572e18f457f24885339a98cd22ebb251e7b20052723cda1c7a2eef6874cfac2d99209212e89feb7f717  rootfs-usr-lib-sysupdate.d-10-usr-verity-sig.transfer
+1f2270462490dbc9a3e1b7389526cd4deb784e31450780ea38ce86177399bc02c7660a3d961bf0593e0e3533a6cd7da367941142c6dbfc99b11c829432945114  rootfs-usr-lib-sysupdate.d-11-usr-verify.transfer
+fa12dcc6f7b9bf2ed9d33f796cdaab561cb68e35e1fc3aa358cc3bef9a9b0c58d7e0323f30387ac913359fb3b0c129050837900af56e7b71b218bfa182393098  rootfs-usr-lib-sysupdate.d-12-usr.transfer
+af9c2b039e962a12e179aba7e5de539af8678892be75f29e4a61b1d52b059fd0ab2b4a4eba4956fb311e97d6b49def678cc7b1653dd595c865bb718fa120b29f  rootfs-usr-lib-sysupdate.d-20-uki.transfer
+fa1c3dd727fd20d16d18695d58dd10ec335d64ece00152346c84ae750ed5ade8faf5ba11747135d79972dd1a3f4f1ab496ae9425ebcf7232a4203ca9396fa7e0  rootfs-usr-lib-sysusers.d-10-pmos-user.conf
+0779c6d5959aef0e325adb69f3e0720a3f271f474c0f14e9c830f015c923c432d07222a24ce722a3ea58670d2eff3536d45bcaf7ae848b587676f1586a348e0e  rootfs-usr-lib-tmpfiles.d-opt.conf
+3859fd89ee6bc1257f8c6c3ec0b55ff7bca25ccd508dd982206295876b9cd7b74c49d53fd947d248019c847204bbc1233a262dde4def3ab2e4ff028ec7d4cf1e  rootfs-usr-lib-tmpfiles.d-var.conf
+4aa9c49faa69f66750eec519762fbf85715a9ce0882764b4dece795e391bead4dd6a02a5773e3a81382a8405f57a1e2f70fce31ae6e54c5182c9f2baf30993dd  rootfs-usr-share-f0rmz-f0rmz.conf.d-firstboot.conf
+deb3c674ef069f80ab9d25c091192972a5f7b0e059ad4239e6d845c7b94bd0d81741490f7ff869ee037c2b93ae5afc650c55ca20a37bfd0ac7bc9c2ef023b8dd  rootfs-usr-share-mkinitfs-files-10-duranium-base.files
+7989d78bb953ff96607d249972dc234ee793f2d18b7f86de8807094163f57ad4f4909a59ec92654284f8016999d6ce6de2e86b0ab44c51a10825a763d7449531  rootfs-usr-share-mkinitfs-modules-10-duranium-base.modules
+"
