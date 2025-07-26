@@ -1,0 +1,23 @@
+# This works around some strange timing issue related to dm devices not being
+# initialized correctly by udev even though they are in the initramfs before
+# switch_root. The state seems to be lost after the rootfs transition. There's a
+# similar issue described in the mailing list thread below. This rule is
+# basically a more constrained version of the hack posted in the gentoo bug
+# below. It only matches on UUIDs we expect for duranium luks rootfs and usr
+# verity dm devices, so other dm devices created should be ignored.
+#
+# https://www.mail-archive.com/linux-lvm@redhat.com/msg02093.html
+# https://bugs.gentoo.org/706434#c13
+
+SUBSYSTEM!="block", GOTO="dm_hack_end"
+KERNEL!="dm-[0-9]*", GOTO="dm_hack_end"
+ACTION!="add|change", GOTO="dm_hack_end"
+
+ATTR{dm/uuid}=="CRYPT-LUKS2-*-root", GOTO="dm_hack_apply"
+ATTR{dm/uuid}=="CRYPT-VERITY-*-usr-verified", GOTO="dm_hack_apply"
+GOTO="dm_hack_end"
+
+LABEL="dm_hack_apply"
+ENV{DM_UDEV_PRIMARY_SOURCE_FLAG}="1"
+
+LABEL="dm_hack_end"
