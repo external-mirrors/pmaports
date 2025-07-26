@@ -1,0 +1,84 @@
+#!/bin/sh
+# Factory reset script for postmarketOS
+# Sets EFI variable to trigger factory reset on next boot
+
+set -e
+
+# Check if running as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Error: This script must be run as root" >&2
+    echo "Try: doas $0" >&2
+    exit 1
+fi
+
+# EFI variable path
+EFIVAR_PATH="/sys/firmware/efi/efivars/FactoryReset-8cf2644b-4b0b-428f-9387-6d876050dc67"
+
+# Check if EFI variables are available
+if [ ! -d "/sys/firmware/efi/efivars" ]; then
+    echo "Error: EFI variables not available (not booted with UEFI?)" >&2
+    exit 1
+fi
+
+# Check if factory reset is supported by checking for repart configs
+if ! systemd-repart --can-factory-reset >/dev/null 2>&1; then
+    echo "Error: Factory reset not supported (no partitions marked FactoryReset=yes)" >&2
+    exit 1
+fi
+
+# Warn user and ask for confirmation
+echo "WARNING: This will erase all user data and reset the system to factory defaults!"
+echo "This action cannot be undone."
+echo
+printf "Are you sure you want to continue? (yes/no): "
+read -r response
+
+case "$response" in
+    yes|YES)
+        echo "Proceeding with factory reset..."
+        ;;
+    *)
+        echo "Factory reset cancelled."
+        exit 0
+        ;;
+esac
+
+# Remove existing EFI variable if it exists
+if [ -f "$EFIVAR_PATH" ]; then
+    echo "Removing existing FactoryReset variable..."
+    # Clear immutable attribute if set
+    if ! chattr -i "$EFIVAR_PATH"; then
+        echo "Warning: Failed to clear immutable attribute, removal may fail" >&2
+    fi
+    if ! rm "$EFIVAR_PATH"; then
+        echo "Error: Failed to remove existing EFI variable" >&2
+        echo "Try manually: chattr -i $EFIVAR_PATH && rm $EFIVAR_PATH" >&2
+        exit 1
+    fi
+fi
+
+# Create EFI variable
+# Format: 4-byte attributes (0x07 = NON_VOLATILE | BOOTSERVICE_ACCESS | RUNTIME_ACCESS) + "yes"
+echo "Creating FactoryReset EFI variable..."
+if printf '\x07\x00\x00\x001\x00\x00\x00' > "$EFIVAR_PATH"; then
+    echo "Factory reset EFI variable set successfully."
+    echo "System will factory reset on next boot."
+    echo
+    printf "Reboot now? (yes/no): "
+    read -r reboot_response
+
+    case "$reboot_response" in
+        yes|YES)
+            echo "Rebooting..."
+            reboot
+            ;;
+        *)
+            echo "Factory reset is scheduled for next boot."
+            echo "Run 'reboot' when ready to perform the reset."
+            ;;
+    esac
+else
+    echo "Error: Failed to set EFI variable" >&2
+    echo "Check if EFI variables are writable and try again" >&2
+    exit 1
+fi
