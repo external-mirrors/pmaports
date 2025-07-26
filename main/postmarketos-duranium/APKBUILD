@@ -1,0 +1,93 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=postmarketos-duranium
+pkgver=1
+pkgrel=0
+pkgdesc="Configuration files for building and booting immutable postmarketOS images"
+url="https://postmarketos.org"
+options="!check"  # no tests
+depends="
+	f0rmz
+	losetup
+	sfdisk
+	shadow
+	tar
+	unl0kr
+"
+# x86: f0rmz
+arch="noarch !x86"
+license="GPL-3.0-or-later"
+replaces="systemd"  # For overwriting tmpfiles.d/{opt,var}.conf
+
+_source644="
+	usr/lib/repart.d/00-esp.conf
+	usr/lib/repart.d/10-usr-verity-sig.conf
+	usr/lib/repart.d/11-usr-verity.conf
+	usr/lib/repart.d/12-usr.conf
+	usr/lib/repart.d/20-usr-verity-sig.conf
+	usr/lib/repart.d/21-usr-verity.conf
+	usr/lib/repart.d/22-usr.conf
+	usr/lib/repart.d/30-root.conf
+	usr/lib/systemd/system-preset/80-duranium.preset
+	usr/lib/systemd/system/systemd-veritysetup@usr.service.d/10-skip-usr-verified.conf
+	usr/lib/sysupdate.d/10-usr-verity-sig.transfer
+	usr/lib/sysupdate.d/11-usr-verity.transfer
+	usr/lib/sysupdate.d/12-usr.transfer
+	usr/lib/sysupdate.d/20-uki.transfer
+	usr/lib/sysusers.d/10-pmos-user.conf
+	usr/lib/tmpfiles.d/opt.conf
+	usr/lib/tmpfiles.d/var.conf
+	usr/share/f0rmz/f0rmz.conf.d/firstboot.conf
+	usr/share/initramfs/init_functions_immutable.sh
+	usr/share/mkinitfs/files-extra/10-duranium-base.files
+	usr/share/mkinitfs/modules-extra/10-duranium-base.modules
+"
+
+_source755="
+	usr/bin/do-factory-reset
+	etc/profile.d/99-local-bin.sh
+"
+
+# Avoid filename based checksum conflicts by including the whole path:
+# https://gitlab.alpinelinux.org/alpine/abuild/-/issues/10013
+flatpath() {
+	local i
+	for i in $@; do
+		echo "rootfs-$i" | sed s./.-.g
+	done
+}
+source="$(flatpath $_source440 $_source600 $_source644 $_source755)"
+
+package() {
+	for i in $_source644; do
+		install -Dm644 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
+	done
+	for i in $_source755; do
+		install -Dm755 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
+	done
+}
+
+sha512sums="
+b0f320f2ea81c29fa9030abac998e725e098c74bb2ffb76ee2711da4c88615ad46a0e5359b98198648879551781580a0128b57a2ef1ca6a3e03448b01f533065  rootfs-usr-lib-repart.d-00-esp.conf
+be7f90bd96fcad6ccf2b434a4b9ce9bc620b63558df0eddd088d86bcbeb778ff097b6d7db0a021d4322bb2ff908eb65f41840e10b11a479e15986a0b02331bf0  rootfs-usr-lib-repart.d-10-usr-verity-sig.conf
+8dab35b6c5b61936a8a5f7c6872efe77550f70603a90286c874e9b3c12b25214823c89dd32517b0733110a2f92d0908d0adb6a7bff68f83163d2882e4167b4f6  rootfs-usr-lib-repart.d-11-usr-verity.conf
+a2ebcf35620a8c2dcd06dff50b6d17b02e8b688f98c6f7e1bb9727733df20742669cb3926a003ccdb1091bc8a337fdc39cc774de509f1b155f3bd3b45a86f8ef  rootfs-usr-lib-repart.d-12-usr.conf
+9aa66e6472ce58da316357c61b8a1538d0d8829f6568ec404efc58ea7ad5d06f5f806cb7e1bf726eb9941181971d0f7131c34a446a52eedc96f3388d1c31c18f  rootfs-usr-lib-repart.d-20-usr-verity-sig.conf
+1c452cec92a07859e7bed68ea6b67143d9329446db36eb4aa796424609cc6d96ad2e19d8be53bba776fc2efa75b02c87ec7557eaf233926afd1609611f38a81a  rootfs-usr-lib-repart.d-21-usr-verity.conf
+f1833d1627640a30dcb7aebc4ad4296c00f1799168712bf556e54ce74f7e56002b0a37e42ea20bfd10a02d32a9e7b7750c6e8d1b957c416903cd6e1bb19d25c6  rootfs-usr-lib-repart.d-22-usr.conf
+ee77d7903f108ef3566ca99091e95aeefc70f19930fe635b6110c71566225beb9675356162628efeb5d4c5cc6e386127035d8c34fdbe5ca28b123b69f4e15ddc  rootfs-usr-lib-repart.d-30-root.conf
+52a0cddde45bf17e7a7274b804ec818bf7a471ec6fe365931f8e14e2f7279111e9724cbd9941c66ee638e92ecb3579a269e75912130590fc4856bd00b7b86a23  rootfs-usr-lib-systemd-system-preset-80-duranium.preset
+d8de011bdaa98045b23fe37540663371602bb48f75314343c60faab39e7cd4f336ace6eddde745517bb99d8b5f3bf40d78584bd3535375b5f5fc9c7ae03de315  rootfs-usr-lib-systemd-system-systemd-veritysetup@usr.service.d-10-skip-usr-verified.conf
+2e4d532a0d996d8e68007b6036b4564ca3d654dd91cadd80ed904536d0c3ed1e019b4081f7bdb6d128e695cacfe6949bfb20c074b95d10ef25f948f8eb307e24  rootfs-usr-lib-sysupdate.d-10-usr-verity-sig.transfer
+2dbe55c05b8237ad85c4f333a8c02eec26aad14032f159830696ad9b9c6442d624b0190b2e6780e4b8aed590eb12d0c7454d39ab739e55d420300cdba2a78f58  rootfs-usr-lib-sysupdate.d-11-usr-verity.transfer
+14df73dfc786a249b300f8998b1f51301834cf058b65c95701b1350f112d2c3deed3b8db9ba439bd90537cef533f148d187bd73961707dca12ef84735e2d5595  rootfs-usr-lib-sysupdate.d-12-usr.transfer
+4ffb2be01cb033c1282b6661052250937e1ac457cec3900b075d0dcdf59de7dcb2eb927c39db0e96468a90b03fed0a4e6db0d99f62d714c31a29d4684e79751f  rootfs-usr-lib-sysupdate.d-20-uki.transfer
+fa1c3dd727fd20d16d18695d58dd10ec335d64ece00152346c84ae750ed5ade8faf5ba11747135d79972dd1a3f4f1ab496ae9425ebcf7232a4203ca9396fa7e0  rootfs-usr-lib-sysusers.d-10-pmos-user.conf
+0779c6d5959aef0e325adb69f3e0720a3f271f474c0f14e9c830f015c923c432d07222a24ce722a3ea58670d2eff3536d45bcaf7ae848b587676f1586a348e0e  rootfs-usr-lib-tmpfiles.d-opt.conf
+7d98cb314472d7db64599c8abfc2e21ef6437b0c5bf407f0c21a42ec2f14f660fb3aef64c99a13aada124a822a85d8e4a6674838d1fe07719774331121d5414b  rootfs-usr-lib-tmpfiles.d-var.conf
+4aa9c49faa69f66750eec519762fbf85715a9ce0882764b4dece795e391bead4dd6a02a5773e3a81382a8405f57a1e2f70fce31ae6e54c5182c9f2baf30993dd  rootfs-usr-share-f0rmz-f0rmz.conf.d-firstboot.conf
+7c36c79ac4bc66fb97eb39210c60c47e9258470e5d93e0d0c75258f8dff380cfc12a1fd651e7e22d3cd6299595a9e90dc9c1b113e49ee3e56ec60ff92faefe41  rootfs-usr-share-initramfs-init_functions_immutable.sh
+38d93277341c9f21b28b1b6167fefa73377dbec61e4c8fdb56d8cb5688ce231371e6366a284074cdf64e90f46b893a70a64e98cc478f86f5f984d7db26bf53eb  rootfs-usr-share-mkinitfs-files-extra-10-duranium-base.files
+99325a25d1a588923bf55c9c803ea6aa8d7b7e82b929e4edafc47b39630d0c229bda89ea3afff1adde4136c2378ffb8ef24a4edbac015032975f40edcbad74ed  rootfs-usr-share-mkinitfs-modules-extra-10-duranium-base.modules
+97bce380b5c4019aafad6f52856586ffaa4e17efd83f61f133e197bd833a35140406d206f572fb38444c42051b0d1dc789f44313aaf63bf0d4028499cc942b7e  rootfs-usr-bin-do-factory-reset
+765797421f9123cdcf85e1496d01884cce1c8c304d15369b7eee32a8fc5abcd860dc5856c0d493f1cd3c6ad2a0ccdc4d6ba7d2ae356f0fc824dc16cdb84ebf37  rootfs-etc-profile.d-99-local-bin.sh
+"
