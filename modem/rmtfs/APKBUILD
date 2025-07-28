@@ -2,7 +2,7 @@
 pkgname=rmtfs
 pkgver=0.2_git20220718
 _commit="695d0668ffa6e2a4bf6e676f3c58a444a5d67690"
-pkgrel=2
+pkgrel=3
 pkgdesc="Qualcomm Remote Filesystem Service Implementation"
 url="https://github.com/andersson/rmtfs"
 arch="all"
@@ -14,7 +14,8 @@ source="
 	rmtfs.confd
 	rmtfs.initd
 	udev.rules
-	0001-add-modem_tng-alias-for-tunning-partition.patch
+	0001-Add-modem_tng-alias-for-tunning-partition.patch
+	0002-storage-Add-modem_study-into-partition_table.patch
 "
 builddir="$srcdir/rmtfs-$_commit"
 options="!check"
@@ -36,5 +37,6 @@ sha512sums="
 f27225e88be7906b0987bfc6fff4f2d5fe1be835d6df4299b7f240a9bf48f4d8cc635353e845d61c291e7857b059933cc567e39b03c7c655e3205bbcbacae3d3  rmtfs.confd
 12215677a772a7233f8da1b41f4aa16f5bc8f2e10385882b1cae23d131f47b03524b7cdf519c1354354bbe353bdbefb15e2d9349894916a1cf6dc951a29d7a44  rmtfs.initd
 cb2435c159d81d3a40d30e1355c82a3d560dc2df7d05fee95085bc80e492ac93a728258f2f1b463c04a964979760990c8c9176b22cb585cbec19ab285cd45440  udev.rules
-2c48e3e97838eb2b779075263ef688bc48dde5cc9fc8f055e8ee67cc115228ab59e9466faa89dd817812ee9e3219e8ca331d766e84ad383a1b9706cbbdc2c6fd  0001-add-modem_tng-alias-for-tunning-partition.patch
+a55bbb30e588bd082c85adfc11a8c592708cffc76cc5a56d69d11f3a95bfaf3e49592a0813b1dd4ab03dcbf91773eeec834df4b15be81be842418e64d697bc2d  0001-Add-modem_tng-alias-for-tunning-partition.patch
+60cf74936db55f26559d81a61a7ed1fb27e89a6c8650bb0f43fbb789ba208f52bd9bd3359c52ce4c9a98bc3014c7ce231e8f468b9856eb43449d8561e4f72b44  0002-storage-Add-modem_study-into-partition_table.patch
 "
