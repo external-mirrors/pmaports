@@ -99,6 +99,11 @@ parse_cmdline_item() {
 			# shellcheck disable=SC2034
 			log_info=y
 			;;
+		usrhash)
+			# used by init_2nd.sh which sources this script.
+		    # shellcheck disable=SC2034
+			usrhash="$value"
+			;;
 		[![:alpha:]_]* | [[:alpha:]_]*[![:alnum:]_]*)
 			# invalid shell variable, ignore it
 			;;

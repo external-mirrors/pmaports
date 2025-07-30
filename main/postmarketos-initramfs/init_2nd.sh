@@ -40,21 +40,33 @@ check_keys
 
 # If running from initramfs-extra this will be a no-op since it was
 # called before to mount the boot partition
-mount_subpartitions
+#
+# FIXME: At some point we'll probably need to support subpartitions with
+# immutable boot (when usrhash is set), but for now disabling the subpartition
+# check saves 10 seconds from boot
+if [ -z "$usrhash" ]; then
+	mount_subpartitions
+fi
 
 run_hooks /hooks-extra
 
-wait_root_partition
-delete_old_install_partition
-resize_root_partition
-unlock_root_partition
-resize_root_filesystem
-mount_root_partition
-resize_filesystem_after_mount /sysroot
+if [ -n "$usrhash" ]; then
+    handle_immutable_boot "$usrhash"
+else
+    wait_root_partition
+    delete_old_install_partition
+    resize_root_partition
+    unlock_root_partition
+    resize_root_filesystem
+    mount_root_partition
+    resize_filesystem_after_mount /sysroot
+fi
 
 # Mount boot partition into sysroot if needed since some
 # old installations don't have a proper /etc/fstab file. See #2800
-if [ -z "$(cat /sysroot/etc/fstab | grep -v "#" | tr -d '[:space:]')" ]; then
+# Also skip mounting when using an immutable install (usrhash is set), since
+# this is handled after switchroot.
+if [ -z "$usrhash" ] && [ -z "$(cat /sysroot/etc/fstab | grep -v "#" | tr -d '[:space:]')" ]; then
 	wait_boot_partition
 	mount_boot_partition /sysroot/boot "rw"
 fi
@@ -95,6 +107,10 @@ done
 # switch_root does a mount --move , keeping stale filesystems like devtmpfs
 # with /dev/log in there.
 rm /dev/log 2>/dev/null || true
+
+# FIXME: hack...
+ls -hal /sysroot/usr/lib/systemd/systemd
+init=/usr/lib/systemd/systemd
 
 # shellcheck disable=SC2093
 exec switch_root /sysroot "$init"
