@@ -60,13 +60,13 @@ fi
 # Create EFI variable
 # Format: 4-byte attributes (0x07 = NON_VOLATILE | BOOTSERVICE_ACCESS | RUNTIME_ACCESS) + "yes"
 echo "Creating FactoryReset EFI variable..."
-if printf '\x07\x00\x00\x00yes' > "$EFIVAR_PATH"; then
+if printf '\x07\x00\x00\x001\x00\x00\x00' > "$EFIVAR_PATH"; then
     echo "Factory reset EFI variable set successfully."
     echo "System will factory reset on next boot."
     echo
     printf "Reboot now? (yes/no): "
     read -r reboot_response
-    
+
     case "$reboot_response" in
         yes|YES)
             echo "Rebooting..."
