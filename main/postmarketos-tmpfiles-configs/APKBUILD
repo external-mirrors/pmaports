@@ -4,7 +4,7 @@ maintainer="Aster Boese <asterboese@mailbox.org>"
 # How to add a new config (5 steps):
 pkgname=postmarketos-tmpfiles-configs
 # 1. bump pkgver
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="systemd-tmpfiles configs"
 url="https://postmarketos.org"
@@ -17,15 +17,18 @@ license="BSD-3-Clause"
 #    of the package this tmpfile config should be part of
 #    ALPHABETICAL ORDER!!!
 subpackages="
+	flatpak-tmpfiles:_tmpfiles
 	mobile-config-firefox-tmpfiles:_tmpfiles
 	"
 
 # 3. Add a new entry below with the list of tmpfile configs
 #    to install for that package
+_flatpak_sources="flatpak.conf" # https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
 _mobile_config_firefox_sources="mobile-config-firefox.conf"
 
 # 4. Add the _sources variable to the list below
 source="
+	$_flatpak_sources
 	$_mobile_config_firefox_sources
 	"
 
@@ -50,5 +53,6 @@ package() {
 }
 
 sha512sums="
+78aea43f61ba553ff53e5e878c5980da8de9de6ef5c2eb0ed13a6fd0d2a9d6191d1890d83d0301c1e1320b0b302b19c04b5b0603f00c0b264ec39f05c0b5e51a  flatpak.conf
 8903fe38e8ce4734c8bffcd800a5d3bbf5c94fefd9b6d819957ac71d48111b8e29514fd86923c46d39689ad182e67a6fc8cd05b230c4ec7bcd92ec608d677e4c  mobile-config-firefox.conf
 "
