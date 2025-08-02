@@ -4,7 +4,7 @@ maintainer="Aster Boese <asterboese@mailbox.org>"
 # How to add a new config (5 steps):
 pkgname=postmarketos-sysusers-configs
 # 1. bump pkgver
-pkgver=3
+pkgver=4
 pkgrel=0
 pkgdesc="systemd-sysusers configs"
 url="https://postmarketos.org"
@@ -20,6 +20,7 @@ subpackages="
 	dnsmasq-sysusers:_sysusers
 	gdm-sysusers:_sysusers
 	openssh-sysusers:_sysusers
+	sing-box-sysusers:_sysusers
 	"
 
 # 3. Add a new entry below with the list of sysusers configs
@@ -27,12 +28,14 @@ subpackages="
 _dnsmasq_sources="dnsmasq.conf"
 _gdm_sources="gdm.conf"
 _openssh_sources="sshd.conf"
+_sing_box_sources="sing-box.conf"
 
 # 4. Add the _sources variable to the list below
 source="
 	$_dnsmasq_sources
 	$_gdm_sources
 	$_openssh_sources
+	$_sing_box_sources
 	"
 
 _sysusers() {
@@ -59,4 +62,5 @@ sha512sums="
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  dnsmasq.conf
 499cee7844d3ffb355ed8771c1cf0726e1f4c57ecbd1e0d6b25c1a3f6e6c95ad3dd45e878498a818e6db8086dab90912210d96bc024da6734ab5c53cd907ca55  gdm.conf
 4a6d716a907a730675505bfc4ac38598f9c4e7d962fa9cdeea51dbbaa6afec80d1b82b98627c37c164dc5cdcc7f68118104e3adb73d985f32a24f1941766c5af  sshd.conf
+014eff9e21ddaa64260f3915655e0a1fa771b356c0c56b3a5d868830237a561ba3e5cc06085bf70dde9dbf809807c301addd0a968a005436c067b6ce0a52672d  sing-box.conf
 "
