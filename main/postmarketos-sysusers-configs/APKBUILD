@@ -1,0 +1,54 @@
+# sysusers configs for projects that need system users
+
+maintainer="Aster Boese <asterboese@mailbox.org>"
+# How to add a new config (5 steps):
+pkgname=postmarketos-sysusers-configs
+# 1. bump pkgver
+pkgver=1
+pkgrel=0
+pkgdesc="systemd-sysusers configs"
+url="https://postmarketos.org"
+arch="noarch"
+options="!check"
+license="BSD-3-Clause"
+
+# 2. Add a new entry to subpackages in the format
+#    <pkgname>-sysusers:_sysusers where pkgname is the name
+#    of the package this sysusers config should be part of
+#    ALPHABETICAL ORDER!!!
+subpackages="
+	gdm-sysusers:_sysusers
+	"
+
+# 3. Add a new entry below with the list of sysusers configs
+#    to install for that package
+_gdm_sources="gdm.conf"
+
+# 4. Add the _sources variable to the list below
+source="
+	$_gdm_sources
+	"
+
+_sysusers() {
+	local name=$(echo ${subpkgname%%-sysusers})
+	local n=$(echo ${subpkgname%-sysusers} | sed s/-/_/g)
+	install_if="$pkgname=$pkgver-r$pkgrel $name systemd"
+
+	for f in $(eval "echo \$_${n}_sources"); do
+		prefix="$subpkgdir"
+		mode=644
+		prefix="$prefix/usr/lib/sysusers.d"
+		install -Dm"$mode" "$srcdir/$f" "$prefix/$f"
+	done
+
+	depends="systemd"
+	pkgdesc="$pkgdesc (sysusers configs)"
+}
+
+package() {
+	mkdir -p "$pkgdir"
+}
+
+sha512sums="
+499cee7844d3ffb355ed8771c1cf0726e1f4c57ecbd1e0d6b25c1a3f6e6c95ad3dd45e878498a818e6db8086dab90912210d96bc024da6734ab5c53cd907ca55  gdm.conf
+"
