@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=87
+pkgver=88
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -157,13 +157,11 @@ _flatpak_sources="
 	user/flatpak-session-helper.service
 	system-environment-generators/60-flatpak-system-only
 	user-environment-generators/60-flatpak
-	tmpfiles.d/flatpak.conf
 " # From
 # - https://github.com/flatpak/flatpak/blob/main/system-helper/flatpak-system-helper.service.in
 # - https://github.com/flatpak/flatpak/blob/main/session-helper/flatpak-session-helper.service.in
 # - https://github.com/flatpak/flatpak/blob/main/portal/flatpak-portal.service.in
 # - https://github.com/flatpak/flatpak/tree/main/env.d
-# - https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
 _fnott_sources="user/fnott.service"
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
 _geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
@@ -424,7 +422,6 @@ c4dcaa578bbe9e0023cff139a6857a0df28fb81c9814577348e9996122945e26f8ec2760189a312b
 f73df99518af1fd13f96342f561d43b69ebf757cdfd4444cee61665d5bfaa715c5be458cb44feb4a15e5d5613a91dec9e971a7bca30d2ae880d9e10eb7405ead  user-flatpak-session-helper.service
 62be7a7a7dce425fe8155f92ceab57aea52542687d27a2ce3cd9da0a80672381361fb3e4a8d58caf9cc02d80824a29e161ffb9f065f640b4481704851eb0378a  system-environment-generators-60-flatpak-system-only
 2d1337da0d1ac7ea5d6ffefbe05621970fef491278028589f5095ee6072867977eca7a68a997d6870e450546c2077d999207fadb568ab611833769555bfb5c64  user-environment-generators-60-flatpak
-ae2d20da95e519041f6eca39dd140895b2c46284f0894c60a29cf56b87704805146ddc2435e46e7fffbfc8bcab2cabceb32a10804ba1b648e2ed041c0b056102  tmpfiles.d-flatpak.conf
 0924315d4b7337edb42a2ecd7ba84d6a10437633028cd9c6ebd143c0668a6e6fea365d6644c336c70158e62d75a072db38bdee36cb677dfbfa609e9fdf43aca0  user-fnott.service
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
 f3463b85ac47055b400dfd2e24694c5e1dc6ab039efac0fe54496fc027c0732cda5e52a362a497b372dea671dc615154e8abfea866728d243cbbcd25e68a91aa  system-geoclue.service
