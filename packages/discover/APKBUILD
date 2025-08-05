@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=discover
-pkgver=99999_git20250728
+pkgver=99999_git20250801
 pkgrel=0
-_commit="1219c03ea5f50188e25547983b0e8360ed9922cd"
+_commit="00862dd853a72814ebc11573db840731ee26dda8"
 pkgdesc="KDE Plasma resources management GUI"
 url="https://userbase.kde.org/Discover"
 # armhf blocked by qt6-qtdeclarative
@@ -60,7 +60,7 @@ case "$pkgver" in
 *) _rel=stable ;;
 esac
 _repo_url="https://invent.kde.org/plasma/discover.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-30/discover-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/discover-$_commit.tar.xz
 	alpine-appstream-data.json
 	alpine-linux-logo-icon.png
 	"
@@ -105,7 +105,6 @@ backend_flatpak() {
 	amove usr/lib/qt6/plugins/discover/flatpak-backend.so
 	amove usr/share/libdiscover/categories/flatpak-backend-categories.xml
 	amove usr/lib/qt6/plugins/discover-notifier/FlatpakNotifier.so
-	amove usr/share/applications/org.kde.discover-flatpak.desktop
 	amove usr/share/metainfo/org.kde.discover.flatpak.appdata.xml
 	amove usr/share/icons/hicolor/scalable/apps/flatpak-discover.svg
 }
@@ -138,7 +137,7 @@ backend_apk() {
 }
 
 sha512sums="
-22a1d988e7d144cf98b91b1af177e93387ab9eb616e836439f46d4ab47b031ee0ab0727ec43935f31dc4aa48767f6bdae3f73a6bd3c533bba1a0850a51748c0d  discover-1219c03ea5f50188e25547983b0e8360ed9922cd.tar.xz
+4138d45f9c12e57f5830880a4daa1c0e044536e9c133d9d3d92faf710fcdd7ea5b0fa995076f56ef779e44873bff6968861f72234540c9df7cd2fc32c8a6fbce  discover-00862dd853a72814ebc11573db840731ee26dda8.tar.xz
 d9cc12a5a92df820d6d133a3698a4fbb08a97f08f00554a11d87c73c6144b42d07cecd6682bf9576d83c8e2556e35ade2fb39e77895afbbe33e2f94630441bb7  alpine-appstream-data.json
 0766668630cb14f58c840ebdda8b76bd1dec98b4dd61469677d4ad6eb4966809a25dbec2a846502cad0391df5b6ca9d692bb857a6fa203b61a52e6ac044cfbf4  alpine-linux-logo-icon.png
 "

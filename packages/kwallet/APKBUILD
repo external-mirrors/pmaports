@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kwallet
-pkgver=99999_git20250724
+pkgver=99999_git20250801
 pkgrel=0
-_commit="daa09a3d10bfc943f9c87e8d8ef0c3871fe69863"
+_commit="512e88fb5a0cf7298dac9dec078593de4e75c3f9"
 pkgdesc="Secure and unified container for user passwords"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -35,7 +35,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kwallet.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-25/kwallet-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/kwallet-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-bin"
 provides="dbus:org.freedesktop.Secrets"
 # 2nd highst priority after gnome-keyring, mainly for KDE
@@ -78,5 +78,5 @@ bin() {
 }
 
 sha512sums="
-94d0a382bb0dd576e0fa7d4a2b35ed4d7bdb0af083504abb7bc5d362eb990684c011b144c04c23f47daf46a0568e41b33218b3becdd71aab861a30157572bae4  kwallet-daa09a3d10bfc943f9c87e8d8ef0c3871fe69863.tar.xz
+a56e7978b19133d8093b97f7da46c708dc820594cf7d9c1d7e5a599dd93177fa8fb9275592d68d236b2b4a2f6e84acb8d9711b1acced29b11335e1f7d62130cf  kwallet-512e88fb5a0cf7298dac9dec078593de4e75c3f9.tar.xz
 "

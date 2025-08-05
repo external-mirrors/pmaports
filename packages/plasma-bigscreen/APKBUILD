@@ -1,16 +1,14 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-bigscreen
-pkgver=99999_git20250730
+pkgver=99999_git20250803
 pkgrel=0
-_commit="da98cbc76b5bb58000e88859a8122b53da2df049"
+_commit="6be4f32527768db94bb7efa3000aeb4f1b452c8f"
 pkgdesc="A 10-feet interface made for TVs"
 url="https://invent.kde.org/plasma/plasma-bigscreen/"
-# armhf blocked by qt5-qtdeclarative
-arch="all !armhf"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf !rsicv64 !s390x !ppc64le !loongarch64"
 license="LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL"
 depends="
 	kde-cli-tools
@@ -24,6 +22,7 @@ depends="
 	plasma-workspace
 	"
 makedepends="
+	bluez-qt-dev
 	extra-cmake-modules
 	kcmutils-dev
 	kdeclarative-dev
@@ -40,6 +39,7 @@ makedepends="
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
 	qt6-qtmultimedia-dev
+	qt6-qtwebengine-dev
 	samurai
 	"
 subpackages="$pkgname-lang"
@@ -48,7 +48,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-bigscreen.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-30/plasma-bigscreen-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/plasma-bigscreen-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-bigscreen-$_commit"
@@ -70,5 +70,5 @@ package() {
 }
 
 sha512sums="
-d9b8867ba56ac7e2fe06be2d989d4516277671f0c0da3be1ccd9c6ec082bdf9ecfd3c2071f07af8b95e10a7af6a3e1302e250eb880fe0a7314aaccaf236334a4  plasma-bigscreen-da98cbc76b5bb58000e88859a8122b53da2df049.tar.xz
+c0c9139bd43482b0063a9b475d004a8b3bf1f80b405bc0b6ac0197c38acee26d69fa5f06c1a005aea37adf901a4f1ed305405adb5c49fa5a1feb20844fe833be  plasma-bigscreen-6be4f32527768db94bb7efa3000aeb4f1b452c8f.tar.xz
 "

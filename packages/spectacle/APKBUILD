@@ -53,7 +53,7 @@ options="!check"
 builddir="$srcdir/spectacle-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -68,9 +68,6 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 
 	install -Dm644 "$srcdir"/spectacle.desktop -t "$pkgdir"/etc/xdg/autostart/
-
-	# We don't ship systemd
-	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
 10b190cf1e1bcbddb030cdca1551332574999d30638c04115b36706e92a01ebabb3c58f7d83713c4db08479a0b87af9a54fd3e4833c0faa04d8e1fd1f07b760b  spectacle-fdf734ef8febdeeb731e0a5b93d3982de8fd8db3.tar.xz

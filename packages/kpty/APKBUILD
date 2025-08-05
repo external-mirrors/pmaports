@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpty
-pkgver=99999_git20250722
+pkgver=99999_git20250801
 pkgrel=0
-_commit="7c1c383c5a2b9d007a15390c21b49fc1346a6086"
+_commit="3f890bcaed3f6393cb0849076735c6f49f870c71"
 pkgdesc="Pty abstraction"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kpty.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-23/kpty-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/kpty-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 options="!check" # The one test it has fails: "Can't open a pseudo teletype"
 
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-558dcc42b86de2722d2c5043409a62f68c103514bdc5743a9ca3a335c228e27eed663d94f67e7b7d72b13444bfa86d8b5b42b67cd519295fc935a1bdee0d96d6  kpty-7c1c383c5a2b9d007a15390c21b49fc1346a6086.tar.xz
+491e342d37836a9fac68c99704af043a2096fa54ba922fdfc3f9e2d1ee658c97c44434c1f39966b14e02c81758514640cc6e1dde10836c054b63a8c098b7378a  kpty-3f890bcaed3f6393cb0849076735c6f49f870c71.tar.xz
 "

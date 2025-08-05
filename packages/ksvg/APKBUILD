@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ksvg
-pkgver=99999_git20250722
+pkgver=99999_git20250801
 pkgrel=0
-_commit="ad9ddce8ddf2cb0c2f3e9f342ffea60ebfcdfde4"
+_commit="dc734a10214350008811accbe00fae40229dd4db"
 pkgdesc="Configuration system"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -30,7 +30,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xwayland-run"
 _repo_url="https://invent.kde.org/frameworks/ksvg.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-23/ksvg-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/ksvg-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 
 options="!check"
@@ -59,5 +59,5 @@ package() {
 	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-724dd25a5467aeb0a96176427b785290e0313bb24182dd553430459e783906fae01e655f9ebd30126ccea53fa15ac1c00ee09059d85f84d42e88ca17f8030615  ksvg-ad9ddce8ddf2cb0c2f3e9f342ffea60ebfcdfde4.tar.xz
+2fcf8b438a0615d85d6cc89df885006caf01da737cf7df0efa0bdb0e329ae4e47c209b1fed57b8233acd3f9269c0a9ce8f97fef6580bcdf5d519f735b2836453  ksvg-dc734a10214350008811accbe00fae40229dd4db.tar.xz
 "

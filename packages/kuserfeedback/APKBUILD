@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kuserfeedback
-pkgver=99999_git20250724
+pkgver=99999_git20250801
 pkgrel=0
-_commit="4520634ad43a649e0cef316ec2921b2a8e224aec"
+_commit="b2875baa87b5348988a200f731cf91b7700fa02b"
 pkgdesc="Framework for collecting user feedback for applications via telemetry and surveys"
 url="https://kde.org/products/frameworks/"
 # armhf blocked by qt6-qtdeclarative
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/libraries/kuserfeedback.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-25/kuserfeedback-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/kuserfeedback-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kuserfeedback-$_commit"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-9edc1f85ad02ac4782b4c087c00c4cc36cefd88a1d4481bf1f4f776ec02f20dfa93798ee2f8d34339e1c40383dc46842a9dd316c57d765c70d1b26fdd1254650  kuserfeedback-4520634ad43a649e0cef316ec2921b2a8e224aec.tar.xz
+f20737c368d954d6fb9df1728e2a319a9b6477a228d9f6ea172bf8967a6de496789cc76c3715c3829a701e51399729477acc544b9cd0b22e8ab907d8eb7c570f  kuserfeedback-b2875baa87b5348988a200f731cf91b7700fa02b.tar.xz
 "
