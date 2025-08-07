@@ -8,7 +8,7 @@
 pkgname=systemd-services
 # 1. bump pkgver
 pkgver=90
-pkgrel=0
+pkgrel=1
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
 # armhf: pmb#2618
@@ -385,11 +385,10 @@ _service() {
 	done
 
 	# NOTE: we do not call default_systemd because it generates an incorrect
-	# install_if. Instead, call the relevant parts from default_systemd directly
+	# install_if.
 	# See: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/6334#note_474497
 	depends="systemd"
 	pkgdesc="$pkgdesc (systemd files)"
-	default_systemd_install_scripts
 }
 
 package() {
