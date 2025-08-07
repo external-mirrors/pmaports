@@ -9,7 +9,7 @@
 pkgname=systemd
 pkgver=257.8
 _pkgver="musl-v${pkgver//_/-}-split-usr"
-pkgrel=0
+pkgrel=1
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # ppc64le and s390x blocked by pmboostrap not supporting
@@ -131,7 +131,6 @@ subpackages="
 source="
 	https://gitlab.postmarketos.org/postmarketOS/systemd/-/archive/$_pkgver/systemd-$_pkgver.tar.gz
 	wired.network
-	systemd-apk-macros.sh
 	"
 builddir="$srcdir/systemd-$_pkgver"
 
@@ -255,10 +254,6 @@ package() {
 		echo 'disable *' > "$pkgdir"/usr/lib/systemd/"$type"-preset/99-default.preset
 	done
 
-	install -Dm755 "$srcdir"/systemd-apk-macros.sh -t \
-		"$pkgdir"/usr/lib/systemd
-
-
 	# initramfs hardcodes /sbin/init
 	mkdir -p "$pkgdir"/sbin
 	ln -sf "../usr/lib/systemd/systemd" "$pkgdir"/sbin/init
@@ -310,9 +305,6 @@ timesyncd() {
 	amove usr/share/dbus-1/system-services/org.freedesktop.timesync1.service
 	amove usr/share/dbus-1/system.d/org.freedesktop.timesync1.conf
 	amove usr/share/polkit-1/actions/org.freedesktop.timesync1.policy
-
-	# Generate install scripts automatically for services in this subpackage
-	default_systemd_install_scripts
 }
 
 timesyncd_bcomp() {
@@ -346,9 +338,6 @@ networkd() {
 	amove usr/share/polkit-1/actions/org.freedesktop.network1.policy
 
 	install -D -m0644 "$srcdir/wired.network" "$subpkgdir/usr/lib/systemd/network/80-wired.network"
-
-	# Generate install scripts automatically for services in this subpackage
-	default_systemd_install_scripts
 }
 
 networkd_bcomp() {
@@ -376,9 +365,6 @@ resolved() {
 	amove usr/share/dbus-1/system-services/org.freedesktop.resolve1.service
 	amove usr/share/dbus-1/system.d/org.freedesktop.resolve1.conf
 	amove usr/share/polkit-1/actions/org.freedesktop.resolve1.policy
-
-	# Generate install scripts automatically for services in this subpackage
-	default_systemd_install_scripts
 }
 
 resolved_bcomp() {
@@ -467,5 +453,4 @@ libs() {
 sha512sums="
 f074fef94f937707ff56a90f63201a29ebb5348b68b813e9dc6585316313b9aabb92e6b7ea1e7f38411286c616477f7a4e998a8d5b611b51d5e06ecca6d35d6c  systemd-musl-v257.8-split-usr.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
-cc1c8f00a0ff1c94fcebe0e6d48b3d1a74c51b9d86bf255762cecda4b4d0c08e313f817aaaa301f41133eaf73c525e36c0f48659b263a7ed990080de9f3cec6c  systemd-apk-macros.sh
 "
