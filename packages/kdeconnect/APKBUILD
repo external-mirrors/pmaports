@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdeconnect
-pkgver=99999_git20250802
+pkgver=99999_git20250805
 pkgrel=0
-_commit="070fe4013d805c0ebf1260b0c75fb1ab5b8108a2"
+_commit="46bcd062a8918f531d759046febb0301dbf6c547"
 pkgdesc="Adds communication between KDE and your smartphone"
 url="https://community.kde.org/KDEConnect"
 # armhf blocked by qt6-qtdeclarative
@@ -47,7 +47,7 @@ makedepends="
 checkdepends="xvfb-run"
 subpackages="$pkgname-lang $pkgname-nftables::noarch $pkgname-zsh-completion"
 _repo_url="https://invent.kde.org/network/kdeconnect-kde.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/kdeconnect-kde-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-05/kdeconnect-kde-$_commit.tar.xz
 	60_kdeconnect.nft
 	"
 builddir="$srcdir/$pkgname-kde-$pkgver"
@@ -85,6 +85,6 @@ nftables() {
 }
 
 sha512sums="
-ab7917d3104cb1abaeba4b2b229f2fe29fc8ee6abec6705c1d14566b248ebbabf00f4383cf0458a67733fefd62e9a0a9ca96e71e0babaa84b52affa65d95865d  kdeconnect-kde-070fe4013d805c0ebf1260b0c75fb1ab5b8108a2.tar.xz
+a7dc026624324be6026590ffed67aaf19961f29e29d195206b636ad8bfe19824431e845e9875d4cfb9f9c383d563d81ab812738fb3e3b9fa4409d3f0e4386c4d  kdeconnect-kde-46bcd062a8918f531d759046febb0301dbf6c547.tar.xz
 0ccc2cb0ffd3892698b45bcf723cfdd23ad98f0e2b0436cd0a91d9ed13c6992853e2c4092ee8a0edc6216f1f262151e99e344b8f16c52237e9ff8de62fd37cae  60_kdeconnect.nft
 "

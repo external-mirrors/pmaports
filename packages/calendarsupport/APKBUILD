@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=calendarsupport
-pkgver=99999_git20250802
+pkgver=99999_git20250805
 pkgrel=0
-_commit="45b390d39cb7e0b15c9121cad523def0a1d9d1b2"
+_commit="ce240e7b2517288f28d1913c18db61ec602326d0"
 pkgdesc="Library providing calendar support"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -37,7 +37,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xwayland-run"
 _repo_url="https://invent.kde.org/pim/calendarsupport.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/calendarsupport-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-05/calendarsupport-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -60,5 +60,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-b7679af32e27cd43bf1f10d4b41eb2e1e47724e6d743e7ec55c9ec9ac132788e632f52253956a86e00feead8236d3ced798b25079da84fc83c7cac308f1a6f8d  calendarsupport-45b390d39cb7e0b15c9121cad523def0a1d9d1b2.tar.xz
+0d072cf31d8c3c22f21d6b83034015cef7fe32a287fb805382308cababdbdf6a8cf914a2509edd9fcc0fa5eebc30046dade1740c103ad569c8472509eaa94111  calendarsupport-ce240e7b2517288f28d1913c18db61ec602326d0.tar.xz
 "

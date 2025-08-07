@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=libksieve
-pkgver=99999_git20250802
+pkgver=99999_git20250805
 pkgrel=0
-_commit="8e367bcd33155fe3d315345621774abe78a57512"
+_commit="ee6843ed0526adf7e565e476d8f496a8ca8cbe15"
 pkgdesc="KDE PIM library for managing sieves"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -38,7 +38,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/libksieve.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/libksieve-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-05/libksieve-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -63,5 +63,5 @@ package() {
 }
 
 sha512sums="
-3f87366ff061a2379cdf10ff0a88b3bc026b5ef833043ed3129c755a2ff430c1daa4ddc777dbffe228084678130f9cefaeff0faad27596815607dbc7fdeab8e7  libksieve-8e367bcd33155fe3d315345621774abe78a57512.tar.xz
+1be18b15fdb449519aee5538f538261890b261d760fd8a2cfdc764cb3f42ddf1ec8e982629607e7575a4f1a0c20dba2c5a3bb2b7223240b859f2adf71996ca97  libksieve-ee6843ed0526adf7e565e476d8f496a8ca8cbe15.tar.xz
 "

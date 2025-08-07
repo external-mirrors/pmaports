@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kscreenlocker
-pkgver=99999_git20250801
+pkgver=99999_git20250805
 pkgrel=0
-_commit="18b4500cd52df494982c8255a5ad84380a8dbb3b"
+_commit="33585118aab246a8e727b68a55ea05231e1ffa8f"
 pkgdesc="Library and components for secure lock screen architecture"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -47,7 +47,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kscreenlocker.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-03/kscreenlocker-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-05/kscreenlocker-$_commit.tar.xz
 	kde.pam
 	kde-fingerprint.pam
 	kde-smartcard.pam
@@ -79,7 +79,7 @@ package() {
 }
 
 sha512sums="
-47d324d88b3f56e3f397a1cf814b848287bb3228a3ff023391a6861c8072d5027464d3c9c72e2924610a3ea4b1fd3d993cedae5a5756c8f587019f11c1bb7314  kscreenlocker-18b4500cd52df494982c8255a5ad84380a8dbb3b.tar.xz
+9c5647dfed4bcfee3e63cfe7ec7909bcfa947b93212a810be8757f82c1c8cf8b0d8863f14a072218fb9e7f39e0e5d8fd3f07e69fa5905787a66a2f02b343a24b  kscreenlocker-33585118aab246a8e727b68a55ea05231e1ffa8f.tar.xz
 cdbc45fb74a3c43fb2302fe09bf2f9f644ca93693e0110cf748c403762236aaeea8284a8d21fc495014c69b6d5fe4789aaff7687ce9f03dda270490fa5042e2b  kde.pam
 fe2f244b73b5cccf4b7125b9e3cac0a35566840e4ba2f69937fd8053aa56af71ee43dcbfa9c0f79de9ebe31f656e98a5d38955f77560be5c3535b08215ad8789  kde-fingerprint.pam
 2ae866d25224ba345ea9d5ddb2fce668de5c51d1cfbb4d7a048c50107ccd6cffc3231a46855599c0ba3d62ff002a26e45b69d9029f88f4ab42661465a5e526c5  kde-smartcard.pam
