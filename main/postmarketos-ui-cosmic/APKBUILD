@@ -2,7 +2,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-ui-cosmic
 pkgver=1
-pkgrel=3
+pkgrel=4
 pkgdesc="COSMIC Desktop Environment from System76"
 url="https://system76.com/cosmic/"
 # Only tested on these archs.
@@ -48,12 +48,21 @@ replaces="
 	cosmic-applets
 	cosmic-bg
 "
+subpackages="$pkgname-recommended"
 
 package() {
 	install -Dm644 wallpaper.conf \
 		"$pkgdir"/usr/share/cosmic/com.system76.CosmicBackground/v1/all
 	install -Dm644 favorites.conf \
 		"$pkgdir"/usr/share/cosmic/com.system76.CosmicAppList/v1/favorites
+}
+
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
