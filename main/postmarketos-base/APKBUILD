@@ -1,6 +1,6 @@
 pkgname=postmarketos-base
 pkgver=48
-pkgrel=1
+pkgrel=2
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -36,6 +36,7 @@ subpackages="
 	$pkgname-nftables
 	$pkgname-nftables-openrc:nftables_openrc
 	$pkgname-openrc
+	$pkgname-recommended
 	$pkgname-ssh
 	postmarketos-release:release
 	postmarketos-baselayout:baselayout
@@ -233,6 +234,14 @@ release() {
 	# /etc/os-release should be a relative symlink, see:
 	# https://www.man7.org/linux/man-pages/man5/os-release.5.html
 	ln -s ../usr/lib/os-release "$subpkgdir"/etc/os-release
+}
+
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="

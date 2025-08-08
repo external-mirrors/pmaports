@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
 pkgver=42
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -37,6 +37,7 @@ subpackages="
 	$pkgname-openrc-settingsd:openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
+	$pkgname-recommended
 	$pkgname-tinydm
 	$pkgname-wayland
 	$pkgname-wifi-iwd:iwd
@@ -299,6 +300,13 @@ flatpak() {
 	amove usr/share/flatpak/remotes.d/flathub.flatpakrepo
 }
 
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
+
+	mkdir -p "$subpkgdir"
+}
 sha512sums="
 187baa4a2b77e1e97a13536553ef2e1f64c3968f07ab2a372b550e4eee10a801a3b9797766d0d9f566148230335f3d4d150cd335bc40050322313a195874d608  rootfs-etc-chrony-chrony.conf
 8d2c54fe3ca62c62f8337fb6be28479d0e02ea63f32abae81907f2768631e65c9e17485f8bc0854a013377f729b06dd1873e2b75f86f657ece866d00aecbbdb4  rootfs-etc-elogind-logind.conf
