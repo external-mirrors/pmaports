@@ -3,7 +3,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 pkgname=postmarketos-base-ui-gnome
 pkgver=9
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for shared configuration for GNOME-based UIs"
 url="https://postmarketos.org"
 arch="noarch"
@@ -30,7 +30,7 @@ source="
 	10_postmarketos-green-accent.gschema.override
 	"
 options="!check"
-subpackages="$pkgname-openrc"
+subpackages="$pkgname-openrc $pkgname-recommended"
 
 _pmb_recommends="
 	decibels
@@ -86,6 +86,14 @@ openrc() {
 	"
 
 	mkdir "$subpkgdir"
+}
+
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="

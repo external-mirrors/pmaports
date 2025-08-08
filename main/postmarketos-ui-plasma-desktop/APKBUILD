@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-plasma-desktop
 pkgver=3
-pkgrel=5
+pkgrel=6
 pkgdesc="(X11/Wayland) KDE Desktop Environment (works well with tablets)"
 url="https://www.kde.org"
 # armhf and riscv64 blocked by plasma
@@ -38,7 +38,11 @@ _pmb_recommends="$_pmb_recommends
 	xdpyinfo
 	"
 options="!check pmb:systemd" # No tests for a metapkg
-subpackages="$pkgname-openrc $pkgname-systemd"
+subpackages="
+	$pkgname-openrc
+	$pkgname-recommended
+	$pkgname-systemd
+"
 
 package() {
 	mkdir -p "$pkgdir"
@@ -69,6 +73,14 @@ openrc() {
 systemd() {
 	install_if="$pkgname=$pkgver-r$pkgrel systemd"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
+
+	mkdir -p "$subpkgdir"
+}
+
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
 
 	mkdir -p "$subpkgdir"
 }
