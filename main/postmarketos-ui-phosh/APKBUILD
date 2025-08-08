@@ -4,7 +4,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 pkgname=postmarketos-ui-phosh
 pkgver=25
-pkgrel=2
+pkgrel=3
 pkgdesc="(Wayland) Mobile UI initially developed for the Librem 5"
 url="https://phosh.mobi"
 arch="noarch !armhf"
@@ -38,7 +38,12 @@ source="
 	udiskie.desktop
 	"
 options="!check pmb:drm pmb:systemd"
-subpackages="$pkgname-default-osk:default_osk $pkgname-openrc $pkgname-systemd"
+subpackages="
+	$pkgname-default-osk:default_osk
+	$pkgname-openrc
+	$pkgname-recommended
+	$pkgname-systemd
+"
 
 package() {
 	install -Dm644 "$srcdir"/01_postmarketos-ui-phosh.gschema.override \
@@ -68,6 +73,14 @@ systemd() {
 		libcap-utils
 	"
 	mkdir "$subpkgdir"
+}
+
+recommended() {
+	pkgdesc="$pkgdesc (recommended apps)"
+	depends="$_pmb_recommends"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
