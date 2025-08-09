@@ -545,3 +545,10 @@ DYNAMIC_FTRACE = true  # Enable function tracing dynamically
 RS9116_FLASH_MODE = false  # pma!2059
 ["category:pinephonepro".">=0.0.0"."aarch64"]
 LEDS_GROUP_MULTICOLOR = true  # pma!5991
+
+# Required for immutable image booting
+["category:immutable".">=0.0.0"."all"]
+EFIVAR_FS = true
+DM_VERITY = true
+EROFS_FS = true
+EROFS_FS_ZIP = true
