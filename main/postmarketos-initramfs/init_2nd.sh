@@ -8,6 +8,9 @@
 # The set -a in init.sh only exports variables, not functions
 . /init_functions.sh
 . /init_functions_2nd.sh
+if [ -f /init_functions_immutable.sh ]; then
+	. /init_functions_immutable.sh
+fi
 
 # Handle halt/poweroff/reboot
 # Signals from busybox/halt.c
@@ -50,19 +53,23 @@ mount_subpartitions
 
 run_hooks /hooks-extra
 
-wait_root_partition
-delete_old_install_partition
-resize_root_partition
-unlock_root_partition
-resize_root_filesystem
-mount_root_partition
-resize_filesystem_after_mount /sysroot
+if is_immutable_boot; then
+	handle_immutable_boot
+else
+	wait_root_partition
+	delete_old_install_partition
+	resize_root_partition
+	unlock_root_partition
+	resize_root_filesystem
+	mount_root_partition
+	resize_filesystem_after_mount /sysroot
 
-# Mount boot partition into sysroot if needed since some
-# old installations don't have a proper /etc/fstab file. See #2800
-if [ -z "$(cat /sysroot/etc/fstab | grep -v "#" | tr -d '[:space:]')" ]; then
-	wait_boot_partition
-	mount_boot_partition /sysroot/boot "rw"
+	# Mount boot partition into sysroot if needed since some
+	# old installations don't have a proper /etc/fstab file. See #2800
+	if [ -z "$(cat /sysroot/etc/fstab | grep -v "#" | tr -d '[:space:]')" ]; then
+		wait_boot_partition
+		mount_boot_partition /sysroot/boot "rw"
+	fi
 fi
 
 init="/sbin/init"
@@ -101,6 +108,7 @@ done
 # switch_root does a mount --move , keeping stale filesystems like devtmpfs
 # with /dev/log in there.
 rm /dev/log 2>/dev/null || true
+
 
 # shellcheck disable=SC2093
 exec switch_root /sysroot "$init"

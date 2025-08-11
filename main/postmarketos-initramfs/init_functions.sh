@@ -101,6 +101,11 @@ parse_cmdline_item() {
 			# shellcheck disable=SC2034
 			log_info=y
 			;;
+		usrhash)
+			# used by init_2nd.sh which sources this script.
+		    # shellcheck disable=SC2034
+			usrhash="$value"
+			;;
 		[![:alpha:]_]* | [[:alpha:]_]*[![:alnum:]_]*)
 			# invalid shell variable, ignore it
 			;;
@@ -262,6 +267,10 @@ info() {
 	echo "$@"
 }
 
+is_immutable_boot() {
+	[ -n "$usrhash" ]
+}
+
 mount_proc_sys_dev() {
 	# mdev
 	mount -t proc -o nodev,noexec,nosuid proc /proc || echo "Couldn't mount /proc"
@@ -365,8 +374,11 @@ mount_subpartitions() {
 	attempt_start=$(get_uptime_seconds)
 	wait_seconds=10
 	echo "Trying to mount subpartitions for $wait_seconds seconds..."
+	# For immutable boot, root partition may not exist yet (first boot), but boot
+	# partition with ESP will. Break early if we find either to avoid timeout.
 	find_root_partition
-	while [ -z "$PMOS_ROOT" ]; do
+	find_boot_partition
+	while [ -z "$PMOS_ROOT" ] && [ -z "$PMOS_BOOT" ]; do
 		partitions="$android_parts $(grep -v "loop\|ram" < /proc/diskstats |\
 			sed 's/\(\s\+[0-9]\+\)\+\s\+//;s/ .*//;s/^/\/dev\//')"
 		for partition in $partitions; do
@@ -401,7 +413,8 @@ mount_subpartitions() {
 				# Some devices have mmc partitions that appear to have
 				# subpartitions, but aren't our subpartition.
 				find_root_partition
-				if [ -n "$PMOS_ROOT" ]; then
+				find_boot_partition
+				if [ -n "$PMOS_ROOT" ] || [ -n "$PMOS_BOOT" ]; then
 					break
 				fi
 				[ -n "$SUBPARTITION_LOOP" ] && losetup -vd "$SUBPARTITION_LOOP"
@@ -494,7 +507,11 @@ find_root_partition() {
 	# mount_subpartitions() must get executed before calling
 	# find_root_partition(), so partitions from b) also get found.
 	if [ -z "$PMOS_ROOT" ]; then
-		PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		if is_immutable_boot; then
+			PMOS_ROOT="$(find_root_on_boot_device)"
+		else
+			PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		fi
 	fi
 
 	# Set the result, since using a subshell prevents us from caching
@@ -513,6 +530,9 @@ find_boot_partition() {
 			PMOS_BOOT="/sysroot/boot"
 			mount --bind /sysroot/boot /boot
 		else
+			if is_immutable_boot; then
+				get_esp_partition_uuid_from_efi boot_uuid
+			fi
 			PMOS_BOOT="$(find_partition "$boot_uuid" "$boot_path" "pmOS_boot")"
 		fi
 	fi
