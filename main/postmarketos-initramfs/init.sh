@@ -24,6 +24,10 @@ trap 'reboot -f' TERM
 # provide a default for os-release's VERSION in case the file doesn't exist
 VERSION="${VERSION:-unknown}"
 
+if [ -f /init_functions_immutable.sh ]; then
+	. /init_functions_immutable.sh
+fi
+
 # This is set during packaging and is used when triaging bug reports
 INITRAMFS_PKG_VERSION="<<INITRAMFS_PKG_VERSION>>"
 
