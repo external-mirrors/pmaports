@@ -99,6 +99,11 @@ parse_cmdline_item() {
 			# shellcheck disable=SC2034
 			log_info=y
 			;;
+		usrhash)
+			# used by init_2nd.sh which sources this script.
+		    # shellcheck disable=SC2034
+			usrhash="$value"
+			;;
 		[![:alpha:]_]* | [[:alpha:]_]*[![:alnum:]_]*)
 			# invalid shell variable, ignore it
 			;;
@@ -258,6 +263,10 @@ info() {
 	fi
 
 	echo "$@"
+}
+
+is_immutable_boot() {
+	[ -n "$usrhash" ]
 }
 
 mount_proc_sys_dev() {
@@ -462,7 +471,11 @@ find_root_partition() {
 	# mount_subpartitions() must get executed before calling
 	# find_root_partition(), so partitions from b) also get found.
 	if [ -z "$PMOS_ROOT" ]; then
-		PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		if is_immutable_boot; then
+			PMOS_ROOT="$(find_root_on_boot_device)"
+		else
+			PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		fi
 	fi
 
 	# Set the result, since using a subshell prevents us from caching
