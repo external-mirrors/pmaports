@@ -60,7 +60,13 @@ fi
 
 # Discover the partitions if they're "subpartitions"
 # (where the whole disk image is flashed to a partition)
-mount_subpartitions
+#
+# FIXME: At some point we'll probably need to support subpartitions with
+# immutable boot, but for now disabling the subpartition check saves 10 seconds
+# from boot
+if ! is_immutable_boot; then
+	mount_subpartitions
+fi
 
 # Poll for the boot partition to become available or crash
 wait_boot_partition

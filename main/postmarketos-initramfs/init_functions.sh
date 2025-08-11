@@ -99,6 +99,11 @@ parse_cmdline_item() {
 			# shellcheck disable=SC2034
 			log_info=y
 			;;
+		usrhash)
+			# used by init_2nd.sh which sources this script.
+		    # shellcheck disable=SC2034
+			usrhash="$value"
+			;;
 		[![:alpha:]_]* | [[:alpha:]_]*[![:alnum:]_]*)
 			# invalid shell variable, ignore it
 			;;
@@ -260,6 +265,10 @@ info() {
 	echo "$@"
 }
 
+is_immutable_boot() {
+	[ -n "$usrhash" ]
+}
+
 mount_proc_sys_dev() {
 	# mdev
 	mount -t proc -o nodev,noexec,nosuid proc /proc || echo "Couldn't mount /proc"
@@ -406,6 +415,42 @@ pretty_dm_path() {
 	echo "$name"
 }
 
+# Mount EFI vars
+setup_efivarfs() {
+	if mountpoint -q /sys/firmware/efi/efivars; then
+		info "efivars already mounted"
+		return 0
+	fi
+	info "Mounting efivars"
+	modprobe efivarfs || true
+	mount -t efivarfs efivarfs /sys/firmware/efi/efivars || true
+}
+
+# Extract the ESP *partition* UUID from EFI's LoaderDevicePart variable
+# Uses: (none)
+# Sets: uuid variable via output parameters
+# $1: variable name to store ESP partition UUID
+get_esp_partition_uuid_from_efi() {
+	local result="$1"
+	local efi_var uuid
+
+	setup_efivarfs
+	efi_var="$(ls /sys/firmware/efi/efivars/LoaderDevicePartUUID-*)"
+
+	if [ ! -e "$efi_var" ]; then
+		echo "ERROR: LoaderDevicePartUUID not found - not booted via EFI or efivarfs failed?"
+		return 1
+	fi
+
+	# Read UUID, skip first 4 bytes (EFI attributes), convert to lowercase
+	# https://docs.kernel.org/filesystems/efivarfs.html
+	uuid=$(dd if="$efi_var" bs=1 skip=4 2>/dev/null | tr -d '\0' | tr '[:upper:]' '[:lower:]')
+	info "Found ESP UUID: $uuid"
+
+	# Set the result
+	if [ -n "$result" ]; then eval "$result=\"$uuid\""; fi
+}
+
 # Prints the path to the partition if found, or nothing.
 find_partition() {
 	# $1: UUID of partition or filesystem on the partition, if known
@@ -468,7 +513,11 @@ find_root_partition() {
 	# mount_subpartitions() must get executed before calling
 	# find_root_partition(), so partitions from b) also get found.
 	if [ -z "$PMOS_ROOT" ]; then
-		PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		if is_immutable_boot; then
+			PMOS_ROOT="$(find_root_on_boot_device)"
+		else
+			PMOS_ROOT="$(find_partition "$root_uuid" "$root_path" "pmOS_root" "TYPE=crypto_LUKS")"
+		fi
 	fi
 
 	# Set the result, since using a subshell prevents us from caching
@@ -487,6 +536,9 @@ find_boot_partition() {
 			PMOS_BOOT="/sysroot/boot"
 			mount --bind /sysroot/boot /boot
 		else
+			if is_immutable_boot; then
+				get_esp_partition_uuid_from_efi boot_uuid
+			fi
 			PMOS_BOOT="$(find_partition "$boot_uuid" "$boot_path" "pmOS_boot")"
 		fi
 	fi
