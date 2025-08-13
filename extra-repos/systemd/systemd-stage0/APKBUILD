@@ -4,7 +4,7 @@
 # Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 
 pkgname=systemd-stage0
-pkgver=257.7
+pkgver=257.8
 _pkgver="musl-v${pkgver//_/-}-split-usr"
 pkgrel=0
 pkgdesc="Minimal systemd bootstrap package"
@@ -64,11 +64,7 @@ build() {
 		-Dsplit-bin=true \
 		-Dsplit-usr=true \
 		\
-		-Dkmod-path=/bin/kmod \
-		-Dsulogin-path=/sbin/sulogin \
-		\
 		-Dwheel-group=true \
-		-Ddebug-shell=/bin/ash \
 		\
 		-Dbootloader=disabled \
 		-Dutmp=false \
@@ -79,8 +75,6 @@ build() {
 		-Dnss-mymachines=disabled \
 		-Dnss-resolve=disabled \
 		-Dnss-systemd=false \
-		-Dsysext=true \
-		-Dsysusers=true \
 		-Dselinux=disabled \
 		\
 		-Dsystem-alloc-uid-min=101 \
@@ -91,10 +85,7 @@ build() {
 		-Dnobody-user=nobody \
 		-Dnobody-group=nobody \
 		\
-		-Ddefault-kill-user-processes=true \
 		-Dgshadow=false \
-		-Ddefault-locale=en_US.UTF-8 \
-		\
 		-Didn=false \
 		-Dsysvinit-path="" \
 		build .
@@ -106,5 +97,5 @@ package() {
 }
 
 sha512sums="
-e4a122814efed6d7809db33ed78ac8e0bc685f999d76643a0c8f60ac1527c9df10720b202bf6b62ee3b9334cbee5d17a5ff95f8781a9e4f1485705b8020a5c25  systemd-musl-v257.7-split-usr.tar.gz
+f074fef94f937707ff56a90f63201a29ebb5348b68b813e9dc6585316313b9aabb92e6b7ea1e7f38411286c616477f7a4e998a8d5b611b51d5e06ecca6d35d6c  systemd-musl-v257.8-split-usr.tar.gz
 "
