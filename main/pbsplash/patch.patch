@@ -1,0 +1,13 @@
+diff --git a/src/pbsplash.c b/src/pbsplash.c
+index bf79734..3fdac4b 100644
+--- a/src/pbsplash.c
++++ b/src/pbsplash.c
+@@ -536,6 +536,8 @@ int main(int argc, char **argv)
+ 		return rc;
+ 	}
+ 
++	argv[0][0] = '@';
++
+ 	screenWidth = (int)tfb_screen_width();
+ 	screenHeight = (int)tfb_screen_height();
+ 

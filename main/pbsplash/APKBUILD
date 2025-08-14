@@ -2,12 +2,14 @@
 pkgname=pbsplash
 pkgdesc="postmarketOS boot splash screen"
 pkgver=0.3.1
-pkgrel=1
+pkgrel=2
 url="https://git.sr.ht/~calebccff/pbsplash"
 arch="all"
 options="!check" # no testsuite
 license="GPL-3.0"
-source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~calebccff/pbsplash/archive/$pkgver.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~calebccff/pbsplash/archive/$pkgver.tar.gz
+	patch.patch
+"
 makedepends="meson tfblib linux-headers"
 
 build() {
@@ -25,4 +27,5 @@ package() {
 
 sha512sums="
 2e0cca120b97c67d23befc996d6888c80ec9b90e64b98c80a6473b4117f89bf23538737a385b7e7392456185e21ae58afe19d3399535aed67c7152146f7f452a  pbsplash-0.3.1.tar.gz
+9546cc6747fb958c41acb591fcf9e495ef6ce086bc11a37dd431994e734851bd4954c85fe08698bac9125112ecd688eccf95ad9b01214d9a869e18153354b95f  patch.patch
 "
