@@ -40,16 +40,18 @@ if [ -f "$srcdir/modules-initfs" ]; then
 	install -Dm644 "$srcdir/modules-initfs" \
 		"$pkgdir/usr/share/mkinitfs/modules/00-$pkgname.modules"
 	mkdir -p "$pkgdir/usr/share/mkinitfs/files"
-	echo "/usr/share/mkinitfs/modules/00-$pkgname.modules:/lib/modules/initramfs.load" \
+	echo "/usr/share/mkinitfs/modules/00-$pkgname.modules:/usr/lib/modules/initramfs.load" \
 	     > "$pkgdir/usr/share/mkinitfs/files/00-$pkgname-modules.files"
 fi
 
 if [ -f "$srcdir/modules-load.conf" ]; then
 	install -Dm644 "$srcdir/modules-load.conf" \
-		"$pkgdir/etc/modules-load.d/00-$pkgname.conf"
+		"$pkgdir/usr/lib/modules-load.d/00-$pkgname.conf"
 fi
 
 if [ -f "$srcdir/modprobe.conf" ]; then
+	# NOTE: This requires kmod, busybox only looks in /etc/modprobe.d
+	# See https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2184
 	install -Dm644 "$srcdir/modprobe.conf" \
-		"$pkgdir/etc/modprobe.d/$pkgname.conf"
+		"$pkgdir/usr/lib/modprobe.d/$pkgname.conf"
 fi
