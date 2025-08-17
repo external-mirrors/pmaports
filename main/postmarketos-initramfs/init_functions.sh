@@ -723,7 +723,9 @@ try_mount_root_partition() {
 		mount --bind /stowaway/.stowaways/pmos/ /sysroot
 	fi
 
-	if ! [ -e /sysroot/etc/os-release ]; then
+	# This also explicitly checks if os-release is a symlink, since -e can fail if
+	# it exists but is a broken symlink (e.g. the usr partition isn't mounted yet)
+	if ! [ -e /sysroot/etc/os-release ] && ! [ -L /sysroot/etc/os-release ]; then
 		return 3
 	fi
 
