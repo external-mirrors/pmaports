@@ -701,56 +701,84 @@ has_unallocated_space() {
 		head -n1 | grep -qi "free space"
 }
 
-mount_root_partition() {
+# Mount root partition to /sysroot with error handling
+# Uses: rootfsopts
+# Sets: partition and type variables via output parameters
+# $1: variable name to store partition path
+# $2: variable name to store filesystem type
+# Returns: 0 on success, 1 if unsupported filesystem, 2 if mount fails, 3 if no /etc/os-release
+try_mount_root_partition() {
 	# Don't mount root if it is already mounted
 	if mountpoint -q /sysroot; then
 		return
 	fi
 
-	local partition
+	local partition_var="$1"
+	local type_var="$2"
+	local partition_path fs_type
 
-	find_root_partition partition
+	find_root_partition partition_path
 
-	echo "Mount root partition ($partition) to /sysroot (read-write) with options ${rootfsopts#,}"
-	type="$(get_partition_type "$partition")"
-	info "Detected $type filesystem"
+	echo "Mount root partition ($partition_path) to /sysroot (read-write) with options ${rootfsopts#,}"
+	fs_type="$(get_partition_type "$partition_path")"
+	info "Detected $fs_type filesystem"
 
-	case "$type" in
-		btrfs|ext4|f2fs|xfs)
-			;;
-		*)
-			echo "ERROR: Detected unsupported '$type' filesystem ($partition)."
-			show_splash "ERROR: unsupported '$type' filesystem ($partition)\\nhttps://postmarketos.org/troubleshooting"
-			fail_halt_boot
-			;;
+	case "$fs_type" in
+		btrfs|ext4|f2fs|xfs) ;;
+		*) return 1 ;;
 	esac
 
-	if ! modprobe "$type"; then
-		info "Unable to load module '$type' - assuming it's built-in"
+	if ! modprobe "$fs_type"; then
+		info "Unable to load module '$fs_type' - assuming it's built-in"
 	fi
 
 	# btrfs may be using multiple backing block devices, scan for the rest of them
-	if [ "$type" = "btrfs" ]; then
+	if [ "$fs_type" = "btrfs" ]; then
 		btrfs device scan
 	fi
 
-	if ! mount -t "$type" -o rw"$rootfsopts" "$partition" /sysroot; then
-		echo "ERROR: unable to mount root partition!"
-		show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
-		fail_halt_boot
+	if ! mount -t "$fs_type" -o rw"$rootfsopts" "$partition_path" /sysroot; then
+		return 2
 	fi
 
 	if [ -e /sysroot/.stowaways/pmos/etc/os-release ]; then
 		umount /sysroot
 
 		mkdir /stowaway
-		mount -t "$type" -o rw"$rootfsopts" "$partition" /stowaway
+		mount -t "$fs_type" -o rw"$rootfsopts" "$partition_path" /stowaway
 		mount --bind /stowaway/.stowaways/pmos/ /sysroot
 	fi
 
 	if ! [ -e /sysroot/etc/os-release ]; then
-		show_splash "ERROR: root partition does not contain a root filesystem\\nhttps://postmarketos.org/troubleshooting"
-		fail_halt_boot
+		return 3
+	fi
+
+	if [ -n "$partition_var" ]; then eval "$partition_var=\"$partition_path\""; fi
+	if [ -n "$type_var" ]; then eval "$type_var=\"$fs_type\""; fi
+}
+
+# Mount root partition to /sysroot (wrapper with error handling)
+# Uses: (none)
+# Sets: (none)
+# Returns: calls fail_halt_boot on error, 0 on success
+mount_root_partition() {
+	local partition type
+	if ! try_mount_root_partition partition type; then
+		local ret=$?
+		case $ret in
+		1)
+			echo "ERROR: Detected unsupported '$type' filesystem ($partition)."
+			show_splash "ERROR: unsupported '$type' filesystem ($partition)\\nhttps://postmarketos.org/troubleshooting"
+			fail_halt_boot ;;
+		2)
+			echo "ERROR: unable to mount root partition!"
+			show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
+			fail_halt_boot ;;
+		3)
+			echo "ERROR: root partition does not contain a root filesystem"
+			show_splash "ERROR: root partition does not contain a root filesystem\\nhttps://postmarketos.org/troubleshooting"
+			fail_halt_boot
+		esac
 	fi
 }
 
