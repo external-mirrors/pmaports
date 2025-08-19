@@ -411,6 +411,42 @@ pretty_dm_path() {
 	echo "$name"
 }
 
+# Mount EFI vars
+setup_efivarfs() {
+	if mountpoint -q /sys/firmware/efi/efivars; then
+		info "efivars already mounted"
+		return 0
+	fi
+	info "Mounting efivars"
+	modprobe efivarfs || true
+	mount -t efivarfs efivarfs /sys/firmware/efi/efivars || true
+}
+
+# Extract the ESP UUID from EFI's LoaderDevicePart variable
+# Uses: (none)
+# Sets: (none)
+# $1: variable name to store ESP partition UUID
+get_esp_uuid_from_efi() {
+	local result="$1"
+	local efi_var uuid
+
+	setup_efivarfs
+	efi_var="$(ls /sys/firmware/efi/efivars/LoaderDevicePartUUID-*)"
+
+	if [ ! -e "$efi_var" ]; then
+		echo "ERROR: LoaderDevicePartUUID not found - not booted via EFI or efivarfs failed?"
+		return 1
+	fi
+
+	# Read UUID, skip first 4 bytes (EFI attributes), convert to lowercase
+	# https://docs.kernel.org/filesystems/efivarfs.html
+	uuid=$(dd if="$efi_var" bs=1 skip=4 2>/dev/null | tr -d '\0' | tr '[:upper:]' '[:lower:]')
+	info "Found ESP UUID: $uuid"
+
+	# Set the result
+	if [ -n "$result" ]; then eval "$result=\"$uuid\""; fi
+}
+
 # Prints the path to the partition if found, or nothing.
 find_partition() {
 	# $1: UUID of partition if known
@@ -498,6 +534,9 @@ find_boot_partition() {
 			PMOS_BOOT="/sysroot/boot"
 			mount --bind /sysroot/boot /boot
 		else
+			if is_immutable_boot; then
+				get_esp_uuid_from_efi boot_uuid
+			fi
 			PMOS_BOOT="$(find_partition "$boot_uuid" "$boot_path" "pmOS_boot")"
 		fi
 	fi

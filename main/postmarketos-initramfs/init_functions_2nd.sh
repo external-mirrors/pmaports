@@ -154,34 +154,16 @@ resize_filesystem_after_mount() {
 	esac
 }
 
-# Mount EFI vars
-setup_efivarfs() {
-	info "Mounting efivars"
-	modprobe efivarfs || true
-	mount -t efivarfs efivarfs /sys/firmware/efi/efivars || true
-}
-
 # Get boot device from EFI LoaderDevicePartUUID variable
 # Sets: BOOT_DEVICE
 # Returns: 1 if EFI variable not found or invalid, 0 on success
 find_boot_device() {
-	local efi_var part_uuid device
-	efi_var="$(ls /sys/firmware/efi/efivars/LoaderDevicePartUUID-*)"
-	info "Searching for boot device from: $efi_var"
-
-	if [ ! -e "$efi_var" ]; then
-		echo "ERROR: LoaderDevicePartUUID not found - not booted via EFI or efivarfs failed?"
+	local part_uuid device
+	if ! get_esp_uuid_from_efi part_uuid; then
 		return 1
 	fi
 
-	# Read UUID, skip first 4 bytes (EFI attributes), convert to lowercase
-	# https://docs.kernel.org/filesystems/efivarfs.html
-	part_uuid=$(dd if="$efi_var" bs=1 skip=4 2>/dev/null | tr -d '\0' | tr '[:upper:]' '[:lower:]')
 	info "Searching for boot device with uuid: $part_uuid"
-	if [ -z "$part_uuid" ]; then
-		echo "ERROR: failed to read/parse EFI variable LoaderDevicePartUUID"
-		return 1
-	fi
 
 	show_splash "Waiting for boot device..."
 
