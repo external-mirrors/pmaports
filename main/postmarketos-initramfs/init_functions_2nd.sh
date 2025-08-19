@@ -345,6 +345,8 @@ mount_usr_verified() {
 
 	info "Using verified usr partition mapped at: $device_path"
 
+	modprobe erofs || true
+
 	# Mount /usr read-only
 	mkdir -p /sysroot/usr
 	if ! mount -t auto -o ro "$device_path" /sysroot/usr; then
