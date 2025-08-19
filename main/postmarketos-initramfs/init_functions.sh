@@ -408,7 +408,7 @@ pretty_dm_path() {
 
 # Prints the path to the partition if found, or nothing.
 find_partition() {
-	# $1: UUID of partition if known
+	# $1: UUID of partition or filesystem on the partition, if known
 	# $2: path to partition
 	# $3: label of partition
 	# $4: additional blkid token to check (e.g TYPE=crypto_LUKS)
@@ -420,12 +420,14 @@ find_partition() {
 	local partition
 
 	if [ -n "$uuid" ]; then
-		partition="$(blkid --uuid "$uuid")"
+		# Check for the partition by UUID (GPT) or PARTUUID (filesystem)
+		partition="$(blkid --uuid "$uuid" || blkid -t PARTUUID="$uuid" -o device)"
 		if [ -z "$partition" ]; then
 			# Don't fall back to anything if the given UUID wasn't
 			# found, it might show up later but if not we should
 			# error out.
 			return
+
 		fi
 	fi
 
