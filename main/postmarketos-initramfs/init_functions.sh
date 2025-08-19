@@ -418,10 +418,14 @@ find_partition() {
 	if [ -n "$uuid" ]; then
 		partition="$(blkid --uuid "$uuid")"
 		if [ -z "$partition" ]; then
-			# Don't fall back to anything if the given UUID wasn't
-			# found, it might show up later but if not we should
-			# error out.
-			return
+			# Try again, maybe it's a partition UUID
+			partition="$(blkid -t PARTUUID="$uuid" -o device)"
+			if [ -z "$partition" ]; then
+				# Don't fall back to anything if the given UUID wasn't
+				# found, it might show up later but if not we should
+				# error out.
+				return
+			fi
 		fi
 	fi
 
