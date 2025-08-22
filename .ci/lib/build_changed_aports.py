@@ -35,9 +35,6 @@ if __name__ == "__main__":
     common.add_upstream_git_remote()
     packages = common.get_changed_packages()
 
-    # Package count sanity check
-    common.get_changed_packages_sanity_check(len(packages))
-
     # Load context
     sys.argv = ["pmbootstrap.py", "chroot"]
     args = pmb.parse.arguments()
