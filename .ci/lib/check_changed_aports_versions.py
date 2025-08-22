@@ -46,7 +46,7 @@ def get_package_contents(package, revision, check=True):
 
 
 def get_package_version(package, revision, check=True):
-    """ returns version in the format "{pkgver}-r{pkgrel}", or None if no 
+    """ returns version in the format "{pkgver}-r{pkgrel}", or None if no
         matching package is found """
     parsed = get_package_contents(package, revision, check)
     if parsed is None:
@@ -180,18 +180,50 @@ def check_versions(packages):
     if error:
         exit_with_error_message()
 
+def check_package_count(count):
+    for mark in ["[ci:ignore-count]", "[ci:skip-build]"]:
+        if common.commit_message_has_string(mark):
+            print("NOTE: package count sanity check skipped (" + mark + ").")
+            return
+    if count <= 10:
+        return
+
+    branch = common.get_upstream_branch()
+    print(f"""
+ERROR: Too many packages have changed!
+
+This is a sanity check, so we don't end up building packages that
+have not been modified. CI won't run for more than three hours
+anyway.
+
+Your options:
+a) If you *did not* modify everything listed above, then rebase
+   your branch on the official postmarketOS/pmaports.git {branch}
+   branch. Feel free to ask in the chat for help if you need any.
+b) If you *did* modify all these packages, and you assume that
+   they will build within one hour: skip this sanity check by
+   adding '[ci:ignore-count]' to the commit message of the last
+   commit in the merge request (then force push).
+c) If you *did* modify all these packages, and you are sure that
+   they won't build in time, please add '[ci:skip-build]' to the
+   commit message (then force push). Make sure that all packages
+   build with 'pmbootstrap build --strict'!
+
+Thank you and sorry for the inconvenience.
+    """)
+
+    exit(1)
 
 if __name__ == "__main__":
     # Get and print modified packages
     common.add_upstream_git_remote()
     packages = common.get_changed_packages()
-    print(f"Changed packages: {packages}")
-
-    # Verify modified package count
-    common.get_changed_packages_sanity_check(len(packages))
     if len(packages) == 0:
         print("no aports changed in this branch")
         exit(0)
+
+    print(f"Changed packages: {packages}")
+    check_package_count(len(packages))
 
     # Potentially skip this check
     if common.commit_message_has_string("[ci:skip-vercheck]"):
