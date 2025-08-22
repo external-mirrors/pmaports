@@ -206,8 +206,14 @@ if __name__ == "__main__":
             if apkbuild['pkgname'] in device.dependencies:
                 devices_under_test.add(device)
 
+    skip = False
     if common.commit_message_has_string("[ci:skip-build]"):
-        print("User requested skipping build, not creating child pipeline file")
+        print("User requested skipping build, skipping build")
+        skip = True
+    if common.all_committed_by_merge_bot():
+        print("All commits in branch committed by merge bot, skipping build")
+        skip = True
+    if skip:
         archs = ArchTagSet()
         devices_under_test = set()
 

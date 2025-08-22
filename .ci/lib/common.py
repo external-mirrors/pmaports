@@ -46,6 +46,12 @@ def commit_message_has_string(needle):
     return needle in run_git(["log", "--pretty=format:%B", f"{base_commit}..HEAD"])
 
 
+def all_committed_by_merge_bot():
+    base_commit = get_base_commit()
+    commit_emails = run_git(["log", "--pretty=format:%ce", f"{base_commit}..HEAD"]).splitlines()
+    return all("merge-bot@postmarketos.org" == ce for ce in commit_emails)
+
+
 def run_pmbootstrap(parameters):
     """ Run pmbootstrap with the pmaports dir as --aports """
     cmd = ["pmbootstrap", "--aports", get_pmaports_dir()] + parameters
