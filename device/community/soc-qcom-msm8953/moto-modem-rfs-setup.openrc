@@ -28,11 +28,11 @@ start()
 		mkdir -p $PERSIST_PATH
 		mount $PERSIST_DEV -o ro,noatime $PERSIST_PATH
 
-		mkdir $MODEM_FIRMWARE_DIR
+		mkdir -p $MODEM_FIRMWARE_DIR
 
 		cp -R "$PERSIST_PATH"/rfs/msm/mpss/ "$MODEM_FIRMWARE_DIR"/readwrite
 
-		umount $PERSIST_DEV
+		umount $PERSIST_PATH
 		rmdir $PERSIST_PATH
 	fi
 
