@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-remotecontrollers
-pkgver=99999_git20250807
+pkgver=99999_git20250828
 pkgrel=0
-_commit="94c10a153bb86778822ce67e17bd25c0416c1f6d"
+_commit="3ccf4781fd078ce85e8bc831c92a04808c1e4a35"
 pkgdesc="Translate various input device events into keyboard and pointer events"
 url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers"
 # armhf blocked by extra-cmake-modules
@@ -43,7 +43,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-07/plasma-remotecontrollers-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/plasma-remotecontrollers-$_commit.tar.xz
 	uinput.conf
 	"
 options="!check" # No tests
@@ -67,6 +67,6 @@ package() {
 }
 
 sha512sums="
-b33b3fd3b8f1a70e810ada4fd5916339a399a8cd31605c2556ee254cd32c16c6ae2ba1ea8bfe24b156f79bfba9e4c7f5ee569c98bb0eb3b7b6523da1ff77d0bf  plasma-remotecontrollers-94c10a153bb86778822ce67e17bd25c0416c1f6d.tar.xz
+5cef1402f98ca87d98ef20050403a92073c1a69bcd9d2153fa7e1c247e8ae2db97bdd4d26ed6160d97fc944d2fd149d4720bfb69a020e8facb188a5e0a2db2de  plasma-remotecontrollers-3ccf4781fd078ce85e8bc831c92a04808c1e4a35.tar.xz
 a9b069ed121ffeee887e0583d8cb46035ecf1fa90a26a4ecb3aa11ff03178b2b08621f6676db6b2350f290694c04aabcf36f2ce3e0813a76dde9a33555edb112  uinput.conf
 "

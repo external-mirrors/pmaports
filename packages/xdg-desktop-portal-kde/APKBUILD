@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=xdg-desktop-portal-kde
-pkgver=99999_git20250807
+pkgver=99999_git20250828
 pkgrel=0
-_commit="85ed9c2c25a32e54a79400c4273e233de598e639"
+_commit="6255ebe1e89526db2fdb8f0a5b87c75a8de5ec27"
 pkgdesc="A backend implementation for xdg-desktop-portal that is using Qt/KDE"
 # armhf blocked by qt6-qtdeclarative-dev
 arch="all !armhf"
@@ -43,7 +43,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/xdg-desktop-portal-kde.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-07/xdg-desktop-portal-kde-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/xdg-desktop-portal-kde-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/xdg-desktop-portal-kde-$_commit"
@@ -68,5 +68,5 @@ package() {
 }
 
 sha512sums="
-1584e16744385ab8ab599fabbf94b0fe97f369de3c94f40989718dda3c6454dc564f153c1f221cfd01390c629cc30b10d29cbbc5583d7f1e60b4667e13c88d8c  xdg-desktop-portal-kde-85ed9c2c25a32e54a79400c4273e233de598e639.tar.xz
+66a6aa3efd02266f13c0e7abc4fa3231216b11490670ad0f4cf60ecda97c2f9782dc4a91ada57cdb7ba5547806a35b9f10042069a1a1ef19a4d6859872ddc592  xdg-desktop-portal-kde-6255ebe1e89526db2fdb8f0a5b87c75a8de5ec27.tar.xz
 "

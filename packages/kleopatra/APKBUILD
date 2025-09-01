@@ -1,12 +1,10 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kleopatra
-pkgver=99999_git20250812
+pkgver=99999_git20250829
 pkgrel=0
-_commit="b5f32436c99ae988398f52e25c434fbf327e33a2"
+_commit="9cff56b1ad63f72a4d7a813d26d1865bd59ade56"
 arch="all !armhf !s390x"
 url="https://www.kde.org/applications/utilities/kleopatra/"
 pkgdesc="Certificate Manager and Unified Crypto GUI"
@@ -44,16 +42,16 @@ makedepends="
 	qt6-qtbase-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="xwayland-run"
+maintainer="team/kde <bribbers@disroot.org>"
 _repo_url="https://invent.kde.org/pim/kleopatra.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-12/kleopatra-$_commit.tar.xz"
-subpackages="$pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-01/kleopatra-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kleopatra-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -72,5 +70,5 @@ package() {
 }
 
 sha512sums="
-192c6cc7dadacf6037736e5256b78df8cc1859008a3751b02e7286130237d862f775c232a5d709dfce418e8e54780d4a7000dea6d062067254082ab155bae1d7  kleopatra-b5f32436c99ae988398f52e25c434fbf327e33a2.tar.xz
+9e8bd83d5ed6899f88a6d249e53829a1703ceccd63f82daa42f99b3038899bdd032e23cb0864eed42c1b4feb49ce13355a1ca8c0ffcfde8474af65e4262fcbda  kleopatra-9cff56b1ad63f72a4d7a813d26d1865bd59ade56.tar.xz
 "

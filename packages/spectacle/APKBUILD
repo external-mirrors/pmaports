@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=spectacle
-pkgver=99999_git20250810
+pkgver=99999_git20250828
 pkgrel=0
-_commit="a124f5c8d66338d2185abbbd0eec6f907d327dec"
+_commit="ed1d6b55c307d468649749ca52501e97dbc06fea"
 pkgdesc="Application for capturing desktop screenshots"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> purpose
@@ -44,7 +44,7 @@ makedepends="
 	zxing-cpp-dev
 	"
 _repo_url="https://invent.kde.org/graphics/spectacle.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-11/spectacle-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/spectacle-$_commit.tar.xz
 	spectacle.desktop
 	"
 subpackages="$pkgname-doc $pkgname-lang"
@@ -70,6 +70,6 @@ package() {
 	install -Dm644 "$srcdir"/spectacle.desktop -t "$pkgdir"/etc/xdg/autostart/
 }
 sha512sums="
-bd5a65705c409b91f9603dc14df5cfff00b7275afbaa1ed47e4d808807e597063ed6646917db8bc29bcbf1aa081d9550791a343ef35358a7e6b6af79b54fdc5a  spectacle-a124f5c8d66338d2185abbbd0eec6f907d327dec.tar.xz
+5d9cd1838c8e9684e742c40348c1d0b72d1af7e83c326f74582cbe2bbcb239c8ba0aa1738bc65263214fca5016e47ae91cdc5331f02f7c1eee8a7931afed7197  spectacle-ed1d6b55c307d468649749ca52501e97dbc06fea.tar.xz
 7c563d811f30d26f83e01a465e803b95167c5b2b842315257216ab282e07c69e7582a14d7f429cd19678199179ad8f3f2854265092f5a4c9ce9b65c87ed3849d  spectacle.desktop
 "
