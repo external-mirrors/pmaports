@@ -23,6 +23,8 @@ _test_passedn=0
 _test_failedn=0
 _test_current_test=""
 _test_statefile="$(mktemp)"
+_test_original_pwd=""
+_test_temp_root=""
 # Set by each test
 results_dir="${results_dir:-}"
 
@@ -40,6 +42,23 @@ test_info() {
 test_debug() {
 	# shellcheck disable=SC3037
 	echo -e "${YELLOW}$*${RESET}" >&2
+}
+
+create_test_root() {
+	_test_original_pwd="$(pwd)"
+	_test_temp_root="$(mktemp -d)"
+	cd "$_test_temp_root"
+}
+
+cleanup_test_root() {
+	if [ -n "$_test_original_pwd" ]; then
+		cd "$_test_original_pwd"
+	fi
+	if [ -n "$_test_temp_root" ] && [ -d "$_test_temp_root" ]; then
+		rm -rf "$_test_temp_root"
+	fi
+	_test_original_pwd=""
+	_test_temp_root=""
 }
 
 assert_strequal() {
