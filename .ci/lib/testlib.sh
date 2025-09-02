@@ -133,6 +133,44 @@ assert_not_exists() {
 	test_log "    ✅ \$$1 does not exist"
 }
 
+assert_contains() {
+	# $1: string to search in
+	# $2: substring to find
+	if [ -z "$1" ] || [ -z "$2" ]; then
+		test_log "ERROR: assert_contains: not enough arguments given"
+		exit 1
+	fi
+	case "$1" in
+		*"$2"*)
+			test_log "    ✅ '$2' found in '$1'"
+			;;
+		*)
+			_test_assert_failed="'$2' not found in '$1'"
+			test_log "    ❌ $_test_assert_failed"
+			return
+			;;
+	esac
+}
+
+assert_not_contains() {
+	# $1: string to search in
+	# $2: substring that should not be found
+	if [ -z "$1" ] || [ -z "$2" ]; then
+		test_log "ERROR: assert_not_contains: not enough arguments given"
+		exit 1
+	fi
+	case "$1" in
+		*"$2"*)
+			_test_assert_failed="'$2' found in '$1' but should not be"
+			test_log "    ❌ $_test_assert_failed"
+			return
+			;;
+		*)
+			test_log "    ✅ '$2' not found in '$1'"
+			;;
+	esac
+}
+
 # Log some expression and evaluate it
 logeval() {
 	eval "$*"
