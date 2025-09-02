@@ -106,6 +106,33 @@ assert_unset() {
 	test_log "    ✅ \$$1 is unset"
 }
 
+assert_exists() {
+	# $1: filename to test
+	if [ -z "$1" ]; then
+		test_log "ERROR: assert_exists: not enough arguments given"
+		exit 1
+	fi
+	if ! [ -e "$1" ]; then
+		_test_assert_failed="\$$1 should exist but does not"
+		test_log "    ❌ $_test_assert_failed"
+		return
+	fi
+	test_log "    ✅ \$$1 exists"
+}
+
+assert_not_exists() {
+	if [ -z "$1" ]; then
+		test_log "ERROR: assert_not_exists: not enough arguments given"
+		exit 1
+	fi
+	if [ -e "$1" ]; then
+		_test_assert_failed="\$$1 should NOT exist but does"
+		test_log "    ❌ $_test_assert_failed"
+		return
+	fi
+	test_log "    ✅ \$$1 does not exist"
+}
+
 # Log some expression and evaluate it
 logeval() {
 	eval "$*"
