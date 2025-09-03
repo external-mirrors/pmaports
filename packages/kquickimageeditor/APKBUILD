@@ -2,15 +2,17 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kquickimageeditor
-pkgver=99999_git20250821
+pkgver=99999_git20250829
 pkgrel=0
-_commit="71d2e5fdde24ce940db2122aab17305043d5067b"
+_commit="5351a1751b1929720685460a0537872b74a4c965"
 pkgdesc="Simple image editor for QtQuick applications"
 url="https://invent.kde.org/libraries/kquickimageeditor"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 license="BSD-2-Clause AND LGPL-2.1-or-later"
 depends_dev="
+	kconfig-dev
+	opencv-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
 	"
@@ -20,14 +22,14 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/libraries/kquickimageeditor.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/kquickimageeditor-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-01/kquickimageeditor-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 options="!check" # No tests
 
 builddir="$srcdir/kquickimageeditor-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -39,5 +41,5 @@ package() {
 }
 
 sha512sums="
-af67e0a3260065ecb26d6be331a40bc9e8673d80986a1e3c419a0abe299e19235930e73873c9eed2046e9f4ae734305d4be97411c337bf2d5cfc37bdb617f567  kquickimageeditor-71d2e5fdde24ce940db2122aab17305043d5067b.tar.xz
+ee5e1ebb91ce4314432d80baf85933c773ceab81e44e953612742618c6119aca37bea49140a76c8a4ad0c3c8d38a46696f2066bf1f18fdf65746b8d8d0767f2c  kquickimageeditor-5351a1751b1929720685460a0537872b74a4c965.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=korganizer
-pkgver=99999_git20250828
+pkgver=99999_git20250901
 pkgrel=0
-_commit="c63515b9e78d6d1ad6ee3f6b70bec9ac65bb142f"
+_commit="8d702cf3a17985fb12abddd54887d10fd7b77a06"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kmailtransport
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -63,7 +63,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/korganizer.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/korganizer-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-01/korganizer-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -99,5 +99,5 @@ package() {
 }
 
 sha512sums="
-10cbf9abc14f8b11bcc49ea46999c312a381ce3faef21961346c53f4155868d6f4b39240791185962cd94e674d06c2e52aea5bd690051ebb5ef5bcf7ee7c953e  korganizer-c63515b9e78d6d1ad6ee3f6b70bec9ac65bb142f.tar.xz
+66c4e16d5febbd0f67e1924b06fb19b93f72613c3d541e61191a93302cb4044e077a3a824a326e053f87cd0c3668dad6106e74badafeb21b379714ad89ba878f  korganizer-8d702cf3a17985fb12abddd54887d10fd7b77a06.tar.xz
 "

@@ -9,7 +9,7 @@ pkgdesc="Daemon providing a polkit authentication UI for KDE"
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
-depends="polkit-elogind"
+depends="polkit"
 makedepends="
 	extra-cmake-modules
 	kcoreaddons-dev
@@ -24,13 +24,13 @@ makedepends="
 	qt6-qtbase-dev
 	samurai
 	"
+subpackages="$pkgname-systemd $pkgname-lang"
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/polkit-kde-agent-1.git"
 source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/polkit-kde-agent-1-$_commit.tar.xz"
-subpackages="$pkgname-systemd $pkgname-lang"
 options="!check" # No tests
 
 builddir="$srcdir/polkit-kde-agent-1-$_commit"

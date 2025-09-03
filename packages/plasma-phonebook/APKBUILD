@@ -22,7 +22,6 @@ makedepends="
 	kirigami-addons-dev
 	kirigami-dev
 	kpeople-dev
-	kpeoplevcard-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
 	qt6-qtdeclarative-private-dev
@@ -37,7 +36,7 @@ options="!check" # No tests
 builddir="$srcdir/plasma-phonebook-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
