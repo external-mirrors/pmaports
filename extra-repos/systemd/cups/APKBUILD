@@ -4,7 +4,7 @@ maintainer="Jane Rachinger <jane400+pmaports@postmarketos.org>"
 pkgname=cups
 _pkgver=2.4.12
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=2
 pkgdesc="The CUPS Printing System"
 url="https://github.com/OpenPrinting/cups/"
 # armhf: pmb#2618
@@ -30,10 +30,6 @@ subpackages="
 	$pkgname-dev
 	$pkgname-doc
 	$pkgname-libs
-	ipptool
-	$pkgname-client
-	$pkgname-lang
-	$pkgname-systemd
 	"
 source="$pkgname-$_pkgver.tar.gz::https://github.com/OpenPrinting/cups/archive/v$_pkgver.tar.gz
 	$pkgname.logrotate
@@ -44,7 +40,33 @@ source="$pkgname-$_pkgver.tar.gz::https://github.com/OpenPrinting/cups/archive/v
 options="!check"
 builddir="$srcdir/cups-$_pkgver"
 
+case "$CARCH" in
+riscv64)
+	# examples (which includes ipptool) fail on this arch when building in qemu,
+	# with 'error relocating fakeroot'
+	;;
+*)
+	subpackages="$subpackages ipptool"
+	;;
+esac
+
+# NOTE: pkgname-client MUST come after ipptool or else it'll grab
+# /usr/bin/ipptool first...
+subpackages="
+	$subpackages
+	$pkgname-client
+	$pkgname-lang
+	$pkgname-systemd
+"
+
 build() {
+	case "$CARCH" in
+	riscv64)
+		# examples fail on this arch when building in qemu, with:
+		# 'error relocating fakeroot'
+		sed -i 's/doc examples templates/doc templates/' configure
+		;;
+	esac
 	# pmOS: remove lto
 	./configure \
 		--build=$CBUILD \
