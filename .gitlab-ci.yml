@@ -101,6 +101,19 @@ aport-lint:
     - .ci/apkbuild-lint.sh
   allow_failure: true
 
+# deviceinfo linting
+dint:
+  stage: lint
+  rules:
+    - if: *mr_rule
+      changes:
+        - .ci/**/*
+        - .gitlab-ci.yml
+        - device/*/device-*/deviceinfo
+  script:
+    - .ci/lib/gitlab_prepare_ci.sh
+    - .ci/dint.sh
+
 # kernel kconfig check
 kernel-kconfig:
   stage: lint
