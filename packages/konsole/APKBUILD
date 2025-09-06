@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=konsole
-pkgver=99999_git20250901
+pkgver=99999_git20250903
 pkgrel=0
-_commit="0f6ce8bb38be228aa1b93ce9184595c101dbb6e1"
+_commit="64aa8cbf02abf10fe7b4ec45d6bc1cba375f1720"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/applications/system/konsole"
@@ -44,7 +44,7 @@ makedepends="
 	"
 checkdepends="mesa-dri-gallium xvfb-run"
 _repo_url="https://invent.kde.org/utilities/konsole.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-01/konsole-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-03/konsole-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -83,5 +83,5 @@ package() {
 }
 
 sha512sums="
-3a30800f0970117c43ed0edc59c88d6a50b79de7c7bee02bace83691b309b78d6cc859116d7935d4061b87f48f9ce7d41116fd78443bb5db559d6d586b4c0877  konsole-0f6ce8bb38be228aa1b93ce9184595c101dbb6e1.tar.xz
+2b00788e2d779403ecdf2d4c7344e00adf2f1eb2e85b2633be122a52ee1131948ac9ad08c4f1f7fa1add2956d103b61e0d0ba77a49be84a118d49002ed3bb6cc  konsole-64aa8cbf02abf10fe7b4ec45d6bc1cba375f1720.tar.xz
 "
