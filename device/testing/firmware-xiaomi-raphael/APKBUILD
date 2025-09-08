@@ -1,12 +1,14 @@
 pkgname=firmware-xiaomi-raphael
-pkgver=20240929
-pkgrel=1
+pkgver=20250908
+pkgrel=0
 pkgdesc="Firmware for Xiaomi Mi 9T Pro / Redmi K20 Pro"
 arch="aarch64"
 _carch="arm64"
 subpackages="
 	$pkgname-adreno
 	$pkgname-adsp
+	$pkgname-ath10k
+	$pkgname-bluetooth
 	$pkgname-camera
 	$pkgname-cdsp
 	$pkgname-ipa
@@ -20,7 +22,7 @@ subpackages="
 url="https://github.com/dabao1955/pmos_firmware_xiaomi_raphael"
 license="proprietary"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
-_commit="89149ad98c7c8443946a518e9fb2ff2e2c83d54d"
+_commit="cf9d303adda1cf25dad22cadc192f762f0a06a17"
 source="
 	https://github.com/dabao1955/pmos_firmware_xiaomi_raphael/archive/$_commit.tar.gz
 	30-gpu-firmware.files"
@@ -36,7 +38,7 @@ package() {
 # Xiaomi raphael boots with secure boot, it can only load signed firmwares.
 adreno() {
 	pkgdesc="Xiaomi raphael adreno firmware"
-	depends="firmware-qcom-adreno-a650"
+
 	install -Dm644 "$builddir"/sm8150/raphael/a6* -t \
 		"$subpkgdir/lib/firmware/qcom/"
 }
@@ -46,6 +48,24 @@ adsp() {
 
 	install -Dm644 "$builddir"/sm8150/raphael/adsp* -t \
 		"$subpkgdir/lib/firmware/"
+}
+
+ath10k() {
+	pkgdesc="Xiaomi raphael ath10k firmware"
+
+	install -Dm644 "$builddir"/sm8150/raphael/wlan/ath10k/board-2.bin -t \
+		"$subpkgdir/lib/firmware/ath10k/WCN3990/hw1.0/"
+
+	install -Dm644 "$builddir"/sm8150/raphael/wlan/ath10k/firmware-5.bin -t \
+		"$subpkgdir/lib/firmware/ath10k/WCN3990/hw1.0/"
+}
+
+
+bluetooth() {
+	pkgdesc="Xiaomi raphael adsp firmware"
+
+	install -Dm644 "$builddir"/sm8150/raphael/crnv21.bin -t \
+		"$subpkgdir/lib/firmware/qca/"
 }
 
 camera() {
@@ -93,7 +113,7 @@ venus() {
 	pkgdesc="Xiaomi raphael venus firmware"
 
 	install -Dm644 "$builddir"/sm8150/raphael/venus.mbn -t \
-		"$subpkgdir/lib/firmware/"
+		"$subpkgdir/lib/firmware/qcom/sm8150/Xiaomi/raphael/"
 }
 
 wlan() {
@@ -103,8 +123,8 @@ wlan() {
 		"$subpkgdir/lib/firmware/"
 }
 
+
 sha512sums="
-6a0305e70ffb581b957e5b987048931d3900416753189e967d2f2a5a5826ab30a929ebbd6f79fb64a80c00cef5bc6583bbd1c6825044b03f5d6fc352f84e318b  89149ad98c7c8443946a518e9fb2ff2e2c83d54d.tar.gz
+cc287812d92df8918134ebf6131c8591df15d0eebf962fe8433fb38abc114344f6b5f0a30589974c1516d73d7ee4e106d79c2c56fb9fa26de5850c554b6ab0fb  cf9d303adda1cf25dad22cadc192f762f0a06a17.tar.gz
 db9c8e7e6de67a1c0ca853af138b7218e7451f767268f8ec1f7131c8ef179fdd8d85e6ebccae3ff715bfa6d9ad7ec1bcf2cc2554fe442bb74bd5ecf65e1096fc  30-gpu-firmware.files
 "
-
