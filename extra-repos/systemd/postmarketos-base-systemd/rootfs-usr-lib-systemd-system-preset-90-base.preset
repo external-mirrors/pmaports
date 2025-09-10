@@ -11,6 +11,7 @@ disable multipathd.service
 ## system services
 enable ModemManager.service
 enable NetworkManager.service
+enable NetworkManager-wait-online.service
 enable apk-polkit-server.service
 enable bluetooth.service
 enable haveged.service
@@ -24,7 +25,8 @@ enable sshd.service
 enable systemd-rfkill.service
 enable tinydm.service
 enable udisks2.service
-enable cups.service
+enable cups.path
+enable cups.socket
 enable zram_swap.service
 enable systemd-oomd.service
 enable alsa-restore.service
