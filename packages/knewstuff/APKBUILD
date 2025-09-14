@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=knewstuff
-pkgver=99999_git20250902
+pkgver=99999_git20250910
 pkgrel=0
-_commit="d2ac6bb67e8a706924663d7e9949ba9229718b1b"
+_commit="424fa1922e7524be203fac49910a700b86d508f8"
 pkgdesc="Framework for downloading and sharing additional application data"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -41,7 +41,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/knewstuff.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-03/knewstuff-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/knewstuff-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 case "$CARCH" in
@@ -79,5 +79,5 @@ package() {
 }
 
 sha512sums="
-8c68df235d776f554776aeddce6d8b3bd377a14a4ac080cdef0f5743b41988bee0fb6d6efb32739a45c2079c6ed3b0e4816d3236b13fbece80ad1602379df95b  knewstuff-d2ac6bb67e8a706924663d7e9949ba9229718b1b.tar.xz
+7e751302b1934ee091e4e344a17b408c3cffe9996274e5c1f3dc332cd471a2c83111a5ecc50d0b25cdb0a58e051080d4a0acc08bc8407cd6ef179bde8f88ba75  knewstuff-424fa1922e7524be203fac49910a700b86d508f8.tar.xz
 "

@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=akonadi-mime
-pkgver=99999_git20250905
+pkgver=99999_git20250908
 pkgrel=0
-_commit="87eaade0c4f9b047932e89ffd537364c1f63c220"
+_commit="7964b1e748ee5a313c2f47a5315de40250dcdeb0"
 pkgdesc="Libraries and daemons to implement basic email handling"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative
 # s390x and riscv64 blocked by akonadi
 # ppc64le blocked by qt6-qtwebengine -> kaccounts-integration
 arch="all !armhf !s390x !riscv64 !ppc64le"
@@ -26,21 +24,23 @@ depends_dev="
 	kxmlgui-dev
 	libxslt-dev
 	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
 	shared-mime-info
 	"
 makedepends="$depends_dev
 	extra-cmake-modules
+	qt6-qtdeclarative-private-dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/akonadi-mime.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-06/akonadi-mime-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-08/akonadi-mime-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/akonadi-mime-$_commit"
 
 build() {
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
@@ -49,12 +49,12 @@ build() {
 
 check() {
 	# mailserializerplugintest is broken
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest -E "mailserializerplugintest"
+	ctest -E "mailserializerplugintest"
 }
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-ee48c09f52adf0386e96dd2554f5d42494b314a5e2b92084fd8bc58f709a983b445ad213f0ee74e40074ae7582f8e3c87cb7c65347d0cb5cfe99f981bce8b4bf  akonadi-mime-87eaade0c4f9b047932e89ffd537364c1f63c220.tar.xz
+b4424d6009798012ccefff56c49901a90075cbeac6dc05c7c355f455a2722b46e5da07b56488f042e9233f957fa1683fbd599a49b1c37b4ea080ba17686b72e4  akonadi-mime-7964b1e748ee5a313c2f47a5315de40250dcdeb0.tar.xz
 "
