@@ -4,18 +4,18 @@ set -eu
 
 pmb="pmbootstrap -y"
 
+# TODO: allow selecting device in the UI somehow?
+# For now get it from deviceinfo...
+# shellcheck disable=SC1091
+. /usr/share/misc/source_deviceinfo
+
+if [ -z "$deviceinfo_codename" ]; then
+	echo "unable to get device info"
+	exit 1
+fi
+
 do_prepare() {
 	yes '' | $pmb init --shallow-initial-clone
-
-	# TODO: allow selecting device in the UI somehow?
-	# For now get it from deviceinfo...
-	# shellcheck disable=SC1091
-	. /usr/share/misc/source_deviceinfo
-
-	if [ -z "$deviceinfo_codename" ]; then
-		echo "unable to get device info"
-		exit 1
-	fi
 
 	$pmb config device "$deviceinfo_codename"
 }
@@ -55,7 +55,29 @@ do_configure() {
 	if [ -n "$OSI_ENCRYPTION_PIN" ]; then
 		fde_args="--fde"
 	fi
-	PMB_FDE_PASSWORD="$OSI_ENCRYPTION_PIN" $pmb install --password "$OSI_USER_PASSWORD" --disk "$OSI_DEVICE_PATH" $fde_args
+
+	# There are two install "modes":
+	#
+	# 1) (default) pmbootstrap generates an image and writes it directly to the
+	#	selected storage using the --disk option
+	#
+	# 2) if `deploy.sh` exists then pmbootstrap generates an image, exports it,
+	#	then calls deploy.sh with the path to the image it created, and does NOT
+	#	call pmbootstrap install with --disk. deploy.sh comes from device packages
+	#	that need to implement custom image deployment stuff, when using --disk
+	#	is not appropriate
+
+	# Note: -f because if the file is accidentally not executable then it would be
+	# better to fail than to run install --disk
+	if [ -f /etc/os-installer/deploy.sh ]; then
+		# Image-only install, then deploy.sh
+		PMB_FDE_PASSWORD="$OSI_ENCRYPTION_PIN" $pmb install --password "$OSI_USER_PASSWORD" $fde_args
+		$pmb export --no-install
+		/etc/os-installer/deploy.sh "/tmp/postmarketOS-export/${deviceinfo_codename}.img"
+	else
+		# Standard install
+		PMB_FDE_PASSWORD="$OSI_ENCRYPTION_PIN" $pmb install --password "$OSI_USER_PASSWORD" --disk "$OSI_DEVICE_PATH" $fde_args
+	fi
 }
 
 step="$(basename "$0")"
