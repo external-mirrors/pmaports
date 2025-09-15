@@ -1,0 +1,52 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=keepsecret
+pkgver=99999_git20250914
+pkgrel=0
+_commit="982858f32ca129ba5f881e7ccca0ad900300883e"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://invent.kde.org/utilities/keepsecret"
+pkgdesc="A password manager GUI intended to be a client for a Secret Service compatible provider"
+license="GPL-2.0-only AND (LGPL-2.0-only OR LGPL-2.1-only)"
+depends="kirigami-addons"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kirigami-dev
+	kitemmodels-dev
+	libsecret-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtdeclarative-private-dev
+	qt6-qtsvg-dev
+	samurai
+	wayland-dev
+	wayland-protocols
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/keepsecret.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-14/keepsecret-$_commit.tar.xz"
+options="!check" # No tests
+
+builddir="$srcdir/keepsecret-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+4c7ae412820eb1fc70208850bccffee616811d98121fb07a9fc65da6b6caab0cd2cdbc7e7e8292038421aebebecec90861b0422bbc8c993d242a627f8e68fc40  keepsecret-982858f32ca129ba5f881e7ccca0ad900300883e.tar.xz
+"
