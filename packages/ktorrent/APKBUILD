@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ktorrent
-pkgver=99999_git20250910
+pkgver=99999_git20250913
 pkgrel=0
-_commit="87af983d0b9dba7597a75abd0634c08af6b1bf49"
+_commit="372e8f390b2ddb115b215a3aec251552cc77ed0d"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -52,7 +52,7 @@ checkdepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/network/ktorrent.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/ktorrent-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-14/ktorrent-$_commit.tar.xz"
 
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -76,5 +76,5 @@ package() {
 }
 
 sha512sums="
-6ebb2a894d67b8aaeb7e2b6e6c7e45538ad82fece922e5d8d924101bdd98dcd6e4e453db1b5be3350e4d7c2074f7ad00c20df33d2ea7644220185d95b0b98b2f  ktorrent-87af983d0b9dba7597a75abd0634c08af6b1bf49.tar.xz
+c59f4c25cc5f78048c8230dbf4ee8fb595f7c83f2afc22ed0fdf7229f4017952b4311000907d692794f902fbc59ba5dd10153845c05fd48b9df9ed4b04fef4e1  ktorrent-372e8f390b2ddb115b215a3aec251552cc77ed0d.tar.xz
 "

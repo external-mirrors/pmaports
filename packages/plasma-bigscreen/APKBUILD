@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-bigscreen
-pkgver=99999_git20250909
+pkgver=99999_git20250914
 pkgrel=0
-_commit="fc2a409a0a387c75f76aab94e8aa7dfcbb6ba41a"
+_commit="d6e01c581b3fa99551bca6aed5da7d4fc428d306"
 pkgdesc="A 10-feet interface made for TVs"
 url="https://invent.kde.org/plasma/plasma-bigscreen/"
 # armhf blocked by qt6-qtdeclarative
@@ -48,7 +48,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-bigscreen.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/plasma-bigscreen-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-14/plasma-bigscreen-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-bigscreen-$_commit"
@@ -70,5 +70,5 @@ package() {
 }
 
 sha512sums="
-db20db698fb11e36f5e05a94cdf3e58ce32d3c73f290245bae535dfa5122afe61c63e899df4994af1534f07323679c315f33d3d34f91d80167de2a66561edbc5  plasma-bigscreen-fc2a409a0a387c75f76aab94e8aa7dfcbb6ba41a.tar.xz
+441bf8bb9fbe2497f6f91eed7e972880e180f6bb333fe7746590beb027bb61b7d7e7bbf485de2c474995978fc6b2cd8af0c587a0a9287385e96f6ecdee56fc7d  plasma-bigscreen-d6e01c581b3fa99551bca6aed5da7d4fc428d306.tar.xz
 "
