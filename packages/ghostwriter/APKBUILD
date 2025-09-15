@@ -37,7 +37,7 @@ builddir="$srcdir/ghostwriter-$_commit"
 
 build() {
 	CXXFLAGS="$CXXFLAGS -flto=auto" \
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja -Wno-dev \
+	cmake -B build -G Ninja -Wno-dev \
 		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr
 	cmake --build build

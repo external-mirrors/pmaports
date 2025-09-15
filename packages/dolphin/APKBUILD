@@ -62,7 +62,7 @@ builddir="$srcdir/dolphin-$_commit"
 
 build() {
 	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=0x100000" \
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib

@@ -61,7 +61,7 @@ build() {
 	export CXXFLAGS="$CXXFLAGS -g1"
 	# akonadi recurses while walking e-mail threads, so give it a decent stack
 	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=1024768" \
-	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
