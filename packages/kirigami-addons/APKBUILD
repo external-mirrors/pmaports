@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kirigami-addons
-pkgver=99999_git20250913
+pkgver=99999_git20250915
 pkgrel=0
-_commit="06104efa061526b2827d1e99ab9c00c85b1ef93b"
+_commit="f8b5ecf9580609bc021a342c928ca2fff286245d"
 pkgdesc="Add-ons for the Kirigami framework"
 url="https://invent.kde.org/libraries/kirigami-addons"
 # armhf blocked by qt6-qtdeclarative -> ki18n
@@ -16,17 +16,19 @@ depends="
 	"
 makedepends="
 	extra-cmake-modules
+	kcolorscheme-dev
 	kglobalaccel-dev
 	kguiaddons-dev
 	ki18n-dev
+	kiconthemes-dev
 	kirigami-dev
 	qt6-qtdeclarative-private-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/libraries/kirigami-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-14/kirigami-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-15/kirigami-addons-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kirigami-addons-$_commit"
@@ -42,7 +44,7 @@ build() {
 
 check() {
 	# tst_sounds.qml is broken
-	xvfb-run ctest --test-dir build -E "tst_sounds.qml"
+	wlheadless-run -- ctest --test-dir build -E "tst_sounds.qml"
 }
 
 package() {
@@ -50,5 +52,5 @@ package() {
 }
 
 sha512sums="
-aa3dbe64c27a19109923d3fae843a245bf0f866ebaab58439751e0a12913e27b2f4e761594ea12a970ad19109cb77eb25ef1acd08fe4aeaa2ab5cbdda596194c  kirigami-addons-06104efa061526b2827d1e99ab9c00c85b1ef93b.tar.xz
+84d2fb525d170f81891b823cbd20eee9f7085d6a71d5afad4ce5fe19ece141bf7f03e607e55bbca799e68c7510a57592093d530c589f26279461b628b11044fc  kirigami-addons-f8b5ecf9580609bc021a342c928ca2fff286245d.tar.xz
 "

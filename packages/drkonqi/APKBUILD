@@ -6,13 +6,18 @@ pkgver=99999_git20250908
 pkgrel=0
 _commit="4347dbb402494df1c27f375b7c2831c05556ce71"
 pkgdesc="The KDE crash handler"
-# armhf blocked by qt6-qtdeclarative
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
 depends="
+	elfutils
+	gdb
 	kirigami
 	kitemmodels
+	py3-psutil
+	py3-pygdbmi
+	py3-sentry-sdk
 	"
 makedepends="
 	extra-cmake-modules

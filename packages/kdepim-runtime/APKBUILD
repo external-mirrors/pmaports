@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdepim-runtime
-pkgver=99999_git20250909
+pkgver=99999_git20250915
 pkgrel=0
-_commit="a1a9ae0713b18ac53b2036eb46fcd07dae9d429d"
+_commit="fb7d83bb83dc3cca8e55ac1a9f78638efbc55908"
 pkgdesc="Extends the functionality of kdepim"
 url="https://kontact.kde.org/"
 # armhf blocked by qt6-qtdeclarative -> kconfig
@@ -50,7 +50,7 @@ makedepends="
 	"
 subpackages="$pkgname-dbg $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/kdepim-runtime.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/kdepim-runtime-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-15/kdepim-runtime-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kdepim-runtime-$_commit"
@@ -73,5 +73,5 @@ package() {
 }
 
 sha512sums="
-f24a88fd9fece67167e284790dc3f2341d910770017c679f7b694fd51a8a6d9f21b6f9fe5759a91621574b91c6175cf4114f12e123e0270593f59b98d8fb5919  kdepim-runtime-a1a9ae0713b18ac53b2036eb46fcd07dae9d429d.tar.xz
+63ad590415ee2ce03bb104a05d0d7b2802bcd946575e9d8b026d73506b3167bfbc856daac7309ab75f6e18ac4331a6124d074f6dc283b8f685eca1c6484eaeed  kdepim-runtime-fb7d83bb83dc3cca8e55ac1a9f78638efbc55908.tar.xz
 "
