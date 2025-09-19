@@ -1,0 +1,133 @@
+= Device categorization
+
+Devices that are working quite well get lost in the [[Devices|big matrix of booting devices]]. To improve the situation, devices postmarketOS runs on have been grouped into the following categories.
+
+== Categories ==
+
+[cols="1,1,4"]
+|===
+| Category | Actively maintained | Description
+
+| main
+| yes, >= 2 people
+a| Everything in community, plus required working device features (where available):
+
+* Usable phone UI (i.e. Plasma Mobile or Phosh)
+* Calls (incl. call audio with earpiece)
+* SMS
+* Mobile Data
+* WiFi
+* Audio (speaker, main microphone ; headset, headset microphone ; jack detection, headset buttons)
+* Battery charging
+* Bluetooth
+Not required (shall change in the future):
+* Camera
+
+See also: https://gitlab.postmarketos.org/postmarketOS/postmarketos/-/issues/25[postmarketos#25]
+
+| community
+| yes
+a| Requirements:
+
+* Installation instructions must be well documented on device wiki page
+* Must run a (close to) mainline kernel
+* Kernel must pass `pmbootstrap kconfig check --community`, which includes working firewall (https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/1119[pmaports#1119])
+* All of them must have automatic kernel upgrade working
+** When upgrading the kernel, the new kernel must be used on reboot
+** For Android devices this required flashing a new boot image this is
+   accomplished by setting deviceinfo_flash_kernel_on_update in deviceinfo https://wiki.postmarketos.org/wiki/Deviceinfo_reference#flash[Deviceinfo Reference].
+** For other devices which directly boot a kernel from a boot partition, or which use lk2nd, usually nothing needs to be done.
+* maintainer(s) must take part in the workflow for new postmarketOS releases:
+** Join the https://wiki.postmarketos.org/wiki/Matrix_and_IRC[testing] chat to coordinate the release
+** Testing their device and related fixing issues, according to the https://wiki.postmarketos.org/wiki/Creating_a_release_branch#Timeline[timeline] (test yourself/coordinate with the https://wiki.postmarketos.org/wiki/Testing_Team[Testing Team]; testing one device per SoC is enough for community devices, but of course more is better)
+* 2021-11 and later: track record of upgrading the kernel, device kernel or SoC kernel must at least have been upgraded through 3 kernel releases
+
+Regarding device features (calls working, camera, ...), there is not a fixed feature set (so for users, don't assume that everything works, look at the device's wiki page for details).
+
+The purpose of community is to increase visibility of devices that:
+
+* A lot of work was put into
+* Are (and stay) working quite well (i.e. they are useful in some way and are tested occasionally to find and fix regressions)
+* Are still being improved or are considered completed at some point
+* Are (and stay) overall in good shape
+
+See also: See also: https://gitlab.postmarketos.org/postmarketOS/postmarketos/-/issues/24[postmarketos#24]
+
+| testing
+| no
+a| Other device ports using a (close-to) mainline kernel, including new ones. Maintainers can create merge requests to move devices to _community_ if requirements are met.
+
+Requirements:
+
+* Must run a (close to) mainline kernel
+
+| downstream
+| no
+a| Device ports using vendor/downstream kernels. Can be moved to _testing_ once a mainline port appears. Kernels and devices in this category might be moved to _archive_ if no longer building and either lack a maintainer or the maintainer is unresponsive for months.
+
+Requirements:
+* Port and dependencies build
+
+| archived
+| no
+a| Ports are moved to this category if:
+
+* The port has been replaced with a better alternative (e.g. ports using downstream kernels when a functional mainline port exists).
+* The port no longer boots with the current version of postmarketOS, and the port doesn't have an active maintainer to fix it.
+
+Archived ports aren't listed in `pmbootstrap init` and binary packages are not built for them. Still, they can be manually selected and built by entering the device codename. A warning is displayed with the reason why they have been archived.
+
+This category was formerly called *unmaintained* (https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/1912[pmaports!1912], https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/5046[pmaports!5046]).
+
+|===
+
+
+== Official Images ==
+Official images are built by [[bpo]]. We configure the images as follows:
+
+* Build images for _all_ devices in main and community
+* Build images for _some_ devices in testing, maintainers may [[Bpo#Image_configuration|enable building images]] if:
+** the port runs a mainline kernel
+** the port is actively maintained
+** the maintainer has been active for some time (~6 months)
+** the device is not so obscure that probably nobody will make use of the pre-built images
+
+We may adjust these rules again, e.g. depending on how many testing devices will be added over time. Testing images may be removed again, e.g. if they don't build anymore because of device specific problems.
+
+== Maintainers ==
+A device maintainer must own the device and be able to test changes. They must make sure that the device port stays in good shape.
+
+Put the maintainers listed in the APKBUILD in the the CODEOWNERS file of pmaports.
+
+== Moving between categories ==
+
+=== Moving to a higher category ===
+Moving from testing to community, from community to main or even from testing straight to main.
+
+==== Request process ====
+* Make sure that the device fulfills all requirements for the new category (see table above).
+* Create a new merge request in which you move the files.
+* Add new maintainers to the device's APKBUILD and CODEOWNERS in the merge request, if necessary.
+
+==== Review process ====
+* The core team collects approvals as usual, but requires *four approvals* (instead of the usual two).
+* Everyone should be given the chance to look at the entire device port again, to identify issues/possible improvements. Therefore the MR should not be merged before a *minimum time of one week* passed.
+** Clarification on the week: usually the MR should be in good shape when opened, and only minor fixups should need to be done before merging. If that is the case, then it is one week after the MR was opened. Otherwise, one week after there were the last significant changes.
+* Reviewers should look at all files that were moved and add comments as necessary. (GitLab currently doesn't allow in-line comments for moved files {{issue|213446|gitlab|gitlab-org}}, so just add comments below the merge request.)
+* Reviewers should verify that the device fulfills all requirements for the new category (see table above).
+* Reviewers should pay special attention to consistency issues, as outlined in {{issue|24|postmarketos}}.
+* Consistency issues/possible improvements in the existing features (not missing features) should be discussed and ideally fixed before merge.
+** Consistency changes that require lots of work should be documented as issues at least. (Let's not unnecessarily delay merge, that's annoying for everyone.)
+
+==== After merge ====
+* Change the category of the devices in the wiki
+* When moved from testing to community: [[Bpo#Image_configuration|enable building images]]
+
+=== Moving to a lower category ===
+If rules to keep a device in a category are no longer fulfilled, we should create a merge request to move them to the now appropriate category. So far we did not come up with extra rules, so we would treat it just like any other merge request.
+
+== See also ==
+* {{issue|16|postmarketos}} Increase visibility of actively maintained devices
+* [https://gitlab.postmarketos.org/postmarketOS/postmarketos/issues/11#get-serious-about-supported-devices postmarketos#11] Get serious about supported devices
+
+[[Category:Technical Reference]]
