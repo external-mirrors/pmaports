@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=tokodon
-pkgver=99999_git20250915
+pkgver=99999_git20250917
 pkgrel=0
-_commit="8a5f3c0a1f04c0448b2c9cb449b4daf969f809bf"
+_commit="32fde76fe81d289ef0e0dab89f3483f1c248bb5e"
 pkgdesc="A Mastodon client for Plasma and Plasma Mobile"
 url="https://invent.kde.org/network/tokodon/"
 # armhf blocked by qt6-qtdeclarative
@@ -42,7 +42,7 @@ makedepends="
 	"
 subpackages="$pkgname-dbg $pkgname-lang"
 _repo_url="https://invent.kde.org/network/tokodon.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-15/tokodon-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-17/tokodon-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/tokodon-$_commit"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-61e9f070c07516129a3cd2c7782686eb35c6bc43456f397314754675bf3b9222f4990c135d59002ee441930e190e390157669de4f99ceab561e45e601ae0db48  tokodon-8a5f3c0a1f04c0448b2c9cb449b4daf969f809bf.tar.xz
+4c9317b40acf5bfa4bbfd21a8193a1166998c01366676868ff152f5e7b0354f2ba64624d61410d5bc25e3318317d277d9622fe2df2f4faaefc4eb7595533ea36  tokodon-32fde76fe81d289ef0e0dab89f3483f1c248bb5e.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kwin
-pkgver=99999_git20250915
+pkgver=99999_git20250916
 pkgrel=0
-_commit="21d2b8ae14db04172651789cf705b669e26093c2"
+_commit="cb15cb8b52e7ddf175d671d2d78f947a1b83a91d"
 pkgdesc="An easy to use, but flexible, composited Window Manager"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -105,7 +105,7 @@ case "$pkgver" in
 esac
 
 _repo_url="https://invent.kde.org/plasma/kwin.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-15/kwin-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-17/kwin-$_commit.tar.xz"
 # Broken, fails to setup due to missing or invalid XDG_RUNTIME_DIR?
 options="!check"
 
@@ -131,5 +131,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-91c903f0261d67d7bb3a6fdcb49e012ce2496830eabe8639c112d064ef4e8e1db25208cb369581ae29255a4ff2dbc6a0bc0ef9623b36cbfda3271a5f5c7940e7  kwin-21d2b8ae14db04172651789cf705b669e26093c2.tar.xz
+db367d0d813a7080bdec26686b52b7962792bae9cb95fcdf2db70bf658be8dbef443f52ee19cfb3f94ccff3de60d1986f2ad386348b2e7805b3f4750a6e8dd9b  kwin-cb15cb8b52e7ddf175d671d2d78f947a1b83a91d.tar.xz
 "
