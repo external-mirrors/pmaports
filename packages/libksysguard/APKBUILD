@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=libksysguard
-pkgver=99999_git20250909
+pkgver=99999_git20250921
 pkgrel=0
-_commit="67d8f822fb7ee1c8009c5d918b19e7d626fd6583"
+_commit="79ad44094fa97c256c9fb62795c965b69756d7a1"
 pkgdesc="KDE system monitor library"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -45,7 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/libksysguard.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/libksysguard-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-21/libksysguard-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 replaces="ksysguard<5.22"
@@ -70,5 +70,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-d35b9ecd8ab5cfc6b0dba3359b937f9275ebe0d0bfa3d2f08d2e47362776e663e69231862b23479f620bb95b779d8e4cadd5e58e29a2947cab0c63d41ae5d53a  libksysguard-67d8f822fb7ee1c8009c5d918b19e7d626fd6583.tar.xz
+1374e06bb829f45a74b6e6f97daa5970a4ee0551840400e75fcc4aba05d24f8d04991304a4715b47c1ac77812c1aa9311df541a5845519baed66d012890e9c57  libksysguard-79ad44094fa97c256c9fb62795c965b69756d7a1.tar.xz
 "

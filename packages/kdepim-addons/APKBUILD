@@ -1,12 +1,10 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdepim-addons
-pkgver=99999_git20250917
+pkgver=99999_git20250921
 pkgrel=0
-_commit="762bdbfcb8887970586436f6863d5c6a2176d40a"
+_commit="f20066d8b6452b375a1315883dc181f32935643e"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -64,14 +62,15 @@ makedepends="
 	"
 checkdepends="
 	drkonqi
-	xvfb-runi
+	xwayland-run
 	"
 _repo_url="https://invent.kde.org/pim/kdepim-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-17/kdepim-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-21/kdepim-addons-$_commit.tar.xz
+	0001-kdepim-addons-Revert-Clean-includes.patch
+	"
 subpackages="$pkgname-lang"
 options="!check" # Require OpenGL and running dbus
 
-options="!check"
 builddir="$srcdir/kdepim-addons-$_commit"
 
 build() {
@@ -84,7 +83,7 @@ build() {
 }
 
 check() {
-	xvfb-run ctest --test-dir build
+	wlheadless-run -- ctest --test-dir build
 }
 
 package() {
@@ -92,5 +91,6 @@ package() {
 }
 
 sha512sums="
-67ff85e723b158cdf1aee16b72617ddc85bdc331b54c88822462034c47e61f4bbaab197c4f2dde5ee51451335506ffd8afb81a887505e5a57260d86424472f18  kdepim-addons-762bdbfcb8887970586436f6863d5c6a2176d40a.tar.xz
+2881f6bd8aed3a449ea1cc500ed42d08ee3feaa4fa4015dead63b8c736e8905626ec9b61758f61684ad73bdd7de94215c0b977f3bd0bddb930e296663ae6f005  kdepim-addons-f20066d8b6452b375a1315883dc181f32935643e.tar.xz
+09b845f16a23fa68cdb88270d5a2df925b72e6edb432104283631bb060ac6b4910834be03e199a4d66f76098e31ef71495c00f4af390faebe1b2bdacc7ea8826  0001-kdepim-addons-Revert-Clean-includes.patch
 "
