@@ -8,6 +8,7 @@ license="MIT"
 makedepends="postmarketos-mvcfg"
 install="$pkgname.pre-upgrade"
 source="
+	devicepkg-utils.tmpfiles
 	etc-deviceinfo
 	source_deviceinfo
 "
@@ -18,8 +19,11 @@ package() {
 
 	install -Dm644 "$srcdir"/etc-deviceinfo "$pkgdir"/etc/deviceinfo
 	postmarketos-mvcfg-package "$pkgdir" "$pkgname"
+
+	install -Dm644 "$srcdir"/devicepkg-utils.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/devicepkg-utils.conf
 }
 sha512sums="
+9fa5da1106f4dc712187c3ff90239eea5fa9b410c2825c7b1486208df69032365e6eb4e749144742c483fd2e60ce46661bdada17a81bcb7665ecfa07063a1b2b  devicepkg-utils.tmpfiles
 ef2181d7072b4ef62c11d3f50677fcd455e50cf89a3110e67fcaa6058ea695f101ded48b1442758494e3d23a97cdd93df6669656f329037020ba715af4341b55  etc-deviceinfo
 9e0a27f8f3e236817e3f5d5997bc376dc4d95508ecf5f812c48a29eaf7c9a21d46a2c78a65be98d60a12576b476e27314cdd3515a645b91706a85f929e83c053  source_deviceinfo
 "
