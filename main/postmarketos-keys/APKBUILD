@@ -1,12 +1,14 @@
 pkgname=postmarketos-keys
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 pkgdesc="Public keys for the postmarketOS repositories"
 url="https://postmarketos.org/"
 arch="noarch"
 license="MIT"
+subpackages="$pkgname-tmpfiles"
 source="
 	build.postmarketos.org.rsa.pub
+	postmarketos-keys.tmpfiles
 "
 options="!check" # No testsuite
 
@@ -18,8 +20,18 @@ package() {
 	# Store a copy of the key in /usr/share/apk/keys as backup
 	install -Dm644 "$srcdir"/build.postmarketos.org.rsa.pub \
 		"$pkgdir"/usr/share/apk/keys/build.postmarketos.org.rsa.pub
+
+	install -Dm644 "$srcdir"/postmarketos-keys.tmpfiles \
+		"$pkgdir"/usr/lib/tmpfiles.d/postmarketos-keys.conf
+}
+
+tmpfiles() {
+	install_if="$pkgname=$pkgver-r$pkgrel systemd"
+
+	amove usr/lib/tmpfiles.d
 }
 
 sha512sums="
 0996bd5e5e140096c116fdfeed8083f8993ecbaa2f7e4e097e738277106a13b49c8bda4a408fed10f3369aa8af8cc655deafa34ddd86d9c4a83aeb70d81de024  build.postmarketos.org.rsa.pub
+f9588f078cad569c074d4aa6aa91db6f387562a35f4c83523f5e22a9af84001e80118c147763302e380b775d1d48342fb53ff4e91ae1d949d822afdf756bd02d  postmarketos-keys.tmpfiles
 "

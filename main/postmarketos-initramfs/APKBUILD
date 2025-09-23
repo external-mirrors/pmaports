@@ -2,7 +2,7 @@
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-initramfs
 pkgver=3.8.5
-pkgrel=0
+pkgrel=2
 pkgdesc="Base files for the postmarketOS initramfs / initramfs-extra"
 url="https://postmarketos.org"
 options="!check"  # no tests
@@ -47,10 +47,11 @@ source="
 	00-initramfs-base.files
 	00-initramfs-extra-base.files
 	init.sh
-	init_functions.sh
 	init_2nd.sh
+	init_functions.sh
 	init_functions_2nd.sh
 	mdev.conf
+	postmarketos-initramfs.tmpfiles
 	unudhcpd.conf
 	"
 arch="noarch"
@@ -104,6 +105,9 @@ package() {
 	mkdir -p "$pkgdir"/usr/share/mkinitfs/hooks-extra
 	mkdir -p "$pkgdir"/etc/mkinitfs/hooks
 	mkdir -p "$pkgdir"/etc/mkinitfs/hooks-extra
+
+	install -Dm644 "$srcdir"/postmarketos-initramfs.tmpfiles \
+		"$pkgdir"/usr/lib/tmpfiles.d/postmarketos-initramfs.conf
 }
 
 sha512sums="
@@ -112,9 +116,10 @@ sha512sums="
 c0233d22858a5901db64e1d2fe1f6d39a2e2cfd1b94a10932483f55fed9461e9b8aa2d73b154b9d99a7a8b49ee02abfbddfe917ce0c6d7576601ba2668589c01  00-initramfs-base.files
 d0f35562365756d93066ce45924d17fb347b54095179c3262daa2f073e12743505cd5d9372ad30485915ca754d95a8edba9a74314e7949e0b3cf6978a87d03a5  00-initramfs-extra-base.files
 1dbb25b9dd29c0c0c7e62bd13b44c3d55e166cf16956892b8c98b9dad248ac52c3d810875658db4a5067afc4d94870150ac225c4129078e855dd8b8867c72aca  init.sh
-8948bb1bb17cf707790e0dc91a51a1c1293b883deea08137bbb92b19584282173d5ba7bb4481daafe5d84ee300808c5e9b23fae1256b64f4c2c7ef192b7a97a7  init_functions.sh
 9584421edc21840deb60965dd0b9e8bc8ff3d72b62641f70ed08f7d00c3a5aa5b448da1409e75fef34e7aa3828031e4661207a2b65e71d201d671b02b86b8fdf  init_2nd.sh
+8948bb1bb17cf707790e0dc91a51a1c1293b883deea08137bbb92b19584282173d5ba7bb4481daafe5d84ee300808c5e9b23fae1256b64f4c2c7ef192b7a97a7  init_functions.sh
 bb421896e7bebdc13822258d219795da79f3b17f4f0016f16e00cfc46c46beaf7b4873dd0418fc397a839570512a18030a6d8d452a0b54fd35b48be2de06be08  init_functions_2nd.sh
 675e7d5bee39b2df7d322117f8dcaccc274d61beaf4d50ead19bbf2109446d64b1c0aa0c5b4f9846eb6c1c403418f28f6364eff4537ba41120fbfcbc484b7da7  mdev.conf
+5dfc1af4d269a44b33c3cf3f7e8c7529806bd492a2d7f4edda71bee6406b117d57984489317842ea85580d15f3da24990f593ff7e6d111d794bc38bbc0b92819  postmarketos-initramfs.tmpfiles
 ba3275a9af788c7c782322a22a0f144d5e50e3498ea6886486a29331f23ae89cd32d500a3635cfa7cab369afba92edc18aeca64ccbf0cd589061cce23d15b46c  unudhcpd.conf
 "

@@ -1,7 +1,7 @@
 # Maintainer: Johannes Marbach <n0-0ne+gitlab@mailbox.org>
 pkgname=unl0kr
 pkgver=3.2.0
-pkgrel=7
+pkgrel=8
 _commit_lvgl=ceadda8a468b7d5fa6ba973bd82cf610166278d8
 pkgdesc="Framebuffer-based disk unlocker for the initramfs based on LVGL"
 url="https://gitlab.postmarketos.org/postmarketOS/buffybox"
@@ -29,6 +29,7 @@ source="
 	lvgl-$_commit_lvgl.tar.gz::https://github.com/lvgl/lvgl/archive/$_commit_lvgl.tar.gz
 	unl0kr.conf
 	unl0kr.files
+	unl0kr.tmpfiles
 	unlock.sh
 	10-fb-force-refresh.conf
 	30-unl0kr-test.sh
@@ -67,6 +68,9 @@ package() {
 
 	install -Dm644 "$srcdir"/unl0kr.files \
 		"$pkgdir"/usr/share/mkinitfs/files-extra/30-unl0kr.files
+
+	install -Dm644 "$srcdir"/unl0kr.tmpfiles \
+		"$pkgdir"/usr/lib/tmpfiles.d/unl0kr.conf
 }
 
 fbforcerefresh() {
@@ -92,6 +96,7 @@ sha512sums="
 d3611fe9d55ed105d9567b6019dc49fc0510ac4ed6ca6e15ba0c1bae47f2833d8784b3e008a4dec76dce55bf3809531d07c62e4ba24bafad69c6c54fdd0b70c0  lvgl-ceadda8a468b7d5fa6ba973bd82cf610166278d8.tar.gz
 7155c2f95dcf3716c0f392cf5717e96f1414c383a1f7c2ed30a1f8518dfe0b17c3c0e0e93f6476a342504aa855404099e2f5444eeb099023491c9a9a26fa3d90  unl0kr.conf
 b57260da131a4f40a0a3ee045e8394d4ab79caede9926d77f241afe79c1813fa77f4e312fa3b5e2e5c9fc1b9af082e7c59717abdaf30d512a7eb838a5f623ef8  unl0kr.files
+6365898b4534f87ec9cba5ec5060d4eac1984120acae511f276bda47d6e283dd8cd548147e28b371bf7bf63746324c52daee3827baf946f35cb81164ee94cbba  unl0kr.tmpfiles
 5386f434cd4f1fb9e0d561a8689e5e85d6a8b3c562823122c082d4932d2fb0ad4edcd635f14f0c61e5c8b5e53648c9937b042409c21683007700faea8894c750  unlock.sh
 f700af3145b79d1ef9edfb22982899b25cabfb212f9620dcbd3a2e6f44b5ad591e0a66056c6fcd66c3fde89a2b5f551e8a8fe2e65cf0e2a48adec57c027d7825  10-fb-force-refresh.conf
 407180b49c1a05f12bd6ee6e59dca0a6e74fe7b01f195087dcf2865598c47827d0bb569afdba55defa2f9a16437230fa62aa64f35111508b906bcbf9537acba4  30-unl0kr-test.sh

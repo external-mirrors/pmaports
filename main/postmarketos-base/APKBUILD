@@ -1,6 +1,6 @@
 pkgname=postmarketos-base
-pkgver=48
-pkgrel=1
+pkgver=49
+pkgrel=2
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -58,15 +58,15 @@ provides="alpine-base=1000-r0"
 
 _source440="
 	etc/sudoers
-	etc/doas.d/10-postmarketos.conf
+	usr/share/factory/etc/doas.d/10-postmarketos.conf
 	"
 _source600="
 	etc/ssh/sshd_config.d/50-postmarketos-ui-policy.conf
 	"
 _source644="
 	etc/conf.d/swapfile
-	etc/conf.d/zram-init
 	etc/conf.d/syslog
+	etc/conf.d/zram-init
 	etc/fstab
 	etc/issue
 	etc/motd
@@ -75,6 +75,9 @@ _source644="
 	usr/lib/os-release
 	usr/lib/sysctl.d/90-disable-rp-filter.conf
 	usr/lib/sysctl.d/90-steam.conf
+	usr/lib/tmpfiles.d/postmarketos-base.conf
+	usr/lib/tmpfiles.d/postmarketos-baselayout.conf
+	usr/lib/tmpfiles.d/postmarketos-release.conf
 	usr/lib/udev/rules.d/20-imagis-input.rules
 	usr/lib/udev/rules.d/20-tm2-touchkey-input.rules
 	usr/lib/udev/rules.d/20-tm2-touchkey-leds.rules
@@ -233,15 +236,17 @@ release() {
 	# /etc/os-release should be a relative symlink, see:
 	# https://www.man7.org/linux/man-pages/man5/os-release.5.html
 	ln -s ../usr/lib/os-release "$subpkgdir"/etc/os-release
+
+	amove usr/lib/tmpfiles.d/postmarketos-release.conf
 }
 
 sha512sums="
 e529f5cef1f31481b577f99b8917704f2cfefb963d98bf40a14b017938e55a00134d2033f81d2cb0b8489c5e9b4a92fdc0a788013f1adb4cd46d9580c9988186  rootfs-etc-sudoers
-49cff0dbf37fc3c3ca30709be3bc4bbac9b2c05d1f88356922c6ab849e1fe893da7eca92b42a4095cfa00fe475470a711a93bfa60f1cedfde9c890a6dcc61de9  rootfs-etc-doas.d-10-postmarketos.conf
+49cff0dbf37fc3c3ca30709be3bc4bbac9b2c05d1f88356922c6ab849e1fe893da7eca92b42a4095cfa00fe475470a711a93bfa60f1cedfde9c890a6dcc61de9  rootfs-usr-share-factory-etc-doas.d-10-postmarketos.conf
 1d2975e7e2745020f88fac639021cc9a47b477fb0390c3e146a070d98faab32c3f1c7bd1121f45a26be97301ab65c736ae0a4905d28a7251919a1994895f9c8d  rootfs-etc-ssh-sshd_config.d-50-postmarketos-ui-policy.conf
 e0d2d48b82a03239a4c0a00acaf83e00d397c23a8d7c71053d4e2a383357c22dcedef9e81b0e12a1d7514e1fdbe0bb3eb82613d18b29034a7ce5447f13c84a53  rootfs-etc-conf.d-swapfile
-a286c261dbab800b4bd2891c679cae1fbbf3e3169014bf7e89451961bbd3cbe0f6e34465cd1409aa4373f32ed74f38eb042b166767512be9ee7104e26cd712fa  rootfs-etc-conf.d-zram-init
 e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67dc0ede80f9d44d16bd9ef52e73350d3f13224edc31d73a34  rootfs-etc-conf.d-syslog
+a286c261dbab800b4bd2891c679cae1fbbf3e3169014bf7e89451961bbd3cbe0f6e34465cd1409aa4373f32ed74f38eb042b166767512be9ee7104e26cd712fa  rootfs-etc-conf.d-zram-init
 9b8d0493bb64457fe176fea801e0771d3c5279302c61559824bf81b3d2b66d2c1e076f4aaac65f55389005acb18c27e44bed858c2bdbad37d74199f07c86c354  rootfs-etc-fstab
 45bd0742a64a9d3c4a88e152b97edcf3fa1edca28884f9ea69e7c4c365f1e41ef9056dbe204545de7d4b2ba92e1e5872b2a929c2dcc1dd468e627cc3f090b8e6  rootfs-etc-issue
 01403df3b5a2be0dd70387a3c32cf24a77bc097679fbefca585082a0970b7d756723c33687be3809351b5e31c85947db84861118bfeced8f5f865fe2452555ec  rootfs-etc-motd
@@ -250,6 +255,9 @@ e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67
 6593a61cb4cbb5d557bdd0f98ce09bf91a6e076cfe0023fe3f495e17044c8d586708328a0fae52b58b3ff008a347b1f63a222a2a4d4f3f4d95777531f8a5c1a8  rootfs-usr-lib-os-release
 b70ee1b39b5f33c9a3e6bf4259158519691c82c8cefb700d4df49eb749a2cce208082e00d4905b9eea2c4f75b6da62f73931931c92157b4132adb35dcf0e0a6f  rootfs-usr-lib-sysctl.d-90-disable-rp-filter.conf
 6b16fd00756926c6fdc6f01960f59c854c90920dd9c0e67c19506a90fd26ac887a8dbfd5b1ec2712fff91f0369ddc5b91d56041360018d4d0c4d78e49733b644  rootfs-usr-lib-sysctl.d-90-steam.conf
+af6b40e5598d5290786510e3a02c6e2e17bc921e688c51c3810285230c39f8aec9ebcd765558d652541009432326994586ec6cd6224d2086765ec25a9ca45d92  rootfs-usr-lib-tmpfiles.d-postmarketos-base.conf
+19948697ec56506f5a6eecfd42fd3b6f2945b9e30770304b3bb727e8434e9d7cace742e1da62627619f7b934d0acf05549f2a33afed990ed622f9e6804d7ccf9  rootfs-usr-lib-tmpfiles.d-postmarketos-baselayout.conf
+94d1100a3358417465ba416b690ac2c17d755ff44463f7bcbc352c98f6ccf5224c4817149e8064bc2640f8bf9fd6e0abc85178444784ca1fab732cc3e0ff6e3f  rootfs-usr-lib-tmpfiles.d-postmarketos-release.conf
 560d30c08856714f4bec805ca95fad767330d6fb3760096ffebdf35cad42d4ebea7dd2f5ee2e4d88596743e6717ca6ac2339d4d753feb3ca28e0090c585bf81e  rootfs-usr-lib-udev-rules.d-20-imagis-input.rules
 b61c6116f972df08f460494cf3b511b7cb4046a65bb3bd840cddb5ca98518c4514dc5f8a9330bc9ac630e5adbfecc839cbd21f70cac5000a30fd2daeab0f02d7  rootfs-usr-lib-udev-rules.d-20-tm2-touchkey-input.rules
 de4d8f258cb2ce654be15abe0188caa6ca9cc163fd45350f2025e7e9d043878e3f1202ef9033b1b15d7e18c4b40c3b19db387ee050a3baf03c4bd4293f4721e3  rootfs-usr-lib-udev-rules.d-20-tm2-touchkey-leds.rules
