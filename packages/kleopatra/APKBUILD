@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kleopatra
-pkgver=99999_git20250920
+pkgver=99999_git20250922
 pkgrel=0
-_commit="ed90a5dbeca886ce19e202dee38a8919c30832d5"
+_commit="29b21ecf158247b43d12e2ce43306cefeaac0a73"
 arch="all !armhf !s390x"
 url="https://www.kde.org/applications/utilities/kleopatra/"
 pkgdesc="Certificate Manager and Unified Crypto GUI"
@@ -38,14 +38,14 @@ makedepends="
 	libassuan-dev
 	libkleo-dev
 	mimetreeparser-dev
-	qgpgme
+	qgpgme6
 	qt6-qtbase-dev
 	samurai
 	"
 checkdepends="xwayland-run"
 maintainer="team/kde <bribbers@disroot.org>"
 _repo_url="https://invent.kde.org/pim/kleopatra.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-20/kleopatra-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-22/kleopatra-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kleopatra-$_commit"
@@ -70,5 +70,5 @@ package() {
 }
 
 sha512sums="
-fe391f9612a5fc8f0bff6d060ba0c6ce861f67fdce0c7e4e3a9fa15cf32d8cbe184b3459217fffe1ee56113696e93aae93fce5530e022da378aea182866e17bc  kleopatra-ed90a5dbeca886ce19e202dee38a8919c30832d5.tar.xz
+a875bf8b1b8f5694dc8d232c0cfe9f6c37d8e4696d414adf56c7bb29e355bca535831a1e0d3e413d7da0a4fead62020028f799bdbfd0c06c75b28fdfd0cbe7a7  kleopatra-29b21ecf158247b43d12e2ce43306cefeaac0a73.tar.xz
 "
