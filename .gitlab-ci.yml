@@ -116,6 +116,9 @@ dint:
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/dint.sh
+  allow_failure:
+    exit_codes:
+      - 2  # returned by dint on non-fatal warning
 
 # kernel kconfig check
 kernel-kconfig:
