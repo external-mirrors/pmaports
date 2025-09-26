@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=keysmith
-pkgver=99999_git20250909
+pkgver=99999_git20250923
 pkgrel=0
-_commit="ce992484741773994d7c766d392df24b46e14a01"
+_commit="23a2f976c1a7b61d159e7e07b801627243d2f4d7"
 pkgdesc="OTP client for Plasma Mobile and Desktop"
 url="https://invent.kde.org/kde/keysmith"
 # armhf blocked by qt6-qtdeclarative
@@ -20,6 +20,7 @@ makedepends="
 	kdbusaddons-dev
 	ki18n-dev
 	kirigami-dev
+	kirigami-addons-dev
 	libsodium-dev
 	prison-dev
 	qqc2-desktop-style-dev
@@ -32,7 +33,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/keysmith.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-12/keysmith-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-24/keysmith-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/keysmith-$_commit"
@@ -53,5 +54,5 @@ package() {
 }
 
 sha512sums="
-562cd6280bf18ec33c5779ea99d449655d76d4e80dc0f662bed15cc5b84b801dc0055f582ef21a28c0671931f198e5d9b679752e7a22cfae6f93495e8fdf4fa8  keysmith-ce992484741773994d7c766d392df24b46e14a01.tar.xz
+67147db9ef735fb5ee79d81ee278dcfb66a959c23c5e14df9ba9767acb3cbcf8baa208f710a897ef210d9e025872e2c9d5ce316c007b0b57168c141954975bcb  keysmith-23a2f976c1a7b61d159e7e07b801627243d2f4d7.tar.xz
 "
