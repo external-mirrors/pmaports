@@ -2,6 +2,7 @@
 # Copyright 2025 Pablo Correa Gomez
 # SPDX-License-Identifier: GPL-3.0-or-later
 import os
+import subprocess
 import sys
 
 # Same dir
@@ -20,9 +21,17 @@ def verify_checksums(packages):
 
     print("verifying checksums: " + ", ".join(packages))
     common.run_pmbootstrap(["build_init"])
-    common.run_pmbootstrap(["--details-to-stdout", "checksum", "--verify"] +
-                           list(packages))
 
+    result = common.run_pmbootstrap(
+        ["--details-to-stdout", "checksum", "--verify"] + list(packages),
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    print(result.stdout)
+
+    # Check for failures, since pmb checksum --verify doesn't fail if running
+    # against local aports...
+    if 'FAILED' in result.stdout:
+        raise Exception("Checksum verification failed")
 
 if __name__ == "__main__":
     # Get and print modified packages
