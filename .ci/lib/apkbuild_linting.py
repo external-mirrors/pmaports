@@ -21,16 +21,17 @@ custom_valid_options = [
 ]
 
 
-def get_kconfigcheck_categories() -> None:
+def get_kconfigcheck_categories() -> list [str]:
     with open("kconfigcheck.toml", "rb") as kconfigcheck_config:
         kconfigcheck_data = tomllib.load(kconfigcheck_config)
 
     kconfigcheck_categories = []
 
-    for alias_name in kconfigcheck_data["aliases"]:
-        kconfigcheck_categories.append(f"pmb:kconfigcheck-{alias_name}")
-
-        for category_name in kconfigcheck_data["aliases"][alias_name]:
+    for category_name in kconfigcheck_data:
+        if category_name == "aliases":
+            for alias_name in kconfigcheck_data["aliases"]:
+                kconfigcheck_categories.append(f"pmb:kconfigcheck-{alias_name}")
+        else:
             kconfigcheck_categories.append(category_name)
 
     return [item.replace("category:", "pmb:kconfigcheck-") for item in kconfigcheck_categories]
