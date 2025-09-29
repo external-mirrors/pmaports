@@ -45,10 +45,11 @@ def all_committed_by_merge_bot():
     return all(bot_email == ce for ce in commit_emails)
 
 
-def run_pmbootstrap(parameters):
+def run_pmbootstrap(parameters, stdout=None, stderr=None):
     """ Run pmbootstrap with the pmaports dir as --aports """
     cmd = ["pmbootstrap", "--aports", get_pmaports_dir()] + parameters
-    subprocess.run(cmd, universal_newlines=True, check=True)
+    return subprocess.run(cmd, universal_newlines=True, check=True,
+                         stdout=stdout, stderr=stderr)
 
 
 def get_upstream_branch():
