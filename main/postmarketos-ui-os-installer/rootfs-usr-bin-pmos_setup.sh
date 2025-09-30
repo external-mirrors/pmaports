@@ -5,7 +5,7 @@ set -eu
 pmb="pmbootstrap -y"
 
 do_prepare() {
-	yes '' | $pmb init
+	yes '' | $pmb init --shallow-initial-clone
 
 	# TODO: allow selecting device in the UI somehow?
 	# For now get it from deviceinfo...
