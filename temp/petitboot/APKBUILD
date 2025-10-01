@@ -1,6 +1,6 @@
 pkgname=petitboot
 pkgver=1.13
-pkgrel=0
+pkgrel=1
 pkgdesc="Petitboot is an operating system bootloader based on Linux kexec"
 url="https://github.com/open-power/petitboot"
 arch="all"
@@ -11,6 +11,7 @@ source="
 	discover-grub2-implement-devicetree-command.patch
 	Prevent-the-UI-from-locking-up-while-the-countdown-r.patch
 	udev-check-idpath-for-nullptr-before-calling-strcmp.patch
+	musl-gcc15.patch
 	"
 subpackages="
 	$pkgname-doc
@@ -33,4 +34,5 @@ sha512sums="
 44b32d3cd760bd06417bdee3f4165b72783f5790763233b07222ac98d5ac99f5f63afd32587259cc25d0cb1db0e0695c692fdced9e5c1e9d214ce277ceb45229  discover-grub2-implement-devicetree-command.patch
 330b88c1922f1e6a9b2e77114056c6fa4b66aa6a0655d273911acadc778cd9d1a102d2c4fd61c59096c06f7f231159db961aa39401b421b049e05dc39d3437a9  Prevent-the-UI-from-locking-up-while-the-countdown-r.patch
 c05e2769660ab95f9380b2233d81cad78ef82637dfed46c4b094e8e30d9f865a6c949e6c9ed1928c47b519f81bb2ed5c8fc8355c793a61db34b33838d212f8a9  udev-check-idpath-for-nullptr-before-calling-strcmp.patch
+e1f2d438b5970a61e8231e99e29edcb660e5f47c425c4480e7b4f6d8cbbddf5e8e9ae9f08c325c72467a3490a2a3f66f24af28df3309feeb0cb072c49ba0b71f  musl-gcc15.patch
 "
