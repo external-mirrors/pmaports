@@ -1,0 +1,95 @@
+# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
+
+pkgname=zed
+pkgver=0.203.5
+_pkgver=${pkgver/_/-}
+pkgrel=5
+pkgdesc="High-performance multiplayer code editor (experimental package!)"
+url="https://zed.dev"
+# TODO: Enable on more arches later.
+arch="aarch64 x86_64"
+license="GPL-3.0-only"
+depends="
+	nodejs
+	npm
+	"
+makedepends="
+	alsa-lib-dev
+	cargo
+	cargo-auditable
+	clang-dev
+	curl-dev
+	fontconfig-dev
+	libgit2-dev
+	libxcb-dev
+	libxkbcommon-dev
+	mimalloc2-dev
+	openssl-dev
+	protoc
+	sqlite-dev
+	vulkan-loader
+	wayland-dev
+	zstd-dev
+	libx11-dev
+	cmake
+	"
+source="https://github.com/zed-industries/zed/archive/v$_pkgver/zed-$_pkgver.tar.gz
+	zed-desktop.patch
+	"
+builddir="$srcdir/$pkgname-$_pkgver"
+options="!check"  # FIXME: building fails on out of memory
+
+# TODO:
+# - unbundle fonts
+# - unbundle other assets (?)
+# - unbundle tree-sitter parsers
+# - remove Supermaven integration (not usable on Alpine)?
+
+unset CARGO_PROFILE_RELEASE_PANIC  # is this needed?
+export CARGO_PROFILE_RELEASE_STRIP="symbols"
+
+export RELEASE_VERSION="$_pkgver"
+# Disable automatic updates.
+export ZED_UPDATE_EXPLANATION="Please use apk to update zed"
+
+prepare() {
+	default_prepare
+
+	# Rust target triple.
+	local target="$(rustc -vV | sed -n 's/host: //p')"
+
+	# Build against system-provided libs.
+	mkdir -p .cargo
+	cat >> .cargo/config.toml <<-EOF
+		[target.$target]
+		git2 = { rustc-link-lib = ["git2"] }
+		mimalloc = { rustc-link-lib = ["mimalloc"] }
+		zstd = { rustc-link-lib = ["zstd"] }
+	EOF
+
+	cargo fetch --target="$CTARGET" --locked
+}
+
+build() {
+	cargo build --frozen --release -p zed --jobs $(nproc)
+	cargo build --frozen --release -p cli --jobs $(nproc)
+}
+
+check() {
+	cargo test --workspace --frozen
+}
+
+package() {
+	install -D -m755 target/release/zed "$pkgdir"/usr/libexec/zed-editor
+	# Upstream recommends name "zed" but that's already taken by ZFS Event Daemon.
+	install -D -m755 target/release/cli "$pkgdir"/usr/bin/zed-editor
+
+	install -D -m644 crates/zed/resources/zed.desktop.in "$pkgdir"/usr/share/applications/zed.desktop
+	install -D -m644 crates/zed/resources/app-icon.png "$pkgdir"/usr/share/icons/hicolor/512x512/apps/zed.png
+	install -D -m644 crates/zed/resources/app-icon@2x.png "$pkgdir"/usr/share/icons/hicolor/1024x1024/apps/zed.png
+}
+
+sha512sums="
+b2dc4d90f75df0b6c11496fbd08a5d1b14b7c730db1b93d95581fed26145bc639f46cdd6101b41248ab8bd6658fb4613b5ce1a5a1b5841bf3fe487846e4d075b  zed-0.203.5.tar.gz
+3c6535348c1dd5f0ed98c79e2506039b1b68042334654cbaa55452402b276f502256812dd083b5e417e4696e8f1721bb6d9e92c25d1e9e92b2d9cef03492e2e7  zed-desktop.patch
+"
