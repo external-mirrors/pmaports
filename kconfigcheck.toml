@@ -22,6 +22,7 @@ community = [
 	"category:nftables",
 	"category:usb_gadgets",
 	"category:waydroid",
+	"category:wine",
 	"category:wireguard",
 	"category:zram",
 ]
@@ -550,3 +551,7 @@ EFIVAR_FS = "m"
 DM_VERITY = "m"
 EROFS_FS = "y"
 EROFS_FS_ZIP = "y"
+
+# Wine / Proton support
+["category:wine".">=6.14.0"."all"]
+NTSYNC = "m"
