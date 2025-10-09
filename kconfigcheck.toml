@@ -24,6 +24,7 @@ community = [
 	"category:nftables",
 	"category:usb_gadgets",
 	"category:waydroid",
+	"category:wine",
 	"category:wireguard",
 	"category:zram",
 ]
@@ -603,3 +604,7 @@ SHADOW_CALL_STACK = "y"
 ["category:rust".">=6.1.0"."all"]
 DEBUG_INFO_BTF = "n" # Conflicts with LTO when Rust is enabled
 DEBUG_INFO_BTF_MODULES = "n" # Conflicts with LTO when Rust is enabled
+
+# Wine / Proton support
+["category:wine".">=6.14.0"."all"]
+NTSYNC = "m"
