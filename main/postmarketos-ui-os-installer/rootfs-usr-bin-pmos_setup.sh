@@ -47,7 +47,9 @@ do_configure() {
 	# OSI_ADDITIONAL_FEATURES: Space-separated list of additional features chosen
 
 	$pmb config user "$OSI_USER_USERNAME"
-	$pmb config timezone "$OSI_TIMEZONE"
+	# os-installer replaces underscores with spaces, but this breaks pmb if we use
+	# the value directly without switching spaces for underscores
+	$pmb config timezone "$(echo "$OSI_TIMEZONE" | tr ' ' '_')"
 
 	fde_args=""
 	if [ -n "$OSI_ENCRYPTION_PIN" ]; then

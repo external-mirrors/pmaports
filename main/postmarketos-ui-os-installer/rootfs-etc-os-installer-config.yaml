@@ -2,33 +2,25 @@
 ---
 distribution_name: 'postmarketOS'
 
-internet_connection_required: yes
-internet_checker_url: 'http://networkcheck.postmarketos.org'
+internet:
+  connection_required: yes
+  checker_url: 'http://networkcheck.postmarketos.org'
 
-# Skip the language selection dialog by specifing a language, e.g. 'pt_BR'
-# Default: no (No fixed language, not Norwegian)
-fixed_language: no
-
-# A selection of languages the installer should present by default.
-# Note: For a language to be available, it needs to be provided by the system
-# and the installer needs to have a translation into that language.
-# Default: ['ar', 'de', 'en', 'es', 'fr', 'ja', 'ru', 'zh']
-suggested_languages:
-  - 'ar'
-  - 'de'
-  - 'en'
-  - 'es'
-  - 'fr'
-  - 'ja'
-  - 'ru'
-  - 'zh'
+scripts:
+  prepare: /etc/os-installer/scripts/prepare.sh
+  install: /etc/os-installer/scripts/install.sh
+  configure: /etc/os-installer/scripts/configure.sh
 
 welcome_page:
   logo    : '/etc/os-installer/distro.svg'
   text    : "Let's install postmarketOS!"
   usage   : yes
 
-minimum_disk_size: 5  # GB, probably enough for most UIs?
+disk:
+  min_size: 5 # GB
+  # We don't support installing to a partition, so don't give users the option
+  # to select a single partition
+  partition_ok: no
 
 disk_encryption:
   offered: yes
@@ -67,7 +59,7 @@ user:
 # gnome-initial-setup can handle user and locale setup.
 # These settings allow to disable these pages.
 skip_user: no
-skip_locale: no
+skip_region: no
 
 # additional_software:
 #   - name           : 'Firefox'
@@ -88,6 +80,7 @@ skip_locale: no
 
 failure_help_url: 'https://wiki.postmarketos.org'
 
-browser_cmd: 'firefox'
-disks_cmd  : 'gnome-disks'
-wifi_cmd   : 'gnome-control-center wifi'
+commands:
+  browser: 'firefox'
+  disks: 'gnome-disks'
+  wifi: 'gnome-control-center wifi'
