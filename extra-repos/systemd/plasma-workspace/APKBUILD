@@ -3,7 +3,7 @@
 pkgname=plasma-workspace
 pkgver=99996.4.5
 _pkgver=6.4.5
-pkgrel=0
+pkgrel=1
 pkgdesc="KDE Plasma Workspace"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -138,7 +138,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DPLASMA_X11_DEFAULT_SESSION=OFF \
-		-DINSTALL_SDDM_WAYLAND_SESSION=OFF # Fails to get permissions to take control over tty
+		-DINSTALL_SDDM_WAYLAND_SESSION=ON
 
 	# workaround for:
 	# https://invent.kde.org/plasma/plasma-workspace/-/issues/132
