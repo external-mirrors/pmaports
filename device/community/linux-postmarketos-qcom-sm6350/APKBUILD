@@ -3,7 +3,7 @@
 _flavor="postmarketos-qcom-sm6350"
 pkgname=linux-$_flavor
 pkgver=6.17.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SM6350/SM7225 devices"
 arch="aarch64"
 _carch="arm64"
@@ -17,14 +17,14 @@ makedepends="bash bison findutils flex installkernel openssl-dev perl python3"
 
 _repo="linux"
 _config="config-$_flavor.$arch"
-_tag="v$pkgver-sm6350"
+_tag="f8deffef825a68df4fb04d6e7d605a458487d845"
 
 # Source
 source="
 	https://github.com/sm6350-mainline/$_repo/archive/$_tag/$_repo-$_tag.tar.gz
 	$_config
 "
-builddir="$srcdir/$_repo-$pkgver-sm6350"
+builddir="$srcdir/$_repo-$_tag"
 
 prepare() {
 	default_prepare
@@ -54,6 +54,6 @@ package() {
 }
 
 sha512sums="
-30cb9cffb7ca393598de3332450c350d64413f9d571811731d806de266e319e20f3d9161b27402359324d40f89d6ace7d036e9260fd1e82993bcc59eae4a9d23  linux-v6.17.0-sm6350.tar.gz
-cc94d637d93a54acf51453daf0a0ebffe2beb8a22a6d90fbba08d9b70c3807fab65a72815af22ad52631623c667bec4098b09a1b5ed9387d8a5053ea29ccb119  config-postmarketos-qcom-sm6350.aarch64
+6ed9863f0950d0faef23b2b9298f106f38c2c427d9ec7c1a93c7bc7e466d3930124d023069f56b1ecd6896c393baf3fbbb8c0d2a245b5454533013bcf323477d  linux-f8deffef825a68df4fb04d6e7d605a458487d845.tar.gz
+11a597fa98aa19ee7f85b6e0fe4d5aeac5943a931963a7da777a468d9ca10eb4dafe8c23c0d27dd4b25f273baf189bbf172f9fb14f1e3037e07dfb7fe24f5731  config-postmarketos-qcom-sm6350.aarch64
 "
