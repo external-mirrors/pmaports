@@ -3,8 +3,7 @@
 pkgname=sddm
 pkgver=99990.21.0
 _pkgver=0.21.0
-pkgrel=3
-_pkgrel=7
+pkgrel=4
 pkgdesc="Simple Desktop Display Manager"
 url="https://github.com/sddm/sddm/"
 # armhf blocked by qt5-qtdeclarative
@@ -29,7 +28,12 @@ makedepends="
 	upower-dev
 	utmps-dev
 	"
-subpackages="$pkgname-doc $pkgname-lang $pkgname-openrc"
+subpackages="
+	$pkgname-doc
+	$pkgname-lang
+	$pkgname-openrc
+	$pkgname-weston
+	"
 install="sddm.pre-install"
 langdir="/usr/share/sddm/translations"
 pkgusers="sddm"
@@ -40,6 +44,7 @@ source="https://github.com/sddm/sddm/archive/v$_pkgver/sddm-v$_pkgver.tar.gz
 	0003-CMake-Raise-required-version-to-3.5.patch
 	sddm.initd
 	sddm.confd
+	weston.conf
 	"
 builddir="$srcdir/$pkgname-$_pkgver"
 
@@ -84,6 +89,14 @@ lang() {
 	amove usr/share/sddm/translations-qt6
 }
 
+weston() {
+	depends="$pkgname
+		weston
+		"
+
+	install -Dm644 "$srcdir"/weston.conf "$subpkgdir"/etc/sddm.conf.d/weston.conf
+}
+
 sha512sums="
 2e8e460e7f318f20a406dcbb1a9fa1dc78b6a5b8d888bfbbaae22b9c642dbc49cf2ac682b4ea9ed847bbafa9bdc361ba08795e59cad970088b370caaaa70f458  sddm-v0.21.0.tar.gz
 42a0b24717820d98a42d178b5d3a40441672d496c9d8f7c2f8002d770a2718324e9d00d0f27602232b91e8bb042693125507d6cb8371b6f6f211f2b95babe666  0001-pam-path-fix.patch
@@ -91,4 +104,5 @@ bc7b572331de32245abba234e3537885a3d9dd20273a12bd7a82eb754467dd3c753fc4d90ec24cc2
 3f7162b4dc46dc07ad5574a1f39390a68e1074a60c1a842725932d06866cfcdb2f15347bf4228b1e2b6573fc6cfd7bf36abe16ef7d17e873fffac32d9f5ad670  0003-CMake-Raise-required-version-to-3.5.patch
 aa2dba75888e56f0b1203a59400a4fcd71382763375f958372d7c6f929b09f4e0966f10632ec055bcee405e6818e8ffe0d14b262bedae411217538b41f7bd253  sddm.initd
 b841282b96110ec59a7aa539db0737327b09549d55c78dc4b2c3b28b4a6ad1facf015b3175cb6d3a38f13e47aa6314ef3dc1514a4e60dd653a97409ec54ba706  sddm.confd
+7431d893cf30b4e212403d88f1a7a617f8d5613aa1083e4646cdb8ce511c89478128c546f56026c1ec1b41dd10c74597409321dd18ff3e4afc008df917b9dcf3  weston.conf
 "
