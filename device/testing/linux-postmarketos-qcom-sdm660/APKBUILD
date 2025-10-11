@@ -3,7 +3,7 @@
 
 _flavor="postmarketos-qcom-sdm660"
 pkgname=linux-$_flavor
-pkgver=6.14.6
+pkgver=6.17.4
 pkgrel=0
 pkgdesc="Close to mainline linux kernel for Qualcomm Snapdragon 660 SoC"
 arch="aarch64"
@@ -45,25 +45,42 @@ prepare() {
 
 build() {
 	unset LDFLAGS
+
 	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" all Image.gz
 }
 
 package() {
 	mkdir -p "$pkgdir"/boot
 
-	make zinstall modules_install dtbs_install \
+	make modules_install dtbs_install \
 		ARCH="$_carch" \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
-		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs-tmp"
+
+	install -D "$builddir/arch/arm64/boot/vmlinuz.efi" \
+		"$pkgdir/boot/vmlinuz.efi"
+
+	install -D "$builddir/arch/arm64/boot/Image.gz" \
+		"$pkgdir/boot/vmlinuz"
+
+	# Reduce package size, install only qcom SDM630/636/660 dtbs.
+	# This reduces .apk size from ~46 Mb to ~30 Mb.
+	mkdir -p "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sda660* "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm630* "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm636* "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm660* "$pkgdir"/boot/dtbs/qcom
+	rm -r "$pkgdir"/boot/dtbs-tmp
+
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
 
 	install -D "$builddir/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 }
 sha512sums="
-d0141c811c10080554b4a5c1b2a144cb901678eb4ada9dc76f41dd312419f36b0022c54adf29ffaff60d368e457001fb2adff963d28d306216464729788243a0  linux-v6.14.6-sdm660.tar.gz
-9b9ff989a82439401ecce8a7681b51f6d4e297fbd91c17208f9078a685afb1e1590deaaf4484f3d416ba535d7eb34a5c9f005e88522ddfda853d6f9479ef831c  config-postmarketos-qcom-sdm660.aarch64
+27b33c08162ff76f29095641b3913f61f301728eb3d341be4d8e03614a136783a7ee79842154614d11c76a84a06c6f2f0014f0ffeb378f7cd760e5e6fe138a88  linux-v6.17.4-sdm660.tar.gz
+5b93e48a7290c07be0439e449fcf26613bb6988d99b48efdbf43416cb8e008f0093a72f3f666803df17b3b8d4ed3a607c81a2c5430e31ae54285739b8f7ecf75  config-postmarketos-qcom-sdm660.aarch64
 "
