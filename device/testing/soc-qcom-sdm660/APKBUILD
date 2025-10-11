@@ -1,13 +1,17 @@
-# Maintainer: Max Buchholz <max.buchholz@gmx.de>
+# Maintainer: Alexey Minnekhanov <alexeymin@postmarketos.org>
+# Co-Maintainer: Max Buchholz <max.buchholz@gmx.de>
 pkgname=soc-qcom-sdm660
 pkgdesc="Common package for Qualcomm SDM630/636/660 devices"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
 options="!check !archcheck !tracedeps pmb:cross-native"
-depends="swclock-offset"
+depends="
+	alsa-ucm-conf-qcom-sdm660
+	swclock-offset
+"
 subpackages="
 	$pkgname-rproc
 	$pkgname-rproc-openrc:rproc_openrc
