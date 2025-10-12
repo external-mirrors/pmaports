@@ -2,13 +2,14 @@
 # Maintainer: Max Buchholz <max.buchholz@gmx.de>
 pkgname=device-sony-pioneer
 pkgdesc="Sony Xperia XA2"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	firmware-sony-ninges
 	linux-postmarketos-qcom-sdm660
 	mkbootimg
 	postmarketos-base
@@ -19,11 +20,6 @@ makedepends="devicepkg-dev"
 install="$pkgname.post-install"
 source="
 	deviceinfo
-	phoc.ini
-"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-phosh
 "
 
 build() {
@@ -34,19 +30,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
-	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
-}
-
-nonfree_firmware() {
-	pkgdesc="Various firmware files required for most subsystems to run"
-	depends="firmware-sony-ninges soc-qcom-sdm660-nonfree-firmware"
-	mkdir "$subpkgdir"
-}
-
 sha512sums="
-e85cffccf42ce1305f9eb1667a9f2f6d4bea9f6f02e9c5f5afef3b690ba3c4916236ce55a3995c87293ee642036089bd5fe565e838783e317db7b55bd5e12992  deviceinfo
-aad7cce10db5ec156585893c82932bd42f2c86e4d68208b5f3816ac7f5f80eb6ddf15157666e81de97d30b20897f88e1027545a87fe5c96c37b5e75e3e125ee4  phoc.ini
+02e5e9824dfa337200c4e4c5a088b8e2e6e45d75beb8f6c07c437ce87750ea5cf1602cc7a796e281d43903cd1b99fb699e0997fe85f956a2e8b446045cf25a53  deviceinfo
 "
