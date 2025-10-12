@@ -1,15 +1,13 @@
 # Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 pkgname=dint
-pkgver=0.0.1_git20251003
-pkgrel=1
+pkgver=0.0.1
+pkgrel=0
 pkgdesc="postmarketOS deviceinfo validator and linter"
-url="https://gitlab.postmarketos.org/Newbyte/dint"
+url="https://gitlab.postmarketos.org/postmarketOS/dint"
 arch="all"
 license="EUPL-1.2"
 makedepends="cargo cargo-auditable"
-_commit="70882e1494110eb1d4a97a183efef7eebd2d5865"
-source="https://gitlab.postmarketos.org/Newbyte/dint/-/archive/$_commit/hello-world-rust-$_commit.tar.bz2"
-builddir="$srcdir/dint-$_commit"
+source="https://gitlab.postmarketos.org/postmarketOS/dint/-/archive/$pkgver/dint-$pkgver.tar.bz2"
 options="!pmb:crossdirect"
 
 prepare() {
@@ -34,5 +32,5 @@ package() {
 }
 
 sha512sums="
-36dde57c8cdc45734ed906e53c41178e803e81045ad7a0de5e796ca81d524f4ee42ce03df98455c8ad704ae3f19994cd46f5835a297fdf765f443bf3a19f2826  hello-world-rust-70882e1494110eb1d4a97a183efef7eebd2d5865.tar.bz2
+7e202a9f98c7dce00ad13b3cf55af10c9c26ae2b823a29556cde9c7bacae8630c95af836a18f93bced0cf578629fb5f190d1ff32d6671e08386ef4356485bf74  dint-0.0.1.tar.bz2
 "
