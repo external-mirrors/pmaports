@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-activities
-pkgver=99999_git20250921
+pkgver=99999_git20250923
 pkgrel=0
-_commit="25fd29196c249fb79f9ae116f7f56252cd825e7d"
+_commit="690d377810f775b0e4e7512f9516c8a9ba123d4f"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 pkgdesc="Core components for the KDE's Activities"
@@ -27,7 +27,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-libs $pkgname-doc"
 _repo_url="https://invent.kde.org/plasma/plasma-activities.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-24/plasma-activities-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-26/plasma-activities-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-activities-$_commit"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-0a2439e6bcd79089f75ceeb9bb1909d1d9076c8d5a185665f2d872618a3265ef4afef2cb060452461eac370044cda07eef0f32cba088550020961ed26e6b5aa1  plasma-activities-25fd29196c249fb79f9ae116f7f56252cd825e7d.tar.xz
+63890b3804cca929bcbf249d829cb7f6572379a33d621bca1a313879f0bc802b5a0273e57bfcba357caa643815d6e8bf6c43286f49554b7db4ffcf741f997e40  plasma-activities-690d377810f775b0e4e7512f9516c8a9ba123d4f.tar.xz
 "

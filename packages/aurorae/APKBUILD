@@ -1,0 +1,56 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=aurorae
+pkgver=99999_git20250930
+pkgrel=0
+_commit="08924daadf35359805667334e65019e315fbcdec"
+pkgdesc="Themeable window decoration for KWin"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+makedepends="
+	cmake
+	extra-cmake-modules
+	kcmutils-dev
+	kcolorscheme-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kdecoration-dev
+	ki18n-dev
+	knewstuff-dev
+	ksvg-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+
+case "$pkgver" in
+	*.*.9*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+
+_repo_url="https://invent.kde.org/plasma/aurorae.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-29/aurorae-$_commit.tar.xz"
+options="!check" # No tests
+
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+10f9905bea69b4680a306b81ec876d45c93bd69255f29384fcb0121dba387f941cd8cefa5e362f4da63f4676778520026d1be561b4a82c863c6f01ed440d449e  aurorae-08924daadf35359805667334e65019e315fbcdec.tar.xz
+"
