@@ -2,7 +2,7 @@
 # Co-Maintainer: Max Buchholz <max.buchholz@gmx.de>
 pkgname=soc-qcom-sdm660
 pkgdesc="Common package for Qualcomm SDM630/636/660 devices"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -15,7 +15,6 @@ depends="
 subpackages="
 	$pkgname-rproc
 	$pkgname-rproc-openrc:rproc_openrc
-	$pkgname-nonfree-firmware:nonfree_firmware
 "
 source="sdm660-adreno-quirks.sh"
 
@@ -48,15 +47,6 @@ rproc_openrc() {
 		"
 
 	mkdir -p "$subpkgdir"
-}
-
-nonfree_firmware() {
-	pkgdesc="Non-free firmware for GPU and Bluetooth"
-	depends="
-		linux-firmware-qca
-		linux-firmware-qcom
-	"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

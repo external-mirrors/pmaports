@@ -1,12 +1,16 @@
 pkgname=firmware-sony-ninges
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 pkgdesc="Firmware for Sony Xperia XA2/Plus/Ultra & 10/10 Plus"
 url="postmarketos.org"
 arch="aarch64"
 license="BSD-3-Clause"
 options="!check !archcheck !strip !tracedeps pmb:cross-native"
-depends="rsync"
+depends="
+	firmware-qcom-adreno-a530
+	linux-firmware-qca
+	rsync
+"
 subpackages="$pkgname-openrc"
 source="copy-firmware.initd"
 
