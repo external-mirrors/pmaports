@@ -1,0 +1,77 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/gnome <pabloyoyoista@postmarketos.org>
+pkgname=calls
+pkgver=49.1
+pkgrel=1
+pkgdesc="Phone dialer and call handler"
+# armhf blocked by libpeas2 -> gjs-dev -> mozjs
+arch="all !armhf"
+url="https://gitlab.gnome.org/GNOME/calls"
+license="GPL-3.0-or-later"
+depends="
+	callaudiod
+	modemmanager
+	sofia-sip-linphone
+	"
+makedepends="
+	callaudiod-dev
+	desktop-file-utils
+	evolution-data-server-dev
+	feedbackd-dev
+	folks-dev
+	gettext-dev
+	gobject-introspection-dev
+	gom-dev
+	gsound-dev
+	gstreamer-dev
+	gtk4.0-dev
+	libadwaita-dev
+	libpeas2-dev
+	meson
+	modemmanager-dev
+	ninja
+	py3-docutils
+	sofia-sip-linphone-dev
+	vala
+	"
+subpackages="$pkgname-doc $pkgname-dbg $pkgname-lang"
+_libcall_ui_commit="f66056ace818ff19b507335634dd67138a92c77f"
+# temporary upstream issue: https://gitlab.gnome.org/Infrastructure/openshift-images/gnome-release-service/-/issues/14
+#source="https://download.gnome.org/sources/calls/${pkgver%%.*}/calls-$pkgver.tar.xz
+source="https://gitlab.gnome.org/GNOME/calls/-/archive/v$pkgver/calls-v$pkgver.tar.gz
+	https://gitlab.gnome.org/World/Phosh/libcall-ui/-/archive/$_libcall_ui_commit/libcall-ui-$_libcall_ui_commit.tar.gz
+	mr-795-dbus-activation-load-plugins.patch
+	"
+options="!check" # Requires running Wayland compositor
+builddir="$srcdir/$pkgname-v$pkgver"
+
+prepare() {
+	default_prepare
+
+	mv "$srcdir"/libcall-ui-$_libcall_ui_commit/* "$builddir"/subprojects/libcall-ui
+}
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dtests="$(want_check && echo true || echo false)" \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+e94d76d8edbe79aa14e2d3db41db21cb0d4739fb70aa8b9bcfd70fb7e7fc0a74181f892c1712e3bda45a063131d2c3b354074ea7629abcbd17a0aabf8ff7c3d6  calls-v49.1.tar.gz
+26e2ebd3332df4280accd13870e739dc7c2c39bd9df5a5a6eedd3818fa3478908318c280345e5b7e666e89dedb88841548328fa1daca9c510f5044e909da0bc1  libcall-ui-f66056ace818ff19b507335634dd67138a92c77f.tar.gz
+0e19f06e46f9c30bf25efbdcce9fe4114cb2b16424853ee8107a75393184a234ae9568ef8b5fca23cda718995e6273c52308b49263adb3f48d748f5403c635d8  mr-795-dbus-activation-load-plugins.patch
+"
