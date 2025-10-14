@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=breeze-icons
-pkgver=99999_git20251006
+pkgver=99999_git20251010
 pkgrel=0
-_commit="e74b472f341872ec744518890b7da04eb86160b7"
+_commit="e89eb1cb10084ed42c943107715d401dcc6445b6"
 pkgdesc="Breeze icon themes"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -21,7 +21,7 @@ makedepends="
 checkdepends="bash"
 subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/breeze-icons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-06/breeze-icons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-12/breeze-icons-$_commit.tar.xz"
 
 # Several KDE applications use icons not yet present in most themes
 # We want to keep the possibility for users to not use the KDE provided
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-353320150ac74c1cb2dfdba01ed7c3c3581f113c657680f8eb39b8e1675caf26b65a374c8c732ff7515e56564273b3a04dcdfdfc0e3a2a88197d7b0b34a2f891  breeze-icons-e74b472f341872ec744518890b7da04eb86160b7.tar.xz
+91d438dbd61d6208f0b949e0719e8ae8ddb2cba5a4b9fe745d155e68e3a828f861557922dbfd8460c6792b4580b005d23208fad3309c4df4bd74c1619c6fc67d  breeze-icons-e89eb1cb10084ed42c943107715d401dcc6445b6.tar.xz
 "
