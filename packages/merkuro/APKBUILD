@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=merkuro
-pkgver=99999_git20251012
+pkgver=99999_git20251013
 pkgrel=0
-_commit="0403bc961a737892184adf63a75db7b8cfbdf05d"
+_commit="3c7e65829011a07cff2d6e7b3d1b547f7e00bea8"
 pkgdesc="A calendar application using Akonadi to sync with external services (NextCloud, GMail, ...)"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -47,7 +47,7 @@ makedepends="
 somask="libmerkuro_contact_plugin.so"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/pim/merkuro.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-12/merkuro-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-14/merkuro-$_commit.tar.xz"
 options="!check ldpath-recursive" # No tests
 
 provides="kalendar=$pkgver-r$pkgrel"
@@ -69,5 +69,5 @@ package() {
 }
 
 sha512sums="
-a5e284cfec9d648569f8868169cb98888e808441c0dc180f26b1d300562424e8e6bd17d4add0f3d7d0a08b7294bb1cee2109b5cda8d3bde8f8d4c22597e14e19  merkuro-0403bc961a737892184adf63a75db7b8cfbdf05d.tar.xz
+36a989a10a33aea8bcebffacbee35008c6c7b818f9a631e80e3daa948b3a6003299231b4d1559f187f5944d323480ca8ae64ef10af183323003d35e13b636ddf  merkuro-3c7e65829011a07cff2d6e7b3d1b547f7e00bea8.tar.xz
 "
