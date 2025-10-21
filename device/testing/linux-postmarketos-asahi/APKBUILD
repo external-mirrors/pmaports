@@ -1,6 +1,6 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=linux-postmarketos-asahi
-pkgver=6.16.8_p1
+pkgver=6.17.5_p1
 pkgrel=0
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -48,7 +48,7 @@ makedepends="
 _repository="linux"
 source="
 	$pkgname-$_asahiver.tar.gz::https://github.com/AsahiLinux/linux/archive/refs/tags/asahi-$_asahiver.tar.gz
-	device.config
+	asahi.config.patch
 	misc.config
 	pmos.config
 "
@@ -68,7 +68,7 @@ prepare() {
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
-		"$_defconfig" device.config misc.config pmos.config
+		"$_defconfig" asahi.config misc.config pmos.config
 }
 
 build() {
@@ -95,8 +95,8 @@ package() {
 }
 
 sha512sums="
-bd5d3c29282e1b55d045dad4a894cfa7a7d2ea991a3bdf372323d0df25e0059092439b2987d8ed05e1db17d92319ed613711ee29a3031f70620f63aecadc5c25  linux-postmarketos-asahi-6.16.8-1.tar.gz
-860a7fbf519b09c194e79a0c54f827048a6dd4c52d13532d92c5d040743c9af58c2ffa37f36ae66781a919abd49cad766b2e5b8768273b5ec3de66ac59efb682  device.config
-e7a651b3780b1cfa68ca65b9e62f77db4273cf5b9162514318c347790d961b4668d0c6eb51604aaaf15a15c9f370fe03b4b977163293af379fda9a08d5f7e73d  misc.config
-a3ca72c9ecc41684b958aad9a77d99f759ff56664eeac048d5ca715ce946b27ef3b6db6f1b65aa9e616131501afa50b0acda4d0a7c2b880530151cdfa9d236da  pmos.config
+3cc4af2b8d935b67ef61091f647dc88b884e09cf31505b786b560a970cb5f8d6e54d47f03bbe27cbe8951539baba4db208bfd35cddc6e9474c126442587251b2  linux-postmarketos-asahi-6.17.5-1.tar.gz
+28b00587b6bccbfb870e44f1e9fc459b2fa0fad2eb4e39a316b55d8a76907e6420a59190b94fe5410ae1ff50c0b4be7733995f0735a4b25da1fae9e230d33b09  asahi.config.patch
+2d4edfd9cdc320ede0913cf25afe95b9db46284efc97b282c61f30f85345eec3da8a063b8941e4c44e6393acbe6bf777ce04b2af85c52f65dbf549dc8864358f  misc.config
+e384ea875e249f1039ac2ff2bc2bd775cf18a074722dc74a1cca741caca1cd8ed8db4c2b769941b4b8468b42a59e6ca08454321ed99889b275d1ee7955ce864f  pmos.config
 "
