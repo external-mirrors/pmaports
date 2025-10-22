@@ -28,6 +28,7 @@ than 6 months.
 The following policies are under the team responsibility:
 
 * Rules for packaging device-specific information like firmware.
+* Breaking changes in configuration that affect multiple devices.
 * Tools to use for building device-specific packages, e.g: kernels.
 * Rules for device categorization.
 * Reviews of device category changes.
