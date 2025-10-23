@@ -1,0 +1,15 @@
+#!/bin/bash
+
+pkgsgrep="team/kde"
+pkgnames=""
+pkgnames_skip="plasma-desktop-meta"
+clones="/mnt/pmos-data/git_checkouts"
+tarballs="/mnt/pmos-data/tarballs"
+
+apkbuilds="$PWD/packages"
+APORTSDIR="$(pmbootstrap config work)/cache_git/aports_upstream"
+
+source ./gen-apkbuilds
+
+gen
+

@@ -1,0 +1,153 @@
+#!/bin/bash
+# requirements: rg (ripgrep), abuild
+# for building it requires: abuild with https://gitlab.alpinelinux.org/alpine/abuild/-/merge_requests/388
+set -e
+
+APORTSDIR="${APORTSDIR:-$HOME/aports}" # your aports clone
+
+pkgsgrep="${pkgsgrep:-}" # Pattern to grep for in matching APKBUILDs
+pkgnames="${pkgnames:-}" # $pkgname's of matching packages
+pkgnames_skip="${pkgnames_skip:-}" # $pkgname's to skip when grepped
+reponame="${reponame:-nightly}" # repository name
+apkbuilds="${apkbuilds:-$PWD/repos/$reponame}" # directory containing the APKBUILDs
+clones="${clones:-$PWD/clones}" # directory where packages' git repos will be cloned to
+tarballs="${tarballs:-$PWD/tarballs}" # directory where the tarballs will be placed
+
+mkdir -p $apkbuilds $clones $tarballs
+
+command -v abuild > /dev/null || (echo "abuild is missing"; exit 1)
+[ ! -d "$APORTSDIR" ] && (echo "set \$APORTSDIR to your local aports clone"; exit )
+
+msg() {
+	printf "\033[1;32m>>>\033[1;0m %s\n" "$1" 1>&2
+}
+
+pkgmsg() {
+	printf "\033[1;32m>>>\033[1;0m \033[1;1m%s\033[1;0m: %s\n" "$1" "$2" 1>&2
+}
+
+get_pkgnames() {
+	local t="$pkgnames"
+	for g in $pkgsgrep; do
+		gr=$(cd "$APORTSDIR" && rg "$g" -l|cut -d/ -f2)
+		for p in $pkgnames_skip; do
+			gr="${gr//$p}"
+		done
+		t="$t $gr"
+	done
+	msg "Packages: $(echo $t | tr -d "\n")"
+	echo "$t"
+}
+
+get_git_url() {
+	local pkgname="$1"
+	giturl=$(source $APORTSDIR/*/$pkgname/APKBUILD;echo $_repo_url)
+	echo $giturl
+}
+
+get_git_dir() {
+	local pkgname="$1" dir="$clones/$pkgname"
+	[[ -d "$dir" ]] && \
+		(pkgmsg "$pkgname" "Pulling repo" && git -C "$dir" pull >/dev/null 2>&1) || \
+		(pkgmsg "$pkgname" "Cloning repo" && git clone "$(get_git_url $pkgname)" "$dir" >/dev/null 2>&1)
+	echo "$dir"
+}
+
+get_last_commit() {
+	local pkgname="$1"
+	cd "$(get_git_dir $pkgname)"
+	pkgmsg "$pkgname" "Checking last commit"
+	commit=$(git rev-parse HEAD)
+	commit_year="$(git show -s --format='%cI' $commit | cut -d '-' -f 1)"
+	commit_month="$(git show -s --format='%cI' $commit | cut -d '-' -f 2)"
+	commit_day="$(git show -s --format='%cI' $commit | cut -d 'T' -f 1 | cut -d '-' -f 3)"
+	pkgmsg "$pkgname" "Last commit was $commit ($commit_year-$commit_month-$commit_day)"
+	echo "$commit:$commit_year$commit_month$commit_day"
+}
+
+make_tarball() {
+	local pkgname="$1"
+	local commit="$2"
+	local tar_name="$tarballs/$pkgname-$commit.tar"
+
+	pkgmsg "$pkgname" "Creating tarball"
+
+	cd "$(get_git_dir $pkgname)"
+	git archive --format tar --prefix "$pkgname" HEAD > "$tar_name"
+	xz -vv -T0 -9 -e "$tar_name" >/dev/null 2>&1
+	echo "$tar_name.xz"
+}
+
+upload_tarball() {
+	local tarball="$1"
+
+	pkgmsg "$pkgname" "Uploading tarball"
+
+	rsync --archive -v "$tarball" "main1.postmarketos.org:/data-hdd/nightly-data/plasma-mobile/sources/$(date -I)/" >/dev/null 2>&1
+}
+
+setup() {
+	local pkgname="$1" dir="$apkbuilds/$1"
+
+	commit="$(get_last_commit $pkgname)"
+	commitdate="$(echo $commit | cut -d: -f2)"
+	commitsha="$(echo $commit | cut -d: -f1)"
+	pkgver="99999_git$commitdate"
+
+	tarball="$(make_tarball $pkgname $commitsha)"
+	upload_tarball "$tarball"
+	newsource="https://nightly.postmarketos.org/plasma-mobile/sources/$(date -I)/$pkgname-$commitsha.tar.xz"
+
+	builddir="\$srcdir/\$pkgname-\$_commit"
+
+	pkgmsg "$pkgname" "Preparing $dir"
+	rm -fr "$dir"; mkdir -p "$dir"; cd "$dir"
+	cp -r "$APORTSDIR"/*/$pkgname/* "$dir"
+
+	pkgmsg "$pkgname" "Running 'pre_setup'"
+	pre_setup "$pkgname"
+
+	pkgmsg "$pkgname" "Setting variables in APKBUILD"
+	(
+	sed "s/^pkgver=.*/pkgver=$pkgver/" -i APKBUILD	
+	sed "s/^pkgrel=.*/pkgrel=0/" -i APKBUILD
+	sed "/^pkgver/ a_commit=\"$commitsha\"" -i APKBUILD
+	grep 'source=".*"$' APKBUILD >/dev/null 2>&1 && \
+		sed "/^source/c\source=\"$newsource\"" -i APKBUILD || \
+		sed "/^source/c\source=\"$newsource" -i APKBUILD
+	grep 'builddir=' APKBUILD >/dev/null 2>&1 && \
+		sed "/^builddir/c\builddir=\"$builddir\"" -i APKBUILD || \
+		(echo "builddir=\"$builddir\"" | tee -a APKBUILD) >/dev/null
+	(echo "options=\"!check\"" | tee -a APKBUILD) >/dev/null
+
+	sed 's/abuild-meson/abuild-meson --wrap-mode=default/g' -i APKBUILD
+	) >&2
+
+	pkgmsg "$pkgname" "Running 'post_setup'"
+	post_setup "$pkgname"
+
+	pkgmsg "$pkgname" "Running 'abuild checksum'"
+	abuild checksum >/dev/null 2>&1
+	rm -fr src
+}
+
+pre_setup() {
+	printf '' # Default it no-op
+}
+
+post_setup() {
+	printf '' # Default is no-op
+}
+
+rm_patch() {
+	local pkgname="$1" p="$2"
+	rm -fr "$apkbuilds/$pkgname/$p"
+	sed -i "s/$p//g" "$apkbuilds/$pkgname/"APKBUILD
+}
+
+gen() {
+	for i in $(get_pkgnames); do
+		setup $i
+	done
+}
+
