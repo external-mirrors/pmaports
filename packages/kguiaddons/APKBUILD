@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kguiaddons
-pkgver=99999_git20251016
+pkgver=99999_git20251017
 pkgrel=0
-_commit="b0ac82d1b9fa44b7afd01850083476dad973901c"
+_commit="44685fb1b9ab09aa748d56c7f6cdfbd2775b0ef7"
 pkgdesc="Addons to QtGui"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -32,7 +32,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kguiaddons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-17/kguiaddons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-22/kguiaddons-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-bin py3-$pkgname:_py3"
 
 options="!check"
@@ -71,5 +71,5 @@ _py3() {
 }
 
 sha512sums="
-3bc269550bd80641843cf0762bb2ad0cfb9af360089e0ffcde50772300f9bd920c77b8674bf8197ba6760016aa16d7783f22c2529fc99c344bf2ac6e5f0b9bc5  kguiaddons-b0ac82d1b9fa44b7afd01850083476dad973901c.tar.xz
+23a7bc66f2b3f3ec3180570ee00286391adb83cbf642ab9d720d0a140572a2f56a7c4589b815a7d51db3f81713cb4a3cc5dded8b5e0368b376d2626e8c7aec49  kguiaddons-44685fb1b9ab09aa748d56c7f6cdfbd2775b0ef7.tar.xz
 "

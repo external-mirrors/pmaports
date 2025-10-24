@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=powerdevil
-pkgver=99999_git20251017
+pkgver=99999_git20251019
 pkgrel=0
-_commit="4a7ef2444b42a0d95edfff29a1e93e43569da105"
+_commit="ca49d538b2313efb9f90a94c9baf961e81542177"
 pkgdesc="Manages the power consumption settings of a Plasma Shell"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,7 +47,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/powerdevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-17/powerdevil-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-22/powerdevil-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang $pkgname-systemd"
 
 options="!check"
@@ -74,5 +74,5 @@ package() {
 }
 
 sha512sums="
-356dfa6feb64307623dbc5cf0517a881068dbfeaab550698c4a4a5a573f765f6d5fcd4ddefc0a99b0ea6ebd9906e1e1edfe0e06cec6e465848b3960b4890881c  powerdevil-4a7ef2444b42a0d95edfff29a1e93e43569da105.tar.xz
+c8d615283705f7a3a6240417cce7566ef28912c52534aa0f2f5839d16ad7f7d222928e01617bb26840bf2a29f3b5564ed6731a5b9bfa870050bb77fe55c54d1c  powerdevil-ca49d538b2313efb9f90a94c9baf961e81542177.tar.xz
 "
