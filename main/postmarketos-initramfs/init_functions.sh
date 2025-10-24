@@ -360,6 +360,8 @@ mount_subpartitions() {
 		partitions="$android_parts $(grep -v "loop\|ram" < /proc/diskstats |\
 			sed 's/\(\s\+[0-9]\+\)\+\s\+//;s/ .*//;s/^/\/dev\//')"
 		for partition in $partitions; do
+		    # Skip whole disks - only check partitions for subpartitions
+			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || continue
 			case "$(kpartx -l "$partition" 2>/dev/null | wc -l)" in
 				2)
 					echo "Mount subpartitions of $partition"
@@ -386,6 +388,8 @@ mount_subpartitions() {
 			return;
 		fi
 		sleep 0.1;
+		# Check if partition appeared without needing subpartitions
+		find_root_partition
 	done
 }
 
