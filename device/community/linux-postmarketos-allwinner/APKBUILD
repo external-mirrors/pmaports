@@ -3,20 +3,23 @@
 _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
-pkgver=6.17.0_git20250929
+pkgver=6.17.5_git20251026
 pkgrel=0
-_tag="orange-pi-6.17-20250929-0124"
+_tag="orange-pi-6.17-20251026-1441"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
 url="https://megous.com/git/linux/"
 license="GPL-2.0-only"
 makedepends="
 	bison
+	clang
 	devicepkg-dev
 	findutils
 	flex
 	gmp-dev
 	installkernel
+	lld
+	llvm
 	mpc1-dev
 	mpfr-dev
 	openssl-dev
@@ -63,7 +66,7 @@ prepare() {
 build() {
 	unset LDFLAGS
 	# V=1: workaround for pma#1990
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
 		CFLAGS_MODULE=-fno-pic \
 		DTC_FLAGS="-@" \
@@ -80,9 +83,9 @@ package() {
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 }
 sha512sums="
-c8f301d67aba17d48e0117b580ba0ce09a6b450f0db3e1134cb58fe4a5d010dafa1c8d2b42fe95de024ecadb8d0861d6c664de8355e806fced01bb8fe8e4b347  linux-postmarketos-allwinner-orange-pi-6.17-20250929-0124.tar.gz
-07711920494103697139df76b1f04e14ccec7bd1757ae0a7d6f18b674875cbd8a95189338dd618d1d76454c2e626a2e04402988aa4b01ecad17a5990af407a5f  config-postmarketos-allwinner.aarch64
-1246a8bdfa2785171923961eaf28452e2894fca9bb0da0035e630a86417a78a7ddf058c94dcd6e911cdf8101ce19a7b211ebc5bd6b9f50167819723e8b3a9abe  config-postmarketos-allwinner.armv7
+6d8f14b11b0d50bc7e6354716a91600531a2e9385035bd277d1f241aa7515137340acd9d17e161c3d3f4b7d846f4513b80a5e93fc74bf1ee1275424e11afa8e9  linux-postmarketos-allwinner-orange-pi-6.17-20251026-1441.tar.gz
+02134d0bb81019a5fdfb1d2c14b167185f174bb2d49695cc4bab944ed3363e2058a39a6d4d0c55f3baa4aac8c0df95150185f96278d9a2ec3b08f383b66d0ef1  config-postmarketos-allwinner.aarch64
+928dfc0545ebe2e2ff6e86407d74f7158968a770e088dc804b99985fc5c0dab56970c4f64b845f560090456f02431a41b1d6c2f61f0862675306fb15ed9e46c9  config-postmarketos-allwinner.armv7
 22d8630900ddd644e5351aecddf430782f27a83a89369f6e7e222682c909b1d0a37f6ddba2fd560a4c9306aaa285f117f3047c54435efe146c1fd06cf6c69281  0001-dts-add-dontbeevil-pinephone-devkit.patch
 a342cfefa540a090f10f1c2d16e27f14db8da1c46867ea0a5c60f6cd9ead7443a9994af1e0a45e94878f7bb37c8e36cae5ce086c6afae5007d71f613190ec861  0002-dts-add-pinetab-dev-old-display-panel.patch
 cb321cc103295e4091754a867e1cbf40fa918483d557d81d7e9fe2df594fd078ae6025f72c1339a93cf342e762fa82121d0225cd8c09e89234962eca1c69c129  0003-dts-pinetab-add-missing-ohci1.patch
