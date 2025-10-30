@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kscreen
-pkgver=99999_git20251020
+pkgver=99999_git20251028
 pkgrel=0
-_commit="25958df305726d8de8552143467707bd1aff9be9"
+_commit="50f571da6206f25f297e51230b1ad8cccc4495ba"
 pkgdesc="KDE's screen management software"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -40,7 +40,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kscreen.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-22/kscreen-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-28/kscreen-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -68,5 +68,5 @@ package() {
 }
 
 sha512sums="
-aafb8f47ba864b73cf2073c37221b2393180a08d7329d918b0cf0c924e2400e718f55641736fe5e8d6483aadd9d4dd300131f326c5dddab76fe171e5d927a3f2  kscreen-25958df305726d8de8552143467707bd1aff9be9.tar.xz
+66417f61e18cf4c68b457b1829b3bf258e344a9faa17af0f07acfddc7b1a954c492101399d431a8bae18d1a54a975d5001c11765db170bba2b8da27944629121  kscreen-50f571da6206f25f297e51230b1ad8cccc4495ba.tar.xz
 "

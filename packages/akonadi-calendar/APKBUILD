@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-calendar
-pkgver=99999_git20251021
+pkgver=99999_git20251025
 pkgrel=0
-_commit="c84c414ff13ce9fcacf2a2515a43e9f58baf0a5e"
+_commit="950d976794e0129f98a5d5def16228ef2e0484e4"
 pkgdesc="Akonadi calendar integration"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by kmailtransport -> libkgapi -> qt6-qtwebengine
@@ -35,7 +35,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/akonadi-calendar.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-22/akonadi-calendar-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-28/akonadi-calendar-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 options="!check" # Broken
 
@@ -60,5 +60,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-31b6af44fc81bb3ce5a09cc733a15978602339d38a8c63deefe9ffb19c890f4e8c2894f7552e4141b8a95f742f58f990c6de3d9e8959a0381d1fe21b5e34da0c  akonadi-calendar-c84c414ff13ce9fcacf2a2515a43e9f58baf0a5e.tar.xz
+a57a496bac9546f7d1105b034198ddf40695140bc2aec25a50c9eef864f974e04900fe12297a70ecb73583911071ed3b409346efecb1612471fc026bafda7088  akonadi-calendar-950d976794e0129f98a5d5def16228ef2e0484e4.tar.xz
 "
