@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=krdp
-pkgver=99999_git20251026
+pkgver=99999_git20251030
 pkgrel=0
-_commit="89bea7a43e1aa0b7a78bafd0fc4339907296d4d1"
+_commit="0a62a8c8585db32ffbab39bdb69f9a29a00bc077"
 pkgdesc="An application for monitoring system resources"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -42,7 +42,7 @@ case "$pkgver" in
 esac
 
 _repo_url="https://invent.kde.org/plasma/krdp.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-28/krdp-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-30/krdp-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/$pkgname-$_commit"
@@ -60,5 +60,5 @@ package() {
 }
 
 sha512sums="
-702072f0ad18566269f60ec4c54e5935d8f72d780a4b2a4810d4bc93f27de173ae0ec23d03ce00d53df3be7a5fd03dd39d85c27f8de5b3e3e0e7a37e124afd66  krdp-89bea7a43e1aa0b7a78bafd0fc4339907296d4d1.tar.xz
+39a0c9e808d31e7b9a1dd14f5a1e8ddd828eee56480430ecff740090246cc5d5c8f373564a026beee1718762a4d4e7bdc959b62f4d4d95cf431bf82d438148dc  krdp-0a62a8c8585db32ffbab39bdb69f9a29a00bc077.tar.xz
 "
