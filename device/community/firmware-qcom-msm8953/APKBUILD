@@ -1,7 +1,7 @@
 # Co-Maintainer: Victor Pavlov (vipaoL) <vipaolmail@gmail.com>
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 pkgname=firmware-qcom-msm8953
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="Firmware files for Qualcomm MSM8953 devices"
 url="https://postmarketos.org"
@@ -10,6 +10,7 @@ license="proprietary"
 options="!strip !check !archcheck !spdx !tracedeps pmb:cross-native"
 
 _asus_ze520kl_commit="f1439210719b2a1597f6390f34ae93cb1470ddf4"
+_billion_rimob_commit="a0b07d3cf66f0e2e13015d9d0f7dffdbda27683e"
 _fairphone_fp3_commit="ee529820bb874ab1b52873f0b144c3786f01ee4c"
 _huawei_milan_commit="f417e07a32310ee4002ca67a3d57f9ba0a960297"
 _lenovo_cd18781y_commit="337032e864fd6abe29375997fc3683398a4d27c4"
@@ -28,6 +29,7 @@ _xiaomi_ysl_commit="ccfd274b825aec2d80e834b16499a6d9ba96c3f5"
 
 source="
 	firmware-asus-ze520kl-$_asus_ze520kl_commit.tar.gz::https://gitlab.com/Smankusors/firmware-asus-zenfone3/-/archive/$_asus_ze520kl_commit/firmware-asus-zenfone3-$_asus_ze520kl_commit.tar.gz
+	firmware-billion-rimob-$_billion_rimob_commit.tar.gz::https://gitlab.com/cristian_ci/firmware-billion-rimob/-/archive/$_billion_rimob_commit/firmware-billion-rimob-$_billion_rimob_commit.tar.gz
 	firmware-fairphone-fp3-$_fairphone_fp3_commit.tar.gz::https://github.com/FairBlobs/FP3-firmware/archive/$_fairphone_fp3_commit/FP3-firmware-$_fairphone_fp3_commit.tar.gz
 	firmware-huawei-milan-$_huawei_milan_commit.tar.gz::https://github.com/bzy-080408/postmarketos-vendor-huawei-milan/archive/$_huawei_milan_commit.tar.gz
 	firmware-lenovo-cd18781y-$_lenovo_cd18781y_commit.tar.gz::https://gitlab.com/kaechele/postmarketos-vendor-lenovo-cd-18781y/-/archive/$_lenovo_cd18781y_commit/firmware-lenovo-cd18781y-$_lenovo_cd18781y_commit.tar.gz
@@ -54,6 +56,10 @@ package() {
 	install -Dm644 "$asus_ze520kl_dir/a506_zap.mdt" -t "$pkgdir/$_fwdir/asus/ze520kl"
 	install -Dm644 "$asus_ze520kl_dir/a506_zap.b02" -t "$pkgdir/$_fwdir/asus/ze552kl"
 	install -Dm644 "$asus_ze520kl_dir/a506_zap.mdt" -t "$pkgdir/$_fwdir/asus/ze552kl"
+
+	billion_rimob_dir="$srcdir/firmware-billion-rimob-$_billion_rimob_commit"
+	install -Dm644 "$billion_rimob_dir/a506_zap.b02" -t "$pkgdir/$_fwdir/billion/rimob"
+	install -Dm644 "$billion_rimob_dir/a506_zap.mdt" -t "$pkgdir/$_fwdir/billion/rimob"
 
 	fairphone_fp3_dir="$srcdir/FP3-firmware-$_fairphone_fp3_commit"
 	install -Dm644 "$fairphone_fp3_dir/a506_zap.b02" -t "$pkgdir/$_fwdir/fairphone/fp3"
@@ -126,6 +132,7 @@ package() {
 
 sha512sums="
 a9980ae2ab0868d7e8e2d054e72525c030fe75d66aec6eebd2e17619d5d24455de2a158ea7ed0eb0db2f7a2f4bc07701672de217f8c7274599cd92c00cb2d04e  firmware-asus-ze520kl-f1439210719b2a1597f6390f34ae93cb1470ddf4.tar.gz
+809f39ca3e07950087dae7f6973d6e432c63ef8bc05d57dc7ae35e7029a1979fff029fa553734dc81e8838cdbd7cae53fd574b5fd32ff06358f499c2425d6c2e  firmware-billion-rimob-a0b07d3cf66f0e2e13015d9d0f7dffdbda27683e.tar.gz
 efa827787814ff4a59a0a61ca66410e46ce0add29b1451b4962b2d8af1d52b7035a0550b188fd442358702252964e4b64b16f836c5dcb1f748102cd0550aff7b  firmware-fairphone-fp3-ee529820bb874ab1b52873f0b144c3786f01ee4c.tar.gz
 f04a54bd81e389001e95357ffe301a10285c54782f70bb8ac9aed30173a6c9594b3568649d287234769b413cc3f93dbc982b3c596d287947d4630eaf98954451  firmware-huawei-milan-f417e07a32310ee4002ca67a3d57f9ba0a960297.tar.gz
 ed6ac4faa37312924de5498c4319338f842e69bd79f9ebfbf9c5dc9ce5d9cf7ca4d81e5ade31bc8ffc31f5489f7d752605d04a438e813966e0096d0d09c31e63  firmware-lenovo-cd18781y-337032e864fd6abe29375997fc3683398a4d27c4.tar.gz
