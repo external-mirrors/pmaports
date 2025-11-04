@@ -31,16 +31,16 @@ subfolders of the device directory. As such, commits changing
 packages inside of the device directory should omit the directory
 prefix, for example:
 
-	device-pine64-pinephone: description of change
+    device-pine64-pinephone: description of change
 
 Or:
 
-	soc-qcom-msm8996: description of change
+    soc-qcom-msm8996: description of change
 
 If the commit only makes device-specific changes, the
 commit title can opt to use the following format:
 
-	manufacturer-codename: description of change
+    manufacturer-codename: description of change
 
 ### Changes to packages inside of the systemd directory
 
@@ -48,12 +48,12 @@ We also shorten the prefixes for packages in `extra-repos/systemd`.
 When the `systemd` package itself gets changed, use `systemd: ` as
 prefix. For example:
 
-	systemd: add triggers for reloading/restarting services
+    systemd: add triggers for reloading/restarting services
 
 When another package inside the systemd directory gets changed, use
 `systemd/$pkgname: ` as prefix. For example:
 
-	systemd/cups: restart on upgrade
+    systemd/cups: restart on upgrade
 
 ### Moving devices between categories
 
@@ -61,11 +61,11 @@ As we do not include directory prefixes in device-related commits,
 Alpine's commit style for moving packages does not apply. Instead,
 we do the following:
 
-	manufacturer-codename: move from category to category
+    manufacturer-codename: move from category to category
 
 For example:
 
-	samsung-m0: move from testing to community
+    samsung-m0: move from testing to community
 
 ## Additions
 
