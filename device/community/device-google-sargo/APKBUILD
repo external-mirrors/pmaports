@@ -2,8 +2,8 @@
 # Maintainer: Richard Acayan <mailingradian@gmail.com>
 pkgname=device-google-sargo
 pkgdesc="Google Pixel 3a"
-pkgver=13
-pkgrel=4
+pkgver=14
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -34,6 +34,7 @@ source="
 	modem-gnss.service
 	modules-initfs
 	no-hexagonrpcd-on-suspend.sh
+	no-hexagonrpcd-on-suspend-systemd.sh
 	plasmacamerarc
 	q6voiced.conf
 "
@@ -63,6 +64,9 @@ package() {
 
 	install -Dm755 "$srcdir"/modem-gnss.service \
 		-t "$pkgdir"/usr/lib/systemd/system
+
+	install -Dm755 "$srcdir"/no-hexagonrpcd-on-suspend-systemd.sh \
+		-t "$pkgdir"/usr/lib/systemd/system-sleep
 }
 
 openrc() {
@@ -94,6 +98,7 @@ b6208c254b6e44ac4f6d748a38cc6b05da0db2c90235ada2011b138b82ccc3372687df2f5ad97e88
 c55833c796804966ac8cae4a719aa41df3728b0fc080f11ee94dfb17807c2ff428ffe0061355f913317f5d44ccfa67bda535f1c0a9d9a895d6415a0f71109f92  modem-gnss.service
 925d8b176a8f1b47a86a1026cc920ffae99ceb35c3e52c222654c15078907579d23c4d68ed65a98ab937f59aaba2bbdd74da8d273e8b9c1ac87a52f718d383d6  modules-initfs
 2972005a9cf6ca57061965075593dddfa8ee479bc6c21cd41851b1a14768cb1cddbd31a17975ae17adc36d40d294ccbc6bf83defbd69fc7b363f638d8564fbbc  no-hexagonrpcd-on-suspend.sh
+a4d09bf1b5395aa6d75e6a946347d09e45c54189719efa9fc519730d9d5b419eb04d7ea28b8e7574930867fabd6d0f102c7245e74734a14fe171a05533f2bfb0  no-hexagonrpcd-on-suspend-systemd.sh
 53bec3338d875ecedf2ae981cf9a0f9066e276f09570b3bd06217414461126a76942b70e01c3bb18831fbefeb188621dd5a341ab2604e8fb0c6de8a3025177e2  plasmacamerarc
 3a4a9322839d4b3ef9d79668a37840a9f444954759ae3c512e694051d2f9a2573db42ad6c4c1a5c75eeb861232a27ba1a8cef9b503decd54ead25a96e3dd6f98  q6voiced.conf
 "
