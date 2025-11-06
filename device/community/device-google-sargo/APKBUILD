@@ -3,7 +3,7 @@
 pkgname=device-google-sargo
 pkgdesc="Google Pixel 3a"
 pkgver=13
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -74,7 +74,7 @@ openrc() {
 
 	# The FastRPC service is only enabled when non-free firmware is installed.
 	install -Dm755 "$srcdir"/no-hexagonrpcd-on-suspend.sh \
-		"$subpkgdir"/etc/elogind/system-sleep/no-hexagonrpcd-on-suspend.sh
+		"$subpkgdir"/usr/lib/elogind/system-sleep/no-hexagonrpcd-on-suspend.sh
 
 	install -Dm755 "$srcdir"/modem-gnss.initd \
 		"$subpkgdir"/etc/init.d/modem-gnss
