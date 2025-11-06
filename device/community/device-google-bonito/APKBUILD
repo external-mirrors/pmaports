@@ -2,8 +2,8 @@
 # Maintainer: Anjandev Momi <anjan@momi.ca>
 pkgname=device-google-bonito
 pkgdesc="Google Pixel 3a XL"
-pkgver=6
-pkgrel=2
+pkgver=7
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -31,12 +31,14 @@ source="
 	hexagonrpcd-adsp-sensorspd.confd
 	modules-initfs
 	no-hexagonrpcd-on-suspend.sh
+	no-hexagonrpcd-on-suspend-systemd.sh
 	q6voiced.conf
 "
 subpackages="
 	$pkgname-kernel-sdc:kernel_sdc
 	$pkgname-kernel-tianma:kernel_tianma
-	$pkgname-openrc:openrc
+	$pkgname-openrc
+	$pkgname-systemd
 "
 
 build() {
@@ -56,6 +58,9 @@ package() {
 	# The q6voiced configuration can only be used if the ADSP is brought up
 	# via non-free firmware.
 	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+
+	install -Dm755 "$srcdir"/no-hexagonrpcd-on-suspend-systemd.sh \
+		-t "$pkgdir"/usr/lib/systemd/system-sleep
 }
 
 kernel_sdc() {
@@ -90,5 +95,6 @@ e417f9a4da0dd595e34c520c10aef89e480336d9d57b66284a98777afce1dbc3dcda30f8a3a1c625
 b6208c254b6e44ac4f6d748a38cc6b05da0db2c90235ada2011b138b82ccc3372687df2f5ad97e885e9eea135216a3c52266a08a7f4eb323e62e799f6f82ec7b  hexagonrpcd-adsp-sensorspd.confd
 0253ff4688b789aa7cdbffb22e7ff9497aabe083adc44bf33fa52617215a1f48fc722bd61aa13a35d109eff1e69202eb599dccff029e39c0a390dcab11dd9b76  modules-initfs
 2972005a9cf6ca57061965075593dddfa8ee479bc6c21cd41851b1a14768cb1cddbd31a17975ae17adc36d40d294ccbc6bf83defbd69fc7b363f638d8564fbbc  no-hexagonrpcd-on-suspend.sh
+a4d09bf1b5395aa6d75e6a946347d09e45c54189719efa9fc519730d9d5b419eb04d7ea28b8e7574930867fabd6d0f102c7245e74734a14fe171a05533f2bfb0  no-hexagonrpcd-on-suspend-systemd.sh
 3a4a9322839d4b3ef9d79668a37840a9f444954759ae3c512e694051d2f9a2573db42ad6c4c1a5c75eeb861232a27ba1a8cef9b503decd54ead25a96e3dd6f98  q6voiced.conf
 "
