@@ -3,7 +3,7 @@
 pkgname=device-apple-mac-aarch64
 pkgdesc="Apple M-series Macs"
 pkgver=3
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -26,7 +26,11 @@ source="
 	modules-initfs
 	os-installer-deploy.sh
 "
-subpackages="$pkgname-audio $pkgname-os-installer:os_installer"
+subpackages="
+	$pkgname-audio
+	$pkgname-os-installer:os_installer
+	$pkgname-vulkan
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -66,6 +70,12 @@ os_installer() {
 	depends="gojq"
 
 	amove etc/os-installer/deploy.sh
+}
+
+vulkan() {
+	install_if="$pkgname=$pkgver-r$pkgrel vulkan-loader"
+	depends="mesa-vulkan-asahi"
+	mkdir "$subpkgdir"
 }
 
 sha512sums="
