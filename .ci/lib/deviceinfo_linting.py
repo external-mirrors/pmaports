@@ -8,6 +8,9 @@ import subprocess
 import sys
 
 if __name__ == "__main__":
+    if common.commit_message_has_string("[ci:skip-dint]"):
+        print("WARNING: not linting deviceinfo files ([ci:skip-dint])")
+        exit(0)
     deviceinfo_files = {file for file in common.get_changed_files(removed=False)
                         if os.path.basename(file) == "deviceinfo"}
 
