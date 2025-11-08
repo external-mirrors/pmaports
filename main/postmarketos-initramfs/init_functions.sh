@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox ash
 # This file will be in /init_functions.sh inside the initramfs.
 
 # NOTE!!! The file is sourced again in init_2nd.sh, avoid

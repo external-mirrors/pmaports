@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox ash
 # Additional functions that depend on initramfs-extra
 # Functions are notated with the reason they're only in
 # initramfs-extra

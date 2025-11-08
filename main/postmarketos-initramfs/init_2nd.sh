@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox ash
 # shellcheck disable=SC1091
 
 # This is the "real" init.sh script, it's either jumped to immediately

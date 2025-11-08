@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/busybox ash
 # shellcheck disable=SC1091
 
 # Export all variables so they're available in /init_2nd.sh
