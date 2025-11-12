@@ -3,8 +3,8 @@
 maintainer="Jianhua Lu <lujianhua000@gmail.com>"
 _flavor="postmarketos-qcom-sm8250"
 pkgname=linux-$_flavor
-pkgver=6.17.0
-pkgrel=3
+pkgver=7.1.0
+pkgrel=0
 pkgdesc="Mainline kernel fork for SM8250"
 arch="aarch64"
 _carch="arm64"
@@ -19,11 +19,14 @@ makedepends="
 	bash
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -56,16 +59,16 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
-77d6686275fd2aee878fb58986101b7e64a989bed8991da6cd9e0ad2437aaacfccdc6a155db97c281b127b73c3e3d8172039cd9bfb566de88cc9c540a99bf6f8  linux-postmarketos-qcom-sm8250-sm8250-6.17.0.tar.gz
-9f258295ffc7a7d52598b63c40ad909374e32abde707b1c25298e545b31f338a54b6384223a1e47a945165764c88888e641f15de4c75d0c6eae24fb3c5ad2c62  config-postmarketos-qcom-sm8250.aarch64
+7b1d8e4649f8c3e877c256ad5268b150274b3096f26f9c7f453166bab2f2c98a2138d1a6d8256d4e99549ed8510e77252ec053fe89497ff46ae1b68da945f6b6  linux-postmarketos-qcom-sm8250-sm8250-7.1.0.tar.gz
+bc304f311b8bfb640b2391977f2fd972616380cbbf7143d76ae343f63aa921ea4c1d15eacf2d65b176a7ffe2630bc057874b9872299dfae8d24d71b5cbe519f3  config-postmarketos-qcom-sm8250.aarch64
 "
