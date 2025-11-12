@@ -141,7 +141,7 @@ def get_changed_files(removed=True):
     return ret
 
 
-def get_changed_packages():
+def get_changed_packages(skip_archived: bool = False):
     ret = set()
     for file in get_changed_files():
         dirname, filename = os.path.split(file)
@@ -149,7 +149,7 @@ def get_changed_packages():
         # Skip files:
         # * in the root dir of pmaports (e.g. README.md)
         # * path with a dot (e.g. .ci/, device/.shared-patches/)
-        if not dirname or file.startswith(".") or "/." in file:
+        if not dirname or file.startswith(".") or "/." in file or skip_archived and dirname.startswith("device/archived"):
             continue
 
         if filename != "APKBUILD":
@@ -178,9 +178,9 @@ def get_changed_packages():
     return ret
 
 
-def get_changed_kernels():
+def get_changed_kernels(skip_archived: bool = False):
     ret = []
-    for pkgname in get_changed_packages():
+    for pkgname in get_changed_packages(skip_archived):
         if pkgname.startswith("linux-"):
             ret += [pkgname]
     return ret
