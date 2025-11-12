@@ -82,7 +82,7 @@ if __name__ == "__main__":
             exit(1)
         exit(0)
 
-    pkgnames = common.get_changed_kernels()
+    pkgnames = common.get_changed_kernels(skip_archived=True)
     print(f"Changed kernels: {pkgnames}")
 
     if len(pkgnames) == 0:
