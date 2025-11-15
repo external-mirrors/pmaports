@@ -1,12 +1,13 @@
 # Maintainer: Dang Huynh <danct12@disroot.org>
 pkgname=wl1251-cal
 pkgver=1.2
-pkgrel=7
+pkgrel=8
 pkgdesc="Retrieve wl1251 calibration data from a CAL partition and feed it to the driver"
 url="https://github.com/maemo-leste/wl1251-cal"
 arch="armv7"
 license="LGPL-2.1-only"
 makedepends="linux-headers"
+install="$pkgname-openrc.post-install"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="$pkgname-$pkgver.tar.gz::https://github.com/maemo-leste/wl1251-cal/archive/refs/tags/$pkgver.tar.gz
 	wl1251-cal.initd
@@ -26,7 +27,6 @@ package() {
 
 openrc() {
 	default_openrc
-	install="$subpkgname.post-install"
 	install -Dm755 "$srcdir"/wl1251-cal.initd "$subpkgdir"/etc/init.d/wl1251-cal
 }
 

@@ -2,7 +2,7 @@
 # Maintainer: Danct12 <danct12@disroot.org>
 pkgname=device-nokia-n900
 pkgver=51
-pkgrel=0
+pkgrel=1
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
 arch="armv7"
@@ -27,7 +27,11 @@ makedepends="
 	kbd-bkeymaps
 	postmarketos-mvcfg
 "
-install="$pkgname.post-install $pkgname.pre-upgrade"
+install="
+	$pkgname.post-install
+	$pkgname.pre-upgrade
+	$pkgname-openrc.post-install
+"
 subpackages="
 	$pkgname-foot
 	$pkgname-i3blocks
@@ -202,7 +206,6 @@ upower() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
 	depends="wl1251-cal-openrc"
 
 	mkdir -p "$subpkgdir"

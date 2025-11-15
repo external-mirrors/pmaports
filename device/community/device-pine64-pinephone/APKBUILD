@@ -3,7 +3,7 @@
 # Co-Maintainer: Jan Jasper de Kroon <jajadekroon@gmail.com>
 pkgname=device-pine64-pinephone
 pkgver=9
-pkgrel=2
+pkgrel=3
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -41,7 +41,11 @@ makedepends="
 	dtc
 	u-boot-tools
 "
-install="$pkgname.pre-upgrade"
+install="
+	$pkgname.pre-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	"
 source="
 	00_alsa_pinephone_dshare.conf
 	10-pinephone-proximity.rules
@@ -163,7 +167,6 @@ nonfree_firmware() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="eg25-manager-openrc openrc"
 	mkdir "$subpkgdir"
 }

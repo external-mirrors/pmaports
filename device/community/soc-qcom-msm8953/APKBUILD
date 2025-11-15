@@ -3,12 +3,13 @@
 pkgname=soc-qcom-msm8953
 pkgdesc="Common package for Qualcomm MSM8953 devices"
 pkgver=18
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
 options="!check !archcheck !tracedeps pmb:cross-native"
 depends="$pkgname-ucm swclock-offset"
+install="$pkgname-modem-openrc.post-install $pkgname-modem-openrc.post-upgrade"
 subpackages="
 	$pkgname-gpu
 	$pkgname-modem
@@ -54,7 +55,6 @@ modem() {
 
 modem_openrc() {
 	install_if="$pkgname-modem=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		openrc
 		q6voiced-openrc

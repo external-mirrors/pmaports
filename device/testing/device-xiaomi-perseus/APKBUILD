@@ -2,7 +2,7 @@
 pkgname=device-xiaomi-perseus
 pkgdesc="Xiaomi Mi Mix 3"
 pkgver=1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -17,6 +17,10 @@ depends="
 	unl0kr-fbforcerefresh
 "
 makedepends="devicepkg-dev"
+install="
+	$pkgname-nonfree-firmware-openrc.post-install
+	$pkgname-nonfree-firmware-openrc.post-upgrade
+"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
@@ -54,7 +58,6 @@ nonfree_firmware() {
 
 nonfree_firmware_openrc() {
 	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="hexagonrpcd-openrc"
 
 	mkdir -p "$subpkgdir"
@@ -63,7 +66,6 @@ nonfree_firmware_openrc() {
 pmtest() {
 	depends="bootrr qrtr firmware-xiaomi-perseus unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	install="$subpkgname.post-install"
 
 	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgname.post-install"
 }
