@@ -29,4 +29,4 @@ pmbootstrap -q shutdown
 # Needed to import "common"
 export PYTHONPATH=".ci/lib"
 # Run testcases
-pytest -vv -x --tb=native "$pmaports/.ci/testcases" "$@"
+pytest -vv --tb=native "$pmaports/.ci/testcases" "$@"
