@@ -4,7 +4,7 @@ maintainer="Jane Rachinger <jane400+pmaports@postmarketos.org>"
 pkgname=polkit
 pkgver=999126
 _pkgver=126
-pkgrel=1
+pkgrel=2
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 url="https://github.com/polkit-org/polkit"
 arch="all"
@@ -12,7 +12,8 @@ license="GPL-2.0-or-later"
 # pmb:strict: force zap after building this package so we don't still have
 #             systemd-stage0 installed
 # !check: needs a functioning dbus daemon
-options="suid pmb:strict !check"
+# !pmb:crossdirect: otherwise we see lto1: fatal error: compiler does not support ZSTD LTO compression
+options="suid pmb:strict !check !pmb:crossdirect"
 makedepends="
 	dbus-dev
 	duktape-dev
@@ -77,6 +78,7 @@ check() {
 package() {
 	depends="$pkgname-libs=$pkgver-r$pkgrel"
 	provides="$pkgname-elogind=$pkgver-r$pkgrel"
+	provider_priority=9999
 
 	DESTDIR="$pkgdir" meson install --no-rebuild -C systemd
 
