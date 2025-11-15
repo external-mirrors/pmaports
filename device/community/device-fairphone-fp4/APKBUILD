@@ -3,7 +3,7 @@
 pkgname=device-fairphone-fp4
 pkgdesc="Fairphone 4"
 pkgver=5
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -34,6 +34,7 @@ depends="
 	tqftpserv
 "
 makedepends="devicepkg-dev"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="
 	81-libssc-fairphone-fp4.rules
@@ -57,7 +58,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		hexagonrpcd-openrc
 		openrc
