@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-base-ui-plasma
 pkgver=2
-pkgrel=18
+pkgrel=19
 pkgdesc="Meta package for shared configuration for Plasma-based UIs"
 url="https://postmarketos.org"
 arch="noarch !armhf" # armhf is not supported
@@ -92,6 +92,7 @@ systemd() {
 	install_if="$pkgname=$pkgver-r$pkgrel systemd"
 	depends="
 		drkonqi
+		polkit-systemd
 	"
 	mkdir "$subpkgdir"
 }
