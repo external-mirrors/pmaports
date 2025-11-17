@@ -54,6 +54,7 @@ wait_root_partition
 delete_old_install_partition
 resize_root_partition
 unlock_root_partition
+resize_root_luks
 resize_root_filesystem
 mount_root_partition
 resize_filesystem_after_mount /sysroot

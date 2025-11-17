@@ -147,3 +147,18 @@ resize_filesystem_after_mount() {
 			;;
 	esac
 }
+
+resize_luks_container() {
+	command -v cryptsetup >/dev/null || return
+
+	# Only resize if we actually unlocked a LUKS container
+	if [ -e /sys/block/"$(basename "$PMOS_ROOT")"/dm/uuid ]; then
+		uuid=$(cat /sys/block/"$(basename "$PMOS_ROOT")"/dm/uuid)
+		case "$uuid" in
+			CRYPT-*)
+				echo "Resize LUKS container ($PMOS_ROOT)"
+				cryptsetup resize "$(basename "$PMOS_ROOT")"
+				;;
+		esac
+	fi
+}
