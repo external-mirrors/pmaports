@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=101
+pkgver=102
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -81,7 +81,6 @@ subpackages="
 	q6voiced-systemd:_service
 	qbootctl-systemd:_service
 	qcom-diag-systemd:_service
-	rmtfs-systemd:_service
 	rtkit-systemd:_service
 	sensorfw-systemd:_service
 	siglo-systemd:_service
@@ -212,7 +211,6 @@ _powerdevil_sources="user/plasma-powerdevil.service" # From https://invent.kde.o
 _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
 _qcom_diag_sources="system/diag-router.service"
-_rmtfs_sources="system/rmtfs.service"
 _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
 _sensorfw_sources="system/sensorfwd.service"
 _siglo_sources="user/siglo.service"  # From https://github.com/theironrobin/siglo/blob/main/data/siglo.service
@@ -325,7 +323,6 @@ source="$(flatpath \
 	$_q6voiced_sources \
 	$_qbootctl_sources \
 	$_qcom_diag_sources \
-	$_rmtfs_sources \
 	$_rtkit_sources \
 	$_sensorfw_sources \
 	$_siglo_sources \
@@ -487,7 +484,6 @@ ebd194aad645a836ba2b51bfcebd7f78a8ec703e62dd7a7e85343df4f7b60e99abfebd6de12e540e
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
 621189aa251655796795f4fa0cd79360bb67573e7327e545064eaadafc83cc7b382a405d6ba80662e0a4ece3876e4270e3563d859a6ba63b5e3854b39c35873e  system-qbootctl.service
 998f70776a2857b44202079ecb1ec76331f998155c8a4a15ce036b2fb916d82cba5d750d66509e562f93482c2301a262e8efc220fe54ac2ee1a445801823e465  system-diag-router.service
-010cdc35517e3bc37c0ffd8666d3286ddc3a3b45d7a028995f93d735e27f4e06a517f30d0db8e776403ac1793d1bd8c8dd2bafc63908806925378b05034733db  system-rmtfs.service
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
 d5bf5f01c0feafab4edfc39b75eded608dc3efcd3b918739e3ed2ab11340c9cc9b6fb97c0706ddd3d49b726c5f62e8cdb0048aefafd916f3ad9defc6ff9783bc  system-sensorfwd.service
