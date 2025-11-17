@@ -1,13 +1,13 @@
 # Maintainer: Minecrell <minecrell@minecrell.net>
 pkgname=rmtfs
 pkgver=1.1.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Qualcomm Remote Filesystem Service Implementation"
 url="https://github.com/linux-msm/rmtfs"
 arch="all"
 license="BSD-3-Clause"
 makedepends="eudev-dev qrtr-dev"
-subpackages="$pkgname-doc $pkgname-openrc"
+subpackages="$pkgname-doc $pkgname-openrc $pkgname-systemd"
 source="
 	https://github.com/linux-msm/rmtfs/archive/v$pkgver/rmtfs-v$pkgver.tar.gz
 	rmtfs.confd
@@ -22,7 +22,7 @@ build() {
 }
 
 package() {
-	install -Dm755 rmtfs "$pkgdir"/usr/sbin/rmtfs
+	DESTDIR="$pkgdir" make prefix=/usr install
 	install -Dm755 "$srcdir/$pkgname.initd" "$pkgdir/etc/init.d/$pkgname"
 	install -Dm644 "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
 	install -Dm644 "$srcdir/udev.rules" "$pkgdir/usr/lib/udev/rules.d/65-$pkgname.rules"
