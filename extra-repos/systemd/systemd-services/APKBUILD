@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=113
+pkgver=114
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -47,7 +47,6 @@ subpackages="
 	pd-mapper-systemd:_service
 	q6voiced-systemd:_service
 	qbootctl-systemd:_service
-	rmtfs-systemd:_service
 	rtkit-systemd:_service
 	sleep-inhibitor-systemd:_service
 	speakersafetyd-systemd:_service
@@ -103,7 +102,6 @@ _openssh_server_pam_sources="
 _pd_mapper_sources="system/pd-mapper.service"
 _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
-_rmtfs_sources="system/rmtfs.service"
 _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
 _sleep_inhibitor_sources="system/sleep-inhibitor.service"
 _speakersafetyd_sources="system/speakersafetyd.service" # From https://github.com/AsahiLinux/speakersafetyd/blob/main/speakersafetyd.service
@@ -158,7 +156,6 @@ source="$(flatpath \
 	$_pd_mapper_sources \
 	$_q6voiced_sources \
 	$_qbootctl_sources \
-	$_rmtfs_sources \
 	$_rtkit_sources \
 	$_sleep_inhibitor_sources \
 	$_speakersafetyd_sources \
@@ -250,7 +247,6 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 0bed9a8a719661609ad84d1c6fcdf2fe9213e741682b7ddebad82d9744f137c593788ed522868f10b95b599d81743d07ec3212630a7e99d333261dfa1bf1cc11  system-pd-mapper.service
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
 621189aa251655796795f4fa0cd79360bb67573e7327e545064eaadafc83cc7b382a405d6ba80662e0a4ece3876e4270e3563d859a6ba63b5e3854b39c35873e  system-qbootctl.service
-010cdc35517e3bc37c0ffd8666d3286ddc3a3b45d7a028995f93d735e27f4e06a517f30d0db8e776403ac1793d1bd8c8dd2bafc63908806925378b05034733db  system-rmtfs.service
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
 be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
