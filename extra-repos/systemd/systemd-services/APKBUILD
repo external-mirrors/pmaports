@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=102
+pkgver=103
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -68,7 +68,6 @@ subpackages="
 	mce-systemd:_service
 	mmsd-tng-systemd:_service
 	modemmanager-systemd:_service
-	msm-modem-systemd:_service
 	msm-modem-wwan-port-systemd:_service
 	nftables-systemd:_service
 	nginx-systemd:_service
@@ -193,7 +192,6 @@ _lxc_sources="system/lxc@.service"
 _mce_sources="system/mce.service" # From mce upstream
 _mmsd_tng_sources="user/mmsd-tng.service"
 _modemmanager_sources="system/ModemManager.service"
-_msm_modem_sources="system/msm-modem-uim-selection.service"
 _msm_modem_wwan_port_sources="system/msm-modem-wwan-port.service"
 _nftables_sources="system/nftables.service"
 _nginx_sources="system/nginx.service" # Based on arch's service: https://gitlab.archlinux.org/archlinux/packaging/packages/nginx/-/blob/main/nginx.service
@@ -467,7 +465,6 @@ f6fb4c890cbf72e344ca7a22e7f033fb4c32ce9f5edc27c03ccc5c21424d6a0ef871d79e8a89a502
 becb3bb17995f44b4021d05109130a00d0eba3d698eaf204a1f8d325741faa729d4ac7fedf0446b9468507a3b558a412ae9aa7f813bbb1f466395c86f66542fd  system-mce.service
 873b53592786a978659bda8d32de5ed9a9f163ca298c4f4112f10bf635a8170c4060cc15b57ff72b3afd50075cd1c5dbc10030f00b166e2540397da9e1c5e46b  user-mmsd-tng.service
 5eab6a59c81232b188df45482e325b2d1cb9e038ca147a1b6983c1c095d8194fba804793c5e291b201a820976c8f506aadd2daf7c52fe573a3af708fc9984641  system-ModemManager.service
-a12d8d6994ae6e46b0d131c9f5c475ccc70ab7aaf5839b19c1917410fb3c90a208bc0c6e07c90cf251ea6e445741af83a9f77bf9fcb30490bb0fbfc07aa8cbb9  system-msm-modem-uim-selection.service
 f380d0a4760f0d19ea65b5fea7ca5e1eee28eb162fd15efec318bddb3ea1735f2c891d9d129227e959a2ac479b49f2c438170fe1fdd2c91abf564f7b111a97c3  system-msm-modem-wwan-port.service
 12bb9aa2a2ab8d4b21c72a785b41057eb16a27eca5718cd03a987a50b77d669fe90abafae48c68b41616f31b1953853b3b4a74db4bc3cdeccacc00df113de204  system-nftables.service
 9cba2f9fc043d8cfb09ce7bcc6bef13194f6708bd0b82b2a360304a66a344d38b7f2641bdbeb0ce85ef9390e0f2ea34feef9d7d2c066ca8e0bd8d1f6108ce1e0  system-nginx.service
