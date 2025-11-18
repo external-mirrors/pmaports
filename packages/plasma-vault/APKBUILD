@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-vault
-pkgver=99999_git20251104
+pkgver=99999_git20251114
 pkgrel=0
-_commit="effb586d30eafe6180e7a4090fe943bef58d4b59"
+_commit="c60f2faec1a841f67b0d6ba7250a7c3da387e5a5"
 pkgdesc="Plasma applet and services for creating encrypted vaults"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -35,7 +35,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-vault.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-04/plasma-vault-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/plasma-vault-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-70f50dbd1da2c94f8101c387ab120ea5c74bf4ff174aa7f4b5d06792739eea281c9ec30462c5a51cb2e07337f756d68e98c029b01d09354759998de4345a6cf3  plasma-vault-effb586d30eafe6180e7a4090fe943bef58d4b59.tar.xz
+70ecd40e7bdfeb724dda135e057b0b58bdfb054bc049ac6e2d8ad5e560f48bb6434120e6ff81294d13495bf175b38a1f435617912addfa78aeb91c7b2be5f73c  plasma-vault-c60f2faec1a841f67b0d6ba7250a7c3da387e5a5.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdecoration
-pkgver=99999_git20251018
+pkgver=99999_git20251111
 pkgrel=0
-_commit="aebf31c4e1da24090cd352ef6075d9b458e2a668"
+_commit="4ef786919bc85a677d977df1f6c7cbd0753dcf92"
 pkgdesc="Plugin based library to create window decorations"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -26,7 +26,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kdecoration.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-10-22/kdecoration-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/kdecoration-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-8c9ad413d1a0027acbea15ae7d5fabcf08450c99c8d821b138932fe2341b3fd0e9bebedd640dfbb2e2dd52259fca11579570f063caf13938f50b8e319e72e5c4  kdecoration-aebf31c4e1da24090cd352ef6075d9b458e2a668.tar.xz
+439d193f82f5dab364864272ad20111b7c6f522c00bbf12cb73e902c0dd0ff6ffa9a03ebb557b1230dba5abfc2ae35865348a20145f5e5c5e71f68882dfb931d  kdecoration-4ef786919bc85a677d977df1f6c7cbd0753dcf92.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=keepsecret
-pkgver=99999_git20251031
+pkgver=99999_git20251111
 pkgrel=0
-_commit="35e936acb84c8b62d5c56653cb1b8b284e3a5f32"
+_commit="bb871d346ab4f119eaa336c9b8859b0a31fd4331"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://invent.kde.org/utilities/keepsecret"
@@ -30,7 +30,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/keepsecret.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-02/keepsecret-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/keepsecret-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/keepsecret-$_commit"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-ebdf6256db4ecf2ec0c3d26e962cff2b25bfa23068d1b5cfd267e4835a5ee1220948dba8d05e8f66c066097f4a7b245791d23a58e962ace7bed5bdd0e40c777b  keepsecret-35e936acb84c8b62d5c56653cb1b8b284e3a5f32.tar.xz
+f7052a58ed83b4c294037c62137afcaec6c2e7fd043bca9ac995589465e8f5f6b3b9bdd79698ee982759b65974ba75a505907af362cec5a036683f620e22d9d0  keepsecret-bb871d346ab4f119eaa336c9b8859b0a31fd4331.tar.xz
 "

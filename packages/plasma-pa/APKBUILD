@@ -2,15 +2,19 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-pa
-pkgver=99999_git20251101
+pkgver=99999_git20251115
 pkgrel=0
-_commit="12dde94a26739193fc36050ecfedb78b16886fd1"
+_commit="56b9b6baf3389e7c1a74d9e3ef2add25605377a7"
 pkgdesc="Plasma applet for audio volume management using PulseAudio"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="LGPL-2.1-only OR LGPL-3.0-only AND GPL-2.0-only"
-depends="kirigami"
+depends="
+	kirigami
+	kirigami-addons
+	kitemmodels
+	"
 makedepends="
 	extra-cmake-modules
 	kcoreaddons-dev
@@ -30,14 +34,13 @@ makedepends="
 	qt6-qtdeclarative-private-dev
 	samurai
 	"
-
+subpackages="$pkgname-doc $pkgname-lang"
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-pa.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-02/plasma-pa-$_commit.tar.xz"
-subpackages="$pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/plasma-pa-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-pa-$_commit"
@@ -46,8 +49,7 @@ build() {
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DUSE_GCONF=OFF
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 }
 
@@ -60,5 +62,5 @@ package() {
 }
 
 sha512sums="
-2b56a8ed6435f48c22713d4a48b1feca0b2ee12786bca7b801e4697eb3f12f2cfc0a852b044f1f4bb00092b5125cdd6a0f5dbac7080bacb21a1cf21eb3edc790  plasma-pa-12dde94a26739193fc36050ecfedb78b16886fd1.tar.xz
+0c8d17a57d286c93f8f4b1a6d41aaced2841b85ac33e308fff2569c70734761052d496c4f5d7da3d0cfaed5bdd2a3303a5fbcd47d4d07cc4ba89e41b58cd0676  plasma-pa-56b9b6baf3389e7c1a74d9e3ef2add25605377a7.tar.xz
 "

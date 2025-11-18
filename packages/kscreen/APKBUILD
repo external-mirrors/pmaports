@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kscreen
-pkgver=99999_git20251104
+pkgver=99999_git20251114
 pkgrel=0
-_commit="729c75bf8d2391df2dc178d05050ed12e80f7465"
+_commit="120ec0e6b7f236db7a0441ad095d58bf8bf46ebd"
 pkgdesc="KDE's screen management software"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -34,14 +34,16 @@ makedepends="
 	samurai
 	"
 checkdepends="wlheadless-run"
-
+subpackages="
+	$pkgname-systemd
+	$pkgname-lang
+	"
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kscreen.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-04/kscreen-$_commit.tar.xz"
-subpackages="$pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/kscreen-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kscreen-$_commit"
@@ -62,11 +64,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-
-	# We don't ship systemd
-	rm -r "$pkgdir"/usr/lib/systemd
 }
 
 sha512sums="
-30549be9910836c7ad1ba4ba2d9d6fc63588abb84f41f9bef05bda47b2c280410f9ffb976ec46438c93c64198066b8ed04b46a9b50f47516b2d89aed2afe2ad5  kscreen-729c75bf8d2391df2dc178d05050ed12e80f7465.tar.xz
+b7a3898f52080c9fa467c86d456cf63240dfa2244ae4b1f5edbb085a98431e743c6c3001d6c7fdb2c37cf59d9875801110cc6ad35173c75f6d07f7dd53a621d2  kscreen-120ec0e6b7f236db7a0441ad095d58bf8bf46ebd.tar.xz
 "

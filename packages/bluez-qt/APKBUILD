@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=bluez-qt
-pkgver=99999_git20251104
+pkgver=99999_git20251114
 pkgrel=0
-_commit="66ef885c742c6a079b770265d1003109da0b536e"
+_commit="35161f914c18d5dd99df138b7c7708b263097896"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 pkgdesc="Qt wrapper for Bluez 5 DBus API"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/bluez-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-04/bluez-qt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/bluez-qt-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 options="!check" # Multiple tests either hang or fail completely
 
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-b534af10ee57c3c2cc02fac27cd4a0bf8750bb6fb9ac0da8654eec7adacccb053c447b28d3996f187b63fa64db393b18671aee7b2ce43dc706a2a289f3dc4fb4  bluez-qt-66ef885c742c6a079b770265d1003109da0b536e.tar.xz
+1aca2bcf730a4d10c59c160b502d7cc210facb430f4de8e7a6217ec9aef493756652d688e6e646ee544fdff1874d905ca7a037a34588ef5381ab8fc0af922bdf  bluez-qt-35161f914c18d5dd99df138b7c7708b263097896.tar.xz
 "

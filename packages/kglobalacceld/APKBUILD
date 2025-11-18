@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kglobalacceld
-pkgver=99999_git20251031
+pkgver=99999_git20251106
 pkgrel=0
-_commit="832616006d7870cc7f340b53ef6d5665822c32a7"
+_commit="64d9063178d2b4beb80de5087f55c017910b8570"
 pkgdesc="Daemon providing Global Keyboard Shortcut (Accelerator) functionality"
 # armhf blocked by qt6-qtdeclarative -> kio
 arch="all !armhf"
@@ -30,9 +30,13 @@ makedepends="$depends_dev
 	qt6-qttools-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="xwayland-run"
+subpackages="
+	$pkgname-systemd
+	$pkgname-dev
+	"
 _repo_url="https://invent.kde.org/plasma/kglobalacceld.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-02/kglobalacceld-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/kglobalacceld-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 
 options="!check"
@@ -47,15 +51,12 @@ build() {
 }
 
 check() {
-	dbus-run-session -- xvfb-run -a ctest --test-dir build
+	dbus-run-session wlheadless-run -- ctest --test-dir build
 }
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-
-	# We don't ship systemd
-	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
-888019c2bf9b483dea4eed15852596623882ea9c82cf21841028b50ecfe935ac79a51156a1a68feeccc2f1137f936ae9eaa39f6ddf8ebc10e1460c54da2e10aa  kglobalacceld-832616006d7870cc7f340b53ef6d5665822c32a7.tar.xz
+983b26efeb25012f3af25b6418277b69da231de63e47c5fcb00ef7e6fefc4819c686a0a7bee4a78a530a12eede248bcdf6b3bff44de9521f4b91d4ef143429d6  kglobalacceld-64d9063178d2b4beb80de5087f55c017910b8570.tar.xz
 "

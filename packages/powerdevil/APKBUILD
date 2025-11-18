@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=powerdevil
-pkgver=99999_git20251104
+pkgver=99999_git20251115
 pkgrel=0
-_commit="1c6eea49dd9ca5dc22b94ace8f380f6a0f256db7"
+_commit="4273c0866a178a5c08f903ad190f8f72b1978120"
 pkgdesc="Manages the power consumption settings of a Plasma Shell"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later AND LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
@@ -41,23 +39,24 @@ makedepends="$depends_dev
 	libcap-utils
 	samurai
 	"
-
+subpackages="
+	$pkgname-systemd
+	$pkgname-dev
+	$pkgname-libs
+	$pkgname-doc
+	$pkgname-lang
+	"
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/powerdevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-04/powerdevil-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang $pkgname-systemd"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-16/powerdevil-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/powerdevil-$_commit"
 
 build() {
-	# HAVE_DDCUTIL needs to be set manually for now but is enabled by default in the next
-	# (post 5.28.x) powerdevil version. Nothing changed in particular warranting it to be
-	# enabled again, but upstream mentions the reasons for originally disabling it by default
-	# aren't known anymore and it's time to re-enable again
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
@@ -74,5 +73,5 @@ package() {
 }
 
 sha512sums="
-420f6602fb4b8d0c784f50bbc22a720a18d8e61955ad13046b9c6e094ef5e7ca6573fe9644b7f6b8deec4cc97fb69cbbfa2d7795bb4e89d1f4d4cdb558b416e1  powerdevil-1c6eea49dd9ca5dc22b94ace8f380f6a0f256db7.tar.xz
+199e5c89adf75adc912f7077bd16363dd67843813b57e5fe4dfa79c71e2368bd2b835a1020e31665da5674ed45e0e725e452a4ca604b4db67e7bd14d2532e4a2  powerdevil-4273c0866a178a5c08f903ad190f8f72b1978120.tar.xz
 "
