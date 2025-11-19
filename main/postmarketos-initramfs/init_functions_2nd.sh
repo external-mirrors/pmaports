@@ -698,6 +698,40 @@ find_root_on_boot_device() {
 	done
 }
 
+# Limit USB storage transfer size to work around dm-verity corruption issue
+# See: https://gitlab.postmarketos.org/postmarketOS/duranium/-/issues/1
+# Uses: BOOT_DEVICE
+# Sets: (none)
+# Returns: 0 always
+limit_usb_transfer_size() {
+	local device_name sysfs_path device_path
+	device_name="$(basename "$BOOT_DEVICE")"
+	sysfs_path="/sys/block/$device_name/queue/max_sectors_kb"
+	device_path="/sys/block/$device_name/device"
+
+	if [ ! -L "$device_path" ]; then
+		info "Not setting max_sectors_kb: device path not found"
+		return
+	fi
+
+	# Check if device symlink contains /usb, indicating it's a usb device. This
+	# seems like a safe assumption to make, and it prevents us from applying this
+	# workaround for non-usb devices.
+	if ! readlink -f "$device_path" | grep -q "/usb"; then
+		info "Not setting max_sectors_kb: not a USB device"
+		return
+	fi
+
+	if [ ! -f "$sysfs_path" ]; then
+		info "Not setting max_sectors_kb: sysfs file not found"
+		return
+	fi
+
+	echo 32 > "$sysfs_path"
+	info "Applied USB workaround: set max_sectors_kb=32 for $device_name"
+	return
+}
+
 # Handle immutable boot with A/B updates and factory reset
 # Uses: usrhash
 # Sets: BOOT_DEVICE, USR_PARTITION, VERITY_PARTITION, PMOS_ROOT
@@ -720,6 +754,8 @@ handle_immutable_boot() {
 		show_splash "ERROR: Unable to find required EFI variable"
 		fail_halt_boot
 	fi
+
+	limit_usb_transfer_size
 
 	# Factory reset handling
 	if factory_reset_requested; then
