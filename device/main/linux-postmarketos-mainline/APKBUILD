@@ -1,0 +1,136 @@
+# Maintainer: Jens Reidel <adrian@postmarketos.org>
+# Co-Maintainer: Achill Gilgenast <achill@achill.org>
+pkgname=linux-postmarketos-mainline
+pkgver=6.18
+pkgrel=0
+_rel=${pkgver#*_p}
+_kver=${pkgver%_p*}
+_kver=${_kver//_/-}
+pkgdesc="Mainline Kernel"
+# armhf: pmbootstrap cannot dynamically choose a defconfig, so it ends up using multi_v7_defconfig which isn't correct
+# s390x: kconfigcheck is not ready for it yet
+arch="all !armhf !s390x"
+_flavor="mainline"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="
+	!check
+	!tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-immutable
+	pmb:kconfigcheck-rust
+	pmb:kconfigcheck-uefi
+	pmb:kconfigcheck-virt
+"
+makedepends="
+	bison
+	clang
+	clang-libclang
+	diffutils
+	elfutils-dev
+	findutils
+	flex
+	linux-headers
+	lld
+	llvm
+	openssl-dev
+	pahole
+	perl
+	python3
+	rust
+	rust-bindgen
+	rust-src
+	rustfmt
+	sed
+	zstd
+"
+
+# Source
+source="
+	$pkgname-$pkgver.tar.gz::https://git.kernel.org/torvalds/t/linux-${pkgver/_/-}.tar.gz
+
+	config-mainline.aarch64
+	config-mainline.armv7
+	config-mainline.loongarch64
+	config-mainline.ppc64le
+	config-mainline.riscv64
+	config-mainline.x86
+	config-mainline.x86_64
+
+	pmos.aarch64.config
+	pmos.armv7.config
+	pmos.loongarch64.config
+	pmos.ppc64le.config
+	pmos.riscv64.config
+	pmos.x86.config
+	pmos.x86_64.config
+
+	localversion.config
+	virtio.config
+"
+builddir="$srcdir/linux-${pkgver/_/-}"
+_defconfig="defconfig"
+
+case "$CARCH" in
+	aarch64*) _carch="arm64" ;;
+	arm*) _carch="arm" ;;
+	loongarch*) _carch="loongarch" ;;
+	ppc*) _carch="powerpc" ;;
+	riscv*) _carch="riscv" ;;
+	s390x) _carch="s390" ;;
+	x86) _carch="i386" ;;
+	x86_64) _carch="x86_64" ;;
+esac
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	local _install
+	case "$CARCH" in
+		arm*|aarch64|riscv*) _install="zinstall dtbs_install" ;;
+		*) _install="install" ;;
+	esac
+
+	make modules_install $_install \
+		ARCH="$_carch" \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs-$_flavor
+
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+e2fba9d86c1559fee1820d900d21ed865e5f12984c300dc8e87295a0496d0da32d48f0c44a5162feec28d9f3263b37e8d0c3a19d227b79fe500fcda3d9c1b269  linux-postmarketos-mainline-6.18.tar.gz
+2e1436a1d7bb5d95c0116eea7e7b896bd38529746ff5b656c19c14bdd8908b37286473a4f9bf433b906e1219f98ea021711d782aed72eebc3624d7bd223db44f  config-mainline.aarch64
+7a9d209bcd50a42006dc40e72e25be8cfd5850d9b55dffd29a8e6ebc5702710c5f2784573106628f1138d466daa0bfc61bb9220deb2644bced843f41b35abb7c  config-mainline.armv7
+981ebbda4dfb01741571497cf1531bd955371de3ae9a000a800f4fc175be6793b7f2c43280e51592662e969f565a724becf6fd854f3e7714453e0988b7a6e0b7  config-mainline.loongarch64
+aa0fb37d01ec97aa0fa4e2e4a6e89f16e817bf2403d1ba44bb2c02846fa4e84629b868c3b8e294227740e3542c13e7199853be7a9108c81805946de82a29b629  config-mainline.ppc64le
+2549a0a9fb60d1b82b99cd70ce23be2cd3ff91f012a79e0c124aec1d5c0eec5aa4dd2f4f2eccd5030024e830a93115c8d7eea79bc4572f700e3060e06363d7e8  config-mainline.riscv64
+693198abf1438eca11f05c3649ccbd9a28af3cc2c22acc689c19a2fb84f0ab2dc5158afb452c423af5377a19d5868d043710b8ccdb024eb8acd299529e4875d4  config-mainline.x86
+4d831eaf659b950143d1f93eefc13668e7b6de886923d1bcb05cd36bd54ef88d0168021f12c2dad030fb4c5e13c631e15bfadc75d952348eb69b381e8128db27  config-mainline.x86_64
+d21ab36ca4d6d561412a919abce513385d6fd712dc8edf6d5de72882673f91547af40ed6f299076907765afea1f7d251367e22280711dbc14fd0a9cd04243525  pmos.aarch64.config
+459a426a0edfe04e9e24a66dd22303c5605b0f07f2f44e9f17bae726173167d3784059fbf9ca709674556dddd92bad5c754d88e26977e5732bab318927d59c59  pmos.armv7.config
+f7cab4483ddb88a2d54bd847a997f0ff1a32cde004c7bc556d57816fd518a81365f1237d3122eb4caeb78c39cfe2a4a28527c9b23c015ca970e2fefd11d9a45b  pmos.loongarch64.config
+c37dc255225d26563478aca892c16fc94c033a186eb800674a4a8c3f1ec76289855f220732cfebf0aab2dcfd224cd21e2c1129cb417496995a0512bef9e6e661  pmos.ppc64le.config
+61e26cb0e7bf6e024405647073f4c85d377bf7866acac13c05c1dd0fa6fd48005c045fc559767e54e55a6500c9db2f520b25e54eb2af30d4227de718424bd327  pmos.riscv64.config
+5b8a276b77c7116d8f3d10228a6b7e6bb0058a77e011d2e3840e036007b7d9fac42fbe36384e0a525f55167dc30b539c602f4c33afd3b1dc32175336f0acf9a7  pmos.x86.config
+a2c04b2f16f21c41a5664dc6656dc072185657e80edde77f696f9e03e0cdc11266084a5ca28910fe4611caf188af682e6bb06585874a4817613fcf36f27caa53  pmos.x86_64.config
+285539f4641f5a62aa8abd813cda34dfbac4e88225a1729842390de870621822c638c25f6d7711a17ad0ba1d79a7630540b9c46263258097d6413a463241bafa  localversion.config
+c6323164b90ddbd6eb226667176e6b1f4813819b69fca6f9d040ed456e0ac9bef76dbeebb9cc03d6be8d45c62a8bebc152c2254b903f21fd6a839d244c5a467a  virtio.config
+"
