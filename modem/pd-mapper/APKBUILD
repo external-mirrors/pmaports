@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@lucaweiss.eu>
 pkgname=pd-mapper
 pkgver=1.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Qualcomm Protection domain mapper"
 url="https://github.com/linux-msm/pd-mapper"
 arch="all"
@@ -9,8 +9,9 @@ license="BSD-3-Clause"
 makedepends="qrtr-dev"
 source="https://github.com/linux-msm/pd-mapper/archive/v$pkgver/pd-mapper-v$pkgver.tar.gz
 	pd-mapper.initd
+	systemd-drop-qrtr-ns-dep.patch
 	"
-subpackages="$pkgname-doc $pkgname-openrc"
+subpackages="$pkgname-doc $pkgname-openrc $pkgname-systemd"
 options="!check" # No test suite
 
 build() {
@@ -19,7 +20,6 @@ build() {
 
 package() {
 	make prefix="/usr" DESTDIR="$pkgdir" install
-	rm -r "$pkgdir"/usr/lib/systemd
 
 	install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/COPYING
 	install -Dm755 "$srcdir"/pd-mapper.initd "$pkgdir"/etc/init.d/pd-mapper
@@ -28,4 +28,5 @@ package() {
 sha512sums="
 3118feb3ba972327af38d7753b8fb5f3b43ba7a2c88d550670cb7426237e29400e984042da33d115d638772a83307c790d5f9d76f081c85d815770861c66581b  pd-mapper-v1.0.tar.gz
 67aaec50737782c68e2e639b9dfb5b4803850b50c4260983975ac466b4b59d775e57542eccac1af5fffddeed8403f7b991194544c96b7c4aba7b0c1a666eb262  pd-mapper.initd
+3456298a068f3fe8bb74c2068e00b7c58db0234082df646d67b36811e06cfb787063feab80f5d5241466e9aac26c39e1730b67ce72808c070a0d1f20465900aa  systemd-drop-qrtr-ns-dep.patch
 "
