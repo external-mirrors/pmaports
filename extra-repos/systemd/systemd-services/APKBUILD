@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=104
+pkgver=105
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -28,23 +28,18 @@ subpackages="
 	at-spi2-core-systemd:_service
 	avahi-systemd:_service
 	baloo-systemd:_service
-	blueman-systemd:_service
 	bluez-systemd:_service
 	colord-systemd:_service
 	connman-systemd:_service
 	containerd-systemd:_service
-	cosmic-greeter-systemd:_service
-	dconf-systemd:_service
 	dnsmasq-systemd:_service
 	docker-engine-systemd:_service
 	eg25-manager-systemd:_service
-	evolution-data-server-systemd:_service
 	flatpak-systemd:_service
 	fnott-systemd:_service
 	fprintd-systemd:_service
 	geoclue-systemd:_service
 	gnome-clocks-systemd:_service
-	gnome-terminal-systemd:_service
 	goimapnotify-systemd:_service
 	greetd-wlgreet-systemd:_service
 	hexagonrpcd-systemd:_service
@@ -67,7 +62,6 @@ subpackages="
 	lxc-systemd:_service
 	mce-systemd:_service
 	mmsd-tng-systemd:_service
-	modemmanager-systemd:_service
 	msm-modem-systemd:_service
 	msm-modem-wwan-port-systemd:_service
 	nftables-systemd:_service
@@ -76,7 +70,6 @@ subpackages="
 	pd-mapper-systemd:_service
 	plasma-mobile-systemd:_service
 	polkit-kde-agent-1-systemd:_service
-	power-profiles-daemon-systemd:_service
 	powerdevil-systemd:_service
 	q6voiced-systemd:_service
 	qbootctl-systemd:_service
@@ -94,8 +87,6 @@ subpackages="
 	tinysparql-systemd:_service
 	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
-	tuned-systemd:_service
-	tuned-ppd-systemd:_service
 	udisks2-systemd:_service
 	udiskie-systemd:_service
 	usb-moded-systemd:_service
@@ -105,10 +96,7 @@ subpackages="
 	waydroid-sensors-systemd:_service
 	waydroid-systemd:_service
 	wpa_supplicant-systemd:_service
-	xdg-desktop-portal-gtk-systemd:_service
 	xdg-desktop-portal-kde-systemd:_service
-	xdg-desktop-portal-systemd:_service
-	xdg-desktop-portal-wlr-systemd:_service
 	xfce4-systemd:_service
 	zram-init-systemd:_service
 	sing-box-systemd:_service
@@ -120,11 +108,6 @@ _apk_polkit_rs_sources="system/apk-polkit-server.service"
 _at_spi2_core_sources="user/at-spi-dbus-bus.service"
 _avahi_sources="system/avahi-daemon.service system/avahi-daemon.socket"  # From: https://github.com/avahi/avahi/blob/master/avahi-daemon
 _baloo_sources="user/kde-baloo.service"
-_blueman_sources="
-	system/blueman-mechanism.service
-	user/blueman-applet.service
-	user/blueman-manager.service
-"
 _bluez_sources="
 	system/bluetooth.service
 	system/bluetooth-mesh.service
@@ -139,36 +122,14 @@ _connman_sources="
 	system/connman.service
 " # From connman upstream
 _containerd_sources="system/containerd.service"  # From: https://github.com/containerd/containerd/blob/main/containerd.service
-_cosmic_greeter_sources="system/cosmic-greeter.service system/cosmic-greeter-daemon.service" # From https://github.com/pop-os/cosmic-greeter/tree/master/debian
-_dconf_sources="user/dconf.service"
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
 _docker_engine_sources="system/docker.service system/docker.socket"  # From https://github.com/moby/moby/blob/master/contrib/init/systemd
 _eg25_manager_sources="system/eg25-manager.service" # From https://gitlab.com/mobian1/eg25-manager/-/blob/master/data/eg25-manager.service.in
-_evolution_data_server_sources="
-	user/evolution-addressbook-factory.service
-	user/evolution-calendar-factory.service
-	user/evolution-source-registry.service
-	user/evolution-user-prompter.service
-" # From https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/master/src/services
-_flatpak_sources="
-	system/flatpak-system-helper.service
-	user/flatpak-oci-authenticator.service
-	user/flatpak-portal.service
-	user/flatpak-session-helper.service
-	system-environment-generators/60-flatpak-system-only
-	user-environment-generators/60-flatpak
-	tmpfiles.d/flatpak.conf
-" # From
-# - https://github.com/flatpak/flatpak/blob/main/system-helper/flatpak-system-helper.service.in
-# - https://github.com/flatpak/flatpak/blob/main/session-helper/flatpak-session-helper.service.in
-# - https://github.com/flatpak/flatpak/blob/main/portal/flatpak-portal.service.in
-# - https://github.com/flatpak/flatpak/tree/main/env.d
-# - https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
+_flatpak_sources="tmpfiles.d/flatpak.conf" # From https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
 _fnott_sources="user/fnott.service"
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
 _geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
 _gnome_clocks_sources="user/gnome-clocks.service"
-_gnome_terminal_sources="user/gnome-terminal-server.service" # From https://gitlab.gnome.org/GNOME/gnome-terminal/-/blob/master/src/gnome-terminal-server.service.in
 _goimapnotify_sources="user/goimapnotify@.service" # From https://gitlab.com/shackra/goimapnotify/-/raw/master/goimapnotify@.service
 _greetd_wlgreet_sources="system/wlgreet.service"
 _hexagonrpcd_sources="system/hexagonrpcd-adsp-rootpd.service system/hexagonrpcd-adsp-sensorspd.service system/hexagonrpcd-sdsp.service system/iio-sensor-proxy.service.d/hexagonrpcd.conf"
@@ -191,7 +152,6 @@ _localsearch_sources="user/localsearch-writeback-3.service user/localsearch-cont
 _lxc_sources="system/lxc@.service"
 _mce_sources="system/mce.service" # From mce upstream
 _mmsd_tng_sources="user/mmsd-tng.service"
-_modemmanager_sources="system/ModemManager.service"
 _msm_modem_sources="system/msm-modem-uim-selection.service"
 _msm_modem_wwan_port_sources="system/msm-modem-wwan-port.service"
 _nftables_sources="system/nftables.service"
@@ -205,7 +165,6 @@ _openssh_server_pam_sources="
 _pd_mapper_sources="system/pd-mapper.service"
 _plasma_mobile_sources="system/plasma-mobile.service system-generators/plasma-mobile-user-override"
 _polkit_kde_agent_1_sources="user/plasma-polkit-agent.service" # From https://invent.kde.org/plasma/polkit-kde-agent-1/-/blob/master/plasma-polkit-agent.service.in
-_power_profiles_daemon_sources="system/power-profiles-daemon.service" # From https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/blob/main/data/power-profiles-daemon.service.in
 _powerdevil_sources="user/plasma-powerdevil.service" # From https://invent.kde.org/plasma/powerdevil/-/blob/master/daemon/plasma-powerdevil.service.in
 _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
@@ -223,8 +182,6 @@ _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  
 _tinysparql_sources="user/tinysparql-xdg-portal-3.service"  # From https://gitlab.gnome.org/GNOME/tinysparql/-/blob/main/src/portal/tracker-xdg-portal.service.in
 _tqftpserv_sources="system/tqftpserv.service"
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
-_tuned_sources="system/tuned.service"  # From https://github.com/redhat-performance/tuned/blob/master/tuned.service
-_tuned_ppd_sources="system/tuned-ppd.service"  # From https://github.com/redhat-performance/tuned/blob/master/tuned/ppd/tuned-ppd.service
 _udisks2_sources="system/udisks2.service" # From https://github.com/storaged-project/udisks/blob/master/data/udisks2.service.in
 _udiskie_sources="user/udiskie.service"  # created, no unit file upstream
 _usb_moded_sources="system/usb_moded.service" # From usb_moded upstream
@@ -234,15 +191,7 @@ _watchdog_kick_sources="system/watchdog-kick.service"
 _waydroid_sources="system/waydroid-container.service"
 _waydroid_sensors_sources="system/waydroid-sensors.service"
 _wpa_supplicant_sources="system/wpa_supplicant.service"
-_xdg_desktop_portal_sources="
-	user/xdg-desktop-portal.service
-	user/xdg-desktop-portal-rewrite-launchers.service
-	user/xdg-document-portal.service
-	user/xdg-permission-store.service
-"
-_xdg_desktop_portal_gtk_sources="user/xdg-desktop-portal-gtk.service"
 _xdg_desktop_portal_kde_sources="user/plasma-xdg-desktop-portal-kde.service" # From https://invent.kde.org/plasma/xdg-desktop-portal-kde/-/blob/master/data/plasma-xdg-desktop-portal-kde.service.in
-_xdg_desktop_portal_wlr_sources="user/xdg-desktop-portal-wlr.service"
 _xfce4_sources="user/xfce4-notifyd.service"
 _zram_init_sources="system/zram_swap.service"  # adapted from https://github.com/vaeth/zram-init/blob/main/systemd/system/zram_swap.service
 _sing_box_sources="
@@ -266,23 +215,18 @@ source="$(flatpath \
 	$_at_spi2_core_sources \
 	$_avahi_sources \
 	$_baloo_sources \
-	$_blueman_sources \
 	$_bluez_sources \
 	$_colord_sources \
 	$_connman_sources \
 	$_containerd_sources \
-	$_cosmic_greeter_sources \
-	$_dconf_sources \
 	$_dnsmasq_sources \
 	$_docker_engine_sources \
 	$_eg25_manager_sources \
-	$_evolution_data_server_sources \
 	$_flatpak_sources \
 	$_fnott_sources \
 	$_fprintd_sources \
 	$_geoclue_sources \
 	$_gnome_clocks_sources \
-	$_gnome_terminal_sources \
 	$_goimapnotify_sources \
 	$_greetd_wlgreet_sources \
 	$_hexagonrpcd_sources \
@@ -305,7 +249,6 @@ source="$(flatpath \
 	$_lxc_sources \
 	$_mce_sources \
 	$_mmsd_tng_sources \
-	$_modemmanager_sources \
 	$_msm_modem_sources \
 	$_msm_modem_wwan_port_sources \
 	$_nftables_sources \
@@ -314,7 +257,6 @@ source="$(flatpath \
 	$_pd_mapper_sources \
 	$_plasma_mobile_sources \
 	$_polkit_kde_agent_1_sources \
-	$_power_profiles_daemon_sources \
 	$_powerdevil_sources \
 	$_q6voiced_sources \
 	$_qbootctl_sources \
@@ -332,8 +274,6 @@ source="$(flatpath \
 	$_tinysparql_sources \
 	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
-	$_tuned_sources \
-	$_tuned_ppd_sources \
 	$_udisks2_sources \
 	$_udiskie_sources \
 	$_usb_moded_sources \
@@ -343,11 +283,7 @@ source="$(flatpath \
 	$_waydroid_sensors_sources \
 	$_waydroid_sources \
 	$_wpa_supplicant_sources \
-	$_xdg_desktop_portal_gnome_sources \
-	$_xdg_desktop_portal_gtk_sources \
 	$_xdg_desktop_portal_kde_sources \
-	$_xdg_desktop_portal_sources \
-	$_xdg_desktop_portal_wlr_sources \
 	$_xfce4_sources \
 	$_zram_init_sources \
 	$_sing_box_sources \
@@ -399,9 +335,6 @@ sha512sums="
 37c2b24cf9d59c7f91b2556f7aac74d2dd2cbd7b1473432cc2eaeb1bc9b2c7cedc531e7b5b0facc3478840a516eb9cde8182714c3d5148169547554bf0810f84  system-avahi-daemon.service
 2f10490def55253edf164b26e17cf8d82fdcb19089c2dc2eac110c622c9661e0a3c4247629f924246b6c1a24faf0416bece4a6ab8729cd400ed5c3c1a7ed703b  system-avahi-daemon.socket
 c68f0c9f09f3e26a5d317792177057bbcfd83f7cd9c57b235325a836cf01c83abd4c0ab0088b2f3777d85497f35d25b1498ac5d29b717d3f5c0f0651ef1b6054  user-kde-baloo.service
-d579b380591dc39d2c52b3de14309bb35be6e13a4106615b6a9180389361938e49ff7a752ed6b49da304288771eab2a93d1626db16f395703151304e61ca4299  system-blueman-mechanism.service
-022827efa05c322a5a5af7617fdbc33db054ff08eb17e6349755f3355f81b6907c4132324344f2f9cb7205bbd3be2ffbfcde451edfdba2665574a697a1b9a93f  user-blueman-applet.service
-aef7b9060dec287f3d3e246255fb33fae3c8b2558dcc750b23d89d6ed66ca5db888b1bdb307a8d8a7c44e55a7398dea41aba23eab3d720ec93313f029b958377  user-blueman-manager.service
 de133c35cf95d7c833368c9010264668e72657400ad4e5259ef046321c878507f36ef73fa7b4759f69c9d18cda8f8db8d7675d794d9a28f46480fb4d47ba9e0c  system-bluetooth.service
 7972e37d950d8e337f109242dc3a7689d0d6e43b80ce42decd81f8d48abaf275a50f5d980d5a40d4494608a2f88f745e1d4639688e179c95792bfb6f398b9ae4  system-bluetooth-mesh.service
 5ad5f8adcc89759e5c935a2e55803fac52a9681af3a28f5c8d46f693717afcf7c8c6394f85dd5dbc1ddb575b909b0f6feee2e9973ee177e6445d375136b932ee  user-dbus-org.bluez.obex.service
@@ -412,29 +345,15 @@ c10378bac1d64c0a2c767aab439c7d71bb7706b4fdc981add3ab4d5967257c0177f07448f884aeb1
 a7fd0c47858a10c263d9bc661dc955366a2acd79f7be5cf2571dc7ec3b3f5adf122b4e55e58d01b778aa7ed0c6981fc454295c93d29bd89d9145d5d2439e01a5  system-connman-wait-online.service
 9e2bb4153e97c11db7792b758a7a21bd352c7443dbdbde0f390d4dfe52d7495a4a01cb15097e842cfe69eb1214f9bca5a626fb54b4f8216e11efda1c55b89add  system-connman.service
 b7cc164dc0520652df9b2bf6f9708b7230bc6a3274d02ce222ba507f94bf31e3125532cf806af7ca0084c8b286b7dcefbc2cffe42a901a9e58c56e145d365fed  system-containerd.service
-4c64d433da3999c4f778c379e67779b30370b3a06ee09f22eaa594ce68f948afe2d3827c254ddf4b53341b394718eb5e29d242d2db5209e87084502cb581cac8  system-cosmic-greeter.service
-0da725086569f336593f52de6e61fa34482522bd83cd477c3a8de610813c9a96278d94b59d84e2ce9fc3605f893a4e2708f2cf9452aae6c4cfe2ffca54c91e2c  system-cosmic-greeter-daemon.service
-e4de73d12abd046c8683e3be6e3aab40a5db3f5d6246cedbb3ff099bcc8037a167b23ac957d30f1118db571b69cb10c042272ac2b54dacf83fa6a3e9dad13a87  user-dconf.service
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  sysusers.d-dnsmasq.conf
 1189ada8b126b2e574aea2e9b3ad9b0a86282d82be4f4ad4c58b1d968ce15ff45e8c60108f5e128ee946aa7e6e57f9fbb0b5d31d8371e79a2f0b3f3456bbd65f  system-docker.service
 c2d1f2a55bd7eed5a296e14b3250baa2f568dbdbce4444bae4635c1ce4bd6d3f1036462926d8c32d62d6609f5fcfb58933bf7eeb1924aefd814e864bc77bb7c7  system-docker.socket
 780912dbfdc7e9a350e934d46022b043edda86a393a7c107d0c855e9580240e4bce791428fdadef0a45adc6cfa24fb5d58981b6ccd80e3dad99da3e5fa3dc7b8  system-eg25-manager.service
-73e1839cec077e35ed985891f5274a09816115cc083e7a6e7e1fd98c88f4a114d7353492dee5808a28c47bf06bca32d9a6a7cc833cf4f21e501774955e93b321  user-evolution-addressbook-factory.service
-c648760e50e0c47970cce8fdd1972864af74bbc979ed4366973bf1c923ee624779bea95cf1e54260c55fa8a069090a367ceabe9b240842e20959bca42f2f8043  user-evolution-calendar-factory.service
-0e5d1d1cd0e7c9942dcc0c0742beb85f0c1c61338f0b637835f347579601ff7fe93214041306b69db2162aafb677a1d7111130c0f7dab646e5b5cd9f2dda3b33  user-evolution-source-registry.service
-fda84bb8dc10fa613790ff3ac9d50a03f21fb32f793ba3641740be93136800f0f07ba53d6e4843d0912f802955cc26719333d1dc2877610eff12354e8538ad5b  user-evolution-user-prompter.service
-fe2fd936cafc22a1bea7c4c0d9135866395cf537fc7a030350ef7ea427a8d3dd658fb608974c67d224c7471a8ccb7d621d12c4df5eb5c421c5de2f22bf22dd64  system-flatpak-system-helper.service
-c4dcaa578bbe9e0023cff139a6857a0df28fb81c9814577348e9996122945e26f8ec2760189a312ba46b14a6553afe12af8acd6fc77ea534ff2a632b2e2c2043  user-flatpak-oci-authenticator.service
-31c13c8774d35dc22c153787488b7764b0585f904f555ab578deba1fc18704080694dffd2794b4bf69f07cadeaf63ed5f384c97129ccce4962a59defd331899f  user-flatpak-portal.service
-f73df99518af1fd13f96342f561d43b69ebf757cdfd4444cee61665d5bfaa715c5be458cb44feb4a15e5d5613a91dec9e971a7bca30d2ae880d9e10eb7405ead  user-flatpak-session-helper.service
-62be7a7a7dce425fe8155f92ceab57aea52542687d27a2ce3cd9da0a80672381361fb3e4a8d58caf9cc02d80824a29e161ffb9f065f640b4481704851eb0378a  system-environment-generators-60-flatpak-system-only
-2d1337da0d1ac7ea5d6ffefbe05621970fef491278028589f5095ee6072867977eca7a68a997d6870e450546c2077d999207fadb568ab611833769555bfb5c64  user-environment-generators-60-flatpak
 ae2d20da95e519041f6eca39dd140895b2c46284f0894c60a29cf56b87704805146ddc2435e46e7fffbfc8bcab2cabceb32a10804ba1b648e2ed041c0b056102  tmpfiles.d-flatpak.conf
 0924315d4b7337edb42a2ecd7ba84d6a10437633028cd9c6ebd143c0668a6e6fea365d6644c336c70158e62d75a072db38bdee36cb677dfbfa609e9fdf43aca0  user-fnott.service
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
 f3463b85ac47055b400dfd2e24694c5e1dc6ab039efac0fe54496fc027c0732cda5e52a362a497b372dea671dc615154e8abfea866728d243cbbcd25e68a91aa  system-geoclue.service
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
-ccf803ac6a764570a98845f0b0ddcde0529943472ce4cc3dc904501883a51fda482d7aef3b84fac89590e869fecdcec9142a6eac3db8ae73782a5e29f32eaae1  user-gnome-terminal-server.service
 e0c5baf8030bae74c1ddb0f6f9bc4fdf2a1febaa344de1957d9a69a01eb7e1dc143b9d324ef15214289934b3a7fd4725df26b032f9225102d9cf5633145320bc  user-goimapnotify@.service
 e226bdb71f6fafe92d14046dfa19ddbccb765b579c1f90687a9ece376fa12406db9f2cf8035ff07d5a78ef77dc73615d39a8790f8722585bf65872be773888ff  system-wlgreet.service
 21652c58e7ee18b703f168a53bceaef9d3684db3af61bd7b0898601f5788307ed0ec28b4ed9db311baf533de115d6b6ff7a3b39cf846e0e814c7825073c2c450  system-hexagonrpcd-adsp-rootpd.service
@@ -462,7 +381,6 @@ c5ebba42808185df86d71a0eec6d4c2122c45ea1d27123f0c0b389849e09dd8a85bd174654f3c6cb
 f6fb4c890cbf72e344ca7a22e7f033fb4c32ce9f5edc27c03ccc5c21424d6a0ef871d79e8a89a502a707bdceb3bfbd7a5b3c8e16b1cd30e149bf2fdf8cccea9e  system-lxc@.service
 becb3bb17995f44b4021d05109130a00d0eba3d698eaf204a1f8d325741faa729d4ac7fedf0446b9468507a3b558a412ae9aa7f813bbb1f466395c86f66542fd  system-mce.service
 873b53592786a978659bda8d32de5ed9a9f163ca298c4f4112f10bf635a8170c4060cc15b57ff72b3afd50075cd1c5dbc10030f00b166e2540397da9e1c5e46b  user-mmsd-tng.service
-5eab6a59c81232b188df45482e325b2d1cb9e038ca147a1b6983c1c095d8194fba804793c5e291b201a820976c8f506aadd2daf7c52fe573a3af708fc9984641  system-ModemManager.service
 a12d8d6994ae6e46b0d131c9f5c475ccc70ab7aaf5839b19c1917410fb3c90a208bc0c6e07c90cf251ea6e445741af83a9f77bf9fcb30490bb0fbfc07aa8cbb9  system-msm-modem-uim-selection.service
 f380d0a4760f0d19ea65b5fea7ca5e1eee28eb162fd15efec318bddb3ea1735f2c891d9d129227e959a2ac479b49f2c438170fe1fdd2c91abf564f7b111a97c3  system-msm-modem-wwan-port.service
 12bb9aa2a2ab8d4b21c72a785b41057eb16a27eca5718cd03a987a50b77d669fe90abafae48c68b41616f31b1953853b3b4a74db4bc3cdeccacc00df113de204  system-nftables.service
@@ -475,7 +393,6 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 a69a66ecba0819337fc2b870b3095e0e25c109ca634aa8686f4d5ea07f8f06b8421dfe8f4969785ba1ec6a10f98cf1b7e97ecf32804f597e14bfde780b047961  system-plasma-mobile.service
 e726c2850024cd9f8c009b8748b3b58a78cfc7eaa1633ab03e7ba3df1a65cfa99d3dd54dfc99b6df2be6821da80a719e827e965d85052be22e3c5b4620feb37d  system-generators-plasma-mobile-user-override
 ebd194aad645a836ba2b51bfcebd7f78a8ec703e62dd7a7e85343df4f7b60e99abfebd6de12e540e4be24e9079aee0b8ea450e5169ce9ee97e44d0b370013a07  user-plasma-polkit-agent.service
-95a6acdc58b2ca13a92c62a36e455da9007443798c48a614a2154669de9a73e176b2f92124716f919f0088ba5b5bc4ae679138babf2c41f6e02c6a26af2da46a  system-power-profiles-daemon.service
 9f9392a2f9f72791c96179cf6e22e39e9c2f0e2dd3016e32143a68f871bd0ab506936f3372af0714330099888c877e7fe940102c862aa447d3e2758d9e00d046  user-plasma-powerdevil.service
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
 621189aa251655796795f4fa0cd79360bb67573e7327e545064eaadafc83cc7b382a405d6ba80662e0a4ece3876e4270e3563d859a6ba63b5e3854b39c35873e  system-qbootctl.service
@@ -496,8 +413,6 @@ de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb
 7adde19af39f218b5daf81a356ed76c9311d48552d6aa5998535e34fc8e6217947e5b9722e7085b6f2969a9a64be467c0715ef11163c9ea1d437a2d04ef8288b  user-tinysparql-xdg-portal-3.service
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
-a6154846b26445d4da8ef59364b8b43a2d64db7edc6726f094ff0f8688c832444a1e666c77a142bb66c11c226b45f29ad2000395bf69662fbbce9044c7dcadb0  system-tuned.service
-8d55230785dab9d37abc57b996af962333f493c516285f1b674788659915a5b83c7de48773da918ac7cbcc49b02c833c2e36d19e29b48911c96315b8927bcf45  system-tuned-ppd.service
 c7ea2b18c9d8f82306fbaca6d07b7019de3819d7898c3f50c3d0aceef4da4d311ed3bf31385e2f8998b8e3e326b1eb13309ffd44cf1b2d9db9b40bca00222c16  system-udisks2.service
 4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
 be47b824125cc54d2e1c879f59421f3c549e3f42c92a53f7117968a861403edf60c9e3bf54fd54a69997ccb22dce6f891d993aec606070884e3ff6da2ac8a5b1  system-usb_moded.service
@@ -507,13 +422,7 @@ bef07aeb8d5d31d8f0d34e44e8db06f4a0aa1cb77245ca7e11e8775c935e3a3b3dcd923300192b01
 841caa793d256cacea7eb651f3d77039b1c0ddb22727100d6cca74230e528aee09e945e1fdf20eaf40abbe3eaec9210eb7fa27144dc906cab65f8078b36921f9  system-waydroid-sensors.service
 023fc89481f9079ac2d2d6b8a9ab212cb13a6b309caaa92b336df4c6ee9cff05538f035f8411fd8f6b87ca73b400172f56022edbf02d3776ab6f2aa7af2eebef  system-waydroid-container.service
 ff5e1481d00d870b39fa8f11545b1a3bff7ac0278440d329f600d4493de8628c120b95268494e6b87666c4743a6598afdf23778c7e666c12e1a5614fbff0e8ae  system-wpa_supplicant.service
-eb01dd32fc598e49cbae31847aee4c3e28ee5014df052d65ad02c9a943a9e3399a4a119aa136630efef1157e31f6adc2d8420f8e72dc9da4c0b72645e4c84faa  user-xdg-desktop-portal-gtk.service
 8b7992b88fbccd4be77b7b8094349a27bde66a19585b97c40c441858a70d033b1a8fa146dd85bef5a08eed0ab08bd868ec9512ca72dbaea29ffa7038cf915605  user-plasma-xdg-desktop-portal-kde.service
-9a3620d3df53540a91efa48df322288d96ec887415f538877a979be40eb5239b95917b9ac57fda2c699fe3f1c6500f7de09a4ce6625b0818f5786e125713552f  user-xdg-desktop-portal.service
-e09a3c76f3be961dce9f564bb654ea84d1d7fb59907a2168c0569bf6c17a5ebe9fbe4d1f94f1d014433757bb721bc443d5962deb540cacbd5547b1dd47717f92  user-xdg-desktop-portal-rewrite-launchers.service
-9dd95f10dcdb6234697b012c6f428cfca0cfbde24a8951e96cb4c463f55a22d40096a94ca0018f9dbe4ebb2c80eb39faeaa9222f6fb419831520a138f88f0321  user-xdg-document-portal.service
-1262f10b97989be726432700a923d7717570feb7b0d78c3c573e21ee6be320f5a618d0d21c1eb351702397caa95b476b8854bf83545993fb464b4a7a80067800  user-xdg-permission-store.service
-744c60fdc6e53ba2c9f370ce8462e1a420cfea973edff49d0caf7a3e65f0f35257d61b5ae3ace3e9d9d48e382cb54d9f2ff96ad02d5e16758a49ba2e07963e5a  user-xdg-desktop-portal-wlr.service
 760a0002f08df28c1584dea41c06df4a6cfb016e201e909dcfba639e5e794cdf3ae9e790a9c9e50261b88968d8129bfee35ec1be8e9f99ad1c7e1359872b5643  user-xfce4-notifyd.service
 1072886ed07e3e3545e41c542d001f313185497fbaaa8b2071b30f296c04f925b4a5a50bc2b08fa91ca5e83033564a0eae7d017ec1afb01defad42fb6d65e6ed  system-zram_swap.service
 4d201f29ad98abf38a15e877bb1b4f46fb08ab0cd5cb83f29aaa104eaa0a51fd14784110ee844ccb89914aa73b985fc9c61e216f8d2ac230adfa1d1660ebd573  system-sing-box.service
