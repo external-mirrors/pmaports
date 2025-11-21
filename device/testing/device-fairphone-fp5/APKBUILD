@@ -2,7 +2,7 @@
 # Maintainer: Luca Weiss <luca@lucaweiss.eu>
 pkgname=device-fairphone-fp5
 pkgdesc="Fairphone 5"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -37,7 +37,6 @@ subpackages="$pkgname-openrc"
 source="
 	81-libssc-fairphone-fp5.rules
 	deviceinfo
-	hexagonrpcd.confd
 	modules-initfs
 	ucm/HiFi.conf
 	ucm/fp5.conf
@@ -59,9 +58,6 @@ package() {
 	mkdir -p "$pkgdir"/usr/share/alsa/ucm2/conf.d/qcm6490
 	ln -s /usr/share/alsa/ucm2/Fairphone/fp5/fp5.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/qcm6490/Fairphone\ 5.conf
-
-	install -Dm644 "$srcdir"/hexagonrpcd.confd \
-		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf
 }
 
 openrc() {
@@ -75,7 +71,6 @@ openrc() {
 sha512sums="
 2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-fairphone-fp5.rules
 8577d77e9e5fe4981f9800fb361ade934d724bd477b530f5f1c237b529704a450490fa9e045d3e5fb9e998260b89c10e8b633ccee4c411715bee932301b64e4b  deviceinfo
-206c7b2616b61c1f7630933d036875985e78cfc23e6a175795b328d251684abeceb06373da4ae211f6f7dd7e45fb3b3238bb8a4b5698906be626d8d918adf5b3  hexagonrpcd.confd
 6280b66b9d4843ef78d0029c31d267b0bf59ea669bc3f2c268edfddf4edb3cec62d40b97c8204c85d1350759ad56e1ac2a5ba8ddc691f73c35c7385350ef12ee  modules-initfs
 f39b6e5de6d9bfefc841e887b92bb5a92d02d1de46fd376ca83871b7a9cf0da5297d7201457b2bb12c302887bb0a9d328604ff910ebda8022ac71ad120b11a3c  HiFi.conf
 fb510ca806fb76174576218f5cb4d799e05757b3e351eec32b1406bcf22540cf27888f30e3737f016d43e3c38dea8d7418c194e12c9879df9c756d4d80ceae99  fp5.conf
