@@ -4,7 +4,7 @@
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
 pkgver=17
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -63,14 +63,16 @@ openrc() {
 pmtest() {
 	depends="bootrr qrtr firmware-oneplus-sdm845 unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	install="$subpkgname.post-install"
+	install="$subpkgdir/$subpkgname.post-install"
 
-	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgname.post-install"
+	mkdir -p "$subpkgdir"
+
+	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgdir/$subpkgname.post-install"
 }
 
 systemd() {
 	install -Dm644 -t "$subpkgdir"/usr/lib/systemd/system-preset \
-		80-device-oneplus-enchilada.preset
+		"$srcdir"/80-device-oneplus-enchilada.preset
 	default_systemd
 }
 
