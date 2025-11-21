@@ -4,7 +4,7 @@
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
 pkgver=17
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -53,7 +53,7 @@ nonfree_firmware() {
 	"
 
 	install -Dm644 "$srcdir"/81-libssc-oneplus-fajita.rules -t "$subpkgdir"/usr/lib/udev/rules.d/
-	install -Dm644 q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
@@ -69,14 +69,16 @@ nonfree_firmware_openrc() {
 pmtest() {
 	depends="bootrr qrtr firmware-oneplus-sdm845 unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	install="$subpkgname.post-install"
+	install="$subpkgdir/$subpkgname.post-install"
 
-	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgname.post-install"
+	mkdir -p "$subpkgdir"
+
+	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgdir/$subpkgname.post-install"
 }
 
 systemd() {
 	install -Dm644 -t "$subpkgdir"/usr/lib/systemd/system-preset \
-		80-device-oneplus-fajita.preset
+		"$srcdir"/80-device-oneplus-fajita.preset
 	default_systemd
 }
 
