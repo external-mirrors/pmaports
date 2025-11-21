@@ -2,8 +2,8 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp6
 pkgdesc="The Fairphone (Gen. 6)"
-pkgver=6
-pkgrel=1
+pkgver=7
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -13,10 +13,12 @@ depends="
 	firmware-fairphone-fp6-adsp
 	firmware-fairphone-fp6-bluetooth
 	firmware-fairphone-fp6-cdsp
+	firmware-fairphone-fp6-hexagonfs
 	firmware-fairphone-fp6-ipa
 	firmware-fairphone-fp6-modem
 	firmware-fairphone-fp6-vpu
 	firmware-fairphone-fp6-wpss
+	hexagonrpcd
 	linux-firmware-ath11k
 	linux-postmarketos-qcom-milos
 	make-dynpart-mappings
@@ -27,7 +29,10 @@ depends="
 	soc-qcom-qbootctl
 "
 makedepends="devicepkg-dev"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
+subpackages="$pkgname-openrc"
 source="
+	81-libssc-fairphone-fp6.rules
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
@@ -38,9 +43,20 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/81-libssc-fairphone-fp6.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/81-libssc-fairphone-fp6.rules
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	depends="hexagonrpcd-openrc openrc"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
+2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-fairphone-fp6.rules
 da360c976442b4d804e15ad9978eba45db7514be073040db289a1f3ddc00b8d796c8548b9f499c83cfdc5ae8a6116ed7a02b8c5bfd6d7216bf09372db18307cf  deviceinfo
 a230e30a05453491d41ba4a6a4c504e3dbe7b630402ac2b837aa5d977c2d38c73c93fb198e8aff892a12005de8d2355593fe2fae8e3e9412418efb1d32250022  kernel-cmdline.conf
 178bb66a35b50aee147e3ce995b0aaf052715057025261e28a3d48e7a6449b981ceff1280799a8806529abb5c1882cea867991320594f9a291cc405d15b3e204  modules-initfs
