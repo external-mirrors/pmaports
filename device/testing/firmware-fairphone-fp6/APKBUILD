@@ -1,13 +1,14 @@
 # Maintainer: Luca Weiss <luca@lucaweiss.eu>
 pkgname=firmware-fairphone-fp6
 pkgver=20250606
-pkgrel=1
+pkgrel=2
 pkgdesc="Firmware for The Fairphone (Gen. 6)"
 subpackages="
 	$pkgname-adreno
 	$pkgname-adsp
 	$pkgname-bluetooth
 	$pkgname-cdsp
+	$pkgname-hexagonfs
 	$pkgname-ipa
 	$pkgname-modem
 	$pkgname-venus
@@ -18,7 +19,7 @@ arch="aarch64"
 license="proprietary"
 makedepends="pil-squasher"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
-_commit="cb1e77ced667a95ee637964124ff83bb0373838b"
+_commit="63962e04b68cdba034b778c97878b97d5e1d8498"
 source="https://github.com/FairBlobs/FP6-firmware/archive/$_commit/FP6-firmware-$_commit.tar.gz"
 builddir="$srcdir/FP6-firmware-$_commit"
 
@@ -69,6 +70,21 @@ cdsp() {
 		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
+hexagonfs() {
+	pkgdesc="The Fairphone (Gen. 6) hexagonfs files"
+
+	mkdir -p "$subpkgdir"/usr/share/qcom/milos/Fairphone/
+	cp -r "$builddir"/hexagonfs/ \
+		"$subpkgdir"/usr/share/qcom/milos/Fairphone/fp6
+
+	# Remove files that we don't need - for now
+	#rm -r "$subpkgdir"/usr/share/qcom/milos/Fairphone/fp6/acdb/
+	#rm -r "$subpkgdir"/usr/share/qcom/milos/Fairphone/fp6/dsp/
+
+	find "$subpkgdir/usr/share/qcom/milos/Fairphone/fp6/" \
+		-type f -exec chmod 0644 {} \;
+}
+
 ipa() {
 	pkgdesc="The Fairphone (Gen. 6) ipa firmware"
 
@@ -105,5 +121,5 @@ wpss() {
 }
 
 sha512sums="
-c657a720e64d33bfa6aca93aae2528d506ef1fa5e900745ef1c187c57cab829a2440182831ab13454524decde77a081e730811969a8b9528394e924a8148393a  FP6-firmware-cb1e77ced667a95ee637964124ff83bb0373838b.tar.gz
+a4589d67a4389de342be55b1d3ae207d327c2c70503d32190a0e3f8df087daf7737e6857725524cd61d311a3c0345c0cb47d2fbdd916af970e8e2872d48e00de  FP6-firmware-63962e04b68cdba034b778c97878b97d5e1d8498.tar.gz
 "
