@@ -1,13 +1,14 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=boot-deploy
 pkgver=0.20.3
-pkgrel=0
+pkgrel=1
 pkgdesc="tool for finalizing and deploying boot related files"
 url="https://gitlab.postmarketos.org/postmarketOS/boot-deploy"
 arch="noarch"
 license="GPL-2.0-or-later"
 source="
 	https://gitlab.postmarketos.org/postmarketOS/boot-deploy/-/archive/$pkgver/boot-deploy-$pkgver.tar.gz
+	0001-Remove-boot-image-header-v2-spaghetti.patch
 
 	os-customization
 	use-busybox-sh.patch
@@ -30,6 +31,7 @@ package() {
 }
 sha512sums="
 f760748eb65e2f1505dafc95d01e9426224f495ff015c9eae98ea02545379ec9424345a0915d323aaa8a6e83f34a1db53e8ddb01ae751261299c59d0a76491a0  boot-deploy-0.20.3.tar.gz
+58b6c77023e38d1a7f59fcaf42943135bec645adbdbd394e936d056926f743bf7454b5d94e148be26b36df7e1787ae2f872c20f675cef6cd48fc22cd129cd126  0001-Remove-boot-image-header-v2-spaghetti.patch
 a243975b9850d9933e0f917f7eb38fc4a76ea658c3dcc56f035f60ee6c62d6740c1107143b8210bdc0231d4c9b6b2003e458120985604eb09649322d359ae89f  os-customization
 5b3da17fab1b0e76b3686667c0c8c3a3e29a5794406875dd6375d73c5b1b47d60da6cf54720a3d8ad98b79c563af0863fedc87d2506b19055fb3fdea1cbd731d  use-busybox-sh.patch
 "

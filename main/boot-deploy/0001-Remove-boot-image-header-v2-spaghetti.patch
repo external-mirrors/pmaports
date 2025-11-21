@@ -1,0 +1,38 @@
+From f6216db878e9c5d30fd3c9b7f2a1ed2b0d124d3e Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca.weiss@fairphone.com>
+Date: Fri, 21 Nov 2025 09:43:07 +0100
+Subject: [PATCH] Remove boot image header v2 spaghetti
+
+Some devices that use use boot image header v2 also require the setting
+of bootimg_custom_args. Currently the --dtb and --dtb_offset parameters
+are silently not added to the mkbootimg invocation, leading to failure
+to include the dtb in the boot image.
+
+Currently in postmarketOS pmaports there is one device that has both
+header_version="2" AND bootimg_custom_args set, which is the Fairphone
+(Gen. 6), and it's breaking boot.img generation there. I didn't dig into
+if at earlier times (e.g. when that code was introduced in July 2022)
+there were occurances in pmaports where this broke but now this should
+be safe to do.
+---
+ boot-deploy-functions.sh | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/boot-deploy-functions.sh b/boot-deploy-functions.sh
+index 105a61e..364bd63 100755
+--- a/boot-deploy-functions.sh
++++ b/boot-deploy-functions.sh
+@@ -744,9 +744,7 @@ create_bootimg() {
+ 	fi
+ 
+ 	local _header_v2=""
+-	# XXX: Some deviceinfo files used custom_args for header v2 support before it was implemented
+-	# here. We check if deviceinfo_bootimg_custom_args is set to avoid breaking those devices.
+-	if [ "$deviceinfo_header_version" = "2" ] && [ -z "$deviceinfo_bootimg_custom_args" ]; then
++	if [ "$deviceinfo_header_version" = "2" ]; then
+ 		if [ -z "$deviceinfo_flash_offset_dtb" ]; then
+ 			log "ERROR: deviceinfo_header_version is 2, but"
+ 			log "'deviceinfo_flash_offset_dtb' is missing. Set it"
+-- 
+2.51.2
+
