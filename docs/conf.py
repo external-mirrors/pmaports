@@ -1,10 +1,6 @@
 # Configuration file for the Sphinx documentation builder.
 
 import datetime
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(".."))  # Allow modules to be found
 
 project = "pmaports"
 copyright = str(datetime.date.today().year) + ", postmarketOS contributors"
