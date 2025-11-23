@@ -15,6 +15,7 @@ in pmaports and the processes around device categorization.
 
    approval-rules
    device-categorization
+   deviceinfo-reference
    ci-tags
    kernel-versions
 ```

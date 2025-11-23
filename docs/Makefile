@@ -14,4 +14,3 @@ run:
 	python3 -m http.server -b 127.0.0.1 8081 -d ../public
 
 .PHONY: default venv run
-
