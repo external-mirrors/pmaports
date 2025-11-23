@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=105
+pkgver=106
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -125,7 +125,20 @@ _containerd_sources="system/containerd.service"  # From: https://github.com/cont
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
 _docker_engine_sources="system/docker.service system/docker.socket"  # From https://github.com/moby/moby/blob/master/contrib/init/systemd
 _eg25_manager_sources="system/eg25-manager.service" # From https://gitlab.com/mobian1/eg25-manager/-/blob/master/data/eg25-manager.service.in
-_flatpak_sources="tmpfiles.d/flatpak.conf" # From https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
+_flatpak_sources="
+	system/flatpak-system-helper.service
+	user/flatpak-oci-authenticator.service
+	user/flatpak-portal.service
+	user/flatpak-session-helper.service
+	system-environment-generators/60-flatpak-system-only
+	user-environment-generators/60-flatpak
+	tmpfiles.d/flatpak.conf
+" # From
+# - https://github.com/flatpak/flatpak/blob/main/system-helper/flatpak-system-helper.service.in
+# - https://github.com/flatpak/flatpak/blob/main/session-helper/flatpak-session-helper.service.in
+# - https://github.com/flatpak/flatpak/blob/main/portal/flatpak-portal.service.in
+# - https://github.com/flatpak/flatpak/tree/main/env.d
+# - https://github.com/flatpak/flatpak/tree/main/data/tmpfiles.d
 _fnott_sources="user/fnott.service"
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
 _geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
@@ -349,6 +362,12 @@ b7cc164dc0520652df9b2bf6f9708b7230bc6a3274d02ce222ba507f94bf31e3125532cf806af7ca
 1189ada8b126b2e574aea2e9b3ad9b0a86282d82be4f4ad4c58b1d968ce15ff45e8c60108f5e128ee946aa7e6e57f9fbb0b5d31d8371e79a2f0b3f3456bbd65f  system-docker.service
 c2d1f2a55bd7eed5a296e14b3250baa2f568dbdbce4444bae4635c1ce4bd6d3f1036462926d8c32d62d6609f5fcfb58933bf7eeb1924aefd814e864bc77bb7c7  system-docker.socket
 780912dbfdc7e9a350e934d46022b043edda86a393a7c107d0c855e9580240e4bce791428fdadef0a45adc6cfa24fb5d58981b6ccd80e3dad99da3e5fa3dc7b8  system-eg25-manager.service
+fe2fd936cafc22a1bea7c4c0d9135866395cf537fc7a030350ef7ea427a8d3dd658fb608974c67d224c7471a8ccb7d621d12c4df5eb5c421c5de2f22bf22dd64  system-flatpak-system-helper.service
+c4dcaa578bbe9e0023cff139a6857a0df28fb81c9814577348e9996122945e26f8ec2760189a312ba46b14a6553afe12af8acd6fc77ea534ff2a632b2e2c2043  user-flatpak-oci-authenticator.service
+31c13c8774d35dc22c153787488b7764b0585f904f555ab578deba1fc18704080694dffd2794b4bf69f07cadeaf63ed5f384c97129ccce4962a59defd331899f  user-flatpak-portal.service
+f73df99518af1fd13f96342f561d43b69ebf757cdfd4444cee61665d5bfaa715c5be458cb44feb4a15e5d5613a91dec9e971a7bca30d2ae880d9e10eb7405ead  user-flatpak-session-helper.service
+62be7a7a7dce425fe8155f92ceab57aea52542687d27a2ce3cd9da0a80672381361fb3e4a8d58caf9cc02d80824a29e161ffb9f065f640b4481704851eb0378a  system-environment-generators-60-flatpak-system-only
+2d1337da0d1ac7ea5d6ffefbe05621970fef491278028589f5095ee6072867977eca7a68a997d6870e450546c2077d999207fadb568ab611833769555bfb5c64  user-environment-generators-60-flatpak
 ae2d20da95e519041f6eca39dd140895b2c46284f0894c60a29cf56b87704805146ddc2435e46e7fffbfc8bcab2cabceb32a10804ba1b648e2ed041c0b056102  tmpfiles.d-flatpak.conf
 0924315d4b7337edb42a2ecd7ba84d6a10437633028cd9c6ebd143c0668a6e6fea365d6644c336c70158e62d75a072db38bdee36cb677dfbfa609e9fdf43aca0  user-fnott.service
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
