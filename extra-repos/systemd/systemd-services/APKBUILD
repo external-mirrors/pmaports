@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=106
+pkgver=107
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -48,14 +48,9 @@ subpackages="
 	iio-sensor-proxy-systemd:_service
 	irqbalance-systemd:_service
 	iwd-systemd:_service
-	kactivitymanagerd-systemd:_service
 	kanshi-systemd:_service
-	kded-systemd:_service
 	keyd-systemd:_service
-	kglobalacceld-systemd:_service
 	kodi-systemd:_service
-	ksystemstats-systemd:_service
-	kwallet-pam-systemd:_service
 	lightdm-systemd:_service
 	localsearch-systemd:_service
 	lxc-systemd:_service
@@ -67,9 +62,6 @@ subpackages="
 	nginx-systemd:_service
 	openssh-server-pam-systemd:_service
 	pd-mapper-systemd:_service
-	plasma-mobile-systemd:_service
-	polkit-kde-agent-1-systemd:_service
-	powerdevil-systemd:_service
 	q6voiced-systemd:_service
 	qbootctl-systemd:_service
 	qcom-diag-systemd:_service
@@ -79,7 +71,6 @@ subpackages="
 	siglo-systemd:_service
 	sleep-inhibitor-systemd:_service
 	speakersafetyd-systemd:_service
-	spectacle-systemd:_service
 	syncthing-systemd:_service
 	tailscale-systemd:_service
 	tinydm-systemd:_service
@@ -95,7 +86,6 @@ subpackages="
 	waydroid-sensors-systemd:_service
 	waydroid-systemd:_service
 	wpa_supplicant-systemd:_service
-	xdg-desktop-portal-kde-systemd:_service
 	xfce4-systemd:_service
 	zram-init-systemd:_service
 	sing-box-systemd:_service
@@ -138,13 +128,8 @@ _iio_sensor_proxy_sources="system/iio-sensor-proxy.service"
 _irqbalance_sources="system/irqbalance.service"
 _iwd_sources="system/iwd.service" # From https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/iwd.service.in
 _kanshi_sources="user/kanshi.service" # created, no unit file upstream
-_kactivitymanagerd_sources="user/plasma-kactivitymanagerd.service"
-_kded_sources="user/plasma-kded6.service" # From https://invent.kde.org/frameworks/kded/-/blob/master/src/plasma-kded6.service.in
 _keyd_sources="system/keyd.service" # From https://github.com/rvaiya/keyd/blob/master/keyd.service.in
-_kglobalacceld_sources="user/plasma-kglobalaccel.service"
 _kodi_sources="system/kodi.service" # From https://github.com/graysky2/kodi-standalone-service/blob/master/x86/init/kodi-gbm.service
-_ksystemstats_sources="user/plasma-ksystemstats.service"
-_kwallet_pam_sources="user/plasma-kwallet-pam.service"
 _lightdm_sources="system/lightdm.service"
 _localsearch_sources="user/localsearch-writeback-3.service user/localsearch-control-3.service user/localsearch-3.service"  # From https://gitlab.gnome.org/GNOME/localsearch
 _lxc_sources="system/lxc@.service"
@@ -161,9 +146,6 @@ _openssh_server_pam_sources="
 	sysusers.d/sshd.conf
 "
 _pd_mapper_sources="system/pd-mapper.service"
-_plasma_mobile_sources="system/plasma-mobile.service system-generators/plasma-mobile-user-override"
-_polkit_kde_agent_1_sources="user/plasma-polkit-agent.service" # From https://invent.kde.org/plasma/polkit-kde-agent-1/-/blob/master/plasma-polkit-agent.service.in
-_powerdevil_sources="user/plasma-powerdevil.service" # From https://invent.kde.org/plasma/powerdevil/-/blob/master/daemon/plasma-powerdevil.service.in
 _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
 _qcom_diag_sources="system/diag-router.service"
@@ -173,7 +155,6 @@ _sensorfw_sources="system/sensorfwd.service"
 _siglo_sources="user/siglo.service"  # From https://github.com/theironrobin/siglo/blob/main/data/siglo.service
 _sleep_inhibitor_sources="system/sleep-inhibitor.service"
 _speakersafetyd_sources="system/speakersafetyd.service" # From https://github.com/AsahiLinux/speakersafetyd/blob/main/speakersafetyd.service
-_spectacle_sources="user/app-org.kde.spectacle.service"
 _syncthing_sources="user/syncthing.service"  # From https://github.com/syncthing/syncthing/blob/main/etc/linux-systemd/user/syncthing.service
 _tailscale_sources="system/tailscaled.service etc/default/tailscaled"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
@@ -189,7 +170,6 @@ _watchdog_kick_sources="system/watchdog-kick.service"
 _waydroid_sources="system/waydroid-container.service"
 _waydroid_sensors_sources="system/waydroid-sensors.service"
 _wpa_supplicant_sources="system/wpa_supplicant.service"
-_xdg_desktop_portal_kde_sources="user/plasma-xdg-desktop-portal-kde.service" # From https://invent.kde.org/plasma/xdg-desktop-portal-kde/-/blob/master/data/plasma-xdg-desktop-portal-kde.service.in
 _xfce4_sources="user/xfce4-notifyd.service"
 _zram_init_sources="system/zram_swap.service"  # adapted from https://github.com/vaeth/zram-init/blob/main/systemd/system/zram_swap.service
 _sing_box_sources="
@@ -233,14 +213,9 @@ source="$(flatpath \
 	$_iio_sensor_proxy_sources \
 	$_irqbalance_sources \
 	$_iwd_sources \
-	$_kactivitymanagerd_sources \
 	$_kanshi_sources \
-	$_kded_sources \
 	$_keyd_sources \
-	$_kglobalacceld_sources \
 	$_kodi_sources \
-	$_ksystemstats_sources \
-	$_kwallet_pam_sources \
 	$_lightdm_sources \
 	$_localsearch_sources \
 	$_lxc_sources \
@@ -252,9 +227,6 @@ source="$(flatpath \
 	$_nginx_sources \
 	$_openssh_server_pam_sources \
 	$_pd_mapper_sources \
-	$_plasma_mobile_sources \
-	$_polkit_kde_agent_1_sources \
-	$_powerdevil_sources \
 	$_q6voiced_sources \
 	$_qbootctl_sources \
 	$_qcom_diag_sources \
@@ -264,7 +236,6 @@ source="$(flatpath \
 	$_siglo_sources \
 	$_sleep_inhibitor_sources \
 	$_speakersafetyd_sources \
-	$_spectacle_sources \
 	$_syncthing_sources \
 	$_tailscale_sources \
 	$_tinydm_sources \
@@ -280,7 +251,6 @@ source="$(flatpath \
 	$_waydroid_sensors_sources \
 	$_waydroid_sources \
 	$_wpa_supplicant_sources \
-	$_xdg_desktop_portal_kde_sources \
 	$_xfce4_sources \
 	$_zram_init_sources \
 	$_sing_box_sources \
@@ -362,14 +332,9 @@ cf95791ba56247e3b37a1e23d59638ded09cf343b646dd68b733cc1f72d3ea3daa038a99ca961f44
 d12ebe6e7db2a8e34baab640dd4e2ea9cd01bc19054adf32d55528a6b27f71c2006ac2d65a58c98e21ed598e9cc66bfe79e197d20ed9d13f866a5a6cd3e247d5  system-iio-sensor-proxy.service
 0ed5e05b73cf4952c81deeffc7f662f0ef6e684c24fb8177f625f2d086582fad2df1376a2479155b4a6aa6d584f1cccfe8c143f7830eccaf5e693cae5aefed2d  system-irqbalance.service
 df3388cb7b9d035e54b34d8f8a6594be89c3015f979fe3bdc199fb7db1ab0bef821d6b306eecdf978eb227454d5e50aab29ac02d9722b1b075ec0ce4705e3518  system-iwd.service
-9cf877929b16f3437e65d1a0a2049799cc97cc84a7caab6a581e90139495b4febb5fb4c59ee463110866a0b60c9462d6d0fdb331d92d29b30ce6aeada365ac48  user-plasma-kactivitymanagerd.service
 fa41668288d53f8ce42a7524f10b1e03812fb11ed71bcb484dc22d0d374b453837317eb599cf61b66163a905949024509e73d5190012b664b301d48af7002a01  user-kanshi.service
-b0ecd5d413a2010d3f36285c2d35523119c29007e1e4162e51dfc746cc105f990a82a2a2d6037a8b906628c0a4f606729290525c7a53dbcfbc8147244fa403a7  user-plasma-kded6.service
 b80a6bca1f38c4feaffba5d1ceb854738f41d5b3ab450a1613da959cb516790e6849b7a164d1b5e62cba369c86e0c75797cd599dcd87064262760c3be159ef81  system-keyd.service
-acf21c4391ca62775491ba4d3b7c460b4163ef07abb195e152c98299a2d12779f3eb95f8cad0aeb3239f2d0fa8222a2483000c45aa6a47e05269876147d89839  user-plasma-kglobalaccel.service
 e7c33c889afb822ae20ebd09f3b9f8d130d1f89324006ab3a140fbf46ef7e774634d2ac13ac328c588266823e5eb52c7e0d6d6459f1f64052f9cea5a5fe9f54a  system-kodi.service
-bccc419b13d39c59ef6bb765dde2bef70c621995bc53d74ccc9ad4aef92931ee74c3ee0b19a0dffb8c3f133b5b0d73f5f70df269dddf5f0ed1dba1cf31d7e141  user-plasma-ksystemstats.service
-a9358610c86fd3506e4cf02aea26e699d61268121ea3c16507b8f71446c16169a1c90c75faf126f2cf607c091e507f7e5822ea5fd8cc1f6e14f257c8007287a3  user-plasma-kwallet-pam.service
 d49344e79f6468ef06538068cbb12c37e313e02ade28984a75dad4d50e1e962372451908e9910ae60c74bd5230ae45e6a6346bb0f7c6af83c346a691f5714556  system-lightdm.service
 49010e368981fdb8f36bdfe58ed6ee00615cbee696891ce02fae7b213b451d5dfe60a5c6e0065c6d3ab588ce38948f5bee1f03200daa4fe8e234e82b249a9e15  user-localsearch-writeback-3.service
 53777d4ba1c35d7f00294675f61d3f0a0fa632a9abd6d428d9e159419e3ae43c6bb3c12f506dca0545db889a6642bfbaee5802fc637c6a84635e5f6814c79944  user-localsearch-control-3.service
@@ -386,10 +351,6 @@ fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf
 c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731cd280cbb3525b4c60311817609381e2308d9f2dfb7c0d7072  system-sshdgenkeys.service
 4a6d716a907a730675505bfc4ac38598f9c4e7d962fa9cdeea51dbbaa6afec80d1b82b98627c37c164dc5cdcc7f68118104e3adb73d985f32a24f1941766c5af  sysusers.d-sshd.conf
 0bed9a8a719661609ad84d1c6fcdf2fe9213e741682b7ddebad82d9744f137c593788ed522868f10b95b599d81743d07ec3212630a7e99d333261dfa1bf1cc11  system-pd-mapper.service
-a69a66ecba0819337fc2b870b3095e0e25c109ca634aa8686f4d5ea07f8f06b8421dfe8f4969785ba1ec6a10f98cf1b7e97ecf32804f597e14bfde780b047961  system-plasma-mobile.service
-e726c2850024cd9f8c009b8748b3b58a78cfc7eaa1633ab03e7ba3df1a65cfa99d3dd54dfc99b6df2be6821da80a719e827e965d85052be22e3c5b4620feb37d  system-generators-plasma-mobile-user-override
-ebd194aad645a836ba2b51bfcebd7f78a8ec703e62dd7a7e85343df4f7b60e99abfebd6de12e540e4be24e9079aee0b8ea450e5169ce9ee97e44d0b370013a07  user-plasma-polkit-agent.service
-9f9392a2f9f72791c96179cf6e22e39e9c2f0e2dd3016e32143a68f871bd0ab506936f3372af0714330099888c877e7fe940102c862aa447d3e2758d9e00d046  user-plasma-powerdevil.service
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
 621189aa251655796795f4fa0cd79360bb67573e7327e545064eaadafc83cc7b382a405d6ba80662e0a4ece3876e4270e3563d859a6ba63b5e3854b39c35873e  system-qbootctl.service
 998f70776a2857b44202079ecb1ec76331f998155c8a4a15ce036b2fb916d82cba5d750d66509e562f93482c2301a262e8efc220fe54ac2ee1a445801823e465  system-diag-router.service
@@ -400,7 +361,6 @@ d5bf5f01c0feafab4edfc39b75eded608dc3efcd3b918739e3ed2ab11340c9cc9b6fb97c0706ddd3
 631a5647c93c103853cf27c69951f44f50b9d44a6ac7773258093b6b632ad466dd0275d9ce7d9b1018b083d3a582c80be011d80f6b9579e78b00113fe3e90951  user-siglo.service
 be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
 7d829633bf7d281ebe9b4c2896f36a7196390aa5426820d3d74eb47889a12c4a776b0f4b0b38547fadb3639bc6903be4d7c013911bf9a98fee93cf0cb5718784  system-speakersafetyd.service
-0cfdb5bb5efad2ff0d730c68af4b16a0cf24985b864c6a5a9cedfdff130d403865dacfe1d9f5d37660a3898bd8681007d2fb5604a887cd7176836023adfe8c56  user-app-org.kde.spectacle.service
 399cd971b02e4b8bdfe60808ab1beac111b8618358f89a4482cafde1d19fe0a943d2ef6c20f5ad853581a85ab2297065187ade83eac7a664bd47412d0df7b2b6  user-syncthing.service
 41547eb369937348378e898e0dda7151552056107f4daab5a8a137a1b846560afa923cd345037b4f96bc9cdf2a7f66211a346b77229cc07ce2d0b634ff40dfe7  system-tailscaled.service
 de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb9042d77ec323a6ffb5f108e33d28b6e7820d09250daadd57  etc-default-tailscaled
@@ -418,7 +378,6 @@ bef07aeb8d5d31d8f0d34e44e8db06f4a0aa1cb77245ca7e11e8775c935e3a3b3dcd923300192b01
 841caa793d256cacea7eb651f3d77039b1c0ddb22727100d6cca74230e528aee09e945e1fdf20eaf40abbe3eaec9210eb7fa27144dc906cab65f8078b36921f9  system-waydroid-sensors.service
 023fc89481f9079ac2d2d6b8a9ab212cb13a6b309caaa92b336df4c6ee9cff05538f035f8411fd8f6b87ca73b400172f56022edbf02d3776ab6f2aa7af2eebef  system-waydroid-container.service
 ff5e1481d00d870b39fa8f11545b1a3bff7ac0278440d329f600d4493de8628c120b95268494e6b87666c4743a6598afdf23778c7e666c12e1a5614fbff0e8ae  system-wpa_supplicant.service
-8b7992b88fbccd4be77b7b8094349a27bde66a19585b97c40c441858a70d033b1a8fa146dd85bef5a08eed0ab08bd868ec9512ca72dbaea29ffa7038cf915605  user-plasma-xdg-desktop-portal-kde.service
 760a0002f08df28c1584dea41c06df4a6cfb016e201e909dcfba639e5e794cdf3ae9e790a9c9e50261b88968d8129bfee35ec1be8e9f99ad1c7e1359872b5643  user-xfce4-notifyd.service
 1072886ed07e3e3545e41c542d001f313185497fbaaa8b2071b30f296c04f925b4a5a50bc2b08fa91ca5e83033564a0eae7d017ec1afb01defad42fb6d65e6ed  system-zram_swap.service
 4d201f29ad98abf38a15e877bb1b4f46fb08ab0cd5cb83f29aaa104eaa0a51fd14784110ee844ccb89914aa73b985fc9c61e216f8d2ac230adfa1d1660ebd573  system-sing-box.service

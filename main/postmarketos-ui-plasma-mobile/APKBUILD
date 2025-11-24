@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-plasma-mobile
 pkgver=6
-pkgrel=3
+pkgrel=4
 pkgdesc="(Wayland) Mobile variant of KDE Plasma"
 url="https://wiki.postmarketos.org/wiki/Plasma_Mobile"
 arch="noarch !armhf !x86 !ppc64le" # armhf: pmaports#75, x86: aports#11807, ppc64le: no angelfish
@@ -31,6 +31,7 @@ _pmb_recommends="
 source="
 	kscreenlockerrc
 	org.kde.plasma.mobile.homescreen.folio.js
+	system-generators-plasma-mobile-user-override
 	"
 subpackages="$pkgname-extras $pkgname-openrc $pkgname-systemd"
 install="
@@ -87,10 +88,12 @@ openrc() {
 systemd() {
 	default_systemd
 
-	mkdir -p "$subpkgdir"
+	install -Dm755 "$srcdir"/system-generators-plasma-mobile-user-override \
+		-t "$subpkgdir"/usr/ĺib/systemd/system-generators
 }
 
 sha512sums="
 b3aa8ee26c01de103c0c0af23532bf232f7071fdd02c53bd787d78e5974faa5662fc5776ce9be417392214ae73334b0eb0d073fe24f616a0ce99081f30b9158c  kscreenlockerrc
 9396bb437c8a6e4b13eff1d16d1dee5804beafd126f4be55ab6deec7bcc42e2473c824b9a37717e347f99c33037d4de7accfb67943cb282fde38eb89ed6f2b89  org.kde.plasma.mobile.homescreen.folio.js
+e726c2850024cd9f8c009b8748b3b58a78cfc7eaa1633ab03e7ba3df1a65cfa99d3dd54dfc99b6df2be6821da80a719e827e965d85052be22e3c5b4620feb37d  system-generators-plasma-mobile-user-override
 "
