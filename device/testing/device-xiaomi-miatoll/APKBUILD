@@ -47,7 +47,7 @@ nonfree_firmware() {
 		hexagonrpcd>=0.3.2-r3
 	"
 
-	install -Dm644 81-libssc-xiaomi-miatoll.rules \
+	install -Dm644 "$srcdir"/81-libssc-xiaomi-miatoll.rules \
 		"$subpkgdir"/etc/udev/rules.d/81-libssc-xiaomi-miatoll.rules
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf

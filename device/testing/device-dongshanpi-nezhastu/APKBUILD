@@ -53,7 +53,7 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-	install -Dm644 "$srcdir"/bootriscv64.efi \
+	install -Dm644 bootriscv64.efi \
 		"$pkgdir"/boot/efi/boot/bootriscv64.efi
 }
 

@@ -69,13 +69,13 @@ kernel_lts() {
 firmware_amd() {
 	install_if="$pkgname=$pkgver-r$pkgrel linux-firmware-amdgpu"
 
-	install -Dm644 00-amdgpu-firmware.files \
+	install -Dm644 "$srcdir"/00-amdgpu-firmware.files \
 		-t "$subpkgdir"/usr/share/mkinitfs/files-extra
 }
 firmware_intel() {
 	install_if="$pkgname=$pkgver-r$pkgrel linux-firmware-i915"
 
-	install -Dm644 00-i915-firmware.files \
+	install -Dm644 "$srcdir"/00-i915-firmware.files \
 		-t "$subpkgdir"/usr/share/mkinitfs/files-extra
 }
 
