@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=xdg-desktop-portal-kde
-pkgver=99999_git20251118
+pkgver=99999_git20251120
 pkgrel=0
-_commit="cfaaae9cb6c49dc4c2263f53c57097f85494ace4"
+_commit="e42937815cd6e81a062139cfa7fc6a6487c7e125"
 pkgdesc="A backend implementation for xdg-desktop-portal that is using Qt/KDE"
 # armhf blocked by qt6-qtdeclarative-dev
 arch="all !armhf"
@@ -34,16 +34,19 @@ makedepends="
 checkdepends="
 	dbus-x11
 	py3-gobject3
-	xvfb-run
+	xwayland-run
 	"
-subpackages="$pkgname-lang"
+subpackages="
+	$pkgname-systemd
+	$pkgname-lang
+	"
 
 case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/xdg-desktop-portal-kde.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-18/xdg-desktop-portal-kde-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-20/xdg-desktop-portal-kde-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/xdg-desktop-portal-kde-$_commit"
@@ -58,15 +61,13 @@ build() {
 }
 
 check() {
-	xvfb-run ctest --test-dir build
+	wlheadless-run -- ctest --test-dir build
 }
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-
-	rm -rf "$pkgdir"/usr/lib/systemd
 }
 
 sha512sums="
-21dc043c48db5f5853ad3bdfaea1f02a8e962980642667ea7d46aa157ddf48e2851738c328697b5e1030f755b05c5bd7e0c50bfab2599cfa0cd97438d57fdc07  xdg-desktop-portal-kde-cfaaae9cb6c49dc4c2263f53c57097f85494ace4.tar.xz
+8eb8d18d484944b11b4fd09f89801f1a46077599a01b59ebb0a4458c7c147d7550f86bef8e75adfd967b4756982c2663aa0e34af78fe0f35672f2dedea040b1c  xdg-desktop-portal-kde-e42937815cd6e81a062139cfa7fc6a6487c7e125.tar.xz
 "
