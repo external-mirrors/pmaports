@@ -36,7 +36,7 @@ if __name__ == "__main__":
     arch = sys.argv[1]
 
     # Get and print modified packages
-    packages = common.get_changed_packages()
+    packages = common.get_changed_packages(skip_archived=True)
 
     # Load context
     sys.argv = ["pmbootstrap.py", "chroot"]
