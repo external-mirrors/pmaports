@@ -4,8 +4,8 @@
 _flavor="postmarketos-stericsson"
 _config="config-$_flavor.armv7"
 pkgname=linux-$_flavor
-pkgver=6.10.8
-pkgrel=2
+pkgver=6.18
+pkgrel=0
 pkgdesc="Mainline kernel for ST-Ericsson NovaThor devices"
 arch="armv7"
 _carch="arm"
@@ -38,7 +38,7 @@ source="
 	https://cdn.kernel.org/pub/linux/kernel/v${_kernver%%.*}.x/linux-$_kernver.tar.xz
 	config-$_flavor.armv7
 
-	make-new-commands-optional.patch
+	drm-regressions.patch
 	"
 builddir="$srcdir/linux-${_kernver//_/-}"
 
@@ -67,7 +67,7 @@ package() {
 }
 
 sha512sums="
-0829f6963a91cd230e33fa82605ff0b5b1b7c6f21192634f94a60185926c9b2eb12f3124693753c7da33cb6b15abe9146ec343c9bf7307156dd63c2fbc585f13  linux-6.10.8.tar.xz
-aaba9361986b8a798d8797b000b4175c46dbd5348f4df8f9deaa07af911482c89374db44683eb78571f649c34e19f80864a3c313c7ec6ff02cc4317db11c8517  config-postmarketos-stericsson.armv7
-9e474877e43f26b389c63436fdad2009fb80afd753fffe88104d8cfab67d97c65d8af08420d1739301461db3b03af3bb9fb5c40a691a675e9ab551fdd35724aa  make-new-commands-optional.patch
+88599ffdec96d150c1feb9b261ba93bb0301a9d0e1ad6bef7aeab1f5372cbfc57d8b43c7e902bd8f76921d1dbd8189663c142ea869e51d0e2b483b150ee00fe0  linux-6.18.tar.xz
+95ba9556091a1434a58d05b12550e9f6e51aa30e2eec7bfdaa49abc10c2d9f35bdcf0e2dfce7643d8656a232d36e798bdd440f5e3ec0ec372abb9e0401ffbfca  config-postmarketos-stericsson.armv7
+2ba9304f4f2d8578906017699255aadb10d1f0dc62704400632859b9bdad06a10c5837ce1a524813b1d205b33e8b5f7990038a700942e2ee728b79b7ecc45282  drm-regressions.patch
 "
