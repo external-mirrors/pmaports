@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kio-fuse
-pkgver=5.1.0
-pkgrel=2
-_commit=""
+pkgver=99999_git20251014
+pkgrel=0
+_commit="6b06dd4c9989d45abbfca093a03694281eb7b2a7"
 # armhf blocked by qt6-qtdeclarative -> kio
 arch="all !armhf"
 url="https://kde.org/"
@@ -22,12 +22,13 @@ makedepends="
 checkdepends="dbus"
 subpackages="$pkgname-systemd"
 _repo_url="https://invent.kde.org/system/kio-fuse.git"
-source="https://download.kde.org/stable/kio-fuse/kio-fuse-$pkgver.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-24/kio-fuse-$_commit.tar.xz
 	modules-load.conf
 	kio-fuse.desktop
 	"
 install="$pkgname.post-install"
 options="!check" # Only test is broken
+builddir="$srcdir/$pkgname-$_commit"
 
 build() {
 	cmake -B build -G Ninja \
@@ -50,7 +51,7 @@ package() {
 }
 
 sha512sums="
-273b75fe90f8cb31ee0f611716bf05384d78d21747cb43785bb7a91037ca9ac30233aee5081e467d46aa21aa03f4c0fc7583334fe34dec7530c89c818db41a4b  kio-fuse-5.1.0.tar.xz
+2b94aca391cdba15d4b7d43ec39a767feaa835ad2dcffdf5d04bc3d0c2540d531f4cd8ab47a88ed44d62e57b1032d922a2349d99d8f67160f933db21793db822  kio-fuse-6b06dd4c9989d45abbfca093a03694281eb7b2a7.tar.xz
 57d23d2778556eafc3035e6be575bf95b4032f123b35f2b1657eff5e7496de253173edc657f90531ee58e25673f4f27a5cd1cc76b14a038edb244f104a231771  modules-load.conf
 94a5acc6d6b622f923e6fa077cac63f365ad1a0828690336421368f7300179b39318b10c5e6490de7c442e2713dc25b2b3fb17fee4ac4064595a474ea50c2137  kio-fuse.desktop
 "
