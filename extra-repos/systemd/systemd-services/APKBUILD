@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=110
+pkgver=111
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -72,7 +72,6 @@ subpackages="
 	tailscale-systemd:_service
 	tinydm-systemd:_service
 	tinysparql-systemd:_service
-	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
 	udisks2-systemd:_service
 	udiskie-systemd:_service
@@ -153,7 +152,6 @@ _syncthing_sources="user/syncthing.service"  # From https://github.com/syncthing
 _tailscale_sources="system/tailscaled.service etc/default/tailscaled"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
 _tinysparql_sources="user/tinysparql-xdg-portal-3.service"  # From https://gitlab.gnome.org/GNOME/tinysparql/-/blob/main/src/portal/tracker-xdg-portal.service.in
-_tqftpserv_sources="system/tqftpserv.service"
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
 _udisks2_sources="system/udisks2.service" # From https://github.com/storaged-project/udisks/blob/master/data/udisks2.service.in
 _udiskie_sources="user/udiskie.service"  # created, no unit file upstream
@@ -233,7 +231,6 @@ source="$(flatpath \
 	$_tailscale_sources \
 	$_tinydm_sources \
 	$_tinysparql_sources \
-	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
 	$_udisks2_sources \
 	$_udiskie_sources \
@@ -357,7 +354,6 @@ de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb
 23f854fa2d0e0cb4de54db8605e549bb32061470ea7fa8ac16d474149be635e2b20a815c4ea8088e583693d7f515651ad2872b45f3b38a762f686b977d4fc49d  system-tinydm.service
 7a11c25c767de73a5c9fbf6d35c36da8200a5aa464c1a59880e443d60ea3ba3bb08ff3408ff2a087373bfe23b6ddcb6249aacd173c36d0a857dda5267954b47c  system-generators-tinydm-user-override
 7adde19af39f218b5daf81a356ed76c9311d48552d6aa5998535e34fc8e6217947e5b9722e7085b6f2969a9a64be467c0715ef11163c9ea1d437a2d04ef8288b  user-tinysparql-xdg-portal-3.service
-c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
 c7ea2b18c9d8f82306fbaca6d07b7019de3819d7898c3f50c3d0aceef4da4d311ed3bf31385e2f8998b8e3e326b1eb13309ffd44cf1b2d9db9b40bca00222c16  system-udisks2.service
 4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
