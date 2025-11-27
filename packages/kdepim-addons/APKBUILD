@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdepim-addons
-pkgver=99999_git20251124
+pkgver=99999_git20251126
 pkgrel=0
-_commit="4645425c729e38d7688d5de1105228fa85fc3439"
+_commit="b8cfb9d6132ea6bcc3a3b585bdee5b02c333be38"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -65,7 +65,7 @@ checkdepends="
 	xwayland-run
 	"
 _repo_url="https://invent.kde.org/pim/kdepim-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-24/kdepim-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-26/kdepim-addons-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # Require OpenGL and running dbus
 
@@ -89,5 +89,5 @@ package() {
 }
 
 sha512sums="
-8171376aa7f47312b34be9d7b3c58133e9d27b13e82f5ffdc3da1c3c5b9b31f2239e2e208d3777a29b9f09a1aa7a8d7f20e116e7b2d1578798f624af879c7367  kdepim-addons-4645425c729e38d7688d5de1105228fa85fc3439.tar.xz
+e08e18bb6765f851d0fe60713e2adad214a988da0cf569a90f2d7da56f73fc1491466126df017e198edc8cc1e11746261a7e2db4397c446e2524f0f15ffc3d82  kdepim-addons-b8cfb9d6132ea6bcc3a3b585bdee5b02c333be38.tar.xz
 "
