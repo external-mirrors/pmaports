@@ -1,6 +1,7 @@
 # Automatically generated aport, do not edit!
 # Generator: pmbootstrap aportgen grub-efi-x86
 
+maintainer=""
 pkgname=grub-efi-x86
 pkgver=2.12
 pkgrel=8
@@ -12,15 +13,15 @@ pkgdesc="GRUB $_arch EFI files for every architecture"
 url="https://www.gnu.org/software/grub/"
 license="GPL-3.0-or-later"
 arch="x86_64"
-source="grub-efi-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/grub-efi-$pkgver-r$pkgrel.apk"
+source="grub-efi-$pkgver-r$pkgrel-$_arch-v3.23.apk::$_mirror/v3.23/main/$_arch/grub-efi-$pkgver-r$pkgrel.apk"
 
 package() {
 	mkdir -p "$pkgdir"
 	cd "$pkgdir"
-	tar -xf "$srcdir/grub-efi-$pkgver-r$pkgrel-$_arch-edge.apk"
+	tar -xf "$srcdir/grub-efi-$pkgver-r$pkgrel-$_arch-v3.23.apk"
 	rm .PKGINFO .SIGN.*
 }
 
 sha512sums="
-cca57dbed340ff4f9cc0f12c509c8213e8c83edbf80c8ace9ab5a46e7d48c19a7c8cb57a1c86bab3324dcfc071e289045e13ddf3b5011923e1a1a27713e86e0f  grub-efi-2.12-r8-x86-edge.apk
+bce252b0da94509e63b1b8f640cdaf876eb8c6630d0d94c35d4eec4907ba0aee6915f551f339bb9718b40f9269820ef724cac23c5a7ac6ef74356a25e92b85f0  grub-efi-2.12-r8-x86-v3.23.apk
 "
