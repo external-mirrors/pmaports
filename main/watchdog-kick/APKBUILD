@@ -5,13 +5,14 @@ pkgdesc="Periodically kich watchdogs"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-2.0-or-later"
-options="!check"
+install="$pkgname-openrc.post-install"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="
 	watchdog-kick
 	watchdog-kick.init
 	watchdog-kick.service
 "
+options="!check"
 
 package() {
 	install -Dm755 "$srcdir/watchdog-kick" \
@@ -20,14 +21,6 @@ package() {
 		"$pkgdir/etc/init.d/watchdog-kick"
 	install -Dm644 "$srcdir/watchdog-kick.service" \
 		-t "$pkgdir/usr/lib/systemd/system"
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
-	depends="openrc"
-
-	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
