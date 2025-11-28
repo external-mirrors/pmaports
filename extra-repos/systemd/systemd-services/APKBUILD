@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=112
+pkgver=113
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -60,7 +60,6 @@ subpackages="
 	waydroid-systemd:_service
 	wpa_supplicant-systemd:_service
 	xfce4-systemd:_service
-	zram-init-systemd:_service
 	sing-box-systemd:_service
 "
 # 3. Add a new entry below with the list of service files
@@ -117,7 +116,6 @@ _waydroid_sources="system/waydroid-container.service"
 _waydroid_sensors_sources="system/waydroid-sensors.service"
 _wpa_supplicant_sources="system/wpa_supplicant.service"
 _xfce4_sources="user/xfce4-notifyd.service"
-_zram_init_sources="system/zram_swap.service"  # adapted from https://github.com/vaeth/zram-init/blob/main/systemd/system/zram_swap.service
 _sing_box_sources="
 	system/sing-box.service
 	system/sing-box@.service
@@ -173,7 +171,6 @@ source="$(flatpath \
 	$_waydroid_sources \
 	$_wpa_supplicant_sources \
 	$_xfce4_sources \
-	$_zram_init_sources \
 	$_sing_box_sources \
 )"
 
@@ -269,7 +266,6 @@ c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc2258
 43049153345752c20717222575394fffadf2cae1e5164a3ab7bf720647ab19584f67bb2d2492c663d68518a4326196bdfe019e19a6beb0cc658b780c8f6e1ad5  system-waydroid-container.service
 ff5e1481d00d870b39fa8f11545b1a3bff7ac0278440d329f600d4493de8628c120b95268494e6b87666c4743a6598afdf23778c7e666c12e1a5614fbff0e8ae  system-wpa_supplicant.service
 760a0002f08df28c1584dea41c06df4a6cfb016e201e909dcfba639e5e794cdf3ae9e790a9c9e50261b88968d8129bfee35ec1be8e9f99ad1c7e1359872b5643  user-xfce4-notifyd.service
-1072886ed07e3e3545e41c542d001f313185497fbaaa8b2071b30f296c04f925b4a5a50bc2b08fa91ca5e83033564a0eae7d017ec1afb01defad42fb6d65e6ed  system-zram_swap.service
 4d201f29ad98abf38a15e877bb1b4f46fb08ab0cd5cb83f29aaa104eaa0a51fd14784110ee844ccb89914aa73b985fc9c61e216f8d2ac230adfa1d1660ebd573  system-sing-box.service
 f4042114ed0f36e51bc32f6df184843d6d7e58b7cece8a845796910d80e1f26c9d0be9415ed90f7a91211bd669d8bb002b24a5a79657f8b699f952299ddfb5d2  system-sing-box@.service
 e67997cfad302af405e1bee78f79ea9caaa8fec0b765003ff08901f43a2ea07209726d0a20f2640b796bc6775606e34143da362d1e0471ce32b919747004d53c  tmpfiles.d-sing-box.conf
