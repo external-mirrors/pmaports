@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=110
+pkgver=111
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -24,39 +24,24 @@ makedepends="systemd-dev"
 #    ALPHABETICAL ORDER!!!
 subpackages="
 	alsa-utils-systemd:_service
-	apk-polkit-rs-systemd:_service
-	at-spi2-core-systemd:_service
-	avahi-systemd:_service
 	baloo-systemd:_service
 	bluez-systemd:_service
 	colord-systemd:_service
 	connman-systemd:_service
-	containerd-systemd:_service
 	dnsmasq-systemd:_service
-	docker-engine-systemd:_service
-	eg25-manager-systemd:_service
-	fnott-systemd:_service
 	fprintd-systemd:_service
-	geoclue-systemd:_service
 	gnome-clocks-systemd:_service
-	goimapnotify-systemd:_service
 	greetd-wlgreet-systemd:_service
 	hexagonrpcd-systemd:_service
 	hfd-service-systemd:_service
 	hkdm-systemd:_service
 	httpd-systemd:_service
-	iio-sensor-proxy-systemd:_service
 	irqbalance-systemd:_service
 	iwd-systemd:_service
 	kanshi-systemd:_service
 	keyd-systemd:_service
 	kodi-systemd:_service
-	lightdm-systemd:_service
-	localsearch-systemd:_service
-	lxc-systemd:_service
-	mce-systemd:_service
 	mmsd-tng-systemd:_service
-	nftables-systemd:_service
 	nginx-systemd:_service
 	openssh-server-pam-systemd:_service
 	pd-mapper-systemd:_service
@@ -64,21 +49,13 @@ subpackages="
 	qbootctl-systemd:_service
 	rmtfs-systemd:_service
 	rtkit-systemd:_service
-	sensorfw-systemd:_service
-	siglo-systemd:_service
 	sleep-inhibitor-systemd:_service
 	speakersafetyd-systemd:_service
-	syncthing-systemd:_service
 	tailscale-systemd:_service
 	tinydm-systemd:_service
-	tinysparql-systemd:_service
 	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
-	udisks2-systemd:_service
 	udiskie-systemd:_service
-	usb-moded-systemd:_service
-	vnstat-systemd:_service
-	vvmd-systemd:_service
 	watchdog-kick-systemd:_service
 	waydroid-sensors-systemd:_service
 	waydroid-systemd:_service
@@ -90,9 +67,6 @@ subpackages="
 # 3. Add a new entry below with the list of service files
 #    to install for that package
 _alsa_utils_sources="system/alsa-restore.service system/alsa-state.service"  # Adapted from https://git.alsa-project.org/?p=alsa-utils.git;a=tree;f=alsactl
-_apk_polkit_rs_sources="system/apk-polkit-server.service"
-_at_spi2_core_sources="user/at-spi-dbus-bus.service"
-_avahi_sources="system/avahi-daemon.service system/avahi-daemon.socket"  # From: https://github.com/avahi/avahi/blob/master/avahi-daemon
 _baloo_sources="user/kde-baloo.service"
 _bluez_sources="
 	system/bluetooth.service
@@ -107,32 +81,20 @@ _connman_sources="
 	system/connman-wait-online.service
 	system/connman.service
 " # From connman upstream
-_containerd_sources="system/containerd.service"  # From: https://github.com/containerd/containerd/blob/main/containerd.service
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
-_docker_engine_sources="system/docker.service system/docker.socket"  # From https://github.com/moby/moby/blob/master/contrib/init/systemd
-_eg25_manager_sources="system/eg25-manager.service" # From https://gitlab.com/mobian1/eg25-manager/-/blob/master/data/eg25-manager.service.in
-_fnott_sources="user/fnott.service"
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
-_geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
 _gnome_clocks_sources="user/gnome-clocks.service"
-_goimapnotify_sources="user/goimapnotify@.service" # From https://gitlab.com/shackra/goimapnotify/-/raw/master/goimapnotify@.service
 _greetd_wlgreet_sources="system/wlgreet.service"
 _hexagonrpcd_sources="system/hexagonrpcd-adsp-rootpd.service system/hexagonrpcd-adsp-sensorspd.service system/hexagonrpcd-sdsp.service system/iio-sensor-proxy.service.d/hexagonrpcd.conf"
 _hfd_service_sources="system/hfd-service.service" # From https://gitlab.com/ubports/development/core/hfd-service/-/blob/main/init/hfd-service.service.in
 _hkdm_sources="system/hkdm.service"
 _httpd_sources="system/httpd.service"
-_iio_sensor_proxy_sources="system/iio-sensor-proxy.service"
 _irqbalance_sources="system/irqbalance.service"
 _iwd_sources="system/iwd.service" # From https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/iwd.service.in
 _kanshi_sources="user/kanshi.service" # created, no unit file upstream
 _keyd_sources="system/keyd.service" # From https://github.com/rvaiya/keyd/blob/master/keyd.service.in
 _kodi_sources="system/kodi.service" # From https://github.com/graysky2/kodi-standalone-service/blob/master/x86/init/kodi-gbm.service
-_lightdm_sources="system/lightdm.service"
-_localsearch_sources="user/localsearch-writeback-3.service user/localsearch-control-3.service user/localsearch-3.service"  # From https://gitlab.gnome.org/GNOME/localsearch
-_lxc_sources="system/lxc@.service"
-_mce_sources="system/mce.service" # From mce upstream
 _mmsd_tng_sources="user/mmsd-tng.service"
-_nftables_sources="system/nftables.service"
 _nginx_sources="system/nginx.service" # Based on arch's service: https://gitlab.archlinux.org/archlinux/packaging/packages/nginx/-/blob/main/nginx.service
 _openssh_server_pam_sources="
 	system/sshd.service
@@ -145,21 +107,13 @@ _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
 _rmtfs_sources="system/rmtfs.service"
 _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
-_sensorfw_sources="system/sensorfwd.service"
-_siglo_sources="user/siglo.service"  # From https://github.com/theironrobin/siglo/blob/main/data/siglo.service
 _sleep_inhibitor_sources="system/sleep-inhibitor.service"
 _speakersafetyd_sources="system/speakersafetyd.service" # From https://github.com/AsahiLinux/speakersafetyd/blob/main/speakersafetyd.service
-_syncthing_sources="user/syncthing.service"  # From https://github.com/syncthing/syncthing/blob/main/etc/linux-systemd/user/syncthing.service
 _tailscale_sources="system/tailscaled.service etc/default/tailscaled"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
-_tinysparql_sources="user/tinysparql-xdg-portal-3.service"  # From https://gitlab.gnome.org/GNOME/tinysparql/-/blob/main/src/portal/tracker-xdg-portal.service.in
 _tqftpserv_sources="system/tqftpserv.service"
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
-_udisks2_sources="system/udisks2.service" # From https://github.com/storaged-project/udisks/blob/master/data/udisks2.service.in
 _udiskie_sources="user/udiskie.service"  # created, no unit file upstream
-_usb_moded_sources="system/usb_moded.service" # From usb_moded upstream
-_vvmd_sources="user/vvmd.service"  # From https://salsa.debian.org/DebianOnMobile-team/vvmd/-/blob/debian/latest/debian/vvmd.user.service
-_vnstat_sources="system/vnstat.service"  # From https://github.com/vergoh/vnstat/blob/master/examples/systemd/vnstat.service
 _watchdog_kick_sources="system/watchdog-kick.service"
 _waydroid_sources="system/waydroid-container.service"
 _waydroid_sensors_sources="system/waydroid-sensors.service"
@@ -183,41 +137,26 @@ flatpath() {
 # 4. Add the _sources variable to the list below
 source="$(flatpath \
 	$_alsa_utils_sources \
-	$_apk_polkit_rs_sources \
-	$_at_spi2_core_sources \
-	$_avahi_sources \
 	$_baloo_sources \
 	$_bluez_sources \
 	$_colord_sources \
 	$_connman_sources \
-	$_containerd_sources \
 	$_dnsmasq_sources \
-	$_docker_engine_sources \
-	$_eg25_manager_sources \
-	$_fnott_sources \
 	$_fprintd_sources \
-	$_geoclue_sources \
 	$_gnome_clocks_sources \
-	$_goimapnotify_sources \
 	$_greetd_wlgreet_sources \
 	$_hexagonrpcd_sources \
 	$_hfd_service_sources \
 	$_hkdm_sources \
 	$_httpd_sources \
-	$_iio_sensor_proxy_sources \
 	$_irqbalance_sources \
 	$_iwd_sources \
 	$_kanshi_sources \
 	$_keyd_sources \
 	$_kodi_sources \
-	$_lightdm_sources \
-	$_localsearch_sources \
-	$_lxc_sources \
-	$_mce_sources \
 	$_mmsd_tng_sources \
 	$_msm_modem_sources \
 	$_msm_modem_wwan_port_sources \
-	$_nftables_sources \
 	$_nginx_sources \
 	$_openssh_server_pam_sources \
 	$_pd_mapper_sources \
@@ -225,21 +164,13 @@ source="$(flatpath \
 	$_qbootctl_sources \
 	$_rmtfs_sources \
 	$_rtkit_sources \
-	$_sensorfw_sources \
-	$_siglo_sources \
 	$_sleep_inhibitor_sources \
 	$_speakersafetyd_sources \
-	$_syncthing_sources \
 	$_tailscale_sources \
 	$_tinydm_sources \
-	$_tinysparql_sources \
 	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
-	$_udisks2_sources \
 	$_udiskie_sources \
-	$_usb_moded_sources \
-	$_vvmd_sources \
-	$_vnstat_sources \
 	$_watchdog_kick_sources \
 	$_waydroid_sensors_sources \
 	$_waydroid_sources \
@@ -290,10 +221,6 @@ package() {
 sha512sums="
 99279e69962225e4b1888d202bffaa68263a3ffb8ab8ebb95069eb756de330c2a08307c9426ffb58733b3a000ef388bb041956cb219f239db2e6e65360983b0c  system-alsa-restore.service
 7f79adb7d523408d841d78016b86ceee1fba06fecc70ca0e4cbdf348a09ed19b9cbb9051e0457f7c52db208e4d86d2471bc4a697fec8e7e5070c01e2a0b4dfcc  system-alsa-state.service
-269dfc4748a9f1c4f49be8bab399d7412b6ff3b6d6ed9b3f2e31074b791789fb39aad450b4d43d318e7a070d1118ba79f216782b064cd106feac3eb4a8ca5581  system-apk-polkit-server.service
-12f5e008b0a41b3426b29f33556689ef88ba7184293ddb78fdaaf05cc4d029fd0b4c8fbef668aefed103a9f48c525f04a8e4e60ddc6e4329698aaf761b8e8f81  user-at-spi-dbus-bus.service
-37c2b24cf9d59c7f91b2556f7aac74d2dd2cbd7b1473432cc2eaeb1bc9b2c7cedc531e7b5b0facc3478840a516eb9cde8182714c3d5148169547554bf0810f84  system-avahi-daemon.service
-2f10490def55253edf164b26e17cf8d82fdcb19089c2dc2eac110c622c9661e0a3c4247629f924246b6c1a24faf0416bece4a6ab8729cd400ed5c3c1a7ed703b  system-avahi-daemon.socket
 c68f0c9f09f3e26a5d317792177057bbcfd83f7cd9c57b235325a836cf01c83abd4c0ab0088b2f3777d85497f35d25b1498ac5d29b717d3f5c0f0651ef1b6054  user-kde-baloo.service
 de133c35cf95d7c833368c9010264668e72657400ad4e5259ef046321c878507f36ef73fa7b4759f69c9d18cda8f8db8d7675d794d9a28f46480fb4d47ba9e0c  system-bluetooth.service
 7972e37d950d8e337f109242dc3a7689d0d6e43b80ce42decd81f8d48abaf275a50f5d980d5a40d4494608a2f88f745e1d4639688e179c95792bfb6f398b9ae4  system-bluetooth-mesh.service
@@ -304,16 +231,9 @@ c10378bac1d64c0a2c767aab439c7d71bb7706b4fdc981add3ab4d5967257c0177f07448f884aeb1
 52840a212a845900ed88bd08a7b318c2b74c68a421bf1a9bbb3378e09be2b6edab1ddb87a3e410925ab0f50ab738ab3c804611bdf8101ca7896e874f9f6ba066  system-connman-vpn.service
 a7fd0c47858a10c263d9bc661dc955366a2acd79f7be5cf2571dc7ec3b3f5adf122b4e55e58d01b778aa7ed0c6981fc454295c93d29bd89d9145d5d2439e01a5  system-connman-wait-online.service
 9e2bb4153e97c11db7792b758a7a21bd352c7443dbdbde0f390d4dfe52d7495a4a01cb15097e842cfe69eb1214f9bca5a626fb54b4f8216e11efda1c55b89add  system-connman.service
-b7cc164dc0520652df9b2bf6f9708b7230bc6a3274d02ce222ba507f94bf31e3125532cf806af7ca0084c8b286b7dcefbc2cffe42a901a9e58c56e145d365fed  system-containerd.service
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  sysusers.d-dnsmasq.conf
-1189ada8b126b2e574aea2e9b3ad9b0a86282d82be4f4ad4c58b1d968ce15ff45e8c60108f5e128ee946aa7e6e57f9fbb0b5d31d8371e79a2f0b3f3456bbd65f  system-docker.service
-c2d1f2a55bd7eed5a296e14b3250baa2f568dbdbce4444bae4635c1ce4bd6d3f1036462926d8c32d62d6609f5fcfb58933bf7eeb1924aefd814e864bc77bb7c7  system-docker.socket
-780912dbfdc7e9a350e934d46022b043edda86a393a7c107d0c855e9580240e4bce791428fdadef0a45adc6cfa24fb5d58981b6ccd80e3dad99da3e5fa3dc7b8  system-eg25-manager.service
-0924315d4b7337edb42a2ecd7ba84d6a10437633028cd9c6ebd143c0668a6e6fea365d6644c336c70158e62d75a072db38bdee36cb677dfbfa609e9fdf43aca0  user-fnott.service
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
-f3463b85ac47055b400dfd2e24694c5e1dc6ab039efac0fe54496fc027c0732cda5e52a362a497b372dea671dc615154e8abfea866728d243cbbcd25e68a91aa  system-geoclue.service
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
-e0c5baf8030bae74c1ddb0f6f9bc4fdf2a1febaa344de1957d9a69a01eb7e1dc143b9d324ef15214289934b3a7fd4725df26b032f9225102d9cf5633145320bc  user-goimapnotify@.service
 e226bdb71f6fafe92d14046dfa19ddbccb765b579c1f90687a9ece376fa12406db9f2cf8035ff07d5a78ef77dc73615d39a8790f8722585bf65872be773888ff  system-wlgreet.service
 21652c58e7ee18b703f168a53bceaef9d3684db3af61bd7b0898601f5788307ed0ec28b4ed9db311baf533de115d6b6ff7a3b39cf846e0e814c7825073c2c450  system-hexagonrpcd-adsp-rootpd.service
 146e30849b4e829213bd2b097dc0b5049b98ab4adb525bff4e06cac1800284aaa7a7dbca2fce113ba3bccaa94a58ff95c7230e8603b23335a5c39dd27cc9d61f  system-hexagonrpcd-adsp-sensorspd.service
@@ -322,20 +242,12 @@ cf95791ba56247e3b37a1e23d59638ded09cf343b646dd68b733cc1f72d3ea3daa038a99ca961f44
 5087ff36981b89c9bd09f96cff93d1f20d5af513e2cdebf65a85e329f458a9a2b77c12091ed31278c3b89baef79273cc818fddabbe4e1eec75faf7b9cc18cb8a  system-hfd-service.service
 083e59dcbbbd8f6ea148880256ff20f1a16e583348cd7cfc7aa6321d7b0cbe0a82780fd482a26ef25a5ebcfc83f5b7899d5db7c7d479fd7c56e5d7e95fd24a34  system-hkdm.service
 666ba094bff47aa67b4e4431929516af355f90ffc1fd60429dcd20b337c3c17d2d62a71c289496217282f0819bc8deba8db5cc5b2915b692defa14d19532a8d1  system-httpd.service
-d12ebe6e7db2a8e34baab640dd4e2ea9cd01bc19054adf32d55528a6b27f71c2006ac2d65a58c98e21ed598e9cc66bfe79e197d20ed9d13f866a5a6cd3e247d5  system-iio-sensor-proxy.service
 0ed5e05b73cf4952c81deeffc7f662f0ef6e684c24fb8177f625f2d086582fad2df1376a2479155b4a6aa6d584f1cccfe8c143f7830eccaf5e693cae5aefed2d  system-irqbalance.service
 df3388cb7b9d035e54b34d8f8a6594be89c3015f979fe3bdc199fb7db1ab0bef821d6b306eecdf978eb227454d5e50aab29ac02d9722b1b075ec0ce4705e3518  system-iwd.service
 fa41668288d53f8ce42a7524f10b1e03812fb11ed71bcb484dc22d0d374b453837317eb599cf61b66163a905949024509e73d5190012b664b301d48af7002a01  user-kanshi.service
 b80a6bca1f38c4feaffba5d1ceb854738f41d5b3ab450a1613da959cb516790e6849b7a164d1b5e62cba369c86e0c75797cd599dcd87064262760c3be159ef81  system-keyd.service
 e7c33c889afb822ae20ebd09f3b9f8d130d1f89324006ab3a140fbf46ef7e774634d2ac13ac328c588266823e5eb52c7e0d6d6459f1f64052f9cea5a5fe9f54a  system-kodi.service
-d49344e79f6468ef06538068cbb12c37e313e02ade28984a75dad4d50e1e962372451908e9910ae60c74bd5230ae45e6a6346bb0f7c6af83c346a691f5714556  system-lightdm.service
-49010e368981fdb8f36bdfe58ed6ee00615cbee696891ce02fae7b213b451d5dfe60a5c6e0065c6d3ab588ce38948f5bee1f03200daa4fe8e234e82b249a9e15  user-localsearch-writeback-3.service
-53777d4ba1c35d7f00294675f61d3f0a0fa632a9abd6d428d9e159419e3ae43c6bb3c12f506dca0545db889a6642bfbaee5802fc637c6a84635e5f6814c79944  user-localsearch-control-3.service
-c5ebba42808185df86d71a0eec6d4c2122c45ea1d27123f0c0b389849e09dd8a85bd174654f3c6cb6467bd0ddb5cf25f07266ac3cdf25b888be355d07086ffed  user-localsearch-3.service
-f6fb4c890cbf72e344ca7a22e7f033fb4c32ce9f5edc27c03ccc5c21424d6a0ef871d79e8a89a502a707bdceb3bfbd7a5b3c8e16b1cd30e149bf2fdf8cccea9e  system-lxc@.service
-becb3bb17995f44b4021d05109130a00d0eba3d698eaf204a1f8d325741faa729d4ac7fedf0446b9468507a3b558a412ae9aa7f813bbb1f466395c86f66542fd  system-mce.service
 873b53592786a978659bda8d32de5ed9a9f163ca298c4f4112f10bf635a8170c4060cc15b57ff72b3afd50075cd1c5dbc10030f00b166e2540397da9e1c5e46b  user-mmsd-tng.service
-12bb9aa2a2ab8d4b21c72a785b41057eb16a27eca5718cd03a987a50b77d669fe90abafae48c68b41616f31b1953853b3b4a74db4bc3cdeccacc00df113de204  system-nftables.service
 9cba2f9fc043d8cfb09ce7bcc6bef13194f6708bd0b82b2a360304a66a344d38b7f2641bdbeb0ce85ef9390e0f2ea34feef9d7d2c066ca8e0bd8d1f6108ce1e0  system-nginx.service
 fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf611067add80c2ccb289a381fc5ff6a5f654ea49c81f02fe8  system-sshd.service
 6f1db26dbbcf96a5e14996cc468f1911c51a46fc3f70552af3591c0dfaaa043135d137d435818a2a2cce656f09fa305337c3c86121a5109dc20f0326a2e0ec15  system-sshd@.service
@@ -347,23 +259,15 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 010cdc35517e3bc37c0ffd8666d3286ddc3a3b45d7a028995f93d735e27f4e06a517f30d0db8e776403ac1793d1bd8c8dd2bafc63908806925378b05034733db  system-rmtfs.service
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
-d5bf5f01c0feafab4edfc39b75eded608dc3efcd3b918739e3ed2ab11340c9cc9b6fb97c0706ddd3d49b726c5f62e8cdb0048aefafd916f3ad9defc6ff9783bc  system-sensorfwd.service
-631a5647c93c103853cf27c69951f44f50b9d44a6ac7773258093b6b632ad466dd0275d9ce7d9b1018b083d3a582c80be011d80f6b9579e78b00113fe3e90951  user-siglo.service
 be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
 7d829633bf7d281ebe9b4c2896f36a7196390aa5426820d3d74eb47889a12c4a776b0f4b0b38547fadb3639bc6903be4d7c013911bf9a98fee93cf0cb5718784  system-speakersafetyd.service
-399cd971b02e4b8bdfe60808ab1beac111b8618358f89a4482cafde1d19fe0a943d2ef6c20f5ad853581a85ab2297065187ade83eac7a664bd47412d0df7b2b6  user-syncthing.service
 41547eb369937348378e898e0dda7151552056107f4daab5a8a137a1b846560afa923cd345037b4f96bc9cdf2a7f66211a346b77229cc07ce2d0b634ff40dfe7  system-tailscaled.service
 de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb9042d77ec323a6ffb5f108e33d28b6e7820d09250daadd57  etc-default-tailscaled
 23f854fa2d0e0cb4de54db8605e549bb32061470ea7fa8ac16d474149be635e2b20a815c4ea8088e583693d7f515651ad2872b45f3b38a762f686b977d4fc49d  system-tinydm.service
 7a11c25c767de73a5c9fbf6d35c36da8200a5aa464c1a59880e443d60ea3ba3bb08ff3408ff2a087373bfe23b6ddcb6249aacd173c36d0a857dda5267954b47c  system-generators-tinydm-user-override
-7adde19af39f218b5daf81a356ed76c9311d48552d6aa5998535e34fc8e6217947e5b9722e7085b6f2969a9a64be467c0715ef11163c9ea1d437a2d04ef8288b  user-tinysparql-xdg-portal-3.service
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
-c7ea2b18c9d8f82306fbaca6d07b7019de3819d7898c3f50c3d0aceef4da4d311ed3bf31385e2f8998b8e3e326b1eb13309ffd44cf1b2d9db9b40bca00222c16  system-udisks2.service
 4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
-be47b824125cc54d2e1c879f59421f3c549e3f42c92a53f7117968a861403edf60c9e3bf54fd54a69997ccb22dce6f891d993aec606070884e3ff6da2ac8a5b1  system-usb_moded.service
-6029a2cc1e7fbc00fea0b2abe9d4be6fa2a03cee4b7aceaecb2bbc94ddf1ed3127f1ce99a2e38c0e901261ed36aa3a616390da22364b40370b820023dc2b4a8e  user-vvmd.service
-b7cbb806669929182855dccc8cc6a606d829457dbe78320e13aaa2fcfbfbf0891fa624a499c4f1ba21d15dd8f712f7fb8797119b8bdfbfe55e2c21c673389d28  system-vnstat.service
 bef07aeb8d5d31d8f0d34e44e8db06f4a0aa1cb77245ca7e11e8775c935e3a3b3dcd923300192b0145c81e50bca76a97cfbee28e0af1e521ace794d26786eeaf  system-watchdog-kick.service
 841caa793d256cacea7eb651f3d77039b1c0ddb22727100d6cca74230e528aee09e945e1fdf20eaf40abbe3eaec9210eb7fa27144dc906cab65f8078b36921f9  system-waydroid-sensors.service
 43049153345752c20717222575394fffadf2cae1e5164a3ab7bf720647ab19584f67bb2d2492c663d68518a4326196bdfe019e19a6beb0cc658b780c8f6e1ad5  system-waydroid-container.service
