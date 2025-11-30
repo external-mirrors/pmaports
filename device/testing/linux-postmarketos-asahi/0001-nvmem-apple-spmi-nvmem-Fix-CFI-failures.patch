@@ -1,0 +1,54 @@
+From 7db3ec97747fa7e92f11f4b4e610f2453d06663e Mon Sep 17 00:00:00 2001
+From: Jens Reidel <adrian@mainlining.org>
+Date: Tue, 18 Nov 2025 01:41:13 +0100
+Subject: [PATCH] nvmem: apple-spmi-nvmem: Fix CFI failures
+
+Signed-off-by: Jens Reidel <adrian@mainlining.org>
+---
+ drivers/nvmem/apple-spmi-nvmem.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nvmem/apple-spmi-nvmem.c b/drivers/nvmem/apple-spmi-nvmem.c
+index 88614005d5ce..acc2cddf3f3b 100644
+--- a/drivers/nvmem/apple-spmi-nvmem.c
++++ b/drivers/nvmem/apple-spmi-nvmem.c
+@@ -18,6 +18,24 @@ static const struct regmap_config apple_spmi_regmap_config = {
+ 	.max_register	= 0xffff,
+ };
+
++static int apple_spmi_nvmem_read(void *priv,
++                                 unsigned int offset,
++                                 void *val,
++                                 size_t bytes)
++{
++    struct regmap *map = priv;
++    return regmap_bulk_read(map, offset, val, bytes);
++}
++
++static int apple_spmi_nvmem_write(void *priv,
++                                  unsigned int offset,
++                                  void *val,
++                                  size_t bytes)
++{
++    struct regmap *map = priv;
++    return regmap_bulk_write(map, offset, val, bytes);
++}
++
+ static int apple_spmi_nvmem_probe(struct spmi_device *sdev)
+ {
+ 	struct regmap *regmap;
+@@ -28,8 +46,8 @@ static int apple_spmi_nvmem_probe(struct spmi_device *sdev)
+ 		.word_size = 1,
+ 		.stride = 1,
+ 		.size = 0xffff,
+-		.reg_read = (void *)regmap_bulk_read,
+-		.reg_write = (void *)regmap_bulk_write,
++		.reg_read = apple_spmi_nvmem_read,
++		.reg_write = apple_spmi_nvmem_write,
+ 	};
+
+ 	regmap = devm_regmap_init_spmi_ext(sdev, &apple_spmi_regmap_config);
+--
+2.51.1
+
+

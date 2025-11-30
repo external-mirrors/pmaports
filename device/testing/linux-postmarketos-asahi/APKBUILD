@@ -1,6 +1,6 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=linux-postmarketos-asahi
-pkgver=6.17.8_p1
+pkgver=6.17.9_p1
 pkgrel=0
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -17,7 +17,6 @@ options="!strip
 	!tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
-	pmb:kconfigcheck-immutable
 	pmb:kconfigcheck-uefi
 	pmb:kconfigcheck-virt
 "
@@ -56,6 +55,8 @@ source="
 	asahi.config
 	misc.config
 	pmos.config
+
+	0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
 "
 builddir="$srcdir/linux-asahi-$_asahiver"
 _defconfig="defconfig"
@@ -90,9 +91,10 @@ package() {
 }
 
 sha512sums="
-962e7eb913fcab9f34ac13556d5b2d2fb4bb16ca20744a7ed63c227786176d744dfda6b4c84b58a0d58cb09ea4b0cb7aa1bf0a20cbf797d603e9566f0761c013  linux-postmarketos-asahi-6.17.8-1.tar.gz
-2e593611b6ce4d753addfb37ef48363177ae875d17612aba88fc8e02f006cf7c8b9befe1dd360405dd9c647394a7bbe4e86e1e61fbb1451dbf683bced91c3cde  config-postmarketos-asahi.aarch64
+a8d3af18bdc3bc218b4ba7fb0994d4fae23e11e0c4bd93cea50aea36776b4b618b9d2eea8a2c14207cd5ebd4c2348dbe02e694e2727e94a6ee6712750ad5ab60  linux-postmarketos-asahi-6.17.9-1.tar.gz
+26d18cf078495206c63e433b77e358e9ce48c4e6433e2dee53388be5c3456b536a7337d21423566ca6dd3f6e4bbea32fd2066c78e15dac3b2fb0f655728319bf  config-postmarketos-asahi.aarch64
 c23c89cefc4690c69f9e18e12f542078e1231e3f3017624a1e1499bdf8ee132a95c7d8499fe4313d9b19922b043dd9ed7e743ddf046b6f298bbf4e665e4cdc7c  asahi.config
-7ac17f293047d02fb21bf6ec6181b60c4d44d5d48b4ed162071639a319ddf0f0ae1c8db70107550ad44c1c5056f840347d9da57baa4c9adf79e8a1c1bc1398d2  misc.config
-f8c617814178ca4b49ba2d9e31c8fd9c655b3829bf34e04ba0c73c16af1821c2fd512ef9a15ebde608a06fd70c2b8ff4d293012e40c9e0000af97792022ce6d1  pmos.config
+71aa3bcdf22b81f261db9750eef5c654cbb02e2d710db99346ad4c0a646a75fb24844d89c233e9c06d27979dc7bedc31478ee7e3dea0879ba3de8c6f9419870d  misc.config
+4b82a0e9ed8cd83fcef897c665dd1b386ae1d6d0cbce09d059f39197d899e694e004890712b57a93598e077b59d5b7e460f9190c651666879336e7e3f2035638  pmos.config
+5c07c59405356d1a14adbb98adbd9efde8352c1f07ab791d15a208c8fe262ce0dd47820694cb4b371b68b05917f19ec248c4c506d74b206e25a90acf7c070ded  0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
 "
