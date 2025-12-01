@@ -30,10 +30,12 @@ makedepends="
 "
 
 _tag="sdm845-6.16.7-r0"
+_defconfig="defconfig"
 
 # Source
 source="
 	linux-$_tag.tar.gz::https://gitlab.com/sdm845-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	config-postmarketos-qcom-sdm845.aarch64
 	pmos.config
 	sdm845.config
 	0001-arm64-dts-qcom-sdm845-xiaomi-beryllium-Fix-compatibl.patch
@@ -42,17 +44,7 @@ builddir="$srcdir/linux-$_tag"
 
 prepare() {
 	default_prepare
-
-	# Move kernel fragments
-	cp "$srcdir/pmos.config" "$builddir"/arch/"$_carch"/configs/
-	cp "$srcdir/sdm845.config" "$builddir"/arch/"$_carch"/configs/
-
-	# Generate .config
-	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
-		pmos.config \
-		sdm845.config
+	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
 
 build() {
@@ -96,7 +88,8 @@ package() {
 
 sha512sums="
 803d2cf85b248c3da41a9c9178d69d211eccf5d1adb72acd5343e09cbb65782f727e579939287c91712c69a862bed7344a0e2bc893c2791a971b6fed95ec6f1a  linux-sdm845-6.16.7-r0.tar.gz
+f03a0b8e39730d5382e1a096c5a7017c365b0c18e5623faa17e024ce4229c2ff698fd78d531c42a6927bcb87022b053408248bcbdc574c88ea3ec54edcb50fd1  config-postmarketos-qcom-sdm845.aarch64
 30e703c4b32f1c9b49202c7605ebc07bd638de0aef7332721d2e8228f5d72475e97d4ecd316b4e5cf33d1b061f2474fa4a912da51219ab4506251da3fc657f4d  pmos.config
-baffb8711d1d9a60e49f8cc234dda6285300caf9811110c4749d4319b31b7a2e11986aa8a57d34074fb4020a19cae3b4d80f9ea6bce5ed2418e0ed9d4676b039  sdm845.config
+2a7dc1206c766f88ade0a3986281252518059d445f170274a788821cdd1801e2040a90c6c5e30c20115d0d443fe441312859a3b4f0240a9e578a9b3b932284f3  sdm845.config
 fbd04f5f429ca1067dadb4209d5279e5fd3cfb4a5ae5957e8e189488109a6cf44d27aa1f38cceb78e1cc360d3020b0c4342ca768243eb6ba7460093a1306b98c  0001-arm64-dts-qcom-sdm845-xiaomi-beryllium-Fix-compatibl.patch
 "
