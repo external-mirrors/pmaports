@@ -1,8 +1,8 @@
 # Maintainer: Antoine Martin (ayakael) <dev@ayakael.net>
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
-pkgver=6
-pkgrel=1
+pkgver=7
+pkgrel=0
 _commit="28d2c05ab4e80a7972611cd3188f3e8be4197f6a"
 url="https://postmarketos.org"
 license="GPL-3.0-only"
@@ -36,14 +36,12 @@ source="
 	30-eink-waveform.files
 	50-touchscreen.conf
 	panfrost.conf
-	phoc.ini
 	tinydm-ebc.service
 "
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
 	$pkgname-nonfree-firmware-systemd:nonfree_firmware_systemd
-	$pkgname-phosh
 	$pkgname-x11
 	$pkgname-sway
 	$pkgname-sway-systemd:sway_systemd
@@ -101,14 +99,6 @@ package() {
 	# panfront sometimes insists on loading after rockchip_ebc
 	install -Dm644 "$srcdir"/panfrost.conf \
 		-t "$pkgdir"/usr/lib/modprobe.d
-}
-
-phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
-	depends="postmarketos-theme"
-
-	install -Dm644 "$srcdir"/phoc.ini \
-		-t "$subpkgdir"/etc/phosh
 }
 
 sway() {
@@ -251,6 +241,5 @@ df0565391a66eed53ed817d3d1415bef000f9ed33ef2e8aa3016be3ecc21dd4a357e57838979d271
 8f7a5ad2f407de8c474d54dfdb9cc099c96e8918fc123f8b2a8ff911d7e1c7ca6fe30f9cea8ee2f0c1ba5f3e53359193d0683ca912f0b66e79a12814ce38dd98  30-eink-waveform.files
 ac433eebbc35a48561837495997aee4e55510b979bc0d8e3bafb761bc1be5b4bdeed2f456369dcbc582688aefd07c63966b0d72b6ffa99e84cfd868e677f02c8  50-touchscreen.conf
 6ba6638754e00908243de2f73ed6898dac03638a200dcf7b7cd9684757355ee1eb0ac874af0f971ad2e054c1a8c471867bdaea4d9aaf7eea6d3cf81ac7dd73a2  panfrost.conf
-4bf5158fbd53274a7429e825bb66225001f2403a4851e2d6803323b77d9095738ee3e5340ac85baf3e86bb4f47d38af8cbd78d8a5055c59a62f5b06e722e19cb  phoc.ini
 efc0b7fd892a9557d404f3dd52e6f03187d183b9432947a8845ef417e52e9dc55a71f920936a8fa11b90e73a355212b6094b86406c564d439a2e0347cfb0cced  tinydm-ebc.service
 "
