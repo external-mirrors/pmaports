@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=baloo-widgets
-pkgver=99999_git20251124
+pkgver=99999_git20251130
 pkgrel=0
-_commit="e86a08a72ca0caccb9b34d9c5a3de66d00cf6236"
+_commit="8781a55acd660c4b2d91cf51a22b80f49cbeb5a6"
 pkgdesc="Widgets for Baloo"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -26,7 +26,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/libraries/baloo-widgets.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-24/baloo-widgets-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-01/baloo-widgets-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -60,5 +60,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-b3ef9c20228c66c8ed0917aac04ee99d9bccca1b0675cc38a648485acba39ebd9fc98925bf77e61f67f18c127a545558981400779588ac51b7a19104ba4d154f  baloo-widgets-e86a08a72ca0caccb9b34d9c5a3de66d00cf6236.tar.xz
+1b7acc3082f044d1dfc77f0e016c70decad4f54c1c58bee4a02df7054c32d165ba235f2e0a5e58ad254140d23b3f4162e58a2222ca32f6e3f91118bf8891805c  baloo-widgets-8781a55acd660c4b2d91cf51a22b80f49cbeb5a6.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=blinken
-pkgver=99999_git20251118
+pkgver=99999_git20251130
 pkgrel=0
-_commit="320abcea313fe27e5a305b43703213d1d26ed1e8"
+_commit="38803ff8eaa26769c3a795cc3339ee7745966ffa"
 # armhf blocked by extra-cmake-modules
 # s390x blocked by kxmlgui
 arch="all !armhf !s390x !riscv64"
@@ -27,7 +27,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/blinken.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-18/blinken-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-01/blinken-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-09ba559516d1fbc67ec19b72d5d70c2258fcc298ac49046de0ed0d9667b3cd627aad117322bb0371d28ce39b3032293c5cd28951380988fa2c185e43a6c2572b  blinken-320abcea313fe27e5a305b43703213d1d26ed1e8.tar.xz
+15b09d34db51d33aba4a5061d2a5f7ad414ef54464feed407299e4969265b9722a3a83e57705de550989ece5227c7bb2416556cfb21acd8f93eadd40476a85cc  blinken-38803ff8eaa26769c3a795cc3339ee7745966ffa.tar.xz
 "
