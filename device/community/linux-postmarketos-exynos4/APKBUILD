@@ -5,7 +5,7 @@
 
 pkgname=linux-postmarketos-exynos4
 pkgver=6.16.10
-pkgrel=1
+pkgrel=0
 pkgdesc="Mainline kernel fork for Samsung Exynos4 devices"
 arch="armv7"
 _carch="arm"
@@ -17,12 +17,13 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-community
 	"
 makedepends="
+	bash
 	bison
-	clang
 	findutils
 	flex
-	lld
-	llvm
+	gmp-dev
+	mpc1-dev
+	mpfr-dev
 	openssl-dev
 	perl
 	postmarketos-installkernel
@@ -40,8 +41,6 @@ _tag="v${pkgver//_/-}-exynos4"
 source="
 	$pkgname-$_tag.tar.bz2::$url/-/archive/$_tag/linux-$_tag.tar.bz2
 	$_config
-
-	clang21.patch
 "
 builddir="$srcdir/linux-$_tag"
 
@@ -52,7 +51,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
+	make ARCH="$_carch" CC="${CC:-gcc}" KCFLAGS="-Wno-array-bounds" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
@@ -60,7 +59,6 @@ package() {
 	mkdir -p "$pkgdir"/boot
 	make zinstall modules_install dtbs_install \
 		ARCH="$_carch" \
-		LLVM=1 \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
@@ -72,6 +70,5 @@ package() {
 
 sha512sums="
 2b70d220163811efc79e21fc7ba3ff2a6d81c8633d9439f1c3b2fbea51c40b5fff42220af8ae5105665b49372cfa9ba30f4560b4c0d53bfbb83bbd84c94c0e64  linux-postmarketos-exynos4-v6.16.10-exynos4.tar.bz2
-5db5d60e509e833e7ee546ffb8bb206ebfea97dd5e209d4ba3a5d16520011959b952600998e9bed0f38141cadc0321e2bd6f8d8b761fa1ea6248c20f5de87e5c  config-postmarketos-exynos4.armv7
-bda4519e24c0e1c950d9f7cb69147df46758f41405193ad4eae71afea42b6c722757f7e23ce84f28e4da90d76322f83202eb0fa1c6d13174a2ff97d09b0c6c56  clang21.patch
+b0b4529d19c511cca75f48d10c3b353b6f57aa299d8b242539f5b8427d25e2752b1bad04f92fdd4b49a454e7a31852316ec26388cefb03a98c3bb8746523aea3  config-postmarketos-exynos4.armv7
 "
