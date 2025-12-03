@@ -55,7 +55,6 @@ start_unudhcpd
 
 if [ "$IN_CI" = "false" ]; then
 	setup_framebuffer
-	show_splash "Loading..."
 fi
 
 # Discover the partitions if they're "subpartitions"
