@@ -21,13 +21,13 @@ start_test "Ensure all boolean variables can be set"
 # shellcheck disable=SC3001
 parse_cmdline < <(echo \
 pmos.bootchart2 pmos.debug-shell pmos.force-partition-resize \
-pmos.nosplash pmos.stowaway rd.info \
+splash pmos.stowaway rd.info \
 )
 
 assert_equal "bootchart2" "y"
 assert_equal "debug_shell" "y"
 assert_equal "force_partition_resize" "y"
-assert_equal "nosplash" "y"
+assert_equal "nosplash" "n"
 assert_equal "log_info" "y"
 end_test
 
@@ -55,7 +55,7 @@ assert_equal "rootfsopts" ",default"
 
 test_info "Checking other variables are unset"
 assert_unset debug_shell
-assert_unset nosplash
+assert_unset splash
 assert_unset bootchart2
 end_test
 
