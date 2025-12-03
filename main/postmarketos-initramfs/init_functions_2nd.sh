@@ -3,6 +3,28 @@
 # Functions are notated with the reason they're only in
 # initramfs-extra
 
+# Start the Plymouth daemon
+# Uses: (none)
+# Sets: (none)
+# Returns: 0
+splash_start() {
+	if ! command -v plymouthd > /dev/null || ! command -v plymouth > /dev/null; then
+		echo "ERROR: plymouth not found!"
+		return
+	fi
+	plymouthd --mode=boot --attach-to-session
+}
+
+# Stop the Plymouth daemon
+# Uses: (none)
+# Sets: (none)
+# Returns: 0
+splash_stop() {
+	if plymouth --ping 2>/dev/null; then
+		plymouth quit
+	fi
+}
+
 # udevd is too big
 setup_udev() {
 	if ! command -v udevd > /dev/null || ! command -v udevadm > /dev/null; then
@@ -91,16 +113,14 @@ resize_root_partition() {
 unlock_root_partition() {
 	command -v cryptsetup >/dev/null || return
 	if cryptsetup isLuks "$PMOS_ROOT"; then
-		# Make sure the splash doesn't interfere
-		hide_splash
+		splash_hide
 		tried=0
 		until cryptsetup status root | grep -qwi active; do
 			fde-unlock "$PMOS_ROOT" "$tried"
 			tried=$((tried + 1))
 		done
 		PMOS_ROOT=/dev/mapper/root
-		# Show again the loading splashscreen
-		show_splash "Loading..."
+		splash_set_status "Loading..."
 	fi
 }
 
