@@ -22,10 +22,11 @@ setup_udev
 setup_usb_network
 start_unudhcpd
 
-# Splash is already running if we're loaded from initramfs-extra
-if [ "$deviceinfo_create_initfs_extra" != "true" ] && [ "$IN_CI" = "false" ]; then
+# Start splash
+if [ "$nosplash" != "y" ] && [ "$IN_CI" = "false" ]; then
 	setup_framebuffer
-	show_splash "Loading..."
+	splash_start
+	splash_set_status "Loading..."
 fi
 
 setup_dynamic_partitions "${deviceinfo_super_partitions:=}"
@@ -83,7 +84,7 @@ elif [ "$debug_shell" != "y" ]; then
 fi
 
 # Make it clear that we're at the end of the initramfs
-show_splash "Starting..."
+splash_set_status "Starting..."
 
 # Re-enable kmsg ratelimiting (might have been disabled for logging)
 echo ratelimit > /proc/sys/kernel/printk_devkmsg

@@ -551,13 +551,13 @@ check_filesystem() {
 	esac
 
 	if [ "$status" = "fail" ]; then
-		show_splash "WARNING: filesystem needs manual repair (fsck) ($partition)\\nhttps://postmarketos.org/troubleshooting\\n\\nBoot anyways by pressing Volume-Up or Left-Shift..."
+		splash_set_message "WARNING: filesystem needs manual repair (fsck) ($partition)\nhttps://postmarketos.org/troubleshooting\n\nBoot anyways by pressing Volume-Up or Left-Shift..."
 		while ! iskey KEY_LEFTSHIFT KEY_VOLUMEUP ; do
 			:
 		done
 	fi
 
-	show_splash "Loading..."
+	splash_set_status "Loading..."
 }
 
 # $1: path
@@ -612,7 +612,7 @@ extract_initramfs_extra() {
 	initramfs_extra="$1"
 	if [ ! -e "$initramfs_extra" ]; then
 		echo "ERROR: initramfs-extra not found!"
-		show_splash "ERROR: initramfs-extra not found\\nhttps://postmarketos.org/troubleshooting"
+		splash_set_error "ERROR: initramfs-extra not found\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 	echo "Extract $initramfs_extra"
@@ -631,7 +631,7 @@ wait_partition() {
 		return
 	fi
 
-	show_splash "Waiting for $description partition..."
+	splash_set_status "Waiting for $description partition..."
 	for _ in $(seq 1 30); do
 		sleep 1
 		$findfunc partition
@@ -641,7 +641,7 @@ wait_partition() {
 		check_keys ""
 	done
 
-	show_splash "ERROR: $description partition not found!\\nhttps://postmarketos.org/troubleshooting"
+	splash_set_error "ERROR: $description partition not found!\nhttps://postmarketos.org/troubleshooting"
 	fail_halt_boot
 }
 
@@ -698,7 +698,7 @@ mount_root_partition() {
 			;;
 		*)
 			echo "ERROR: Detected unsupported '$type' filesystem ($partition)."
-			show_splash "ERROR: unsupported '$type' filesystem ($partition)\\nhttps://postmarketos.org/troubleshooting"
+			splash_set_error "ERROR: unsupported '$type' filesystem ($partition)\nhttps://postmarketos.org/troubleshooting"
 			fail_halt_boot
 			;;
 	esac
@@ -714,7 +714,7 @@ mount_root_partition() {
 
 	if ! mount -t "$type" -o rw"$rootfsopts" "$partition" /sysroot; then
 		echo "ERROR: unable to mount root partition!"
-		show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
+		splash_set_error "ERROR: unable to mount root partition\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 
@@ -727,7 +727,7 @@ mount_root_partition() {
 	fi
 
 	if ! [ -e /sysroot/etc/os-release ]; then
-		show_splash "ERROR: root partition does not contain a root filesystem\\nhttps://postmarketos.org/troubleshooting"
+		splash_set_error "ERROR: root partition does not contain a root filesystem\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 }
@@ -1170,7 +1170,7 @@ debug_shell() {
 	rmdir "$CONFIGFS/g1/functions/$CONFIGFS_MASS_STORAGE_FUNCTION"
 	setup_usb_configfs_udc
 
-	show_splash "Loading..."
+	splash_set_status "Loading..."
 
 	pkill -f buffyboard || true
 }
@@ -1196,30 +1196,73 @@ check_keys() {
 	done
 }
 
-# $1: Message to show
-show_splash() {
-	info "SPLASH: $1"
+# Show the Plymouth splash screen
+# Uses: nosplash
+# Sets: (none)
+# Returns: 0
+splash_show() {
 	if [ "$nosplash" = "y" ]; then
 		return
 	fi
 
-	hide_splash
-
-	# shellcheck disable=SC2154,SC2059
-	/usr/bin/pbsplash -s /usr/share/pbsplash/pmos-logo-text.svg \
-		-b "$VERSION | Linux $(uname -r) | $deviceinfo_codename" \
-		-m "$(printf "$1")" >/dev/null &
+	if plymouth --ping 2>/dev/null; then
+		plymouth show-splash
+	fi
 }
 
-hide_splash() {
+# Hide the Plymouth splash screen
+# Uses: nosplash
+# Sets: (none)
+# Returns: 0
+splash_hide() {
 	if [ "$nosplash" = "y" ]; then
 		return
 	fi
-	killall pbsplash 2>/dev/null
 
-	while pgrep pbsplash >/dev/null; do
-		sleep 0.01
-	done
+	if plymouth --ping 2>/dev/null; then
+		plymouth hide-splash
+	fi
+}
+
+# Set the Plymouth status message
+# Uses: (none)
+# Sets: (none)
+# $1: status text to display
+# Returns: 0
+splash_set_status() {
+	info "SPLASH: $1"
+	splash_show
+	if plymouth --ping 2>/dev/null; then
+		plymouth update --status="$1"
+	fi
+}
+
+# Set the Plymouth message
+# Uses: (none)
+# Sets: (none)
+# $1: message text to display, may be multiline with \n
+# Returns: 0
+splash_set_message() {
+	info "SPLASH: $1"
+	splash_show
+	if plymouth --ping 2>/dev/null; then
+		# Use printf to convert \n to literal newlines for multiline messages
+	    plymouth display-message --text "$(printf '%b' "$1")"
+	fi
+}
+
+# Set an error on the Plymouth splash
+# Uses: (none)
+# Sets: (none)
+# $1: error text to display
+# Returns: 0
+splash_set_error() {
+	info "SPLASH ERROR: $1"
+	splash_show
+	if plymouth --ping 2>/dev/null; then
+		plymouth update --status=":("
+		plymouth display-message --text="$1"
+	fi
 }
 
 set_framebuffer_mode() {
