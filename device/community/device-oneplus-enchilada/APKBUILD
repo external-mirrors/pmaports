@@ -4,7 +4,7 @@
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
 pkgver=18
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -64,7 +64,7 @@ openrc() {
 }
 
 pmtest() {
-	depends="bootrr qrtr firmware-oneplus-sdm845 unl0kr"
+	depends="bootrr qrtr firmware-oneplus-sdm845 postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 	install="$subpkgdir/$subpkgname.post-install"
 
