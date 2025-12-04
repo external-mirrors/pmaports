@@ -1,0 +1,19 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=postmarketos-plymouth-themes
+pkgver=1.0
+pkgrel=0
+pkgdesc="Plymouth themes for postmarketOS"
+url="https://postmarketos.org"
+arch="noarch"
+license="GPL-3.0-or-later"
+source="https://gitlab.postmarketos.org/postmarketOS/plymouth-themes/-/archive/$pkgver/plymouth-themes-$pkgver.tar.gz"
+options="!check" # no tests
+builddir="$srcdir/plymouth-themes-$pkgver"
+
+package() {
+	mkdir -p "$pkgdir"/usr/share/plymouth/themes
+	cp -r pmos-pulse "$pkgdir"/usr/share/plymouth/themes/
+}
+sha512sums="
+2ca4fc5d2861b14876bacb81ffd6a3480cabc6f02462e4bdd9778e80eb186e7f0a14ca0848bdbaf67b01959f38c1ce3112e7c6ee7c6b11659036ee0481d67982  plymouth-themes-1.0.tar.gz
+"
