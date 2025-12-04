@@ -3,7 +3,7 @@
 # Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=device-qemu-amd64
 pkgver=12
-pkgrel=0
+pkgrel=1
 pkgdesc="Simulated device in QEMU (x86_64)"
 url="https://postmarketos.org"
 arch="x86_64"
@@ -20,6 +20,7 @@ subpackages="
 	$pkgname-kernel-virt:kernel_virt
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-none:kernel_none
+	$pkgname-pmtest
 	"
 source="
 	deviceinfo
@@ -58,6 +59,13 @@ kernel_stable() {
 	provides="$pkgname-kernel-edge=$pkgver-r$pkgrel"
 	replaces="$pkgname-kernel-edge"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+pmtest() {
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
+	depends="unl0kr"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
