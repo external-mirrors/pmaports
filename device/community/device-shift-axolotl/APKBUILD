@@ -5,7 +5,7 @@
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
 pkgver=17
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,7 +21,7 @@ depends="
 	soc-qcom-qbootctl
 	fwupd>=1.8.6
 "
-makedepends="devicepkg-dev postmarketos-test"
+makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	hexagonrpcd.confd
@@ -68,7 +68,7 @@ nonfree_firmware_openrc() {
 }
 
 pmtest() {
-	depends="bootrr qrtr firmware-shift-sdm845 unl0kr"
+	depends="bootrr qrtr firmware-shift-sdm845 postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 	install="$subpkgdir/$subpkgname.post-install"
 
