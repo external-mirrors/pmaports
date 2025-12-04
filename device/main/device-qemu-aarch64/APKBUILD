@@ -3,7 +3,7 @@
 # Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=device-qemu-aarch64
 pkgver=13
-pkgrel=0
+pkgrel=1
 pkgdesc="Simulated device in QEMU (aarch64)"
 url="https://postmarketos.org"
 arch="aarch64"
@@ -76,7 +76,7 @@ kernel_stable() {
 
 pmtest() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	depends="unl0kr"
+	depends="postmarketos-test-unl0kr"
 
 	mkdir -p "$subpkgdir"
 }
