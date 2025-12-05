@@ -3,7 +3,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
 pkgver=18
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -70,11 +70,8 @@ nonfree_firmware_openrc() {
 pmtest() {
 	depends="bootrr qrtr firmware-oneplus-sdm845 postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	install="$subpkgdir/$subpkgname.post-install"
 
 	mkdir -p "$subpkgdir"
-
-	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgdir/$subpkgname.post-install"
 }
 
 systemd() {
