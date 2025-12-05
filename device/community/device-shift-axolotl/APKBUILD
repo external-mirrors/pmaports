@@ -5,7 +5,7 @@ maintainer="Alexander Martinz <amartinz@shiftphones.com>"
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
 pkgver=17
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -70,11 +70,8 @@ nonfree_firmware_openrc() {
 pmtest() {
 	depends="bootrr qrtr firmware-shift-sdm845 postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
-	install="$subpkgdir/$subpkgname.post-install"
 
 	mkdir -p "$subpkgdir"
-
-	devicepkg_pmtest_post_install "ttyMSM0,115200" > "$subpkgdir/$subpkgname.post-install"
 }
 
 sha512sums="
