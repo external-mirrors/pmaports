@@ -1,0 +1,51 @@
+# Forked from Alpine to test Craftyguy patch
+
+pkgname=libssc
+pkgver=99990.2.2
+_pkgver=5e699fc97d92684c6882741fc9f71cb57a33e25b
+pkgrel=0
+pkgdesc="Library to expose Qualcomm Sensor Core sensors"
+url="https://codeberg.org/DylanVanAssche/libssc"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="
+	eudev-dev
+	glib-dev
+	libgudev-dev
+	linux-headers
+	libqmi-dev
+	meson
+	protobuf-c-dev
+	protobuf-dev
+	python3-dev
+	py3-gobject3
+	py3-protobuf
+	qrtr-libs
+"
+subpackages="$pkgname-dbg $pkgname-dev $pkgname-pyc"
+builddir="$srcdir/$pkgname"
+options="!check" # socket(AF_QIPCRTR): Address family not supported by protocol on many arches in CI
+source="
+  $pkgname-$_pkgver.tar.gz::https://codeberg.org/DylanVanAssche/libssc/archive/$_pkgver.tar.gz
+  20251205-PR103.patch
+"
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		. output
+	meson compile -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+check() {
+	cd "$srcdir"/"$pkgname" && sh run-tests.sh
+}
+
+sha512sums="
+6497a2eebcbbcaaffd039238370d8e5ee3a63d0afb8371b88d5a9279a3d042af76e6dc38479f2e64f10b5bfad8f5e1ad555bf9eae23643275e92dcbca74a0026  libssc-5e699fc97d92684c6882741fc9f71cb57a33e25b.tar.gz
+078a50b0bc2027e8bc040d08c94810d327e9ba2c6530b4a39885e52bc95784f896822577010ba3344b0696c69e467923a2a2cd9fca3f93d0cb24709182c234ec  20251205-PR103.patch
+"
