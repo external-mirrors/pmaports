@@ -1,0 +1,16 @@
+test-oneplus-enchilada:
+  extends:
+    # Extended from build-jobs.yaml.j2
+    - .device-boot-flow-separate-artifacts
+    - .test-oneplus-enchilada
+  # This should instead be a .pmos-ci-tron-runner-oneplus-enchilada in
+  # ci-common that we import here
+  # extends:
+  #   - .pmos-ci-tron-runner-oneplus-enchilada
+  tags:
+    - cpu:arch:arm64
+    - soc:sdm845
+    - compatible:oneplus-enchilada
+
+  variables:
+    CI_TRON_KERNEL_CMDLINE__CONSOLE: "console=ttyMSM0,115200"
