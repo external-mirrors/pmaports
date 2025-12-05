@@ -88,7 +88,7 @@ class Device:
         return self.package_dependencies | self.testing_dependencies
 
     @cached_property
-    def kernels(self) -> list[str] | None:
+    def kernel_variants(self) -> list[str]:
         kernels = []
 
         subpackage_prefix = f"device-{self.codename}-kernel-"
@@ -101,10 +101,7 @@ class Device:
             if kernel_name != "none":
                 kernels.append(kernel_name)
 
-        if kernels:
-            return kernels
-        else:
-            return None
+        return kernels
 
     @cached_property
     def deviceinfo(self) -> dict[str, Deviceinfo] | Deviceinfo:
@@ -117,7 +114,7 @@ class Device:
 
     @property
     def has_kernel_variants(self):
-        return len(self.kernels) > 0
+        return len(self.kernel_variants) > 0
 
     @classmethod
     def supported_devices(cls) -> dict[Path, Self]:
