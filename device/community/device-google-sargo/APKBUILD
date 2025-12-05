@@ -3,7 +3,7 @@
 pkgname=device-google-sargo
 pkgdesc="Google Pixel 3a"
 pkgver=13
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -42,6 +42,7 @@ subpackages="
 	$pkgname-openrc
 	$pkgname-plasma-camera:plasma_camera
 	$pkgname-systemd
+	$pkgname-pmtest
 "
 
 build() {
@@ -82,6 +83,13 @@ plasma_camera() {
 	install_if="$pkgname=$pkgver-r$pkgrel plasma-camera"
 
 	install -Dm644 "$srcdir"/plasmacamerarc "$subpkgdir"/etc/xdg/plasmacamerarc
+}
+
+pmtest() {
+	depends="postmarketos-test-unl0kr"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
