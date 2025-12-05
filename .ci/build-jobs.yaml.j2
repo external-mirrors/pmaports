@@ -129,8 +129,9 @@ prepare-{{ device.name }}:
   needs:
     - job: 'prepare-{{ device.name }}'
       artifacts: false
-      # NOTE: We can't wait for a particular job in the matrix until GitLab implements support for it:
-      # https://gitlab.com/gitlab-org/gitlab/-/issues/423553
+      parallel:
+        matrix:
+          - KERNEL_VARIANT: $[[ matrix.KERNEL_VARIANT ]]
   variables:
     CI_TRON__PMB_BUILD_JOB: "prepare-{{ device.name }}{% if device.has_kernel_variants %}: [$KERNEL_VARIANT]{% endif %}"
     CI_TRON_KERNEL_CMDLINE__DEVICEINFO: '{{ device.deviceinfo.kernel_cmdline }}'
