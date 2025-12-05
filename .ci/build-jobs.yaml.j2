@@ -88,13 +88,13 @@ prepare-{{ device.name }}:
   extends:
     .pmos-ci-tron-build-boot-artifacts
   {%- if device.has_kernel_variants %}
-  # Let's build all the boot artifacts for all the supported kernels in
+  # Let's build all the boot artifacts for all the supported kernel variants in
   # different jobs, but hide them behind a single job name so as not to pollute
   # the pipeline.
   parallel:
     matrix:
       - KERNEL_VARIANT:
-      {%- for kernel in device.kernels %}
+      {%- for kernel in device.kernel_variants %}
         - {{ kernel }}
       {%- endfor %}
   {%- endif %}
@@ -108,7 +108,7 @@ prepare-{{ device.name }}:
     DEVICE_NAME: {{ device.name }}
     # NOTE: All the packages that may influence testing should have an
     # `install-if postmarketos-mkinitfs-hook-ci`, so no need to add them here
-    INSTALL_PACKAGES: {{ device.pkgname }} {{ device.pkgname }}-kernel-${KERNEL_VARIANT} postmarketos-mkinitfs-hook-ci
+    INSTALL_PACKAGES: {{ device.pkgname }} {% if device.has_kernel_variants %}{{ device.pkgname }}-kernel-${KERNEL_VARIANT} {% endif %}postmarketos-mkinitfs-hook-ci
 
 .test-{{ device.name }}:
   stage: hardware tests
@@ -120,7 +120,7 @@ prepare-{{ device.name }}:
   parallel:
     matrix:
       - KERNEL_VARIANT:
-      {%- for kernel in device.kernels %}
+      {%- for kernel in device.kernel_variants %}
         - {{ kernel }}
       {%- endfor %}
   {%- endif %}
@@ -128,9 +128,11 @@ prepare-{{ device.name }}:
   needs:
     - job: 'prepare-{{ device.name }}'
       artifacts: false
+      {%- if device.has_kernel_variants %}
       parallel:
         matrix:
           - KERNEL_VARIANT: $[[ matrix.KERNEL_VARIANT ]]
+      {%- endif %}
   variables:
     CI_TRON__PMB_BUILD_JOB: "prepare-{{ device.name }}{% if device.has_kernel_variants %}: [$KERNEL_VARIANT]{% endif %}"
     CI_TRON_KERNEL_CMDLINE__DEVICEINFO: '{{ device.deviceinfo.kernel_cmdline }}'
