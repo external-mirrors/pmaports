@@ -1,0 +1,15 @@
+test-{{ device.name }}:
+  extends:
+    # Extended from jobs defined in ci-common's ci-tron/common.yml
+    # - .pmos-ci-tron-runner-{{ device.name }}
+
+    # Extended from build-jobs.yaml.j2
+    - .ci-tron-device-boot-flow-fastboot-image
+    - .test-{{ device.name }}
+
+  tags:
+    - compatible:{{ device.name }}
+
+  variables:
+    CI_TRON_KERNEL_CMDLINE__CONSOLE: "console=ttyMSM0,115200"
+    KERNEL_NAME: "vmlinuz"
