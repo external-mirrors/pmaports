@@ -4,7 +4,6 @@
 # Export all variables so they're available in /init_2nd.sh
 set -a
 
-IN_CI="false"
 LOG_PREFIX="[pmOS-rd]"
 
 # Handle halt/poweroff/reboot
@@ -14,8 +13,6 @@ trap 'poweroff -f' USR2
 trap 'reboot -f' TERM
 
 [ -e /hooks/10-verbose-initfs.sh ] && set -x
-
-[ -e /hooks/05-ci.sh ] && IN_CI="true"
 
 [ -e /etc/unudhcpd.conf ] && . /etc/unudhcpd.conf
 . ./init_functions.sh
@@ -53,10 +50,8 @@ load_modules /lib/modules/initramfs.load
 setup_usb_network
 start_unudhcpd
 
-if [ "$IN_CI" = "false" ]; then
-	setup_framebuffer
-	show_splash "Loading..."
-fi
+setup_framebuffer
+show_splash "Loading..."
 
 # Discover the partitions if they're "subpartitions"
 # (where the whole disk image is flashed to a partition)
