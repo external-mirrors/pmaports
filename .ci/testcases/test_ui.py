@@ -14,7 +14,7 @@ def test_aports_ui():
     """
     pmaports_cfg = pmb.config.pmaports.read_config()
     for arch in pmaports_cfg["supported_arches"].split(","):
-        for path in common.get_changed_files():
+        for path in common.get_changed_files(removed=False):
             path = Path(path)
 
             if path.name != "APKBUILD":
