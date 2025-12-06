@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=114
+pkgver=115
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -32,7 +32,6 @@ subpackages="
 	fprintd-systemd:_service
 	gnome-clocks-systemd:_service
 	greetd-wlgreet-systemd:_service
-	hexagonrpcd-systemd:_service
 	hfd-service-systemd:_service
 	hkdm-systemd:_service
 	httpd-systemd:_service
@@ -82,7 +81,6 @@ _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.or
 _fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
 _gnome_clocks_sources="user/gnome-clocks.service"
 _greetd_wlgreet_sources="system/wlgreet.service"
-_hexagonrpcd_sources="system/hexagonrpcd-adsp-rootpd.service system/hexagonrpcd-adsp-sensorspd.service system/hexagonrpcd-sdsp.service system/iio-sensor-proxy.service.d/hexagonrpcd.conf"
 _hfd_service_sources="system/hfd-service.service" # From https://gitlab.com/ubports/development/core/hfd-service/-/blob/main/init/hfd-service.service.in
 _hkdm_sources="system/hkdm.service"
 _httpd_sources="system/httpd.service"
@@ -139,7 +137,6 @@ source="$(flatpath \
 	$_fprintd_sources \
 	$_gnome_clocks_sources \
 	$_greetd_wlgreet_sources \
-	$_hexagonrpcd_sources \
 	$_hfd_service_sources \
 	$_hkdm_sources \
 	$_httpd_sources \
@@ -226,10 +223,6 @@ a7fd0c47858a10c263d9bc661dc955366a2acd79f7be5cf2571dc7ec3b3f5adf122b4e55e58d01b7
 c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
 e226bdb71f6fafe92d14046dfa19ddbccb765b579c1f90687a9ece376fa12406db9f2cf8035ff07d5a78ef77dc73615d39a8790f8722585bf65872be773888ff  system-wlgreet.service
-21652c58e7ee18b703f168a53bceaef9d3684db3af61bd7b0898601f5788307ed0ec28b4ed9db311baf533de115d6b6ff7a3b39cf846e0e814c7825073c2c450  system-hexagonrpcd-adsp-rootpd.service
-146e30849b4e829213bd2b097dc0b5049b98ab4adb525bff4e06cac1800284aaa7a7dbca2fce113ba3bccaa94a58ff95c7230e8603b23335a5c39dd27cc9d61f  system-hexagonrpcd-adsp-sensorspd.service
-cf95791ba56247e3b37a1e23d59638ded09cf343b646dd68b733cc1f72d3ea3daa038a99ca961f44792dd5ba35bc1b56808eb9e87f6bbc5426fa24a12eae89d1  system-hexagonrpcd-sdsp.service
-2e8a876b61093add48e0677dcbfdac148690eddb398ff51ab4edb6547515ad8f8cfec31e8fda6886746b3bf30410b7b63c7486dcfe2441a7e742ea5023981a45  system-iio-sensor-proxy.service.d-hexagonrpcd.conf
 5087ff36981b89c9bd09f96cff93d1f20d5af513e2cdebf65a85e329f458a9a2b77c12091ed31278c3b89baef79273cc818fddabbe4e1eec75faf7b9cc18cb8a  system-hfd-service.service
 083e59dcbbbd8f6ea148880256ff20f1a16e583348cd7cfc7aa6321d7b0cbe0a82780fd482a26ef25a5ebcfc83f5b7899d5db7c7d479fd7c56e5d7e95fd24a34  system-hkdm.service
 666ba094bff47aa67b4e4431929516af355f90ffc1fd60429dcd20b337c3c17d2d62a71c289496217282f0819bc8deba8db5cc5b2915b692defa14d19532a8d1  system-httpd.service
