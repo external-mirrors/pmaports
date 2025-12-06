@@ -2,7 +2,7 @@
 # Maintainer: Jens Reidel <adrian@postmarketos.org>
 pkgname=device-generic-loongarch64
 pkgver=3
-pkgrel=0
+pkgrel=1
 pkgdesc="Generic loongarch64 system"
 url="https://postmarketos.org"
 arch="loongarch64"
@@ -17,6 +17,7 @@ makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-lts:kernel_lts
 	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-mainline:kernel_mainline
 	"
 
 source="
@@ -42,6 +43,12 @@ kernel_lts() {
 kernel_stable() {
 	pkgdesc="Alpine Stable kernel"
 	depends="linux-stable"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+	pkgdesc="postmarketOS Mainline kernel"
+	depends="linux-postmarketos-mainline"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
