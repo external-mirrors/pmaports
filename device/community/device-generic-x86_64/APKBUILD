@@ -4,7 +4,7 @@
 pkgname=device-generic-x86_64
 pkgdesc="Generic x86_64 system, with EFI"
 pkgver=21
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -26,6 +26,7 @@ source="
 install="$pkgname.post-install $pkgname.post-upgrade"
 subpackages="
 	$pkgname-intel
+	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
 "
@@ -54,6 +55,12 @@ intel() {
 
 	install -Dm644 "$srcdir"/30-gpu-i915-firmware.files \
 		-t "$subpkgdir"/usr/share/mkinitfs/files/
+}
+
+kernel_mainline() {
+	pkgdesc="postmarketOS Mainline kernel"
+	depends="linux-postmarketos-mainline"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_stable() {
