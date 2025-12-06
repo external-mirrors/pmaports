@@ -2,8 +2,8 @@
 # Maintainer: Minecrell <minecrell@minecrell.net>
 # Co-Maintainer: Luca Weiss <luca@lucaweiss.eu>
 pkgname=device-qemu-riscv64
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 pkgdesc="Simulated device in QEMU (riscv64)"
 url="https://postmarketos.org"
 arch="riscv64"
@@ -11,6 +11,7 @@ license="MIT"
 depends="
 	postmarketos-base
 	postmarketos-qemu-common
+	systemd-boot
 	"
 makedepends="devicepkg-dev"
 subpackages="
@@ -47,6 +48,6 @@ kernel_mainline() {
 }
 
 sha512sums="
-0f6c30def83bfdfea7da0a9786f28e81bfbca9a51f224f206b13a36f659faac82ca5192cc3663f493a7a18ad788c2ee7cca51ca1ad61efd2966e405aad0dc036  deviceinfo
+1350558d701000a805f25c1453161219c33c8a051fefcd70ad33a5b5c2ea2b27e8c8414f7f8b661099bf49699ae09c2301c5e2915dfe902823d04f6f79a11d9d  deviceinfo
 8129439ec53e76e714b2d3dac97bbe702822d6f6642ea6b631aa26001fec85ca310fbe9eeb04c2bd849145a1137b7934c21b704524f3a98b96b7c6f71c2ca992  modules-initfs
 "
