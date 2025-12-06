@@ -4,7 +4,7 @@
 pkgname=device-postmarketos-trailblazer
 pkgdesc="postmarketOS Trailblazer generic ARM64"
 pkgver=16
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -36,6 +36,7 @@ install="$pkgname.pre-upgrade"
 makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-next:kernel_next
+	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-lts:kernel_lts
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-postmarketos-qcom-laptop:kernel_postmarketos_qcom_laptop
@@ -57,6 +58,12 @@ package() {
 kernel_next() {
 	pkgdesc="Unstable next kernel (linux-next)"
 	depends="linux-next"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+	pkgdesc="Mainline postmarketOS kernel (linux-postmarketos-mainline)"
+	depends="linux-postmarketos-mainline"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
