@@ -3,7 +3,7 @@
 pkgname=iio-sensor-proxy
 pkgver=99993.8
 _pkgver=3.8
-pkgrel=2
+pkgrel=3
 pkgdesc="IIO sensors to D-Bus proxy"
 url="https://gitlab.freedesktop.org/hadess/iio-sensor-proxy"
 arch="aarch64"
@@ -21,6 +21,7 @@ subpackages="$pkgname-openrc $pkgname-systemd $pkgname-udev"
 builddir="$srcdir/$pkgname-$_pkgver"
 source="https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/archive/$_pkgver/iio-sensor-proxy-$_pkgver.tar.gz
 	iio-sensor-proxy.initd
+	system-iio-sensor-proxy.service.d-hexagonrpcd.conf
 	0001-iio-sensor-proxy-depend-on-libssc.patch
 	0001-WIP-iio-sensor-proxy.c-Do-not-exit-based-on-sensor-e.patch
 	0002-proximity-support-SSC-proximity-sensor.patch
@@ -51,11 +52,15 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 
 	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/$pkgname
+
+	install -Dm644 "$srcdir"/system-iio-sensor-proxy.service.d-hexagonrpcd.conf \
+		"$pkgdir"/usr/lib/systemd/system/iio-sensor-proxy.service.d/hexagonrpcd.conf
 }
 
 sha512sums="
 9cca8d706c531c9a2e34dfebdc8673a1765b615533e3f7776118c74cb1ce145e472203c6c7804d35701c22cc93755609829bc3817c5920d5961249d7e8de87c6  iio-sensor-proxy-3.8.tar.gz
 b25df94e249ca46fe96926e5a866c20dc913fa52a2d9259fb7a3594861c6b2f246fc7fef8a21f5b021f3a71401f734ae27210137b0b1917a7daaffb5e3221f2e  iio-sensor-proxy.initd
+2e8a876b61093add48e0677dcbfdac148690eddb398ff51ab4edb6547515ad8f8cfec31e8fda6886746b3bf30410b7b63c7486dcfe2441a7e742ea5023981a45  system-iio-sensor-proxy.service.d-hexagonrpcd.conf
 d46eeb1deabb6ee6017b86f573fcb717d8b992979bfd447e52c6dabc95d9e6c986ab937f602c2f0a731d10d87d67578aa59930d7faff69b2f42a0eab25f4c60c  0001-iio-sensor-proxy-depend-on-libssc.patch
 4b43ea53b71c9be29367897a3c9ba349e9fdb71185300aafc00be69f923d7f27aa02bb7f0f5c5be800f0d494035992e046c010fd70a1754f8a47701b17666926  0001-WIP-iio-sensor-proxy.c-Do-not-exit-based-on-sensor-e.patch
 59800fbd73abd77c6cf86ab1bcdce85abefb07e3cd28d58c3e91a4b3cdd9d893a9671e8f0f3dc212064d5744a62b0b24c54fa91ce8f3ac84e361f7ba8cc64ded  0002-proximity-support-SSC-proximity-sensor.patch
