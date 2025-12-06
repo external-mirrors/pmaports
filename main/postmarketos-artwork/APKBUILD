@@ -53,7 +53,7 @@ wallpapers() {
 
 	# /usr/share/wallpapers/postmarketos.jpg should always point to the
 	# current wallpaper so we don't break configs
-	magick convert "$subpkgdir"/usr/share/wallpapers/postmarketos/contents/images/2000x2000.png \
+	magick "$subpkgdir"/usr/share/wallpapers/postmarketos/contents/images/2000x2000.png \
 		-format jpeg \
 		"$subpkgdir"/usr/share/wallpapers/postmarketos.jpg
 }
