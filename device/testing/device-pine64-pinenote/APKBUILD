@@ -2,7 +2,7 @@
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
 pkgver=7
-pkgrel=0
+pkgrel=1
 _commit="28d2c05ab4e80a7972611cd3188f3e8be4197f6a"
 url="https://postmarketos.org"
 license="GPL-3.0-only"
@@ -36,16 +36,17 @@ source="
 	30-eink-waveform.files
 	50-touchscreen.conf
 	panfrost.conf
-	tinydm-ebc.service
+	tinydm-ebc-workaround-override.conf
 "
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
-	$pkgname-nonfree-firmware-systemd:nonfree_firmware_systemd
-	$pkgname-x11
+	$pkgname-nonfree-firmware
+	$pkgname-nonfree-firmware-openrc:firmware_openrc
+	$pkgname-nonfree-firmware-systemd:firmware_systemd
 	$pkgname-sway
-	$pkgname-sway-systemd:sway_systemd
+	$pkgname-sway-hrdl
+	$pkgname-systemd
 	$pkgname-xournalpp
+	$pkgname-x11
 "
 builddir="$srcdir"/pinenote-dist-$_commit
 
@@ -69,29 +70,33 @@ package() {
 		-t "$pkgdir"/etc/libinput
 
 	# modprobe rules
-	# Hack to get around grep CI error since we don't want to exclude the whole file
-	cd "$builddir"/etc
-	install -Dm644 \
-		modprobe.d/rockchip_ebc.conf \
-		modprobe.d/wifi.conf \
-		-t "$pkgdir"/usr/lib/modprobe.d
-	cd "$builddir"
+	# cd because shellcheck-grep gets confused by usage of etc/modprobe.d
+	(
+		cd "$builddir"/etc
 
-	# udev rules
-	install -Dm644 \
-		"$builddir"/etc/udev/rules.d/81-libinput-pinenote.rules \
-		"$builddir"/etc/udev/rules.d/83-backlight.rules \
-		"$builddir"/etc/udev/rules.d/84-rockchip-ebc-power.rules \
-		-t "$pkgdir"/usr/lib/udev/rules.d
+		install -Dm644 \
+			./modprobe.d/rockchip_ebc.conf \
+			./modprobe.d/wifi.conf \
+			-t "$pkgdir"/usr/lib/modprobe.d
+
+		# udev rules
+		install -Dm644 \
+			./udev/rules.d/81-libinput-pinenote.rules \
+			./udev/rules.d/83-backlight.rules \
+			./udev/rules.d/84-rockchip-ebc-power.rules \
+			-t "$pkgdir"/usr/lib/udev/rules.d
+	)
 
 	# bins
+	# rockchip_ebc_dump_buffers.py binary to dump whatever is on the screen framebuffer for debugging
+	# {before,after}_sleep.sh hooks to put a splash screen when sleeping and shutdown backlight
 	install -Dm755 \
 		"$builddir"/bin/rockchip_ebc_dump_buffers.py \
 		"$builddir"/bin/before_sleep.sh \
 		"$builddir"/bin/after_resume.sh \
 		-t "$pkgdir"/usr/bin
 
-	# python library
+	# python library used by rockchip_ebc_dump_buffers and waveform extraction on first boot
 	local _site_packages_path="$(python -c 'import site; print(site.getsitepackages())' | sed -e "s|\['||" -e "s|'\]||")"
 	install -Dm755 "$builddir"/bin/rockchip_ebc_custom_ioctl.py \
 		-t "$pkgdir"/$_site_packages_path
@@ -99,12 +104,19 @@ package() {
 	# panfront sometimes insists on loading after rockchip_ebc
 	install -Dm644 "$srcdir"/panfrost.conf \
 		-t "$pkgdir"/usr/lib/modprobe.d
+
+	# rockchip_ebc sometimes fails to load the initial waveform.
+	# This forces a reload before starting tinydm
+	# TODO: openrc workaround
+	install -Dm644 \
+		"$srcdir"/tinydm-ebc-workaround-override.conf \
+		"$pkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
 }
 
-sway() {
-	install_if="$pkgname=$pkgver-r$pkgrel sway"
-	install="device-pine64-pinenote-sway.post-install"
-	depends="postmarketos-theme waybar squeekboard swayidle swaybg iio-sensor-proxy
+hrdl() {
+	pkgdesc="Opinionated sway UI by hrdl optimized for the Pinenote"
+	install="$subpkgname.post-install $subpkgname.post-deinstall"
+	depends="postmarketos-ui-sway postmarketos-theme waybar squeekboard swayidle swaybg iio-sensor-proxy
 	brightnessctl jq nwg-menu py3-i3ipc network-manager-applet rot8 papirus-icon-theme
 	ttf-font-awesome font-noto-emoji font-noto lisgd wtype coreutils wtype kitty
 	adwaita-icon-theme tinydm thunar py3-pillow py3-dbus-next py3-pydbus bash"
@@ -150,19 +162,6 @@ sway() {
 		-t "$subpkgdir"/usr/bin
 }
 
-sway_systemd() {
-	install_if="$pkgname-sway=$pkgver-r$pkgrel systemd"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="systemd"
-
-	# tinydm replacement systemd
-	# rockchip_ebc sometimes fails to load the initial waveform.
-	# This forces a reload before starting tiydm
-	install -Dm644 \
-		"$srcdir"/tinydm-ebc.service \
-		-t "$subpkgdir"/usr/lib/systemd/system/
-}
-
 xournalpp() {
 	install_if="$pkgname=$pkgver-r$pkgrel xournalpp"
 	depends="xournalpp"
@@ -173,14 +172,14 @@ xournalpp() {
 		-t "$subpkgdir"/etc/skel/.config/xournalpp
 }
 
-nonfree_firmware() {
+firmware() {
 	pkgdesc="WiFi, Bluetooth and display firmware"
 	depends="linux-firmware-cypress linux-firmware-brcm"
 	replaces="firmware-pine64-pinenote"
 
 	# waveform firmware is provided locally via /dev/disk/by-label/waveform
-	# and then adapted to kernel using hrdl's script
-	# and initd script executes it at first boot of device
+	# extracted using waveform_exctract.sh, then adapted to kernel using wbf_to_custom.py
+	# initd or systemd service execute these on first boot
 	install -Dm644 "$srcdir"/30-eink-waveform.files \
 		"$subpkgdir"/usr/share/mkinitfs/files/30-eink-waveform.files
 	install -Dm755 \
@@ -194,29 +193,50 @@ nonfree_firmware() {
 	touch "$subpkgdir"/lib/firmware/rockchip/ebc.wbf
 	touch "$subpkgdir"/lib/firmware/rockchip/custom_wf.bin
 
-	# symbolic link for wifi firmware to where it expects it
+	# symbolic link for wifi firmware to where drivers expects it
 	mkdir -p "$subpkgdir"/lib/firmware/brcm
 	ln -s ../cypress/cyfmac43455-sdio.bin.zst "$subpkgdir"/lib/firmware/brcm/brcmfmac43455-sdio.pine64,pinenote-v1.2.bin.zst
 }
 
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="openrc"
+sway() {
+	install_if="$pkgname=$pkgver-r$pkgrel sway"
+	install="$subpkgname.post-upgrade"
 
-	install -Dm755 "$srcdir"/pinenote-init-waveform.initd \
-		"$subpkgdir"/etc/init.d/pinenote-init-waveform
+	# dummy subpackage to allow seamless upgrade from 7-r0 to 8-r0,
+	# which renamed `sway` to `sway-hrdl. Executes post-upgrade script
+	# that changes default tinydm session back to vanilla sway, with
+	# instructions to `apk add device-pine64-pinenote-sway-hrdl` to
+	# use the opinionated non-default configuration
+	# TODO: remove in preparation for v26.06 release
+	mkdir -p "$subpkgdir"
 }
 
-nonfree_firmware_systemd() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel systemd"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="systemd"
+systemd() {
+	# post-install enables tinydm if tinydm-ebc was enabled
+	# enables seamless upgrade 7-r0 to 8-r0
+	# TODO: remove in preparation for v26.06
+	install="$subpkgname.post-install"
 
+	default_systemd
+}
+
+firmware_openrc() {
+	install="$subpkgname.post-install"
+	install -Dm755 "$srcdir"/pinenote-init-waveform.initd \
+		"$subpkgdir"/etc/init.d/pinenote-init-waveform
+
+	# source `install_if`, `pkgdesc` and `depends`
+	default_openrc
+}
+
+firmware_systemd() {
 	install -Dm644 \
 		"$builddir"/systemd/pinenote-hrdl-extract-waveform.service \
 		"$builddir"/systemd/pinenote-hrdl-convert-waveform.service \
 		-t "$subpkgdir"/usr/lib/systemd/system
+
+	# source `install_if`, `pkgdesc` and `depends`
+	default_systemd
 }
 
 x11() {
@@ -241,5 +261,5 @@ df0565391a66eed53ed817d3d1415bef000f9ed33ef2e8aa3016be3ecc21dd4a357e57838979d271
 8f7a5ad2f407de8c474d54dfdb9cc099c96e8918fc123f8b2a8ff911d7e1c7ca6fe30f9cea8ee2f0c1ba5f3e53359193d0683ca912f0b66e79a12814ce38dd98  30-eink-waveform.files
 ac433eebbc35a48561837495997aee4e55510b979bc0d8e3bafb761bc1be5b4bdeed2f456369dcbc582688aefd07c63966b0d72b6ffa99e84cfd868e677f02c8  50-touchscreen.conf
 6ba6638754e00908243de2f73ed6898dac03638a200dcf7b7cd9684757355ee1eb0ac874af0f971ad2e054c1a8c471867bdaea4d9aaf7eea6d3cf81ac7dd73a2  panfrost.conf
-efc0b7fd892a9557d404f3dd52e6f03187d183b9432947a8845ef417e52e9dc55a71f920936a8fa11b90e73a355212b6094b86406c564d439a2e0347cfb0cced  tinydm-ebc.service
+3b95a2292a7367d228f281a1f0e031fffb3d26748350d7010d26b18a3fb46bceb214b083e0c8e2d5fe318c67ae3776663ad78fef83ce9030529d3a89b581b703  tinydm-ebc-workaround-override.conf
 "

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cat >&2 <<-EOF
+
+Starting with 8-r0 device package version, the opinionated configuration
+from hrdl is not installed by default with sway, and packaged under a
+different subpackage. To keep it, please execute the following
+
+    apk add device-pine64-pinenote-sway-hrdl
+	
+EOF
+
+tinydm-set-session -f -s  /usr/share/wayland-sessions/sway.desktop
