@@ -2,7 +2,7 @@
 pkgname=unisoc-nvitem-daemon
 pkgver=0_git20250618
 _commit="23f3be10fd5b54bd0fedde3189b98dcfb88f16c2"
-pkgrel=0
+pkgrel=1
 pkgdesc="NV item daemon for Unisoc modems"
 url="https://git.abscue.de/linux-mainlining/unisoc-nvitem-daemon"
 arch="aarch64"
@@ -36,7 +36,7 @@ systemd() {
 
 	install -Dm644 "$builddir"/unisoc-nvitem-daemon.service \
 		-t "$subpkgdir"/usr/lib/systemd/system
-	install -Dm644 90-unisoc-nvitem-daemon.preset \
+	install -Dm644 "$srcdir"/90-unisoc-nvitem-daemon.preset \
 		-t "$subpkgdir"/usr/lib/systemd/system-preset
 }
 
