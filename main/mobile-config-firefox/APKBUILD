@@ -1,6 +1,6 @@
 # Maintainer: Oliver Smith <ollieparaoid@postmarketos.org>
 pkgname=mobile-config-firefox
-pkgver=4.6.1
+pkgver=5.0.0_rc1
 pkgrel=0
 pkgdesc="Firefox tweaks for mobile and privacy"
 url="https://gitlab.postmarketos.org/postmarketOS/mobile-config-firefox"
@@ -11,10 +11,6 @@ arch="noarch"
 license="GPL-3.0-or-later"
 options="!check" # No tests
 subpackages="$pkgname-librewolf"
-
-build() {
-	make
-}
 
 package() {
 	make DESTDIR="$pkgdir" FIREFOX_DIR=/usr/lib/firefox install
@@ -28,5 +24,5 @@ librewolf() {
 }
 
 sha512sums="
-a0884387180073b2917b789d958dccb448f1229af1f373d80c73e477d2f34695ba50ee37380ea81d02dadb24b433092fd48481d828e324de36208fbee16e8faa  mobile-config-firefox-4.6.1.tar.bz2
+0a66eea1a581b9986490f07d82ff4985dcacea02a925d6c11db46000eab2e5ea8376c93844fea285882c34afe65399d83beae6c8847e085360ff15885d56cdea  mobile-config-firefox-5.0.0_rc1.tar.bz2
 "
