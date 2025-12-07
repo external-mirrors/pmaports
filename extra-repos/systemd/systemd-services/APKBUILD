@@ -1,13 +1,16 @@
-# Maintainer: Casey Connolly <kcxt@postmarketos.org>
-# Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
-# Service files for projects that would otherwise either
-# need to be forked just for the service, or don't provide
-# a service file at all.
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+# Co-Maintainer: Achill Gilgenast <achill@achill.org>
 
-# How to add a new service file (5 steps):
+# !!! systemd split func got upstreamed into Alpine !!!
+#     New services must go to upstream packages
+
+# If you want to work on upstreaming the legacy services to
+# Alpine, please take a look at
+# https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4099
+# and get in chat.
+
 pkgname=systemd-services
-# 1. bump pkgver
-pkgver=116
+pkgver=117
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -18,77 +21,32 @@ license="BSD-3-Clause"
 
 makedepends="systemd-dev"
 
-# 2. Add a new entry to subpackages in the format
-#    <pkgname>-systemd:_service where pkgname is the name
-#    of the package this service file should be part of
-#    ALPHABETICAL ORDER!!!
 subpackages="
-	alsa-utils-systemd:_service
-	baloo-systemd:_service
-	bluez-systemd:_service
 	colord-systemd:_service
-	connman-systemd:_service
 	dnsmasq-systemd:_service
-	fprintd-systemd:_service
 	gnome-clocks-systemd:_service
 	greetd-wlgreet-systemd:_service
-	hfd-service-systemd:_service
-	hkdm-systemd:_service
 	httpd-systemd:_service
 	irqbalance-systemd:_service
 	iwd-systemd:_service
-	kanshi-systemd:_service
-	keyd-systemd:_service
 	kodi-systemd:_service
-	mmsd-tng-systemd:_service
 	nginx-systemd:_service
 	openssh-server-pam-systemd:_service
-	pd-mapper-systemd:_service
 	q6voiced-systemd:_service
-	qbootctl-systemd:_service
 	rtkit-systemd:_service
-	sleep-inhibitor-systemd:_service
-	tailscale-systemd:_service
 	tinydm-systemd:_service
 	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
 	udiskie-systemd:_service
-	waydroid-sensors-systemd:_service
-	waydroid-systemd:_service
-	wpa_supplicant-systemd:_service
-	xfce4-systemd:_service
-	sing-box-systemd:_service
 "
-# 3. Add a new entry below with the list of service files
-#    to install for that package
-_alsa_utils_sources="system/alsa-restore.service system/alsa-state.service"  # Adapted from https://git.alsa-project.org/?p=alsa-utils.git;a=tree;f=alsactl
-_baloo_sources="user/kde-baloo.service"
-_bluez_sources="
-	system/bluetooth.service
-	system/bluetooth-mesh.service
-	user/dbus-org.bluez.obex.service
-	user/mpris-proxy.service
-	user/obex.service
-" # From bluez build with --enable-systemd
 _colord_sources="system/colord.service" # From https://github.com/hughsie/colord/blob/main/data/colord.service.in
-_connman_sources="
-	system/connman-vpn.service
-	system/connman-wait-online.service
-	system/connman.service
-" # From connman upstream
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
-_fprintd_sources="system/fprintd.service" # From https://gitlab.freedesktop.org/libfprint/fprintd/-/blob/master/data/fprintd.service.in
 _gnome_clocks_sources="user/gnome-clocks.service"
 _greetd_wlgreet_sources="system/wlgreet.service"
-_hfd_service_sources="system/hfd-service.service" # From https://gitlab.com/ubports/development/core/hfd-service/-/blob/main/init/hfd-service.service.in
-_hkdm_sources="system/hkdm.service"
 _httpd_sources="system/httpd.service"
 _irqbalance_sources="system/irqbalance.service"
 _iwd_sources="system/iwd.service" # From https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/iwd.service.in
-_kanshi_sources="user/kanshi.service" # created, no unit file upstream
-_keyd_sources="system/keyd.service" # From https://github.com/rvaiya/keyd/blob/master/keyd.service.in
 _kodi_sources="system/kodi.service" # From https://github.com/graysky2/kodi-standalone-service/blob/master/x86/init/kodi-gbm.service
-_mmsd_tng_sources="user/mmsd-tng.service"
 _nginx_sources="system/nginx.service" # Based on arch's service: https://gitlab.archlinux.org/archlinux/packaging/packages/nginx/-/blob/main/nginx.service
 _openssh_server_pam_sources="
 	system/sshd.service
@@ -96,26 +54,12 @@ _openssh_server_pam_sources="
 	system/sshdgenkeys.service
 	sysusers.d/sshd.conf
 "
-_pd_mapper_sources="system/pd-mapper.service"
 _q6voiced_sources="system/q6voiced.service"
-_qbootctl_sources="system/qbootctl.service"
 _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
-_sleep_inhibitor_sources="system/sleep-inhibitor.service"
-_tailscale_sources="system/tailscaled.service etc/default/tailscaled"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
 _tqftpserv_sources="system/tqftpserv.service"
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
 _udiskie_sources="user/udiskie.service"  # created, no unit file upstream
-_waydroid_sources="system/waydroid-container.service"
-_waydroid_sensors_sources="system/waydroid-sensors.service"
-_wpa_supplicant_sources="system/wpa_supplicant.service"
-_xfce4_sources="user/xfce4-notifyd.service"
-_sing_box_sources="
-	system/sing-box.service
-	system/sing-box@.service
-	tmpfiles.d/sing-box.conf
-	sysusers.d/sing-box.conf
-" # From https://github.com/SagerNet/sing-box/tree/dev-next/release/config
 
 flatpath() {
 	local i
@@ -124,45 +68,23 @@ flatpath() {
 	done
 }
 
-# 4. Add the _sources variable to the list below
 source="$(flatpath \
-	$_alsa_utils_sources \
-	$_baloo_sources \
-	$_bluez_sources \
 	$_colord_sources \
-	$_connman_sources \
 	$_dnsmasq_sources \
-	$_fprintd_sources \
 	$_gnome_clocks_sources \
 	$_greetd_wlgreet_sources \
-	$_hfd_service_sources \
-	$_hkdm_sources \
 	$_httpd_sources \
 	$_irqbalance_sources \
 	$_iwd_sources \
-	$_kanshi_sources \
-	$_keyd_sources \
 	$_kodi_sources \
-	$_mmsd_tng_sources \
-	$_msm_modem_sources \
-	$_msm_modem_wwan_port_sources \
 	$_nginx_sources \
 	$_openssh_server_pam_sources \
-	$_pd_mapper_sources \
 	$_q6voiced_sources \
-	$_qbootctl_sources \
 	$_rtkit_sources \
-	$_sleep_inhibitor_sources \
-	$_tailscale_sources \
 	$_tinydm_sources \
 	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
 	$_udiskie_sources \
-	$_waydroid_sensors_sources \
-	$_waydroid_sources \
-	$_wpa_supplicant_sources \
-	$_xfce4_sources \
-	$_sing_box_sources \
 )"
 
 _service() {
@@ -204,55 +126,25 @@ package() {
 }
 
 sha512sums="
-99279e69962225e4b1888d202bffaa68263a3ffb8ab8ebb95069eb756de330c2a08307c9426ffb58733b3a000ef388bb041956cb219f239db2e6e65360983b0c  system-alsa-restore.service
-7f79adb7d523408d841d78016b86ceee1fba06fecc70ca0e4cbdf348a09ed19b9cbb9051e0457f7c52db208e4d86d2471bc4a697fec8e7e5070c01e2a0b4dfcc  system-alsa-state.service
-c68f0c9f09f3e26a5d317792177057bbcfd83f7cd9c57b235325a836cf01c83abd4c0ab0088b2f3777d85497f35d25b1498ac5d29b717d3f5c0f0651ef1b6054  user-kde-baloo.service
-de133c35cf95d7c833368c9010264668e72657400ad4e5259ef046321c878507f36ef73fa7b4759f69c9d18cda8f8db8d7675d794d9a28f46480fb4d47ba9e0c  system-bluetooth.service
-7972e37d950d8e337f109242dc3a7689d0d6e43b80ce42decd81f8d48abaf275a50f5d980d5a40d4494608a2f88f745e1d4639688e179c95792bfb6f398b9ae4  system-bluetooth-mesh.service
-5ad5f8adcc89759e5c935a2e55803fac52a9681af3a28f5c8d46f693717afcf7c8c6394f85dd5dbc1ddb575b909b0f6feee2e9973ee177e6445d375136b932ee  user-dbus-org.bluez.obex.service
-00049b418fab6dec7d9931a87cc64d2062efa0f7128bec1a693bfdf112703e628a2f1c98d2d5bf71554e6e576882890cef7a02de283909b1dd2f4c5ec0f6393e  user-mpris-proxy.service
-5ad5f8adcc89759e5c935a2e55803fac52a9681af3a28f5c8d46f693717afcf7c8c6394f85dd5dbc1ddb575b909b0f6feee2e9973ee177e6445d375136b932ee  user-obex.service
 c10378bac1d64c0a2c767aab439c7d71bb7706b4fdc981add3ab4d5967257c0177f07448f884aeb1ee4571c59746c3584befa95858940aed198e29fa83cf5d17  system-colord.service
-52840a212a845900ed88bd08a7b318c2b74c68a421bf1a9bbb3378e09be2b6edab1ddb87a3e410925ab0f50ab738ab3c804611bdf8101ca7896e874f9f6ba066  system-connman-vpn.service
-a7fd0c47858a10c263d9bc661dc955366a2acd79f7be5cf2571dc7ec3b3f5adf122b4e55e58d01b778aa7ed0c6981fc454295c93d29bd89d9145d5d2439e01a5  system-connman-wait-online.service
-9e2bb4153e97c11db7792b758a7a21bd352c7443dbdbde0f390d4dfe52d7495a4a01cb15097e842cfe69eb1214f9bca5a626fb54b4f8216e11efda1c55b89add  system-connman.service
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  sysusers.d-dnsmasq.conf
-c86ffe994aa78b3d68c3956c54255c9479d832c4a2fd3905deec6ef620871bacf60f7a9cb7ef9a3dfd7993354d4590b8b5efef3159274477857c3ead614dee02  system-fprintd.service
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
 e226bdb71f6fafe92d14046dfa19ddbccb765b579c1f90687a9ece376fa12406db9f2cf8035ff07d5a78ef77dc73615d39a8790f8722585bf65872be773888ff  system-wlgreet.service
-5087ff36981b89c9bd09f96cff93d1f20d5af513e2cdebf65a85e329f458a9a2b77c12091ed31278c3b89baef79273cc818fddabbe4e1eec75faf7b9cc18cb8a  system-hfd-service.service
-083e59dcbbbd8f6ea148880256ff20f1a16e583348cd7cfc7aa6321d7b0cbe0a82780fd482a26ef25a5ebcfc83f5b7899d5db7c7d479fd7c56e5d7e95fd24a34  system-hkdm.service
 666ba094bff47aa67b4e4431929516af355f90ffc1fd60429dcd20b337c3c17d2d62a71c289496217282f0819bc8deba8db5cc5b2915b692defa14d19532a8d1  system-httpd.service
 0ed5e05b73cf4952c81deeffc7f662f0ef6e684c24fb8177f625f2d086582fad2df1376a2479155b4a6aa6d584f1cccfe8c143f7830eccaf5e693cae5aefed2d  system-irqbalance.service
 df3388cb7b9d035e54b34d8f8a6594be89c3015f979fe3bdc199fb7db1ab0bef821d6b306eecdf978eb227454d5e50aab29ac02d9722b1b075ec0ce4705e3518  system-iwd.service
-fa41668288d53f8ce42a7524f10b1e03812fb11ed71bcb484dc22d0d374b453837317eb599cf61b66163a905949024509e73d5190012b664b301d48af7002a01  user-kanshi.service
-b80a6bca1f38c4feaffba5d1ceb854738f41d5b3ab450a1613da959cb516790e6849b7a164d1b5e62cba369c86e0c75797cd599dcd87064262760c3be159ef81  system-keyd.service
 e7c33c889afb822ae20ebd09f3b9f8d130d1f89324006ab3a140fbf46ef7e774634d2ac13ac328c588266823e5eb52c7e0d6d6459f1f64052f9cea5a5fe9f54a  system-kodi.service
-873b53592786a978659bda8d32de5ed9a9f163ca298c4f4112f10bf635a8170c4060cc15b57ff72b3afd50075cd1c5dbc10030f00b166e2540397da9e1c5e46b  user-mmsd-tng.service
 9cba2f9fc043d8cfb09ce7bcc6bef13194f6708bd0b82b2a360304a66a344d38b7f2641bdbeb0ce85ef9390e0f2ea34feef9d7d2c066ca8e0bd8d1f6108ce1e0  system-nginx.service
 fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf611067add80c2ccb289a381fc5ff6a5f654ea49c81f02fe8  system-sshd.service
 6f1db26dbbcf96a5e14996cc468f1911c51a46fc3f70552af3591c0dfaaa043135d137d435818a2a2cce656f09fa305337c3c86121a5109dc20f0326a2e0ec15  system-sshd@.service
 c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731cd280cbb3525b4c60311817609381e2308d9f2dfb7c0d7072  system-sshdgenkeys.service
 4a6d716a907a730675505bfc4ac38598f9c4e7d962fa9cdeea51dbbaa6afec80d1b82b98627c37c164dc5cdcc7f68118104e3adb73d985f32a24f1941766c5af  sysusers.d-sshd.conf
-0bed9a8a719661609ad84d1c6fcdf2fe9213e741682b7ddebad82d9744f137c593788ed522868f10b95b599d81743d07ec3212630a7e99d333261dfa1bf1cc11  system-pd-mapper.service
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
-621189aa251655796795f4fa0cd79360bb67573e7327e545064eaadafc83cc7b382a405d6ba80662e0a4ece3876e4270e3563d859a6ba63b5e3854b39c35873e  system-qbootctl.service
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
-be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
-41547eb369937348378e898e0dda7151552056107f4daab5a8a137a1b846560afa923cd345037b4f96bc9cdf2a7f66211a346b77229cc07ce2d0b634ff40dfe7  system-tailscaled.service
-de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb9042d77ec323a6ffb5f108e33d28b6e7820d09250daadd57  etc-default-tailscaled
 23f854fa2d0e0cb4de54db8605e549bb32061470ea7fa8ac16d474149be635e2b20a815c4ea8088e583693d7f515651ad2872b45f3b38a762f686b977d4fc49d  system-tinydm.service
 7a11c25c767de73a5c9fbf6d35c36da8200a5aa464c1a59880e443d60ea3ba3bb08ff3408ff2a087373bfe23b6ddcb6249aacd173c36d0a857dda5267954b47c  system-generators-tinydm-user-override
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
 4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
-841caa793d256cacea7eb651f3d77039b1c0ddb22727100d6cca74230e528aee09e945e1fdf20eaf40abbe3eaec9210eb7fa27144dc906cab65f8078b36921f9  system-waydroid-sensors.service
-43049153345752c20717222575394fffadf2cae1e5164a3ab7bf720647ab19584f67bb2d2492c663d68518a4326196bdfe019e19a6beb0cc658b780c8f6e1ad5  system-waydroid-container.service
-ff5e1481d00d870b39fa8f11545b1a3bff7ac0278440d329f600d4493de8628c120b95268494e6b87666c4743a6598afdf23778c7e666c12e1a5614fbff0e8ae  system-wpa_supplicant.service
-760a0002f08df28c1584dea41c06df4a6cfb016e201e909dcfba639e5e794cdf3ae9e790a9c9e50261b88968d8129bfee35ec1be8e9f99ad1c7e1359872b5643  user-xfce4-notifyd.service
-4d201f29ad98abf38a15e877bb1b4f46fb08ab0cd5cb83f29aaa104eaa0a51fd14784110ee844ccb89914aa73b985fc9c61e216f8d2ac230adfa1d1660ebd573  system-sing-box.service
-f4042114ed0f36e51bc32f6df184843d6d7e58b7cece8a845796910d80e1f26c9d0be9415ed90f7a91211bd669d8bb002b24a5a79657f8b699f952299ddfb5d2  system-sing-box@.service
-e67997cfad302af405e1bee78f79ea9caaa8fec0b765003ff08901f43a2ea07209726d0a20f2640b796bc6775606e34143da362d1e0471ce32b919747004d53c  tmpfiles.d-sing-box.conf
-014eff9e21ddaa64260f3915655e0a1fa771b356c0c56b3a5d868830237a561ba3e5cc06085bf70dde9dbf809807c301addd0a968a005436c067b6ce0a52672d  sysusers.d-sing-box.conf
 "
