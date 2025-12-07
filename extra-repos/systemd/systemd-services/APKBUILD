@@ -7,7 +7,7 @@
 # How to add a new service file (5 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=115
+pkgver=116
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -48,7 +48,6 @@ subpackages="
 	qbootctl-systemd:_service
 	rtkit-systemd:_service
 	sleep-inhibitor-systemd:_service
-	speakersafetyd-systemd:_service
 	tailscale-systemd:_service
 	tinydm-systemd:_service
 	tqftpserv-systemd:_service
@@ -102,7 +101,6 @@ _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
 _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
 _sleep_inhibitor_sources="system/sleep-inhibitor.service"
-_speakersafetyd_sources="system/speakersafetyd.service" # From https://github.com/AsahiLinux/speakersafetyd/blob/main/speakersafetyd.service
 _tailscale_sources="system/tailscaled.service etc/default/tailscaled"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
 _tqftpserv_sources="system/tqftpserv.service"
@@ -155,7 +153,6 @@ source="$(flatpath \
 	$_qbootctl_sources \
 	$_rtkit_sources \
 	$_sleep_inhibitor_sources \
-	$_speakersafetyd_sources \
 	$_tailscale_sources \
 	$_tinydm_sources \
 	$_tqftpserv_sources \
@@ -243,7 +240,6 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
 be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
-7d829633bf7d281ebe9b4c2896f36a7196390aa5426820d3d74eb47889a12c4a776b0f4b0b38547fadb3639bc6903be4d7c013911bf9a98fee93cf0cb5718784  system-speakersafetyd.service
 41547eb369937348378e898e0dda7151552056107f4daab5a8a137a1b846560afa923cd345037b4f96bc9cdf2a7f66211a346b77229cc07ce2d0b634ff40dfe7  system-tailscaled.service
 de63ecafaffc675f21d2a4b1e6b7e2c5464c03f7b2f79094d7f719c295190ac28b3cd85ba99a17bb9042d77ec323a6ffb5f108e33d28b6e7820d09250daadd57  etc-default-tailscaled
 23f854fa2d0e0cb4de54db8605e549bb32061470ea7fa8ac16d474149be635e2b20a815c4ea8088e583693d7f515651ad2872b45f3b38a762f686b977d4fc49d  system-tinydm.service
