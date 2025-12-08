@@ -6,7 +6,7 @@
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=6.16.7
-pkgrel=4
+pkgrel=5
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
@@ -14,7 +14,8 @@ url="https://gitlab.com/sdm845-mainline/linux"
 license="GPL-2.0-only"
 options="!check !tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-community"
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-boot2container"
 makedepends="
 	bison
 	clang
@@ -88,8 +89,8 @@ package() {
 
 sha512sums="
 803d2cf85b248c3da41a9c9178d69d211eccf5d1adb72acd5343e09cbb65782f727e579939287c91712c69a862bed7344a0e2bc893c2791a971b6fed95ec6f1a  linux-sdm845-6.16.7-r0.tar.gz
-f03a0b8e39730d5382e1a096c5a7017c365b0c18e5623faa17e024ce4229c2ff698fd78d531c42a6927bcb87022b053408248bcbdc574c88ea3ec54edcb50fd1  config-postmarketos-qcom-sdm845.aarch64
-30e703c4b32f1c9b49202c7605ebc07bd638de0aef7332721d2e8228f5d72475e97d4ecd316b4e5cf33d1b061f2474fa4a912da51219ab4506251da3fc657f4d  pmos.config
+b10e388af832d3a74b7b067588698b2d1449b417366ac17de9f6facb35e6e26f44dc376bf636cd47e48cc17ab79ae9df648cbf03f396efe66d8305b1774ea2ed  config-postmarketos-qcom-sdm845.aarch64
+2c87c683a85f159b578509898ba4bcabb7c2ab69076b128fd7b22a12b7d47dbc5fbef4031caf65b6b21667558b4dcde750521dcb0b7cb497ad1fd0f0efc93e44  pmos.config
 2a7dc1206c766f88ade0a3986281252518059d445f170274a788821cdd1801e2040a90c6c5e30c20115d0d443fe441312859a3b4f0240a9e578a9b3b932284f3  sdm845.config
 fbd04f5f429ca1067dadb4209d5279e5fd3cfb4a5ae5957e8e189488109a6cf44d27aa1f38cceb78e1cc360d3020b0c4342ca768243eb6ba7460093a1306b98c  0001-arm64-dts-qcom-sdm845-xiaomi-beryllium-Fix-compatibl.patch
 "
