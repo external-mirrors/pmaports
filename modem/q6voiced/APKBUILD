@@ -1,31 +1,36 @@
 # Maintainer: Minecrell <minecrell@minecrell.net>
 pkgname=q6voiced
-pkgver=0_git20210408
-_commit="a75518e1ddf44971b1181e12c328dd250b62962a"
-pkgrel=1
+pkgver=0.2.0_git20251209
+_commit=83d638076dde5273c8307fee05d233e9eae3de73
+pkgrel=0
 pkgdesc="Enable q6voice audio when call is performed with oFono/ModemManager"
-url="https://github.com/msm8916-mainline/linux"
+url="https://gitlab.postmarketos.org/postmarketOS/q6voiced"
 arch="all"
 license="MIT"
-makedepends="tinyalsa-dev dbus-dev"
-subpackages="$pkgname-openrc"
+makedepends="alsa-lib-dev dbus-dev meson"
+subpackages="$pkgname-doc $pkgname-openrc $pkgname-systemd"
 source="https://gitlab.postmarketos.org/postmarketOS/q6voiced/-/archive/$_commit/q6voiced-$_commit.tar.gz
 	q6voiced.initd
 	"
-options="!check" # no tests
 builddir="$srcdir/q6voiced-$_commit"
 
 build() {
-	gcc -o q6voiced q6voiced.c -I/usr/include/dbus-1.0/ \
-		-I/usr/lib/dbus-1.0/include -ltinyalsa -ldbus-1
+	abuild-meson \
+		output .
+	meson compile -C output
+}
+
+check() {
+	meson test --print-errorlogs -C output
 }
 
 package() {
-	install -Dm755 q6voiced "$pkgdir"/usr/bin/q6voiced
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 	install -Dm755 "$srcdir"/q6voiced.initd "$pkgdir"/etc/init.d/q6voiced
+	install -Dm644 LICENSE -t "$pkgdir"/usr/share/licenses/$pkgname/
 }
 
 sha512sums="
-1d60d65235b152f368fd64a1b294080623542cb86fcf2f6e12e3ff7ca275a119669313c764f3dd4f07b4f57622ba618d4394f376352e88100e58df57ec1b3a3d  q6voiced-a75518e1ddf44971b1181e12c328dd250b62962a.tar.gz
+1a410218eaf0b91ab28be33847b3c41c7fb92d83d636a6994a51b2485d4b209ee3d49e798403acd6ab0cf90bf99e0cd0091e632125e056366bf3f44f5a5e7686  q6voiced-83d638076dde5273c8307fee05d233e9eae3de73.tar.gz
 02e5b338f2b1ed2bbcb1f8cc29d57a5915bf5fc03bc946906b545d2c31bd16302399508bbe8000ec660eee54bb1a6407689a4f85631be727ebd963e1964a54b9  q6voiced.initd
 "
