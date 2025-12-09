@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=drkonqi
-pkgver=99999_git20251202
+pkgver=99999_git20251208
 pkgrel=0
-_commit="079936c81753e81708524ebdaf4957791dd7697a"
+_commit="32ca19dab244323536b710905f3dfa90dd99d4f5"
 pkgdesc="The KDE crash handler"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -48,7 +48,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/drkonqi.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-02/drkonqi-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-08/drkonqi-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -74,5 +74,5 @@ package() {
 }
 
 sha512sums="
-ef0c969296eceb98970a9a96a383a8efdb5df372ae9792a583811092dc520e96fd78e0357e5878c4f4097b8897385045d67229f655160036bc96a327dba9753a  drkonqi-079936c81753e81708524ebdaf4957791dd7697a.tar.xz
+42305687d2a64e6c89056c30f4dd85906406cfe4e53a81e5a2fdb448f1d901dff21cbd96e29c94c7fc8f05a7cbea4e961b488106f90c3a60a79918c15bd525ab  drkonqi-32ca19dab244323536b710905f3dfa90dd99d4f5.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-mobile
-pkgver=99999_git20251202
+pkgver=99999_git20251207
 pkgrel=0
-_commit="a46bf048cec22b13657fb408885df94c38cc61bb"
+_commit="a29f6b64d77af731d190ad4c15b85129a9713996"
 pkgdesc="Modules providing phone functionality for Plasma"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -79,9 +79,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-mobile.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-02/plasma-mobile-$_commit.tar.xz
-	0001-plasma-mobile-859.patch::https://invent.kde.org/plasma/plasma-mobile/-/merge_requests/859.patch
-	"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-08/plasma-mobile-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-mobile-$_commit"
@@ -118,6 +116,5 @@ waydroid() {
 }
 
 sha512sums="
-4da80c7b8d49724820ca76666836db4f32090bbf281130955fc69533dd5a62f4a354bf0441806d1d52a94726840e07e0b9d1b56ff4ab9bd6f9ded2cdbce5c962  plasma-mobile-a46bf048cec22b13657fb408885df94c38cc61bb.tar.xz
-591f191a0a2ca1c05a5eec7cd4af83b5b4962d8767efd0c0933eb141d139a5dfc5792a286a3e0f6e5f90cf81a7ad6c0d02360a338f0727334d5e1551395b80be  0001-plasma-mobile-859.patch
+8ddcb439da5dd9c817e7a2050fa88a6044439df8170db2836d0309643f7e5c8149115437d256b9faf1ac0884f41c76e32dd677054031d07c39f749eda7d01bd2  plasma-mobile-a29f6b64d77af731d190ad4c15b85129a9713996.tar.xz
 "
