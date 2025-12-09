@@ -5,7 +5,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lenovo-21bx
 pkgdesc="Lenovo ThinkPad X13s"
-pkgver=16
+pkgver=17
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -25,7 +25,6 @@ depends="
 "
 makedepends="devicepkg-dev"
 source="
-	01_$pkgname.override
 	deviceinfo
 	firmware.files
 	modules-initfs
@@ -33,7 +32,6 @@ source="
 	usbguard.conf
 "
 subpackages="
-	$pkgname-gnome
 	$pkgname-pipewire
 	$pkgname-usbguard
 	$pkgname-vulkan
@@ -50,16 +48,8 @@ package() {
 		-t "$pkgdir"/usr/share/mkinitfs/files
 	install -Dm644 "$srcdir"/pipewire.conf \
 		-t "$pkgdir"/usr/share/pipewire.conf.d
-	install -Dm644 "$srcdir"/01_"$pkgname".override \
-		-t "$pkgdir"/usr/share/glib-2.0/schemas
 	install -Dm600 "$srcdir"/usbguard.conf \
 		"$pkgdir"/etc/usbguard/rules.d/"$pkgname".conf
-}
-
-gnome() {
-	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-base-ui-gnome"
-
-	amove usr/share/glib-2.0/schemas/01_"$pkgname".override
 }
 
 pipewire() {
@@ -81,7 +71,6 @@ usbguard() {
 }
 
 sha512sums="
-0254e1277ad0971c50e6e69b377983e8b25f8f45773fdef98fe3a9df7cb06e1c5b9553109e8bd20472099562f82a08b2c9329c72d0ef97210840b5c00a048caa  01_device-lenovo-21bx.override
 95260beda1a476801f699b10aee77ce1b0342ae67b3120c0d6a59a09f04489c67d579d2c90d1899a90e6b4220ab8726da2eb295e28ed22a800ee78b7b408932b  deviceinfo
 5f4e6a80455c8a2ed879bfd457a89f81790824657ed4101e03b7ec288a274e63340f48e2ad5028cf83744263a4529584b1e94c36d10b98912e5b31804fa98ff0  firmware.files
 45d56b8d6157dd7d679d0d4af4866973e6e0365c276fa56c008cbc8373f64626c881b6097ad1b9fa9c0d5b769e61b5a81466d6a773e2848c9ee89f06c0302249  modules-initfs
