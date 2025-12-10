@@ -1,59 +1,60 @@
-# Kernel config based on: arch/arm/configs/qcom_defconfig
 # Co-Maintainer: Luca Weiss <luca@lucaweiss.eu>
 maintainer="Newbyte <newbie13xd@gmail.com>"
 _flavor="postmarketos-qcom-msm8226"
 pkgname=linux-$_flavor
 pkgver=6.15.2
-pkgrel=0
-_tag="v${pkgver/_/-}-msm8226"
-pkgdesc="Mainline kernel fork for Qualcomm APQ8026/MSM8226/MSM8926 devices"
+pkgrel=1
+pkgdesc="Mainline Kernel fork for APQ8026/MSM8226/MSM8926 devices"
 arch="armv7"
 _carch="arm"
-url="https://kernel.org"
+url="https://github.com/msm8226-mainline/linux"
 license="GPL-2.0-only"
-options="
-	!check
-	!strip
-	!tracedeps
+options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
 	"
 makedepends="
 	bison
+	clang
 	findutils
 	flex
-	gmp-dev
-	mpc1-dev
-	mpfr-dev
+	lld
+	llvm
 	openssl-dev
 	perl
 	postmarketos-installkernel
 	python3
+	xz
+	zstd
 "
+
+_config="config-$_flavor.$arch"
+_tag="v${pkgver/_/-}-msm8226"
 
 # Source
 source="
-	linux-$_tag.tar.gz::https://github.com/msm8226-mainline/linux/archive/refs/tags/$_tag.tar.gz
-	config-$_flavor.armv7
-	"
+	https://github.com/msm8226-mainline/linux/archive/$_tag/linux-$_tag.tar.gz
+	$_config
+"
 builddir="$srcdir/linux-${_tag#v}"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$CARCH" .config
+	cp "$srcdir/config-$_flavor.$arch" .config
 }
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION=$((pkgrel + 1 ))
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
 	mkdir -p "$pkgdir"/boot
 	make zinstall modules_install dtbs_install \
 		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir"/boot \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
@@ -65,5 +66,5 @@ package() {
 
 sha512sums="
 fcc51b32f987afb4f0a09ba18418f099fb14d2fece395a0b1044551106c9e468885c0143af2df73f5d880707cf87ffe853a1161cb3e0122009a762c409e48704  linux-v6.15.2-msm8226.tar.gz
-2ca0d6aee757d65eb10e3653e089a77848f3fd9aa107926196f82214226577ff7f9654b0a681c08e5edd9acc57ab83bcf178e37a74f6c73c29021cb412a00b53  config-postmarketos-qcom-msm8226.armv7
+142faf7071b8e1eb4238ae53cb5f66c57634332fc276b04ee88eeb845a311b062f46c44274d40ed9fe17f5076d2c13a2f055b460739c99d0fae647ae35fdaeba  config-postmarketos-qcom-msm8226.armv7
 "
