@@ -3,7 +3,7 @@ maintainer=""
 pkgname=device-samsung-p4note
 pkgdesc="Samsung Galaxy Note 10.1"
 pkgver=6
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -15,12 +15,16 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-udev
+"
 source="
 	deviceinfo
 	audio/HiFi.conf
 	audio/p4note.conf
-	90-sensors.hwdb"
+	90-sensors.hwdb
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -34,7 +38,7 @@ package() {
 	install -Dm644 "$srcdir"/p4note.conf \
 		-t "$pkgdir"/usr/share/alsa/ucm2/conf.d/p4note
 	install -Dm644 "$srcdir"/90-sensors.hwdb \
-		-t "$pkgdir"/etc/udev/hwdb.d
+		-t "$pkgdir"/usr/lib/udev/hwdb.d
 }
 
 nonfree_firmware() {
