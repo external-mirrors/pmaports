@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-asus-flo
 pkgver=5
-pkgrel=1
+pkgrel=2
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
 arch="armv7"
@@ -14,7 +14,9 @@ subpackages="
 	$pkgname-kernel-next:kernel_next
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
-	$pkgname-nonfree-firmware:nonfree_firmware"
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-udev
+"
 source="deviceinfo kernel-cmdline.conf 90-android-touch-dev.rules wpa_supplicant.conf pointercal"
 
 options="!check !archcheck"
@@ -28,7 +30,7 @@ package() {
 	install -D -m644 "$srcdir"/wpa_supplicant.conf \
 		"$pkgdir"/etc/wpa_supplicant/wpa_supplicant.conf
 	install -D -m644 "$srcdir"/90-android-touch-dev.rules \
-		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
+		"$pkgdir"/usr/lib/udev/rules.d/90-android-touch-dev.rules
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
 }
