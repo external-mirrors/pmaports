@@ -3,7 +3,7 @@ maintainer="Nikroks <nikroks@mainlining.org>"
 pkgname=device-xiaomi-miatoll
 pkgdesc="Xiaomi Redmi Note 9 Pro / Redmi Note 9S"
 pkgver=9
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -30,6 +30,7 @@ source="
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
+	$pkgname-nonfree-firmware-udev:nonfree_firmware_udev
 "
 
 build() {
@@ -38,6 +39,11 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/81-libssc-xiaomi-miatoll.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/81-libssc-xiaomi-miatoll.rules
+	install -Dm644 "$srcdir"/hexagonrpcd.confd \
+		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf
 }
 
 nonfree_firmware() {
@@ -48,10 +54,7 @@ nonfree_firmware() {
 		hexagonrpcd>=0.3.2-r3
 	"
 
-	install -Dm644 "$srcdir"/81-libssc-xiaomi-miatoll.rules \
-		"$subpkgdir"/etc/udev/rules.d/81-libssc-xiaomi-miatoll.rules
-	install -Dm644 "$srcdir"/hexagonrpcd.confd \
-		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf
+	amove usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf
 }
 
 nonfree_firmware_openrc() {
@@ -60,6 +63,11 @@ nonfree_firmware_openrc() {
 	depends="hexagonrpcd-openrc openrc"
 
 	mkdir "$subpkgdir"
+}
+
+nonfree_firmware_udev() {
+	default_udev
+	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel udev"
 }
 
 sha512sums="
