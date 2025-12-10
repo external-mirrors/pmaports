@@ -36,7 +36,6 @@ subpackages="
 	tinydm-systemd:_service
 	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
-	udiskie-systemd:_service
 "
 _colord_sources="system/colord.service" # From https://github.com/hughsie/colord/blob/main/data/colord.service.in
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
@@ -57,7 +56,6 @@ _rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
 _tqftpserv_sources="system/tqftpserv.service"
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
-_udiskie_sources="user/udiskie.service"  # created, no unit file upstream
 
 flatpath() {
 	local i
@@ -81,7 +79,6 @@ source="$(flatpath \
 	$_tinydm_sources \
 	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
-	$_udiskie_sources \
 )"
 
 _service() {
@@ -142,5 +139,4 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 7a11c25c767de73a5c9fbf6d35c36da8200a5aa464c1a59880e443d60ea3ba3bb08ff3408ff2a087373bfe23b6ddcb6249aacd173c36d0a857dda5267954b47c  system-generators-tinydm-user-override
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
-4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
 "
