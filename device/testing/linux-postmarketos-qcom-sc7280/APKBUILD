@@ -3,7 +3,7 @@
 _flavor="postmarketos-qcom-sc7280"
 pkgname=linux-$_flavor
 pkgver=6.17.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SC7280/SM7325/QCM6490 devices"
 arch="aarch64"
 _carch="arm64"
@@ -13,7 +13,18 @@ options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
 	"
-makedepends="bash bison findutils flex installkernel openssl-dev perl python3"
+makedepends="
+	bison
+	clang
+	findutils
+	flex
+	installkernel
+	lld
+	llvm
+	openssl-dev
+	perl
+	python3
+"
 
 _repo="linux"
 _config="config-$_flavor.$arch"
@@ -33,7 +44,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
@@ -43,6 +54,7 @@ package() {
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
@@ -55,5 +67,5 @@ package() {
 
 sha512sums="
 be7687ed300e8ef8b59bf9f65e377b6f462e92d8e40902a6b3e878101c3c15cfff1c8584448b8a5b4b87114ee79fea51649576a83e2556eeb16140370632e47c  linux-v6.17.0-sc7280.tar.gz
-4fe7343a1d3a0b5f3df8971447d53a3ddd8163e1578d9ab75f8adc31c269415afb102a10517054733616e1a7c8141f80e7d5e75aa403bf2cc6ecbe366f8521b8  config-postmarketos-qcom-sc7280.aarch64
+bc77aad56f9d8a399db3f4e1139a32cbf02b5ba6f09875e485f52045d060dda0dc738c57f73374941e939ae37b760333c5cd22a49ad2f5d43d45624a893415b0  config-postmarketos-qcom-sc7280.aarch64
 "
