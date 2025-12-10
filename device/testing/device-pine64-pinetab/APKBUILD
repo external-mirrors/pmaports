@@ -3,7 +3,7 @@ maintainer=""
 pkgname=device-pine64-pinetab
 pkgdesc="PINE64 PineTab"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,6 +27,7 @@ subpackages="
 	$pkgname-phosh
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-plasma-mobile:plasma_mobile
+	$pkgname-udev
 	$pkgname-upower
 	"
 install="$pkgname.post-install"
@@ -134,7 +135,7 @@ package() {
 
 	# Fix for the meta key on v1 keyboard dock, probably not needed on newer revisions
 	install -Dm644 "$srcdir"/99-pinetab-keyboard.hwdb \
-		"$pkgdir"/etc/udev/hwdb.d/99-pinetab-keyboard.hwdb
+		"$pkgdir"/usr/lib/udev/hwdb.d/99-pinetab-keyboard.hwdb
 
 	# Prevent artifacts in GTK4 apps (pmaports#1069)
 	install -Dm755 "$srcdir"/gsk-renderer-gl.sh -t \
