@@ -1,48 +1,50 @@
-# Co-Maintainer: Luca Weiss <luca@lucaweiss.eu>
-maintainer="Alexey Minnekhanov <alexeymin@postmarketos.org>"
-_flavor=postmarketos-qcom-msm8974
-_config="config-$_flavor.$CARCH"
-
+maintainer="Luca Weiss <luca@lucaweiss.eu>"
+_flavor="postmarketos-qcom-msm8974"
 pkgname=linux-$_flavor
 pkgver=6.15.2
-pkgrel=0
-_tag="v${pkgver/_/-}-msm8974"
-pkgdesc="Kernel close to mainline with extra patches for Qualcomm MSM8974 devices"
+pkgrel=1
+pkgdesc="Mainline Kernel fork for MSM8974 devices"
 arch="armv7"
 _carch="arm"
-url="https://kernel.org/"
+url="https://github.com/msm8974-mainline/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
 	"
 makedepends="
-	bash
 	bison
+	clang
 	findutils
 	flex
-	gmp-dev
-	mpc1-dev
-	mpfr-dev
+	lld
+	llvm
 	openssl-dev
 	perl
 	postmarketos-installkernel
 	python3
-	"
+	xz
+	zstd
+"
+
+_config="config-$_flavor.$arch"
+_tag="v${pkgver/_/-}-msm8974"
+
+# Source
 source="
-	linux-$_tag.tar.gz::https://github.com/msm8974-mainline/linux/archive/refs/tags/$_tag.tar.gz
-	config-$_flavor.armv7
-	"
+	https://github.com/msm8974-mainline/linux/archive/$_tag/linux-$_tag.tar.gz
+	$_config
+"
 builddir="$srcdir/linux-${_tag#v}"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$CARCH" .config
+	cp "$srcdir/config-$_flavor.$arch" .config
 }
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
@@ -50,17 +52,18 @@ package() {
 	mkdir -p "$pkgdir"/boot
 	make zinstall modules_install dtbs_install \
 		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir"/boot \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
 
-	install -D "$builddir/include/config/kernel.release" \
-		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
 4d96914c8d1bd119178412352bd7fd7016a1f912395d38530a875d0cd21deadec2aeed6c9d7a5502a028221f4fe6ae8188701fd23e96587ce09303b8e3b7f0d7  linux-v6.15.2-msm8974.tar.gz
-9ff08f7765d19976fba29a67ad3a3fe2b35e414a7eff0005b1763edaddf802b053c37b9d21ab01978d548e9053d276772c46e5d99a164fd13b7da81e683296d6  config-postmarketos-qcom-msm8974.armv7
+537a444b07aa08337d884cc35cc9a342975ff4f1ddb36e8ccba567ac540576dd197c4c815311e3b67e70faab14cbb8bd80d22d09c9f146afc4dcd2486dab9e0e  config-postmarketos-qcom-msm8974.armv7
 "
