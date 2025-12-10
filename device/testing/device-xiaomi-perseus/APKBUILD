@@ -3,7 +3,7 @@ maintainer=""
 pkgname=device-xiaomi-perseus
 pkgdesc="Xiaomi Mi Mix 3"
 pkgver=3
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -25,6 +25,7 @@ install="
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
+	$pkgname-nonfree-firmware-udev:nonfree_firmware_udev
 	$pkgname-pmtest
 "
 
@@ -42,6 +43,12 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/81-libssc-xiaomi-perseus.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/81-libssc-xiaomi-perseus.rules
+
+	install -Dm644 "$srcdir"/hexagonrpcd.confd \
+		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
 
 nonfree_firmware() {
@@ -52,10 +59,7 @@ nonfree_firmware() {
 		soc-qcom-modem
 	"
 
-	install -Dm644 "$srcdir"/81-libssc-xiaomi-perseus.rules \
-		"$subpkgdir"/etc/udev/rules.d/81-libssc-xiaomi-perseus.rules
-	install -Dm644 "$srcdir"/hexagonrpcd.confd \
-		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+	amove usr/share/hexagonrpcd
 }
 
 nonfree_firmware_openrc() {
@@ -63,6 +67,11 @@ nonfree_firmware_openrc() {
 	depends="hexagonrpcd-openrc"
 
 	mkdir -p "$subpkgdir"
+}
+
+nonfree_firmware_udev() {
+	default_udev
+	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel udev"
 }
 
 pmtest() {
