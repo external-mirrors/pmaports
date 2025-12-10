@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-sony-sirius
 pkgver=5
-pkgrel=0
+pkgrel=1
 pkgdesc="Sony Xperia Z2 device package"
 url="https://postmarketos.org"
 arch="armv7"
@@ -14,7 +14,11 @@ depends="
 	soc-qcom-msm8974
 "
 makedepends="devicepkg-dev"
-subpackages="$pkgname-x11 $pkgname-nonfree-firmware:nonfree_firmware"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-udev
+	$pkgname-x11
+"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -32,9 +36,9 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 	install -Dm644 "$srcdir"/99-touch.rules \
-		"$pkgdir"/etc/udev/rules.d/99-touch.rules
+		"$pkgdir"/usr/lib/udev/rules.d/99-touch.rules
 	install -D -m644 "$srcdir"/brcmfmac4339-sdio.txt \
-		"$pkgdir"/lib/firmware/brcm/brcmfmac4339-sdio.txt
+		"$pkgdir"/usr/lib/firmware/brcm/brcmfmac4339-sdio.txt
 }
 
 x11() {
