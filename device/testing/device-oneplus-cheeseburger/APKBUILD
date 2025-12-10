@@ -3,7 +3,7 @@ maintainer=""
 pkgname=device-oneplus-cheeseburger
 pkgdesc="OnePlus 5"
 pkgver=8
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,6 +27,7 @@ subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-phosh
 	$pkgname-plasma-mobile:plasma_mobile
+	$pkgname-plasma-mobile-udev:plasma_mobile
 "
 
 build() {
@@ -65,10 +66,17 @@ phosh() {
 
 plasma_mobile() {
 	install_if="$pkgname postmarketos-ui-plasma-mobile"
+
+	mkdir $subpkgdir
+}
+
+plasma_mobile_udev() {
+	install_if="$pkgname-plasma-mobile=$pkgver-r$pkgrel udev"
+
 	# fix incorrect 180 degree touchscreen rotation due to PlaMo kwin_wayland bug
 	# https://invent.kde.org/teams/plasma-mobile/issues/-/issues/160
 	install -Dm644 "$srcdir"/21-oneplus5-ts.rules \
-		"$subpkgdir"/etc/udev/rules.d/21-oneplus5-ts.rules
+		"$subpkgdir"/usr/lib/udev/rules.d/21-oneplus5-ts.rules
 }
 
 sha512sums="
