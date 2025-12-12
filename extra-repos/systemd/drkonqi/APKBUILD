@@ -1,10 +1,11 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=drkonqi
-pkgver=6.5.2
+pkgver=6.5.4
 pkgrel=0
 pkgdesc="The KDE crash handler"
 # armhf blocked by qt6-qtdeclarative -> ki18n
-arch="all !armhf"
+# riscv64 blocked by out-of-sync builder in Alpine
+arch="all !armhf !riscv64"
 url="https://kde.org/plasma-desktop/"
 license="GPL-2.0-or-later"
 depends="
@@ -68,5 +69,5 @@ package() {
 }
 
 sha512sums="
-ad768a6b553d43843bfb48f2a653d75c985fad68621da857a902e328b310a1883f959576e2961751022ab60160f82cf541df0b8bc178d7f28db29e0246533889  drkonqi-6.5.2.tar.xz
+e4f56296f63645ac4cc9a3300ae1bbbb46846d0aa1641e77bbae54b209f86d761e8a9ca7c4afe211ec87ad9fd98378e7d14dce78788b1e47eccdba6d9c4c5ba0  drkonqi-6.5.4.tar.xz
 "
