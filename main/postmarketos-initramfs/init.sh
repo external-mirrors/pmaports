@@ -54,6 +54,9 @@ setup_usb_network
 start_unudhcpd
 
 if [ "$IN_CI" = "false" ]; then
+	# Vibrate early, as soon as drivers to handle haptics are loaded, to indicate that
+	# we are booting
+	beebzzr &
 	setup_framebuffer
 	show_splash "Loading..."
 fi

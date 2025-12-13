@@ -1164,6 +1164,7 @@ check_keys() {
 		# If the user is pressing either the left control key or the volume down
 		# key then drop to a debug shell.
 		if iskey KEY_LEFTCTRL KEY_VOLUMEDOWN; then
+			beebzzr -b 2 -d 100 &
 			debug_shell
 		# If instead they're pressing left shift or volume up, then fail boot
 		# and dump logs
@@ -1324,6 +1325,7 @@ export_logs() {
 }
 
 fail_halt_boot() {
+	beebzzr -b 3 -d 250 &
 	export_logs
 	debug_shell
 	echo "Looping forever"

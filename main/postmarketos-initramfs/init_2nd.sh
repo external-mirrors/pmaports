@@ -19,6 +19,13 @@ trap 'reboot -f' TERM
 # loaded in time
 setup_udev
 
+# Vibrate early, as soon as drivers to handle haptics are loaded, to indicate that
+# we are booting (only do this on devices without initramfs-extra, the ones that have
+# initramfs-extra already vibrated earlier)
+if [ "$deviceinfo_create_initfs_extra" != "true" ] && [ "$IN_CI" = "false" ]; then
+	beebzzr &
+fi
+
 setup_usb_network
 start_unudhcpd
 
