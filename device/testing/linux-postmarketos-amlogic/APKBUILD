@@ -3,8 +3,8 @@
 # Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
 # Co-Maintainer: exkc <exxxxkc@getgoogleoff.me>
 pkgname=linux-postmarketos-amlogic
-pkgver=6.12.23
-pkgrel=5
+pkgver=6.18.2
+pkgrel=0
 pkgdesc="Mainline kernel for Amlogic devices"
 arch="aarch64"
 _carch="arm64"
@@ -16,30 +16,31 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-community
 "
 makedepends="
-	bash
 	bc
 	bison
+	clang
 	devicepkg-dev
 	flex
 	openssl-dev
 	perl
-	gmp-dev
-	mpc1-dev
-	mpfr-dev
+	lld
+	llvm
 	findutils
 	postmarketos-installkernel
 	gzip
 "
-_config="config-$_flavor.$arch"
+_defconfig="defconfig"
+_config="
+	config-$_flavor.$arch
+	amlogic.config
+	misc.config
+	pmos.config
+"
 source="
 	$pkgname-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	$_config
 	0001-add-x96-mini-support.patch
 	0002-add-initial-support-for-zte-b860hv5.patch
-	0003-arm64-dts-amlogic-Add-Ugoos-AM3.patch
-	0004-dt-bindings-arm-amlogic-add-S805Y-and-Mi-TV-Stick.patch
-	0005-arm64-dts-amlogic-add-support-for-xiaomi-aquaman-Mi-.patch
-	0006-arm64-dts-amlogic-xiaomi-aquaman-revert-to-the-old-PWM-binding.patch
 	0007-meson-g12b-bananapi-cm4-mnt-reform2.dts-fix-audio-an.patch
 	0008-Revert-drm-bridge-synopsys-dw-mipi-dsi-enable-EoTp-b.patch
 	0009-dw-mipi-dsi-phy-stop-wait-time.patch
@@ -55,17 +56,17 @@ source="
 	0019-sdio-pullups.patch
 	0020-sdio-improve-wifi-speed.patch
 	0021-WORKAROUND-meson-plane-disable-afbc-32x8.patch
-	"
+"
 builddir="$srcdir/linux-$pkgver"
 
 prepare() {
 	default_prepare
-	cp -v "$srcdir"/$_config .config
+	cp -v "$srcdir"/config-$_flavor.$arch .config
 }
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 -j4 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
@@ -73,6 +74,7 @@ package() {
 	mkdir -p "$pkgdir"/boot
 	make install modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
@@ -83,14 +85,13 @@ package() {
 }
 
 sha512sums="
-c972c81f985c5470d4c1b4642214f9ddcb49cecbf1e6a99e52a24ce480d06d7ee7ca7f0dcee7bc4fe00da2f41f0bec4fcd569b6034522845ba5f0ad9ea0e1958  linux-postmarketos-amlogic-6.12.23.tar.xz
-e5b84fe804568ea7c4f9091bc3fbc1aeb528096493585d49c4429e594d2fbc9ec9a9e6ec5f693b5ba7233b14ebf6dddda8ef59da0c9591e590ef3f83672cdfd7  config-postmarketos-amlogic.aarch64
+15989d1a26c6a5200b8eab4ba348b308466398aa75dda3844b37e7eb320206236d47c94cbc0e0b1d7ead10385ca84d34d0f2aa02ba5c1bd65ca6a5aa71c57117  linux-postmarketos-amlogic-6.18.2.tar.xz
+c9b51f338007d9cfa30bc5e8fd26d685c215963649fbdf9a40e797d45de3f9bd67410b4b1a0dee6c6c6cfa2da5a7bf58712b565838bc8ac46014d7b1b9be00e6  config-postmarketos-amlogic.aarch64
+a28ac83f5e57e64259766a40985a5bc302982c2e2b757b1eab1e26fff85b0eb4709e5909e0f61e40e30d94ac3ff5035ee52cb39dd9afb7ddfca66abd2d7d0a85  amlogic.config
+482481f0c948092d3ed6eb36f6df06a8b73afcf1fcf578e759da859c08b2894d8641f2afd79acffe7efafb2b26320d6bf3719383684d2c1c294c313ab16ce27c  misc.config
+06082d902a00c7fb1b19a495d8fb13d24c12e19fb272d0e17561b96974b3aa2c9b4a1a8aec20b7a7c9a9ccb466d17875e65bf87a97a92eb2487fe14fef8d85c0  pmos.config
 4538994c7d3bbb0c4740e8ce108b6838618be239a549e407ca239f3ceca8eed29b5a9ca75d162567dbc06b13ac7caacc61ebf55b247ce6fe122fecc7e5b275d5  0001-add-x96-mini-support.patch
 222e7c12dbeb931f325b7d4a306c2f1e835992b5503ba3ab387a0b006e0fb2226291d93f32aec8ac7b2f6cf15704f20ef3285bb9bafe7374b11a034639d786ef  0002-add-initial-support-for-zte-b860hv5.patch
-74af031a66bab9c52e79d3099b506ad572a075d77e673b608d7ec32c8998c769171ced2d5c863118ff6d3757be2656e5a9adfb9455396dd855014cfdb9959b50  0003-arm64-dts-amlogic-Add-Ugoos-AM3.patch
-f49836388fedb8adf93a8b619c701eb13b6c96736a6293f91ec7f6a2286ecd54eaee6fd90d8872652cea12c2fc1f90473a73bfb8038edd77d94baa2e921e35c5  0004-dt-bindings-arm-amlogic-add-S805Y-and-Mi-TV-Stick.patch
-d7c1f097b32d201893942d7eb4541c5f1c17e998006c6c20501f4ab9c7c3f6bf6567658f15d1c6587d9ef31534fea296e6bec539d51bddb4615939b4c0da7b51  0005-arm64-dts-amlogic-add-support-for-xiaomi-aquaman-Mi-.patch
-a080d357c9870ffe936d41cef757e2b717d97c4593332fa8682476dc0791d07af59e2de74935bde68485ffae9554a39084151b3f1877cdf320d631dec72f735c  0006-arm64-dts-amlogic-xiaomi-aquaman-revert-to-the-old-PWM-binding.patch
 f1a3f10c67f491758bbaa2922b3acc84e2abee432ae22a39cb4081c9cea71792c5c740c57df93740e4b9756755e0e32583d23a93485933aeddb01c1d85eb4ccc  0007-meson-g12b-bananapi-cm4-mnt-reform2.dts-fix-audio-an.patch
 fb34099eefaf51b7bb36d7eca3c6130d7b23760250be8934341e93656d9315a099a243cbb02c9ed572dd76bf9017016b76aa1a8c03e867273f8ff4c3e7b3c9cb  0008-Revert-drm-bridge-synopsys-dw-mipi-dsi-enable-EoTp-b.patch
 00e257c1271fb9bfdb3cb3d61693e4226ec64cf7f168b19c504744c22844776f45e72005ec4def46450315ee71edfb5c762b323dad97df61c1106b835e91c372  0009-dw-mipi-dsi-phy-stop-wait-time.patch
