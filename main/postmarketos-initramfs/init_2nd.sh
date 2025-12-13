@@ -83,6 +83,11 @@ splash_set_message "Starting"
 # Re-enable kmsg ratelimiting (might have been disabled for logging)
 echo ratelimit > /proc/sys/kernel/printk_devkmsg
 
+# Vibrate to indicate that we are booting
+if [ "$IN_CI" != "true" ]; then
+	beebzzr &
+fi
+
 killall udevd syslogd 2>/dev/null
 
 # Kill any getty shells that might be running
