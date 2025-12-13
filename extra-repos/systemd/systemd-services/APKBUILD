@@ -10,7 +10,7 @@
 # and get in chat.
 
 pkgname=systemd-services
-pkgver=117
+pkgver=118
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -25,7 +25,6 @@ subpackages="
 	colord-systemd:_service
 	dnsmasq-systemd:_service
 	gnome-clocks-systemd:_service
-	greetd-wlgreet-systemd:_service
 	httpd-systemd:_service
 	irqbalance-systemd:_service
 	iwd-systemd:_service
@@ -42,7 +41,6 @@ subpackages="
 _colord_sources="system/colord.service" # From https://github.com/hughsie/colord/blob/main/data/colord.service.in
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
 _gnome_clocks_sources="user/gnome-clocks.service"
-_greetd_wlgreet_sources="system/wlgreet.service"
 _httpd_sources="system/httpd.service"
 _irqbalance_sources="system/irqbalance.service"
 _iwd_sources="system/iwd.service" # From https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/iwd.service.in
@@ -72,7 +70,6 @@ source="$(flatpath \
 	$_colord_sources \
 	$_dnsmasq_sources \
 	$_gnome_clocks_sources \
-	$_greetd_wlgreet_sources \
 	$_httpd_sources \
 	$_irqbalance_sources \
 	$_iwd_sources \
@@ -129,7 +126,6 @@ sha512sums="
 c10378bac1d64c0a2c767aab439c7d71bb7706b4fdc981add3ab4d5967257c0177f07448f884aeb1ee4571c59746c3584befa95858940aed198e29fa83cf5d17  system-colord.service
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  sysusers.d-dnsmasq.conf
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
-e226bdb71f6fafe92d14046dfa19ddbccb765b579c1f90687a9ece376fa12406db9f2cf8035ff07d5a78ef77dc73615d39a8790f8722585bf65872be773888ff  system-wlgreet.service
 666ba094bff47aa67b4e4431929516af355f90ffc1fd60429dcd20b337c3c17d2d62a71c289496217282f0819bc8deba8db5cc5b2915b692defa14d19532a8d1  system-httpd.service
 0ed5e05b73cf4952c81deeffc7f662f0ef6e684c24fb8177f625f2d086582fad2df1376a2479155b4a6aa6d584f1cccfe8c143f7830eccaf5e693cae5aefed2d  system-irqbalance.service
 df3388cb7b9d035e54b34d8f8a6594be89c3015f979fe3bdc199fb7db1ab0bef821d6b306eecdf978eb227454d5e50aab29ac02d9722b1b075ec0ce4705e3518  system-iwd.service
