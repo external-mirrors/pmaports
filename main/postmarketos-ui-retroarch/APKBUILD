@@ -1,39 +1,54 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Sandelinos <postmarketos@sandelinos.me>
 pkgname=postmarketos-ui-retroarch
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="RetroArch in KMS mode"
 url="https://www.retroarch.com"
 arch="noarch"
 license="GPL-3.0-or-later"
 depends="
-	autologin
 	elogind
-	polkit-elogind
+	postmarketos-base-ui
+	postmarketos-base-ui-audio
+	postmarketos-base-ui-networkmanager
 	retroarch
+	tinydm
 	"
-subpackages="$pkgname-openrc"
+depends_systemd="polkit-systemd"
+subpackages="$pkgname-openrc $pkgname-systemd"
 source="
-	retroarch.initd
-	postmarketos-ui-retroarch.sh
+	retroarch.cfg
+	retroarch.desktop
 	"
 options="!check pmb:drm"
+install="$pkgname.post-install"
+# Note: for adding a new skeleton config in /etc/retroarch.cfg:
+replaces="retroarch"
 
 package() {
-	install -Dm755 retroarch.initd "$pkgdir/etc/init.d/retroarch"
-	install -Dm755 postmarketos-ui-retroarch.sh "$pkgdir/usr/bin/postmarketos-ui-retroarch"
+	install -Dm644 retroarch.cfg -t "$pkgdir"/etc/
+
+	# Ok ok this isn't *really* wayland, but tinydm doesn't care and it runs
+	# retroarch just fine...
+	install -Dm644 retroarch.desktop -t "$pkgdir"/usr/share/wayland-sessions/
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="elogind-openrc"
+	depends="elogind-openrc polkit-elogind"
+	mkdir -p "$subpkgdir"
 
 	default_openrc
 }
 
+systemd() {
+	mkdir -p "$subpkgdir"
+
+	default_systemd
+}
+
 sha512sums="
-07b2177325734bdb8358265c48f6849ba39e9801b2b1a871d7242259f4d456ff974eed126a6e5775bca87bf5286422db0afd4a2fa0b96a170f18682edd60a0cd  retroarch.initd
-317299beaf517274f5027c59c4903301abfa531043184dab8824d74cab22c4e2cd573b56492195caf9f151f6ad41da1dd3a4a561d986d8e8034b7e459c859983  postmarketos-ui-retroarch.sh
+9c71418cdddbaff028431a58b04924ed5360bafd3a08fb50edd48f8f27ed353f25c2c6d6db4b85b44f7f556e9552d7d1914e3278bfb6ca0b7fb8478ef6ab50ae  retroarch.cfg
+f25843d7a95c3c01e6ce709d55398d3696bcb429fd6913f9bab9623151b8f12a601d9d53973581c54f0ae562e1080d40631aa491dc1cd8179848a878848a5a33  retroarch.desktop
 "
