@@ -1,28 +1,27 @@
 # Maintainer: Oliver Smith <ollieparaoid@postmarketos.org>
 pkgname=mobile-config-firefox
-pkgver=5.0.0_rc1
+pkgver=5.0.0
 pkgrel=0
 pkgdesc="Firefox tweaks for mobile and privacy"
 url="https://gitlab.postmarketos.org/postmarketOS/mobile-config-firefox"
-source="
-	https://gitlab.postmarketos.org/postmarketOS/mobile-config-firefox/-/archive/$pkgver/mobile-config-firefox-$pkgver.tar.bz2
-"
 arch="noarch"
 license="GPL-3.0-or-later"
-options="!check" # No tests
 subpackages="$pkgname-librewolf"
+source="https://gitlab.postmarketos.org/postmarketOS/mobile-config-firefox/-/archive/$pkgver/mobile-config-firefox-$pkgver.tar.gz"
+options="!check" # No tests
 
 package() {
 	make DESTDIR="$pkgdir" FIREFOX_DIR=/usr/lib/firefox install
+	make DESTDIR="$pkgdir" FIREFOX_DIR=/usr/lib/firefox-developer-edition install
 	make DESTDIR="$pkgdir" FIREFOX_DIR=/usr/lib/firefox-esr install
 	make DESTDIR="$pkgdir" FIREFOX_DIR=/usr/lib/librewolf install
 }
 
 librewolf() {
-	depends="mobile-config-firefox"
+	depends="librewolf"
 	amove /usr/lib/librewolf
 }
 
 sha512sums="
-0a66eea1a581b9986490f07d82ff4985dcacea02a925d6c11db46000eab2e5ea8376c93844fea285882c34afe65399d83beae6c8847e085360ff15885d56cdea  mobile-config-firefox-5.0.0_rc1.tar.bz2
+8ff54316905bd290902904b12ac087521db73fead36bbfb75e3e519c312ffc380e27ff4e8946ad1a54fe2b899b2e76d93c851870532b8c1d16fa5b3227ebb92e  mobile-config-firefox-5.0.0.tar.gz
 "
