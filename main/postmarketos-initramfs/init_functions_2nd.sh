@@ -757,6 +757,7 @@ handle_immutable_boot() {
 
 	limit_usb_transfer_size
 
+	set -x
 	# Factory reset handling
 	if factory_reset_requested; then
 		show_splash "Factory resetting device..."
@@ -772,6 +773,7 @@ handle_immutable_boot() {
 		handle_first_boot
 		return
 	fi
+	set +x
 
 	# Try normal boot
 	info "Trying normal bootup"
