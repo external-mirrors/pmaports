@@ -3,7 +3,7 @@
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
 pkgver=9
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -83,6 +83,7 @@ kernel_p281() {
 kernel_ugoos_am3() {
 	pkgdesc="Kernel for Ugoos AM3 (S912)"
 	depends="linux-postmarketos-amlogic"
+	aml_boot_prep "meson-gxm-ugoos-am3.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
