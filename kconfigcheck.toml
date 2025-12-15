@@ -570,27 +570,25 @@ DM_VERITY = "m"
 EROFS_FS = "y"
 EROFS_FS_ZIP = "y"
 
-# In 6.18+, CFI_CLANG is CFI and does not require LTO
+# In 6.18+, CFI_CLANG is CFI
 ["category:hardening".">=6.18_rc1"."x86_64 aarch64 armv7 riscv64"]
 CFI = "y"
 CFI_PERMISSIVE = "n"
 # All older versions use CFI_CLANG
 ["category:hardening".">=6.10.0 <6.18_rc1"."armv7"]
 CFI_CLANG = "y"
-LTO_CLANG_THIN = "y" # Required for CFI
 CFI_PERMISSIVE = "n"
 ["category:hardening".">=6.6.0 <6.18_rc1"."riscv64"]
 CFI_CLANG = "y"
-LTO_CLANG_THIN = "y" # Required for CFI
 CFI_PERMISSIVE = "n"
 ["category:hardening".">=6.1.0 <6.18_rc1"."x86_64"]
 CFI_CLANG = "y"
-LTO_CLANG_THIN = "y" # Required for CFI
 CFI_PERMISSIVE = "n"
 ["category:hardening".">=5.13.0 <6.18_rc1"."aarch64"]
 CFI_CLANG = "y"
-LTO_CLANG_THIN = "y" # Required for CFI
 CFI_PERMISSIVE = "n"
+["category:hardening".">=5.13.0 <6.1_rc1"."aarch64"]
+LTO_CLANG_THIN = "y" # Required for CFI pre-6.1
 ["category:hardening".">=6.12.0"."x86_64 aarch64 armv7 riscv64"]
 CFI_ICALL_NORMALIZE_INTEGERS = "y" # Required for CFI with Rust
 
