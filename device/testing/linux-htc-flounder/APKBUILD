@@ -1,7 +1,7 @@
 maintainer=""
 pkgname=linux-htc-flounder
 pkgver=6.0.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Google Nexus 9 kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -10,9 +10,27 @@ url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native
 	pmb:kconfigcheck-nftables pmb:kconfigcheck-zram
-	pmb:kconfigcheck-containers pmb:kconfigcheck-waydroid"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev
-	     devicepkg-dev bison flex openssl-dev xz findutils gzip"
+	pmb:kconfigcheck-containers pmb:kconfigcheck-waydroid
+"
+makedepends="
+	bash
+	bc
+	bison
+	clang
+	devicepkg-dev
+	elfutils-dev
+	findutils
+	flex
+	gmp-dev
+	gzip
+	linux-headers
+	lld
+	llvm
+	openssl-dev
+	perl
+	sed
+	xz
+"
 
 # Source
 _repository="linux"
@@ -27,15 +45,14 @@ _outdir="out"
 
 prepare() {
 	default_prepare
-	REPLACE_GCCH=0 \
-		. downstreamkernel_prepare
+	. downstreamkernel_prepare
 }
 
 build() {
 	unset LDFLAGS
 
 	# V=1: workaround for pma#1990
-	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+	make O="$_outdir" ARCH="$_carch" LLVM=1 LLVM_IAS=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" V=1
 }
 
@@ -43,6 +60,8 @@ package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
 
 	make modules_install dtbs_install \
+		LLVM=1 \
+		LLVM_IAS=1 \
 		O="$_outdir" ARCH="$_carch" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir" \
@@ -55,5 +74,5 @@ package() {
 
 sha512sums="
 ee712d770cc863a6acff52ee32c5009657480864fcd748f0ccc7afb9edba912d727e56bd1d484bd391c5f3d0fed0d063ec8fca36af80c88572bcf85a6f00522e  linux-htc-flounder-1af7ece0542ef888433623a572ed8e19ca5e956a.tar.gz
-24cd0364ed2110f4889514eb7596c70284cafae0b311ea56dcf0e29455f86778c2dea2b92f20c1290ab5f87293e1c1d4bde025811e71dd13629c5ab4e188a8f5  config-htc-flounder.aarch64
+2862f537195da1dfc9ac9d36526e8aecc0183ac1bceec2905ef5663dd8daf048b4341282fcb005b60b1aa25718136ce5f3a0f6b2a49261df65322cf5d59dbee6  config-htc-flounder.aarch64
 "
