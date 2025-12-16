@@ -67,6 +67,9 @@ package() {
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
 
+	#clean up unneeded dtbs
+	rm -f "$pkgdir"/boot/dtbs/keystone*.dtb "$pkgdir"/boot/dtbs/tegra20*.dtb "$pkgdir"/boot/dtbs/tegra30*.dtb
+
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
