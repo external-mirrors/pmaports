@@ -4,8 +4,8 @@
 # Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 
 pkgname=systemd-stage0
-pkgver=257.10
-_pkgver="musl-v${pkgver//_/-}-split-usr"
+pkgver=259
+_pkgver="${pkgver/_/-}"
 pkgrel=0
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
@@ -46,14 +46,13 @@ makedepends_host="
 # Let usr/lib/libudev.so.1 from systemd-stage0 be the file that gets used
 replaces="eudev-libs systemd-udevd"
 
-source="https://gitlab.postmarketos.org/postmarketOS/systemd/-/archive/$_pkgver/systemd-$_pkgver.tar.gz"
+source="systemd-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz"
 builddir="$srcdir/systemd-$_pkgver"
 
-export CFLAGS="$CFLAGS -D__UAPI_DEF_ETHHDR=0" # see src/basic/linux/if_ether.h
-
 build() {
+	# NOTE: tests=true to work around https://github.com/systemd/systemd/issues/39984
 	abuild-meson \
-		-Dtests=false \
+		-Dtests=true \
 		-Ddbuspolicydir=/usr/share/dbus-1/system.d \
 		-Ddbussessionservicedir=/usr/share/dbus-1/services \
 		-Ddbussystemservicedir=/usr/share/dbus-1/system-services \
@@ -62,7 +61,7 @@ build() {
 		\
 		-Dmode=release \
 		-Dsplit-bin=true \
-		-Dsplit-usr=true \
+		-Dlibc=musl \
 		\
 		-Dkmod-path=/bin/kmod \
 		-Dsulogin-path=/sbin/sulogin \
@@ -106,5 +105,5 @@ package() {
 }
 
 sha512sums="
-bc2c715e41db9fdb3611aaea4f17ee42fa43d3bba86b9c2cb413ce8b371d078017a81117634469b58b71192d52ea47f8f6a700199f9d63c64767fec74782c6f1  systemd-musl-v257.10-split-usr.tar.gz
+ef46b13661df43e3cfbeee1bc22f0b1eb902e8ebe39c19868c465efd08b35a199c2a2cd9d8021a6bc4d692fa0c6e0eab3f13eecd6ce24dde81d3945464a25b50  systemd-259.tar.gz
 "

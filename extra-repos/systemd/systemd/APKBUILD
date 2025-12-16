@@ -7,15 +7,14 @@
 #########################################################
 
 pkgname=systemd
-pkgver=257.10
-_pkgver="musl-v${pkgver//_/-}-split-usr"
+pkgver=259
+_pkgver="${pkgver/_/-}"
 pkgrel=0
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
-# armhf blocked by pmb#2618
-arch="all !armhf"
+arch="all"
 license="MIT AND GPL-2.0-only AND LGPL-2.1-or-later"
-options="pmb:strict !check" # few tests fail, need to debug. We use alpine dbus for building, systemd-dbus for runtime
+options="pmb:strict"
 
 triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 /usr/lib/udev/hwdb.d:\
@@ -29,7 +28,7 @@ triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 /etc/systemd/system:\
 /etc/systemd/user
 "
-
+checkdepends="grep postmarketos-release"
 makedepends="
 	acl
 	acl-dev
@@ -62,7 +61,6 @@ makedepends="
 	libselinux-dev
 	libxkbcommon-dev
 	linux-pam-dev
-	linux-stable-dev
 	llvm21
 	lz4-dev
 	meson
@@ -82,6 +80,35 @@ makedepends="
 
 	dbus-dev
 	polkit-dev
+	"
+# NOTE: these are dlopened and have to be listed explicitly since abuild cannot detect these dependencies
+# See:
+#  - https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/3992
+#  - https://gitlab.alpinelinux.org/alpine/abuild/-/issues/10177
+depends="
+	acl-libs
+	audit-libs
+	cryptsetup-libs
+	kmod-libs
+	libapparmor
+	libblkid
+	libbpf
+	libcap2
+	libdw
+	libelf
+	libfido2
+	libgcrypt
+	libidn2
+	libmount
+	libqrencode
+	libseccomp
+	libxkbcommon
+	linux-pam
+	lz4-libs
+	p11-kit
+	pcre2
+	xz-libs
+	zstd-libs
 	"
 
 # provides=openrc and openrc-settingsd to prevent those packages
@@ -128,12 +155,10 @@ subpackages="
 	"
 
 source="
-	https://gitlab.postmarketos.org/postmarketOS/systemd/-/archive/$_pkgver/systemd-$_pkgver.tar.gz
+	$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
 	"
 builddir="$srcdir/systemd-$_pkgver"
-
-export CFLAGS="$CFLAGS -D__UAPI_DEF_ETHHDR=0" # see src/basic/linux/if_ether.h
 
 _bashcomp="usr/share/bash-completion/completions"
 _zshcomp="usr/share/zsh/site-functions"
@@ -168,9 +193,9 @@ build() {
 
 	# TODO: after usr-merge completion: remove hardcoded "-D*-path" options
 	abuild-meson \
+		-Dlibc=musl \
 		-Dmode=release \
 		-Dsplit-bin=true \
-		-Dsplit-usr=true \
 		\
 		-Dquotaon-path=/usr/sbin/quotaon \
 		-Dquotacheck-path=/usr/sbin/quotacheck \
@@ -188,19 +213,19 @@ build() {
 		-Dpam=enabled \
 		-Dpamlibdir=/usr/lib/security \
 		-Dpamconfdir=/usr/lib/pam.d \
+		\
+		-Dsysupdate=enabled \
 		-Dsysupdated=enabled \
 		-Dimportd=enabled \
 		\
 		-Dbootloader=disabled \
-		-Dutmp=false \
-		-Dldconfig=false \
-		-Duserdb=false \
-		-Dhomed=disabled \
-		-Dnss-myhostname=false \
-		-Dnss-mymachines=disabled \
-		-Dnss-resolve=disabled \
-		-Dnss-systemd=false \
+		-Dinitrd=false \
+		-Dhibernate=false \
 		-Dselinux=disabled \
+		-Dsysvinit-path="" \
+		\
+		-Dhomed=disabled \
+		-Duserdb=false \
 		\
 		-Dman=enabled \
 		-Dhtml=disabled \
@@ -216,30 +241,29 @@ build() {
 		-Ddefault-kill-user-processes=true \
 		-Ddefault-locale=en_US.UTF-8 \
 		\
-		-Dgshadow=false \
-		-Didn=false \
-		-Dsysvinit-path="" \
-		\
 		-Ddefault-dns-over-tls=yes \
 		-Ddns-over-tls=openssl \
 		-Ddns-servers="9.9.9.10#dns10.quad9.net 149.112.112.10#dns10.quad9.net 2620:fe::10#dns10.quad9.net 2620:fe::fe:10#dns10.quad9.net" \
 		-Dntp-servers="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 4.pool.ntp.org" \
 		\
 		-Dbpf-framework=enabled \
-		-Dvmlinux-h=provided \
-		-Dvmlinux-h-path="$(find /usr/src -path "/usr/src/linux-headers-*-stable/vmlinux.h" | sort -V | tail -n1)" \
 		build .
 	meson compile ${JOBS:+-j ${JOBS}} -C build
 }
 
 check() {
-	meson test -C build
+	case "$CARCH" in
+	x86_64) meson test -C build ;;
+	*)
+		echo "*** NOTE: Skipping tests for archs that might use pmb:crossdirect/qemu-user ***" ;;
+	esac
 }
 
 package() {
 	# FIXME: For some reason .note.dlopen isn't placed in the binary. Investigate!
 	# https://github.com/systemd/systemd/blob/main/docs/ELF_DLOPEN_METADATA.md
 	depends="
+		$depends
 		$pkgname-journald=$pkgver-r$pkgrel
 		$pkgname-udevd=$pkgver-r$pkgrel
 		!openrc
@@ -273,7 +297,6 @@ udevd() {
 	amove etc/udev
 	amove usr/bin/udevadm
 	amove usr/lib/libudev*
-	amove usr/lib/systemd/system/initrd-udevadm-cleanup-db.service
 	amove usr/lib/systemd/system/sockets.target.wants/systemd-udev*
 	amove usr/lib/systemd/system/sysinit.target.wants/systemd-udev*
 	amove usr/lib/systemd/system/systemd-udev*
@@ -454,6 +477,6 @@ libs() {
 }
 
 sha512sums="
-bc2c715e41db9fdb3611aaea4f17ee42fa43d3bba86b9c2cb413ce8b371d078017a81117634469b58b71192d52ea47f8f6a700199f9d63c64767fec74782c6f1  systemd-musl-v257.10-split-usr.tar.gz
+ef46b13661df43e3cfbeee1bc22f0b1eb902e8ebe39c19868c465efd08b35a199c2a2cd9d8021a6bc4d692fa0c6e0eab3f13eecd6ce24dde81d3945464a25b50  systemd-259.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
 "
