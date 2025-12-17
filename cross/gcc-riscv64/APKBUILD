@@ -37,16 +37,23 @@ pkgname=gcc-riscv64
 pkgrel=2
 pkgdesc="Stage2 cross-compiler for riscv64"
 url="https://gcc.gnu.org"
-arch="x86_64"
+arch="aarch64 x86_64"
 license="GPL-2.0-or-later AND LGPL-2.1-or-later"
 _gccrel=$pkgver-r$pkgrel
-depends="binutils-riscv64 mpc1 so:libc.musl-x86_64.so.1 so:libgcc_s.so.1 so:libgmp.so.10 so:libisl.so.23 so:libmpc.so.3 so:libmpfr.so.6 so:libstdc++.so.6 so:libz.so.1"
+depends="binutils-riscv64 mpc1 so:libgcc_s.so.1 so:libgmp.so.10 so:libisl.so.23 so:libmpc.so.3 so:libmpfr.so.6 so:libstdc++.so.6 so:libz.so.1"
 makedepends_build="gcc g++ bison flex texinfo gawk zip gmp-dev mpfr-dev mpc1-dev zlib-dev"
 makedepends_host="linux-headers gmp-dev mpfr-dev mpc1-dev isl-dev zlib-dev musl-dev-riscv64 binutils-riscv64"
 subpackages="g++-riscv64:gpp libstdc++-dev-riscv64:libcxx_dev"
 [ "$CHOST" = "$CTARGET" ] && subpackages="gcc-gdb gcc-doc"
 replaces="libstdc++ binutils"
 options="!strip !tracedeps"
+
+case "$CARCH" in
+aarch64)
+	depends="$depends so:libc.musl-aarch64.so.1" ;;
+x86_64)
+	depends="$depends so:libc.musl-x86_64.so.1" ;;
+esac
 
 : "${LANG_CXX:=true}"
 : "${LANG_D:=true}"
@@ -580,7 +587,12 @@ gpp() {
 	depends="libstdc++-dev$_target=$_gccrel gcc$_target=$_gccrel musl-dev"
 	[ "$CHOST" = "$CTARGET" ] && depends="$depends libstdc++=$_gccrel"
 
-	depends="$depends so:libc.musl-x86_64.so.1 so:libgmp.so.10 so:libisl.so.23 so:libmpc.so.3 so:libmpfr.so.6 so:libz.so.1"
+	depends="$depends so:libgmp.so.10 so:libisl.so.23 so:libmpc.so.3 so:libmpfr.so.6 so:libz.so.1"
+	case "$CARCH" in
+	aarch64) depends="$depends so:libc.musl-aarch64.so.1" ;;
+	x86_64) depends="$depends so:libc.musl-x86_64.so.1" ;;
+	esac
+
 
 	amove $_gcclibexec/cc1plus
 	amove usr/bin/*++
