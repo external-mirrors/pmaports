@@ -1,6 +1,6 @@
 maintainer="Ingo Reitz <9l@9lo.re>"
 pkgname=linux-postmarketos-gs101
-pkgver=6.18_rc2
+pkgver=6.18.13
 pkgrel=1
 pkgdesc="Google gs101 (Pixel 6 Series) close-to-mainline kernel"
 arch="aarch64"
@@ -23,7 +23,7 @@ makedepends="
 "
 
 # Source
-_commit="2bce1f7172c8ee7d8e73d027c3f4963282b918f3"
+_commit="1c50748fbe5c0115671d2ab65152ad125d53cae6"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/gs101-mainline/linux/archive/$_commit.tar.gz
@@ -63,6 +63,6 @@ package() {
 }
 
 sha512sums="
-44cfb483162496f3815362ab7e782367fd6a53e8d9f989078087b0bb33522c2783953378a42225813a11d9ff0c43bbf3302fca4b64b567194e25b4dc546b7a0d  linux-postmarketos-gs101-2bce1f7172c8ee7d8e73d027c3f4963282b918f3.tar.gz
-6c23b5479256941e504d5ac1659477d4ec44b3fec0b0257a882ddef99d883c1f3dc9c64b6bade473c0128a252045ea80d661e6b945390ea8b0ebd1bc48fe0f14  config-postmarketos-gs101.aarch64
+0c2cb70b397db6b9f3e158be33f7acc83fe56d0ac3505f35a15c85626f3ab3d19390eb54bdceff2f5ed686a37dd106cb9aff22d0a27caad12f25b3d8c7dfac6e  linux-postmarketos-gs101-1c50748fbe5c0115671d2ab65152ad125d53cae6.tar.gz
+083b9672da2b62630bdbd9efb5ada76cf5f0b4442c149ea7fce960bd79cd020563f04755a521c24ef678afd31d09375e894363e2c2f4e8cd718d5b49f1af666c  config-postmarketos-gs101.aarch64
 "
