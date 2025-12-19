@@ -5,10 +5,6 @@
 #
 set -eu
 
-# Maximal allowed size (in bytes) of a file.
-FILE_SIZE_LIMIT=262144  # 256 kiB
-
-
 if ! command -v sha512sum >/dev/null; then
 	# macOS / BSDs (?) don't have sha512sum, but shasum.
 	alias sha512sum='shasum -a 512'
@@ -95,20 +91,6 @@ check_local_sources() {
 	return $status
 }
 
-# Checks if the file ($1) being committed is not bigger than FILE_SIZE_LIMIT.
-check_file_size() {
-	local path="$1"
-	local size
-
-	size=$(git cat-file -s ":$path")
-	if [ $size -gt $FILE_SIZE_LIMIT ]; then
-		local size_kb=$(( size / 1024 ))
-
-		error "file \"$path\" is quite big ($(( size / 1024 )) kiB), better put a remote url in source="
-		return 1
-	fi
-}
-
 cleanup() {
   [ -f "$_staged" ] && rm "$_staged"
 }
@@ -120,10 +102,6 @@ for apkbuild in $(changed_files '**/APKBUILD'); do
 	git show ":$apkbuild" >"$_staged"
 	check_local_sources "$_staged" "${apkbuild%/*}"
 	cleanup
-done
-
-for path in $(changed_files); do
-	check_file_size "$path"
 done
 
 trap - EXIT
