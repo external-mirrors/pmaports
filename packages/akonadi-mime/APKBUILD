@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=akonadi-mime
-pkgver=99999_git20251206
+pkgver=99999_git20251210
 pkgrel=0
-_commit="3bb0f60ac2c6b4703e4c419f9e637bfa6dc0d93d"
+_commit="44f383dc1366f78e2a6593334a34c2b79d55b1d5"
 pkgdesc="Libraries and daemons to implement basic email handling"
 # armhf blocked by qt6-qtdeclarative
 # s390x and riscv64 blocked by akonadi
@@ -33,7 +33,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/akonadi-mime.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-08/akonadi-mime-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-10/akonadi-mime-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -56,5 +56,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-2ed29822167df273389e5e8ed1ec093c0cf59569f86db475c78f7536c06af4fb5f0fd921bf6b778d58f883b55838b8d1c5ce73cacb028c2b066a9566752fc052  akonadi-mime-3bb0f60ac2c6b4703e4c419f9e637bfa6dc0d93d.tar.xz
+2cc601483d75ea880f9fae4608264d7b4675f3aa2abb06df1d2a169ebd273698f65ea6739af7abdd71c56cf2b3505ad1984352f3e8948c01df4be98b3097d234  akonadi-mime-44f383dc1366f78e2a6593334a34c2b79d55b1d5.tar.xz
 "

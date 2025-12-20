@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kinfocenter
-pkgver=99999_git20251209
+pkgver=99999_git20251210
 pkgrel=0
-_commit="63592ec88dc20398cde7eeaf8737c28cbcb46d13"
+_commit="a253282adc9b092d2fd85bf833dd6107e8bd202a"
 pkgdesc="A utility that provides information about a computer system"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -45,7 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kinfocenter.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-09/kinfocenter-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-10/kinfocenter-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -68,5 +68,5 @@ package() {
 }
 
 sha512sums="
-815753d67002a5c04ad548f4685784411dae805362e15dbb1a9a5ce51eba8bd00f9642707e8975c0e96a8cd36628d425f818902c186e6236814ac1fce3a1f01a  kinfocenter-63592ec88dc20398cde7eeaf8737c28cbcb46d13.tar.xz
+eb26efa26be96430e86150471bfeb81f56d67136a90a37cd45b7d57a7c1c1726933507f271cb7ec6a726799d62af57fc96c4ab313a01aa5cdabbc51ed0683008  kinfocenter-a253282adc9b092d2fd85bf833dd6107e8bd202a.tar.xz
 "
