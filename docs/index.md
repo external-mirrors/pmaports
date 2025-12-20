@@ -17,5 +17,6 @@ in pmaports and the processes around device categorization.
    device-categorization
    deviceinfo-reference
    ci-tags
+   kconfig-fragments
    kernel-versions
 ```
