@@ -19,6 +19,7 @@ in pmaports and the processes around device categorization.
    ci-tags
    generic-device-packages
    generic-kernels
+   kconfig-fragments
    kconfigcheck
    kernel-cmdline
    kernel-versions
