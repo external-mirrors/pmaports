@@ -40,10 +40,9 @@ cases, before merging, in addition to the regular approvals, it is required to:
 Backporting features from edge to stable is done at request of the MR author or
 package maintainer. All patches for stable branches must go through edge first
 and get backported from there to get additional testing before they potentially
-breaks something in stable. The only exception are patches for failures that
-only happen on stable.
+breaks something in stable, and should be tested in the MR too. The only
+exception are patches for failures that only happen on stable.
 
-Only some members of the team are allowed to push to stable branches. To get a
-patch backported to stable, label the MR with the corresponding `backport-to-v*`
-label, and request a Core Contributor to cherry-pick it. Cherry-picking should
-be done using `-x` option, to make sure that the original commit is mentioned.
+While backporting patches to stable, label the MR with the corresponding
+`backport-to-v*` label, and cherry-pick the commits with the `-x` option, to
+make sure that the original commit is mentioned.
