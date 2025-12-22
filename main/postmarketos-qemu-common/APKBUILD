@@ -1,7 +1,7 @@
 pkgname=postmarketos-qemu-common
 pkgdesc="Common package for Qemu 'devices'"
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64 x86_64 loongarch64 ppc64le riscv64"
@@ -13,6 +13,7 @@ subpackages="
 "
 source="
 	mce-display-blanking.conf
+	modules-initfs
 	resolution-qemu-X11.conf
 	wlr-no-hw-cursor.sh
 "
@@ -22,6 +23,8 @@ package() {
 	# multiple subpkgs to handle these is silly.
 	install -Dm644 wlr-no-hw-cursor.sh \
 		"$pkgdir"/etc/profile.d/10-wlr-no-hw-cursor.sh
+
+	install -Dm644 modules-initfs "$pkgdir"/usr/share/mkinitfs/modules/00-$pkgname.modules
 }
 
 mce() {
@@ -45,6 +48,7 @@ x11() {
 
 sha512sums="
 99d32eed6c5cda59e91516e982c5bd5165ff718133e2411a0dbba04e2057d1dfad49a75e5cc67140d0e0adcbe1383671bd2892335929b782a5b19f5472e635ad  mce-display-blanking.conf
+29766094e64a7ce881c8e96433203ea538057b8fd1d577fc69b9add6bc1217af04ddf60cbcf82333811c627897eda7537b0b1f862899e1fdfd93403b3f6425d7  modules-initfs
 bfff3ebf11abb43d8ea45e778c19554b1bc8ef9e694d8160daaac0ef906b4d8eda772e5f984033cce52ebddfbbe76e5340c6805e68f967994a3240c1e10c8b5b  resolution-qemu-X11.conf
 1434e9d3431eabeb76129e3bcaf20318b6a0c8fcc879d90d667f53984f45a88d5b50000501b3deb4469df5f5d9b82cb0accef23313344c23c13336880d9006e1  wlr-no-hw-cursor.sh
 "
