@@ -144,12 +144,8 @@ class Device:
 class ArchTagSet(set):
     supported_arches = [
         Arch.x86_64,
-        Arch.x86,
         Arch.aarch64,
         Arch.armv7,
-        Arch.armhf,
-        Arch.riscv64,
-        Arch.ppc64le,
     ]
 
     def update(self, iterable):
