@@ -10,7 +10,7 @@
 # and get in chat.
 
 pkgname=systemd-services
-pkgver=118
+pkgver=119
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -22,28 +22,20 @@ license="BSD-3-Clause"
 makedepends="systemd-dev"
 
 subpackages="
-	colord-systemd:_service
 	dnsmasq-systemd:_service
 	gnome-clocks-systemd:_service
 	httpd-systemd:_service
-	irqbalance-systemd:_service
-	iwd-systemd:_service
 	kodi-systemd:_service
 	nginx-systemd:_service
 	openssh-server-pam-systemd:_service
 	q6voiced-systemd:_service
-	rtkit-systemd:_service
 	tinydm-systemd:_service
 	tqftpserv-systemd:_service
 	transmission-daemon-systemd:_service
-	udiskie-systemd:_service
 "
-_colord_sources="system/colord.service" # From https://github.com/hughsie/colord/blob/main/data/colord.service.in
 _dnsmasq_sources="sysusers.d/dnsmasq.conf"  # From: https://src.fedoraproject.org/rpms/dnsmasq/blob/rawhide/f/dnsmasq-systemd-sysusers.conf
-_gnome_clocks_sources="user/gnome-clocks.service"
-_httpd_sources="system/httpd.service"
-_irqbalance_sources="system/irqbalance.service"
-_iwd_sources="system/iwd.service" # From https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/iwd.service.in
+_gnome_clocks_sources="user/gnome-clocks.service" # Similar to https://gitlab.gnome.org/guidog/gnome-clocks/-/commits/phosh
+_httpd_sources="system/httpd.service" # https://gitlab.archlinux.org/archlinux/packaging/packages/apache/-/blob/main/httpd.service + path adjustments
 _kodi_sources="system/kodi.service" # From https://github.com/graysky2/kodi-standalone-service/blob/master/x86/init/kodi-gbm.service
 _nginx_sources="system/nginx.service" # Based on arch's service: https://gitlab.archlinux.org/archlinux/packaging/packages/nginx/-/blob/main/nginx.service
 _openssh_server_pam_sources="
@@ -52,12 +44,10 @@ _openssh_server_pam_sources="
 	system/sshdgenkeys.service
 	sysusers.d/sshd.conf
 "
-_q6voiced_sources="system/q6voiced.service"
-_rtkit_sources="system/rtkit-daemon.service sysusers.d/rtkit.conf"
+_q6voiced_sources="system/q6voiced.service" # WIP: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/7532
 _tinydm_sources="system/tinydm.service system-generators/tinydm-user-override"  # see issue tinydm#11
-_tqftpserv_sources="system/tqftpserv.service"
+_tqftpserv_sources="system/tqftpserv.service" # WIP: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/7431
 _transmission_daemon_sources="system/transmission-daemon.service"  # Based on https://github.com/transmission/transmission/blob/main/daemon/transmission-daemon.service.in
-_udiskie_sources="user/udiskie.service"  # created, no unit file upstream
 
 flatpath() {
 	local i
@@ -67,21 +57,16 @@ flatpath() {
 }
 
 source="$(flatpath \
-	$_colord_sources \
 	$_dnsmasq_sources \
 	$_gnome_clocks_sources \
 	$_httpd_sources \
-	$_irqbalance_sources \
-	$_iwd_sources \
 	$_kodi_sources \
 	$_nginx_sources \
 	$_openssh_server_pam_sources \
 	$_q6voiced_sources \
-	$_rtkit_sources \
 	$_tinydm_sources \
 	$_tqftpserv_sources \
 	$_transmission_daemon_sources \
-	$_udiskie_sources \
 )"
 
 _service() {
@@ -123,12 +108,9 @@ package() {
 }
 
 sha512sums="
-c10378bac1d64c0a2c767aab439c7d71bb7706b4fdc981add3ab4d5967257c0177f07448f884aeb1ee4571c59746c3584befa95858940aed198e29fa83cf5d17  system-colord.service
 97887423ad5b8344786912899553cd2f2033da6a79104a9ad59ebda813505ee05bef19c9e6f46af5ecee62dd0d436773a9a0d10bad759cd92aad3f53b95e62a2  sysusers.d-dnsmasq.conf
 bc7987a001d2076788d904f1ea6d3e97a2ab905ee55302ffb90402133c2b9fb760d7ad94e06971d811b9d905048e164cb78355f8cd087219b5b8ff6dab2fbd9c  user-gnome-clocks.service
 666ba094bff47aa67b4e4431929516af355f90ffc1fd60429dcd20b337c3c17d2d62a71c289496217282f0819bc8deba8db5cc5b2915b692defa14d19532a8d1  system-httpd.service
-0ed5e05b73cf4952c81deeffc7f662f0ef6e684c24fb8177f625f2d086582fad2df1376a2479155b4a6aa6d584f1cccfe8c143f7830eccaf5e693cae5aefed2d  system-irqbalance.service
-df3388cb7b9d035e54b34d8f8a6594be89c3015f979fe3bdc199fb7db1ab0bef821d6b306eecdf978eb227454d5e50aab29ac02d9722b1b075ec0ce4705e3518  system-iwd.service
 e7c33c889afb822ae20ebd09f3b9f8d130d1f89324006ab3a140fbf46ef7e774634d2ac13ac328c588266823e5eb52c7e0d6d6459f1f64052f9cea5a5fe9f54a  system-kodi.service
 9cba2f9fc043d8cfb09ce7bcc6bef13194f6708bd0b82b2a360304a66a344d38b7f2641bdbeb0ce85ef9390e0f2ea34feef9d7d2c066ca8e0bd8d1f6108ce1e0  system-nginx.service
 fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf611067add80c2ccb289a381fc5ff6a5f654ea49c81f02fe8  system-sshd.service
@@ -136,11 +118,8 @@ fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf
 c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731cd280cbb3525b4c60311817609381e2308d9f2dfb7c0d7072  system-sshdgenkeys.service
 4a6d716a907a730675505bfc4ac38598f9c4e7d962fa9cdeea51dbbaa6afec80d1b82b98627c37c164dc5cdcc7f68118104e3adb73d985f32a24f1941766c5af  sysusers.d-sshd.conf
 169b0765a860303ca87ebe4e33bd8c7235ccf75d8061b13d7e7a27729a8555afb68e9e3b1be21636c725c6011b4f17123031ffa48f703875ba95f38eaca62afe  system-q6voiced.service
-1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
-97eb5b1d8fa2356ec32a889b0c8c3bfd53eda3450e2316ecbfb01bc05789f7fb6fad7500190f85388ae097d434e7fcd228f5b900ca6167b2c3afb04f52727422  sysusers.d-rtkit.conf
 23f854fa2d0e0cb4de54db8605e549bb32061470ea7fa8ac16d474149be635e2b20a815c4ea8088e583693d7f515651ad2872b45f3b38a762f686b977d4fc49d  system-tinydm.service
 7a11c25c767de73a5c9fbf6d35c36da8200a5aa464c1a59880e443d60ea3ba3bb08ff3408ff2a087373bfe23b6ddcb6249aacd173c36d0a857dda5267954b47c  system-generators-tinydm-user-override
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
 6b8346e94a078db1a81a77f7d3ea8cbd83e0f4f435806c3b36c3c16d06fa25d2b7774615acc82d1fb5e066fe5bc24c088038e2154f46812c2354d002871037ae  system-transmission-daemon.service
-4c43a308e9e653914e534d92fc8caaf8c60cd21ae57bdbbf2fa591c1bd6a41e502268b6e0ff17b19cbe301fc7cfa1ad43070f13b372376fa3ddee9d11bf76f5a  user-udiskie.service
 "
