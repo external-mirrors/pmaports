@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdsoap-ws-discovery-client
-pkgver=99999_git20250819
+pkgver=99999_git20251101
 pkgrel=0
-_commit="83a46ce3f8afaaef108dd73e122390382c872edf"
+_commit="9944c6061852438d50411fdc6be4dffbe6bc93f3"
 pkgdesc="Library for finding WS-Discovery devices in the network using Qt and KDSoap"
 arch="all"
 url="https://invent.kde.org/libraries/kdsoap-ws-discovery-client"
@@ -22,7 +22,7 @@ checkdepends="xwayland-run"
 maintainer="team/kde <bribbers@disroot.org>"
 subpackages="$pkgname-dev $pkgname-doc"
 _repo_url="https://invent.kde.org/libraries/kdsoap-ws-discovery-client.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-08-29/kdsoap-ws-discovery-client-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/kdsoap-ws-discovery-client-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kdsoap-ws-discovery-client-$_commit"
@@ -44,5 +44,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-138e65c19c39e34037dc3dd445fdcd1a6fe3191f14f735a430ca2305b7dcf21fcfe367516557458556da0cf39e0e10e3029af627e384378a85d3fa2e4281ccd7  kdsoap-ws-discovery-client-83a46ce3f8afaaef108dd73e122390382c872edf.tar.xz
+e27eeb39bf1fa8f997ae6054c4e37b5126860e7521a6f18aff2367b1e51666484484945c8a334ec23a42a078d28f88c5c8f52987d65fc7485687c454f798f2d3  kdsoap-ws-discovery-client-9944c6061852438d50411fdc6be4dffbe6bc93f3.tar.xz
 "

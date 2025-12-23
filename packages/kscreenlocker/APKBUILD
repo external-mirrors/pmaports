@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kscreenlocker
-pkgver=99999_git20251130
+pkgver=99999_git20251212
 pkgrel=0
-_commit="f20729bf1e05f26ca2fd1f66cd08542905e26fb3"
+_commit="5c2e6e1e877c1a0ecd915d4b91773cf9c56734e6"
 pkgdesc="Library and components for secure lock screen architecture"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -45,7 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kscreenlocker.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-01/kscreenlocker-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/kscreenlocker-$_commit.tar.xz
 	kde.pam
 	kde-fingerprint.pam
 	kde-smartcard.pam
@@ -76,7 +76,7 @@ package() {
 }
 
 sha512sums="
-7f42e2ebb4270bc4fdb23debd8f976a0c5c37097b2fa4c51c9a1561f0b897925022ed0a0e4daafdfee694a8c76a22fab0de710e7f42aad6077374da7c6fde201  kscreenlocker-f20729bf1e05f26ca2fd1f66cd08542905e26fb3.tar.xz
+ab78cd49766f911f996b3a785eb56492678e344b09b9583d60b19aa1fc96fde3fbec9bd975072e01e46267ae8fb32fa272ec1aebd208596bae7b1e63b88a7e8d  kscreenlocker-5c2e6e1e877c1a0ecd915d4b91773cf9c56734e6.tar.xz
 cdbc45fb74a3c43fb2302fe09bf2f9f644ca93693e0110cf748c403762236aaeea8284a8d21fc495014c69b6d5fe4789aaff7687ce9f03dda270490fa5042e2b  kde.pam
 fe2f244b73b5cccf4b7125b9e3cac0a35566840e4ba2f69937fd8053aa56af71ee43dcbfa9c0f79de9ebe31f656e98a5d38955f77560be5c3535b08215ad8789  kde-fingerprint.pam
 2ae866d25224ba345ea9d5ddb2fce668de5c51d1cfbb4d7a048c50107ccd6cffc3231a46855599c0ba3d62ff002a26e45b69d9029f88f4ab42661465a5e526c5  kde-smartcard.pam

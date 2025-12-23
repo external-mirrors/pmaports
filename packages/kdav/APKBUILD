@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdav
-pkgver=99999_git20251205
+pkgver=99999_git20251216
 pkgrel=0
-_commit="015ec4b003c34d9cf1f8f6a2ac0263d0e1bce0c4"
+_commit="37d92aa5ccaa4226d898dc160d626f0d63b2aece"
 pkgdesc="A DAV protocol implementation with KJobs"
 url="https://community.kde.org/Frameworks"
 # armhf blocked by qt6-qtdeclarative
@@ -26,7 +26,7 @@ makedepends="$depends_dev
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/frameworks/kdav.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-08/kdav-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/kdav-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kdav-$_commit"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-296f9f55800a1027b334a8a64782186e9826ac4cf8ba0995a21da4e94d0beac4327cc73ed1acf14d56016f008ea768e3eaee828d8e9061ea54679a1732ab3a0e  kdav-015ec4b003c34d9cf1f8f6a2ac0263d0e1bce0c4.tar.xz
+e8f2c66bc23ee690031fbfec7bcc7543dfd6aeb4725a34dce5f1b215063643bcea6b1da5fdd2cd3a4bf1624fc55a68dbb98e602c54d235031c0444a902b84f3b  kdav-37d92aa5ccaa4226d898dc160d626f0d63b2aece.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpmcore
-pkgver=99999_git20251210
+pkgver=99999_git20251211
 pkgrel=0
-_commit="5fe2129fca688c8d538d88ada56555133cfcea52"
+_commit="712502cb8a01e92e391799eee63dd3d95ca2ae8f"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/system/org.kde.partitionmanager"
@@ -28,7 +28,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/system/kpmcore.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-10/kpmcore-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/kpmcore-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 options="!check" # Requires running dbus server
 
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-ea9da4251ee38961b5f90641a5a1242409814b33efb26d75d48a31819c1a1e2488ea17f1da8b7882b2aa6d9f473c4d4430433f1f873238bc0b3867e2bd0fbba0  kpmcore-5fe2129fca688c8d538d88ada56555133cfcea52.tar.xz
+1271d6844655641808874b337aa18c904af866a479478c7513f1bdb01e5eca115729bb6a41fbb09d236d995cd31e4511f6e635ceb25b10ca553c93324949d9df  kpmcore-712502cb8a01e92e391799eee63dd3d95ca2ae8f.tar.xz
 "
