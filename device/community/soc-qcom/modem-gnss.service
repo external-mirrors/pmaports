@@ -1,5 +1,11 @@
 [Unit]
 Description=Qualcomm GNSS Modem Setup
+# These commands need to run after qrtr is up, MM seems to be late enough that
+# this is the case.
+# Ideally there would be a /dev or sysfs path we could add
+# a ConditionPathExists= on...
+After=ModemManager.service
+Requires=ModemManager.service
 
 [Service]
 ExecStart=qmicli -d qrtr://0 --loc-set-engine-lock=mt
