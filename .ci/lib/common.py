@@ -76,6 +76,7 @@ def get_upstream_branch():
     return channels_cfg[channel]["branch_pmaports"]
 
 
+@cache
 def get_base_commit() -> str:
     """Get the base commit that can be compared with HEAD to get all commits in the
     given branch/merge request."""
