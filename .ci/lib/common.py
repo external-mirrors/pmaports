@@ -7,18 +7,12 @@
 import configparser
 import os
 import subprocess
+from functools import cache
 
 
-cache = {}
-
-
+@cache
 def get_pmaports_dir():
-    global cache
-    if "pmaports_dir" in cache:
-        return cache["pmaports_dir"]
-    ret = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/../.."))
-    cache["pmaports_dir"] = ret
-    return ret
+    return os.path.realpath(os.path.join(os.path.dirname(__file__) + "/../.."))
 
 
 def run_git(parameters, check=True, stderr=None):
@@ -51,6 +45,7 @@ def run_pmbootstrap(parameters):
     subprocess.run(cmd, universal_newlines=True, check=True)
 
 
+@cache
 def get_upstream_branch():
     """ Use pmaports.cfg from current branch (e.g. "v20.05_fix-ci") and
         channels.cfg from master to retrieve the upstream branch.
@@ -60,10 +55,6 @@ def get_upstream_branch():
     # Prefer gitlab CI target branch name if it's set (i.e. running in gitlab CI)
     if target_branch := os.environ.get("CI_MERGE_REQUEST_TARGET_BRANCH_NAME"):
         return target_branch
-
-    global cache
-    if "upstream_branch" in cache:
-        return cache["upstream_branch"]
 
     # Get channel (e.g. "stable") from pmaports.cfg
     # https://postmarketos.org/pmaports.cfg
@@ -82,9 +73,7 @@ def get_upstream_branch():
         " This appears to be an old branch, consider recreating your change" \
         " on top of master."
 
-    ret = channels_cfg[channel]["branch_pmaports"]
-    cache["upstream_branch"] = ret
-    return ret
+    return channels_cfg[channel]["branch_pmaports"]
 
 
 def get_base_commit() -> str:
