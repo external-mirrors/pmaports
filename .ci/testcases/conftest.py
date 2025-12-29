@@ -27,6 +27,7 @@ def args(request):
     args.offline = False
     args.action = "init"
     args.cross = False
+    args.ccache = False
     args.log = None
 
     init_args(args)
