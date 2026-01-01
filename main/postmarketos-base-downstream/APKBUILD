@@ -1,14 +1,16 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=postmarketos-base-downstream
 pkgver=2
-pkgrel=2
+pkgrel=1
 pkgdesc="Base package for devices with downstream (vendor) kernels"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-3.0-or-later"
+install="$pkgname-msm-modem-openrc.post-install"
 subpackages="
 	$pkgname-disable-udev-v4l:disable_udev_v4l
 	$pkgname-lightdm
+	$pkgname-msm-modem-openrc:msm_modem_openrc
 "
 source="10-logind-check-graphical.conf"
 
@@ -30,6 +32,12 @@ lightdm() {
 
 	install -Dm644 "$srcdir"/10-logind-check-graphical.conf \
 		-t "$subpkgdir"/usr/share/lightdm/lightdm.conf.d
+}
+
+msm_modem_openrc() {
+	default_openrc
+	install_if="$pkgname=$pkgver-r$pkgrel openrc msm-modem"
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
