@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdesu
-pkgver=99999_git20251219
+pkgver=99999_git20251222
 pkgrel=0
-_commit="f2f267c4114656d2eb19a394441efab95668592c"
+_commit="00431c49267c81c560c7183d6ac42a712ef6bdb0"
 pkgdesc="Integration with su for elevated privileges"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kdesu.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/kdesu-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-23/kdesu-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 # Since the goal of this library is to elevate privileges, suid being needed should be obvious
 options="suid"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-37f60033ccacb48c8ff47b4b3fd731cab19432a545813ccf942e56f28806a92f36968d7f6d439ebe0b60c4d5f568c55489604c5b1964a9b3aac14e0dfce9fe68  kdesu-f2f267c4114656d2eb19a394441efab95668592c.tar.xz
+8fc9d333c6299b088c18db0fa90fc3a11388ad576485f58192585f78814a7a0f9434292c84f7cc19969294ba30e863b905e15eef8b7ff14836a43d5d00c392cd  kdesu-00431c49267c81c560c7183d6ac42a712ef6bdb0.tar.xz
 "
