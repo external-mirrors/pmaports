@@ -1,0 +1,33 @@
+From 26c9381a7fc01c00375a9f93981381d41a18ef66 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Fri, 2 Jan 2026 17:18:27 -0800
+Subject: [PATCH 1/2] fixup! data: add libssc udev rules
+
+---
+ data/80-iio-sensor-proxy-libssc.rules | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/data/80-iio-sensor-proxy-libssc.rules b/data/80-iio-sensor-proxy-libssc.rules
+index c4fad16..7f9d7da 100644
+--- a/data/80-iio-sensor-proxy-libssc.rules
++++ b/data/80-iio-sensor-proxy-libssc.rules
+@@ -3,9 +3,12 @@
+ 
+ ACTION=="remove", GOTO="iio_sensor_proxy_libssc_end"
+ 
+-# Set the sensor type for all the types we recognise for SDSP/ADSP.
+-# Some devices expose the sensors via a separate SDSP while others re-use ADSP.
+-# These DSPs expose itself as /dev/fastrpc-* in the misc subsystem.
+-SUBSYSTEM=="misc", KERNEL=="fastrpc-*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-light ssc-proximity ssc-compass"
++SUBSYSTEM=="misc", KERNEL=="fastrpc-sdsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-light ssc-proximity ssc-compass"
++
++# ADSP only if no SLPI/SDSP
++SUBSYSTEM=="misc", KERNEL=="fastrpc-adsp*", \
++  PROGRAM="/bin/sh -c 'grep -aq slpi-pas /sys/firmware/devicetree/base/soc@*/remoteproc@*/compatible 2>/dev/null; echo $?'", \
++  RESULT=="1", \
++  ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-light ssc-proximity ssc-compass"
+ 
+ LABEL="iio_sensor_proxy_libssc_end"
+-- 
+2.52.0
+
