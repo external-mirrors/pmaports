@@ -1,0 +1,55 @@
+# Reference: https://postmarketos.org/uipkg
+# Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
+pkgname=postmarketos-ui-catacomb
+pkgver=1
+pkgrel=0
+pkgdesc="(Wayland) A lightweight Wayland Mobile desktop"
+url="https://catacombing.org"
+arch="noarch"
+license="GPL-3.0-or-later"
+source="
+	"
+depends="
+	catacomb
+	dnsmasq
+	elogind
+	epitaph
+	tinydm
+	mesa-egl
+	polkit-elogind
+	postmarketos-base-ui
+	postmarketos-base-ui-audio
+	postmarketos-base-ui-networkmanager
+	postmarketos-artwork-wallpapers
+	"
+_pmb_recommends="
+	squeekboard
+	tabula
+	tzompantli
+"
+subpackages="$pkgname-openrc"
+options="!check pmb:drm"
+
+build() {
+	return 0
+}
+
+package() {
+	mkdir -p "$pkgdir"
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
+	depends="
+		elogind-openrc
+		networkmanager-openrc
+		tinydm-openrc
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="
+cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e  -
+"

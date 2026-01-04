@@ -1,0 +1,30 @@
+# Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
+pkgname=tabula
+pkgver=1.0.2
+pkgrel=0
+pkgdesc="A Wayland mobile wallpaper tool"
+url="https://catacombing.org/"
+arch="all"
+license="GPL-3.0"
+options="net" # cargo deps download
+makedepends="rust cargo"
+_repo="catacombing/$pkgname"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/$_repo/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+prepare() {
+	default_prepare
+	cargo fetch --target="$CTARGET" --locked
+}
+
+build() {
+	cargo build --release --locked
+}
+
+package() {
+	mkdir -p $pkgdir/usr/bin/
+	install -Dm755 target/release/$pkgname -t $pkgdir/usr/bin/
+}
+sha512sums="
+aa78052ab9a0736fced74ffc71376668add60409a63e28a5ca688b034f59ccc70063b2ee2a27aa9cd336125a0578cd8d75a98ff9b877852e6f18c616b7e24093  tabula-v1.0.2.tar.gz
+"
