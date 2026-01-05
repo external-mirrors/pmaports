@@ -2,14 +2,20 @@
 pkgname=tzompantli
 pkgver=1.2.0
 pkgrel=0
-pkgdesc="A Wayland mobile panel"
+pkgdesc="Wayland mobile app launcher"
 url="https://catacombing.org/"
 arch="all"
 license="GPL-3.0"
 options="net" # cargo deps download
-makedepends="rust cargo fontconfig-dev curl libxkbcommon-dev"
-_repo="catacombing/$pkgname"
-source="$pkgname-v$pkgver.tar.gz::https://github.com/$_repo/archive/refs/tags/v$pkgver.tar.gz"
+depends="libxkbcommon"
+makedepends="
+	cargo
+	curl
+	fontconfig-dev
+	libxkbcommon-dev
+	rust
+"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
@@ -22,8 +28,8 @@ build() {
 }
 
 package() {
-	mkdir -p $pkgdir/usr/bin/
-	install -Dm755 target/release/$pkgname -t $pkgdir/usr/bin/
+	mkdir -p "$pkgdir"/usr/bin/
+	install -Dm755 target/release/$pkgname -t "$pkgdir"/usr/bin/
 }
 sha512sums="
 ec0702746b503429744f6f47117c78aa87c02982dfea6a17af6b1726bb2c0826b8054e6abee08561fa650a2aec1b9b41b5430143e91ae20b4b52044c3743f81a  tzompantli-v1.2.0.tar.gz

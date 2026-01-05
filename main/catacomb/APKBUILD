@@ -2,17 +2,27 @@
 pkgname=catacomb
 pkgver=1.0.6
 pkgrel=0
-pkgdesc="A Wayland Mobile Compositor"
+pkgdesc="Wayland Mobile Compositor optimized to run on low-end hardware with limited battery life"
 url="https://catacombing.org/"
 arch="all"
 license="GPL-3.0"
-depends="libxkbcommon libinput seatd"
-makedepends="rust cargo libxkbcommon-dev libinput-dev libseat-dev wayland-dev mesa-dev"
-_repo="catacombing/$pkgname"
-_commit="28f9ae23184e2f636a1a04346b402592c728f597"
-source="$pkgname-v$pkgver.tar.gz::https://github.com/$_repo/archive/$_commit.tar.gz
-	break-auto-rotation-support.patch"
-builddir="$srcdir/$pkgname-$_commit"
+depends="
+	libxkbcommon
+	libinput
+	seatd
+"
+makedepends="
+	rust
+	cargo
+	libxkbcommon-dev
+	libinput-dev
+	libseat-dev
+	wayland-dev
+	mesa-dev
+"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+subpackages="$pkgname-session"
 
 prepare() {
 	default_prepare
@@ -24,13 +34,16 @@ build() {
 }
 
 package() {
-	mkdir -p $pkgdir/usr/bin/
-	install -Dm755 target/release/$pkgname -t $pkgdir/usr/bin/
-	install -Dm755 session/$pkgname-session -t $pkgdir/usr/bin/
-	install -Dm644 session/$pkgname.desktop -t $pkgdir/usr/share/wayland-sessions/
+	install -Dm755 target/release/$pkgname -t "$pkgdir"/usr/bin/
+	install -Dm755 initrc "$pkgdir"/etc/catacomb/initrc
+}
 
-	mkdir -p $pkgdir/etc/catacomb/
-	install -Dm755 initrc $pkgdir/etc/catacomb/initrc
+session() {
+	pkgdesc="$pkgdesc [Session]"
+	install_if="$pkgname=$pkgver-r$pkgrel"
+
+	install -Dm755 session/$pkgname-session -t "$subpkgdir"/usr/bin/
+	install -Dm644 session/$pkgname.desktop -t "$subpkgdir"/usr/share/wayland-sessions/
 }
 
 sha512sums="
