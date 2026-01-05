@@ -9,7 +9,8 @@ license="GPL-3.0"
 options="net" # cargo deps download
 makedepends="rust cargo"
 _repo="catacombing/$pkgname"
-source="$pkgname-v$pkgver.tar.gz::https://github.com/$_repo/archive/refs/tags/v$pkgver.tar.gz"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/$_repo/archive/refs/tags/v$pkgver.tar.gz
+	fix-u64.patch"
 builddir="$srcdir/$pkgname-$pkgver"
 
 prepare() {
@@ -27,4 +28,5 @@ package() {
 }
 sha512sums="
 c207e9115d890614d67f1d0dade86c5d57bfcbfb7280f2e4529fef397d641ac7610b1f734ef2012f4c5fb38775b20a81a68fbc44d266cfd9a2567cf5c783d840  tremor-v1.0.0.tar.gz
+868feffe7b6799708f0456be08952eec81d66da7b24e1f74b3ea920d75f3355ee82c5eb7ba9e0e59e9f8a6f1e13d9180b16e5a452c42f431a62147a434fed1f3  fix-u64.patch
 "
