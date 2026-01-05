@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-thunderbolt
-pkgver=99999_git20251221
+pkgver=99999_git20251231
 pkgrel=0
-_commit="7f726963fe40bf619c69342da9a4a47c112656e7"
+_commit="571b4032ef18fb096204c16db35ece83b80d560d"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/plasma-desktop/"
@@ -32,7 +32,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-thunderbolt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-21/plasma-thunderbolt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/plasma-thunderbolt-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # Requires running dbus server
 
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-f5a731fb7e15e479ef44b8dd86daac2d74374899863802db98c268d0492bf4ca429f712c3469a79c8d3a41f464a6510281203b3e8fd5944c30b8c821030b4001  plasma-thunderbolt-7f726963fe40bf619c69342da9a4a47c112656e7.tar.xz
+e06d5f963c04b2c6551ec34287db6b9e70258c8c03c93d39184e4743ae443ffed99439de85ee3a5de2dfb970856bed97d3a32a544cffd7035a1c4f5bc66ce4ae  plasma-thunderbolt-571b4032ef18fb096204c16db35ece83b80d560d.tar.xz
 "

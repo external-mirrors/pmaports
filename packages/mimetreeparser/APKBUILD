@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mimetreeparser
-pkgver=99999_git20251223
+pkgver=99999_git20260101
 pkgrel=0
-_commit="1e98e228a4a8c1ff6d8338d41671978f932382dd"
+_commit="f8783efc685897280a9b9ddb908db4cdaf316d14"
 pkgdesc="Parser for MIME trees"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -30,20 +30,24 @@ makedepends="
 	qt6-qttools-dev
 	samurai
 	"
+subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/mimetreeparser.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-23/mimetreeparser-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/mimetreeparser-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/mimetreeparser-$_commit"
 
 build() {
+	export KDE_DOCS=/usr/share/kde/documentation
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -52,7 +56,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-e73c87900a08154b1fecae9974d41cfc7c8dd5a9957c968b89c9ffd78f99b860ff63a3c0ae315f8c7c887f580f60e1fcd5467f87354ab916d0e762c03e3e9981  mimetreeparser-1e98e228a4a8c1ff6d8338d41671978f932382dd.tar.xz
+25de11cbd5f0d595ae11c5f2c77911f470fcef833da9e5f49b2ca0b5850b1b21d63890fc288e46a109865d94c4dfab18d7dcf208cbc0e0c317a3f0fde06b7bcf  mimetreeparser-f8783efc685897280a9b9ddb908db4cdaf316d14.tar.xz
 "

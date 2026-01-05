@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=eventviews
-pkgver=99999_git20251223
+pkgver=99999_git20260101
 pkgrel=0
-_commit="8b8751cc38d850c7697fad03c158cdc8e29e3e30"
+_commit="8a11ef06402040796f0dbf9045d7ded3bfe72cb8"
 pkgdesc="Library for creating events"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -34,22 +34,27 @@ makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	graphviz
+	kde-qdoc-common
 	samurai
 	"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/eventviews.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-23/eventviews-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/eventviews-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/eventviews-$_commit"
 
 build() {
+	export KDE_DOCS=/usr/share/kde/documentation
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
+
+	#cmake --build build --target prepare_docs
+	#cmake --build build --target generate_docs
+	#cmake --build build --target generate_qch
 }
 
 check() {
@@ -58,7 +63,10 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+
+	#DESTDIR="$pkgdir" cmake --build build --target install_html_docs
+	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-7f78c2df160e6098ed6e535fe0f01ccb1a92adfa11b8f6618427661e1fd615ebc5e038807f5f72ac048b555eb299d8f20757ef24ac75a2a0d93bd75808478d68  eventviews-8b8751cc38d850c7697fad03c158cdc8e29e3e30.tar.xz
+e234bc40d3c95a00deef507ccb3b7ef5bf295a12060d9d48b6fadf3ebc36e688f17bc24f12597f494f94f0e7f7a12e18149703c1a65e7587726394e986eee28b  eventviews-8a11ef06402040796f0dbf9045d7ded3bfe72cb8.tar.xz
 "

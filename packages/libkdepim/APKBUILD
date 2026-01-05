@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkdepim
-pkgver=99999_git20251217
+pkgver=99999_git20260101
 pkgrel=0
-_commit="445dad3243ca2600760ccba06e064aabd70e561b"
+_commit="664d6d779112a6bc825af3adf3530d3dc6768c18"
 pkgdesc="Lib for common KDEPim apps"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -40,7 +40,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/libkdepim.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/libkdepim-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/libkdepim-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -63,5 +63,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-416cfa49b1ca5ab2bf7365ce02007efa895e65d4103324b6ef826d3cac1d27eb4894f71d4369561f3e259b9e56da4d1ddd8ba84361e14b064f62d7ff65c09bea  libkdepim-445dad3243ca2600760ccba06e064aabd70e561b.tar.xz
+15f649dce01fbf6d025ceef60d2dbbc9fc955dbbac9be2da559be4e3c94f137465d88b8cc9157642bbb7e7509bb53fdb994a0e056bc6af573b64a7c40df5a3cb  libkdepim-664d6d779112a6bc825af3adf3530d3dc6768c18.tar.xz
 "

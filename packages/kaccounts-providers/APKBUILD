@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kaccounts-providers
-pkgver=99999_git20251118
+pkgver=99999_git20251231
 pkgrel=0
-_commit="8b16da35c55847f59e8524c11f813b01dfdf3870"
+_commit="072ca4d73d00173f4a10b7f5403b71449dac5a60"
 # armhf blocked by extra-cmake-modules
 # s390x, ppc64le and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -28,7 +28,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/network/kaccounts-providers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-11-18/kaccounts-providers-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/kaccounts-providers-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/kaccounts-providers-$_commit"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-c8c028c5b125857f20cbcc790b9508a2ce15267895201fd08a5a1898f7dacf6894550c75f044405ae5750aba2d869c08b4d8d92d8c290c87234a684d265b44c5  kaccounts-providers-8b16da35c55847f59e8524c11f813b01dfdf3870.tar.xz
+01f9c3b38ef1eabba17b47d9d9547c4eb473cbd4b64bdbcfe46ebeb7a8bfe7d7403631582329859d2c426d1c0ffdd5cb3a78515d7f4c62ce3d511381a2c7e066  kaccounts-providers-072ca4d73d00173f4a10b7f5403b71449dac5a60.tar.xz
 "
