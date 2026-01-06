@@ -1,11 +1,12 @@
 maintainer="Arnav Singh <me@arnavion.dev>"
 pkgname=shutdown-clear-rtc-wakealarm
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Pre-shutdown service to clear RTC wake alarm"
 url="https://wiki.postmarketos.org/wiki/Shutdown-clear-rtc-wakealarm"
 arch="noarch"
 license="MIT"
+install="$pkgname-openrc.post-install"
 subpackages="$pkgname-openrc"
 source="
 	clear-rtc-wakealarm.shutdown.initd
@@ -13,11 +14,6 @@ source="
 
 package() {
 	install -Dm755 "$srcdir"/clear-rtc-wakealarm.shutdown.initd "$pkgdir"/etc/init.d/clear-rtc-wakealarm
-}
-
-openrc() {
-	install="$subpkgname.post-install"
-	default_openrc
 }
 
 sha512sums="
