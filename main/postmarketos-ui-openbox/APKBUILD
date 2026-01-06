@@ -2,11 +2,16 @@
 maintainer="hexaheximal <hexaheximal@proton.me>"
 pkgname=postmarketos-ui-openbox
 pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc="(X11) A highly configurable and lightweight X11 window manager (keyboard required)"
 url="https://openbox.org/"
 arch="noarch"
 license="GPL-3.0-or-later"
+depends_openrc="
+	tinydm-openrc
+	elogind-openrc
+	networkmanager-openrc
+"
 depends="
 	dmenu-virtual
 	dnsmasq
@@ -22,6 +27,7 @@ depends="
 	xterm
 	xorg-server
 	"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 options="!check"
 
@@ -30,14 +36,6 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		elogind-openrc
-		openrc
-		networkmanager-openrc
-		tinydm-openrc
-	"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
