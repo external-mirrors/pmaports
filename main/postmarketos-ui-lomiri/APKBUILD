@@ -1,7 +1,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=postmarketos-ui-lomiri
 pkgver=4
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) The convergent desktop environment (Experimental)"
 url="https://lomiri.com/"
 # ppc64le: Missing lomiri-weather-app
@@ -55,6 +55,7 @@ _pmb_recommends="
 	yaru-icon-theme
 	yaru-theme
 "
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="
 	$pkgname-openrc
 "
@@ -87,18 +88,8 @@ package() {
 	# Disable setup wizard
 	mkdir -p "$pkgdir"/etc/skel/.config/lomiri
 	touch "$pkgdir"/etc/skel/.config/lomiri/wizard-has-run
-}
 
-openrc() {
-	install_if="$pkgname openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		openrc
-		postmarketos-base-ui-bluez-openrc
-		postmarketos-base-ui-elogind
-	"
-
-	# superd is only needed on OpenRC
+	# superd
 	mkdir -p "$subpkgdir"/etc/superd/services/
 	for file in "$srcdir"/*.service; do
 		filename=$(basename $file)
@@ -109,6 +100,17 @@ openrc() {
 		ln -s /usr/share/superd/services/"$filename" \
 			"$subpkgdir"/etc/superd/services/"$filename"
 	done
+}
+
+openrc() {
+	default_openrc
+	depends="
+		postmarketos-base-ui-bluez-openrc
+		postmarketos-base-ui-elogind
+	"
+
+	# superd is only needed on OpenRC
+	amove etc/superd/services usr/share/superd
 }
 
 sha512sums="
