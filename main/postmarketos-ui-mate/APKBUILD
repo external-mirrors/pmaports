@@ -2,11 +2,17 @@
 maintainer="Jakko <jahau@rocketmail.com>"
 pkgname=postmarketos-ui-mate
 pkgver=9
-pkgrel=2
+pkgrel=3
 pkgdesc="(X11) MATE Desktop Environment, fork of GNOME2 (stylus recommended)"
 url="http://mate-desktop.org/"
 arch="noarch"
 license="GPL-3.0-or-later"
+depends_openrc="
+	bluez-openrc
+	elogind-openrc
+	lightdm-openrc
+	networkmanager-openrc
+	"
 depends="
 	bluez
 	dbus-x11
@@ -35,6 +41,7 @@ _pmb_recommends="
 	mate-tweak
 	network-manager-applet
 	"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="
 	10_caja-single-click.gschema.override
@@ -87,15 +94,7 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		bluez-openrc
-		elogind-openrc
-		lightdm-openrc
-		networkmanager-openrc
-		"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
