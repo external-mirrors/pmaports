@@ -32,11 +32,8 @@ package() {
 	install -Dm644 "$srcdir"/pmos-logo-text-epaper.svg -t "$pkgdir"/usr/share/pbsplash/
 	install -Dm644 "$srcdir"/postmarketos-bootsplash.files \
 		"$pkgdir"/usr/share/mkinitfs/files/30-postmarketos-bootsplash.files
-}
 
-systemd() {
-	install_if="$pkgname=$pkgver-r$pkgrel systemd"
-
+	# systemd
 	for _service in display-manager emergency getty@ rescue shutdown-splash; do
 		install -Dm644 "$srcdir/kill-pbsplash-override.conf" -t \
 			"$subpkgdir"/usr/lib/systemd/system/"$_service".service.d/
@@ -49,7 +46,6 @@ systemd() {
 		ln -s ../shutdown-splash.service \
 			"$subpkgdir"/usr/lib/systemd/system/"$target".target.wants/
 	done
-
 }
 
 sha512sums="
