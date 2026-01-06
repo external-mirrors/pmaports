@@ -1,19 +1,20 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=msm-fb-refresher
 pkgver=0.2
-pkgrel=6
+pkgrel=7
 pkgdesc="Display refresher for Qualcomm devices"
 arch="all"
 url="https://github.com/AsteroidOS/msm-fb-refresher"
 license="GPL-3.0-or-later"
 makedepends="linux-headers"
+install="$pkgname-openrc.post-install"
+subpackages="$pkgname-openrc"
 source="
 	$pkgname-$pkgver.tar.gz::https://github.com/AsteroidOS/msm-fb-refresher/archive/v$pkgver.tar.gz
 	msm-fb-refresher.init
 	00-msm-fb-refresher.sh
 	00-msm-fb-refresher.files
 "
-subpackages="$pkgname-openrc"
 
 build() {
 	gcc refresher.c -o refresher.o -c
@@ -33,11 +34,6 @@ package() {
 		"$initfsdir"/hooks/00-msm-fb-refresher.sh
 	install -Dm755 "$srcdir"/00-msm-fb-refresher.files \
 		"$initfsdir/files/00-msm-fb-refresher.files"
-}
-
-openrc() {
-	install="$subpkgname.post-install"
-	default_openrc
 }
 
 sha512sums="
