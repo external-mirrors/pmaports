@@ -30,7 +30,13 @@ _pmb_recommends="
 	doas
 	doas-sudo-shim
 "
-install="$pkgname.post-install $pkgname.post-upgrade"
+install="
+	$pkgname-nftables-openrc.post-install
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	"
 triggers="$pkgname.trigger=/usr/share/deviceinfo"
 subpackages="
 	$pkgname-core
@@ -187,9 +193,7 @@ nftables() {
 
 nftables_openrc() {
 	install_if="$pkgname-openrc=$pkgver-r$pkgrel nftables"
-	depends="nftables-openrc openrc"
-	install="$subpkgname.post-install"
-
+	depends="nftables-openrc"
 	mkdir -p "$subpkgdir"
 }
 
@@ -204,7 +208,6 @@ ssh() {
 openrc() {
 	provides="$pkgname-init"
 	provider_priority=10
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	replaces="
 		busybox-openrc
 		eudev
