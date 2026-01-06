@@ -3,7 +3,7 @@
 pkgname=gnome-settings-daemon
 pkgver=99948.1
 _pkgver=48.1
-pkgrel=3
+pkgrel=4
 pkgdesc="GNOME settings daemon"
 url="https://gitlab.gnome.org/GNOME/gnome-settings-daemon"
 # armhf: pmb#2618
@@ -55,6 +55,7 @@ subpackages="
 	$pkgname-systemd
 	"
 source="https://download.gnome.org/sources/gnome-settings-daemon/${_pkgver%.*}/gnome-settings-daemon-$_pkgver.tar.xz
+	gvc-crash.patch
 	"
 builddir="$srcdir/gnome-settings-daemon-$_pkgver"
 
@@ -76,4 +77,5 @@ package() {
 
 sha512sums="
 b4ce4fe5a2a6b9dcdc3a82f4460488b39adcb56e7345079d9558506146202d234562cfaa522b77d1eb0d468121a5aed5cec42983a78abc2fe0946dd78dc2bc40  gnome-settings-daemon-48.1.tar.xz
+09a55d5deb732ff8422d8e94d94841e0be8562ff51d3b854c94500478465de2235e796d460a71b6dca5025f5bf7d3f305a0f53fcac1c37a541a36e62c0b43222  gvc-crash.patch
 "
