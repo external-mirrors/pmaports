@@ -2,15 +2,19 @@
 maintainer="Achill Gilgenast <achill@achill.org>"
 pkgname=postmarketos-ui-i3wm
 pkgver=2
-pkgrel=2
+pkgrel=3
 pkgdesc="(X11) Tiling WM (keyboard required)"
 url="https://i3wm.org"
-# riscv64 has very unstable builders
-arch="noarch !riscv64"
+arch="noarch"
 license="GPL-3.0-or-later"
 source="
 	i3-exec
 	i3wm-pmos
+	"
+depends_openrc="
+	elogind-openrc
+	networkmanager-openrc
+	tinydm-openrc
 	"
 depends="
 	dmenu-virtual
@@ -29,31 +33,20 @@ depends="
 	st-virtual
 	xorg-server
 	"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 options="!check"
-
-build() {
-	return 0
-}
+replaces="i3wm"
 
 package() {
-	mkdir -p "$pkgdir"
 	install -D -m644 "$srcdir"/i3wm-pmos \
 		"$pkgdir"/usr/share/i3/config.pmos
-	replaces="i3wm"
 	install -Dm644 "$srcdir"/i3-exec \
 		"$pkgdir"/usr/share/xsessions/i3.desktop
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		elogind-openrc
-		networkmanager-openrc
-		tinydm-openrc
-		"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
