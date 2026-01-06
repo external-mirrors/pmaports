@@ -2,7 +2,7 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=postmarketos-ui-plasma-bigscreen
 pkgver=1
-pkgrel=3
+pkgrel=4
 _commit_configs="a8bd93e279c222be6058ef46b065c11e88aa8400"
 pkgdesc="(Wayland) 10-feet variant of Plasma, made for big screen TVs"
 url="https://wiki.postmarketos.org/wiki/Plasma_Bigscreen"
@@ -10,6 +10,11 @@ url="https://wiki.postmarketos.org/wiki/Plasma_Bigscreen"
 # riscv64: plasma-workspace, qt5-qtbase need rebuild against libcui18n in alpine edge
 arch="!armhf !riscv64"
 license="GPL-3.0-or-later"
+depends_openrc="
+	elogind-openrc
+	networkmanager-openrc
+	tinydm-openrc
+	"
 depends="
 	plasma-bigscreen
 	postmarketos-base-ui-plasma
@@ -21,6 +26,7 @@ _pmb_recommends="
 	nymphcast
 	plank-player
 	"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="$pkgname-$_commit_configs.tar.gz::https://invent.kde.org/plasma-bigscreen/bigscreen-image-settings/-/archive/$_commit_configs/bigscreen-image-settings-$_commit_configs.tar.gz
 	qtlogging.ini
@@ -40,15 +46,7 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		elogind-openrc
-		openrc
-		networkmanager-openrc
-		tinydm-openrc
-		"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
