@@ -1,13 +1,13 @@
 maintainer=""
 pkgname=postmarketos-boot-hwtest
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Boot into a TTY running hwtest"
 url="https://gitlab.com/MartijnBraam/hwtest"
 arch="all"
 license="MIT"
 depends="hwtest ofono dbus-x11"
-install="$pkgname.post-install"
+install="$pkgname.post-install $pkgname-openrc.post-install"
 subpackages="$pkgname-openrc"
 source="launch_hwtest.sh"
 options="!check"
@@ -19,10 +19,7 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
-	depends="openrc"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
