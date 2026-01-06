@@ -1,0 +1,83 @@
+diff --git a/src/orientation.rs b/src/orientation.rs
+index 6b8d5e1..da15dae 100644
+--- a/src/orientation.rs
++++ b/src/orientation.rs
+@@ -66,17 +66,25 @@ pub struct SensorAccelerometer {
+ impl SensorAccelerometer {
+     /// Attempt to find the accelerometer device.
+     fn new() -> Option<Self> {
++        println!("Enumerating UDEV devices…");
+         let mut enumerator = Enumerator::new().ok()?;
++        println!("Filtering for initialized devices…");
+         enumerator.match_is_initialized().ok()?;
++        println!("Filtering for iio subsystem…");
+         enumerator.match_subsystem("iio").ok()?;
+ 
++        println!("Scanning for devices…");
+         let mut devices = enumerator.scan_devices().ok()?;
++        println!("Finding device with `in_accel_x_raw` attribute…");
+         let accel = devices.find(|device| device.attribute_value("in_accel_x_raw").is_some())?;
++        println!("  Device: {:?}", accel.devpath());
+ 
+         // Read the mount_matrix values.
++        println!("Reading mount matrix…");
+         let accel_mount_matrix = udev_attribute::<Matrix3x3<f32>>(&accel, "in_mount_matrix")
+             .or_else(|| udev_attribute::<Matrix3x3<f32>>(&accel, "in_accel_mount_matrix"))
+             .or_else(|| udev_attribute::<Matrix3x3<f32>>(&accel, "mount_matrix"))?;
++        println!("  Mount Matrix: {:?}", accel_mount_matrix);
+ 
+         let syspath = accel.syspath().to_path_buf();
+ 
+@@ -88,17 +96,26 @@ impl SensorAccelerometer {
+     /// This code was heavily inspired by iio-sensor-proxy:
+     /// <https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/blob/bba45607486acbe2f69df828692a9b1e8a649019/src/orientation.c#L64>
+     fn orientation(&self) -> Option<Orientation> {
++        println!("Checking device orientation…");
++
+         // Read data from sensor.
+         let device = Device::from_syspath(&self.syspath).ok()?;
++        println!("Device: {:?}", device.devpath());
+ 
++        println!("Reading acceleration values…");
+         let x = udev_attribute::<i32>(&device, "in_accel_x_raw")? as f32;
++        println!("  X: {x}");
+         let y = udev_attribute::<i32>(&device, "in_accel_y_raw")? as f32;
++        println!("  Y: {y}");
+         let z = udev_attribute::<i32>(&device, "in_accel_z_raw")? as f32;
++        println!("  Z: {z}");
+ 
+         // Apply acceleration matrix.
+         let accel_point = &self.accel_mount_matrix * Vector3D::new(x, y, z);
+ 
++        println!("Reading acceleration scale…");
+-        let scale = udev_attribute::<f32>(&device, "in_accel_scale")? as f64;
++        let scale = udev_attribute::<f32>(&device, "in_accel_x_scale")? as f64;
++        println!("  Scale: {scale}");
+ 
+         // Apply scale to get to m/s², then convert 1G ~= 256 for the algorithm to work.
+         let Vector3D { x, y, z } = accel_point.scale(scale * 256. / 9.81);
+@@ -118,10 +135,12 @@ impl SensorAccelerometer {
+ 
+         // Deadzone to avoid flickering between orientation.
+         if portrait_angle_abs + DEADZONE > THRESHOLD && landscape_angle_abs + DEADZONE > THRESHOLD {
++            println!("Ignoring orientation change in deadzone");
+             return None;
+         }
+ 
+         // Check if we're far enough from portrait axis to pick landscape mode.
++        println!("Calculating orientation…");
+         let orientation = if portrait_angle_abs > THRESHOLD {
+             if portrait_angle > 0. { Orientation::InverseLandscape } else { Orientation::Landscape }
+         // Ditto for landspace axis.
+@@ -129,9 +148,11 @@ impl SensorAccelerometer {
+             if landscape_angle > 0. { Orientation::InversePortrait } else { Orientation::Portrait }
+         } else {
+             // No orientation is present when parallel to the ground.
++            println!("  Ignoring orientation change due to horizontal alignment");
+             return None;
+         };
+ 
++        println!("Changing orientation: {orientation:?}");
+         Some(orientation)
+     }
+ }

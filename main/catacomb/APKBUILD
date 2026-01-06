@@ -20,9 +20,9 @@ makedepends="
 	wayland-dev
 	mesa-dev
 "
-source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
+source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz
+	break-auto-rotation-support.patch debugging-rotation.patch initrc.patch"
 builddir="$srcdir/$pkgname-$pkgver"
-subpackages="$pkgname-session"
 
 prepare() {
 	default_prepare
@@ -36,17 +36,13 @@ build() {
 package() {
 	install -Dm755 target/release/$pkgname -t "$pkgdir"/usr/bin/
 	install -Dm755 initrc "$pkgdir"/etc/catacomb/initrc
-}
-
-session() {
-	pkgdesc="$pkgdesc [Session]"
-	install_if="$pkgname=$pkgver-r$pkgrel"
-
-	install -Dm755 session/$pkgname-session -t "$subpkgdir"/usr/bin/
-	install -Dm644 session/$pkgname.desktop -t "$subpkgdir"/usr/share/wayland-sessions/
+	install -Dm755 session/$pkgname-session -t "$pkgdir"/usr/bin/
+	install -Dm644 session/$pkgname.desktop -t "$pkgdir"/usr/share/wayland-sessions/
 }
 
 sha512sums="
-6f0190355d6651eabfd0f8d76717b4792507ebc671b1112148834d9e3fd412d9f017348e30579343a6d91dbbb5e55d8253fdb4abaa6f927cd1107adc31763e28  catacomb-v1.0.6.tar.gz
-7e17e666d22ac990b69d7397600597c796e8077bcff7be2d980e79cba9518af0b974202115b746a89c5f7f0500c0d4b00118c4ffa1378a5e4bb992a733ce58bb  break-auto-rotation-support.patch
+ce7650752a79dc6b681c9585767cc1dcbb525a53c8c8c7a9805a7f53a38f48ebd7d8472e41dc569677685537807d346fd223d1a3749eac5e1ae77df7a502d4bc  catacomb-v1.0.6.tar.gz
+023f644209a47c403bd4f60ab0635ee443d44e3fb0372615e0f601f709c9baba4993d9b4c7f42a8d99998e8e948a77c669437d1e2795633343967075dd169855  break-auto-rotation-support.patch
+ede7de00443db90c011e5cca0fa26ede502b22d2709c49029240dc65b6ac46a9d76d02fa8af0e6e437601fb1488be5599e74853c9836918d4415d3662694e696  debugging-rotation.patch
+10b1c184c5c167974d790839c995c9beca2298e41db0942b169e851893da06ad37ee4f4ce60d3150e2dbe5cbe42d2ac9b0626069ad66375f7af3c727f85cf954  initrc.patch
 "
