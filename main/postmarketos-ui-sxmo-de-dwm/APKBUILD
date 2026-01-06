@@ -5,11 +5,19 @@
 maintainer="Willow Barraco <contact@willowbarraco.fr>"
 pkgname=postmarketos-ui-sxmo-de-dwm
 pkgver=1.18.0 # Bump this so the file names in bpo are correct
-pkgrel=0
+pkgrel=1
 pkgdesc="Simple Mobile: Mobile environment based on SXMO and running on dwm"
 url="http://sr.ht/~mil/Sxmo"
 arch="noarch"
 license="AGPL-3.0-only"
+depends_openrc="
+	bluez-openrc
+	iio-sensor-proxy-openrc
+	modemmanager-openrc
+	networkmanager-openrc
+	seatd-openrc
+	tinydm-openrc
+	"
 depends="
 	postmarketos-base-ui
 	postmarketos-base-ui-audio
@@ -21,6 +29,8 @@ depends="
 install="
 	$pkgname.post-install
 	$pkgname.post-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
 	"
 _pmb_recommends="
 	w3m
@@ -42,16 +52,6 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		openrc
-		tinydm-openrc
-		modemmanager-openrc
-		networkmanager-openrc
-		bluez-openrc
-		iio-sensor-proxy-openrc
-		"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
