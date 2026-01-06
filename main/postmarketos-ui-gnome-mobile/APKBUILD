@@ -4,11 +4,12 @@
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=postmarketos-ui-gnome-mobile
 pkgver=4
-pkgrel=4
+pkgrel=5
 pkgdesc="(Wayland) Gnome Shell patched to adapt better to phones (Experimental)"
 url="https://gnome.org/"
 arch="noarch !armhf !riscv64" # gnome-shell / riscv64: mutter-mobile
 license="GPL-3.0-or-later"
+depends_openrc="gdm-openrc"
 depends="
 	bolt
 	dbus-x11
@@ -35,6 +36,7 @@ depends="
 _pmb_recommends="
 	gnome-mobile-extensions-app
 	"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 options="!check pmb:systemd"
 
@@ -43,10 +45,7 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="gdm-openrc openrc"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
