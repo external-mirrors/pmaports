@@ -2,12 +2,13 @@
 maintainer="Aster Boese <asterboese@mailbox.org>"
 pkgname=postmarketos-ui-niri
 pkgver=2
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) A scrollable-tiling compositor (DOES NOT RUN WITHOUT HW ACCELERATION!)"
 url="https://postmarketos.org"
 # Blocked by niri
 arch="x86_64 aarch64 ppc64le"
 license="GPL-3.0-or-later"
+depends_openrc="elogind-openrc networkmanager-openrc"
 depends="
 	bluez
 	dnsmasq
@@ -31,6 +32,7 @@ _pmb_recommends="
 	xwayland
 	"
 _pmb_groups="seat"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="
 	niri-greet.kdl
@@ -55,16 +57,7 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="
-		bluez-openrc
-		elogind-openrc
-		modemmanager-openrc
-		networkmanager-openrc
-		seatd-openrc
-		"
-
+	default_openrc
 	mkdir -p "$subpkgdir"
 }
 
