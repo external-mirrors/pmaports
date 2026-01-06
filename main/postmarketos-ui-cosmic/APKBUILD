@@ -3,7 +3,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-ui-cosmic
 pkgver=2
-pkgrel=3
+pkgrel=4
 pkgdesc="COSMIC Desktop Environment from System76"
 url="https://system76.com/cosmic/"
 # Only tested on these archs.
@@ -11,6 +11,13 @@ url="https://system76.com/cosmic/"
 # packages and build locally.
 arch="x86_64 aarch64 ppc64le loongarch64"
 license="GPL-3.0-or-later"
+_depends="
+	bluez-openrc
+	cosmic-greeter-openrc
+	elogind-openrc
+	networkmanager-openrc
+	seatd-openrc
+	"
 depends="
 	bluez
 	cosmic-session
@@ -42,12 +49,13 @@ _pmb_recommends="
 	snapshot
 	tuned-ppd
 "
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
+subpackages="$pkgname-openrc"
 source="
 	amplification_sink.conf
 	favorites.conf
 	wallpaper.conf
 "
-subpackages="$pkgname-openrc"
 options="!check pmb:drm pmb:systemd"
 replaces="
 	cosmic-applets
@@ -64,23 +72,9 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="
-		$subpkgname.post-install
-		$subpkgname.post-upgrade
-		"
-	depends="
-		bluez-openrc
-		cosmic-greeter-openrc
-		elogind-openrc
-		networkmanager-openrc
-		openrc
-		seatd
-		seatd-openrc
-		"
-	_pmb_recommends="
-		tuned-ppd-openrc
-		"
+	default_openrc
+	depends="seatd"
+	_pmb_recommends="tuned-ppd-openrc"
 	mkdir -p "$subpkgdir"
 }
 
