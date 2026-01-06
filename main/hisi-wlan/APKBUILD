@@ -1,24 +1,18 @@
 # Maintainer Ignacy Kuchciński <ignacykuchcinski@gmail.com>
 pkgname=hisi-wlan
 pkgver=2
-pkgrel=2
+pkgrel=3
 pkgdesc="Init script for enabling hisi wlan driver (downstream Android kernels)"
 url="https://gitlab.postmarketos.org/postmarketOS/pmaports"
 arch="noarch"
 license="GPL-3.0-or-later"
+install="$pkgname-openrc.post-install"
 subpackages="$pkgname-openrc"
 source="$pkgname.initd"
 options="!check" # No tests
 
 package() {
 	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/hisi-wlan
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
-
-	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
