@@ -4,20 +4,21 @@ maintainer="Ingo Reitz <9l@9lo.re>"
 pkgname=postmarketos-cros-common
 pkgdesc="Common package for Chrome OS devices"
 pkgver=2
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64 armv7 x86_64 x86" # there are no cros devices of other arches
 options="!check !archcheck !tracedeps"
-subpackages="
-	$pkgname-gnome
-	$pkgname-sway
-	postmarketos-cros-keymap-openrc:_keymap_openrc
-"
 makedepends="
 	cros-keyboard-map-openrc
 	keyd-openrc
 	postmarketos-ui-sway-logo-key-alt
+"
+install="postmarketos-cros-keymap-openrc.post-install"
+subpackages="
+	$pkgname-gnome
+	$pkgname-sway
+	postmarketos-cros-keymap-openrc:_keymap_openrc
 "
 source="
 	00_postmarketos-cros-common-gnome.gschema.override
@@ -64,7 +65,6 @@ sway() {
 _keymap_openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel cros-keyboard-map openrc"
 	depends="cros-keyboard-map-openrc keyd-openrc"
-	install="postmarketos-cros-keymap-openrc.post-install"
 	mkdir -p "$subpkgdir"
 }
 
