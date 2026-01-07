@@ -3,7 +3,7 @@
 _flavor="postmarketos-qcom-sc7280"
 pkgname=linux-$_flavor
 pkgver=6.18.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SC7280/SM7325/QCM6490 devices"
 arch="aarch64"
 _carch="arm64"
@@ -28,14 +28,14 @@ makedepends="
 
 _repo="linux"
 _config="config-$_flavor.$arch"
-_tag="v$pkgver-sc7280"
+_commit="1b44a80ca4d27e72b47fb2655e1b0f5b2a28f0ee"
 
 # Source
 source="
-	https://github.com/sc7280-mainline/$_repo/archive/refs/tags/$_tag/$_repo-$_tag.tar.gz
+	https://github.com/sc7280-mainline/$_repo/archive/$_commit/$_repo-$_commit.tar.gz
 	$_config
 "
-builddir="$srcdir/$_repo-$pkgver-sc7280"
+builddir="$srcdir/$_repo-$_commit"
 
 prepare() {
 	default_prepare
@@ -66,6 +66,6 @@ package() {
 }
 
 sha512sums="
-3dbc737809dfae5c026671b565de71825f27d116bd311344a43295061e4a1a196eb72e98f88e375da6a20b1349d789e66e26fcf66129e9611349f459a76f0cce  linux-v6.18.0-sc7280.tar.gz
-b55604c5f2c0af069f942591290d7262671c8b7a2fccc86e51ad07c160ad218a67e7649b46077d1ca031f9eebac97ddbb28a267a1a365e57b119b89e4a24f41e  config-postmarketos-qcom-sc7280.aarch64
+73a4a49d631d6b8d9cb9b7f57d5408f53d1a6b23ea147619eb08fdee08c74ad8f2b7005b77c6fa245fa4a0a06e95966e00d7b57857c0a60fab77324df9ba96c6  linux-1b44a80ca4d27e72b47fb2655e1b0f5b2a28f0ee.tar.gz
+db85aad613e20c22e9da3de560c5a279e8e7d2e59a6bd124305af784a0efe6f897a3f3c2a9008edd238525e38787de487c07d8776bb9cd5bc24ef2aa866d7608  config-postmarketos-qcom-sc7280.aarch64
 "
