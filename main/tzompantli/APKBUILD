@@ -15,8 +15,7 @@ makedepends="
 	libxkbcommon-dev
 	rust
 "
-source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$pkgver"
+source="tzompantli-v$pkgver.tar.gz::https://github.com/catacombing/tzompantli/archive/refs/tags/v$pkgver.tar.gz"
 
 prepare() {
 	default_prepare
@@ -29,7 +28,7 @@ build() {
 
 package() {
 	mkdir -p "$pkgdir"/usr/bin/
-	install -Dm755 target/release/$pkgname -t "$pkgdir"/usr/bin/
+	install -Dm755 target/release/tzompantli -t "$pkgdir"/usr/bin/
 }
 sha512sums="
 ec0702746b503429744f6f47117c78aa87c02982dfea6a17af6b1726bb2c0826b8054e6abee08561fa650a2aec1b9b41b5430143e91ae20b4b52044c3743f81a  tzompantli-v1.2.0.tar.gz

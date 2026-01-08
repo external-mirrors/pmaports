@@ -9,8 +9,7 @@ license="GPL-3.0"
 options="net" # cargo deps download
 depends="libxkbcommon"
 makedepends="rust cargo libxkbcommon-dev"
-source="$pkgname-v$pkgver.tar.gz::https://github.com/catacombing/$pkgname/archive/refs/tags/v$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$pkgver"
+source="tabula-v$pkgver.tar.gz::https://github.com/catacombing/tabula/archive/refs/tags/v$pkgver.tar.gz"
 
 prepare() {
 	default_prepare
@@ -23,7 +22,7 @@ build() {
 
 package() {
 	mkdir -p "$pkgdir"/usr/bin/
-	install -Dm755 target/release/$pkgname -t "$pkgdir"/usr/bin/
+	install -Dm755 target/release/tabula -t "$pkgdir"/usr/bin/
 }
 sha512sums="
 aa78052ab9a0736fced74ffc71376668add60409a63e28a5ca688b034f59ccc70063b2ee2a27aa9cd336125a0578cd8d75a98ff9b877852e6f18c616b7e24093  tabula-v1.0.2.tar.gz
