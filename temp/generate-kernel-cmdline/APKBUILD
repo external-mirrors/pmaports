@@ -1,0 +1,30 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=generate-kernel-cmdline
+pkgver=0.1.0
+_commit=06bd51756bf5c06f3834641fdd424f0c369f7b6a
+pkgrel=0
+pkgdesc="Kernel command line generator"
+url="https://gitlab.postmarketos.org/postmarketOS/generate-kernel-cmdline"
+arch="all"
+license="GPL-3.0-or-later"
+source="https://gitlab.postmarketos.org/postmarketOS/generate-kernel-cmdline/-/archive/$_commit/generate-kernel-cmdline-$_commit.tar.gz"
+makedepends="cargo go-md2man just"
+subpackages="$pkgname-doc"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	just
+}
+
+package() {
+	PREFIX=/usr DESTDIR="$pkgdir" just install
+}
+
+check() {
+	# disable test 8, because: https://github.com/Arnavion/uapi-config/issues/2
+	sed -i '/^### Test 8 ###/,/^end_test$/s/^/#/' tests/01-gen-kernel-cmdline.sh
+	just test
+}
+sha512sums="
+13deb8bf04a1c5d7faaad41c6699ef630758542f1f867a466af767b1ec2242df67c7d12188328b5ba60021353e708d0731ba16f71ed835ba1d6093c6b1e4f0b8  generate-kernel-cmdline-06bd51756bf5c06f3834641fdd424f0c369f7b6a.tar.gz
+"
