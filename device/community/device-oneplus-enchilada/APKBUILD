@@ -2,8 +2,8 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
-pkgver=24
-pkgrel=2
+pkgver=25
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -30,7 +30,6 @@ source="
 	modules-initfs
 	q6voiced.conf
 	80-device-oneplus-enchilada.preset
-	81-libssc-oneplus-enchilada.rules
 "
 install="
 	$pkgname-openrc.post-install
@@ -50,8 +49,6 @@ package() {
 	replaces="$pkgname-nonfree-firmware"
 	devicepkg_package $startdir $pkgname
 
-	install -Dm644 "$srcdir"/81-libssc-oneplus-enchilada.rules \
-		-t "$pkgdir"/usr/lib/udev/rules.d/
 	install -Dm644 "$srcdir"/q6voiced.conf \
 		"$pkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
@@ -80,5 +77,4 @@ c8d3026e9f803ea823e35f83dab66fa8545e99af9655576476c194567113084d78200feab46f8498
 ea8709aa214cffaefb1d486c0c47044537446faebff16efb3b015623f043f730b7121e401c676e43aa8868bd6c630fc8a2d7dbf5fb082490e9b5493e0405b66d  modules-initfs
 fe9871c325a38c0cadc9631870801ec15ab9f5b786ee854325b93eb3d23e7d8b1ac4f1075572ffcd225d8ec514dec09b986972ddff12a89260c0218af6de7887  q6voiced.conf
 a72de3293bc59e0afa0114d74030e4e725959f7619879ab616b0164595d57033affc3d1d4ccc9d8bc191b177a4c1593c1ad0a19fe7e452c3e0c9c847135c1102  80-device-oneplus-enchilada.preset
-2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-oneplus-enchilada.rules
 "
