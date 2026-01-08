@@ -1,0 +1,29 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=generate-kernel-cmdline
+pkgver=0.1.0
+_commit=7477ede396a2d747147a4db1b25944910849dd40
+pkgrel=0
+pkgdesc="Kernel command line generator"
+url="https://gitlab.postmarketos.org/postmarketOS/generate-kernel-cmdline"
+arch="all"
+license="GPL-3.0-or-later"
+source="https://gitlab.postmarketos.org/postmarketOS/generate-kernel-cmdline/-/archive/$_commit/generate-kernel-cmdline-$_commit.tar.gz"
+makedepends="cargo go-md2man just"
+subpackages="$pkgname-doc"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	just
+}
+
+package() {
+	PREFIX=/usr DESTDIR="$pkgdir" just install
+}
+
+check() {
+	just test
+}
+
+sha512sums="
+0a06114cbe3c0ded0f52dd04546eaf75eef0a9a55aac877756d4a258fcd513818807bc4068450a2ec73a328dd2c43b00e7a7476b888b76eed4becdb3f0e42483  generate-kernel-cmdline-7477ede396a2d747147a4db1b25944910849dd40.tar.gz
+"
