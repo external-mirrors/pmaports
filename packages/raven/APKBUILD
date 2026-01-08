@@ -1,0 +1,56 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=raven
+pkgver=99999_git20260106
+pkgrel=0
+_commit="cba626d8861368c98c900d900cbb585afff736af"
+# armhf blocked by qt6-qtdeclarative
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://invent.kde.org/plasma-mobile/raven"
+pkgdesc="A mail client for Plasma Mobile"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	corrosion
+	kcmutils-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	kirigami-dev
+	kirigami-addons-dev
+	kitemmodels-dev
+	qcoro-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtsvg-dev
+	qt6-qtwebengine-dev
+	samurai
+	sccache
+	"
+_repo_url="https://invent.kde.org/plasma-mobile/raven.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-07/raven-$_commit.tar.xz"
+options="net !check" # net required to download Rust crates
+
+builddir="$srcdir/raven-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+8c8e5caf4291a59dc019768834fefcbc3b0ce78ce85d0d4f806a07897e29ef6e3df972e6f1d6f4b1b67466ff65a24259bacc1ce4f3c9994a3b8f3f499079e223  raven-cba626d8861368c98c900d900cbb585afff736af.tar.xz
+"
