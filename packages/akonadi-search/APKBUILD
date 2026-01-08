@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=akonadi-search
-pkgver=99999_git20260101
+pkgver=99999_git20260106
 pkgrel=0
-_commit="b5e52809e9acdf936e9cb5d2c9c7d9554d7918eb"
+_commit="9e1839466fd38925ed47a295c485b02ffa83058c"
 pkgdesc="Libraries and daemons to implement searching in Akonadi"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 # riscv64 blocked by akonadi
 # s390x blocked by multiple KDE Frameworks
 # ppc64le blocked by qt6-qtwebengine -> akonadi
@@ -39,11 +37,12 @@ makedepends="$depends_dev
 	graphviz
 	extra-cmake-modules
 	samurai
+	sccache
 	"
-checkdepends="xvfb-run"
-_repo_url="https://invent.kde.org/pim/akonadi-search.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/akonadi-search-$_commit.tar.xz"
+checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/akonadi-search.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-07/akonadi-search-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/akonadi-search-$_commit"
@@ -52,14 +51,11 @@ build() {
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=MinSizeRel \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DBUILD_QCH=ON
+		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build
 }
 
 check() {
-	cd build
-
 	# akonadi-sqlite-schedulertest, konadi-sqlite-collectionindexingjobtest,
 	# akonadi-mysql-schedulertest and akonadi-mysql-collectionindexingjobtest
 	# require running dbus server
@@ -75,12 +71,12 @@ check() {
 		skipped_tests="$skipped_tests|$test"
 	done
 	skipped_tests="$skipped_tests)test"
-	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "$skipped_tests"
+	wlheadless-run ctest --test-dir build -E "$skipped_tests"
 }
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-0bb33243ad05454740cd87c468e17a89bd4b76eaeb3aa4e2c49133f5d3afc387464954f60664a6e9b4c7afcd4a17dd907b02988de7e5a28b748e3f8c7ce42f2f  akonadi-search-b5e52809e9acdf936e9cb5d2c9c7d9554d7918eb.tar.xz
+8510a7f3d4b4a2e448033f975daca62c5a408ce425b39f6c9e25b14e91e8bcb2e9d87fb71f09f2a15686a11275e64d1ee497ef6e5010cde3c971328ddde5d76b  akonadi-search-9e1839466fd38925ed47a295c485b02ffa83058c.tar.xz
 "

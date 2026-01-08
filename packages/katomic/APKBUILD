@@ -1,13 +1,11 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=katomic
-pkgver=99999_git20251228
+pkgver=99999_git20260103
 pkgrel=0
-_commit="a7d3301dbd5a1a5cccf4a63bcadc02e5506d88a6"
-# armhf blocked by extra-cmake-modules
+_commit="e5ff236fba00664e69c33c6d5e2485d2bc785bbb"
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://kde.org/applications/games/org.kde.katomic"
 pkgdesc="A fun and educational game built around molecular geometry"
@@ -27,12 +25,11 @@ makedepends="
 	libkdegames-dev
 	samurai
 	"
-_repo_url="https://invent.kde.org/games/katomic.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/katomic-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/games/katomic.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-06/katomic-$_commit.tar.xz"
 options="!check" # No tests
 
-options="!check"
 builddir="$srcdir/katomic-$_commit"
 
 build() {
@@ -52,5 +49,5 @@ package() {
 }
 
 sha512sums="
-13cc2ce65feb260929074fc7326240e7c65cb576e7e5a3570758076ab7c9a58c93cbfc282dfe3ee67764c0f3b40cce787ed8517e895caebf5d0ccc2cb61ab298  katomic-a7d3301dbd5a1a5cccf4a63bcadc02e5506d88a6.tar.xz
+4dd8b3eea9f4d9cc404f9f1c58e9f494332791b7dd3ab4cb7469c8e9d86fd8419125f180c437af31201c41c84093ade440f64cf6ab505ff8799c477bc3e38aff  katomic-e5ff236fba00664e69c33c6d5e2485d2bc785bbb.tar.xz
 "

@@ -1,15 +1,13 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-remotecontrollers
-pkgver=99999_git20251231
+pkgver=99999_git20260106
 pkgrel=0
-_commit="f1875bfb10b4f25a89bbe0c4799e31ea5623ee30"
+_commit="25d881bff65a05fcf9f646112ca9af5b24f98016"
 pkgdesc="Translate various input device events into keyboard and pointer events"
 url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 license="BSD-2-Clause AND (GPL-2.0-only OR GPL-3.0-only) AND CC0-1.0"
 # For some reason there is no dep on so:libcec but it crashes without it
@@ -43,7 +41,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-01/plasma-remotecontrollers-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-07/plasma-remotecontrollers-$_commit.tar.xz
 	uinput.conf
 	"
 options="!check" # No tests
@@ -67,6 +65,6 @@ package() {
 }
 
 sha512sums="
-92d0e02a85b7a93c23282f7223a7a9f4833b5b11444bd857f5df05327ff51210e565f8785dc4566487d1b2dc8d9a42c3a562c044ca9614fd596b2fb9d5b7e7ff  plasma-remotecontrollers-f1875bfb10b4f25a89bbe0c4799e31ea5623ee30.tar.xz
+7d2edf62f8bda8ef075f358cb8876b1da668abb6ead165997ec63a8993770f4b6c91092c46b707e94a32f60012655c38400afb4ad914d624bb86fd09e94121f1  plasma-remotecontrollers-25d881bff65a05fcf9f646112ca9af5b24f98016.tar.xz
 a9b069ed121ffeee887e0583d8cb46035ecf1fa90a26a4ecb3aa11ff03178b2b08621f6676db6b2350f290694c04aabcf36f2ce3e0813a76dde9a33555edb112  uinput.conf
 "
