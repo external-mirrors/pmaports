@@ -2,6 +2,7 @@
 # Copyright 2025 Pablo Correa Gomez
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import argparse
 from functools import cached_property
 from pathlib import Path
 from typing import Self
@@ -151,13 +152,12 @@ class ArchTagSet(set):
 
 
 if __name__ == "__main__":
-    # Needs input to output if we should create the jobs
-    if len(sys.argv) != 3:
-        print("usage: generate_build_jobs.py TEMPLATE CHILD_PIPELINE")
-        print(sys.argv)
-        sys.exit(1)
-    template = sys.argv[1]
-    child_pipeline = sys.argv[2]
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--template", default=".ci/build-jobs.yaml.j2", help="Jinja2 input template")
+    parser.add_argument("--output", default=".ci/build-jobs.yaml", help="output pipeline")
+    args = parser.parse_args()
 
     # pmb logging has to be initialized for later pmb commands to work, setting
     # to /dev/null since we don't care about the output. Later this could
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     # Load context
     sys.argv = ["pmbootstrap.py", "chroot"]
-    args = pmb.parse.arguments()
+    _ = pmb.parse.arguments()
 
     # Get the list of supported devices
     supported_devices = Device.supported_devices()
@@ -211,7 +211,7 @@ if __name__ == "__main__":
     print(f"Architectures to build: {archs}")
     print(f"Devices under test: {devices_under_test}")
 
-    with open(template) as f:
+    with open(args.template) as f:
         rendered = Template(f.read()).render(
             archs=archs,
             devices_under_test=devices_under_test,
@@ -226,5 +226,5 @@ if __name__ == "__main__":
                 Arch.ppc64le: "ppc64le",
             },
         )
-        with open(child_pipeline, "w") as fw:
+        with open(args.output, "w") as fw:
             fw.write(rendered)

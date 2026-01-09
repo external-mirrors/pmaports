@@ -178,7 +178,7 @@ generate-build-jobs:
     # HACK: Make the pmb library happy to use the currently-cloned pmaports repo
     - mkdir -p /root/.local/var/pmbootstrap/cache_git/ && ln -s $PWD /root/.local/var/pmbootstrap/cache_git/pmaports
 
-    - PYTHONPATH=/tmp/pmbootstrap/ .ci/lib/generate_build_jobs.py .ci/build-jobs.yaml.j2 .ci/build-jobs.yaml
+    - PYTHONPATH=/tmp/pmbootstrap/ .ci/lib/generate_build_jobs.py
 
   artifacts:
     paths:
