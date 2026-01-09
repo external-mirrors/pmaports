@@ -1,11 +1,12 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp5
-pkgver=20240417
-pkgrel=3
+pkgver=20250623
+pkgrel=0
 pkgdesc="Firmware for Fairphone 5"
 subpackages="
 	$pkgname-adreno
 	$pkgname-adsp
+	$pkgname-audio
 	$pkgname-bluetooth
 	$pkgname-cdsp
 	$pkgname-hexagonfs
@@ -19,7 +20,7 @@ arch="aarch64"
 license="proprietary"
 makedepends="pil-squasher"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
-_commit="798524050d9f4802450cd4f1bf46ddd105b6ae4f"
+_commit="a4908f548e6f88965e78b1478af1751b6a854fc9"
 source="https://github.com/FairBlobs/FP5-firmware/archive/$_commit/FP5-firmware-$_commit.tar.gz"
 builddir="$srcdir/FP5-firmware-$_commit"
 
@@ -50,6 +51,13 @@ adsp() {
 		"$subpkgdir/lib/firmware/qcom/qcm6490/fairphone5/"
 	install -Dm644 "$builddir"/battmgr.jsn -t \
 		"$subpkgdir/lib/firmware/qcom/qcm6490/fairphone5/"
+}
+
+audio() {
+	pkgdesc="Fairphone 5 audio amplifier firmware"
+
+	install -Dm644 "$builddir"/aw882xx_acf.bin \
+		"$subpkgdir/lib/firmware/qcom/qcm6490/fairphone5/aw88261_acf.bin"
 }
 
 bluetooth() {
@@ -121,5 +129,5 @@ wpss() {
 }
 
 sha512sums="
-b952aeb6dc953a66514aea00a32cc766c2554e59c9dbbdab723dbf65d5e5e5deeefdc80e88ec59214fdf89d2ffdd6e632e42304ef510431fb4ecc0374f81ba06  FP5-firmware-798524050d9f4802450cd4f1bf46ddd105b6ae4f.tar.gz
+5fb8dd3a04d2dbc927b310363480d516e286534e34d303d8e4962fe1a95330ba69a61231131757433d1a7c4fc7afe1b63b70c8c3fd6abcbc7b98741307cb867a  FP5-firmware-a4908f548e6f88965e78b1478af1751b6a854fc9.tar.gz
 "
