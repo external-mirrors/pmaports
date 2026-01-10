@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=layer-shell-qt
-pkgver=99999_git20251218
+pkgver=99999_git20251224
 pkgrel=0
-_commit="9ddf87a444cfc7b117d70f155a37f792d7de47f1"
+_commit="58f549d136375ca932a79e18df7b33fafc88e1dd"
 pkgdesc="Qt component to allow applications to make use of the Wayland wl-layer-shell protocol"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -26,7 +26,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/layer-shell-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-12-20/layer-shell-qt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-08/layer-shell-qt-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 
 options="!check"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-ece2c2c9dea7baa1a91ccd5715e73e526c55e450e193dd34521a260c9b75c96f9c440e56f95d91b13c60daa30010a2bf4a0a2c27c19f9a941e912475d415aca3  layer-shell-qt-9ddf87a444cfc7b117d70f155a37f792d7de47f1.tar.xz
+1a8af6e09a0bcd2aef5bc37ab15ba63cb92f2166e6a6d87ea7ccb84e1aec5734249878d63aeb15196aff07743394972229c5ce54eb4f37734d1ddeb8d4013bd9  layer-shell-qt-58f549d136375ca932a79e18df7b33fafc88e1dd.tar.xz
 "

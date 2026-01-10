@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=katomic
-pkgver=99999_git20260103
+pkgver=99999_git20260108
 pkgrel=0
-_commit="e5ff236fba00664e69c33c6d5e2485d2bc785bbb"
+_commit="a087676d60118a4cd7684d1650a29a5abe4c5588"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://kde.org/applications/games/org.kde.katomic"
@@ -27,7 +27,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/games/katomic.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-06/katomic-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-09/katomic-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/katomic-$_commit"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-4dd8b3eea9f4d9cc404f9f1c58e9f494332791b7dd3ab4cb7469c8e9d86fd8419125f180c437af31201c41c84093ade440f64cf6ab505ff8799c477bc3e38aff  katomic-e5ff236fba00664e69c33c6d5e2485d2bc785bbb.tar.xz
+b71b74dee606e98e17a71bf93a1550ab9ccca233be5e68fae3da025d56cf33f8d16f3521059b18f0ce86967fff47b2fb80159b5efdd3edd6a23776f3f5d86c5d  katomic-a087676d60118a4cd7684d1650a29a5abe4c5588.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=messagelib
-pkgver=99999_git20260106
+pkgver=99999_git20260108
 pkgrel=0
-_commit="336620e28a9acd19536b909fc3397d2c13a0764a"
+_commit="fcc1bffdc23930ed0665c94a2790cc66950671a6"
 pkgdesc="KDE PIM messaging library"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -60,7 +60,7 @@ makedepends="$depends_dev
 checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/messagelib.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-07/messagelib-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-09/messagelib-$_commit.tar.xz"
 options="!check" # Requires OpenGL and running dbus server
 
 options="!check"
@@ -83,5 +83,5 @@ package() {
 }
 
 sha512sums="
-24b7b9c44fcabd678dc0271ef594ab536f8086c32b561f69fbbc88184b749f7d6731f47c0e3d3f7bfdbaa1e93dc6e19ceabf7fd14616e2dd5cee365c92481c4c  messagelib-336620e28a9acd19536b909fc3397d2c13a0764a.tar.xz
+e54b86be9ad770c3e940032c03e16b92416ffe47bc6362b8b4062b4aba5c6b5b1a323a185d05704fc8d3d0cebe3eb8c080fa5fd27cf16d9b589fdd8ab8c6e0b3  messagelib-fcc1bffdc23930ed0665c94a2790cc66950671a6.tar.xz
 "
