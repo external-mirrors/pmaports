@@ -26,7 +26,7 @@ install -Dm644 "$srcdir/machine-info" \
 
 if [ -f "$srcdir/90-$pkgname.rules" ]; then
 	install -Dm644 "$srcdir/90-$pkgname.rules" \
-		"$pkgdir/etc/udev/rules.d/90-$pkgname.rules"
+		"$pkgdir/usr/lib/udev/rules.d/90-$pkgname.rules"
 fi
 
 if [ -f "$srcdir/initfs-hook.sh" ]; then
