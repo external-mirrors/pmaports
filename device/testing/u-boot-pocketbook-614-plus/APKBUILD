@@ -1,5 +1,5 @@
 # Contributor: Denis Burkov <hitechshell@mail.ru>
-# Maintainer: Denis Burkov <hitechshell@mail.ru>
+maintainer="Denis Burkov <hitechshell@mail.ru>"
 pkgname=u-boot-pocketbook-614-plus
 pkgver=2024.01
 pkgrel=0
