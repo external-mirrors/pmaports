@@ -7,12 +7,14 @@ url="https://catacombing.org/"
 arch="all"
 license="GPL-3.0"
 options="net" # cargo deps download
-depends="libxkbcommon"
+depends="libxkbcommon pango"
 makedepends="
 	cargo
 	curl
 	fontconfig-dev
+	glib-dev
 	libxkbcommon-dev
+	pango-dev
 	rust
 "
 source="gorm-v$pkgver.tar.gz::https://github.com/catacombing/gorm/archive/refs/tags/v$pkgver.tar.gz"
@@ -31,5 +33,5 @@ package() {
 	install -Dm755 target/release/gorm -t "$pkgdir"/usr/bin/
 }
 sha512sums="
-ec0702746b503429744f6f47117c78aa87c02982dfea6a17af6b1726bb2c0826b8054e6abee08561fa650a2aec1b9b41b5430143e91ae20b4b52044c3743f81a  tzompantli-v1.2.0.tar.gz
+a000f72e80af22ba9d6490bbb136e67bae322d8d1ea49bd672b5d6a45eea86bf076374d15e77b919cb4fb220269e424cbbb475aa2170c181cfc3085c992cbbcd  gorm-v1.2.0.tar.gz
 "
