@@ -118,7 +118,8 @@ build() {
 		#./build-fip.sh $board_fip_dir $builddir/u-boot.bin ./build
 
 		#cd ./build
-		dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512 skip=1
+		#dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512 skip=1 # broken
+		cp "$board_fip_dir/u-boot.bin" "./build/u-boot-$board_codename.bin.sd-stripped.bin"
 		cd $builddir
 	done
 	for board in $_gxl_boards; do
