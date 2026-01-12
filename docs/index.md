@@ -18,5 +18,6 @@ in pmaports and the processes around device categorization.
    deviceinfo-reference
    ci-tags
    kconfigcheck
+   kernel-cmdline
    kernel-versions
 ```
