@@ -3,8 +3,8 @@
 # Co-Maintainer: famfo <famfo@famfo.xyz>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=device-qemu-ppc64le
-pkgver=6
-pkgrel=1
+pkgver=7
+pkgrel=0
 pkgdesc="Simulated device in QEMU (ppc64le)"
 url="https://postmarketos.org"
 arch="ppc64le"
@@ -22,6 +22,7 @@ subpackages="
 	"
 
 source="
+	kernel-cmdline.conf
 	deviceinfo
 	"
 options="!check !archcheck"
@@ -53,5 +54,6 @@ kernel_stable() {
 }
 
 sha512sums="
-e27853254dcb297c219004498147b413a74163d4a00446e662255cfc5d4536e16abe0a8b24053c7ce6f65f48c90868c0fc02f05f14ce8e43a4645bfca4687429  deviceinfo
+875267ce79b89ab77b7caa86f34bb942019ec0a5390a0f0a5156faa316367a59545b395a564875d2b2c48b83ebcb67c12b27895905301ac34410389333284ebd  kernel-cmdline.conf
+4e8d60fe172dfd392075ecf533e06ecfa42925355b242b112045915a1b3e51ac0880daa23f7750a4f480bd0fb2b7ebab77b6e28292ec4cba015653383cc1824a  deviceinfo
 "

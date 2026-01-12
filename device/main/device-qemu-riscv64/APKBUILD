@@ -2,8 +2,8 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-qemu-riscv64
-pkgver=9
-pkgrel=1
+pkgver=10
+pkgrel=0
 pkgdesc="Simulated device in QEMU (riscv64)"
 url="https://postmarketos.org"
 arch="riscv64"
@@ -18,6 +18,7 @@ subpackages="
 	"
 
 source="
+	kernel-cmdline.conf
 	deviceinfo
 	"
 options="!check !archcheck"
@@ -39,5 +40,6 @@ kernel_stable() {
 }
 
 sha512sums="
-0f6c30def83bfdfea7da0a9786f28e81bfbca9a51f224f206b13a36f659faac82ca5192cc3663f493a7a18ad788c2ee7cca51ca1ad61efd2966e405aad0dc036  deviceinfo
+8411587834a64f96673e890195d7e6d7451e0316a69126197a4d6a1522e36c7c5a8a522647f1712038653803d19cf27916a66c6f0e409bd41ddca19f6ff1cda9  kernel-cmdline.conf
+78d0252f49f4b0f527a2f6c726abe32cd112553fdcd5793070999dfeb331c4d94fbc63ca163ea282f439f0f069cdbeea5051d9e9aeb8831a3862076b04357c5e  deviceinfo
 "

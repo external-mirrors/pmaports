@@ -3,8 +3,8 @@
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=device-qemu-loongarch64
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 pkgdesc="Simulated device in QEMU (loongarch64)"
 url="https://postmarketos.org"
 arch="loongarch64"
@@ -22,6 +22,7 @@ subpackages="
 
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	"
 options="!check !archcheck"
 
@@ -46,5 +47,6 @@ kernel_stable() {
 }
 
 sha512sums="
-8827f46442d31d73ab1d15298705037222afa21588050c95c5684928ffd4446c6a0e1b886bee9d20200e7e4bf1ed7d59945b180c3f98ee7fcfa07cff99f06e6c  deviceinfo
+847303ea219eb4aba98e30c2ba9d43e0396b7f2d0029f42552ec40e36858014347e07749f80b14a92db1dc9b38730a591b56d03dcb40a04ced8af21843e0b860  deviceinfo
+eb8f9fd9e4b58c7c2cd810ae6449e836d0fa095f6eaa2da661481df6eb40d452998613b3d032f0477f0ac32559689db48eb3da189495c16bd016b8eac3b67b16  kernel-cmdline.conf
 "
