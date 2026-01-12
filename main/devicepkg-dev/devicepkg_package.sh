@@ -55,3 +55,8 @@ if [ -f "$srcdir/modprobe.conf" ]; then
 	install -Dm644 "$srcdir/modprobe.conf" \
 		"$pkgdir/usr/lib/modprobe.d/$pkgname.conf"
 fi
+
+if [ -f "$srcdir/kernel-cmdline.conf" ]; then
+	install -Dm644 "$srcdir/kernel-cmdline.conf" \
+		"$pkgdir/usr/lib/kernel-cmdline.d/50-$pkgname.conf"
+fi
