@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=boot-deploy
 pkgver=0.21.2
-pkgrel=0
+pkgrel=1
 pkgdesc="tool for finalizing and deploying boot related files"
 url="https://gitlab.postmarketos.org/postmarketOS/boot-deploy"
 arch="noarch"
@@ -11,6 +11,7 @@ source="
 
 	os-customization
 	"
+depends="generate-kernel-cmdline"
 
 check() {
 	./test_boot_deploy_functions.sh
