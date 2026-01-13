@@ -1,13 +1,11 @@
 maintainer=""
 pkgname=devicepkg-utils
 pkgver=0.3.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Utilities for interacting with device packages"
 url="https://postmarketos.org"
 arch="noarch"
 license="MIT"
-makedepends="postmarketos-mvcfg"
-install="$pkgname.pre-upgrade"
 source="
 	etc-deviceinfo
 	source_deviceinfo
@@ -18,7 +16,6 @@ package() {
 	install -Dm644 "$srcdir"/source_deviceinfo -t "$pkgdir"/usr/share/misc
 
 	install -Dm644 "$srcdir"/etc-deviceinfo "$pkgdir"/etc/deviceinfo
-	postmarketos-mvcfg-package "$pkgdir" "$pkgname"
 }
 sha512sums="
 ef2181d7072b4ef62c11d3f50677fcd455e50cf89a3110e67fcaa6058ea695f101ded48b1442758494e3d23a97cdd93df6669656f329037020ba715af4341b55  etc-deviceinfo
