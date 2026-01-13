@@ -3,17 +3,20 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
 pkgver=18
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	alsa-ucm-conf-sdm845
+	firmware-oneplus-sdm845>=9
+	hexagonrpcd>=0.3.2-r3
 	linux-postmarketos-qcom-sdm845
 	mkbootimg
 	postmarketos-base
-	alsa-ucm-conf-sdm845
 	soc-qcom
+	soc-qcom-modem
 	soc-qcom-pd-mapper
 	soc-qcom-qbootctl
 	unl0kr-fbforcerefresh
@@ -28,12 +31,11 @@ source="
 	81-libssc-oneplus-fajita.rules
 "
 install="
-	$pkgname-nonfree-firmware-openrc.post-install
-	$pkgname-nonfree-firmware-openrc.post-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
 	"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
+	$pkgname-openrc
 	$pkgname-pmtest
 	$pkgname-systemd
 "
@@ -44,31 +46,21 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
 
-nonfree_firmware() {
-	pkgdesc="Modem, WiFi and GPU Firmware, also needed for osk-sdl"
-	depends="
-		firmware-oneplus-sdm845>=9
-		hexagonrpcd>=0.3.2-r3
-		soc-qcom-modem
-	"
-
-	install -Dm644 "$srcdir"/81-libssc-oneplus-fajita.rules -t "$subpkgdir"/usr/lib/udev/rules.d/
-	install -Dm644 "$srcdir"/q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/81-libssc-oneplus-fajita.rules \
+		-t "$pkgdir"/usr/lib/udev/rules.d/
+	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
-		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
 
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
+openrc() {
+	default_openrc
 	depends="hexagonrpcd-openrc openrc"
-
-	mkdir -p "$subpkgdir"
 }
 
 pmtest() {
-	depends="bootrr qrtr firmware-oneplus-sdm845 postmarketos-test-unl0kr"
+	depends="bootrr qrtr postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 
 	mkdir -p "$subpkgdir"
