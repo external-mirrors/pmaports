@@ -2,7 +2,7 @@
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
 pkgver=51
-pkgrel=2
+pkgrel=3
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
 arch="armv7"
@@ -16,7 +16,6 @@ depends="
 	linux-postmarketos-omap
 	ofono
 	postmarketos-base
-	postmarketos-mvcfg
 	u-boot-tools
 	wl1251-cal
 "
@@ -25,11 +24,9 @@ makedepends="
 	u-boot-tools
 	kbd
 	kbd-bkeymaps
-	postmarketos-mvcfg
 "
 install="
 	$pkgname.post-install
-	$pkgname.pre-upgrade
 	$pkgname-openrc.post-install
 "
 subpackages="
@@ -157,8 +154,6 @@ package() {
 		"$pkgdir"/usr/lib/modprobe.d/n900-module-blocklist.conf
 	install -D -m644 "$srcdir"/bq27k-options.conf \
 		"$pkgdir"/usr/lib/modprobe.d/bq27xxx-battery.conf
-
-	postmarketos-mvcfg-package "$pkgdir" "$pkgname"
 }
 
 x11() {
