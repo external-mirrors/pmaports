@@ -1,6 +1,6 @@
 pkgname=postmarketos-base
-pkgver=51
-pkgrel=1
+pkgver=52
+pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -21,8 +21,8 @@ depends="
 	postmarketos-keys
 	postmarketos-mvcfg
 	postmarketos-ramdisk
+	postmarketos-zram
 	sudo-virt
-	zram-init
 	"
 _pmb_recommends="
 	doas
@@ -67,7 +67,6 @@ _source600="
 	"
 _source644="
 	etc/conf.d/swapfile
-	etc/conf.d/zram-init
 	etc/conf.d/syslog
 	etc/fstab
 	etc/issue
@@ -78,7 +77,6 @@ _source644="
 	usr/lib/os-release
 	usr/lib/sysctl.d/90-disable-rp-filter.conf
 	usr/lib/sysctl.d/90-steam.conf
-	usr/lib/systemd/system/zram_swap.service.d/override.conf
 	usr/lib/udev/rules.d/20-imagis-input.rules
 	usr/lib/udev/rules.d/20-tm2-touchkey-input.rules
 	usr/lib/udev/rules.d/20-tm2-touchkey-leds.rules
@@ -90,7 +88,6 @@ _source755="
 	etc/init.d/swapfile
 	etc/init.d/tmpfs
 	usr/bin/swapfile
-	usr/bin/zram-configurator
 	"
 
 # Avoid filename based checksum conflicts by including the whole path:
@@ -207,7 +204,6 @@ openrc() {
 		busybox-openrc
 		eudev
 		openrc
-		zram-init-openrc
 		"
 	depends="
 		!systemd
@@ -220,12 +216,11 @@ openrc() {
 		openrc
 		openrc-user-pam
 		openssh-server-common-openrc
+		postmarketos-zram-openrc
 		udev-init-scripts-openrc
-		zram-init-openrc
 		"
 
 	amove etc/conf.d/swapfile
-	amove etc/conf.d/zram-init
 	amove etc/conf.d/syslog
 	amove etc/init.d/deferred-initcalls
 	amove etc/init.d/swapfile
@@ -259,7 +254,6 @@ e529f5cef1f31481b577f99b8917704f2cfefb963d98bf40a14b017938e55a00134d2033f81d2cb0
 49cff0dbf37fc3c3ca30709be3bc4bbac9b2c05d1f88356922c6ab849e1fe893da7eca92b42a4095cfa00fe475470a711a93bfa60f1cedfde9c890a6dcc61de9  rootfs-etc-doas.d-10-postmarketos.conf
 1d2975e7e2745020f88fac639021cc9a47b477fb0390c3e146a070d98faab32c3f1c7bd1121f45a26be97301ab65c736ae0a4905d28a7251919a1994895f9c8d  rootfs-etc-ssh-sshd_config.d-50-postmarketos-ui-policy.conf
 e0d2d48b82a03239a4c0a00acaf83e00d397c23a8d7c71053d4e2a383357c22dcedef9e81b0e12a1d7514e1fdbe0bb3eb82613d18b29034a7ce5447f13c84a53  rootfs-etc-conf.d-swapfile
-9e3648adf9ddc17bb7bb07be88a635191d4c7923f0ba807eb010d67ee6b95d01f8f57181a99d25bb27ccaec6a07c0d679c0bc6580cc2a8e3f0851589522b3ac8  rootfs-etc-conf.d-zram-init
 e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67dc0ede80f9d44d16bd9ef52e73350d3f13224edc31d73a34  rootfs-etc-conf.d-syslog
 9b8d0493bb64457fe176fea801e0771d3c5279302c61559824bf81b3d2b66d2c1e076f4aaac65f55389005acb18c27e44bed858c2bdbad37d74199f07c86c354  rootfs-etc-fstab
 45bd0742a64a9d3c4a88e152b97edcf3fa1edca28884f9ea69e7c4c365f1e41ef9056dbe204545de7d4b2ba92e1e5872b2a929c2dcc1dd468e627cc3f090b8e6  rootfs-etc-issue
@@ -270,7 +264,6 @@ e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67
 93d1d7e7bbe014b64f6c7527b0915a20c3ca8627e139177603475309d68489b38acd170cfe760a36c2eae5f51753458b778c68bee678eb54042fe554484caa66  rootfs-usr-lib-os-release
 b70ee1b39b5f33c9a3e6bf4259158519691c82c8cefb700d4df49eb749a2cce208082e00d4905b9eea2c4f75b6da62f73931931c92157b4132adb35dcf0e0a6f  rootfs-usr-lib-sysctl.d-90-disable-rp-filter.conf
 6b16fd00756926c6fdc6f01960f59c854c90920dd9c0e67c19506a90fd26ac887a8dbfd5b1ec2712fff91f0369ddc5b91d56041360018d4d0c4d78e49733b644  rootfs-usr-lib-sysctl.d-90-steam.conf
-a3d28e27b1d037f124ace2ca4158750ceadbf71d4fcec5bcbd735904f7c9fae6749805bc467ca3c2912fe44290f34ae37b4e24acf3866fd342f01e6bcd98f3cc  rootfs-usr-lib-systemd-system-zram_swap.service.d-override.conf
 560d30c08856714f4bec805ca95fad767330d6fb3760096ffebdf35cad42d4ebea7dd2f5ee2e4d88596743e6717ca6ac2339d4d753feb3ca28e0090c585bf81e  rootfs-usr-lib-udev-rules.d-20-imagis-input.rules
 b61c6116f972df08f460494cf3b511b7cb4046a65bb3bd840cddb5ca98518c4514dc5f8a9330bc9ac630e5adbfecc839cbd21f70cac5000a30fd2daeab0f02d7  rootfs-usr-lib-udev-rules.d-20-tm2-touchkey-input.rules
 de4d8f258cb2ce654be15abe0188caa6ca9cc163fd45350f2025e7e9d043878e3f1202ef9033b1b15d7e18c4b40c3b19db387ee050a3baf03c4bd4293f4721e3  rootfs-usr-lib-udev-rules.d-20-tm2-touchkey-leds.rules
@@ -280,5 +273,4 @@ d89a7e4b9d601431c62c11f83c9c72fdb90384d9100ee5fc4aff25dda0836fd3bf9e48c0536615be
 42d6bce78b6e3c118dcbd9228b138661a05f8f321f17457e8df8f2398c0b780399d8d056f0a7c50d91557ac8698ab37dde61ec1a13fd69a7b3faad092f126580  rootfs-etc-init.d-swapfile
 0cd9a0b8490028d854b65d0648aaf84e4703921b8b7797517dd65ffaa1ec9e225487007dcccd42c249a9f2470e5adacf95760536c9508138b14de7252de38473  rootfs-etc-init.d-tmpfs
 23df2632e8ef372dccd6b9abac61441dd0ee447ccc7428fba495e28f1b697ebc415f7580dbb9a39d22d162a175d7264b47bdf9f66552347e35d9d0bb7828647d  rootfs-usr-bin-swapfile
-73eb8784087a6847143d78bcf089f671ec81a2c52628a27a93896364bf15cdf9de37b05b4b2e60a070c5795c7b03756b13b04ac30a43d1dc745cb4878004ab86  rootfs-usr-bin-zram-configurator
 "

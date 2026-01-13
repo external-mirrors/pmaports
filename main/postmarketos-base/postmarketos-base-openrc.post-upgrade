@@ -50,8 +50,8 @@ rm -rf /etc/zoneinfo
 sed -i -e "s% /boot \(fat32\|fat16\) defaults 0 0$% /boot vfat umask=0077,nodev,nosuid,noexec,nosymfollow,codepage=437,iocharset=ascii 0 0%g" /etc/fstab
 sed -i -e "s% /boot ext2 defaults 0 0$% /boot ext2 nodev,nosuid,noexec 0 0%g" /etc/fstab
 
-# To turn zram-init into a no-op, set: deviceinfo_zram_swap_pct="0"
-rc-update -q add zram-init default
+# To turn pmos-zram-swap into a no-op, set: deviceinfo_zram_swap_pct="0"
+rc-update -q add postmarketos-zram-swap default
 # We once enabled tmpfs in default, when it needs bootmisc: pma#2473
 rc-update -qq del tmpfs default || true
 # To disable mounting /tmp as tmpfs deviceinfo_tmp_as_tmpfs_size="0"
