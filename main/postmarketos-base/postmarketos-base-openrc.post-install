@@ -13,7 +13,7 @@ done
 for service in hwclock modules sysctl hostname bootmisc logbookd tmpfs; do
 	rc-update -q add $service boot
 done
-for service in sshd swapfile local zram-init; do
+for service in sshd swapfile local postmarketos-zram-swap; do
 	rc-update -q add $service default
 done
 for service in mount-ro killprocs savecache; do
