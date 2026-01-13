@@ -3,7 +3,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
 pkgver=18
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -52,6 +52,8 @@ package() {
 	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+	install -Dm644 "$srcdir"/80-device-oneplus-fajita.preset \
+		-t "$pkgdir"/usr/lib/systemd/system-preset
 }
 
 openrc() {
@@ -64,12 +66,6 @@ pmtest() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 
 	mkdir -p "$subpkgdir"
-}
-
-systemd() {
-	install -Dm644 -t "$subpkgdir"/usr/lib/systemd/system-preset \
-		"$srcdir"/80-device-oneplus-fajita.preset
-	default_systemd
 }
 
 sha512sums="
