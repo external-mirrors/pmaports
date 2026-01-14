@@ -8,19 +8,16 @@ set -e
 
 get_size() {
         # Size defaults to:
-        # - 75% of RAM for devices with 2GB of RAM or less
-        # - 50% of RAM for devices with between 2GB and 6GB of RAM
-        # - 25% of RAM for devices with greater 6GB of RAM
+        # - 150% of RAM for devices with less than 32GB of RAM
+        # - 50% of RAM for devices with greater than 32GB of RAM
         # This is loosely based on some data here:
-        # https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/3752#note_1229631449
+        # https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/4250
 
         local mem_size_mb size_pct
         mem_size_mb="$(LC_ALL=C free -m | awk '/^Mem:/{print $2}')"
 
-        if [ "$mem_size_mb" -le 2048 ]; then
-                size_pct=75
-        elif [ "$mem_size_mb" -gt 6144 ]; then
-                size_pct=25
+        if [ "$mem_size_mb" -le 32768 ]; then
+                size_pct=150
         else
                 size_pct=50
         fi
