@@ -2,7 +2,7 @@ maintainer="Luca Weiss <luca@lucaweiss.eu>"
 _flavor="postmarketos-qcom-sc7280"
 pkgname=linux-$_flavor
 pkgver=6.18.7
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SC7280/SM7325/QCM6490 devices"
 arch="aarch64"
 _carch="arm64"
@@ -49,7 +49,12 @@ build() {
 }
 
 package() {
-	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+	# ZBOOT EFI decompressor for EFI booting
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+		"$pkgdir/boot/linux.efi"
+
+	# Old GZIP'd kernel image for boot.img compatibility
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
 		"$pkgdir/boot/vmlinuz"
 
 	make modules_install dtbs_install \
@@ -67,5 +72,5 @@ package() {
 
 sha512sums="
 9bed1987b47e38571fe966bb5cb632f604c434beafa8dacf2e21e7a4e5ad768b7feb417484ff5a6bdf837bdce6c88a024f9a6ee56df7016476e896129e1fa6c1  linux-v6.18.7-sc7280.tar.gz
-38e3ccde16400356c22dc9293cf6bebcb76eebbcdc3fcc30b33005469bb9867e56941992568492fb14d8609789117af8858fd07fbf4f60ece9c4bf634681a61d  config-postmarketos-qcom-sc7280.aarch64
+c28a9dbaa3cae258049c5998fbef8a842d211039a515eb03cf2fa4b34c459b1ff52001d6054f2f14e5f759374bcf1e281835ab8414ab538dc50d59ffcc812e1a  config-postmarketos-qcom-sc7280.aarch64
 "
