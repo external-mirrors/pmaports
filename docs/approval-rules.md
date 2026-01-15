@@ -8,9 +8,22 @@ rules, but with the following changes.
 
 Most MRs, those not considered critical or trivial require approval by the
 package maintainer, and by another team member with approval and merge
-rights. If there is no package maintainer or the package maintainer does not
+rights. If the author of the merge request is the sole maintainer of a package
+it is sufficient to solely have the approval a team member.
+
+If there is no package maintainer or the package maintainer does not
 reply within 2 weeks from the time the MR was opened, then any 2 approvals are
 required.
+
+If there are multiple maintainers, an approval from any maintainer is sufficient
+to satisfy the "approval by the package maintainer" criteria (i.e., not every
+maintainer needs to approve it—only one). However, when a maintainer submits a
+merge request for a package with multiple maintainers, co-maintainers must be
+given a 48-hour review window (starting when they're notified, typically via the
+automated GitLab ping). After this window expires, the merge request can proceed
+with any 2 approvals from team members. The submitting maintainer may choose to
+block the merge request to wait for co-maintainer review beyond the 48-hour
+window if desired.
 
 ## Move device from category
 
