@@ -13,7 +13,8 @@ it is sufficient to solely have the approval a team member.
 
 If there is no package maintainer or the package maintainer does not
 reply within 2 weeks from the time the MR was opened, then any 2 approvals are
-required.
+required. Open a issue, when you merge a MR with no maintainer response, with the
+issue template: <https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/new?description_template=Maintainership_status_of_package>.
 
 If there are multiple maintainers, an approval from any maintainer is sufficient
 to satisfy the "approval by the package maintainer" criteria (i.e., not every
