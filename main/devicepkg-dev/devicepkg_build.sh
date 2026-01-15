@@ -71,7 +71,10 @@ generate_machine_info()
 	{
 		local model="${deviceinfo_name#"${deviceinfo_manufacturer}" *}"
 		echo "PRETTY_HOSTNAME=\"$deviceinfo_name\""
-		echo "CHASSIS=\"$deviceinfo_chassis\""
+		# deviceinfo_chassis is not mandatory, don't assume it to be set.
+		if [ -n "${deviceinfo_chassis+set}" ]; then
+			echo "CHASSIS=\"$deviceinfo_chassis\""
+		fi
 		echo "HARDWARE_VENDOR=\"$deviceinfo_manufacturer\""
 		echo "HARDWARE_MODEL=\"$model\""
 	} > "$srcdir/machine-info"
