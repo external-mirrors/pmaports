@@ -167,6 +167,15 @@ resize_filesystem_after_mount() {
 # Returns: 1 if EFI variable not found or invalid, 0 on success
 find_boot_device() {
 	local part_uuid device
+
+
+	# If we have subpartitions, the boot device is the partition containing them
+	if [ -n "$SUBPARTITION_DEV" ]; then
+		BOOT_DEVICE="$SUBPARTITION_DEV"
+		info "Using subpartition container as boot device: $BOOT_DEVICE"
+		return 0
+	fi
+
 	if ! get_esp_partition_uuid_from_efi part_uuid; then
 		return 1
 	fi
@@ -291,10 +300,30 @@ run_repart() {
 		repart_args="$repart_args --key-file=$keyfile"
 	fi
 	info "Running systemd-repart with args: $repart_args"
+
+	# For subpartitions, use a loop device so repart can work with the nested GPT
+	local loop_dev=""
+	local target_device="$BOOT_DEVICE"
+	if [ -n "$SUBPARTITION_DEV" ]; then
+		loop_dev="$(losetup -f --show --partscan "$BOOT_DEVICE")"
+		# Fix GPT backup header location
+		parted -sf "$loop_dev" print >/dev/null 2>&1
+		target_device="$loop_dev"
+	fi
+
 	# shellcheck disable=SC2086
-	if ! systemd-repart $repart_args "$BOOT_DEVICE"; then
+	if ! systemd-repart $repart_args "$target_device"; then
+		[ -n "$loop_dev" ] && losetup -d "$loop_dev"
 		return 1
 	fi
+
+	# Clean up loop device and refresh kpartx mappings
+	if [ -n "$loop_dev" ]; then
+		losetup -d "$loop_dev"
+		kpartx -d "$BOOT_DEVICE"
+		kpartx -afs "$BOOT_DEVICE"
+	fi
+
 	partprobe
 	udevadm settle --timeout=30
 }
@@ -600,11 +629,22 @@ find_part_by_uuid() {
 	local uuid="$1"
 	local path=/dev/disk/by-partuuid/"$uuid"
 
-	if [ ! -L "$path" ]; then
-		echo ""
+	if [ -L "$path" ]; then
+		readlink -f "$path"
 		return
 	fi
-	readlink -f "$path"
+
+	# Check nested partition table if we have subpartitions
+	if [ -n "$SUBPARTITION_DEV" ]; then
+		local partnum
+		partnum="$(sfdisk -d "$SUBPARTITION_DEV" 2>/dev/null | grep -i "uuid=$uuid" | sed -n 's/.*p\([0-9]\+\) :.*/\1/p')"
+		if [ -n "$partnum" ]; then
+			echo "/dev/mapper/$(basename "$SUBPARTITION_DEV")p${partnum}"
+			return
+		fi
+	fi
+
+	echo ""
 }
 
 # Change a UUID in the form XXXXXXXXXXXXX... to XXXXXXXX-XXXX-XXXX-...
@@ -688,14 +728,24 @@ find_root_on_boot_device() {
 
 	[ -z "$root_uuid" ] && return 1
 
-	# Check each partition on the boot device
-	local partition
-	for partition in "$BOOT_DEVICE"*; do
-		if blkid -p -s PART_ENTRY_TYPE "$partition" | grep -qi "$root_uuid"; then
-			echo "$partition"
+	# For subpartitions, search the nested partition table
+	if [ -n "$SUBPARTITION_DEV" ]; then
+		local partnum
+		partnum="$(sfdisk -d "$SUBPARTITION_DEV" 2>/dev/null | grep -i "type=$root_uuid" | sed -n 's/.*p\([0-9]\+\) :.*/\1/p')"
+		if [ -n "$partnum" ]; then
+			echo "/dev/mapper/$(basename "$SUBPARTITION_DEV")p${partnum}"
 			return
 		fi
-	done
+	else
+		# Check each partition on the boot device
+		local partition
+		for partition in "$BOOT_DEVICE"*; do
+			if blkid -p -s PART_ENTRY_TYPE "$partition" | grep -qi "$root_uuid"; then
+				echo "$partition"
+				return
+			fi
+		done
+	fi
 }
 
 # Limit USB storage transfer size to work around dm-verity corruption issue
