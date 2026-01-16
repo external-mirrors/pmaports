@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
 pkgver=42
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -25,8 +25,8 @@ depends="
 	"
 subpackages="
 	$pkgname-audio
-	$pkgname-audio-pipewire:audio_pipewire
-	$pkgname-audio-pulseaudio:audio_pulseaudio
+	$pkgname-audio-backend-pipewire:audio_pipewire
+	$pkgname-audio-backend-pulseaudio:audio_pulseaudio
 	$pkgname-bluez-openrc:bluez_openrc
 	$pkgname-bluez-obexd:obexd
 	$pkgname-elogind
@@ -103,7 +103,8 @@ flatpath() {
 }
 source="$(flatpath $_source644 $_source600 $_source755)"
 
-_pmb_select="postmarketos-base-ui-wifi"
+_pmb_select="postmarketos-base-ui-audio-backend postmarketos-base-ui-wifi"
+_pmb_default="postmarketos-base-ui-audio-backend-pulseaudio postmarketos-base-ui-wifi-wpa_supplicant"
 package() {
 	# wifi, audio and init backends are provided by a subpackage in this
 	# APKBUILD and it won't exist when this is evaluated at the top level.
