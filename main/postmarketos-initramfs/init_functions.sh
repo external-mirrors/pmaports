@@ -362,8 +362,8 @@ mount_subpartitions() {
 		for partition in $partitions; do
 		    # Skip whole disks - only check partitions and logical device-mapper devices for subpartitions
 			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || [ -d "/sys/class/block/$(basename "$partition")/dm" ] || continue
-			case "$(kpartx -l "$partition" 2>/dev/null | wc -l)" in
-				2)
+			subpart_count="$(kpartx -l "$partition" 2>/dev/null | wc -l)"
+			if [ "$subpart_count" -ge 2 ]; then
 					echo "Mount subpartitions of $partition"
 					SUBPARTITION_DEV="$partition"
 					kpartx -afs "$partition"
@@ -376,12 +376,7 @@ mount_subpartitions() {
 					fi
 					kpartx -d "$partition"
 					SUBPARTITION_DEV=""
-					continue
-					;;
-				*)
-					continue
-					;;
-			esac
+			fi
 		done
 		if [ "$(get_uptime_seconds)" -ge $(( attempt_start + wait_seconds )) ]; then
 			echo "ERROR: failed to mount subpartitions!"
