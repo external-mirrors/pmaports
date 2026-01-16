@@ -386,8 +386,8 @@ mount_subpartitions() {
 			# /dev/mmcblk0p62p1 *  4,4,1   979,210,2   2048  499711   97664  243M 83 Linux
 			local part_count
 			part_count="$(fdisk -l "$partition" 2>/dev/null | grep -cE '^ +[0-9]|^'"$partition")"
-			# It's probably the right "disk" if it has 2 partitions on it.
-			if [ "$part_count" -eq 2 ]; then
+			# It's probably the right "disk" if it has at least 2 partitions on it.
+			if [ "$part_count" -ge 2 ]; then
 				echo "Mount subpartitions of $partition"
 				SUBPARTITION_DEV="$partition"
 				# shellcheck disable=SC2086
