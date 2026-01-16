@@ -3,7 +3,7 @@
 pkgname=pipewire
 _pkgver=1.4.9
 pkgver=999$_pkgver
-pkgrel=2
+pkgrel=3
 _so_ver=0.3
 pkgdesc="Multimedia processing graphs"
 url="https://pipewire.org/"
@@ -144,7 +144,7 @@ pulse() {
 		pipewire-session-manager
 		pulseaudio-utils
 		"
-	provides="pulseaudio=$pkgver-r$pkgrel pulseaudio-bluez=$pkgver-r$pkgrel"
+	provides="pulseaudio=0.$pkgver-r$pkgrel pulseaudio-bluez=0.$pkgver-r$pkgrel"
 	provider_priority=1
 
 	amove usr/bin/pipewire-pulse
