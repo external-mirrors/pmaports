@@ -3,7 +3,7 @@ maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=device-apple-mac-aarch64
 pkgdesc="Apple M-series Macs"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -57,7 +57,7 @@ package() {
 audio() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-base-ui-audio"
 	depends="
-		postmarketos-base-ui-audio-pipewire
+		postmarketos-base-ui-audio-backend-pipewire
 	"
 
 	mkdir -p "$subpkgdir"

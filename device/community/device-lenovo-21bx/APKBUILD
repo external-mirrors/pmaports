@@ -6,7 +6,7 @@ maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=device-lenovo-21bx
 pkgdesc="Lenovo ThinkPad X13s"
 pkgver=17
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -53,7 +53,7 @@ package() {
 }
 
 pipewire() {
-	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-base-ui-audio-pipewire"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-base-ui-audio-backend-pipewire"
 
 	amove usr/share/pipewire.conf.d/pipewire.conf
 }
