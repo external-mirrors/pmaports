@@ -44,26 +44,26 @@ options="!check" # No tests
 package() {
 	cd rules
 	for _i in ./*; do
-		install -Dm644 "$_i" "$pkgdir"/etc/nftables.d/"$_i"
+		install -Dm644 "$_i" "$pkgdir"/usr/share/nftables/"$_i"
 	done
 
-	ln -s ../../usr/share/nftables.avail/50_sshd.nft "$pkgdir/etc/nftables.d/50_sshd.nft"
-	ln -s ../../usr/share/nftables.avail/50_mosh.nft "$pkgdir/etc/nftables.d/50_mosh.nft"
+	ln -s ../../usr/share/nftables.avail/50_sshd.nft "$pkgdir/usr/share/nftables/50_sshd.nft"
+	ln -s ../../usr/share/nftables.avail/50_mosh.nft "$pkgdir/usr/share/nftables/50_mosh.nft"
 }
 
 openusb() {
 	depends="$pkgname"
 	description="Adds a rule to accept all incoming connections to the usb* interface"
 
-	amove etc/nftables.d/60_usb.nft
+	amove usr/share/nftables/60_usb.nft
 }
 
 log() {
 	depends="$pkgname"
 	description="Enables logging of nftable events"
 
-	amove etc/nftables.d/00_log_all.nft
-	amove etc/nftables.d/99_drop_log.nft
+	amove usr/share/nftables/00_log_all.nft
+	amove usr/share/nftables/99_drop_log.nft
 }
 
 chromecast() {
@@ -80,14 +80,14 @@ docker() {
 	description="Enables networking for Docker"
 	install_if="$pkgname=$pkgver-r$pkgrel docker"
 
-	amove etc/nftables.d/51_docker.nft
+	amove usr/share/nftables/51_docker.nft
 }
 
 mdns() {
 	depends="$pkgname"
 	description="Enables networking for mDNS"
 
-	amove etc/nftables.d/50_mdns.nft
+	amove usr/share/nftables/50_mdns.nft
 }
 
 moshserver() {
@@ -95,7 +95,7 @@ moshserver() {
 	description="Enables networking for mosh server"
 	install_if="$pkgname=$pkgver-r$pkgrel mosh-server"
 
-	amove etc/nftables.d/50_mosh.nft
+	amove usr/share/nftables/50_mosh.nft
 }
 
 upnp_client() {
@@ -103,7 +103,7 @@ upnp_client() {
 	description="Enables networking for SSDP/UPnP client"
 	install_if="$pkgname=$pkgver-r$pkgrel libupnp"
 
-	amove etc/nftables.d/50_upnp_client.nft
+	amove usr/share/nftables/50_upnp_client.nft
 }
 
 vlc_chromecast() {
@@ -111,21 +111,21 @@ vlc_chromecast() {
 	description="Enables networking for VLC Chromecast casting"
 	install_if="$pkgname=$pkgver-r$pkgrel vlc"
 
-	amove etc/nftables.d/50_vlc_chromecast.nft
+	amove usr/share/nftables/50_vlc_chromecast.nft
 }
 
 vncserver() {
 	depends="$pkgname"
 	description="Enables networking for VNC Server"
 
-	amove etc/nftables.d/50_vncserver.nft
+	amove usr/share/nftables/50_vncserver.nft
 }
 
 wifi_display() {
 	depends="$pkgname"
 	description="Enables networking for peer-to-peer Wi-Fi Displays (Miracast)"
 
-	amove etc/nftables.d/51_wifi_display.nft
+	amove usr/share/nftables/51_wifi_display.nft
 }
 
 networkmanager() {
