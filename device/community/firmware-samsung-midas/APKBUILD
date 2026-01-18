@@ -1,7 +1,7 @@
 maintainer=""
 pkgname=firmware-samsung-midas
 pkgver=8
-pkgrel=0
+pkgrel=1
 pkgdesc="Samsung Galaxy Midas board firmware (m0, m3, t0lte, ...)"
 _commit="fdd8c44568a148c22fbf008de822ff4e27992da1"
 url="https://github.com/TheMuppets/proprietary_vendor_samsung"
@@ -65,6 +65,8 @@ wifi() {
 		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n7105.txt
 	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
 		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n8010.txt
+	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
+		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n5110.txt
 }
 
 sha512sums="
