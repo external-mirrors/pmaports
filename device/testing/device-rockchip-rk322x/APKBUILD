@@ -2,7 +2,7 @@ maintainer="leap123 <leap123@canaglie.org>"
 pkgname=device-rockchip-rk322x
 pkgdesc="Generic device package for various Rockchip RK3228/RK3229-based devices"
 pkgver=3
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -35,7 +35,7 @@ x11() {
 	# https://github.com/armbian/build/blob/master/config/sources/families/include/meson64_common.inc
 	install_if="$pkgname xorg-server"
 	install -D -m644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/11-rockchip.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/11-rockchip.conf
 }
 
 package() {

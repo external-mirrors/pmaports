@@ -3,7 +3,7 @@ maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=soc-amlogic-aarch64
 pkgdesc="Common package for devices using an Amlogic AArch64 SoC"
 pkgver=3
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -38,9 +38,9 @@ x11() {
 	pkgdesc="X11 configuration for Amlogic AArch64-based devices"
 	# Shamelessly taken from Armbian.
 	# https://github.com/armbian/build/blob/master/config/sources/families/include/meson64_common.inc
-	install_if="$pkgname xorg-server"
-	install -D -m644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/11-meson.conf
+	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
+	install -Dm644 "$srcdir"/xorg.conf \
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/11-meson.conf
 }
 
 sha512sums="

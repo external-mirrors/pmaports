@@ -3,7 +3,7 @@ maintainer=""
 pkgname=device-samsung-i927
 pkgdesc="Samsung Captivate Glide"
 pkgver=5
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -56,7 +56,7 @@ package() {
 		"$pkgdir"/etc/pm/config.d/i927-pm-conf
 
 	install -D -m644 "$srcdir"/40-samsung-i927.conf \
-		"$pkgdir"/etc/X11/xorg.conf.d/40-samsung-i927.conf
+		"$pkgdir"/usr/share/X11/xorg.conf.d/40-samsung-i927.conf
 }
 
 nonfree_firmware() {
@@ -66,9 +66,10 @@ nonfree_firmware() {
 }
 
 x11() {
-	install_if="$pkgname xorg-server"
+	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 	depends="xf86-video-opentegra libvdpau-tegra"
-	mkdir "$subpkgdir"
+
+	amove usr/share/X11
 }
 
 sha512sums="
