@@ -4,7 +4,7 @@
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
 pkgver=12
-pkgrel=0
+pkgrel=1
 _confver=69
 _purismrel=2
 # <librem5-base ver>.<purism release>
@@ -142,7 +142,7 @@ usbguard() {
 x11() {
 	install_if="$pkgname xorg-server"
 	install -Dm644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/10-video.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/10-video.conf
 }
 
 package() {

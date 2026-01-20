@@ -2,7 +2,7 @@ maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
 pkgver=11
-pkgrel=0
+pkgrel=1
 _commit="28d2c05ab4e80a7972611cd3188f3e8be4197f6a"
 url="https://postmarketos.org"
 license="GPL-3.0-only"
@@ -270,7 +270,7 @@ x11() {
 
 	# xorg touchscreen settings
 	install -Dm644 "$srcdir"/50-touchscreen.conf \
-		-t "$subpkgdir"/etc/X11/xorg.conf.d
+		-t "$subpkgdir"/usr/share/X11/xorg.conf.d
 }
 
 sha512sums="

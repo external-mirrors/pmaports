@@ -3,7 +3,7 @@
 maintainer="Arnav Singh <me@arnavion.dev>"
 pkgname=device-pine64-pinephone
 pkgver=11
-pkgrel=0
+pkgrel=1
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -226,7 +226,7 @@ sway() {
 x11() {
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 	install -Dm644 "$srcdir"/x11-pinephone-keyboard.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/pinephone-keyboard.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/pinephone-keyboard.conf
 }
 
 audio() {

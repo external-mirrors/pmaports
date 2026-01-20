@@ -4,7 +4,7 @@ maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=soc-mediatek-mt8183
 pkgdesc="Common package for Mediatek MT8183 devices"
 pkgver=2
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
@@ -34,9 +34,9 @@ x11() {
 	install_if="$pkgname xorg-server"
 
 	install -Dm644 "$srcdir"/11-modesetting.conf \
-		-t "$subpkgdir"/etc/X11/xorg.conf.d
+		-t "$subpkgdir"/usr/share/X11/xorg.conf.d
 	install -Dm644 "$srcdir"/13-panfrost-swapped-dri-nodes.conf \
-		-t "$subpkgdir"/etc/X11/xorg.conf.d
+		-t "$subpkgdir"/usr/share/X11/xorg.conf.d
 }
 
 sha512sums="
