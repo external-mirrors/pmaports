@@ -3,7 +3,7 @@ maintainer="19atlas <warfarin@vern.cc>"
 pkgname=device-samsung-gtexswifi
 pkgdesc="Samsung Galaxy Tab A 7.0"
 pkgver=3
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -42,8 +42,8 @@ x11() {
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 
 	# Touch fix
-	mkdir -p "$pkgdir"/etc/X11/xorg.conf.d
-	install -Dm644 "$srcdir"/00-fbdev-rotate-UD.conf "$subpkgdir"/etc/X11/xorg.conf.d
+	install -Dm644 "$srcdir"/00-fbdev-rotate-UD.conf \
+		-t "$subpkgdir"/usr/share/X11/xorg.conf.d
 }
 
 sha512sums="

@@ -2,13 +2,14 @@
 pkgname=device-planet-geminipda
 pkgdesc="Gemini PDA"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base devicepkg-utils linux-planet-geminipda mkbootimg"
 makedepends="devicepkg-dev"
+subpackages="$pkgname-x11"
 source="deviceinfo
 	kernel-cmdline.conf
 	10-geminipda-loopback-device.sh
@@ -25,7 +26,14 @@ package() {
 		"$pkgdir"/usr/share/mkinitfs/hooks/10-geminipda-loopback-device.sh
 
 	install -Dm644 "$srcdir"/20-fbdev.conf \
-		"$pkgdir"/etc/X11/xorg.conf.d/20-fbdev.conf
+		"$pkgdir"/usr/share/X11/xorg.conf.d/20-fbdev.conf
+}
+
+x11() {
+	pkgdesc="$pkgdesc (x11 Configuration)"
+	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
+
+	amove usr/share/X11
 }
 
 sha512sums="

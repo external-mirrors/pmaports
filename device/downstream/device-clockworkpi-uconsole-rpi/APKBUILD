@@ -5,7 +5,7 @@ pkgdesc="Clockwork Tech ClockworkPi uConsole with Raspberry Pi compute modules"
 pkgver=9
 # commit to fork of kernel with drivers maintained by ak-rex
 _commit=d340a0416d34bf94591b45b50c5538aecbf5b09b
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -144,7 +144,7 @@ nonfree_firmware() {
 x11() {
 	install_if="$pkgname xorg-server"
 	install -Dm644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/10-monitor.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/10-monitor.conf
 }
 
 openrc() {

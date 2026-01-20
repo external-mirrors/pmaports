@@ -2,7 +2,7 @@
 pkgname=device-asus-t00f
 pkgdesc="Asus Zenfone 5"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="x86"
@@ -31,7 +31,7 @@ x11() {
 		xf86-input-libinput
 		xf86-video-fbdev"
 	install -Dm644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/10-t00f.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/10-t00f.conf
 }
 
 sha512sums="

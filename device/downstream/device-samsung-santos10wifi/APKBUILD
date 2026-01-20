@@ -2,7 +2,7 @@
 pkgname=device-samsung-santos10wifi
 pkgdesc="Samsung Galaxy Tab 3 10.1 Wi-Fi"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="x86"
@@ -31,7 +31,7 @@ x11() {
 		xf86-input-libinput
 		xf86-video-fbdev"
 	install -Dm644 "$srcdir"/xorg.conf \
-		"$subpkgdir"/etc/X11/xorg.conf.d/10-santos10wifi.conf
+		"$subpkgdir"/usr/share/X11/xorg.conf.d/10-santos10wifi.conf
 }
 
 nonfree_firmware() {

@@ -2,7 +2,7 @@
 pkgname=device-samsung-crownlte
 pkgdesc="Samsung Galaxy Note 9"
 pkgver=4
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -65,7 +65,7 @@ x11() {
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 	depends="xf86-input-evdev"
 	install -Dm644 "$srcdir"/stylus.conf \
-		-t "$subpkgdir"/etc/X11/xorg.conf.d
+		-t "$subpkgdir"/usr/share/X11/xorg.conf.d
 }
 
 sha512sums="
