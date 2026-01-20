@@ -6,24 +6,31 @@ pkgrel=1
 _nextver="${pkgver#*_git}"
 pkgdesc="Linux next kernel"
 arch="armv7 aarch64"
-case "$CARCH" in
-	aarch64) _carch="arm64";_defconfig="defconfig";;
-	# FIXME: We should not be using qcom_defconfig. Instead we should be using multi_v7_defconfig.
-	# The problem is two-fold:
-	# - We need to reduce the amount of mainline kernels.
-	# - We need to find a way to not duplicate upstream defconfigs into our repo.
-	# Please see: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/6133#note_468011
-	armv7) _carch="arm";_defconfig="qcom_defconfig";;
-esac
+_defconfig="defconfig"
+# case "$CARCH" in
+# 	aarch64) _carch="arm64";_defconfig="defconfig";;
+# 	# FIXME: We should not be using qcom_defconfig. Instead we should be using multi_v7_defconfig.
+# 	# The problem is two-fold:
+# 	# - We need to reduce the amount of mainline kernels.
+# 	# - We need to find a way to not duplicate upstream defconfigs into our repo.
+# 	# Please see: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/6133#note_468011
+# 	armv7) _carch="arm";_defconfig="qcom_defconfig";;
+# esac
 _flavor="generic-trailblazer"
 url="https://kernel.org"
 license="GPL-2.0-only"
-# FIXME: kconfigcheck isn't supported since we use fragments
-options="!strip !check !tracedeps pmb:cross-native"
+options="
+	!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-immutable
+	pmb:kconfigcheck-uefi
+"
 source="
 	https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/snapshot/linux-next-next-$_nextver.tar.gz
 	devices.config
-	pmos.config
+	config-generic-trailblazer.aarch64
+	config-generic-trailblazer.armv7
 "
 makedepends="
 	bash
@@ -52,14 +59,8 @@ builddir="$srcdir/linux-next-next-$_nextver"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/pmos.config" "$builddir"/arch/"$_carch"/configs/
-	cp "$srcdir/devices.config" "$builddir"/arch/"$_carch"/configs/
 
-	# Generate .config
-	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-next-$_nextver" \
-		"$_defconfig" pmos.config devices.config
+	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
 
 build() {
@@ -92,5 +93,6 @@ package() {
 sha512sums="
 ba5629cb92a2c3e17fef5354b9393ed421db23153e9c3bc7b9651d9e75683e33f7c3e5ec368dc26284f29f9b011a0ed8c314b6941f0e229abf2e4c83eb38b42c  linux-next-next-20251215.tar.gz
 9b97849df749c6051503b4f4522db72bc6d5ec718a65a24f99132138a9262b6a473a33bc02e5f09fdb721066d3f6e6a0577de363cdd8a0e38ee99c9e3b08d01d  devices.config
-25c07558cc7dc82485957c82246bbf1eef4a4188f007546b27336fcd84507b387c8afc3d0feb2a2760e90ccde804ff7d7112be38831bba92d5a1988780a42cdd  pmos.config
+508fe488785200754cf56d06ba4921be644efc0d2fdac29a6037c9295b62f349ef8408ea5b83d6325de983bc30e8f47d19e74f95903a954c157a42b065407fad  config-generic-trailblazer.aarch64
+cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e  config-generic-trailblazer.armv7
 "
