@@ -5,7 +5,7 @@ maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-desktop
 _pkgver=44.4
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="GNOME desktop core libraries"
 url="https://gitlab.gnome.org/GNOME/gnome-desktop"
 # armhf: pmb#2618
@@ -61,10 +61,10 @@ check() {
 
 package() {
 	depends="
-		libgnome-bg-4=$_pkgver-r$pkgrel
-		libgnome-desktop-3=$_pkgver-r$pkgrel
-		libgnome-desktop-4=$_pkgver-r$pkgrel
-		libgnome-rr-4=$_pkgver-r$pkgrel
+		libgnome-bg-4=$pkgver-r$pkgrel
+		libgnome-desktop-3=$pkgver-r$pkgrel
+		libgnome-desktop-4=$pkgver-r$pkgrel
+		libgnome-rr-4=$pkgver-r$pkgrel
 		"
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
