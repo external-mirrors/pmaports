@@ -1,14 +1,12 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=libkleo
-pkgver=99999_git20260111
+pkgver=99999_git20260118
 pkgrel=0
-_commit="33b23e5fe661cc9e23810d85e688c4ed5b1abb76"
+_commit="229ef54439a00097dfa853b51fe215ab85e23415"
 pkgdesc="KDE PIM cryptographic library"
-# armhf blocked by extra-cmake-modules
+# armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
 url="https://kontact.kde.org"
 license="GPL-2.0-or-later"
@@ -16,8 +14,10 @@ license="GPL-2.0-or-later"
 depends="gnupg"
 makedepends="
 	boost-dev
+	doxygen
 	extra-cmake-modules
-	gpgme-dev
+	gpgmepp-dev
+	graphviz
 	kcodecs-dev
 	kcompletion-dev
 	kconfig-dev
@@ -27,13 +27,14 @@ makedepends="
 	kpimtextedit-dev
 	kwidgetsaddons-dev
 	kwindowsystem-dev
+	qgpgme-dev
 	qt6-qtbase-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="xwayland-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/libkleo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-12/libkleo-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/libkleo-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/libkleo-$_commit"
@@ -42,7 +43,8 @@ build() {
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
 	cmake --build build
 }
 
@@ -55,5 +57,5 @@ package() {
 }
 
 sha512sums="
-47012ebcb64c569e0408f6e585ecd555ed47ee105f7588b9f397c79ef70f40303e67891760199e75752ea7e03f840a8c3bc2f200bbafcef0ce4d06c7594a32a8  libkleo-33b23e5fe661cc9e23810d85e688c4ed5b1abb76.tar.xz
+e45136d0043b80a1c6559fe7dea74e5c438b389122372c453533df2aa12d949adae143101c335820abb0bca92ed58b1d07fa48d6cd44070066c7f584da775a2e  libkleo-229ef54439a00097dfa853b51fe215ab85e23415.tar.xz
 "

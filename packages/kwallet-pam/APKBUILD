@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kwallet-pam
-pkgver=99999_git20250918
+pkgver=99999_git20260113
 pkgrel=0
-_commit="7d65f545532e4208eda1a2dd7f0b3f049cedec5a"
+_commit="4ba1f0abe96f37fa671e76b79db2148433944c9c"
 pkgdesc="KWallet PAM integration"
 # armhf blocked by qt6-qtdeclarative -> kwallet
 arch="all !armhf"
@@ -23,7 +23,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kwallet-pam.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-09-20/kwallet-pam-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-14/kwallet-pam-$_commit.tar.xz"
 options="!check" # No tests available
 
 builddir="$srcdir/kwallet-pam-$_commit"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-d2f1954c1e24e8ff373bad9ad6a91c6ab7eaa7b001b7e9f06b884963903fc2c6257b0d0132a635778c2385693732dca88fcf6e08ef30fb9fcdc0283cbaeb2673  kwallet-pam-7d65f545532e4208eda1a2dd7f0b3f049cedec5a.tar.xz
+9a95b4ef2ad6ec63d180579fd95462a9c7154a70cb808ee3c7ca305cc252e1d20a1f47730bc8afbdf2edd0a61db55b9d33856a32ee14387fc05c76c59aa1182e  kwallet-pam-4ba1f0abe96f37fa671e76b79db2148433944c9c.tar.xz
 "

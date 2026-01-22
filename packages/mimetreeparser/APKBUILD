@@ -1,9 +1,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mimetreeparser
-pkgver=99999_git20260111
+pkgver=99999_git20260118
 pkgrel=0
-_commit="f2961e05b4c1c355a08eed5957c882f7d68598c3"
+_commit="8fb5291814581693e63d1474c20207d5cf2edbc8"
 pkgdesc="Parser for MIME trees"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -12,7 +12,7 @@ license="LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later AND BSD-3-Cla
 makedepends="
 	doxygen
 	extra-cmake-modules
-	gpgme-dev
+	gpgmepp-dev
 	graphviz
 	kcalendarcore-dev
 	kcodecs-dev
@@ -23,6 +23,7 @@ makedepends="
 	kmime-dev
 	kwidgetsaddons-dev
 	libkleo-dev
+	qgpgme-dev
 	qt6-qt5compat-dev
 	qt6-qtbase-dev
 	qt6-qtdeclarative-dev
@@ -32,7 +33,7 @@ makedepends="
 	"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/mimetreeparser.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-12/mimetreeparser-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/mimetreeparser-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/mimetreeparser-$_commit"
@@ -61,5 +62,5 @@ package() {
 	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-1f1f598fffd38c7e7a59974509b5d490dfe605576c859051b91aa4eee5023d1089b380868a907a68f53c4efb644b95c96197afa3481e6f24f54c4d8b27bc03f0  mimetreeparser-f2961e05b4c1c355a08eed5957c882f7d68598c3.tar.xz
+3470aa8c70003a593c93da231f92c116e41bf8d4b17d1b8fb01fc821427ec003c22dac9dab8882b8c59ae24dd062742e4e05315fe2841b629d9d02d501a622cd  mimetreeparser-8fb5291814581693e63d1474c20207d5cf2edbc8.tar.xz
 "

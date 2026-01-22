@@ -1,12 +1,10 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: team/kde <bribbers@disroot.org>
-
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
+maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-pass
-pkgver=99999_git20260110
+pkgver=99999_git20260118
 pkgrel=0
-_commit="793a398308a72ee5b4288eb6df90a33628eeef27"
+_commit="618a6895297d55ff4bef49bce80fd1ccbc1e84ec"
 pkgdesc="Plasma applet for the Pass password manager"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -14,7 +12,7 @@ url="https://kde.org/plasma-desktop/"
 license="LGPL-2.1-or-later"
 makedepends="
 	extra-cmake-modules
-	gpgme-dev
+	qgpgme-dev
 	ki18n-dev
 	kitemmodels-dev
 	libplasma-dev
@@ -25,7 +23,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/plasma/plasma-pass.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-10/plasma-pass-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/plasma-pass-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -48,5 +46,5 @@ package() {
 }
 
 sha512sums="
-7f055a618268f3922ef853fdfbaf9778fdcdc487f9d7033bd4f00120dd93273890cfd29d3eee0819e84bc96fbb6f827dc4a9ac278b6a97dd5ed6b5a358828262  plasma-pass-793a398308a72ee5b4288eb6df90a33628eeef27.tar.xz
+34d86dd55e064c3840e2471a08a6a2953c9ebec15387a673a08d4a336aa2c63814e867888328d0ca85c1e375e88044416888080d98a5ce6eee9f0c2a140b4ae8  plasma-pass-618a6895297d55ff4bef49bce80fd1ccbc1e84ec.tar.xz
 "

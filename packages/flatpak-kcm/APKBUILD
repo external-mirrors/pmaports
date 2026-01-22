@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=flatpak-kcm
-pkgver=99999_git20260111
+pkgver=99999_git20260118
 pkgrel=0
-_commit="75af2254a417340ec055961a0568e78472cc051d"
+_commit="81c3e785e98636501ef9c0aee33e358cacb0a370"
 pkgdesc="Flatpak Permissions Management KCM"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -32,7 +32,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/flatpak-kcm.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-12/flatpak-kcm-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/flatpak-kcm-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 install_if="flatpak systemsettings"
 
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-2462ee875f9005041e2aa2200987aaea4a2f0eaa1e3505daf0ba7487a805511d9c0e67d8f2f6ee6d936ec35673f8d73e406f6610e761c7ec70f334f72158ac8c  flatpak-kcm-75af2254a417340ec055961a0568e78472cc051d.tar.xz
+592476367eb7651d26fc385d31d93d858dd24512ff84224c35906f1ed3d0b0f33b42a001852804a06526960bf495d8021a0b66df816e616046eaa76d40983d75  flatpak-kcm-81c3e785e98636501ef9c0aee33e358cacb0a370.tar.xz
 "

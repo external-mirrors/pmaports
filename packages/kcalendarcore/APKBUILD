@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcalendarcore
-pkgver=99999_git20260110
+pkgver=99999_git20260111
 pkgrel=0
-_commit="48de014f22069d93a1330ed594db30e77264275f"
+_commit="3d01937a617c97870ff7dfd1b9346ddc6f4c6f67"
 pkgdesc="The KDE calendar access library"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/kcalendarcore.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-10/kcalendarcore-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-15/kcalendarcore-$_commit.tar.xz"
 options="!check" # RecursOn-ConnectDaily(2|3|6) make the builders stuck
 
 replaces="kcalcore"
@@ -58,5 +58,5 @@ package() {
 }
 
 sha512sums="
-d7ed04f43b6ffc61a4ca5b0a4002fb533bb067087e134461dcdcd1b4232df82f78a0d3818a9a45a4278c60282a432c284af1ab02c4edb55bb32573b1d1dea6bb  kcalendarcore-48de014f22069d93a1330ed594db30e77264275f.tar.xz
+4444bd15cb1cb8d74441f402aae0d490869e3209d955a40b42238f2d4a01bd3e626946836c008028e8e916520f5dc8f587cf2c414c0d318869ca1e4b8da2a6d5  kcalendarcore-3d01937a617c97870ff7dfd1b9346ddc6f4c6f67.tar.xz
 "
