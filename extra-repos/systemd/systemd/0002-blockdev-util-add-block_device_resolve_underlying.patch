@@ -1,0 +1,85 @@
+From a9a130419b4e596fb26d092696ca020a6a7a9b1e Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Thu, 22 Jan 2026 15:29:49 -0800
+Subject: [PATCH 2/5] blockdev-util: add block_device_resolve_underlying()
+
+Add a function to resolve through device-mapper layers (dm-verity,
+dm-crypt, dm-linear) to find the underlying block device. This
+iteratively walks /sys/dev/block/X:Y/slaves/ until reaching a
+non-dm device.
+
+This is needed for subpartitioning support where /usr may be on
+dm-verity backed by a subpartition.
+---
+ src/shared/blockdev-util.c | 42 ++++++++++++++++++++++++++++++++++++++
+ src/shared/blockdev-util.h |  1 +
+ 2 files changed, 43 insertions(+)
+
+diff --git a/src/shared/blockdev-util.c b/src/shared/blockdev-util.c
+index 3242ea23da..f9499174f7 100644
+--- a/src/shared/blockdev-util.c
++++ b/src/shared/blockdev-util.c
+@@ -307,6 +307,48 @@ int block_get_originating(dev_t dt, dev_t *ret) {
+         return sd_device_get_devnum(origin, ret);
+ }
+ 
++int block_device_resolve_underlying(dev_t *ret) {
++        dev_t d;
++
++        assert(ret);
++        d = *ret;
++
++        for (;;) {
++                _cleanup_free_ char *slaves_dir = NULL;
++                _cleanup_closedir_ DIR *dir = NULL;
++                bool resolved = false;
++
++                if (asprintf(&slaves_dir, "/sys/dev/block/%u:%u/slaves", major(d), minor(d)) < 0)
++                        return -ENOMEM;
++
++                dir = opendir(slaves_dir);
++                if (!dir)
++                        break;
++
++                FOREACH_DIRENT(de, dir, return -errno) {
++                        _cleanup_(sd_device_unrefp) sd_device *slave = NULL;
++                        dev_t slave_devno;
++
++                        if (sd_device_new_from_subsystem_sysname(&slave, "block", de->d_name) < 0)
++                                continue;
++
++                        if (sd_device_get_devnum(slave, &slave_devno) < 0)
++                                continue;
++
++                        d = slave_devno;
++                        log_debug("Resolved to underlying device: %s", de->d_name);
++                        resolved = true;
++                        break;
++                }
++
++                if (!resolved)
++                        break;
++        }
++
++        *ret = d;
++        return 0;
++}
++
+ int get_block_device_harder_fd(int fd, dev_t *ret) {
+         int r;
+ 
+diff --git a/src/shared/blockdev-util.h b/src/shared/blockdev-util.h
+index 871596f618..824f20ffde 100644
+--- a/src/shared/blockdev-util.h
++++ b/src/shared/blockdev-util.h
+@@ -25,6 +25,7 @@ int block_device_new_from_path(const char *path, BlockDeviceLookupFlags flags, s
+ int block_device_is_whole_disk(sd_device *dev);
+ int block_device_get_whole_disk(sd_device *dev, sd_device **ret);
+ int block_device_get_originating(sd_device *dev, sd_device **ret);
++int block_device_resolve_underlying(dev_t *ret);
+ 
+ int block_get_whole_disk(dev_t d, dev_t *ret);
+ int block_get_originating(dev_t d, dev_t *ret);
+-- 
+2.52.0
+

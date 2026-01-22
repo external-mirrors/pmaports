@@ -9,7 +9,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=systemd
 pkgver=259
 _pkgver="${pkgver/_/-}"
-pkgrel=1
+pkgrel=999
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 arch="all"
@@ -156,6 +156,12 @@ subpackages="
 
 source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
+
+	0001-blkid-util-add-blkid_device_has_gpt-helper.patch
+	0002-blockdev-util-add-block_device_resolve_underlying.patch
+	0003-blockdev-util-add-subpartition-support-to-block_get_.patch
+	0004-dissect-image-use-dev-mapper-paths-for-subpartitions.patch
+	0005-find-esp-support-subpartitions-when-verifying-ESP.patch
 	"
 builddir="$srcdir/systemd-$_pkgver"
 
@@ -479,4 +485,9 @@ libs() {
 sha512sums="
 ef46b13661df43e3cfbeee1bc22f0b1eb902e8ebe39c19868c465efd08b35a199c2a2cd9d8021a6bc4d692fa0c6e0eab3f13eecd6ce24dde81d3945464a25b50  systemd-259.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
+54ff3607e4f26a2e1a3da9e81e72a04b414573f5eef3103e1a586446c0e556b3e9e31f6e810b4048674d1afe2718dd80ef3269e470bd18ec0ef2fb3b28f16979  0001-blkid-util-add-blkid_device_has_gpt-helper.patch
+9b49e359c968b13d94171548f74d55aaf0f6158c73e4d8d5919c83846a639d49d1130eca67fb54764cc339c35cf376aa8c6e8cb94847043563f9f81240a8cf87  0002-blockdev-util-add-block_device_resolve_underlying.patch
+c533bc1297a29b8a8efa0d3add0a301cfcb6b6df62384a099da7b99de6314d4dfbe6d6cc6c3fd1e84e22dfecf7bbe6a89dc7ff0e24e5b8fda0d6c3b0c8f5d837  0003-blockdev-util-add-subpartition-support-to-block_get_.patch
+4e046d262780f06bb650f6fd41ce8c6105596b0dd414da3ef41e6b4c6d9d022370a841aa7b41b7064cade26de3ba374da02425e7ca0bcbc29811a7c33d6cea8f  0004-dissect-image-use-dev-mapper-paths-for-subpartitions.patch
+3ee0219c535487014496fac43d6ea44b8726e4d871ee75cfbe7127faef0cac6e0e42fd73ce4ecf0f183e079df2d3fec4443929c8d45e1dbfd004700e6720483e  0005-find-esp-support-subpartitions-when-verifying-ESP.patch
 "

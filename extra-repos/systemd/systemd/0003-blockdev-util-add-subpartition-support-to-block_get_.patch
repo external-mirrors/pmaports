@@ -1,0 +1,109 @@
+From c04df487fde9c0212b92139a3ef7a3bdd48b1891 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Thu, 22 Jan 2026 15:30:36 -0800
+Subject: [PATCH 3/5] blockdev-util: add subpartition support to
+ block_get_whole_disk()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Modify block_get_whole_disk() to support "subpartitions" scenarios
+where a GPT partition contains a nested GPT with its own partitions.
+This is commonly used on Android devices where repartitioning the main
+storage is difficult or impossible.
+
+Example layout:
+  sda17 (contains GPT)
+  ├─sda17p1 (ESP)
+  ├─sda17p2 (usr-verity-sig)
+  ├─sda17p3 (usr-verity)
+  │ └─usr-verified (dm-verity) -> /usr
+  └─sda17p4 (usr data)
+
+The function now checks if the parent device (after resolving dm layers
+and getting the partition's container) has a GPT partition table. If so,
+that parent is treated as the "whole disk" for partitioning purposes
+rather than continuing to walk up to the physical disk.
+
+Subpartition detection uses blkid rather than libfdisk because
+blkid seems to be more widely "available" (more components like
+gpt-auto-generator, bootctl, and so on use blkid but not libfdisk). The
+idea is that this would maximize the number of components that benefit
+from this subpartition support transparently.
+---
+ src/shared/blockdev-util.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/src/shared/blockdev-util.c b/src/shared/blockdev-util.c
+index f9499174f7..83108285af 100644
+--- a/src/shared/blockdev-util.c
++++ b/src/shared/blockdev-util.c
+@@ -24,6 +24,10 @@
+ #include "path-util.h"
+ #include "string-util.h"
+ 
++#if HAVE_BLKID
++#include "blkid-util.h"
++#endif
++
+ static int fd_get_devnum(int fd, BlockDeviceLookupFlags flags, dev_t *ret) {
+         struct stat st;
+         dev_t devnum;
+@@ -218,6 +222,11 @@ int block_get_whole_disk(dev_t d, dev_t *ret) {
+         if (major(d) == 0)
+                 return -ENODEV;
+ 
++        /* Resolve through device-mapper layers */
++        r = block_device_resolve_underlying(&d);
++        if (r < 0)
++                log_debug_errno(r, "Failed to resolve underlying device, ignoring: %m");
++
+         /* If it has a queue this is good enough for us */
+         xsprintf_sys_block_path(p, "/queue", d);
+         if (access(p, F_OK) >= 0) {
+@@ -227,6 +236,19 @@ int block_get_whole_disk(dev_t d, dev_t *ret) {
+         if (errno != ENOENT)
+                 return -errno;
+ 
++#if HAVE_BLKID
++        /* Check if current device has GPT (subpartition case) */
++        r = dlopen_libblkid();
++        if (r >= 0) {
++                _cleanup_free_ char *node = NULL;
++                r = devname_from_devnum(S_IFBLK, d, &node);
++                if (r >= 0 && blkid_device_has_gpt(node) > 0) {
++                        *ret = d;
++                        return 1;
++                }
++        }
++#endif
++
+         /* If it is a partition find the originating device */
+         xsprintf_sys_block_path(p, "/partition", d);
+         if (access(p, F_OK) < 0)
+@@ -242,6 +264,22 @@ int block_get_whole_disk(dev_t d, dev_t *ret) {
+         if (r < 0)
+                 return r;
+ 
++#if HAVE_BLKID
++        /* Check if resolved device has GPT and if so, it's the "whole disk" */
++        r = dlopen_libblkid();
++        if (r >= 0) {
++                _cleanup_free_ char *node = NULL;
++                r = devname_from_devnum(S_IFBLK, devt, &node);
++                if (r >= 0) {
++                        r = blkid_device_has_gpt(node);
++                        if (r > 0) {
++                                *ret = devt;
++                                return 1;
++                        }
++                }
++        }
++#endif
++
+         /* Only return this if it is really good enough for us. */
+         xsprintf_sys_block_path(p, "/queue", devt);
+         if (access(p, F_OK) < 0)
+-- 
+2.52.0
+
