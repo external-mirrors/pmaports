@@ -1,0 +1,52 @@
+From 90e9cbbafd7411cbbfbcb69ece41d14479c2d297 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Thu, 22 Jan 2026 23:08:29 -0800
+Subject: [PATCH 4/5] dissect-image: use /dev/mapper paths for subpartitions
+
+When dissecting images with subpartitions (GPT within a partition),
+construct device paths using /dev/mapper/ prefix instead of diskseq
+paths. Subpartitions created by kpartx appear in /dev/mapper/ and
+don't have diskseq symlinks.
+
+This enables gpt-auto-generator to correctly mount ESP and other
+partitions from nested GPT tables, commonly used on Android devices
+where repartitioning the main storage is difficult or impossible.
+---
+ src/shared/dissect-image.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/src/shared/dissect-image.c b/src/shared/dissect-image.c
+index 05c2514593..fda365c1f1 100644
+--- a/src/shared/dissect-image.c
++++ b/src/shared/dissect-image.c
+@@ -684,6 +684,27 @@ static int make_partition_devname(
+         assert(nr != 0); /* zero is not a valid partition nr */
+         assert(ret);
+ 
++        /* Subpartitions don't have diskseq entries, so we must use direct paths. This only looks in
++        * /dev/mapper, for subpartitions mapped by kpartx */
++        _cleanup_(sd_device_unrefp) sd_device *dev = NULL;
++        if (sd_device_new_from_devname(&dev, whole_devname) >= 0 &&
++            block_device_is_whole_disk(dev) <= 0) {
++                _cleanup_free_ char *name = NULL;
++                r = path_extract_filename(whole_devname, &name);
++                if (r < 0)
++                        return r;
++
++                if (nr < 0)
++                        r = asprintf(&s, "/dev/mapper/%s", name);
++                else
++                        r = asprintf(&s, "/dev/mapper/%sp%i", name, nr);
++                if (r < 0)
++                        return -ENOMEM;
++
++                *ret = TAKE_PTR(s);
++                return 0;
++        }
++
+         r = diskseq_should_be_used(whole_devname, diskseq, flags);
+         if (r < 0)
+                 log_debug_errno(r, "Failed to determine if diskseq should be used for %s, assuming no, ignoring: %m", whole_devname);
+-- 
+2.52.0
+
