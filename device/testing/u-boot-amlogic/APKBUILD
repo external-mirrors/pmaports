@@ -51,7 +51,7 @@ _fip_builddir="$srcdir/amlogic-boot-fip-$_amlogicblob_commit"
 
 # Format: <board>:<board u-boot defconfig>,<amlogic-boot-fip board files>
 _gxbb_boards="
-	odroid-c2:odroid-c2,p201
+	odroid-c2:odroid-c2,odroid-c2
 "
 _gxl_boards="
 	beelink-gt1:beelink-gt1-ultimate,beelink-gt1
@@ -95,20 +95,36 @@ build() {
 		cd $_fip_builddir
 		mkdir -p ./build
 
-		# create amlogic fip
-		python "$board_fip_dir/acs_tool.py" "$board_fip_dir/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/acs.bin" 0
-		"$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
-		#gxlimg -t bl2 -s "$board_fip_dir/bl2_new.bin" "$board_fip_dir/bl2.bin.sig"
-		bl2bin="$board_fip_dir/bl2_new.bin"
+		if [ -f "$board_fip_dir/bl2.package" ]; then
+			# special handling for ODROID-C2
+			bl2bin="$board_fip_dir/bl2.package"
+			bl30bin="$board_fip_dir/bl30.bin"
+			bl301bin="$board_fip_dir/bl301.bin"
+			bl31bin="$board_fip_dir/bl31.bin"
 
-		# embed bl301 in bl30
-		"./$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl30.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl30_zero.bin" "$board_fip_dir/bl301.bin" "$board_fip_dir/bl301_zero.bin" "$board_fip_dir/bl30_new.bin" bl30
-		bl30bin="$board_fip_dir/bl30_new.bin"
-		bl31bin="$board_fip_dir/bl31.img"
+			# ugh...
+			if [ "$(uname -m)" != "x86_64" ]; then
+				qemu-x86_64 "./$board_fip_dir/fip_create" --bl30 "$bl30bin" --bl301 "$bl301bin" --bl31 "$bl31bin" --bl33 "$builddir/u-boot.bin" "$board_fip_dir/fip.bin"
+			else
+				"./$board_fip_dir/fip_create" --bl30 "$bl30bin" --bl301 "$bl301bin" --bl31 "$bl31bin" --bl33 "$builddir/u-boot.bin" "$board_fip_dir/fip.bin"
+			fi
+			fipbin="$board_fip_dir/fip.bin"
+		else
+			# create amlogic fip
+			python "$board_fip_dir/acs_tool.py" "$board_fip_dir/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/acs.bin" 0
+			"$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
+			#gxlimg -t bl2 -s "$board_fip_dir/bl2_new.bin" "$board_fip_dir/bl2.bin.sig"
+			bl2bin="$board_fip_dir/bl2_new.bin"
 
-		# fip.bin
-		fiptool create --align 16384 --scp-fw "$bl30bin" --soc-fw "$bl31bin" --nt-fw "$builddir/u-boot.bin" "$board_fip_dir/fip.bin"
-		fipbin="$board_fip_dir/fip.bin"
+			# embed bl301 in bl30
+			"./$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl30.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl30_zero.bin" "$board_fip_dir/bl301.bin" "$board_fip_dir/bl301_zero.bin" "$board_fip_dir/bl30_new.bin" bl30
+			bl30bin="$board_fip_dir/bl30_new.bin"
+			bl31bin="$board_fip_dir/bl31.img"
+
+			# fip.bin
+			fiptool create --align 16384 --scp-fw "$bl30bin" --soc-fw "$bl31bin" --nt-fw "$builddir/u-boot.bin" "$board_fip_dir/fip.bin"
+			fipbin="$board_fip_dir/fip.bin"
+		fi
 
 		cat "$bl2bin" "$fipbin" > "$board_fip_dir/u-boot_unsig.bin"
 
