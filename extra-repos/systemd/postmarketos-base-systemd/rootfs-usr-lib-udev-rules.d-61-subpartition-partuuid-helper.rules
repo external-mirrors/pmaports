@@ -1,0 +1,4 @@
+# Import PARTUUID from nested GPT
+SUBSYSTEM=="block", KERNEL=="dm-*", ENV{DM_NAME}=="*p[0-9]", IMPORT{program}="/usr/lib/udev/subpartition-partuuid-helper"
+SUBSYSTEM=="block", KERNEL=="dm-*", ENV{DM_NAME}=="*p[0-9]", ENV{ID_PART_ENTRY_UUID}!="", SYMLINK+="disk/by-partuuid/$env{ID_PART_ENTRY_UUID}"
+
