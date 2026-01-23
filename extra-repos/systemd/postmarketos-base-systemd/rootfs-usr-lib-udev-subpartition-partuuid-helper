@@ -1,0 +1,19 @@
+#!/bin/sh
+# Extract PARTUUID from nested GPT for kpartx mapper devices
+
+# Parse mapper device name, e.g. sda17p3 -> parent=sda17 partnum=3
+partnum="${DM_NAME##*p}"
+parent="${DM_NAME%p*}"
+
+# Get PARTUUID from nested partition table
+# Note: Systemd generators expect lower case uuids but the output from sfdisk is
+# upper case.
+# Note: We have to use sfdisk here and not blkid, since blkid doesn't read the
+# nested GPT in the parent partition.
+uuid=$(sfdisk -d "/dev/$parent" 2>/dev/null | \
+       grep "/${parent}p${partnum} :" | \
+       sed -n 's/.*uuid=\([^,]*\).*/\1/p' | tr 'A-F' 'a-f')
+
+if [ -n "$uuid" ]; then
+    echo "ID_PART_ENTRY_UUID=$uuid"
+fi

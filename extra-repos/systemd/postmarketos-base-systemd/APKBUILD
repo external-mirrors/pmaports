@@ -2,7 +2,7 @@
 # pmbootstrap installs this, if systemd is selected in "pmbootstrap init".
 maintainer="Oliver Smith <ollieparanoid@postmarketos.org>"
 pkgname=postmarketos-base-systemd
-pkgver=67
+pkgver=68
 pkgrel=0
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
@@ -34,6 +34,7 @@ depends="
 	login-utils
 	polkit>9990
 	rtkit
+	sfdisk
 	so:libkmod.so.2
 	systemd
 	systemd-services
@@ -67,11 +68,14 @@ _source644="
 	usr/lib/systemd/user-preset/90-base.preset
 	usr/lib/systemd/resolved.conf.d/disable-dnsovertls.conf
 	usr/lib/systemd/resolved.conf.d/disable-mdns.conf
+	usr/lib/systemd/system/systemd-udev-trigger.service.d/dm-retrigger.conf
+	usr/lib/udev/rules.d/61-subpartition-partuuid-helper.rules
 "
 
 _source755="
 	etc/apk/commit_hooks.d/postmarketos-base-systemd
 	usr/bin/setup-timezone
+	usr/lib/udev/subpartition-partuuid-helper
 	usr/libexec/systemd-apk-trigger
 "
 
@@ -115,7 +119,10 @@ c5252710d8e2f95f5c216cce17737bb14e112c7f1e0b73f085ac0bc3da5a718bb831cc62c0c62e7e
 963b8e0d55c473bae1af7b770a60d05a0edb7a1b60f96297a829088e1eda678e60b364c92ae81e28cf3e1df7605c6116eafdcd34eecc350ed8f03fb284def834  rootfs-usr-lib-systemd-user-preset-90-base.preset
 e49972d276441e9da284315bab5f70d8d25ccba5e43d7e7ec6607c34a3d4dfa512f7303d5ce41076819ef24f5dced5acc74001b4d569258269de34da27912466  rootfs-usr-lib-systemd-resolved.conf.d-disable-dnsovertls.conf
 93ab180810dbd2a1477f7ea0f0959be90f099272fe5840030a0772771c97a066b70068c476d32c6a4610b8f7b9fc5bfcf1d7a93f071cec026553ac6a3b8b5324  rootfs-usr-lib-systemd-resolved.conf.d-disable-mdns.conf
+07c0c3b0e22cc2a8f8f3a9769f1de98da4e4cdf508a51f5d622c1a71fd8ecb7ba63770e0197f2fd35cf08e6efa60377eadc50c48e79a58c472d6788da90c6273  rootfs-usr-lib-systemd-system-systemd-udev-trigger.service.d-dm-retrigger.conf
+055aa7565166ee881f7eaac787df5d669d4f4b3eed3b432b841c50c97291fa632b26c256b6980c3aff364c0509ad7a3e4e1d091b871f2f4df38e098342d5c085  rootfs-usr-lib-udev-rules.d-61-subpartition-partuuid-helper.rules
 6ff3fbd88493e50de5821c6e3db92623b38de52be4e8e967f4f297d8f70e31a86d91f1243b973387b80c8520edcc89a8233db6f234bca22a56ee61a1b4333670  rootfs-etc-apk-commit_hooks.d-postmarketos-base-systemd
 605df1f004783d2e0ec5dd99a688bca27502c8c24bc05fb4dc26589b2070b0fbd1cf9bd56e6861d7cda2f8ac8147e7eb040acfd886185c01c8cf9de8b1ce2dcd  rootfs-usr-bin-setup-timezone
+d0df01e943b8995045c9c6e5e820a0a02a6f881fdbad436dfd2ffa13ebf2e4bcbb06b8fe4d650532b3b895e0acd0cfdb465c99d1ecb3bbef6822e75b85f9ab84  rootfs-usr-lib-udev-subpartition-partuuid-helper
 d96898efb28508b172f148c0a468a7dddd363dde94efea7c2274b9f746544b4e8bf7905ce3f8134a97c1eb33210ad97380f3da452082f346f1f3f0f665f79d47  rootfs-usr-libexec-systemd-apk-trigger
 "
