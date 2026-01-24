@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=linux-postmarketos-asahi
-pkgver=6.18.4_p1
+pkgver=6.18.6_p1
 pkgrel=1
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -52,12 +52,8 @@ _repository="linux"
 source="
 	$pkgname-$_asahiver.tar.gz::https://github.com/AsahiLinux/linux/archive/refs/tags/asahi-$_asahiver.tar.gz
 	config-postmarketos-asahi.aarch64
-	asahi.config
-	misc.config
-	pmos.config
 
 	0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
-	0002-fixup-iio-common-Add-AOP-sensor-drivers.patch
 "
 builddir="$srcdir/linux-asahi-$_asahiver"
 _defconfig="defconfig"
@@ -92,11 +88,7 @@ package() {
 }
 
 sha512sums="
-432adee3cd8415b2d1d29836eba028338fa19e479ee219677ce2649bcfc19ef6ae786f81957352b44db92acc6c5d0020dd5d175641357c3e8a722590d7385531  linux-postmarketos-asahi-6.18.4-1.tar.gz
-f7846dae1d24091ea2b0e305ddb030f23345c533b75053bd7087a9d4ba3223f2f501aa3eab78148bcaeacfcf1c0680ba3bc83e982dcea4862ca4df86db7032e3  config-postmarketos-asahi.aarch64
-c3efedc043588c9c23e69b82e97819f8d92f69e34aaa5223f340baa67f45f2e2acc0ad64fbdc646761ba263a70e068446286043878cb84ed2a5afb8f86a1e921  asahi.config
-0f9b91bcaf66a7004268e31a14d0e05a9d63da20a5a027cbcbaeb75453de4edf41abf34c422d04616a0f233cc86497a8939ab1f455e697990653a7a740ea46ef  misc.config
-e75e7e80cd26dc22cf34ef8b8c969de4b8c44c4d16b6b2c8e4a7d919f4688569675e428a9c2bbdaa22a6df0bfced04012d5645650c2383317e450a7da7662967  pmos.config
+0822974e8955bfd8b1b5d11f2cd2652c61868d46a6fff033f5d2556b64325ad646585fa6107e501d360a845df3bb498c57c28aeb95bf6b30ebec8376b7c545d1  linux-postmarketos-asahi-6.18.6-1.tar.gz
+cfe2cbcb13f62c1bfb9b0eaa310ef57034160ea7e7ff4bed9b4b2569a54c7f649608dde36770de965eff7cee4d9d388520f78f900c0d7419385fca1addb5e762  config-postmarketos-asahi.aarch64
 8d205300cfabe192b53ed1cc644b087e76421eb973e1b2a31d657e4f2676badebdfcf6b0865569c43b4b904935435f6e729c3a8d4a6221fb5792e40ec1017a0f  0001-nvmem-apple-spmi-nvmem-Fix-CFI-failures.patch
-d89ae23b1e51e3a928487a533ef22a61d9bb56a274d10f0f5fa9e92684b110a69be09cf9dffe33b8d55da7e550030a0de00c9fcd32927b9fe9e182752ca01787  0002-fixup-iio-common-Add-AOP-sensor-drivers.patch
 "
