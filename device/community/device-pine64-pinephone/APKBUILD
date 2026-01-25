@@ -2,8 +2,8 @@
 # Maintainer: Arnav Singh <me@arnavion.dev>
 # Co-Maintainer: Jan Jasper de Kroon <jajadekroon@gmail.com>
 pkgname=device-pine64-pinephone
-pkgver=9
-pkgrel=4
+pkgver=10
+pkgrel=0
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -60,7 +60,6 @@ source="
 	hwtest.ini
 	kirigami-lowpower.sh
 	kxkbrc
-	modemmanager.conf
 	pinephone-vccq-mod.dts
 	pulse-pinephone.conf
 	sensorfw/90-pinephone.conf
@@ -144,8 +143,6 @@ package() {
 		"$pkgdir"/usr/bin/pinephone_setup-modem
 	install -Dm644 "$srcdir"/90-modem-eg25.rules -t \
 		"$pkgdir"/usr/lib/udev/rules.d/
-	install -Dm644 "$srcdir"/modemmanager.conf \
-		"$pkgdir"/etc/conf.d/modemmanager
 
 	# Wifi / PM
 	install -Dm644 "$srcdir"/70-wifi-pm.rules -t \
@@ -267,7 +264,6 @@ b8482111e6fa805779c5c8d56c83ccf9ad360fe6481ea4e8e1fa3b71c82fe0c8de948c6f69d2b53f
 3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini
 6bc22b369b2d9058b702ac7a7862abaefaf8179b43491868bdb008d181b59104f1ded89db1da51a810e1ccdc803a579b924a438674283a65afc3a9c4d2894caf  kirigami-lowpower.sh
 03d547ece68445579352d0419bf16a43ca1c567c1b0b14a977982cc8adddd34f1f8e8691465f1420091a5d33fa50daaefcee404d9d4b89e7598c4ad43a72469e  kxkbrc
-c5006c38828eb519917d57756f7831c4552feffef2d4922a384073f6a551535f615ad397d784e313818e0b943e1f6212bcca0aff9ce37da60b29547b1631f24b  modemmanager.conf
 d66ecef1fa5481ff138fe4e12b194903ceacab9d0649e716049f32e56ec6d9be09b97e2ff769ebc5c9fbced542986b9214f47ed14511ad761d80a41b19e02df7  pinephone-vccq-mod.dts
 9c472065b19141dd4c7555869b955de2e679b36e597f9fa3bdac18d0e9460986b0e2fffe1e04751301305f1b6474c1375803afb7d6212eeae91b4905d0bf8ff8  pulse-pinephone.conf
 967e3a43c7e91ed37fc932a7c580cd168ca11d8ec7f60ff60ece7f286e5144f27faead95162fa7d571a2317ed0da970fd86f5bc9ed0235a25c0be9182d42d64d  90-pinephone.conf
