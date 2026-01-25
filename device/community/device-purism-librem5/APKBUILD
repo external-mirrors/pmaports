@@ -3,8 +3,8 @@
 # Co-Maintainer: Newbyte <newbyte@postmarketos.org>
 # Contributor: Clayton Craft <clayton@craftyguy.net>
 pkgname=device-purism-librem5
-pkgver=9
-pkgrel=7
+pkgver=10
+pkgrel=0
 _confver=69
 _purismrel=2
 # <librem5-base ver>.<purism release>
@@ -55,7 +55,6 @@ source="
 	l5-brcm-bt-enable.service
 	l5-lockdown-support.initd
 	l5-ship-mode.initd
-	modemmanager.conf
 	udev/70-brcm-bluetooth.rules
 	udev/70-wifi-pm.rules
 "
@@ -202,10 +201,6 @@ package() {
 	install -Dm644 "$builddir"/debian/librem5-base-defaults.librem5-lockdown-support.service -t \
 		"$pkgdir"/usr/lib/systemd/system
 
-	# Modem
-	install -Dm644 "$srcdir"/modemmanager.conf \
-		"$pkgdir"/etc/conf.d/modemmanager
-
 	devicepkg_package $startdir $pkgname
 }
 
@@ -233,7 +228,6 @@ b45749fcddfd65a302b502bcabfa5828d1b63e45d844fd50e44009a756b919db20fe9526102947c0
 58edf35607606b7ef9079bfe015b8867c32ff3c0d3c87e11246e9077311017645d1a2d58917eab2990d25a26b85191fb3b9843195387643e4bafe3f3567cd0d2  l5-brcm-bt-enable.service
 f4b314d553655f7975445ac0a33099923e20dabb082c07e2cf6a78e4118c143d777dd4ad2c09cbc388600bdefe8deb3073fbd15b238772ddf09c66ac46415590  l5-lockdown-support.initd
 c723764d507ccd4b04aa5ce79b1d1ebc131873cdc37a943cb0f92b8a08a3c69eb9e0d31fcd4589fd8c40a9676bae9897e4f12ec2ebe4db8214ac85669ef35a53  l5-ship-mode.initd
-e089b0c4320c8cb5a6bd1e85f12b6afb24d035958f2bdc7a8ed2cee5b0f379e6fdfad876d8d22c03c9cb0576b4aa7c20c3e9986ba8147500add6d93b44e5f266  modemmanager.conf
 b7f5ecd0fefe8a122ed20e7ac21a23a65e007f62a7343c7178712955ed580f5473ca923cedb9f86cd10ecb13a76ab50c91a2f7b8b2fd456ee8420aeca75f3fec  70-brcm-bluetooth.rules
 8b6fa7b12c15f439c561901f3ffe24a1ef2a0c343401c0a79281060854ab29e08a1fb5e7adae8684b12aa9f535ed99e2dad993dce9724822cb0fbf2497dd86e5  70-wifi-pm.rules
 "
