@@ -11,8 +11,9 @@ if __name__ == "__main__":
     if common.commit_message_has_string("[ci:skip-dint]"):
         print("WARNING: not linting deviceinfo files ([ci:skip-dint])")
         exit(0)
+    # only lint deviceinfo files in the devices repo
     deviceinfo_files = {file for file in common.get_changed_files(removed=False)
-                        if os.path.basename(file) == "deviceinfo"}
+                        if os.path.basename(file) == "deviceinfo" and file.startswith("device/")}
 
     try:
         subprocess.run(["dint", "check", *deviceinfo_files], text=True, check=True)
