@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-oneplus-billie2-downstream
 pkgdesc="OnePlus Nord N100 (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-oneplus-billie2 mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 }
 
 sha512sums="
-e59673e72d9f75d0fde5d5f8e36c846f11524e5f87cef8bc086b82b6ed5151f2b6ab9ff49f864e0767f1ba1014e0de76f4a05b70ccc06a88637dd2ff71be78d1  deviceinfo
+63e427a6cb96589a4f8bddccf5ac22f27a59096c475160a695926cd91935dc67daf5ac2671b66f3b50f91d688e968c69acbaf390371348e0be700c9b25e59d8e  deviceinfo
+4bc72fb80c18e99c656039f1bcfbdf7c4168e03a5ff5251de650b77e070d52797d68324d2b61f121e475a8370bb66bebf7db2dbf09fc5db75745a5e1f859d2de  kernel-cmdline.conf
 "

@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-pocketbook-614-plus
 pkgdesc="PocketBook 614 Plus"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 
@@ -27,6 +28,7 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 sha512sums="
-6f275c609919f48e6872cc6175317de0ce7624591ee5522c6c424b8167b62539198bb364d075d84c074e0f3e030c23ae3837bbfe1b85c16fece3515567aca64b  deviceinfo
+9c9fb4e79f3384565fa387404b20476f533039f86b391cd811a0b5e8ebc620b36c3e28e68530327f605deb0462fc4e80b2983eecce973f58dd3fb2fdc0149fec  deviceinfo
+4a47e4e4c7205ec979e0649c0263e14c99e1d81c19b92887b61b5901f9fc18ee0700082e4f8e85fcf21c30bf5b9ded43831ddb214ec11191b0710ec5bee3285b  kernel-cmdline.conf
 bccead09b413637b2ef20bf6eed96e29998b85c40b6c3250ac5ecad1b7529e1ad54ea490cd4b29c457d30cd7fdc1e5b30811903c228b1df07145f18cb96739cf  modules-initfs
 "

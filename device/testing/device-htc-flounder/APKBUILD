@@ -1,8 +1,8 @@
 maintainer=""
 pkgname=device-htc-flounder
 pkgdesc="Google Nexus 9"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -14,7 +14,7 @@ depends="
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -31,5 +31,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-c0a2e6fa56ac477e9329eb6fc93aec093d15634f4134d835d44c3faaa661e7fecb67e40db1a49c4c0536abaaf2fbd85390f814e5b43a5e6260286df05adaaaad  deviceinfo
+c4f62584236518ef21e759d1a3118fa2c796365c4b723f86efa471c0a66842941684e81e3ff36fda863a1909c4d9e1f335a69202e7955c91ea0c84de9318eb67  deviceinfo
+976e9979e8ab47f59bda9520a42025a0c99505a106456c4aa6bf5d5f675a2ea2489cf85fdd6b53ff5b17079a491b99c9f6da38addc23ff2a483f40e187294184  kernel-cmdline.conf
 "

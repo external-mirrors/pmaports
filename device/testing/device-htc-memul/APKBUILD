@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-htc-memul
 pkgdesc="HTC One Mini 2"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -22,6 +22,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	"
 
@@ -34,6 +35,7 @@ package() {
 }
 
 sha512sums="
-3c1d89e422c75dcfe0908c38f99fdb3aa047705d49f3a93ec3bf14336b59d203ec0a4dedbd2c8e496c318d06ddaac2839809f40d48a52d3ca421da73f337e3af  deviceinfo
+d8585ad8cebeaa03118198339d962aa1952cc893d26d0c7dc19e2a5e2e2676fad9adb266b9cc6b4dc24759c066014fc89339ec950c250545dfc11c144d18e9f9  deviceinfo
+cba683b9d0bce86fda8166e1c99dc5ced1f9dbc9ea7c595075f7f5a72fc3462617412246c5c62b70c3bd89fd3a68b57ee823d3124e4b61cf53c23ba0c2efda24  kernel-cmdline.conf
 9ebe6ca9e371b5091e4e47ecbe3ec0c72d055e4bc2281880119eb0dee4c56b71f20f7d3cf1f1cb62e6814604e745fb17bbbfcfed2fec42398871e50b17685533  modules-initfs
 "

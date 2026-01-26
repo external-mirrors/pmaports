@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-planet-geminipda
 pkgdesc="Gemini PDA"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,6 +10,7 @@ options="!check !archcheck"
 depends="postmarketos-base devicepkg-utils linux-planet-geminipda mkbootimg"
 makedepends="devicepkg-dev"
 source="deviceinfo
+	kernel-cmdline.conf
 	10-geminipda-loopback-device.sh
 	20-fbdev.conf"
 
@@ -28,7 +29,8 @@ package() {
 }
 
 sha512sums="
-62a98dcdf1933f340722b1747cd5c1b0cafb29f5d9e69ccd24b5dccaff4d4ef45050f8a6da9605c9c26acb85782f62c583f414b2ac42c66fb88293b24ca01897  deviceinfo
+eba2b8b72b8d44a38aa1502d96784cbcbb7a00f72a2e7096c9ac9fceac89ecdb18b2ef050406c83f3550355b9fafc6c3b797b6025ac87395f94a1b4a96281f69  deviceinfo
+94791b16963779f4805ad89621a5a34fc8667750bbb6e8dd1c5d7b1c8c7e80f816db87f0fa5ad4edc486f4a585c4c7e379e3ee553bafa41177a62335674f298f  kernel-cmdline.conf
 7082c8e98d0295b03a192cc61aea6cef8fb23ab93b52cee55e886a6e92c6413da48238cee97bfd27d5726da485f7f207648885456f0a8c9a4798b5be5a3c7361  10-geminipda-loopback-device.sh
 07bda3435dffec7f8e8e158266cb619fb41c6b04a49a605e76fa88bc33be3cb27fdc54c8664be0738bab2c7a8054ce3d7563036323bf04762dcf735064ac10a2  20-fbdev.conf
 "

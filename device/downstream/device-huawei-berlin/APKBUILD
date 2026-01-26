@@ -2,7 +2,7 @@
 maintainer="markochk <markochk@proton.me>"
 pkgname=device-huawei-berlin
 pkgdesc="Huawei Honor 6X"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -33,5 +33,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-23befd0e51914f24e2698af8cd4d3dca6a762c6f7dfa5bf6603ba3780ada4a9239749d2e38405cc9acc1ffe7321188f2595f23573e794f81992dccf165ccd378  deviceinfo
+fc8fbb0f92743342998b9ab9d24a54ad97d216029a171561bf5e93480547f139a6bee840830963ab9bc9645d5a97b1357713a1db670ccc556415b2f580ab848d  deviceinfo
+e30d7197b06041ce52e0e923c021abbf8f1ed305f6d5657ce3af1b81543d29adcf2755743e4b11bce1ee1badf4b424f22e1de45966b671c1fff8109d1e27aec5  kernel-cmdline.conf
 "

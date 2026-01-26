@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-volla-mimameid
 pkgdesc="Volla Phone 22"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-2275abd011cee581da0c3a2b73720902c16f4ba3f17ff5ca4a665eb1f9f9fd119d85233880a8e8c352d9b8a06d4876a11e2f7a83685c9b6d4d471136f8e476aa  deviceinfo
+ccb42af4f3f009e9cbb21e4f945aad3f35a90b102fc055a5795366281749fc6ed20c037467e5b736a092f8941b87e6b41a7175e82272b6897582493f4965de5a  deviceinfo
+d89b08ef9888faae6cb96a378421669e6119023307a3b5a109e18b7f9e2c70e1f8b240ba8f9b9d22d319fa28e416565d06074d34382f482c9b037b7ab3f4861c  kernel-cmdline.conf
 "

@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-oneplus-dumpling
 pkgdesc="OnePlus 5T"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,6 +15,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.mainline.conf
 	modules-initfs.alpine
 	modules-initfs.mainline
 	phoc.ini
@@ -61,7 +62,8 @@ phosh() {
 }
 
 sha512sums="
-796684a1ee073be5b420397223698a07bf9f2d5327c9a53b251f1b584254d2639df830adb4b2ea221c3e0d4a2cc2599baf2ae1954e6b8336190249ea8bbc642d  deviceinfo
+466e80473b1c110a032198effe0e5aec0fee7f408f7069db8411c1673c0722edb403d4cfab703df2fe13283956afa2a9cebf5e8ffc851c7395bc380944263ca6  deviceinfo
+515b7a75cf7cfc9c3e9d122140a32fd14f84fe99456145686a93ed04de3977d07272ba4dc9b05d213461e62733530a0ea6def83c48621f5c0b2d10f2254ed359  kernel-cmdline.mainline.conf
 53472343462865f6b44897a079edc62dbbefe1b3ad0c7ceb02fa85a21d0162c0505321b516fc37a9fa7fcfe946cd17fd03a70b24bca302aa18773b576e5f14c9  modules-initfs.alpine
 27fa563174768cf1c3b0568b9e5b84cfb5eb54ed29ff4788eaba829ca484a053dff46ae7f64741c59a9e7652970f5858e8bf42af5ae23fe6f37660777ca40d4a  modules-initfs.mainline
 2288f08a44aae5136c0c0c846501c2bd4bcb10f05454b40c6e4490d398385b8a7129216047b5eb7982ca6d62d3aa71f3e18bfb8661d0cd32c8a600685ca0da48  phoc.ini

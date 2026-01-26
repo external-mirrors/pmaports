@@ -2,7 +2,7 @@
 maintainer="Raymond Hackley <wonderfulShrineMaidenOfParadise@postmarketos.org>"
 pkgname=device-qcom-msm8226
 pkgdesc="Generic device package for various Qualcomm MSM8226-based devices"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 
@@ -30,6 +31,7 @@ package() {
 }
 
 sha512sums="
-335c429b43714cb0f248a9727df73681ef81a969fd0b31f8d8d5a0d486f3df53945766f6e72e14d3e02f0aa3e2ebe00ee94edb5902e59650e191103e9e2eacea  deviceinfo
+027645348d26211c59f0ff65200c41550fc43e775aa0d7e96f7ac93bdba56421e73b638ccfde2a7ff9ee55a67a8a206d7cfa624ccb06c3d3b0d488a68cad5c0c  deviceinfo
+39b1ab5bf4bdeb4da7593c4563e4f459ab7ebc87f9dc4bc347e8148ff92700aef27965b368e9e5ee2623b2ed38053c912133ab7731f45f77d04afcf395dd8039  kernel-cmdline.conf
 c9f95fa07c7a8d1445a1d85c74b2ad9dae0854a7898bda0a7af0a283a2a89092ced017c8df1fa09261aa3799db2914413c7c047688da847290b8ac8df7e4b38f  modules-initfs
 "

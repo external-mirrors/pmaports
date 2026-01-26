@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-bq-paella-downstream
 pkgdesc="BQ Aquaris X5 (Downstream)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-bq-paella-downstream mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -29,5 +29,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-2759dceedaca6672489410f092db2b47d451cab7cb7706e942412eb957a1c2861d723a3938c79e1543be01e3d584c62408be9675b9533f5cc49ce50287b2d16f  deviceinfo
+b27ff683c57ee055aa076defb268dc2a49f186dbaa2f5c023803402a9e5a2d82a8c8e2c83dbdd63f990cac2b01a146ef07491d050772bfef9d3ec0e37fed8f80  deviceinfo
+7d218a308a421869faf6017a09cb9ed0a5fa56fb813c8ce582b6b85f4aaf5e1104761c86fdd7afa4ef0717c17bd18e2f9037661887bcac069af4d43431d8d129  kernel-cmdline.conf
 "

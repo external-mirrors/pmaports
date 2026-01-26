@@ -2,7 +2,7 @@
 maintainer="Raymond Hackley <wonderfulShrineMaidenOfParadise@postmarketos.org>"
 pkgname=device-samsung-fortuna
 pkgdesc="Samsung Galaxy Grand Prime"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	soc-qcom-msm8916-rproc
 "
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-fortuna3g:kernel_fortuna3g
@@ -128,6 +128,7 @@ nonfree_firmware_grandprimelte() {
 }
 
 sha512sums="
-8341169d74693de00f1f69538c673e718c7afd9705543ba59da1a5846e915b8088bc46d1df1955c8aec189104063c150ad273e1be0e049999cdff87727310ba7  deviceinfo
+3ebc5acc8d86c6e29df634243e6df06884e48f8e9ad3f5c60be00ab89228897d38a2f448f4a8367fb5175c04c6496a0dc9068a8f0b4ff223b09b6fdeb3192b2d  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 02b6d383149ba2ec3a31b206767be7ead31d9f0e7ee5cab11047000c53ccad387a118cbddb06093bca5cae3e82f884c02194de47b8e7a9c76102ac46506bb111  modules-initfs
 "

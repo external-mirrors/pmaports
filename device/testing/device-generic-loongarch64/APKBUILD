@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=device-generic-loongarch64
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 pkgdesc="Generic loongarch64 system"
 url="https://postmarketos.org"
 arch="loongarch64"
@@ -22,6 +22,7 @@ subpackages="
 
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	"
 options="!check !archcheck"
@@ -53,6 +54,7 @@ kernel_mainline() {
 }
 
 sha512sums="
-fb5466d3d62e563fa8a78e774182ed4369602fe37c22d65def42e9fcc8c077b0c31c2771591d8d57ba6e69396b71bb7852f90df0a82e7c47b6cbc87b601394bf  deviceinfo
+72ae824a077e40fc0656cb4ed3c9d62279c9bfc2bbe361a58c0c392cbd01f02313206406b1eee4f33da4e6e74da3b969c8529afda399ad2a4296c67286784320  deviceinfo
+eb8f9fd9e4b58c7c2cd810ae6449e836d0fa095f6eaa2da661481df6eb40d452998613b3d032f0477f0ac32559689db48eb3da189495c16bd016b8eac3b67b16  kernel-cmdline.conf
 2acfb32ce5d9c43956a49f48113bdfca6558a8c67a5ffd52aa30e35fc281abd7eff5808f8ae47707f4ba6d75d18acbd013813127263e8eb7529660380e9c3e85  modules-initfs
 "

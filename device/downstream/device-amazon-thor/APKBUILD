@@ -1,6 +1,6 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-amazon-thor
-pkgver=3
+pkgver=4
 pkgrel=0
 pkgdesc="Amazon KFHDX 7inch 2013"
 url="https://postmarketos.org"
@@ -10,6 +10,7 @@ depends="postmarketos-base linux-amazon-thor mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	fb.modes
 "
 options="!check !archcheck"
@@ -23,6 +24,7 @@ package() {
 }
 
 sha512sums="
-fb9d258114d705fd4d73371bbb21197f06089813ca179a78447ed960bb92cfd58a2782a79b438b6bb015cdb7a74f1e2d044f7d8b6bc26232bc81a18910d7ff00  deviceinfo
+ae17e1328883f86580ba7882a437b6010fc8bd0c33a75a6392b8152ba282f387f5e6643031924c6be9738eadb31f2e46501e94e7d97acd7763f61a72656fe54f  deviceinfo
+856a94060a7e53a8f053f41e83a6d76ace12b877cbe922de09329bf0d8b038fc72bb1e58c006e94ac2a5ee21130affbdd34629329884fe7e4a5f57455fdcf76b  kernel-cmdline.conf
 e96725e631ba474980274266fd5af85c72fcd31543d0b5f5dbe7bd610f9650f881708a41887d61ba3e1d821b88668c3ca3d18667e9a1de918560a1ff762dda3d  fb.modes
 "

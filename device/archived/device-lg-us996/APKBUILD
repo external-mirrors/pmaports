@@ -3,7 +3,7 @@
 maintainer="Uclydde <julianbraha@gmail.com>"
 pkgname=device-lg-us996
 pkgdesc="LG V20"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,5 +27,6 @@ package() {
 }
 
 sha512sums="
-a5bccebc2fdf2d6b53dd45a1f07f8ef215379861d8b59023b0bebcad8864d1337019e16993d8fc6ca7518157181665cdd63754881e56c24d510a6bd58bb83eb5  deviceinfo
+0d9a483cee79e1b2664a28918a857c0e1690b41a85ea3fdd2fc4244e1318c37653d4baa1f164947e7e3074eca011786c7e59f6f246e5449d9c0c30f18bdeea70  deviceinfo
+4651a3b003e812b08facae42d5bd9c9f6089ed2481da8804ba2f98f75bd910b36551b2a8f2de437cfe8fea257746c904841dac3ae5e8278819dfb7b813f9ddd2  kernel-cmdline.conf
 "

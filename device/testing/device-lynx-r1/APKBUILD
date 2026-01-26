@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-lynx-r1
 pkgdesc="Lynx R1"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -21,7 +21,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -32,5 +32,6 @@ package() {
 }
 
 sha512sums="
-741cde2a9e8f023ee3cac17234429760f12de4f11ac1f2be6298ccabf12d033484f985509e45d755f3f93f516e8586be317422999d00caad8bf6adfdf074cfd3  deviceinfo
+b668905da35cf26fca3727034f71eba5879e9cec48ee2b26b24a2b0269a0e640ecebd5f25fddfa14df50006bfa4df9a29653f77b0825d68ea7cd6e7af6a38e91  deviceinfo
+a0e00bd913b562af6f81b407e3571360356a46d2c7a2fef0f45d1685ba2b2a248600beba97b6324766e58bc6438b22d4b0c0a3aae0f1d347154b86468e785120  kernel-cmdline.conf
 "

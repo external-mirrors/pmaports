@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-amazon-ford
 pkgdesc="Amazon Fire 7 (2015)"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -18,6 +18,7 @@ makedepends="devicepkg-dev"
 subpackages="$pkgname-udev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	90-android-touch-dev.rules
 "
 
@@ -32,6 +33,7 @@ package() {
 }
 
 sha512sums="
-a40d6ea0a07dfea6091c98a9cd9a09871bbd0c57f2e208817be40930962937d4721dd3d49aafdc456a0bf5662f2cac6bb41118ed953ef44c6aaf1ddf69d48a95  deviceinfo
+ee6ec642a0c6c0e4e3f01678b0e046499f20f791bcd5c3e880eadd470d329f413bc0f18b32869aa7a7c53ac2c03660bf347b2bbd3c4b798c044ac3626d069c35  deviceinfo
+9dbe50f298f56ce5b2045d668ea5e4a411e11ece54f5afbcf34446c19aea71b77504cc75da8ae5a34ffacdbe943071245cd9fafa29d8c155992d22eb01685825  kernel-cmdline.conf
 f3d0b7d44f549100b3402fb287e80654279ae962a6b7721f3dc676324bdcf5c104391f9e4f3c5eac5733eff0ad467aa959a5f66553e7668c08124a1609ed3145  90-android-touch-dev.rules
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-a20
 pkgdesc="Samsung Galaxy A20"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-a20 mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo initfs-hook.sh"
+source="deviceinfo kernel-cmdline.conf initfs-hook.sh"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -27,6 +27,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-f2fdc81e59fcb8a61ffd521adddcd2ddc9a69cbde74cc4f34debfaa9c821525ef65726997467ecbc8dc8c8de8ba8e43186bf6e14c0104da70fd56ca56c903c1b  deviceinfo
+750dc5095797c2379dcb599b958d4c3809a5988dc444a39dbbbed04ffb0e59f0d854940d7b1625260069822563b16b81be3aceb56c327e43fdd8e35c810d2446  deviceinfo
+6263b6dab9ea670bd1af22feff8fb7ce9d143ed5ab99223bcef9da76bb0947c89e62dbf7004e1a307e2b71df48de84ea95cad258d88a44cedb37e347c56db8d2  kernel-cmdline.conf
 04445194a5245d08fcf1b425bff1d8dd6a8fdacafdc151223634299a35f1eb20fbd733979b58bcfd854e16fde02629c28453f840d6c9dc34fc15d4fcc8aa4302  initfs-hook.sh
 "

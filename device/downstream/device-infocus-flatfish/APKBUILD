@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-infocus-flatfish
 pkgdesc="InFocus New Tab F1"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,6 +11,7 @@ depends="postmarketos-base linux-infocus-flatfish mkbootimg"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	fb.modes
 "
 
@@ -25,6 +26,7 @@ package() {
 }
 
 sha512sums="
-98068b724e6d870c1a6490b76be7957c61ae086a1ade1e3401136c757a86d59179bebe5a1839ddee0479d087dfc9d47e8afee048a517078d14a7a5f1af303118  deviceinfo
+51a97c20bb6048f7ee939d1ae80985051fee83fc2994092a82c666e655ad3f5f3d62b397259d394978a24b44bf3f58711992ae3eb666dd78b21c42547d8af220  deviceinfo
+dd0ecafc3bdc7bee058f8abf7d65e212a4b938f118eaa623caeffc2afaa4175300aa2ed78ce3908e3ace2d9f0111ebdf0d01611d1ebaa02e033329a0093ec0aa  kernel-cmdline.conf
 2961df06a303e28139f67ae8abc99d0ddc48d2aa4c1d67a51e924493a27b46fff7e6072ddfd4273bdfa6b489598cbfda65400c3afdfaf16fce7fc407d19284f0  fb.modes
 "

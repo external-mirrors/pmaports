@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-raspberry-pi0
 pkgdesc="Raspberry Pi Zero"
-pkgver=5
-pkgrel=1
+pkgver=6
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -10,7 +10,7 @@ options="!check !archcheck"
 depends="postmarketos-base raspberrypi-bootloader linux-rpi bluetooth-raspberry-pi"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-openrc $pkgname-udev"
-source="deviceinfo modules-initfs usercfg.txt 95-vchiq-permissions.rules"
+source="deviceinfo kernel-cmdline.conf modules-initfs usercfg.txt 95-vchiq-permissions.rules"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -32,7 +32,8 @@ openrc() {
 }
 
 sha512sums="
-c7c83cec7f997eac95c2a1f4009fb2429020453944eff28023b564a2da86d9075333db492f01cf9512e3230261691fbbac9fbdb32fd9da17d86172b0243e2b62  deviceinfo
+b75ad63ff5b0be3a0c07e087ebe2fa4a6992898d277ecdb1876e9910d4f533322f62ca85e0a09d793453765398a1ff5a3182e5bbead8a4b695687161148229b8  deviceinfo
+a2aaf8bcd162084b41c6df3c67c99110c94d203a5824b17b0b0a8b3e226c17def074580ab3066ca9292b69a94ed37cefea01f49d32cbe67f102ebbe63a01398b  kernel-cmdline.conf
 09540960017460809c091457ba9f96b0d12c8a12ef300b77017651bf1492e66440244502ccf22fb8c58d0362751366ef1acf1c5a60b0698c1dda530f0945c17f  modules-initfs
 ce4c85de4e95fc6b5298ba442a6cc27f242ce5b2136e1ef5c2d5b3747716107e6d5d37e7a6d9f95a65d5970b3562950cc9ffb3d104743e4240b7754c395ae054  usercfg.txt
 7e5505cb07d5b4a81bd28443d508336b5c547356538f1c06f91ed93ad0d7d456d4f74f1d24df5a2e08c17e74f0a66607352ac4874e967e9a91dfec9522d2d58d  95-vchiq-permissions.rules

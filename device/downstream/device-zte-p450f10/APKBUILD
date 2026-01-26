@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-zte-p450f10
 pkgdesc="ZTE Blade V9"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-8b979c15dc3d2e8b882e730d8d306cf4115b15c9deafa7d142412ab338b3012cfa8fc2e27c4088a54fc5c05aa45d7caa2813d0fb1ce0c663a4453125466f01d4  deviceinfo
+f0e5d2b601cac8b9dfd8447249fe72c3adf7533df09eb528ce07b036bc7a52675832f1809ef9fff9be81170cc2fa8befec726d46ec041fd5fda4b4b84c58b25d  deviceinfo
+4075dbca122e832e9b9f6e1d2f51d6fdcd9e042987e04f33c5e71bc3e8d1e2488d9efefb3475cdbbb3cd446cb93b6f329fa7e38c25c977f1e9d2c4dd26d66266  kernel-cmdline.conf
 "

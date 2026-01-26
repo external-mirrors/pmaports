@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-tulip
 pkgdesc="Sony Xperia M4 Aqua"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-sony-tulip mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-5fcfa3215aef5a34f68e5de588ead6576e6db84ed2668bf840ef1ae986c83a9b95a2aaac29fb479735614cd18268e22de1b0838cb5611a21b4d2c395815ee189  deviceinfo
+3998b04fce3398c3d6a04a694d6c36d9ff0cef1dcf915f38fc95c3753b9eaaceb147b11e009abc8b735eb2c6a0d5e5d36c93bd40d5bd684cc11a3da5d1ed6426  deviceinfo
+90bd491c0f60806d9d7ebecb996de9067707d9a32d4ec2ce4f9e17330a677d03c43d4d989712e5dea7888f5301a959e7344ef079b644bad350c0fbbbe6c61d5d  kernel-cmdline.conf
 "

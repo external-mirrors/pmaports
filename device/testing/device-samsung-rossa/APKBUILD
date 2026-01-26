@@ -2,7 +2,7 @@
 maintainer="Raymond Hackley <wonderfulShrineMaidenOfParadise@postmarketos.org>"
 pkgname=device-samsung-rossa
 pkgdesc="Samsung Galaxy Core Prime LTE"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -19,6 +19,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
@@ -45,6 +46,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-d8d45352db16f5e67bf48b9d24f7776ca0a88b5973162a3cabef38b14bd1303311f2b2d5849a6aa7b83f89d7b11491048f3ab3f747e008a7526b3c4ea0ad4a96  deviceinfo
+ef398dee1e31ddf65e6714c8c19f0ff3ba1fe234b6cb479412b7aa96614f8edf0e8285d401cce398304435d961b4770f3d5fae4e337455d2301fb8ed1e91a987  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 9ead03b9e3edb69b238b25e5eecd477c99f03223237a549d124903dfb56a8be02df25ea43c8c308998d2250f9e586c8fef594007f43bc426dfb2d074a6270bba  modules-initfs
 "

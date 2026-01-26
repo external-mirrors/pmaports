@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-motorola-ocean-downstream
 pkgdesc="Motorola Moto G7 Power"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-motorola-ocean-downstream mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-0e3c481d3a14914916d8cb264e3c37c19bb65fad9c4e35a8ca0a9e6f6fbf6be02ad34fdcca86c713893153cace1f5254bd76cc8747a5ca141bb4b8b4c7cdebdd  deviceinfo
+81f4b35d863fbbad7d3857b0d55db511bb2eb75c749c89c00f6692fcb8ad5337ef58e637170c554bed780a4a21eafd3baf5d1821218ebca3ae73aa7ba271405f  deviceinfo
+bd4030f0441e913a6bfe623f848419b237e77cbc33aadd94553c9d53300ef41adba3767f6f4b1c9148064e3475e7a911fd9d3c0d21acec3b44c0682ce0b3eb8f  kernel-cmdline.conf
 "

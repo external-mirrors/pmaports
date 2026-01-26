@@ -2,7 +2,7 @@
 maintainer="Alexey Minnekhanov <alexeymin@postmarketos.org>"
 pkgname=device-xiaomi-cepheus
 pkgdesc="Xiaomi Mi 9"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-e24321e4fb1a8908ddabf37df4ba168856ac7e3261933e3c44a488dcf1007d11d43f62fd72c0a0875d5924d0b09cfb437c1ed327cdb075391ceecb9e22baaf30  deviceinfo
+90ec02cf560903d6cab0f03b95f3c29c5806929b46d1689cdad9cad10647b9b0e5c3fe5215c493758ed4563e740ac01a8bff5f248e991c28ee2594be52e8faf5  deviceinfo
+42d3a47ebc8109fc3bf1ac03ddae6254ca9bc7b0a64f58cfe652b30a40bdceddf09fd65a46fddeda0138d8b52dbccc2425da06f7705373f4a4ab0babaa35b150  kernel-cmdline.conf
 "

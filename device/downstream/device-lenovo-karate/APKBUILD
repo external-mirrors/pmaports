@@ -1,15 +1,15 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lenovo-karate
 pkgdesc="Lenovo K6 Power"
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-lenovo-karate mkbootimg mdss-fb-init-hack"
 makedepends="devicepkg-dev"
-source="deviceinfo 90-android-touch-dev.rules"
+source="deviceinfo kernel-cmdline.conf 90-android-touch-dev.rules"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-udev
@@ -32,6 +32,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-7cd74794032abc10eb4fb89c12e82a5e6b08a3b2326b08d7f7b6a6f1dadf876c09563192e39593069b05fffab7a01c18be4b75d8cc2a453f3e8c35292400add9  deviceinfo
+9cfad61c0c6bd9f710f9e7e584065f4258fcb3273d6730c19d607b31712389e3511e16db917576644610e105b801f3bb8786af6a1c66d0fad24c0321dda9bc4a  deviceinfo
+268cca5feefb8bf389dc5245eaf4c2ac223fd1f588705bdcd91c4e62598242cba1dbc8d694b7f401b2f390b631d4a0263de423a82d861e994a6bfdb70da04f76  kernel-cmdline.conf
 c6a76928d81a36d54734a6061f73f41ce0a6108cf151eb0ef19c96ac5c108e05996d9bb8b57055037e8e0cb8ea0fb0e7dc3d1f047e1d974f7ea1375754ed0962  90-android-touch-dev.rules
 "

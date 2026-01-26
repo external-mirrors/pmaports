@@ -3,7 +3,7 @@
 maintainer="ky0ko <ky0ko@disroot.org>"
 pkgname=device-motorola-def
 pkgdesc="Motorola Moto One Hyper"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,7 +12,7 @@ options="!check !archcheck"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 depends="postmarketos-base linux-motorola-def mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -30,5 +30,6 @@ nonfree_firmware() {
 
 
 sha512sums="
-af469ff2346a449b544d92fb254d39f1750adcdb4cfda7ff93aafa272450aa9e409b4fd8a73f7f53b3c9bf17f3fbbfee4b9d84c09507ae31ca1c524fb625483d  deviceinfo
+2c1e6487b1c4dcbcee6a3b0592987516f7a9dcbe1205575f5924c1d3ce217e575a0cd0b8da3616c98ee6255d5addb8f8900e8eaa9143d5a1322bee854bc35c1e  deviceinfo
+3906bdcdf77b48757b538e15ca84f8126a147f368fc8d3487c1e8e62f33100c5b875e7ca69327f46c1a02cd173c610bad1721347e891805000c5f4f14823f107  kernel-cmdline.conf
 "

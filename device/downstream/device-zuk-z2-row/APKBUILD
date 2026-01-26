@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-zuk-z2-row
 pkgdesc="Lenovo ZUK Z2 Pro"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,6 +13,7 @@ subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 install="$pkgname.post-install"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-load.conf
 "
 
@@ -31,6 +32,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-7c35b7304a1288ebb30185da7d09a4643af8b0d0d49ee45d11f46399f57d12bd3742af7c562607c5c9a7ee94af055dd05faff32c8166ea8605d7e69c4e63af61  deviceinfo
+5dc21f0e86814820aef5e8287e1727d0428d018c476e64cdf4cd8a96dabedc500538561750a33a58ffdef985842adc49ed19278735f24f69806f592b71637583  deviceinfo
+0af20442d052d3dec3e917b6c3733d40c69f7aaeca86aaaaef4a0adf448140c5d30cd9844f38fedb30bb7e9f629d604efba3d1d1f6ef2e89fee45f6682ec2801  kernel-cmdline.conf
 e85747dc082df4fd793bc444f1a47c22459ceb411befed90827a079c4cba21d013c3324194b169bf50e0fdf3d49d6d242b3d31947d5c0a1e58d9c4d1cf78bd22  modules-load.conf
 "

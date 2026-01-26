@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-amazon-karnak
 pkgdesc="Amazon Fire HD 8 (2018)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-c186f266bd534d5993221c18d1f19ad6f6698ed8c619dedf63bf2e307e2f0428497bd6da0e7b2904ff3bd0207d0312447fcad6b3f18785bce480c9bcc2163646  deviceinfo
+dbb5bd2940906207f1f084059f2d290caedea3f6c7dfbd40a9e98147918f146811f8bdfda2ce35c17a894866f6effd34b1dc7c0403393f79a007f77afc75eeb5  deviceinfo
+e02595fcda9941643ce2bb7969a7b72933a79c0adaf53889e3896f55946f903028761ee9cad6a05a601f8ac8cadf3b1cd62ff2fd3813e903f27091a1fa3714b9  kernel-cmdline.conf
 "

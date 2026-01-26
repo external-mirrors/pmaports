@@ -3,7 +3,7 @@
 maintainer="Mis012 <Michael.Srba@seznam.cz>"
 pkgname=device-samsung-a3
 pkgdesc="Samsung Galaxy A3 (2015)"
-pkgver=16
+pkgver=17
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,6 +14,7 @@ depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 subpackages="
@@ -45,6 +46,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-b611d82cc3ee9c0e42690edd42341b9578b1d841a92964eb5912a4267b5a7357279ea07479572264fbe7a4286b87474b65e9747359607a9e95d1f0749ff1cb89  deviceinfo
+2d03ab0acfbae029fe9354ae843f7494471e4ec4f98a0de388dfa4273b4f973623efa6574405b59858b691f7a13a11c8d3c10178731396081d2b28215ddfe815  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 3754688b2a61c204f37944d700b6fc273f68a01e25d444a3c3f2dd2531d8538650a2e571657e18e7a96a2db96b19f2f738d6f465bde477efd66ab31a78edfb91  modules-initfs
 "

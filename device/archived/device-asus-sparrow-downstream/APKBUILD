@@ -3,7 +3,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-asus-sparrow-downstream
 pkgdesc="ASUS ZenWatch 2 (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-64ad025793dbaca01bde6eefc446ab4f1f5a21b300cce8daba1851926c08f1bbac668fffebe8e5c492499205bae15b410bdc2741f366039bf20054f12c98f0bb  deviceinfo
+2a51794b31e52f92a4d50e34f82656331338d646128f547d8e14c4e40c1e40f15f147270ab634a312742dcce3b4e5894a33e87b0e485c8046641285ecf9a5cb1  deviceinfo
+4b7f1842dbbd6ec2990d7ea259de3f801a33e38a82f747549249cedcb64aa37935e9452a5f50f6d0cc6ce38a1db8e9d6f77440a7c52f61cd353ea75b7f3e395a  kernel-cmdline.conf
 "

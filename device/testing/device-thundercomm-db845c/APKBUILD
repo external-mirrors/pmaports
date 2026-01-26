@@ -2,7 +2,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-thundercomm-db845c
 pkgdesc="Thundercomm Dragonboard 845c"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -20,6 +20,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 subpackages="
@@ -41,6 +42,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-40fa3e841917cb4904f01fc2c162551432b9d1b1d5ce56fe4e7206fdf0811767fce33291d4f7e28e9abc5c46cab9ec20ff1ed23c78276f2aa4f9a3cb85b16060  deviceinfo
+b28795b1ba0246467d6f4480eefe6c1a56511aa5f0dc294821b2bd5edea3748a4c4aacbbd4bbcf58f31ecf7a26827ec103e2191ecc371d9743504919389d3eb2  deviceinfo
+003e5228a2b2825f24cb8b4842e3c3f72b99225f0aef3cda5bb2de4e4beb5e1c84800ba48c6cf1b84fe042bd039912e67c545c00981b604db0c0f0bcb546f7c5  kernel-cmdline.conf
 085809bd3525802faa63ce60206266853a688a40c9793b79faafc4c53c5d9d6f0f33a1695fb3a5c0c01f8bab9d7b7088ba7f2735ac27d5c72e2d258cce6ebba3  modules-initfs
 "

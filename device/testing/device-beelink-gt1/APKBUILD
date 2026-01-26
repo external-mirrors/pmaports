@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer=""
 pkgname=device-beelink-gt1
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Beelink gt1 (Ultimate)"
 url="https://postmarketos.org"
@@ -15,7 +15,7 @@ replaces="$pkgname-kernel-amlogic=$pkgver-r$pkgrel $pkgname-kernel-alpine=$pkgve
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	asound.state
-	deviceinfo modules-initfs"
+	deviceinfo kernel-cmdline.amlogic.conf kernel-cmdline.alpine.conf modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -36,6 +36,8 @@ nonfree_firmware() {
 
 sha512sums="
 a38e33d5bce26549c73f9aad2988ef8d7e7a3bbb28ac37348545fe7edb935be1b51dbdf8a857fb9d49be7e6eab7d40ac2f11fdcd618487747b809f7236ccf57b  asound.state
-aae7a971411db1e7c368af0c7934c188035988b3655ee469d6d99e4038183c0e5443d54401dc5437b3dcfcdd233f8119302508fbad62df32a22f53af4983a4da  deviceinfo
+ebd4eadeba93f857d9b0ae25dc2a87b22ff819d3578ee3f0116a8502db048eaaf14c43f9829f22c0acf25c8441cad01b6cf10bc601bea7d04ff337f87e377ee1  deviceinfo
+cf9d03ab06004b4629bde4eff29028ffb07edc512a08c397f773dc49bed1aa2aead46496333c530f51bc10b653eb3ac706966cbc86997cdc37c7518b24acc368  kernel-cmdline.amlogic.conf
+cf9d03ab06004b4629bde4eff29028ffb07edc512a08c397f773dc49bed1aa2aead46496333c530f51bc10b653eb3ac706966cbc86997cdc37c7518b24acc368  kernel-cmdline.alpine.conf
 52948c2884a6f6384e12b7a598f70878526d0d3293c214425170145231144ec7de805c038641741a4a5d75b50e554f6a3fa3769784a674217ed032f9b6a233c8  modules-initfs
 "

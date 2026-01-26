@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-asus-x00p
 pkgdesc="Asus Max M1"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	initfs-hook.sh
 "
 
@@ -28,6 +29,7 @@ package() {
 }
 
 sha512sums="
-3915868941bfea32cb81416bdf6b2e260024cbbbb9bb7c87284a10761a9699fea16aa8302f3fda7dcbb245fb94f97db9f95f575d6e844f238058f72b26049ca1  deviceinfo
+173458d73390483a9ca7af788e9a0d44f052edc7d96d5a584715828c52137c4eb44de47028f13dab0847a22925402b84746b3c914797059fc936d0844d7cfccc  deviceinfo
+cd60a70d2784939099ed289bf99aeb0134070b1772eeceef19ddd12547e4dceb7da75c2c4ab4cc4167896c545882b225432ca6fd2564334e0e84513917593f8e  kernel-cmdline.conf
 23d8031d87e3e01a76886d0ad091c51f3146cd2ded947f32e47bcf84413882c3be0fcbdd559a7fc3d3372c42510c276d37741e836ca9aa4549142e43a625cc79  initfs-hook.sh
 "

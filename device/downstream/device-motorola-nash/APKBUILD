@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-motorola-nash
 pkgdesc="Motorola Moto Z2 Force"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-motorola-nash mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-36f4afa070a85c734e4983ba1673eea351fe2bef57109d6bd557902d807945faff38da5bdfe9674f6ee355eba11aa2fb3a973439fbadbeaab017aedc071355aa  deviceinfo
+da988c0cc1885613061f9501040b051cc4f2c6abe63adecd5f6d0c8b3b28ece855365033803af7991afdc293ab086298399e1a9baa59de15a456bc7c32ed4300  deviceinfo
+8193f436847b751640c3b625174c6e60a00d5fb2cc835ca5394b031f0a4e317cd95a851191f603ce1498a06c853d0a18925a850ad6277ec96dfa0ecbdc4cf77e  kernel-cmdline.conf
 "

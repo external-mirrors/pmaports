@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-nextbit-robin
 pkgdesc="Nextbit Robin"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-nextbit-robin mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-06db95b17a195bffbcbfde3288855283c33433ac81ea25a05f385beec71e911e06f1e0f7db1c12fa14457d6885f4ebb4345b4aac1b03644adc9dbfab266739fb  deviceinfo
+8c23aba2ec9addb05cd7cbcef1e58335116def61bb5ef8f9d6234f89f246aa11dfe075dbceebde37c59e2202af81ad4ed12a94036d639f81b9b3ab79d2d2a166  deviceinfo
+1b4d715b282965481c89473a5969b6f64158227e51a6c51e9823c188cb4c19a9c1796452df571d4c47718073371631534390e68fc9be64f382585c44c9f3f1e0  kernel-cmdline.conf
 "

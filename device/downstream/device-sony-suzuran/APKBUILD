@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-suzuran
 pkgdesc="Sony Xperia Z5 Compact"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -18,6 +18,7 @@ makedepends="devicepkg-dev"
 subpackages="$pkgname-udev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	90-android-touch-dev.rules
 "
 
@@ -32,6 +33,7 @@ package() {
 }
 
 sha512sums="
-a9b81b60240c36b5225d0e7a10713e8ae404864ebca8e7fdc46bd588f0cf54e83696d72045db8be674bdc3dd72047e2cefb8c8000f8fbac231aeeb4daa070712  deviceinfo
+d0bbd7a3e00aaed5d537522de8d31bd68970c6fdf6f2e88ab39f42ff3a9d1ad7eae3028f780a052729252dade41f09d4d3a77b3bd7a17efc83ff98b24265ceef  deviceinfo
+804b5db0e22411bb05e9b603aa8e965b86050618e7b7df428c26f6cdb6e29ad24f5f117926cac3ddc3ba91187ded472d7569130c95b6ccf2c92fd8a601770bc0  kernel-cmdline.conf
 ad75ee1f07de8a413d98b0a28be58df80bf08b454aad80b265ca86dcb3370ec8f47c1246e4379d036d8f98ae3292b89d74988d6f8bafea100860615feaee17d2  90-android-touch-dev.rules
 "

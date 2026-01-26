@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-semc-urushi
 pkgdesc="Sony Ericsson Xperia ray"
-pkgver=1
+pkgver=2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,6 +17,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -28,5 +29,6 @@ package() {
 }
 
 sha512sums="
-2e8fd57a64f48c4650336104aa77fa98697c00ed10cc50cff5fe8e8cac20cc4335dbc21eff6241104a16aa579540c3824824ba85ea03eee7e3ae50553c22c880  deviceinfo
+c257376f6eabcd269f79d19fa02109a85c5b4a202a624d93d09f6aca6e3ae4c39a6ddea2df0e98119aefa848b4fae9f110df6cbec96cc0dd5d5fe95631ba396e  deviceinfo
+48d379f98ad471023a3fe3f9049c7aa4090835a687f81e07ba5ca7d1923196b45e4e532b96acb361d99032ee6e814f347d3aadd05471f4c0a28e5e4fc0746ee5  kernel-cmdline.conf
 "

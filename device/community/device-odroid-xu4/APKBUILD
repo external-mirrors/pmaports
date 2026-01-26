@@ -2,7 +2,7 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=device-odroid-xu4
 pkgdesc="ODROID XU4"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	firmware-odroid-xu4
 	"
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,6 +26,7 @@ package() {
 }
 
 sha512sums="
-86fad219316bb27756048de7abd195b7736ed6750423edf9ed42a8b50e841af73f091af3e1f2c662cfa6838e3f50be3e04550101fbea1e429e7e5b3781841898  deviceinfo
+8cf34cf4daca69f3936b5b7cf675ec3dd0ed8cc3130d64489944f6961ab1e66609fa4f1f849a6a0520d2b49ecf0b8178db7b48a726194d5058570b3f50033fbf  deviceinfo
+da521908455bec78086df8614e2a9f0cd871155f91d65d351670fdcf3e2880bfb1d578aab26f3dd3778ce3ebf27efbde67d65f39f5f733da5c750e33161ecc9b  kernel-cmdline.conf
 9f6c3cc0079e718ef0dfc221fadaf9bc092a8601b62794c2298eab893924af457612bd8a6e852fb2b181bee637e774dd2abea681eb72b1aa9c6672e686454795  modules-initfs
 "

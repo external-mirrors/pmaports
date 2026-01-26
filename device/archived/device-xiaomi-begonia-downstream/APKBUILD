@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-begonia-downstream
 pkgdesc="Xiaomi Redmi Note 8 Pro (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-xiaomi-begonia-downstream mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 }
 
 sha512sums="
-a0ec18dc1b613f53721a8a4b9b94bb3bf83cde15112a51f69629e3d80918c9de25545fd29fec9c2fe19b123ef4f920762decbfb2120e050ee6972cb66e6bee14  deviceinfo
+ca1cfa1e6de50faac6b257f46bcad2bf87343603c1d6ec24e87aee80876419dad634a2f717567430d912dfbee05154b1637235256e5360285c3005bcc4d815d7  deviceinfo
+d89b08ef9888faae6cb96a378421669e6119023307a3b5a109e18b7f9e2c70e1f8b240ba8f9b9d22d319fa28e416565d06074d34382f482c9b037b7ab3f4861c  kernel-cmdline.conf
 "

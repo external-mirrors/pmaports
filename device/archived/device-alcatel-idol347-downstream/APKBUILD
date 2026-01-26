@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-alcatel-idol347-downstream
 pkgdesc="Alcatel OneTouch Idol 3 (4.7) (Downstream)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-alcatel-idol347-downstream mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 }
 
 sha512sums="
-118b62d7ad6d9b62f0d63a1749005321fdf73417f95e8d70e761b6755f7c4e0164b2b476c8e1aad93dc42cd4df24384f660e21af6c62a9f8eda4d3e3bd8298e6  deviceinfo
+f2e7527ef3b498147c311df678cfed15d2ca3049ebba87b93dbfcfc1d05237daf8f7d0943c24347d4d5ea4283dd03f412cf11575735f0d7724c7f49066e52e8c  deviceinfo
+928047af135afd6a3e76791628148eb7e5c8fe55465786655e47662b6baf07d251940357e278614b05de58898c03632dfcc7761f62c39765206b0cb70d054e9d  kernel-cmdline.conf
 "

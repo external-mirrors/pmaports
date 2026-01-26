@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-google-crosshatch-downstream
 pkgdesc="Google Pixel 3 XL (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 	"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-941eb2010c0fc853cab893b40207f309cc2cd566aaeeb1b32c1731b74fd9c69b63e87fc303ee175a81a76627e2634ea1ced985d0e1003d865d0439de3f776ba5  deviceinfo
+cc909a06b9015b4aa0d19c04c3cce3b886d78c125712f0ab4956049b464c6cceb9b4b8e141d78951dfce5782c6663e2a27e074a82f6058a84bb0775f14366b27  deviceinfo
+c2762af3b8268599d2edf37f1dca6284e85e7fd6222a701c7699b9baedb3312bad766100a6bafcd2b2660f04241429b19d5f641f2b0a3915dd4cb079d52b0680  kernel-cmdline.conf
 "

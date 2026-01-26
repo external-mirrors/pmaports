@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-volla-yggdrasil
 pkgdesc="Volla Phone"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-2d7438ffdb4b58b1e7939b3e547d7c8b4ddd669fc7a2cbe8da34089f8fbf2f563d364a6e32b3a67c9a166409d4cbc7c953334ef4f00ad7dd1373569a8e80c939  deviceinfo
+128d2e31eecc33713c6ec29ffa70ed1f99affd520257a4435224af9f1860ddc25d9d6971303d14cca886122a02dfa5183d6c0fae16741e8c1fef1bcd2d9ebb39  deviceinfo
+c047db85c8056292b1d8a9b383e8f0683d91fa08e063291a955ec2b302d7718a146833254fb934eab24404e6732eed7cc8e0987d1c18f1ffb827d120a0ff5b3d  kernel-cmdline.conf
 "

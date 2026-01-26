@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-crespo
 pkgdesc="Samsung Nexus S"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,7 +11,7 @@ options="!check !archcheck"
 depends="postmarketos-base linux-samsung-crespo mkbootimg"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-086250581a7a9f1e4dd6701137beb7ce130074af481653698d40e38e487155d09061581df27f27cfb74a980746f555b3286922f993b06e8b8f0d408b8787146e  deviceinfo
+c9b0734977671e386b237034d0b3d085acb205f6700bd417ff8d529926ea61d3b24919d85b0aec5dc7fbc2d1f566514859ee2632dffbeccbd7e24933f3c50835  deviceinfo
+3e96eda8d580992ecc2bfcb959df91bb7bfb3cbc28d046ac3a714b3f22ee598762070f30228f9e943d6f4e6b2603da652e748939f72584cdb4f564c2b3736eb5  kernel-cmdline.conf
 "

@@ -2,8 +2,8 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=device-google-peach-pit
 pkgdesc="Samsung Chromebook 2 (11.6 inch)"
-pkgver=9
-pkgrel=1
+pkgver=10
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	i3wm/xorg.conf.d/90-tap-to-click.conf
 	ucm/Peach-Pit-I2S-MAX98090.conf
@@ -57,7 +58,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-ee5465c0f4d4375375c27d9336b692a611c89da0f253af1db3ecfd6f2da552f341e5ac3b7b97339cf527eb3ef1b3652b452088a4176bc676ef24cdd2e726aaab  deviceinfo
+e0bf8ca7cb16d413b51c24860cd4018f3ee52f9ce4da80367832dd67e7bce5c98b249ccf2e212ee9d13b0e8664fcb8f08e97410f6021e2d465951d74f651cc21  deviceinfo
+fef8383cd86332dbdb247b81791a7e5ca0775f93f5cd2ef5033d1ea340920fcdddf9e6b5c15bcc79562a5da784964503643e184030211019f08e103aafcf4b83  kernel-cmdline.conf
 e12a68f919182cb4e6812a5dd13fce8dc15266d2ac16aa5f0a31034f111cb403c020ebaaa4d94309f4baf2f71379327c57c08029e27c506d152695e9a2b04b2b  modules-initfs
 e53ca475830930ecfc1fd537702e850e2abcb66fbed521cb6c3a2918d762649254bd0244ec93a47b20dfc593ec3afc9bdebdec1759a7bc96dcbe4800f40893da  90-tap-to-click.conf
 6fe67c8f2e09e3e37297eebaf2a86a32671923a5fd4d18e5aeb10e580fb998e4ddb4a691531a0c8f4b4e70c6f0f7e91008dd836ffca8026d59862c6e829fd996  Peach-Pit-I2S-MAX98090.conf

@@ -2,8 +2,8 @@
 maintainer=""
 pkgname=device-ayn-odin
 pkgdesc="AYN Odin"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -22,6 +22,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	hexagonrpcd.confd
 	modules-initfs
 	phoc.ini.odin
@@ -79,7 +80,8 @@ _phosh_m2() {
 }
 
 sha512sums="
-0bc5ffb6652268514dff0acaa131c5ba30159414f5b2489d72694cf93d3a8c08ac5ad4b8a0d61e2270afb1830de2d10ba54ef4f7665981f2d3fc9f2710ba277e  deviceinfo
+6985dfcec7e4c676295daad24c4ff72cd0cab92afcbe8ad8e76d1b5a555649662ac770f261edefeb040d93b07f7d34c13551d3ab9db8174a3365cae1407b991a  deviceinfo
+4991bd4df62daf75dc051f45c9250636d819c3509fec650026da72b6fb5fe57a6703fb8a15c1b1d4eb63751eed403fc90e3cf867f799596a0a52960cabfc4f58  kernel-cmdline.conf
 cd3da21e666698f92382938bf75c8e57e7582b440c8de69c19841a5d36861a8bdd3f4e1ac5282c1e9a8ad5009cc4ffbb2bf40cd8bb8fb9a22acdf5d8caf37e67  hexagonrpcd.confd
 dc987332abe6d5c7ac511be1045af227d80b9dbe2f907e23e89b62217ca867dd064484caec36f0605dda89a9894da780b75beb23d9b893bd0f9a46593e675393  modules-initfs
 01bec0b7efad2b44920cd9403b1121240ad16a4ee720c457778cd6bb427065bc471aa021e571ce0b88fb213a79b572faaf12ab5428f1dd25c7850471cddc3880  phoc.ini.odin

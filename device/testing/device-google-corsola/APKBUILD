@@ -3,8 +3,8 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=device-google-corsola
 pkgdesc="Google Corsola Chromebooks"
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -20,6 +20,7 @@ depends="
 makedepends="devicepkg-dev"
 _ucm_commit="b728563a07ebcd05545c60989412ae023b1dd06d"
 source="deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	alsa-ucm-conf-$_ucm_commit.tar.gz::https://github.com/alsa-project/alsa-ucm-conf/archive/$_ucm_commit.tar.gz
 "
@@ -59,7 +60,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-b395e587353b6b1ebfedcee0b2c402e4c4ab063fd82cb488d1b7aed13ac421d99a0bc0254ff844e3145fb15e297265ea7020576dc4c8f3604ebb0ea60ac646cd  deviceinfo
+e32163709d30881bd87576556c9c659bba62acbe85be797919d87f41b18042d15d85710153606b85b4907930ba965572b4f8f52fbdabc2788f36343a2af5ac79  deviceinfo
+97e88eaa9b8e7989a20d2572479fe5d1fe0284de862da11c91b1f347099d5704673837db01a6b0c289fee0a2d7236f64fba31fd6001475f957c23203e34fd6fb  kernel-cmdline.conf
 56fdcaa7a610497ed1bddbbfc0850f895bcfd79173b2e7de4bcf196f69120e1b62680da2a0b74543f153cb3d2b84055e71e258e7df938913aff66dca47061d7a  modules-initfs
 d33545d435755c2cca3b916d920464f3f711c6f09f48b68622f740f389c4faf95544467d9e3b418e562fadb8141ae37f2311166f228d5149434183736710567d  alsa-ucm-conf-b728563a07ebcd05545c60989412ae023b1dd06d.tar.gz
 "

@@ -2,7 +2,7 @@
 maintainer="Max Pertsov <max.pertsov@gmail.com>"
 pkgname=device-nokia-beatles
 pkgdesc="Nokia 2720 Flip"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-nokia-beatles mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -22,5 +22,6 @@ package() {
 
 
 sha512sums="
-32293f2a0806b85e04e792964d2cac73ac7cb39fcd44c308500edb71bb23173cc2587216fa864114184fc004053cd0af357d117e83e032a85222b5bb6a200110  deviceinfo
+00b0231691db231cb8628915f2e5170ef91aefe0ae35ae04904873027771852823bac9e5c12308b91aa78b664a1c335017dac9ea7184bc0fa3f410896a6fa366  deviceinfo
+18dbd396cdc85aa5d2a0e4bf02a0d8907ccbe25a1442def9ccfe3731afb284d3aaf3a47d776a988485494edf04828ef04552c0683693c76189cdccdf64b5fd8c  kernel-cmdline.conf
 "

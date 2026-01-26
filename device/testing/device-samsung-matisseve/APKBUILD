@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-samsung-matisseve
 pkgdesc="Samsung Galaxy Tab 4 10.1"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,6 +28,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-f304591875c336766ef53819afaed093f1b0709bbfe619bb044287d40524723f02af7219c555d08204477fa24328509385d1cc397ae9f93fac8ab9d3c21cc923  deviceinfo
+ba115d47ca1716eb414d86fc297827643c79497b788f6cd7983a6af7ce08120f5980a90071f0c4aa00cd162b8c5d9fe2e5c49261cc66cb1db113c63075dc9ae4  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 a04d688a6df0cbb202598b558c5c9d3cf2ad39c8268f3055cc79c56fc7728be4a08366f67fddbb2b689e5bb23bec9a3821860114ea21f60a1d1cd0d6723dd53d  modules-initfs
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-ariesve
 pkgdesc="Samsung Galaxy S Plus"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-ariesve mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-0b9aa653a760ba7404009e406664a3bd470dfc27e10ddeb2209014cce17d58242b4e2db450483a481f20aa376269f29bf7e1c816688ff8d1d316223d93acdd0c  deviceinfo
+9385d57849647d7ac7c8d7006868787f06f9489fcc3d414861a617c12e9c10e938d58f10730a30576ad35934e9cc63187f42dc2e075413fd4630bc782145b0cd  deviceinfo
+cb0731b5e71b427024bb47cd70aa48d3be409a89aa476f3fd4dea8e5b42ef87371a65bbe836bca7da04c0384178ad293b44da8a88557ad04fc57857bef502050  kernel-cmdline.conf
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-taoshan
 pkgdesc="Sony Xperia L"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,6 +11,7 @@ depends="postmarketos-base linux-sony-taoshan mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	sony-taoshan-screen-enlightener
 	fb.modes
 	40-boot-logo.files
@@ -34,7 +35,8 @@ package() {
 
 
 sha512sums="
-3f464d406da687e5582bfd6be32a20aa8ac3b6d5b6fa61bf0aece52f85e3d1204d2a5e46e8ebdf24774ba86eb080313a4bf657742f8cccf91be23bd3266dc491  deviceinfo
+72b6565d9e8e2eca386c12e36de323c5e47c9e98c0909ec730574f09e50b690817c938cb07b6bdf837547e956fc49e71a84c35a3a52b0140dd7496141fc07e1c  deviceinfo
+55c4af39c2c88a0b5f1515585bb48486d0b42e7d99481ef27ca73884f89d5f8e9086cba59ca773ff316e489dbc57f5a97371278d44ed2412a417b12d8a59fccf  kernel-cmdline.conf
 fff18ea9ccdabd2d6290755d716cb5444f54ce350f3ddd6ae0f23b78539b64d92b9e81a804b290c4c89bca318cfaa5930658ca62dc60cb0ad60033d516ab6aed  sony-taoshan-screen-enlightener
 72b830759c11c1d15387bff6cd9556ddac6aafa168f86ed3d3cb461f67f1492ff0b779b4c4141b6ce62a3ae02e8073bda6e19cfcf73b18b11aac99dbec8099f4  fb.modes
 153f8549244ed2c053aee3f2560df241f7c133f24032d889a2fce112015773fc32d3d081a9e09755536232462a3668dc8798851f2f6a48a16f66cfdd85d317a4  40-boot-logo.files

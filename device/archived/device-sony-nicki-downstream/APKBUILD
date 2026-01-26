@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-nicki-downstream
 pkgdesc="Sony Xperia M (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -20,6 +20,7 @@ makedepends="devicepkg-dev"
 source="
 	90-android-touch-dev.rules
 	deviceinfo
+	kernel-cmdline.conf
 	fb.modes
 	pointercal
 	screen-workaround.sh
@@ -44,7 +45,8 @@ package() {
 
 sha512sums="
 a3d3a0cf43c5f216279666143d6042f2669dbe3dc5ecec2817b6118a0c122f5b927799b37432bee3167359c118d0142fd8e8e8d67374e8ab1d837673f217e1ae  90-android-touch-dev.rules
-bd1439568f39bcbf3296c202589bf0b18fc391d85566dd1f7ecc8e436314459fb95d0aaee6d2c87dfd2c6302a8c691964d9aabc75e5aa5fe7678f7355f138d27  deviceinfo
+0dd2b80e07e0770f721265a306b7bf8085ec67e2f1cb093d4827c7067b908b1f6e2a18e6e953198b2b0eb773254c5d7a371fca1714892c767fcdf60922dfed54  deviceinfo
+69606ce8913e054414b5beae41c8dd71112344b7eaf3e1ead280aa53fea5720adb8829c524ddfe190f13324705db42ad4241007cf655f24dc716e2bf58af54df  kernel-cmdline.conf
 aac9a5d4c856b6feaf4f2961251fbc81d9173e24c3b20806e803711b40e388a173abf2651d5d828d36a504ef2de12c1c1eacea1f1b9479e31f55234012140405  fb.modes
 016111b7618e2509186fd91dd238cdfb51c37a02af98ba01d3cf27358ff901f71f7ff5e798752334e720bf8108b907a31e9242085c8c915748f2d9391f86dfc4  pointercal
 336b6ac90946ec4b4626e9dcb8f1cce503d0ad6fc164177e53502b580aa509dc31ae2ef4fcb9fb04906576cdd6590f625f127e2c29ec61493e30cb6508fdb68d  screen-workaround.sh

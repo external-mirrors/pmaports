@@ -2,8 +2,8 @@
 maintainer=""
 pkgname=device-lg-judyp
 pkgdesc="LG V35 ThinQ"
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -16,7 +16,7 @@ depends="
 	soc-qcom
 "
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,6 +27,7 @@ package() {
 }
 
 sha512sums="
-9b05114fc43babd8d27a1cc2a8d3b52ead8fa414b78a6ea472e86955c03e548d492d5f05370d91713b17e29cbe8596ffa2a049d455424e04403ace4867a58de8  deviceinfo
+a5196eb8b61a8d70d7758458a6574119b55d9a16a3a9cb414d03f52a0ed2a6ebc8c362ae36739bf64505340443a60fab5111d194bbb0641cc583cbf7eb5aa6ff  deviceinfo
+003e5228a2b2825f24cb8b4842e3c3f72b99225f0aef3cda5bb2de4e4beb5e1c84800ba48c6cf1b84fe042bd039912e67c545c00981b604db0c0f0bcb546f7c5  kernel-cmdline.conf
 09fb39b4698e3fd433e35f94b4c39787a4ff9af258e8a85b5a197fb2676f993da2666ffb4ae98c41f35446d52b3578e1e6ebd06cc7010287ca140bf207c3a8af  modules-initfs
 "

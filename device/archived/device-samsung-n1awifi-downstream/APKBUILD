@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-n1awifi-downstream
 pkgdesc="Samsung Galaxy Note 10.1 (2014 edition)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 	msm-fb-refresher
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -34,5 +34,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-fd9a53c4357e634bf9e2ce99736362743100e0a16136d06ff4a080fe29b4bf72eaa38b9c0103de16927b98cd05208f322b1e389fe9d50945df79faadf4d1dd5a  deviceinfo
+b28c23e2d5f7f917251775bee8639ac1d97bfcf0606d83dcfc1f689b1b8bd0b11f803842ad71ece2b94e61bb36e7127c6991f06621a55b31e5a8513d9ecca4da  deviceinfo
+cb0731b5e71b427024bb47cd70aa48d3be409a89aa476f3fd4dea8e5b42ef87371a65bbe836bca7da04c0384178ad293b44da8a88557ad04fc57857bef502050  kernel-cmdline.conf
 "

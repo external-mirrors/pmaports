@@ -1,6 +1,6 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-maguro
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Google Galaxy Nexus (GSM)"
 url="https://postmarketos.org"
@@ -9,7 +9,7 @@ license="MIT"
 depends="postmarketos-base linux-samsung-maguro mkbootimg"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 options="!check !archcheck"
 
 build() {
@@ -27,5 +27,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-f572a18bddeb5c347b4d8545d2c493efe61b96772a63db5338074b4fd9237214b5a3eb16c224afa050d307edaeb7888baa978197e164c661ca79653b3812174a  deviceinfo
+956575a30fec2988a8d4d57e6e40ad1ce0177ff13ff002d1bc7aad4141835286508f27709555a658f09fcdd2d6ea4ddd1f7b52dc49b35e9788cf09378320da0e  deviceinfo
+91f1f4f476519acc418653779c074ee708846f713037da73c555e091b0cf42998c76a324178f0f18d029695be144e682cb3dc608fa238ced197efbe445cfac16  kernel-cmdline.conf
 "

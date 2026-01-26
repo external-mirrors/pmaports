@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-t2m-flame
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 pkgdesc="Mozilla Flame"
 url="https://postmarketos.org"
 arch="armhf"
@@ -9,7 +9,7 @@ license="MIT"
 depends="postmarketos-base linux-t2m-flame mkbootimg"
 makedepends="devicepkg-dev"
 install="$pkgname.post-install"
-source="deviceinfo 90-android-touch-dev.rules"
+source="deviceinfo kernel-cmdline.conf 90-android-touch-dev.rules"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-udev
@@ -33,6 +33,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-dfc8783eeda8a51f4f4c890a5ee3b852c1721a8c4d3037f0105a992366975d0a7d51f7b1bca8e8287baa9449ee4cdee5a48d7ff195a6be2bbbb753c8f7b2ffdc  deviceinfo
+651cf51026b542c9d9ce0886b284a92302b12c9151f82b6d6e25bd2cabbae539c69bcf12ce9d7553ed78213dc82c9aaf2eeaa2ba83bc66ba0b8732d5adb428a2  deviceinfo
+d8b29fbfcae09278542a4d69748c3a61a48132ab565f045d03891f7a14d37e205f151684eeb1d818c399242d2f0be55df97a1a9c35b7e5a17987612e457d0044  kernel-cmdline.conf
 25256120a19cba6b6f9ae0cda7b2c8c84d168a6457e82afee438d50d2c28b9598bfe690301c15156d866b77cd87652d9b7cc3d9b0637f69414aae09fec159c91  90-android-touch-dev.rules
 "

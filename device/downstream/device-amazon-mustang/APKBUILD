@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-amazon-mustang
 pkgdesc="Amazon Fire 7 (2019)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-amazon-mustang mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-5a00e27a37d45da55e16c86faa8ebb552a5f5d6e0d84230506896cdae7150d2a900867bce1f287ca3b570e1734a4e91b9ba8e82e6827049f89fe1ac1609f5823  deviceinfo
+c111111e7d4738a84d02eead8c91f7441825821b1203b02a95a96a26574854a83d8a539905f91b44ebf77f74097e3c0f7d6425735ef9e07ed5053e8f183f61d5  deviceinfo
+09546e1eb0a32e6dbfd81987be7ed413d0fa83ec84426d0eca144386b8cac09f5ffbc3c04d5a830ae9cc3fc82dd2706c6488591b49966ed84287303ea966b310  kernel-cmdline.conf
 "

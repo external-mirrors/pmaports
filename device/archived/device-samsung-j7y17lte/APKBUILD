@@ -3,7 +3,7 @@
 maintainer="Eray Tutmaz <tarkanttmz261@gmail.com>"
 pkgname=device-samsung-j7y17lte
 pkgdesc="Samsung Galaxy J7 2017"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -28,6 +28,7 @@ install="$pkgname.post-install"
 subpackages="$pkgname-openrc"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	etc-conf.d-samsungipcd
 	etc-init.d-udev-settle
 	etc-init.d-wlan0-up
@@ -64,7 +65,8 @@ openrc() {
 }
 
 sha512sums="
-a250b0fb8235f69dce2c660a7d92f9372168d8fa0b976fbc5bdbf6180492cf1ae01cb25a2c024d4c9325668160d9bbac09410f1db81f572e4f127528750fad06  deviceinfo
+d451f1b58a20b23aadff65f15560c8838ac26d486e9b5b6f9afca0e80a31499ef8baa751619ba3f9593f381d00e15a54a4c2f1575d57bea8860b5fb10e803dd9  deviceinfo
+6263b6dab9ea670bd1af22feff8fb7ce9d143ed5ab99223bcef9da76bb0947c89e62dbf7004e1a307e2b71df48de84ea95cad258d88a44cedb37e347c56db8d2  kernel-cmdline.conf
 3e5bb764529010d2b6b1f2759a7799f665d140aebcee2dd63433e68cd4282e09b5d3b34fb7c21e737595b406501e7f02ece4592651c60e4c2b9419de4aedb438  etc-conf.d-samsungipcd
 203b832a7080d5f1351c5e024e444f9fe509f6e0fd4b376a60c7d73359b7e356863a4f15caf9b2e4e733dc44d2971722083e7c69ca94a012eb004b4b8ded9d09  etc-init.d-udev-settle
 7caddfe4659c969a33adcc27a760bc78d4f70ca4b7a4a5ec28a6411c12f3e6dd6d427b59f75976a737a5fe0f09806f8b6d65798f6358bd1e1954ad2a28fbfdc8  etc-init.d-wlan0-up

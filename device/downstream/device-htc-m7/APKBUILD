@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-htc-m7
 pkgdesc="HTC One M7"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-htc-m7 mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-7d0253c18d763e13c75c2f8946bc1fa18b5ac522808b4117c1eedb2ac2eb5ca5e27e3e38615aa37e7af0087d926cd783c95a278492c235860f04445434eb995d  deviceinfo
+95675b69982552ca50fcb64277ff90d0154d72cc0bac5039e1a29e014f5ca70840698fd8db0511d69cce839816e6fac4dce238c1f073daad25f7677baec90f86  deviceinfo
+12d79f0589d323e0e24ed06d3015cc95c21f67743603753fdd3b6f0a74f19b66b5e96b6252a4d6e40d1b5f7718ab3d8a7751a745679ecae1097c2ede0e0e9871  kernel-cmdline.conf
 "

@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-klte-downstream
 pkgdesc="Samsung Galaxy S5 (SM-G900F)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -20,6 +20,7 @@ subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	cpufreq.start
 	deviceinfo
+	kernel-cmdline.conf
 	fstab.android
 	NetworkManager-klte.conf
 "
@@ -56,7 +57,8 @@ nonfree_firmware() {
 
 sha512sums="
 c66e0c57e911b644cf6c340ea19ce0a9399b8e9e6cb0da38f612e0f8b3d0812ad109cd7b7506184e840a653397a64e3e57fdc71ab8b0fc52733bf74365b9c0e7  cpufreq.start
-5ed532d99fbfe450143b049f0d8f27e7ad9dbad9da85f4eb41c95e352e3f285cb8a3761e69e1660820517e8524236c7513729bb4287b3a84e999a52c6f560f07  deviceinfo
+866fbc9e40a6e28f98a473218effddc5923475fc16652cf20aa45ee8394bcd0fa0c05f735abdb75c6a77c2aa74e1d8a02897779e2dda001c2de9bcd5c3d7fac5  deviceinfo
+2bedc24a37fd9ad95cfeeabfdf61ea7f719a682ede43bb23161f4703471d7f5847405fafa4f876ad60c8e120ec9c4c2e1ba0e7104d84cd41affc7732351959ca  kernel-cmdline.conf
 6648d792ffd9fc002e45834fe12a77d20935a8936246d4a06f1835a4370c2de1cb3191650d02c21d637cfe68a5a7286a5c9e5f9c00b9c56c299176b210f6af3f  fstab.android
 3753dcd8c25cfbbdd8f087a3168537df1334f0d33f36bc8923ec3d225ceb88121aa8d1670d6c6a2baab3d7067c86a43571695ce22e3b47076f97fcb53d1d7e6f  NetworkManager-klte.conf
 "

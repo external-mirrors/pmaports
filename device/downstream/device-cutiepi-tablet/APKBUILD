@@ -2,8 +2,8 @@
 maintainer="Raffaele Tranquillini <raffaele.tranquillini@gmail.com>"
 pkgname=device-cutiepi-tablet
 pkgdesc="CutiePi Tablet"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -17,6 +17,7 @@ subpackages="
 	"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	mpu6050-i2c5-overlay.dts
 	backlight.rules
@@ -57,7 +58,8 @@ openrc() {
 }
 
 sha512sums="
-567bbf73546ab8ad8c72daa23c1bda59e29a80a165ce1af1400c2521d4f2f094cc8c5f27b724d4b467f36d9337843b26c3deda25582aa5940b684cac60c96027  deviceinfo
+24e60384b3ec5196b8741a37aaea8e7150068ea139f6885a416dfa99d81257d0222570df1a525eec82648cacb6092e3ef620d9962a1f34d54d8c8ed24b3de895  deviceinfo
+d60c4e19dc92b0847f5667a1655a9cf95931b5be6630673fe987ff42f9ac94f19ce59ccf0e34960a686753549bd62677c0f5a6c15e1a4a842b99bda5825d62be  kernel-cmdline.conf
 e3515cf9f41807917eac1f7663e0131bd18783824facf15f2bb0381635bf6d9a0c334f3786b6fb76d01469de6449878c871f8b747f45e9e3cee77699905cf319  modules-initfs
 afc9f83be2b4d089fa1e2c17f7fcfe7f5131233c5f3ff7bca1d95e080416088c5d2f65b7146021fca6eec492ad67961d1fb5ee58b02fb9ddfa7b5b2a586e238d  mpu6050-i2c5-overlay.dts
 9fbf1e8fcad332980b345b1a5eb0b92e752e6f5490027084f5d5713dc113ea20c71932a44ec5a0e077798fee99e52b8db13c8bb2cd263f4d39bfe9d27ca51b2d  backlight.rules

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=device-pine64-rockpro64
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="PINE64 ROCKPro64"
 url="https://postmarketos.org"
@@ -11,7 +11,7 @@ options="!check !archcheck"
 depends="postmarketos-base>=25-r1 linux-postmarketos-rockchip soc-rockchip-rk3399 u-boot-rockchip"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-ef323de5a0b9218feb596146e3e211433b96d35f28de4b2348b4c6035bc1efbf234aecd3319a7c56549da6d0366599f3eb4cea69a7328f8f3d18978dc6ed955c  deviceinfo
+c0adebb2ea75d9ec429d2b3bdf91bd11d35d4bb9ce8ffcffa5f21f9686a0e8e47aed344ea167df7aa7a12d5efd89ef12aefed27476e908d2b6bca5857c76f716  deviceinfo
+b7708fa690798ece0368d21cda7379a8824aaa050444401029a1aa698b85a9920dc4aed78b909370e005f2ace9554cd2e499eefd1570615e14a25e2be420bbc5  kernel-cmdline.conf
 "

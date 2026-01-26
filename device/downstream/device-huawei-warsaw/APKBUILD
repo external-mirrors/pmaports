@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-huawei-warsaw
 pkgdesc="Huawei P10 Lite"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ options="!check !archcheck"
 depends="postmarketos-base linux-huawei-warsaw mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,5 +27,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-460d1497161443b29e9d30ad269f7beb15d5174f85a560fee9bd35c3188b5fc994dc528a9889497c148912ea9b39cad3a600cb293fdf2fafcd33af10755a8bb7  deviceinfo
+6f34194a041d665fb2d3d4012f98193c258ad05a234e5f70347aa77c442587d9fa2ac50d9f6fa9e33a2765b6161a6c332e64f9842a3cf2f23afda3a28a12d567  deviceinfo
+cb0731b5e71b427024bb47cd70aa48d3be409a89aa476f3fd4dea8e5b42ef87371a65bbe836bca7da04c0384178ad293b44da8a88557ad04fc57857bef502050  kernel-cmdline.conf
 "

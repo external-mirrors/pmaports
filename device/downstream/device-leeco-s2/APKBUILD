@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-leeco-s2
 pkgdesc="LeEco Le 2"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,6 +12,7 @@ makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	fb.modes
 	directfbrc
 	ucm/msm8976-skun-snd-card.conf
@@ -42,7 +43,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-81374093f302331440f31ae19038541669b28ab44bfcc7eb29c703c8870844415f473c2a234e66a1e9e6e9c1fbb725d8e443bcd35e90891a3815aad04a54fcd1  deviceinfo
+729f1cb61fc74c47b844e8a9f09e6fa1ec30449c1871d0aed35c111733a51228b79b940bdb44befcda13781d02e6c4b69095bcb5f559acef58b1d09b8417f400  deviceinfo
+a212e5946d6febf7ae029cbff161392662d35f14b20490a02da6ae35dfcf51bc7374b3f7eaa5ec4eb3637b84ad044ec884c42aacbd2ee8e6b6aad9e79e32f470  kernel-cmdline.conf
 ea23de7628945badcff9d4adbe09b671a50c76da6410b8ab0abdaea8529a6cdcc85524c2c785e284e226b2e247589b7c56afdd89c0778ad711e58cf4086b3a21  fb.modes
 eea461b4c2e46351e606039b0fd489c5cf5fc3af71cd09a8aa3f327930ab9c8381908c8079e2cf1d1aba81e70d24b1aaf5e39b32a83596a32ce0c93de04202e9  directfbrc
 72fd18d6fea98a081de1681bf39e4fb228c73e8390064a4d4ecde100ef53fce00142342bcbced3b17c4ad2d6976a9676538cc844e2e158739f6ef0d58be9960b  msm8976-skun-snd-card.conf

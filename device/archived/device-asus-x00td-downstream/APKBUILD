@@ -3,7 +3,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-asus-x00td-downstream
 pkgdesc="Asus Zenfone Max Pro M1 downstream"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="postmarketos.org"
 arch="aarch64"
@@ -11,7 +11,7 @@ license="MIT"
 options="!check !archcheck"
 depends="linux-asus-x00td-downstream mkbootimg msm-fb-refresher postmarketos-base"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -22,5 +22,6 @@ package() {
 }
 
 sha512sums="
-aacace112d10033fc2a0e1fa5705e2734961a6282833da0277e2fec6662eb4142eb797979b648466d5f1fa31c4d296c3b7f74df473dfbb9927cd3fb34b2491dd  deviceinfo
+49572afe646d88e31e53b548912e588447e87de04834592210b191902e23401b3af5d968f6b90fb5c0ab29994605c6a95bdaeae85cd4a225a9e0a385c34986ad  deviceinfo
+4b2ea9d473de336b68db736b2b2ae44e8f952a948c016fbbceb205512f73548b85cb00a488f600f1346e92dc839d2ee2419fbd5bf56f9cba9df843419b69ec74  kernel-cmdline.conf
 "

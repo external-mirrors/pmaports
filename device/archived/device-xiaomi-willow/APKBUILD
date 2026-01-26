@@ -3,7 +3,7 @@
 maintainer="Eli Riggs <eli@rje.li>"
 pkgname=device-xiaomi-willow
 pkgdesc="Xiaomi Redmi Note 8T"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,6 +17,7 @@ subpackages="
 "
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-load.conf
 	weston.ini
 	weston-fixes.sh
@@ -49,7 +50,8 @@ weston() {
 }
 
 sha512sums="
-ccab3b10c35cb2b4909938ab8cb485307b22c30367d7a6b1c73ae774b93b7a53f71bcb62a4bc941c9b76d91ab66b8afb1806129e1d78b98ba6b6ce8689b9d928  deviceinfo
+c77956c533960d75b5377b780b724aa72b73a3237b9fab4eb7543a702245621d1958549269b23b7b9c240333b2be960a5acea220ecbe656956e4a2f5def0a061  deviceinfo
+14058344630b388ea3de9b941af6af700d4d964d15f27fb32431b8df465e0b042ea8841ecab806b087722791a59d0c950979bf93a8ff17f17eedbf848c507c15  kernel-cmdline.conf
 1689a1294cfca52351f384324a0fc17ccfa520e33d9d8c616e6a000cc44273b72ca560f1407886e105cdb60282a6f096262e1499eb46ebd0c470599cfe639442  modules-load.conf
 4fdc188f9cd5c0316959322568916a6e36e67ff316e90fa7bd7c7b642cb137a9ff7002b0475728c6ba53abcbfe8c50d82112e4943460ee424aee4bbfd0efecfe  weston.ini
 2ecdd4f25c1047071f8f300d177bc1c288e7af6d05c0f2fa821f722494c92381416ee7969d7d4a7aff7eb7c4fa18d988b7a12bd3ba769022fd95987ca3b5f065  weston-fixes.sh

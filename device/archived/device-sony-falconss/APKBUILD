@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-falconss
 pkgdesc="Sony Xperia E1"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-sony-falconss mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-c32e716349cb4bddf2e4b0bd28c8e5b4d7c07667df3762f3f7ea9ef365fdef4a7e15d1d9351ff1e4acc1afca66bfb556dcd9c98a55e649159a64b3af5fd115f6  deviceinfo
+affee198d4ceae28f6f51ed92c7ff391949a46d3e5201da7b24cae9e826d8afc7487b2c63e3be6c4a9d35fa261a50010cf9d7400ea682df661fdb8c5a8e5565e  deviceinfo
+1f53415fd6401e46a614c5c02e812332b6b6a0e5ac3a6c31ede67a1cae527d99bfd164ca0189a667b3c9233d9cf4bcad85506cdbae629c7bbce2eb7fd74c1010  kernel-cmdline.conf
 "

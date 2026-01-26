@@ -2,7 +2,7 @@
 maintainer="Er2 <er2@dismail.de>"
 pkgname=device-alcatel-5010d
 pkgdesc="Alcatel OneTouch Pixi 4 (5) 5010D"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-29d49f42bcb479bbf6f92165322d4ae46ca88be28efb7da97be904f137bb3dbaeb425160ce8aa32667464fad823bf14c7137e344be75cd9b369dde6910fc398a  deviceinfo
+7b5b821774b90d2f3b72f55f9ceeafa8540f4a4b5f8e680f6e35abf4c949b119a5385b43b104a5917bc17b94f7b0f12f7b502ed6d982c68fc40ffbdc777b50f6  deviceinfo
+0d61d841c6f2aaff3a807a10d1df7000be0aa4de263e49e944b8304950b48727966e40f39dcc5418001b3a4c71205d5f2f919334d4fcb609130b478e7b6b44d0  kernel-cmdline.conf
 "

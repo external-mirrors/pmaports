@@ -2,7 +2,7 @@
 maintainer="Eray Tutmaz <tarkanttmz261@gmail.com>"
 pkgname=device-xiaomi-fire
 pkgdesc="Xiaomi Redmi 12"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,7 +17,7 @@ depends="
 	firmware-xiaomi-fire
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,5 +28,6 @@ package() {
 }
 
 sha512sums="
-e0c0b801b0c2301ca01609586aa94a9172373e32cb6408ae7c2a5b848baa6c795398423490e85860e931d3464ba73537ea0559087e0ef85085e559d9a26a124d  deviceinfo
+9026b84b4556183bd1cf838b8b6511d24919dbe3924e301e353fd7fb88f2d55279d2b666dd80a9b828a0a38571b420ee2c58f90e1b2ff978224d487db61c8d38  deviceinfo
+9f79746191f412768f5ea129a640a7c4c11b08e9d8f9c3e5aa10a56db321c1e97c457239fae4e9711509b4caa65d686f9fa8dbadaf528166b919245c9f110c59  kernel-cmdline.conf
 "

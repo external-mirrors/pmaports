@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-vee7e
 pkgdesc="LG Optimus L7 II"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-lg-vee7e mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-64ae4a02b1ca8a47fc22ece0c3ef947a34809c95ad7114571bdb8be21e9d2fce33394615b3920535d61a1fd81b90e1a80e11263c525cb9a26db36995919543a7  deviceinfo
+48499f30724d3890345837b589972ec1f9b5513b4a1f9ac211f8b5900f9f9e68ca027349eb0c549f011f2cf259f4e6656550c9af6157e26aa4989a32f618c03a  deviceinfo
+61d3fbe12f07fe8078535af1b3def76b5db0a4800eec5f5e5da8df0755e542e70b25bd8c3637c8a039f853a8c11c612864797b4a918903553164345a57907eba  kernel-cmdline.conf
 "

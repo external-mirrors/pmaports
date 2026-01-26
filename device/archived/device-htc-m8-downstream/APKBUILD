@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-htc-m8-downstream
 pkgdesc="HTC One M8 (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	initfs-hook.sh
 	90-android-touch-dev.rules
 "
@@ -33,7 +34,8 @@ package() {
 }
 
 sha512sums="
-f46238ef93ae77fed95f04bd325d3dab562190842089939116850d2898c8e62c30b5a80ffceb7c2da431b106f6f7b53892027a1e046ba68c534da89eade9531c  deviceinfo
+60949a859a93ca4be67f5d02fca10aa2a8a329e2b1839219934a9ea33d4d9b1ab9641d46a00dedef3d8030f4fe8f3b601cc00956f1d4958de4c1468e7e6fb008  deviceinfo
+ccf2a8dacec72732919f2bb6135b0a682bb54acc209f00287a36283c49341467b59dc2a4aad4ba43ead4874a5807ecb41b16578092d1a1069d3fd320b6d9b8a6  kernel-cmdline.conf
 765abaad5fda0dfda5e62e1e48414d3eea822198f39d0792171a04d73f86f6273a6e562afab430cbfcdd084412568a0ad03d012e9c40c5564f5cd1b9c0f181eb  initfs-hook.sh
 f0f69ab3b5b3fed11ec5049f37c71c4e9dcf87dc1f238199a3917dd61957d46783a8798d63d400cc5d3983987e750e3fec6d7117561ad5005f28131ae4821d66  90-android-touch-dev.rules
 "

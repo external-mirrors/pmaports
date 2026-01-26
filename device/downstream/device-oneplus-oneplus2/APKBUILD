@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-oneplus-oneplus2
 pkgdesc="OnePlus 2"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,6 +10,7 @@ options="!check !archcheck"
 depends="postmarketos-base linux-oneplus-oneplus2 mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 source="deviceinfo
+	kernel-cmdline.conf
 	initfs-hook.sh
 "
 
@@ -22,6 +23,7 @@ package() {
 }
 
 sha512sums="
-b510f170e76a8bdf02b8da323186071332f929faeb669b68201ed28d92eb96499de944e985985ac4dc55baebfdc734860e868eed46aa39735fed874b9d2bd6e6  deviceinfo
+6034fee82e1d76f5f04173ff63ff754360f38b81d17596c9ad205af507532812d0c72a4686dcc4114e20e46c43c4f5fefe1f835d4155078e261ad837fc0e9bc4  deviceinfo
+8cfc580958babb713b0867130ab79b1c0c61968a6cc151925f715561465348bb3fa5cf2d7e126be429f684b55b6c4796a9bbc3cefd3ca06790a28aa2a66db11f  kernel-cmdline.conf
 abf299888a7a2eafc483a0077b0a60ff04a9c85e54c09758896a15d5d4fe0359765d078797d6791acd0ca5ede2f46dac2674fadbbbf0905d81e9a01e97d8b470  initfs-hook.sh
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-bq-frieza
 pkgdesc="BQ Aquarius M10 FHD"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-493d5135d595dc99510d55c7f625267b099fb28e3ba9f8ee2211a98f03bbe64d806e34b587d25be808c04e99768de5e8f298c44da01124cb888e3401c5b70e1d  deviceinfo
+943dde1e1ce995a6488fa231d122b387e5be7e0d13560222443fa4af4ef0b131022fef7543ad98f888db82874a0ef03d3f97684503abede5a7d72d45ba298035  deviceinfo
+e65c8744199357fb540eb0dc5bdf52250f61b20f0fce8b8c1f4d6530ed965057a10071581e24e533414d0745545179d9754bea5340fb0e228e72df2d5e910fcb  kernel-cmdline.conf
 "

@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-mmh4x
 pkgdesc="LG K40 (AT&T)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-ba3b8f6318bb5b511805ee541059fd090670e4b0070aed68c47e155468dfd424550802103c00508c19eb97869abdf1873f315ec8ed950d07bf7786102b5edef4  deviceinfo
+931ac30af846c5b2d70b2532b8cc2b247fb58373a22b8eac4a82c64bc54e0be9646416620fbd041df760781840a5390dcca6be239ee48d388fe11c6f14626280  deviceinfo
+37154047bfd93bab8e6ac342813477eb6af4526ada76b220ca6ea49d938c9f69b95519077f6cd58a12fb774a1dc2db99a3f52ae5a920ebcc762c70af54bb0335  kernel-cmdline.conf
 "

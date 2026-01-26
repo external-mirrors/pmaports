@@ -3,7 +3,7 @@
 maintainer="Statzar <azurestatzar@gmail.com>"
 pkgname=device-xiaomi-fog
 pkgdesc="Xiaomi Redmi 10C"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,7 +11,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="linux-xiaomi-fog mkbootimg postmarketos-base"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -22,5 +22,6 @@ package() {
 }
 
 sha512sums="
-0bf6184712ec36baf5ff0cab7c96d8b9a11811d8f983442a354023ec6d81d0b7cbcfdfd497155d68c1e01dcac452dd4c052eb7131e7b0b7b6877591d2793d0fc  deviceinfo
+8cab61883ac88528c0a96fed5ff5312c17a4dbdcafccdf0b3e5aa9b36ff300c1b5ca855236e1a2da25d16fe8c8624f1b5cebeb4b1ffabe808a459237fc2d4ce8  deviceinfo
+f11302578e831bb7b2803609b419d69b03232a2d0a3b983e1e2049dc350c382e0d6b7b291d5c3f0bce83ddd046bd770f11edf63175e984a1b8a78c2c016e93af  kernel-cmdline.conf
 "

@@ -3,7 +3,7 @@
 maintainer="Fedorov Bohdan <misterjdr@yandex.ru>"
 pkgname=device-xiaomi-cactus
 pkgdesc="Xiaomi Redmi 6A"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,7 +11,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-xiaomi-cactus mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -23,5 +23,6 @@ package() {
 
 
 sha512sums="
-3bbab2420ff71f94b1ade4763f3e53c5624746b8a0a9bdc0f1fc051f92bc4bae1942bc4a9c080fc5b77b66bdad5b598716159f9721e4f9c18750d216900bc37b  deviceinfo
+305d787007aef02af5e204edd4001616994445d43d22a21ad44d9f810b783175363d7f837e1e2a64bcf3f56f2564ea97c257a5d735d72ecc5c79bc4df101b187  deviceinfo
+00775a00c9b76495e84825348d1fa3e66874dd28a9396989199b0424857bbc0446ef5e91e68fbcdb089900e4dd67d1f277c49f3c62de28a60674a422939a14f4  kernel-cmdline.conf
 "

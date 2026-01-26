@@ -2,8 +2,8 @@
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=device-sqfmi-beepy
 pkgdesc="SQFMI Beepy"
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 
 _kbdmodname=beepy-kbd
 _kbdmodver=2.11
@@ -30,6 +30,7 @@ depends="
 makedepends="dtc devicepkg-dev libdrm-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	usercfg.txt
 	$pkgname-$_kbdcommit.tar.gz::https://github.com/ardangelo/beepberry-keyboard-driver/archive/$_kbdcommit.tar.gz
@@ -140,7 +141,8 @@ openrc() {
 }
 
 sha512sums="
-7de1e0ce1d03a4af379c31681972ba807387fdf651d108a5fada2634408635b1de8aa228718f6082cf8ff653e94f3092cc21bdd0f0cbf00801b17b6f816d87e1  deviceinfo
+4487836d288e8d0d27383f2dc458cb7831c90950491cc6493ebc149a3e56b14ebd8fbf51b180ff1343c1b5d309e0dbc044099a69085d0213109aabc5fefe2931  deviceinfo
+8074edca423726da1903595992bae9e5fa0dd5aa180d7865e9f9aef786d24da394c8bfdda09e788d2f95718b95924c7b302c5ff6938e7e831c3d37ac06d03d56  kernel-cmdline.conf
 3ab0bad9c7f38369457c5896fab2533049a2ad6ddb7cec8e7df3b2ac7f3751bd54dc275da8a7c0eedd7e7aafa79a766cac93750375eed4cb3e8c36612a649a39  modules-initfs
 2b387eeb9afddef25a9bb757ec4481c446e213cd1da88291c5b0af0e631bc0bd224588fe6cecb79620bc58820eefa37d0a234ed1b417af2946af48d8f3254d38  usercfg.txt
 d3060bcbca3e90aa26c8a8d6772d8b07116e0cc4f0ae97d44d896434510493367966f23bb86d82f9719723b3bc7ee6b7a9e4b93b5185822b32ffaf4ee0411813  device-sqfmi-beepy-e65472734decd59450e2448d1218c4f69babcea8.tar.gz

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-kccat6
 pkgdesc="Samsung Galaxy S5 Plus"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 	"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-658435d75ac6849badc9035643cd08dd670bcf615e745700e11142f07eadaa67bd7eee5cca806554a8914810027e14779f481c2ba258586d7bb61ae9522889e1  deviceinfo
+781601d3b30f98ae0281ebaa3301d22f57af98c491deee0c2f0c2ce737c6760d04761f7b9baa1622230fe0337e63912af70ce28fa92b7adb5023a3332c040c61  deviceinfo
+592ec2829ce1cb2e7f8feebbab7cb73085c0222b6bfee1a998de39b88fc5784874755d88263c8a32b94a81b0462f295374c1726f631f96613506d8b0a6526719  kernel-cmdline.conf
 "

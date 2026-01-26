@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-ferrari
 pkgdesc="Xiaomi Mi 4i"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-xiaomi-ferrari mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -27,5 +27,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-ff0567f822796398ae63548cb1d144382198d51e6263fa247064a0a7071285ebb310be621f324f6f42bfcbecc517614be738fb88a6c4a002fd2e6f8c946472e4  deviceinfo
+8f4469eb57beeed6331b1163183c53656b7b608d42bb5fbcc177470fc71d9ce2013dfc5b0329ca1342e8b6f9dd45c8693e75daaa83e320f2154bd77db54798f0  deviceinfo
+760de3b5829253649941d0fbcf67ab21db19b1d4a367204ff19a237073d0ff53f7bb343517f86022283804985090e0687d0a615d4c4c2283ff07cca5d5d7c9e2  kernel-cmdline.conf
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-j8y18lte
 pkgdesc="Samsung Galaxy J8 (2018)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo initfs-hook.sh directfbrc fb.modes 30-gpu-firmware.files"
+source="deviceinfo kernel-cmdline.conf initfs-hook.sh directfbrc fb.modes 30-gpu-firmware.files"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -38,7 +38,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-59ea497787eed597d6d393b36018c21eac6c8f9de90fea0b3a6bc3dc7baf3a0c746abce8aea407fdd723fed69770e4e240c9f6c871ee41b73249610ee4a5999a  deviceinfo
+23c6e258f651a0b9f43281ee75afe9daa413602163110194e54de4216e914f914a3fabf00f3e16b5c5b5242696f7d967039985f5b2e4b9a151309f8059952762  deviceinfo
+d4c0a0402d9fb71e102db9184205d1d5495072f0855642095baa796257680a620bde8c4444645e2c81974eff6a0313c2969ec20c8702ee1128d023b53be96f04  kernel-cmdline.conf
 c11610ccfbb2a46a4b721d64f8a2dbc4315768dbae52f1b675fce0ad0ab3b24d8685f944d914f6c37acc480e01b16ae8a2d280655f028f2ac577a68dee7aef7d  initfs-hook.sh
 3db3ec596e159be926ea2b5b2496c18e9bc7be24a64a232a56c89a0c9ee710aa2efb2b6fa9fc08efa34759e8242e6c629d08a4ce688ec8aa125830717c191515  directfbrc
 070eb0e3716d1a13517667d6cc6db720cc865f56f7619b1d4d864157567656128523cfa935236fff30a211a011b5c53b66d0cc28c256ba115a86aac82f4dffe9  fb.modes

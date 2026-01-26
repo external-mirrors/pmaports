@@ -5,7 +5,7 @@
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=device-google-oak
 pkgdesc="Google Oak Chromebooks"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -19,7 +19,7 @@ depends="
 	postmarketos-cros-common
 "
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 # provides and replaces to switch old installations to this package
@@ -41,6 +41,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-77aa1660756fc83f0b15622ee2b31ef453f31e909284f131c28f682715153ce74f2c739f9bde9485c17b5ae05c01248c7136a9e06fd53e4fa0b2afafc0b5e30c  deviceinfo
+cab64e21c7710d875cac4ed459a7c6ca8547d7234704e8cb80e875a5cfc65cab6cac00be0c3d9b9300e96f9a45c1b315896708b488024dcffc7cb42c850127e0  deviceinfo
+97e88eaa9b8e7989a20d2572479fe5d1fe0284de862da11c91b1f347099d5704673837db01a6b0c289fee0a2d7236f64fba31fd6001475f957c23203e34fd6fb  kernel-cmdline.conf
 4b0197eacfeeb4b13f5abc26950f570ee762742547674ce10110ccea63eb46630a2e3b5f87e9c9a1f9deda21baf05bec248ab7a65656687ec94d296b5657dafa  modules-initfs
 "

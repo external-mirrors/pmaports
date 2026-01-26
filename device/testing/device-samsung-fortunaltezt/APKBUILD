@@ -2,7 +2,7 @@
 maintainer="Lin, Meng-Bo <linmengbo06890@proton.me>"
 pkgname=device-samsung-fortunaltezt
 pkgdesc="Samsung Galaxy Grand Prime (SM-G530Y)"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
@@ -37,6 +38,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-0f0b57cb0f8629df5e36d700b6062da80b3d0d83527e6290abbc9798590b62c199fcb49e730981d898e0d19f577e1019e2f339ab0564267d83bdc56cbdec84b8  deviceinfo
+8f37b22163f6732f04e7a46dc819153a127b79288090c184b2e6d2cd27d54324a1672eba00aee2055945fc33e92175c6f3a32c70ff0ec9702e34904e611f5ff8  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 0dcec6521708a8733aab879eb65047d3bf0ab562d4afb40fec2cff057a08b52b59940e1f9dea2f32519b2565af0399f724950c631ee45790a73199eb53c0653f  modules-initfs
 "

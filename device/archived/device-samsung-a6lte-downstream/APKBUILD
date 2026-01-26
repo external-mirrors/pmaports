@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-a6lte-downstream
 pkgdesc="Samsung Galaxy A6 2018 (Downstream)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -28,6 +28,7 @@ replaces="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	etc-conf.d-samsungipcd
 	etc-init.d-hciattach-ttySAC0
 	etc-init.d-udev-settle
@@ -82,7 +83,8 @@ openrc() {
 }
 
 sha512sums="
-3495ec4ed8a315d87eed2c8fdd0b9257e9b36b5bc3746eb9a8ace55adb7c723824f6f9181b832bf53dead859da432e2a0cd5944e1e63578b641d95c6b7d3d34b  deviceinfo
+4d0e7338f0faebc63acfb1316dcdc9c1851fe6ec810dcb13ff76c2cf9ddb29b78d538d132d0afd4765370e9c266aadbdf5c5f87ee867e84c6c4bc83ea74ba726  deviceinfo
+6263b6dab9ea670bd1af22feff8fb7ce9d143ed5ab99223bcef9da76bb0947c89e62dbf7004e1a307e2b71df48de84ea95cad258d88a44cedb37e347c56db8d2  kernel-cmdline.conf
 3e5bb764529010d2b6b1f2759a7799f665d140aebcee2dd63433e68cd4282e09b5d3b34fb7c21e737595b406501e7f02ece4592651c60e4c2b9419de4aedb438  etc-conf.d-samsungipcd
 f9716fc70bf3508d2f9e83d908f1c13103403f01ebb784acec6cdf3e959e92b63c75e49b0120abe1ada5a50d768dcf30b8472630da1172fc826485e97024d85e  etc-init.d-hciattach-ttySAC0
 203b832a7080d5f1351c5e024e444f9fe509f6e0fd4b376a60c7d73359b7e356863a4f15caf9b2e4e733dc44d2971722083e7c69ca94a012eb004b4b8ded9d09  etc-init.d-udev-settle

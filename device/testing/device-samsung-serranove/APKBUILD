@@ -2,8 +2,8 @@
 maintainer=""
 pkgname=device-samsung-serranove
 pkgdesc="Samsung Galaxy S4 Mini Value Edition"
-pkgver=16
-pkgrel=1
+pkgver=17
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -13,6 +13,7 @@ depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	phoc.ini
 "
@@ -52,7 +53,8 @@ phosh() {
 }
 
 sha512sums="
-d1fbccadc2acb44c6bf7b273358875f26556b57add28a2933674cb0c6ed3b6ef6dad450cd0eaa6e5a61173c46b1d8a67367845c179a4108af5e7f7ed85e38669  deviceinfo
+3a223367c1fbb06fc03c2007486aaa1903c801b4eb7f01a35c7bb53fdae3bfd7de83463fbda656c36df3284cb3844065981b764ba2f107e4566ba3d5ea6de292  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 0c92ace5c522d039d356e8914c0e0237e11fc38dd05390ba7a89532be659707d2b499ae77b263c5984345caac11fd007bd6d1e279d3426126bc276a0bcd9348b  modules-initfs
 1bc90a1a67309b43435039332b2a1d7e606408c6429b3cb8991a57f53dd4de36fbe471481b6481fbdb098c3819344e8093dd8eab0d34eb3c091ab6d8abd5c087  phoc.ini
 "

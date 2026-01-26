@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-htc-ville
 pkgdesc="HTC One S"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ options="!check !archcheck"
 depends="postmarketos-base linux-htc-ville mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,5 +28,6 @@ nonfree_firmware() {
 
 
 sha512sums="
-9edcf535707078bcc72997132232e2ed4f19017aae91a3b90fae2d6f3986dd963105aa8fe5e0d882a1ca11a864be4a7d30dec4e5768d29b66c53c24838ac8b9a  deviceinfo
+b8ec029dc851e190796416d09d849cae3aa0cfda7081c0cf010e93e4786e24d78566773b2990e6a9c73ba2622a0c2562bb84ba3325d5fdc47f32389991e06612  deviceinfo
+9de2b4e870e58e9a6aa126b5633b150e2cb0419a0b6759765e409aded5ed33305053a7ce789f1ae1e81d357d15cfa395ebed3e29699fadce599bcf0598f3cd15  kernel-cmdline.conf
 "

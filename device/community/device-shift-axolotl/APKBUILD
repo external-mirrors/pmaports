@@ -4,8 +4,8 @@
 maintainer="Alexander Martinz <amartinz@shiftphones.com>"
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=17
-pkgrel=2
+pkgver=18
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -24,6 +24,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	hexagonrpcd.confd
 	modules-initfs
 	q6voiced.conf
@@ -75,7 +76,8 @@ pmtest() {
 }
 
 sha512sums="
-89f5d315b7b3ff8fcb4d5c290ae8615c44ef88786c466ff8c294b4deaf4204dd6ddec1d763bbdf650c55d8286ca58df598a6c6ef4e3264880788512d74881710  deviceinfo
+9ad8e0fe5ef8d054839372c9be2025c48024a8beb248cbb018713f785824ef326fd0a21425f0313c9d51c4566b18f6ca4d040497cbe27bc61d6647f3001f1370  deviceinfo
+003e5228a2b2825f24cb8b4842e3c3f72b99225f0aef3cda5bb2de4e4beb5e1c84800ba48c6cf1b84fe042bd039912e67c545c00981b604db0c0f0bcb546f7c5  kernel-cmdline.conf
 5966325963a3a62c919b5f39f7bc56e1785f192f50c40a6cc644a2fea0c9b8dd083e287ef43c59c2b9cab5c88d65266b0cd9cf1f5110924950bd250be5385622  hexagonrpcd.confd
 4dc84207c5ca84b33b74139c8b0c9ce5baa8bcb1068df9943c478c02abcf8daccb88e06af63f120a434a115e277008e899305bd5239d8669436cb269889040e9  modules-initfs
 2a3cbdad5aa91181d24a4e56e63986af6accf887c64fa4d1b6ddad1926e29050243c4b1e2fd892d38ca7c16e24dff8545a16552e5749ae31b6d01bf428468e51  q6voiced.conf

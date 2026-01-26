@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Timothy Valldeperas <tvall43@gmail.com>"
 pkgname=device-pine64-rock64
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="PINE64 ROCK64"
 url="https://postmarketos.org"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base>=25-r1 linux-postmarketos-rockchip u-boot-rock64"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 }
 
 sha512sums="
-1da5a51ac675de9db3098652d0ab5620696a6c0aedfc5195302209934f827829f7e3ade11f53177ba39f088affce32080353403f446aa8e871b8b7a986e8b70e  deviceinfo
+c3ceb9ef2dea8a25d082969dfcc56c4fffe4985234424617c6e9e2822e3642d877f38481e525222476bf23616b95c105c170ca51c80cb3df7c93656fec878dce  deviceinfo
+e9ededbc7bd4b9466f2e35f82e03b9baf8874752a0cc1138a790db6db61fa1e5530f86106cc8d210bea84c104b3ccc422166e81bd8ee3efc3d08a4165adb818d  kernel-cmdline.conf
 "

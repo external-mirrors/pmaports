@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-leeco-zl1
 pkgdesc="LeEco Le Pro3"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-e02bc3fa683dc74c15777890bc724f1267faad4f164b7f92b4c962a7953a8fa02666c0d5485827033a596237b8ab7b359d4954d0d3a8e654112da017f0de625d  deviceinfo
+feae420a47c5301b501d8e95849b6eddefb0c0905eb2128cef2bf7c87ad377023ca3a4c3a8180d912e5d4a25e64e93d4715022c44efc80d86020a7126cc11fcb  deviceinfo
+e1271a444d13235f341a55af85bcf48348c2d8b814e717c1d07a161432570d51a585a26d1e8a80cd5fddff7f303ddb51779ba6bb2d9830ce7554d24301c30647  kernel-cmdline.conf
 "

@@ -2,7 +2,7 @@
 maintainer="Eli Hersha <elihersha@gmail.com>"
 pkgname=device-amazon-sheldon
 pkgdesc="Amazon Fire TV Stick Lite"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-67ccad0d356ac55b40444bad964bf1894f582048d6c59cc96f557ec16bec62f2d08be88f1d5e20147b1eef26c541d53190c97d4ae31e05f709e84217e556ce6f  deviceinfo
+d1d6b20a2479567983090964e17357089b4ad0681a591ea927c88e275c2a9fc1eaa4eeb3ee1383aa203fe819a68334f0194a3e659938512fc61763b7a83e0c86  deviceinfo
+4d71bbb121126ce3b015263def88c53b32042de7c32881dba00592d9fc3e8632bf601b4d6b5364e31ff2082d525af27c93a15a76bb0d063a05484215afafd326  kernel-cmdline.conf
 "

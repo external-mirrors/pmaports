@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-olive
 pkgdesc="Xiaomi Redmi 8"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	etc-lightdm-lightdm.conf
 "
 
@@ -50,6 +51,7 @@ fix_lightdm() {
 		"$subpkgdir"/etc/lightdm/lightdm.conf
 }
 sha512sums="
-f9ec986329de099e5805ada6c3e569b12e68dacde7472b4a99472d584c744240a5638a1d423cc7288ca93fa2ca609e0538d9109bfe341c7d1c8a89a352f3cd5c  deviceinfo
+966ac7dffa344d451d65ba19a0928032e5d3dee420ac25bf1898a6b1641f2a126f19584fd6c2aaf3c51c032e38031e2a1897eeb32fc6e79b49cfee13d42d19bc  deviceinfo
+b52f659b82d895feafdb8e608ff02b187a3811a0a172f6247798a6c9f6b2a1031f8dcbce8b4c9a39ceb0eeedbcc7e700425db0f5862f4341129a0a624cc94963  kernel-cmdline.conf
 861270c6bc0b2a3e6cd389c21c8c895e62de8cf8bec6fcf23c178f8cbaae855d62b0ee98692671ab4f518d84cb43dd0b2fe46f5a609f65af6a6c06e0fdbb6d0c  etc-lightdm-lightdm.conf
 "

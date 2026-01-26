@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-gts4lvwifi
 pkgdesc="Samsung Galaxy Tab S5e (SM-T720)"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,6 +15,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -26,5 +27,6 @@ package() {
 }
 
 sha512sums="
-73c0d720f17c31d8763311cd5c92fefd6dfd3c5f7942643c17b5d6ef22a581838e2ee2f88f51dcf15389e7cd70a207d3b74936052834c7150a4aae763f9a41f2  deviceinfo
+66744e7eaa74c5dec91355968af5c8fa81e7cffaed7af7bb654f05adc341d8a5e59f6d41d2fb42debc731140fdd9bc528b968eb1da3080c4442e2fd7229bc31f  deviceinfo
+17b565e660d9374379a84e5ffb3eb1754df39287bf98c71f6dc624da4bcbf1453609f77c13abc77adcaab31d098abc64ea567520dc109314833b0d15b4ee181a  kernel-cmdline.conf
 "

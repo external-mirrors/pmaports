@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-espresso10-downstream
 pkgdesc="Samsung Galaxy Tab 2 (10.1 inch)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-espresso10-downstream mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-9898dad06adbfe62b9e9f312598af675f4a2f02e29cd97f3fd87154645085d3819a899df328c12b61014aa5d4c5ea9573912dfd8462939c885f6cfa2e11675a0  deviceinfo
+f9e925351cb864d56541b2410a3c27fbd25edba5faee4e52e19b7bc6bbadc4e115722df3418206c22ba31d1c21643c38f90e57aec83237a9c0db61a7040d81c9  deviceinfo
+1ff0e69634f2d9e84627089f1d236ce9c9134b78a729ccf74dea447aadea0b165e8bd90cde8d53bc74642a680d8bb637f064d5410a359af6182ed9521d0a6d78  kernel-cmdline.conf
 "

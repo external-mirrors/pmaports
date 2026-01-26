@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-a30
 pkgdesc="Samsung Galaxy A30"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base-downstream
 "
 makedepends="devicepkg-dev"
-source="deviceinfo initfs-hook.sh"
+source="deviceinfo kernel-cmdline.conf initfs-hook.sh"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -33,6 +33,7 @@ nonfree_firmware() {
 
 
 sha512sums="
-c157a21819279e09750acdfb48a7a0d21da0835434a227292a31906766d63d33e82929f840ff21c085675443a204658fd96674f38e394c2dccd77926777ec304  deviceinfo
+548b253acedaf1370adaff33e240f6516746982e7eaef075f6255895d56f3878cbc978d0011db3ec203b1f8a45a95ef73cf86a5b307e4dc867280b05b4245bfc  deviceinfo
+6263b6dab9ea670bd1af22feff8fb7ce9d143ed5ab99223bcef9da76bb0947c89e62dbf7004e1a307e2b71df48de84ea95cad258d88a44cedb37e347c56db8d2  kernel-cmdline.conf
 04445194a5245d08fcf1b425bff1d8dd6a8fdacafdc151223634299a35f1eb20fbd733979b58bcfd854e16fde02629c28453f840d6c9dc34fc15d4fcc8aa4302  initfs-hook.sh
 "

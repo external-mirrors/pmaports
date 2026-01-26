@@ -2,7 +2,7 @@
 maintainer="Petr Vorel <petr.vorel@gmail.com>"
 pkgname=device-lg-bullhead
 pkgdesc="Google Nexus 5X"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 options="!check !archcheck"
 
 build() {
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-b7173d7f6caa58007816bc6f87396521d281d7ba90007416dd6f67e460574e125c5e14cd43810c7cdb3406c032c3895aa41dadf89779d834561889004981c758  deviceinfo
+ddad1e5911c1cee4f1e031864d3ab7c5ee747f093a438e12a3f4ca5a7211db0c9f9e6dfc9a5ebb7a3df4f185cc67fd47bbf1a2dd1c3f3544197e9d6124f19b98  deviceinfo
+e9a2223fcb15391c52976e492648375a70f09fc1c7a5e876fd870d3091056d523f97d3e8fefc5113c3c3b0051ec163ed41d662bde8f0d5ed3c64c6075252e79c  kernel-cmdline.conf
 "

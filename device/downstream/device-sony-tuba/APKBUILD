@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-tuba
 pkgdesc="Sony Xperia XA"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-sony-tuba mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-ef470457c6805e2e309d2db6f844e0503a1ac81182128fa1eeefea46a3f45f1224d04c8748252fb3a68360f44106e67ea7d27a8f8c25769e812e34dcd4d1b44e  deviceinfo
+d6054d5b7fd0b68a204d8e1c1f6330112a240ae7c82817631638bd1d2fb1b23a2f4004cefe7e0cb3140cc63bf2abcf2c2ba5479625ec5aa23123df60906ef0d2  deviceinfo
+d89b08ef9888faae6cb96a378421669e6119023307a3b5a109e18b7f9e2c70e1f8b240ba8f9b9d22d319fa28e416565d06074d34382f482c9b037b7ab3f4861c  kernel-cmdline.conf
 "

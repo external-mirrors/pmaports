@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-realme-rmx1851
 pkgdesc="Realme 3 Pro"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -33,5 +34,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-d9f0d23890610e83e6fb478ec71374b337e36dbaac0575c2fa9d8eadf0276b5697a8c22a9e5666fdc5bc1fb7923e622b8ad03b3ace8b4c27d3e2f13fa0a32913  deviceinfo
+5ce9e24bf5c3e69fec22b94d3f139b96ba7e385f4f20d359dc59b987b214230c4bb86a2e3467e369966e2590bc208c73ea764951d463fb8a705b1adec0438597  deviceinfo
+1fe4b0061379502c346032f164e6941a5501c1f3b7cea352ce7d9682f25d70c4643e99251f1f847a3404a8e262a39c2ad192bb1120f903063a86ce1c1c8e48b7  kernel-cmdline.conf
 "

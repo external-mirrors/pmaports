@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-arubaslim
 pkgdesc="Samsung Galaxy Core"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	msm-fb-refresher
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-7b007c37526d151eff78a0b0a1ffb8fafdf3eb35a80e22c7e604f08095cef8fe6cda499b42d027a24ffda288a4d38bc97c5c62963a4cd08b2a455b33e12a814d  deviceinfo
+b326730ac24ea8d1c4ae65cc24ffe77d46c2f7817a5c8c8e6a9d18acbcf885f65a657fc28dc22e43c2217156224efd1e1e4a0a7662d89fea1b9ada02a9767c51  deviceinfo
+9584fdc80ce771726eec8fb8f469160544991d7e97a66c8b218528ced3a2bfbf3c5a9ae1136e97a4dde8e0a9560e1fd303a084ff582547cf1130331ba28c84a4  kernel-cmdline.conf
 "

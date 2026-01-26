@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-nokia-panther
 pkgdesc="Nokia 4.2"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-b03680ad167b8e6ee3c420faf673a860e71a8c62cf80d05867f8c5f732da1a95f1be40355e7bcce671cce36093fd0d876f75b7fd064daed3fe4aff8a9754d2c2  deviceinfo
+6f336004d15f170a03667ede8feede813cadec88c939e648e5a48531b2f85f70791e27d7bf35c79b175d14a9a5ad0029bc65126eb9abca925c9a8a3c1c6d4d30  deviceinfo
+b92e49138aed7efa5d4e79a47f1fcd665a159bf59a644a801c8c5af4c62afc6e276901d5bb0829064fa8b77f94493f79f62595d9068de02890c62a8d07516fea  kernel-cmdline.conf
 "

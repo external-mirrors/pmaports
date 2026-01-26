@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-huawei-kiwi-downstream
 pkgdesc="Huawei Honor 5X (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-huawei-kiwi-downstream mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,5 +28,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-12ad849642a8548a5d17c24ee4a5a2c0b2d7d2c2f15528e4fff52ce03b17cdc9c898dcc5dc20949b9cc6157613dbc2b180ede47a532b30b621c75002e2a33711  deviceinfo
+fa560fcd95067230b09856709684d20bbac78fe3953f6e2e064a8831dd31430c69be3a66a9585c81c0b5726395adf268ed08e59c591edb6cdd39dedf693c08be  deviceinfo
+232042dfbd16031d4f859cf45f8105054bf395d5121b661390b15623eb25dfda750545811c74c635c7f79129588ed6f0ccfd92e360550f8bd1c4c0784bf27e5e  kernel-cmdline.conf
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-huawei-frd
 pkgdesc="Huawei Honor 8"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-438ec68c7110cdfab37648c3cecfd8de10f04fbe1384cb56122e35050224acf975769bc6561b69fc3f8ef854c59675b3a73798fbbf34d35a9d2986eb06eccbf3  deviceinfo
+cec434c75ab9fc47d824faa0a4962c19ae7f0ea25f5aa7003a205c077a42efa78eb5e730889f7732833bd806fefdd8c7699e057e3b61c99241d0b9cd386fec33  deviceinfo
+1264386242318a98edc98033236cdcec6c7c4347c73fea320d4e2058ee704ef56eadb0dae2acf3b6caaf9ff709a886846d87dfdb744a217100c526c659e96d11  kernel-cmdline.conf
 "

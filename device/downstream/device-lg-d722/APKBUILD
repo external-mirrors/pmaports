@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-d722
 pkgdesc="LG G3 Beat"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-lg-d722 mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-1cf9dd7b10334ba5ac792ec10ae1285399b0c04e08adeb9675716ef5dd65d142d1f6047b775a6596f5a49215e998a755a4c2b7d2c9f8de3becacccbb4e1b092d  deviceinfo
+865d168ed7b3417699f62249fab7827eab4b51b039de5baae5b41918b052d3bc0c9e9a022d3b36a60c6c1e4cf5a44e28eb830cbc0409f111480f2ea36c7ad326  deviceinfo
+329317c743ffb6b8ad2c1a5512ce635e98cd825f7449ea0de5e66bfc02d4235a65672b7ed7e1c1ed6db01882c6314f7cd71c452d9a7eb8d5f3b01d2da9c6a3fe  kernel-cmdline.conf
 "

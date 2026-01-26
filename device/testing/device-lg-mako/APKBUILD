@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer=""
 pkgname=device-lg-mako
-pkgver=7
+pkgver=8
 pkgrel=0
 pkgdesc="Google Nexus 4"
 url="https://postmarketos.org"
@@ -18,7 +18,7 @@ subpackages="
 	$pkgname-kernel-lts:kernel_lts
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 options="!check !archcheck"
 
 build() {
@@ -49,5 +49,6 @@ kernel_lts() {
 }
 
 sha512sums="
-d3d459c5486fe1ba8a39e0c559e5d6f2ffddbbf34ca24d7a921238786ea868c6c752254e310534176bfb5a7ce8c0a64fe3958d77ec167acd0fd78047e66b08d7  deviceinfo
+1e8a909232e17607fb7138d4b202783d19d80e6e409dd6a03dcf431b64c4ce36eac23ae27b713e956fa63c1816e6a14204e7fc81ebebc290752a1c0b31c3d4cf  deviceinfo
+507db97393639e1a529562135aa79ba3d9468101108379599317aa6bed69202dc4f85d00c357d65b79a380386b4224b17e384ea9f022c2eae5895c7598c01b0a  kernel-cmdline.conf
 "

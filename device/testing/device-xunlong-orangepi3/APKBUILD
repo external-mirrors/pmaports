@@ -3,7 +3,7 @@
 maintainer="Maxim Karasev <begs@disroot.org>"
 pkgname=device-xunlong-orangepi3
 pkgdesc="Xunlong Orange Pi 3"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -33,5 +33,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-a0ffba59c5cc7331cc14244b93d32104ced552a0bc21f5d5f735367c379dccca761369d15d5c48278bac6d4803006283de89f4ac5a7b3b6d5d110237ea945ff7  deviceinfo
+0311ab138a2909223a5b83c10e2b17ddd9a7994e76c4f9cbda1d9ddafda4d8486b3f5d8892eec391c11447565a57170e69c914491f961f1e8d9f0515ac5a3092  deviceinfo
+5269b54efc5ad66dd504fbef54820c88fbbb60301c9504332881b7f40c87b182d7a271be17d7bd8e226eb6638c10acd020135d60f7dd09e511d2296a24e6a320  kernel-cmdline.conf
 "

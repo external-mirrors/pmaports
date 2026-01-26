@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="exkc <exxxxkc@getgoogleoff.me>"
 pkgname=device-radxa-zero
-pkgver=3
+pkgver=4
 pkgrel=0
 pkgdesc="Radxa Zero"
 url="https://postmarketos.org"
@@ -11,7 +11,7 @@ options="!check !archcheck"
 depends="postmarketos-base linux-postmarketos-amlogic u-boot-amlogic-radxa-zero"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -29,6 +29,7 @@ nonfree_firmware() {
 
 
 sha512sums="
-c6f4204d13b71db8cb7901553f327bf7fcceed2823d91bc16951306d3d9925877fa2f02cea9e07f71eef4ddad5cfeede2f9dee77045770953fea767025fe06b5  deviceinfo
+9ed5bec4350316839b32e2a59d7735a91fdbb84732c8a9c2586d02e1d6f804ddd8c89c57d50aad3b5a76509706657fb5a84d7008bf485e32e40b70a512038b47  deviceinfo
+cf9d03ab06004b4629bde4eff29028ffb07edc512a08c397f773dc49bed1aa2aead46496333c530f51bc10b653eb3ac706966cbc86997cdc37c7518b24acc368  kernel-cmdline.conf
 b9f3e1902c17909de928c99868265a257ba5873f6ea6aa1097ad10721f59d68342d50ee51992472ecd23722f7664a13dd15f4e26071a40595c7c3e5161e533d7  modules-initfs
 "

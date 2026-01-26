@@ -2,8 +2,8 @@
 maintainer="Jethrob <jeybee@hotmail.com>"
 pkgname=device-microsoft-surface-rt
 pkgdesc="Microsoft Surface RT"
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -19,7 +19,7 @@ subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-x11
 "
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -60,6 +60,7 @@ x11() {
 }
 
 sha512sums="
-bde65d6f49ec2f4297cdab667f8c468ef1cc7635bb53151aa52af8ece472f70184b936c6922906dee08d278ed2ec5f8876e974430f619fdb182a88a1489bca02  deviceinfo
+4bb0449c31a9c6481f0f42290d25c6222577ceb6a414b58101077f4273e9f04c8f095aa7257b073869255308e6b8f3cd66d9b10fb258e448c736341733600bc0  deviceinfo
+97ba87687ec3bbe2d8473d310f17b6771e7a8758f2585e77915025b1f211120dca615946e13fb561771a557081984a4f6f74cf8686d3bd822f614876498b0328  kernel-cmdline.conf
 67ff4306270b7e6e292ddb48ac5fcb1472840d8eaa412f9cd989442fb20139ee3c844fd1ca5c5b923c7980403d945999a77fc6617127059e56e22bdc8dca2bf8  modules-initfs
 "

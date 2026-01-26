@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-motorola-panelli
 pkgdesc="Motorola Moto C Plus"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-fbbf59cc10c963795ab92e03ce5704afdb6a5ba1d4db4c82ce07514c582384b1cfe723b9ba358f9957315f2cc09bd0bd2dc77f7c774ceb13b007e464588723f3  deviceinfo
+9297e798a9703bbdd758ef847e8bfaa5abfcf7996dd5d0e356faf23554386eb20c75bbc67e77356ca1dc2ea55203d6890e99194549c450d3ecf94dbc5602b20f  deviceinfo
+c74b898abf786ad60d78cd4b42c1b1be89fb71eff91c71856232fb03e0b0814a9cf9d4e5d0a7658e68808e3c741ec7e7fe1f30cf619ca005366f5ecadc36c214  kernel-cmdline.conf
 "

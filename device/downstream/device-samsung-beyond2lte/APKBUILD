@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-beyond2lte
 pkgdesc="Samsung Galaxy S10+"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo initfs-hook.sh"
+source="deviceinfo kernel-cmdline.conf initfs-hook.sh"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -32,6 +32,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-3ae5c99aff3ae62239dad554aae86dbcb0a8b40ca50f6801f7916b2ad1e35d34fff6b40df9f25ff6e45811e61718bc5ec64806553e10cd6baffea4960cfa1a73  deviceinfo
+4910ef0a893bd6ca56034b2fc9e10e470bda3855edd2446345bb3da70ae43d52761e2a9c47e507a8a75de5c5e33ffebdf7434b09a754440247a02297e2bf7be6  deviceinfo
+f56828244a8ecd03ff810780a57cc92b269f0b63a2333a5fd242958567112ed53df187b2188a3b2e6f9e240fed5d7ed191bb248a365d30fcf2418ea1c2348338  kernel-cmdline.conf
 03deb65563f4b4421491643854927e88b2d5880b8b19ee6baa4d3fa1ec3f7d7a1c2977fd2c3c41270254efea6fa0c5fdae0a382e7c427d5a3bf6fad34c25375e  initfs-hook.sh
 "

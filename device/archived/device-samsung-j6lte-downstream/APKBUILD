@@ -2,7 +2,7 @@
 # Archived: Downstream port, only for testing. Use mainline port (samsung-j6lte)!
 pkgname=device-samsung-j6lte-downstream
 pkgdesc="Samsung Galaxy J6 (2018)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
@@ -36,5 +37,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-35fff64d4e0b04242626464ef7b63f34b3ce3c236301a75163101bacecb39eceee1b8b99d9d9333b9dfee27d46c076df8edee1fbdd6dafdd5cc2ec9bf085789c  deviceinfo
+2db21cecee8b866cf71aee91246503bfacebcf7239cb6c728f03ce977e7727a557b798bbc54e2dc47d781bf5316012bcfc818347c3222f805023ecb07cf29c7e  deviceinfo
+6263b6dab9ea670bd1af22feff8fb7ce9d143ed5ab99223bcef9da76bb0947c89e62dbf7004e1a307e2b71df48de84ea95cad258d88a44cedb37e347c56db8d2  kernel-cmdline.conf
 "

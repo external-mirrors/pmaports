@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-oneplus-bacon-downstream
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="OnePlus One (Downstream)"
 url="https://postmarketos.org"
@@ -18,6 +18,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	90-android-touch-dev.rules
 	"
 options="!check !archcheck"
@@ -34,6 +35,7 @@ package() {
 }
 
 sha512sums="
-7628d3ae2767bc71d41d35fe9386da63fe484eca3f365be65a81f5359f9cbaa00d3fcde7ed0c2908fa62586d24ae83909c404440854e91added24fb8ac317adf  deviceinfo
+1ec569b9d2d1d03c330f82b3b36cdf8b546edb4d6c00b9bd036789437b0146aabaa837ac1f934d12dba1d84259133894431ea0aa890fcd50efe7ed1d5a92f9ce  deviceinfo
+8117768f75f8ba862c24d93bc3ca17e380b102e4e52252bdbd34df99af801fe03ca5db0964a1436e700385111735acfd7e8d600d23c68dd424f93833c18d0876  kernel-cmdline.conf
 65e9ee7352b1dc39d99ea411eb0ed9c56f9975230907db5add3a1b4146cdf6f227c934052dab38a1937ed67d67585f28fb7410f10a1bec9dd5e4eb69d7253515  90-android-touch-dev.rules
 "

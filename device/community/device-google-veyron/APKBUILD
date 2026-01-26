@@ -4,7 +4,7 @@
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-google-veyron
 pkgdesc="Google Veyron Chromebooks"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -19,7 +19,7 @@ depends="
 "
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 # provides and replaces to switch old installations to this package
 provides="
@@ -55,6 +55,7 @@ nonfree_firmware() {
 
 
 sha512sums="
-28ff76c5920414ad6a0199b9cbc41a9c064ea27e3d17048d4014bfdaa26290a508c707e82b2ce920989f96755422cf89d73d1db69e5980bbefcc057774e69762  deviceinfo
+aa1e5318136f26709eb978639cfe3be264c36a757e0240eeb7c450f5596fb7b1fbb3c52f73ecd3dc67d6a48d9165c1e02e4d494a3e7ec93960b45027fc24eae5  deviceinfo
+97e88eaa9b8e7989a20d2572479fe5d1fe0284de862da11c91b1f347099d5704673837db01a6b0c289fee0a2d7236f64fba31fd6001475f957c23203e34fd6fb  kernel-cmdline.conf
 be3e804fa538d9d377c637094dcf95e503e8a156fa71676a9e78abc0e290595dfdaa70b5642df721ebcdd3daa04d14e0c61d9bab6f78cb1dbd669404abc3a56d  modules-initfs
 "

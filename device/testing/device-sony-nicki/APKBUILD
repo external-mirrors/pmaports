@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-sony-nicki
 pkgdesc="Sony Xperia M"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 	"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-9916362eaa5c190e1a494ca6353bb81339bd7adff0b02d2931b8e20e9dc316e41118333ae95e4bb9cf6a6cbbc3df5cd5e91e7f8af7036fabab2a6e3e862cdd01  deviceinfo
+a4701325aea563eb6a2b870ace5359936a77a33596469b11c3b5dfbadcd54930662b5c924366938682271673fccc28bccd2444545b8d5902bd97407350a8800a  deviceinfo
+9c5426701335c8898bf1ee1dc22c22a17ed0360a5f7cd5a5f31e910fe68140b3f32546dfe08ae81ffb5531ba7907c70a71d60a4c224ff4b36c46345090aa96dd  kernel-cmdline.conf
 "

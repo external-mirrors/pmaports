@@ -3,7 +3,7 @@
 maintainer="Piotr Halama <skrzynka@halamix2.pl>"
 pkgname=device-nokia-frt
 pkgdesc="Nokia 1"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,6 +13,7 @@ depends="postmarketos-base linux-nokia-frt mkbootimg"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	fb.modes
 "
 
@@ -27,6 +28,7 @@ package() {
 
 
 sha512sums="
-de5e02ca4dcad6996cf0986906998cb13be18f1fcae69e859380bc8192794d9d09ba308fc6c6797de688ec1c4f4da920e9e05222cb63c0836798ee7276fcc625  deviceinfo
+0d63da83d97953add678d67e5b4cd7559b13f4f2ae02012ff351e2e49794db8d17277be964c71bad2a2976e771f9f23a25650ddc6100bd861f38183833f35e3f  deviceinfo
+97fe45aeee953670c81c7308c76cfe99b88aa6612356cba9b8644f0999f3b8869750a69b8b55aa8c56e66dc2e0f64d8a1416caf6081c15e838538a02be611f93  kernel-cmdline.conf
 0a0237d639566cdd283182f17ea3f0fb8349c2fbc2c289eae418eac6837b9f2f4acf4a3c18c540d59c19dcbf30e12ac4e83c4f8303bbb4cd7e54b66c78ecfbcb  fb.modes
 "

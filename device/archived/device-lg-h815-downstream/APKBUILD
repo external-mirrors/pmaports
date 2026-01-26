@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-h815-downstream
 pkgdesc="LG G4 (h815) (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 options="!check !archcheck"
 
 build() {
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-d55b9831a95366f51efae3a29e936c226bb5a6875a62633705ed5d1400a1272e20d11fce8b67c022fa6ba6e9fe4b1533ec2778f09e1afbe3f0128e8944b355e9  deviceinfo
+ddcd8ece51e516c8516530640e74f18477963bd9619ef4d8b12d6f5120596d1dec015217127f3271624ccf1f8f61689e331664046d09d594bd0dfb111007f4e7  deviceinfo
+e7a8379644e7a75a0f61314cf36804ffc30bf29b6de444eb2b3e6721fd79fff1ad49356565bced8a3d13c36df4141e51d9599c8e79dc77f5c7eceb1aa84c6ba3  kernel-cmdline.conf
 "

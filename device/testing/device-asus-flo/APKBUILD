@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="David Heidelberg <david@ixit.cz>"
 pkgname=device-asus-flo
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
@@ -15,7 +15,7 @@ subpackages="
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
 	$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo 90-android-touch-dev.rules wpa_supplicant.conf pointercal"
+source="deviceinfo kernel-cmdline.conf 90-android-touch-dev.rules wpa_supplicant.conf pointercal"
 
 options="!check !archcheck"
 
@@ -65,7 +65,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-76a427c49c0a865a312c4fa88e6ecfbcedbd62e35ab6c832b9dfb6e910d81e09c69f6c76a61e457b23f673dec5a2b58f9514eea064c98206855998ee2befb514  deviceinfo
+47b9b5eae515ab63acfd50ede514ee002fdec5747d3129bd7889d0bb702b9107c7ccab5a49c0ffdc4e844efb6e8e0f3f1c4e0495a39cfdadb544e4bc0e6d68a0  deviceinfo
+355605a0fa4cd0f131ca8f3f57be664e3a1afc2ae198f7ccf6f147bdf8c38462000fb9a65b6c7f4e6f3e9233d2f7b7db826a067d9615bad147b02874c6f364d6  kernel-cmdline.conf
 5ac89b627f52d2f1103c3329bd905cdbb906cae5bb332d52e6805d7971fbcc0faabe1fd9d2beb7c6de4e4487c05047eaa17852dbf9e114ee3c5d4b0d57d73859  90-android-touch-dev.rules
 3278921cc1617d10fdd13dfbeaf213cda0078d069e727acd8cfac10bd8ade6f373be1e22fd1e4b50ae71cd2eae09f7d6aad5de42338d9ea9f8c1a34f0b60cb69  wpa_supplicant.conf
 cf913217b41a3dde8bc2a16a5bc82013c85679de0e81db1cfc36f2409ea034fec430082ddcb207c16746453601cf8381300b049cd2fb131f1916dc7dbcc247e3  pointercal

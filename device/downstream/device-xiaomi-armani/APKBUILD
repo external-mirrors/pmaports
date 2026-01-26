@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-armani
 pkgdesc="Redmi 1S"
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -15,6 +15,7 @@ subpackages="
 	$pkgname-udev
 	"
 source="deviceinfo
+	kernel-cmdline.conf
 	90-touchscreen.rules
 	100-charging.rules
 	armani_battery_charging.sh
@@ -51,7 +52,8 @@ openrc() {
 }
 
 sha512sums="
-7281f115ef828baeaa347cbea4096870589ece98cfab189e209051fd488fdd25798afd70ba6aa1c2b757c697b0c0ab30eba8c581a3a5a570bacb8a6cbfc5cfe8  deviceinfo
+42f2dc51a32ebf4ef7bc31cd8b6089b753a7b06fc34334f1aa5c7783c51846a247dbfd87a7553fd4dbd5c435bfdadf353e2279205c99f233625a6dd8d300039a  deviceinfo
+160f63cd53fcd5abe1c64159b00766a85a35a7842bb31e0612799ceb6d2dacfa75851b8d3bb768241ee47f2e8c82d65a4c26da28d76ea4467b36758d75dbbd13  kernel-cmdline.conf
 abf694ebe949025268630457ad14ae69f6a33c151236c1a193da32c27f836591e932517f011f6eb7ce750ab74d2f1e9a70724fed7150210d4da1b80a6e86a801  90-touchscreen.rules
 862f9a8d81af74c0a1c99c6255d4ec9d4bdd7828636ee29fbaf4b3ceef53f236fd2b2078e3150baf0f1d78a3da87d7b3a5b975fef33014238eb7658428642571  100-charging.rules
 8d06a86877c3b6f12e98d7509e634014e790c1356b6b0dd6e86859365588d899f6d94652abc9b749a4ae648abffb4cd39778c27535812d86b589f7f71e2cfdf7  armani_battery_charging.sh

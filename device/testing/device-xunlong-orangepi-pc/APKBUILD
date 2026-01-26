@@ -2,7 +2,7 @@
 maintainer="Marco Loletti <marco.loletti@zohomail.eu>"
 pkgname=device-xunlong-orangepi-pc
 pkgdesc="Xunlong Orange Pi PC"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="GPL-3.0-or-later"
@@ -14,12 +14,13 @@ depends="
 	u-boot-sunxi
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 package() {
 	devicepkg_package $startdir $pkgname
 }
 
 sha512sums="
-a95b670dd1c23469d87fda44bb80371bbfe18a59e316fe2fce2b2831f7c1aca0632d263128167471a1cbe182cb991fa25191aec02af220cdb15c2b362711d33f  deviceinfo
+2e52e1e0a21b9b56bcc3f107e9e6eba32fa89301a039629b3b806f9c936faa8417d7db3c3513ccfa699eb7cace58bb3429f3a75b91a115eebc389eb748ef4035  deviceinfo
+97e88eaa9b8e7989a20d2572479fe5d1fe0284de862da11c91b1f347099d5704673837db01a6b0c289fee0a2d7236f64fba31fd6001475f957c23203e34fd6fb  kernel-cmdline.conf
 "

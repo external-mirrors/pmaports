@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-wiko-v12bnlite
 pkgdesc="Wiko View"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	mdss-fb-init-hack
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-2607a486fab7adb9c756cef92ccbef46951447f65bb234b3c900837bdc7215624ac3a5a2ea2885abbdb6271de13f845056e5612b6a1b02b62b2e0f43beb8eb51  deviceinfo
+efc88add150f5d33e2247815d4e887a3dc1b0ba899ab647694ef8c25f61809cc1e1ae5372fd067cb63acad79ee4f9613d784b8ab8de9d2e48647b2dd6121d3d4  deviceinfo
+ee90dd8b6b9cb89a85368e42012640ec10598aee59c9d91d6b1920d047b7a92634b168875c80353eafd17a87696937f3b5f5e70f5e9448d99901c2d639bb1d94  kernel-cmdline.conf
 "

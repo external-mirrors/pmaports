@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-finepower-f1
 pkgdesc="FinePower F1"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,6 +11,7 @@ depends="postmarketos-base linux-finepower-f1 mkbootimg alsa-utils soc-sprd-audi
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -23,5 +24,6 @@ package() {
 
 
 sha512sums="
-69af30c256c9764cea9f79a5533ab5502f4edadc26710f0066bc13610659f90ec1f4f1297863743156773da4923f2fb3d05971f4036f97f3d7840f4ad1c034fe  deviceinfo
+6349b39a95fd0c3d7cedb9183c7e410fee8eb84164c7a6a9efd5c46766d3f31a1f3e512706f3e0a5d5a9c08f94e9ade97ea7386b1188a5d4d6c18be79dec5e80  deviceinfo
+41dd6dbff0ea7cfa308dc533b6c0b85cf280a89e23017e573e263f67e9802c77a0a795f3e163624f96ee7d404450b88d9aaaa599fb2ac4f136f36c18a42be1a4  kernel-cmdline.conf
 "

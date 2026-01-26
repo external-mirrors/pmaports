@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-cereus
 pkgdesc="Xiaomi Redmi 6"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,6 +17,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -28,5 +29,6 @@ package() {
 }
 
 sha512sums="
-280787ddef23638a5d821e3e68ddcd8a25a2c6e25d4658011b5b9de4712a2d97ef8a1d218af55cbfa322925f9e43f197629be11f89ad016902787f8f8388be4e  deviceinfo
+445ccfd017f72df1ff339a9769fe03d9a4b82bbbd0f505402f09a9475b01b0471e488ffd705442675b96cc78b49a38583478ae48afab3170af1ed78cab9c439c  deviceinfo
+53613c64bafe42607cca461b62ed97a3f653b50f0cad9b38c13f61ef12438c7c624afb8ecc7cc53d8c9de45f270a0456f43ee003df20f17928d088e15735504e  kernel-cmdline.conf
 "

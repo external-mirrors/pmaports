@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-meizu-mblu2
 pkgdesc="Meizu M2"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-7012a8c03b7cce889cafdafc6050e505a1c9f9ebb74c456a366ca782e6f8a613646394a23763070d36be04eca0a759945ad76a93cd7053be6e3ef1cbae566ef3  deviceinfo
+d2bc4165d189375b612639ee3d3db99a9899ad47bd7f6ff8516091447893a22b295b2a888b5129caa4411c58eae49a0bb0db7ce97f5502751eed3f3dc627cdfe  deviceinfo
+09546e1eb0a32e6dbfd81987be7ed413d0fa83ec84426d0eca144386b8cac09f5ffbc3c04d5a830ae9cc3fc82dd2706c6488591b49966ed84287303ea966b310  kernel-cmdline.conf
 "

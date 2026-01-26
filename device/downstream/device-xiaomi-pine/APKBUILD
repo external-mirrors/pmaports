@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-xiaomi-pine
 pkgdesc="Xiaomi Redmi 7A"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,6 +15,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	etc-lightdm-lightdm.conf
 "
 
@@ -49,6 +50,7 @@ fix_lightdm() {
 		"$subpkgdir"/etc/lightdm/lightdm.conf
 }
 sha512sums="
-1c856c6180995347dcd8b643bab784b2fde244f7e46883b6f0e368f5fa0b156d208409da4ae3fe418027421e53c7141f71db8619bb7017117d93b3189b7131d4  deviceinfo
+5a5f8d96083f1622f349b8ac2f2009bdd5c8a5216f93ae80edf518243d2d4e1b4a3768f8fe6789d6d7e6c7b317ac3199c4b8a72fb54dc8a13567a88e5358bdd1  deviceinfo
+b52f659b82d895feafdb8e608ff02b187a3811a0a172f6247798a6c9f6b2a1031f8dcbce8b4c9a39ceb0eeedbcc7e700425db0f5862f4341129a0a624cc94963  kernel-cmdline.conf
 861270c6bc0b2a3e6cd389c21c8c895e62de8cf8bec6fcf23c178f8cbaae855d62b0ee98692671ab4f518d84cb43dd0b2fe46f5a609f65af6a6c06e0fdbb6d0c  etc-lightdm-lightdm.conf
 "

@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-oneplus-kebab-downstream
 pkgdesc="OnePlus 8T (Downstream)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,7 +18,7 @@ makedepends="
 	devicepkg-dev
 	dtc
 "
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -29,5 +29,6 @@ package() {
 }
 
 sha512sums="
-97fa210814c370136e03b51ca82170d8c2a44eab207885015c4305c560e691f714b63d870eaf27475488b4ee3e516ac23142fae04ae8bb8ca54b63eac040c572  deviceinfo
+c9f91cb917fd69317eff97ac41985599403317a8f4b4e72346f87dd463c91f576cffa7245b7b4d7b39b8d5f4a0c394c8d4381f8b3b160afd1679e118b1f52bc7  deviceinfo
+5f52b2b7ebb4f0b79fc7211f8439134138acd517f3672a844af9726343c96a072f38d24313ee97d9f1524d5d3bc0c06f73b3272d81c9b2bea8c5a90fb687592e  kernel-cmdline.conf
 "

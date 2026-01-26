@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer=""
 pkgname=device-sony-yuga
-pkgver=6
+pkgver=7
 pkgrel=0
 pkgdesc="Sony Xperia Z"
 url="https://postmarketos.org"
@@ -18,7 +18,7 @@ subpackages="
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
 "
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 options="!check !archcheck"
 
 build() {
@@ -49,5 +49,6 @@ kernel_lts() {
 }
 
 sha512sums="
-9b359c6810c20854d02fb52e60d591d43b4c30958d88a277c6942d1c3749d9ef6d0bcd65de4fb61658f943dd421ae8736d445fe30e30ca9d84727aa886896214  deviceinfo
+490c1b836334c70e9d5da7c8a3af1aa771b594f251b248de46f69152a44a66979684dab3def16679dbf414c2bd2f3a536fca6285c7a8705ba19eae055d77ced4  deviceinfo
+ed0ef3a8867ceb92e21ce6e8d4666361c588dea02b296d0c97f1dbe699ae521a117dcbba29bc99787f6392cc8544a0899568a15520101751ae55bee595585317  kernel-cmdline.conf
 "

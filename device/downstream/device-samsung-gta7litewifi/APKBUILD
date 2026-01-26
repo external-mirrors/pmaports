@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-gta7litewifi
 pkgdesc="Samsung Galaxy Tab A7 Lite"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -27,5 +28,6 @@ package() {
 }
 
 sha512sums="
-e8e48232df3652f60df885313aa6a143cf95851d2da71ab0ad629971451396ca37426aa1a5d9e915bb1577996f9eaec56677ad7583e05912ee05f3f4fe189bf4  deviceinfo
+19e56b99f3a93c87bd7125802600b05dc0e08468b8660051ba79b4b7013df14d9df2cdbdd4b6364220e7d0eeb9780fa0fb6e452884895eb6dbec1e649825282a  deviceinfo
+954861840272253214064c84d10fcd0febc63abb6bfb6340998ebb1b51141412d55f21eba7f3ef6a0af31172e780782c6a6e254633e8e6c8cb4ee19a3adfd46e  kernel-cmdline.conf
 "

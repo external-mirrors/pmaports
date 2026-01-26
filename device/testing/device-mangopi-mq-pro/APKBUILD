@@ -2,7 +2,7 @@
 maintainer="exkc <exxxxkc@getgoogleoff.me>"
 pkgname=device-mangopi-mq-pro
 pkgdesc="MangoPi MQ-Pro"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -19,7 +19,7 @@ makedepends="
 	grub
 	grub-efi
 	"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -59,5 +59,6 @@ package() {
 	}
 
 sha512sums="
-8fb9ce2f9e744764b2df28243a767acfef5e28c5cb42549374999c0c881f5058abe2cb2c5fde5a56265fbe0f1122b91e0a43923be388faa7c60de37520f75bd9  deviceinfo
+dbe4852febb466d593b6c81895aa90b97c43ac6ce4876b222b07d0728d0f385952c6a30aadec512f31f23f7564a0c6db4b44ade31e04079fab4539ea2b956a32  deviceinfo
+b69fb6d8eac4b2cfffe373129b6169960d9938909979fb3e63698140c397c955b172083b5eeae03d181f34c8a8ca7d9e620fc4d72a4cc5ec94f0e2502a375485  kernel-cmdline.conf
 "

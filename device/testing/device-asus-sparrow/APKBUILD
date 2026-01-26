@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-asus-sparrow
 pkgdesc="ASUS ZenWatch 2"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,7 +18,7 @@ depends="
 	soc-qcom-msm8226
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -29,5 +29,6 @@ package() {
 }
 
 sha512sums="
-c35667589a5ff77c5138f32eb383730ade3c2dbb06d5f5564df7a8160715bd359fff2867a52df73772726362fb641ff18636b3c8f6041e2c6de4c59f3894708f  deviceinfo
+1b66083debe57b82bec3cef35c63720eff0fde5f821c88c235b11ecebebcb6046f2915fac550a6b8bb74c1a64b53173b95c9e9954b239e4f7a5f910cdad25610  deviceinfo
+4a40b89d343fac05d0604a9f93c11425353affc3b7a69f0d329278ea1afe2b978502ca2ae4150cffea877e2031bc4330fae78a31e18bccf3e2706f32b643d516  kernel-cmdline.conf
 "

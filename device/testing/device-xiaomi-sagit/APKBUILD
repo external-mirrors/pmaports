@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-xiaomi-sagit
 pkgdesc="Xiaomi Mi 6"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,6 +17,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	phoc.ini
 "
@@ -46,7 +47,8 @@ phosh() {
 }
 
 sha512sums="
-4f97b5de863d5d255fd34c967e6f5aca24ac61caf6511df3114740a1846ce5c34d6c010cf2ab139ad98090acc3820dc93fee811a892cdec0d63eb6cc9069555f  deviceinfo
+0fbde602456eb33939c7a72e7b62ad3c02a15846446934a01700c3ce2664f204b16dc38546f68268e3ff5110345d36cc73653a2d24f38fe21441e2f55db3a3c9  deviceinfo
+4610b89b3fea5f4e8baa65cee3871033f344f528cf5ed6825b64d5d113e8b53fbd382ee94e6bdd18ba973aa8e085e054ccd784b68dc995471a6f6ca213fb4c4c  kernel-cmdline.conf
 1a58c96c0c73569eea2691e0dc817c3ab8e5e284049458c18d1db499dd1047e519b11f54331ab01ea8eedb824988cea51a41af19c079a54e8dbe42bd61dd37e6  modules-initfs
 2288f08a44aae5136c0c0c846501c2bd4bcb10f05454b40c6e4490d398385b8a7129216047b5eb7982ca6d62d3aa71f3e18bfb8661d0cd32c8a600685ca0da48  phoc.ini
 "

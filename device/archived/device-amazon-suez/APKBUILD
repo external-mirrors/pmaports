@@ -3,7 +3,7 @@
 maintainer="Hadi Charara <hadicharara@ymail.com>"
 pkgname=device-amazon-suez
 pkgdesc="Amazon Fire HD 10"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,7 +11,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-amazon-suez mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -23,5 +23,6 @@ package() {
 
 
 sha512sums="
-91b9a695bbf1bf322a072041bf02adc5b9d182fd381b27b5847f82d6b55189abec68281952072b7368491fc549e4f557a82db96942fc1d4b7977e256e0f38f83  deviceinfo
+2b75dba63b6522bafa78ec359bc5fe3f519520caedbca188e1510e75f26555ad964f9f9ee6e3128570f989e70081317d2ab64bfb9af0db1f3f3cdbf38c70a047  deviceinfo
+d89b08ef9888faae6cb96a378421669e6119023307a3b5a109e18b7f9e2c70e1f8b240ba8f9b9d22d319fa28e416565d06074d34382f482c9b037b7ab3f4861c  kernel-cmdline.conf
 "

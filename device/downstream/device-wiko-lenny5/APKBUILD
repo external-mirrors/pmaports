@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-wiko-lenny5
 pkgdesc="Wiko Lenny 5"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-0a716c52c494ea1f109e555afe50a46fdf7d80c717220279c3772418b9ac3ad783a14056331c98ace3b4efafcc94c801e339c0fd78587a62509ab58eee8fd9ba  deviceinfo
+a5ceaed525480d21b57c32b2fe50e49c0261877fdead8f3b2811d3b1e8417e467731a3f32099e6af0c28f6d266e37b8b2bb229a7ee1fb28bce9c9954b090da63  deviceinfo
+53613c64bafe42607cca461b62ed97a3f653b50f0cad9b38c13f61ef12438c7c624afb8ecc7cc53d8c9de45f270a0456f43ee003df20f17928d088e15735504e  kernel-cmdline.conf
 "

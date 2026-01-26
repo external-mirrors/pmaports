@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-htc-pyramid
 pkgdesc="HTC Sensation"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,7 +15,7 @@ depends="
 	msm-fb-refresher
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -26,5 +26,6 @@ package() {
 }
 
 sha512sums="
-7ec54e7c2c95f59e1e1ab5cea85008365342d7f164dae8707340873c7fcd9a14f7328c2a3334e7b1d2a074f6f1e7ae93603c640cde710790a7d6db6d3fa401c5  deviceinfo
+37b6a8eba816c1653eeefe4b814332ccb33a3c53399daa579cfb5f5f475f9739b1a5c31c69f62d1b17f0cf6eeedea2af4f2927c5e86887a66eec82ff6297f418  deviceinfo
+fe71fabb58d6f5acd8798a4815d2f961922376d0c5b1b7b5155e1e8a90c4c32fdf47f45c98479cb5a7df315388da53d9288c3c6661fb7d5ec5d3aa9f1788bd2e  kernel-cmdline.conf
 "

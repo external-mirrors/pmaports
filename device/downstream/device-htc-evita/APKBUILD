@@ -2,7 +2,7 @@
 # COntributor: sir_si <simonutter@gmail.com>
 pkgname=device-htc-evita
 pkgdesc="HTC One XL"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-htc-evita mkbootimg mdss-fb-init-hack"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -22,5 +22,6 @@ package() {
 
 
 sha512sums="
-3b4b17b33eace65c33c754b34793bea35d65af76cd09ad47e39cd265d332e1c1c87801ad2c3c702e4316ac9f7dac0dbad5bc6a87c1bd85c9439d0d4c49d287b6  deviceinfo
+3728728894ea2878635b661bbd8a8cab3b63a9f6f10e380ffedebcd78f5aec90d27d443553d5d4fb4b667bdca79706a4777ed04c7127bab10f593504d02bd568  deviceinfo
+9de2b4e870e58e9a6aa126b5633b150e2cb0419a0b6759765e409aded5ed33305053a7ce789f1ae1e81d357d15cfa395ebed3e29699fadce599bcf0598f3cd15  kernel-cmdline.conf
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-nokia-rm885
 pkgdesc="Lumia 720"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armhf"
 options="!check !archcheck"
 depends="postmarketos-base linux-nokia-rm885 mkbootimg mdss-fb-init-hack"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-9cf8a1f20b0f854a6d77e59eb31bf2495cbebaf3297714b42d609905f6b37d63c6497cf4b52bf892fd840c6541f9fe16360486300d4239772a92908913dadb97  deviceinfo
+12cf231a30d9f84a3c90bc3718da2f8ef8c03978fb710f94864e67e861a9b7638b15fe25049594a5cd2c122477885f076ab83c942c734e788395a526b729bdef  deviceinfo
+6a9c49a0deb01a18c6e815dc6f24d665b1063a3633be33a68ae281c5e2e65bd8780c5d0032f9af1ae79b081ad2e5e45a86dfdb85628842d69498fe12c9314efd  kernel-cmdline.conf
 "

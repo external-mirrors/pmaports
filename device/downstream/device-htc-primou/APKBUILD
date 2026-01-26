@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-htc-primou
 pkgdesc="HTC One V"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,6 +11,7 @@ depends="postmarketos-base linux-htc-primou mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	initfs-hook.sh
 "
 
@@ -23,6 +24,7 @@ package() {
 }
 
 sha512sums="
-2491ad38d34a9ea2892cdf9f22de3459de0612f206c05f573314e975ecca47c4f7546fabc445b9b873a2e3f3734109015a085b19a00e74734be141089e08cc98  deviceinfo
+36e0be3fc43ebcbc3af9d3f45474a8f0131f5320c547da99c83208735b0426df15a6daf4ee04bd32f8ecf76d66e704a0261efc03208398ac1de7ffdbbff07cb5  deviceinfo
+d555a8bf12a6b2d80940c00c8a01b1b5f54dd9e35eb607659c70597d617088d5a1878f036039a575958414ffa5759fa7d83f3730b34a62577af5faeea055b194  kernel-cmdline.conf
 c0d433af6f68716d507a7ad29743543e9cc1e450fc777e8de60527386b3c4b868cbcd6ae148357d0901189cfcb141227c7f7c66b0d1b998e4b1ac09ce505f8ee  initfs-hook.sh
 "

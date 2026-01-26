@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-samsung-gtelwifiue
 pkgdesc="Samsung Galaxy Tab E 9.6 (SM-T560NU)"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -28,6 +28,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-04e205919cf9b5842894ff6832a36052324920499ab6dcc70d9561efb06f58613eb6e70e1fec0a28611b82cb8c1cf6d4e0177935c8f57aae84744bc12c35551a  deviceinfo
+c23a045af3be7ff6ac65cc5630998480f8a992ffc1d3feccd50a0553f677a1cb653a40e069305848caca4de5f831f8cddf3555b9716f5c7606e76daddb6bb398  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 8e075951dc7fe3f05a4a0a1c33fd1e5630bc20d800f3c2de578853e6249ebf4fc8d31d5752a8abb707df3f3c9f9c18adaa89a1918adf9d3a90a38364d9b93b3c  modules-initfs
 "

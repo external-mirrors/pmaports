@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=device-lenovo-tb128fu
 pkgdesc="Lenovo Xiaoxin Pad 2022"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-9b09bcb3a6c9a852d7bf6846a61329b65a1752610d98b59eb058af8d4326bd50632b8ee674b3da7ce727a779f5e8a03a9cf1a3313873606e75026f177551a564  deviceinfo
+7462631198d6228cdb784cab9e21ac661f30dbf02d3313b578b94cffdcd639f886e0c461c0c17ee3dd0146755db1a6361bb44a655f95ac8bc49e986ce751bb83  deviceinfo
+4e8e3fba36c3a566026ddb71a9e6f7a28469f9e849595f2a16a0e176564db025e1058f9f3ac53f76fe634746893ec59b2fe3c54a23e8fd19b576fd2f41c29f8e  kernel-cmdline.conf
 "

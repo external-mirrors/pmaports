@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-huawei-cameron
 pkgdesc="Huawei Mediapad M5 Pro"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base linux-huawei-cameron mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-2f6ebab5251de8c48cfab8c6f79a8554d3dfcb87a0fb6fa8633f39e2b88494dfa54014213d3817d04f586d0eed55027165c5b81f41a416044a93d831d69e16f8  deviceinfo
+bf74aa9ac21d170edc24bacd82bcef2063fdf8599935b4a19e28b7746bb92c1d1ddffcadeb5d2efbfab5e6b5e1c6f544a2b72453b5d28da6a90883096204f32b  deviceinfo
+8add76f3b67dfca9c451fdda99b7594b453dbe2ae9e8a1ddbad07285d8d8f92ad03162fa5e9797043d7a4d63d41bd0283512d7af844258bf1916c12d5982a230  kernel-cmdline.conf
 "

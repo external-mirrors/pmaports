@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-alcatel-ttab
 pkgdesc="Alcatel Telekom Puls"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-e161758975bc4f1aef466b33d1a6c40b1537a54fa05094e27d874de2f0a5f0171b73b2628e4b211d0cf855c5af1a1b95cf59cba35291ca385ad73078a4f2857c  deviceinfo
+884505121d735d2449364635c5539318f86f9b8f9158163ce0cde33ed424303c861ca45998751044291e8c81468acd05f51dcd6d90f21b9828098aa25cafff75  deviceinfo
+37dce58e8b7d763020986ef26d6f17791a52370185f8b2c2bdfa45667e7a9fa9671c0ddc286c9988ca48a56b38d7645c253215f2005ad4be47820748c8ff9eed  kernel-cmdline.conf
 "

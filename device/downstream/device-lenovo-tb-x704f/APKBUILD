@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lenovo-tb-x704f
 pkgdesc="Lenovo TAB4 10 Plus"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,7 +13,7 @@ depends="
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -24,5 +24,6 @@ package() {
 }
 
 sha512sums="
-40a8539a1b2a8728dcfafd74de01a60475b4a1c93b984fba72812d2af9984ec5fe999455315922b9ab5624e84097bd1eef7f3c255b0a0da3f15c9589c7bb6d63  deviceinfo
+46039e4a15f4c89ba8218e43f35bd39fad71086b2332b036352e7be8606cb8e9c1daf13575cd53805b6dbccde974c2c696f2d8bea0baf5b2a69b97b83a480982  deviceinfo
+1e61eaf698b28b5a1ff197684ce6b197acb3169d395eb930bd1478875e9a65ec7ed2fb91b073c0f43c47ebd676c670b2fed5d44453c4fbb691e7f781b37e2b19  kernel-cmdline.conf
 "

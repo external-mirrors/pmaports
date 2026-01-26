@@ -2,7 +2,7 @@
 maintainer="Lin, Meng-Bo <linmengbo06890@proton.me>"
 pkgname=device-samsung-j3ltetw
 pkgdesc="Samsung Galaxy J3 2016 (SM-J320YZ)"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,7 @@ depends="
 	soc-qcom-msm8916-rproc
 "
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -34,6 +34,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-d37ec0f601e6b73a0a61ef857a62640088ed62c1dcde82c69eab154fa508f2f738a971ea470544bb107eb3d1c01de2584af7af4fc41bd0814345ce1c8ef7569b  deviceinfo
+0b6f64d4659c2e7d59e42ea0600e49dd5f0d180a0260248a86dd91dc59d60375581df2525cf9988e99a20a21409199346326621fbdb97d00a9636448dd1fb212  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 27839a3da5c8b17516f64e0f7c38af2f502379553643a23834038cebd8ef47ea8d321fe796f99715102ce92f70a9fe0cb97062624a3589b98696154bfd7a4514  modules-initfs
 "

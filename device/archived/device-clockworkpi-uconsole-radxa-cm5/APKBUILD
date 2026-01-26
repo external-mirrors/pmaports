@@ -3,7 +3,7 @@
 maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=device-clockworkpi-uconsole-radxa-cm5
 pkgdesc="Clockwork Tech ClockworkPi uConsole Radxa CM5"
-pkgver=5
+pkgver=6
 _commit=2e8040ec92f85e3d43caf3e44557cb0659db4531
 _dtso_commit=c2204834e1d7d0acfd64e1b7874d432bc142f1a4
 pkgrel=0
@@ -33,6 +33,7 @@ source="
 	radxa-cm5-uconsole-$_dtso_commit.tar.gz::https://github.com/dev-null2019/radxa-cm5-uconsole/archive/$_dtso_commit.tar.gz
 
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	modules-load.conf
 	modprobe.conf
@@ -135,7 +136,8 @@ openrc() {
 sha512sums="
 a9c48c3470d5641113e351456d6cfa1e2283e6577cf54eea9a2d49ba4f6269e46cba16039584b34e07c7d8006f6dec112e970148f155f2c3ff0670521568a5a7  clockworkradxa-linux-2e8040ec92f85e3d43caf3e44557cb0659db4531.tar.gz
 a15eb74d9db9114022e96ba04542d18350cf6d637c5efa49f4a5a65c33c5fd20a7997095a049a561fb7aac767a299f367489c5a342138a5259cc32ebb6152384  radxa-cm5-uconsole-c2204834e1d7d0acfd64e1b7874d432bc142f1a4.tar.gz
-8552698a2bfbfab71e2b00be9397ab2117aba646a5d4afd5a7e8f53a93bb1736ed81c260a6c863130c7f4cd8eb9a56518885ac4de01a6f67afa1b42d501a91a3  deviceinfo
+0afdcebb4b42ab9d489bfeb32912f03de0ee30875eba760112b24def4bb04185eca5f827c737da4824081940ec998c2c26a99e9105267e90e9d852b0afa76539  deviceinfo
+fa6332b91b62572528b1f919370382d67f521b0a65c3c9f416df67545ebae7b01f31729340a42e656b5589cdbde676ec8fe0eb9537a34e02ec20f5309bf43b12  kernel-cmdline.conf
 85d573bfd51ac4aa502336452b0384af77b6ec095f5c4760e8f287b8452b3ccb4521051bc01c53fa0856440d52231f535f3f0258d62ad578161ad464344413e9  modules-initfs
 642cdb1b4ac02b8c3ab7b72f4eeef615ac4911b42bcd845b54305f0ff64c07b86f4a807a97d395cb6c0cd0a5f5eed15e68d9e4ccb69db8e38fb65c8be4acaeeb  modules-load.conf
 a5324ed5118168b846d359dc2c8e76ccdc624003d157a28e4c9728ddedd9b52c6deb95af9c3a9d94faf52413f2f830dc45ec6c0093458d27149ef17de5dceef5  modprobe.conf

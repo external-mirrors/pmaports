@@ -2,7 +2,7 @@
 maintainer="Raymond Hackley <raymondhackley@protonmail.com>"
 pkgname=device-samsung-j5
 pkgdesc="Samsung Galaxy J5 (2015)"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,7 +17,7 @@ depends="
 	soc-samsung-msm8916-modem-workaround
 "
 makedepends="devicepkg-dev"
-source="deviceinfo modules-initfs"
+source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -35,6 +35,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-288712b785baf4ba68f3cfa49f8b6d32398d5a0810edbb9b74e3c56b6887bc43a452fa2341d2d05c394db21a552e7b31f6d4aac2c6de9bdc5bef346e6488b582  deviceinfo
+b9517cdb2972dbeecafb13576fcdf8982e098ad80a175b9dad68757860a2713f289258a7f8226e69eaeb530f21d1e06648ad5629566b1cefcd3de8c82bbf806b  deviceinfo
+37e1e5f8839b624ab3eb850a24ed4daeb61a651257a1fb593f49cb869323e5d1b339c831a18eb26a9d7bd0a618ea9eb2bb9bf3882133af5f2606a878e6d39c67  kernel-cmdline.conf
 27839a3da5c8b17516f64e0f7c38af2f502379553643a23834038cebd8ef47ea8d321fe796f99715102ce92f70a9fe0cb97062624a3589b98696154bfd7a4514  modules-initfs
 "

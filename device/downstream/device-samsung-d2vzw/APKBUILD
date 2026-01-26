@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-d2vzw
 pkgdesc="Samsung Galaxy S III (Verizon)"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-d2vzw mkbootimg"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,5 +20,6 @@ package() {
 }
 
 sha512sums="
-6a9849208332a96b0ba6ca7fdeab34d97df6055f5b85b9f609146d7e6d5a0effe3cded72ed892f6a9ebd772feb8d094e68125164f94f6439e110842448491a18  deviceinfo
+0a69c10c489753bbe1d893d2a16fff7a4cceba3e0f69f6361fc2db71d57866a3da62e6cc65e1fb6bd80fe4e2e321d87af0154e344555b5b5db212fa1b118b204  deviceinfo
+e568a546dbb61dbc9b233388f072d793267b961b8e459604d981943047336e7d41d4f325a45830cab0d982394cdf66f019a45f3e91c93b1543bf43d13a0dcc41  kernel-cmdline.conf
 "

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-nokia-fame
 pkgdesc="Nokia Lumia 520"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,7 @@ depends="
 	mdss-fb-init-hack
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,5 +25,6 @@ package() {
 }
 
 sha512sums="
-36c622201836dc7c0f70d12850c0d6fdf8b1dad911810be60ec8f5b908bcfe734447aa5491f6e123a78cf18cd1543c1db5d563f49701886d1b3c1105faf22e26  deviceinfo
+21251a2764b3cc872607fe36687527287ad27e27d66f68b9d3dfd2828b81afd80d45fcd20dbc89ed8f1242d9d9a1ac42ccbc84b0d61780fdad7e9d76936ec652  deviceinfo
+6a9c49a0deb01a18c6e815dc6f24d665b1063a3633be33a68ae281c5e2e65bd8780c5d0032f9af1ae79b081ad2e5e45a86dfdb85628842d69498fe12c9314efd  kernel-cmdline.conf
 "

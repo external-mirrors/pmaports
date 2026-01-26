@@ -2,7 +2,7 @@
 maintainer="Nikroks <nikroks@mainlining.org>"
 pkgname=device-xiaomi-miatoll
 pkgdesc="Xiaomi Redmi Note 9 Pro / Redmi Note 9S"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -21,6 +21,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	hexagonrpcd.confd
 	modules-initfs
 	81-libssc-xiaomi-miatoll.rules
@@ -62,7 +63,8 @@ nonfree_firmware_openrc() {
 }
 
 sha512sums="
-ea8b3b7e5150e9bada9b5b38f87d1cca5417c2d04e6808e5785df997d49fa97be1999c91c5b194265568fae6272b077e1eebd96445605a0faa9bc1306f0d6b72  deviceinfo
+feac868197774bf8f5ca28fa0ea832cd50dbdf49b5a052822b9c6d2e3fff54eb0596adbbdc88ca08da09e71d0e15794aac429fcbb8a11bf090cc416c21d9482e  deviceinfo
+97e88eaa9b8e7989a20d2572479fe5d1fe0284de862da11c91b1f347099d5704673837db01a6b0c289fee0a2d7236f64fba31fd6001475f957c23203e34fd6fb  kernel-cmdline.conf
 9a70ba5c036f2d3dc90c5c34a1d5bf0ef0805a19e5b49cd2821897bf3e6fe8af0cd2148aebb263807359ac616958da1c4032d85079d91d975f4bf220df1028ea  hexagonrpcd.confd
 9c1e77fd27ca8efb288099ed48f5f4cad71ae29a9c76a96d6aef471d3870a7aee3548cd0ed892407d5ce391814cf88145d22e1eba148e7008634c06700eecfbc  modules-initfs
 2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-xiaomi-miatoll.rules

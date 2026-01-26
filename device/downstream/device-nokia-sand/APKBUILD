@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-nokia-sand
 pkgdesc="Lumia 620"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-nokia-sand mkbootimg mdss-fb-init-hack"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -19,5 +19,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 sha512sums="
-ac50861356d0a4c5f381af5efecff0b0fb8aec63bf8c045230089d8230f9d331448b5e7444f0210512ca8ec1cb65aba61828008ece05f2c50ccce985552ee233  deviceinfo
+826f91dae89ea7f070a9b058aeb7a48a7ca7175a82ba3c64af2829eab83946b3e62a2c88d8d15acfe980fb0c1e681ad51bbedd4950d341a8467912b87f177611  deviceinfo
+6a9c49a0deb01a18c6e815dc6f24d665b1063a3633be33a68ae281c5e2e65bd8780c5d0032f9af1ae79b081ad2e5e45a86dfdb85628842d69498fe12c9314efd  kernel-cmdline.conf
 "

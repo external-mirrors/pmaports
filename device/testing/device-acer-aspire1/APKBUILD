@@ -2,7 +2,7 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-acer-aspire1
 pkgdesc="Acer Aspire 1"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -22,6 +22,7 @@ subpackages="
 "
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 	ucm/sc7180.conf
 	ucm/Acer-Aspire-1/init.conf
@@ -69,7 +70,8 @@ nonfree_firmware() {
 }
 
 sha512sums="
-cb18d6b33256c64073c3f4c803efb728a8e300e64bd9c8ce119469790b67aca16fcb4b911bd6b35af13e71e383af38b064063a4bf7e80a9fcf9c4e6ab850ab03  deviceinfo
+bb7b76339ae60092d8253d4388895a3ed1980e66d155a6639d0fb67556f94553bddb3fe79fd36b856bb0789cab4143e25a0c83f35026cd2a77a1726fc10c0cda  deviceinfo
+d77c87adffec9d5f5a5d0d87e05aceefbcd42d112d3ed6068ab23566b21e52046018c8e0c9c1f5165c58f43b370bbbd632a45b2d9e397a35fc74563930639db0  kernel-cmdline.conf
 99b3c6fee1e4088ad0246170b6884c5f342893efa4d4846c4e9fa47fbf58f2dc655b8379f465e7d690621630804634533392254fc4305fea6d292a9d5eb4795a  modules-initfs
 0626518d52fb56b80115e333030abe409fb5ca13aa7c13387e3f41e7d34c3b7c7da3ff06dd7062b79b5472f93119100bffa98f32f05f530623ccca7282777302  sc7180.conf
 ee33efa68a091f47ecaf51fc05f43fb7d5c62ec3eeaacb917dc1438edc4636eaba52c336645bf8a555b68b366a7dc40baf55895595ac7ac66cdeaa7ede86a72f  init.conf

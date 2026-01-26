@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-sf340n
 pkgdesc="LG Stylo 3 Plus"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,6 +15,7 @@ depends="
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
+	kernel-cmdline.conf
 "
 
 build() {
@@ -26,5 +27,6 @@ package() {
 }
 
 sha512sums="
-4d66e8ed08319cb564dc080e22eeb8f8f10e0bc24aa8628a82693922bbf20412c00c18e10ddc30ba3484cedcc819c96cd04eaea05a6ed59eb73d0fbf7b7a93bc  deviceinfo
+d87d43f927181a9b299c29c9532cce9cb997f1aac4774d821f7b99a6f5b76f5de870a8fbe245a05478c353227860ae05e18f11316ef1941f4d0da07252971ba4  deviceinfo
+7189f70a7270de6d803e29644cce7c2b48c2108cdf6d2e48d275feaee4f07714d95f94475b3e93b706bfbac335ea87861a42ce38f2b6e99c618e110af99341f0  kernel-cmdline.conf
 "

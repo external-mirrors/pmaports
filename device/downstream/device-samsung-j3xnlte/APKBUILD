@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-j3xnlte
 pkgdesc="Samsung Galaxy J3"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -9,7 +9,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-j3xnlte mkbootimg mdss-fb-init-hack soc-sprd-audio-sc8830"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 
 
 sha512sums="
-649cdc792977bd0a2874b1737cb9201541c191cbb3bf43884b13f0d720b13129769d9d75472db953d61b5a80451e94d001dde3db8728bd7c365d5e757a567afe  deviceinfo
+b9c4dedd36ce1570d505c32c4c8b38f8e2b8fda4681af501974ce6349f7b2d70c92d498299b9137ed44da9753ff5b8eb8410a04c6f9d1e7ac18fe1a265b6dedf  deviceinfo
+41dd6dbff0ea7cfa308dc533b6c0b85cf280a89e23017e573e263f67e9802c77a0a795f3e163624f96ee7d404450b88d9aaaa599fb2ac4f136f36c18a42be1a4  kernel-cmdline.conf
 "

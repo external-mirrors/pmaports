@@ -2,7 +2,7 @@
 maintainer="Andreas Kemnade <andreas@kemnade.info>"
 pkgname=device-tolino-shine2hd
 pkgdesc="Tolino Shine 2 HD"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -20,6 +20,7 @@ subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 source="
 	deviceinfo
+	kernel-cmdline.conf
 	modules-initfs
 "
 
@@ -38,6 +39,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-5d087f6bb87df0fd0ecc5187622c86b5b8f0c96484f13986fc238d76f94541d22c41993716625d39b989c3d8f389ec9c5ebf7e01250e48132d1894f5225dc79b  deviceinfo
+758630975e05734dfd3df3e32f400276b54d299f403cd3bcaf2a78338bad3feb02ab53b43c63891fdcc6cb9e6d5a3c8a588ba44002c959ddd889b9ee3f715fef  deviceinfo
+b4ab1b5ce58c0c46e655cfe898ff28897abae0e0ba2d927613f7ce2b21fb3fdb3ffaa8b5b260daa9baebef49f71e3c068932fe255ffa420d6ecc9c9e99c67aca  kernel-cmdline.conf
 5d53ee902538e53c4fe79eaef8e3800b9d3f73ec70d2a9887ddb11a6715ca76ce17128e3c02c2b6f2f575fb86f15c2415c24466d4b1a031f7a346d0db186dcb1  modules-initfs
 "

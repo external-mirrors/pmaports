@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-kylessopen
 pkgdesc="Galaxy Trend"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,7 @@ arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-kylessopen mkbootimg msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo kernel-cmdline.conf"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,5 +21,6 @@ package() {
 }
 
 sha512sums="
-284808efe78a4a22ba8827f52ff95b384ffdb1ddea3586e6631b6a1034869542c7f5d1f0c95117e14fa996cd0c2f56f17e4c586c72d39d587bd831ff203c9293  deviceinfo
+cad56dfc9c10cab0b5e0e81ab5e94ef3ded6039fbd259a47197994cfad3151083b3eac63876171021152fbfb50d655bf7cda0e7ce36ac9dd68bad1a8e60e6fce  deviceinfo
+7cd1593c0016040bd3ab157c8ef46e100901ab58814b8b61b04571b85319eb23aaa393f31eca5490f0d0ab33f626e9e464fdb9f3bcb3eca3d99d1429f57cbb14  kernel-cmdline.conf
 "
