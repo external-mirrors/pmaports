@@ -97,7 +97,7 @@ build() {
 
 		if [ -f "$board_fip_dir/bl2.package" ]; then
 			# special handling for ODROID-C2
-			python "$board_fip_dir/acs_tool.py" "$board_fip_dir/../p200/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/../p200/acs.bin" 0
+			python "$board_fip_dir/../p200/acs_tool.py" "$board_fip_dir/../p200/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/../p200/acs.bin" 0
 			"$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/../p200/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
 			bl2bin="$board_fip_dir/bl2_new.bin"
 			bl30bin="$board_fip_dir/bl30.bin"
