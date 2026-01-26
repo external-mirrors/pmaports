@@ -98,22 +98,22 @@ build() {
 		if [ -f "$board_fip_dir/bl2.package" ]; then
 			# special handling for ODROID-C2
 			python "$board_fip_dir/../p200/acs_tool.py" "$board_fip_dir/../p200/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/../p200/acs.bin" 0
-			"$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/../p200/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
+			"$board_fip_dir/../p200/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/../p200/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
 			bl2bin="$board_fip_dir/bl2_new.bin"
+			# embed bl301 in bl30
+			"./$board_fip_dir/../p200/blx_fix.sh" "$board_fip_dir/bl30.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl30_zero.bin" "$board_fip_dir/bl301.bin" "$board_fip_dir/bl301_zero.bin" "$board_fip_dir/bl30_new.bin" bl30
 			bl30bin="$board_fip_dir/bl30.bin"
-			bl301bin="$board_fip_dir/bl301.bin"
-			bl31bin="$board_fip_dir/bl31.bin"
 		else
 			# create amlogic fip
 			python "$board_fip_dir/acs_tool.py" "$board_fip_dir/bl2.bin" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/acs.bin" 0
 			"$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl2_acs.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl2_zero.bin" "$board_fip_dir/bl21.bin" "$board_fip_dir/bl21_zero.bin" "$board_fip_dir/bl2_new.bin" bl2
 			#gxlimg -t bl2 -s "$board_fip_dir/bl2_new.bin" "$board_fip_dir/bl2.bin.sig"
 			bl2bin="$board_fip_dir/bl2_new.bin"
-		fi
 
-		# embed bl301 in bl30
-		"./$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl30.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl30_zero.bin" "$board_fip_dir/bl301.bin" "$board_fip_dir/bl301_zero.bin" "$board_fip_dir/bl30_new.bin" bl30
-		bl30bin="$board_fip_dir/bl30_new.bin"
+			# embed bl301 in bl30
+			"./$board_fip_dir/blx_fix.sh" "$board_fip_dir/bl30.bin" "$board_fip_dir/zero_tmp" "$board_fip_dir/bl30_zero.bin" "$board_fip_dir/bl301.bin" "$board_fip_dir/bl301_zero.bin" "$board_fip_dir/bl30_new.bin" bl30
+			bl30bin="$board_fip_dir/bl30_new.bin"
+		fi
 
 		# bl31.img is basically bl31.bin but with an extra image header.
 		if [ -f "$board_fip_dir/bl31.bin" ]; then
