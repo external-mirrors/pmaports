@@ -38,6 +38,11 @@ if [ -f "$srcdir/modules-initfs.$kernel" ]; then
 	     > "$subpkgdir/usr/share/mkinitfs/files/00-$pkgname-modules.files"
 fi
 
+if [ -f "$srcdir/kernel-cmdline.$kernel.conf" ]; then
+	install -Dm644 "$srcdir/kernel-cmdline.$kernel.conf" \
+		"$subpkgdir/usr/lib/kernel-cmdline.d/50-$pkgname.conf"
+fi
+
 # Iterate over deviceinfo variables that have the kernel type as suffix
 # var looks like: deviceinfo_kernel_cmdline, ...
 grep -E "(.+)_$kernel=.*" "$deviceinfo" | \
