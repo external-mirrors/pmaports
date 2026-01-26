@@ -1,9 +1,9 @@
 # Reference: <https://postmarketos.org/devicepkg>
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Oliver Smith <ollieparanoid@postmarketos.org>"
-pkgname=device-qemu-amd64
+pkgname=device-qemu-x86_64
 pkgver=16
-pkgrel=3
+pkgrel=4
 pkgdesc="Simulated device in QEMU (x86_64)"
 url="https://postmarketos.org"
 arch="x86_64"
@@ -26,6 +26,8 @@ source="
 	kernel-cmdline.conf
 	"
 options="!check !archcheck"
+provides="device-qemu-amd64=$pkgver-r$pkgrel"
+replaces="device-qemu-amd64"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -60,6 +62,6 @@ pmtest() {
 }
 
 sha512sums="
-879044487e1432f0af5cc34b5a7c46cfe09ab837592b1d2febf22db2e4da0747174b3dac6accfa5be21261e38e7eeb25d3f2477f5b78267f92d30e051b6671c4  deviceinfo
+dc01c9069ae19d0f099608fdf0951242f9783bdc924b9841f3b8ebb069802c1179fd9af46a6c01f83ce3da6e2c0a907c5a6bb6357192976e00718bfff45d89cd  deviceinfo
 433875074bc225f5509bde089409b079902a5f161ecb22abcee25b2e45399b3561288c1018e5e08a6a21c38844f7b185dc3683442f97ceddee1020fdc6cc022b  kernel-cmdline.conf
 "
