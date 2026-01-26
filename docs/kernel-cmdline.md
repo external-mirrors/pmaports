@@ -30,6 +30,8 @@ loglevel=2
 clk_ignore_unused
 ```
 
+Device packages with that support multiple kernels should name the file `kernel-cmdline.<kernel name>.conf` and add it to `sources=` in the APKBUILD. No other action is needed, this file will be automatically added to the correct subpackage by `devicepkg-dev`.
+
 ## Device Package Configuration
 
 Device maintainers can add kernel command line parameters specific to their device by creating a `kernel-cmdline.conf` file in the device package directory and adding it to `source=` in the APKBUILD. The devicepkg-dev tool will automatically install this file to `/usr/lib/kernel-cmdline.d/50-<device>.conf` during package build. This works similarly to how `modules-initfs` files are handled.
