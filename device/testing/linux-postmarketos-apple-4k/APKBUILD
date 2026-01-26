@@ -3,7 +3,7 @@
 maintainer="Aster Boese <asterboese@mailbox.org>"
 _flavor="postmarketos-apple-4k"
 pkgname=linux-$_flavor
-pkgver=6.18.1
+pkgver=6.19.0
 pkgrel=0
 pkgdesc="Mainline kernel fork for Apple iPhone and iPad devices (4k)"
 arch="aarch64"
@@ -13,20 +13,27 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
-	"
+	pmb:kconfigcheck-rust
+"
 makedepends="
 	bash
 	bc
 	bison
 	clang
+	clang-libclang
 	devicepkg-dev
+	elfutils-dev
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
 	perl
 	python3
-	linux-headers
+	rust
+	rustfmt
+	rust-bindgen
+	rust-src
 "
 
 # Source
@@ -36,9 +43,6 @@ _config="config-$_flavor.$arch"
 source="
 	http://github.com/$_repository/archive/refs/tags/$_tag.tar.gz
 	$_config
-	apple.config
-	pagesize.config
-	pmos.config
 "
 builddir="$srcdir/linux-$_tag"
 
@@ -73,9 +77,6 @@ package() {
 }
 
 sha512sums="
-15ca1734320fdfbd839f7d154c2365928f9fb7a1d3d370e6f649ca3cb8516baf7f887a99737909246d84454524658f21fd76064852bdec8e15ea5ef4fce0812f  hoolock-6.18.tar.gz
-cbe60989ac87dd8713682d5aa79bba1d0d6eb4a8bf59fa85352592b2353ff7f450b8e9e61c7b6d34cbc3be367a7567c31f897af101741726b9e1b12a320043d6  config-postmarketos-apple-4k.aarch64
-ee09eed2017a7b0cf91a47608918addaa238daa1b91149f964d0e6fb1bcd1b133273a3f56ba7326b12ac58a2cd013366c0aa944d64b2e044d78d70b96095a740  apple.config
-b1bb89de0caeeea66c1056cf2b52905b9c4c58931f40ecbed1b1431b846d43e6a33c94f69e36c113a26dd13bb5ca2255b26caa1c756dcbf701ea499cf618d6bd  pagesize.config
-b8896dba01003c574b18c1a98160a024cb0935c9ab6c408f71086061f7f56fa1ed8bb1f0810e524c88f3404e847a3eb038d16fd47b806670e74b8a4cb657a3fa  pmos.config
+f27eac038be9ece21b5b569afde3af967f87a015a46b5158551744a1b68cac306bf15a159f8c8337409ae3b54d24845cfdf524c97e53a951a5d7fdad055edf48  hoolock-6.19.tar.gz
+feabd04c322428b073d24d155f425dc37ea7a05041e68ed4861dad904c160dc1b94bed10421ab7a04a721d60418bb84044ff36d756fc603b89f69e8e60a8db72  config-postmarketos-apple-4k.aarch64
 "
