@@ -2,7 +2,7 @@
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=device-sqfmi-beepy
 pkgdesc="SQFMI Beepy"
-pkgver=3
+pkgver=4
 pkgrel=0
 
 _kbdmodname=beepy-kbd
@@ -37,6 +37,7 @@ source="
 	$pkgname-$_overlaycommit.tar.gz::https://github.com/ardangelo/beepy-symbol-overlay/archive/$_overlaycommit.tar.gz
 	$pkgname-$_dispcommit.tar.gz::https://github.com/ardangelo/sharp-drm-driver/archive/$_dispcommit.tar.gz
 	displaydriver-compile-on-new-kernels.patch
+	keyboard-driver-compiler-warnings.patch
 	symbol-overlay.patch
 "
 subpackages="$pkgname-overlay $pkgname-modules $pkgname-openrc"
@@ -64,7 +65,7 @@ prepare() {
 	built_modules=$_dispmodname.ko
 
 	build() {
-		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \; -quit) make
+		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
 	}
 	EOF
 
@@ -75,7 +76,7 @@ prepare() {
 	built_modules=$_kbdmodname.ko
 
 	build() {
-		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \; -quit) make
+		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
 	}
 	EOF
 }
@@ -104,7 +105,7 @@ package() {
 	install -Dm644 "$_kbddir"/beepy-kbd.map "$pkgdir"/usr/share/kbd/keymaps/beepy-kbd.map
 	install -Dm644 "$_kbddir"/beepy-kbd.dtbo "$pkgdir"/boot/overlays/beepy-kbd.dtbo
 
-	local kbddestdir="$pkgdir/usr/src/$_kbdmodname-$pkgver"
+	local kbddestdir="$pkgdir/usr/src/$_kbdmodname"
 	install -Dm644 -t "$kbddestdir" $_kbddir/AKMBUILD $_kbddir/Makefile
 	cp -r "$_kbddir"/src "$_kbddir"/beepy-kbd.dts "$kbddestdir"
 
@@ -112,7 +113,7 @@ package() {
 	install -Dm755 "$_dispdir"/monoset "$pkgdir"/usr/bin/monoset
 	install -Dm644 "$_dispdir"/sharp-drm.dtbo "$pkgdir"/boot/overlays/sharp-drm.dtbo
 
-	local dispdestdir="$pkgdir/usr/src/$_dispmodname-$pkgver"
+	local dispdestdir="$pkgdir/usr/src/$_dispmodname"
 	install -Dm644 -t "$dispdestdir" $_dispdir/AKMBUILD $_dispdir/Makefile
 	cp -r $_dispdir/src $_dispdir/sharp-drm.dts "$dispdestdir"
 
@@ -149,5 +150,6 @@ d3060bcbca3e90aa26c8a8d6772d8b07116e0cc4f0ae97d44d896434510493367966f23bb86d82f9
 442703affd913e0bdbbfe5d5eedd49a8b743832702a6fb8e96d49530dd172a7bcdbc36d908b93c61cb455824c85be8ffaa2c67506ae72827e874129f0ba6f912  device-sqfmi-beepy-910b9f59c2bbe5e7f33725370ceff0a4c18777af.tar.gz
 b966c2cae09c3ac12d522700f37b4fa669eb884be9a2d9b4dae78e4baf8e333fa207228f944f00ee7967f8e3d17671b518744fd08187e32d4671bdd05fba8e00  device-sqfmi-beepy-181a5c5b9dd6fecc66cf4d18a94f4a83277b8ca4.tar.gz
 d26333b6eff7219622fc98bdddc288f901911c72a06a7284f9443153de91b9ee51070c5d822ee74923835057497aa6d0c9c9ed533c1e62770beb01aa5eb45ead  displaydriver-compile-on-new-kernels.patch
+8aa27fbd0ec58bf9a77fa105568e31c58355f4f1a33d9e932950b08fe9dd134beaaf3a7350357a3b471d96c2ceee17460c514f81083832dd97486586772873b5  keyboard-driver-compiler-warnings.patch
 fc3c720c5c8af33f2bfd8a745340547c29effc458df761cacfa9e6bed7e09f5f5ecea98e5a6c25d630cefc2a4b3e31016d42839c640759cd715bcb81d9560f38  symbol-overlay.patch
 "

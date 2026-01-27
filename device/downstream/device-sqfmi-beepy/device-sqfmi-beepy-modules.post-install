@@ -2,11 +2,11 @@
 
 kdir=$(find /usr/src/ -type d -iname 'linux-headers-*-rpi' -mindepth 1 -maxdepth 1)
 
-dispdir=/usr/src/sharp-drm-1
-kbddir=/usr/src/beepy-kbd-1
+dispdir=/usr/src/sharp-drm
+kbddir=/usr/src/beepy-kbd
 
 # force use of rpi kernel in Makefiles
-KERNELRELEASE=$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;)
+KERNELRELEASE=$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1)
 
 dtc -@ -I dts -O dtb -W no-unit_address_vs_reg -o $dispdir/sharp-drm.dtbo $dispdir/sharp-drm.dts
 /usr/bin/make -C $kdir M=$dispdir
