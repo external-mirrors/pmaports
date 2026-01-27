@@ -2,7 +2,7 @@
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-lts
 pkgver=6.12.67
-pkgrel=0
+pkgrel=1
 _kver=${pkgver%.*}
 pkgdesc="LTS Kernel"
 # armhf: pmbootstrap cannot dynamically choose a defconfig, so it ends up using multi_v7_defconfig which isn't correct
@@ -48,6 +48,7 @@ makedepends="
 	sed
 	zstd
 "
+replaces="linux-lts"
 
 # Source
 source="
