@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
 pkgver=44
-pkgrel=1
+pkgrel=2
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -265,7 +265,7 @@ audio() {
 
 audio_pipewire() {
 	pkgdesc="Use pipewire as the audio backend. (but may not work with all devices)"
-	depends="pipewire-alsa pipewire-pulse pipewire-spa-bluez pipewire-tools"
+	depends="pipewire-alsa~99991 pipewire-pulse~99991 pipewire-spa-bluez~99991 pipewire-tools~99991"
 	provides="postmarketos-base-ui-audio-backend=$pkgver-r$pkgrel"
 	provider_priority=90
 
