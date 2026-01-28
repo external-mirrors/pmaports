@@ -11,7 +11,6 @@ depends="
 	dbus
 	haveged
 	nftables
-	pipewire
 	postmarketos-artwork-icons
 	postmarketos-base
 	postmarketos-bootsplash
@@ -26,6 +25,8 @@ depends="
 subpackages="
 	$pkgname-audio
 	$pkgname-audio-backend-pipewire:audio_pipewire
+	$pkgname-audio-backend-pipewire-openrc:audio_pipewire_openrc
+	$pkgname-audio-backend-pipewire-systemd:audio_pipewire_systemd
 	$pkgname-audio-backend-pulseaudio:audio_pulseaudio
 	$pkgname-bluez-openrc:bluez_openrc
 	$pkgname-bluez-obexd:obexd
@@ -37,6 +38,7 @@ subpackages="
 	$pkgname-openrc-settingsd:openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
+	$pkgname-systemd:systemd
 	$pkgname-tinydm
 	$pkgname-wayland
 	$pkgname-wifi-iwd:iwd
@@ -149,6 +151,7 @@ openrc() {
 		dbus-openrc
 		haveged-openrc
 		openrc
+		pipewire
 		util-linux-openrc
 	"
 
@@ -265,11 +268,24 @@ audio() {
 
 audio_pipewire() {
 	pkgdesc="Use pipewire as the audio backend. (but may not work with all devices)"
-	depends="pipewire-alsa~99991 pipewire-pulse~99991 pipewire-spa-bluez~99991 pipewire-tools~99991"
 	provides="postmarketos-base-ui-audio-backend=$pkgver-r$pkgrel"
 	provider_priority=90
 
 	amove usr/share/wireplumber/wireplumber.conf.d/50-bluetooth.conf
+}
+
+audio_pipewire_openrc() {
+	install_if="$pkgname-audio-backend-pipewire=$pkgver-r$pkgrel openrc"
+	depends="pipewire-alsa pipewire-pulse pipewire-spa-bluez pipewire-tools"
+
+	mkdir -p "$subpkgdir"
+}
+
+audio_pipewire_systemd() {
+	install_if="$pkgname-audio-backend-pipewire=$pkgver-r$pkgrel systemd"
+	depends="pipewire-alsa~99991 pipewire-pulse~99991 pipewire-spa-bluez~99991 pipewire-tools~99991"
+
+	mkdir -p "$subpkgdir"
 }
 
 audio_pulseaudio() {
@@ -290,6 +306,13 @@ flatpak() {
 flatpak_systemd() {
 	amove usr/lib/systemd/system/flatpak-system-helper.service.d/wait-for-ntp.conf
 	default_systemd
+}
+
+systemd() {
+	install_if="$pkgname=$pkgver-r$pkgrel systemd"
+	depends="pipewire~99991"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
