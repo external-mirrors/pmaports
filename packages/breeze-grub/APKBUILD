@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze-grub
-pkgver=99999_git20240212
+pkgver=99999_git20260122
 pkgrel=0
-_commit="446df092eb17b43309cd558a3b4a63526b6e7fb3"
+_commit="30e2d51d0f47fe18d7b0551e29757d1b8984ed58"
 pkgdesc="Breeze theme for GRUB"
 arch="noarch !s390x !armhf" # armhf blocked by extra-cmake-modules
 url="https://kde.org/plasma-desktop/"
@@ -23,7 +23,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/breeze-grub.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2025-07-09/breeze-grub-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/breeze-grub-$_commit.tar.xz"
 options="!check" # No test suite available
 
 options="!check"
@@ -38,5 +38,5 @@ package() {
 	cp -r breeze "$pkgdir"/usr/share/grub/themes
 }
 sha512sums="
-ab2cdcd8cd528d0bc8cd4fa443192cb093341dedbfeeb33597074ce70fd30e9748b39d3d8617a2965a77d5a7e24fa03f5e9e357b22bcf5aaf3bef4854e8ea1bc  breeze-grub-446df092eb17b43309cd558a3b4a63526b6e7fb3.tar.xz
+e02a407a16be3e1e86f79f1c7f6bbba04af5b099a6f276fb638e06811aee1d2afa38e3147ae23d2cdce487e815064d7183b7b7a6af85305cbf07d4824d71425b  breeze-grub-30e2d51d0f47fe18d7b0551e29757d1b8984ed58.tar.xz
 "

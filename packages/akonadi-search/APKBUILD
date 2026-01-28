@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=akonadi-search
-pkgver=99999_git20260118
+pkgver=99999_git20260120
 pkgrel=0
-_commit="5bc93adfb887caabf0d691c99d364ff471e046e3"
+_commit="da29d1e472ee947262aee348881a5a5963361809"
 pkgdesc="Libraries and daemons to implement searching in Akonadi"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # riscv64 blocked by akonadi
@@ -42,7 +42,7 @@ makedepends="$depends_dev
 checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/akonadi-search.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/akonadi-search-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-22/akonadi-search-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/akonadi-search-$_commit"
@@ -78,5 +78,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-9319394417e80b7d6dc1b16bf335db28d4fe44302136b3e362d904da0609134d43c549eabc13ad06e1705d091842f0888c4749d2b7bd5c856e67698453083a05  akonadi-search-5bc93adfb887caabf0d691c99d364ff471e046e3.tar.xz
+29b9951b726eb7caf057a21d73fb6d7bc09a1a3e5e9bdf3899db78b55ef6bd4ca2e2f758c276a08c3c8804755f5fd34037694076a7009ddb8a2c72da194e0e6d  akonadi-search-da29d1e472ee947262aee348881a5a5963361809.tar.xz
 "

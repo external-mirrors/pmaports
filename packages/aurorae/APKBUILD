@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=aurorae
-pkgver=99999_git20260118
+pkgver=99999_git20260125
 pkgrel=0
-_commit="e9208ebdbf249d0bef3f2ef79d8ddee674d44212"
+_commit="cbb4c1a95c3ab484aa2d153fb1cfbd377c039c98"
 pkgdesc="Themeable window decoration for KWin"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -34,7 +34,7 @@ case "$pkgver" in
 esac
 
 _repo_url="https://invent.kde.org/plasma/aurorae.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/aurorae-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/aurorae-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/$pkgname-$_commit"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-0168bfa5f36d130547910609aed0b2f3ac6953a67f3352e7f7e6ed967d15dad0c1bc6173917adc5349f7a69e9fa4ca5e563f47177d26cbd0ca5426fccbc51f1e  aurorae-e9208ebdbf249d0bef3f2ef79d8ddee674d44212.tar.xz
+6fc46a6e23416ab9cb8e5b5a35924f6276772977ad2075ce11703f988bb4366864b57e7a9342dea000cfef033315f4eb1f20724a4dccbb1df3f221f8d9496ffa  aurorae-cbb4c1a95c3ab484aa2d153fb1cfbd377c039c98.tar.xz
 "

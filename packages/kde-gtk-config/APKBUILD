@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kde-gtk-config
-pkgver=99999_git20260113
+pkgver=99999_git20260125
 pkgrel=0
-_commit="1c9005e64b174550a13b9efb0c0ffc16ee1f01da"
+_commit="7449e41167a738a7417b4fc54aeb052f94acd46e"
 pkgdesc="GTK2 and GTK3 Configurator for KDE"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -41,7 +41,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kde-gtk-config.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-14/kde-gtk-config-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/kde-gtk-config-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kde-gtk-config-$_commit"
@@ -63,5 +63,5 @@ package() {
 }
 
 sha512sums="
-6e428599d8dd7bcbff00e0b627cdfabfe5afb767942c460fb2d3ebfe7b80fef4e8ea9a4c31e09c4b9b96116151d63cf85c1f7c00b619235a6c79e41be7dd9d82  kde-gtk-config-1c9005e64b174550a13b9efb0c0ffc16ee1f01da.tar.xz
+e459a25b3f3c8aeae861f5bbb36b69e6f23e5a8b9c8eb15e9ce764df6a53f92a908fe4b044485afed7981652cfb18804d20588971581e46977d3375c16e66db5  kde-gtk-config-7449e41167a738a7417b4fc54aeb052f94acd46e.tar.xz
 "

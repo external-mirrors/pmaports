@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=minuet
-pkgver=99999_git20260118
+pkgver=99999_git20260126
 pkgrel=0
-_commit="09ba9d92094711f7bd10657e1e92852acfab1a08"
+_commit="bee13b4f06400503a69c82c275189c3f4a29af1a"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://minuet.kde.org/"
@@ -27,7 +27,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang $pkgname-dev"
 _repo_url="https://invent.kde.org/education/minuet.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-18/minuet-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/minuet-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/minuet-$_commit"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-b63f71a0eb025e3dec8135c01d47b6538a5fb2c2cdc3ec04cbc149a3cb2f457818fcc4cfa1176f8149f02dc5bd315515e87c8f91edd14224c824cec3a0b47c2a  minuet-09ba9d92094711f7bd10657e1e92852acfab1a08.tar.xz
+4ba9be2d9176d60742a45e33b1b5a518b8004b25752e0d7bb0a4d07ee0c7a3649a10e25dce59d4164ce905b418a8143ae40b5b5e2ef47884433364d1149ec967  minuet-bee13b4f06400503a69c82c275189c3f4a29af1a.tar.xz
 "
