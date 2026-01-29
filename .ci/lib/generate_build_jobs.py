@@ -73,7 +73,7 @@ class Device:
 
     @property
     def testing_dependencies(self) -> set[str]:
-        # TODO: Source this from the APKGBUILD
+        # TODO: Source this from the APKBUILD
         return {"postmarketos-mkinitfs-hook-ci"}
 
     @cached_property
@@ -168,6 +168,7 @@ if __name__ == "__main__":
 
     # Get the list of supported devices
     supported_devices = Device.supported_devices()
+    print(f"Supported devices: {[d for d in supported_devices.values()]}")
 
     archs = ArchTagSet()
     devices_under_test = set()
