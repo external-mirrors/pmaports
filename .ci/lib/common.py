@@ -108,7 +108,7 @@ def get_base_commit() -> str:
     return commit
 
 
-def get_changed_files(removed=True):
+def get_changed_files(removed=False):
     """ Get all changed files and print them, as well as the branch and the
         commit that was used for the diff.
         :param removed: also return removed files (default: True)
@@ -133,7 +133,7 @@ def get_changed_files(removed=True):
 
 def get_changed_packages(skip_archived: bool = False):
     ret = set()
-    for file in get_changed_files():
+    for file in get_changed_files(removed=True):
         dirname, filename = os.path.split(file)
 
         # Skip files:

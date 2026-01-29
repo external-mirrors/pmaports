@@ -72,7 +72,7 @@ def show_error_all():
 
 
 if __name__ == "__main__":
-    if "kconfigcheck.toml" in common.get_changed_files(removed=False):
+    if "kconfigcheck.toml" in common.get_changed_files():
         print("kconfigcheck.toml changed -> checking all kernels")
         if not check_kconfig_all():
             show_error_all()

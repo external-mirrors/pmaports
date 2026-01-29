@@ -173,7 +173,7 @@ if __name__ == "__main__":
     devices_under_test = set()
     packages_modified = set()
     # Get and print modified packages
-    for file in common.get_changed_files(removed=False):
+    for file in common.get_changed_files():
         path = Path(file)
 
         # Check if the modified's file parent folder is one of a supported dev
