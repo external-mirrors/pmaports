@@ -13,4 +13,4 @@ fi
 
 export PYTHONUNBUFFERED=1
 
-.ci/lib/check_changed_kernels.py
+.ci/lib/kconfig.py
