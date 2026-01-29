@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Description: lint with various python tests
 # Options: native
-# Use 'native' because it requires pmbootstrap.
+# Use 'native' because it requires running pmbootstrap.
 # https://postmarketos.org/pmb-ci
 
 if [ "$(id -u)" = 0 ]; then

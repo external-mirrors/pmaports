@@ -1,6 +1,7 @@
 #!/bin/sh -e
 # Description: build modified packages for this architecture
 # Options: native slow
+# Use 'native' because it requires running pmbootstrap.
 # https://postmarketos.org/pmb-ci
 
 if [ "$(id -u)" = 0 ]; then

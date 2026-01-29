@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Description: check pkgver/pkgrel bumps, amount of changed pkgs etc
 # Options: native
-# Use 'native' because it requires git commit history.
+# Use 'native' because it requires running pmbootstrap.
 # https://postmarketos.org/pmb-ci
 
 if [ "$(id -u)" = 0 ]; then
