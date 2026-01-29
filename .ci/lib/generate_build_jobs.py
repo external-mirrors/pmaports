@@ -173,7 +173,7 @@ if __name__ == "__main__":
     devices_under_test = set()
     packages_modified = set()
     # Get and print modified packages
-    for file in common.get_changed_files():
+    for file in common.get_changed_files(removed=False):
         path = Path(file)
 
         # Check if the modified's file parent folder is one of a supported dev
@@ -182,8 +182,6 @@ if __name__ == "__main__":
 
         if path.name != "APKBUILD":
             continue
-        elif not path.exists():
-            continue  # APKBUILD was deleted
         apkbuild = pmb.parse.apkbuild(path)
         packages_modified.add(apkbuild['pkgname'])
         archs.update(apkbuild["arch"])
