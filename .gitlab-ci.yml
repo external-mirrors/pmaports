@@ -16,6 +16,9 @@ variables:
   # seems like a reasonable balance. If this is too low, git merge-base (from ci/
   # common.py) can fail
   GIT_DEPTH: 100
+  # So that anything that runs install_pmbootstrap and tries to import pmb module
+  # can find it.
+  PYTHONPATH: "/tmp/pmbootstrap"
 
 # This defines the rules for when a pipeline should run.
 workflow:
@@ -178,7 +181,7 @@ generate-build-jobs:
     # HACK: Make the pmb library happy to use the currently-cloned pmaports repo
     - mkdir -p /root/.local/var/pmbootstrap/cache_git/ && ln -s $PWD /root/.local/var/pmbootstrap/cache_git/pmaports
 
-    - PYTHONPATH=/tmp/pmbootstrap/ .ci/lib/generate_build_jobs.py
+    - .ci/lib/generate_build_jobs.py
 
   artifacts:
     paths:

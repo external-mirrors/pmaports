@@ -27,6 +27,6 @@ pmbootstrap config aports "$pmaports"
 pmbootstrap -q shutdown
 
 # Needed to import "common"
-export PYTHONPATH=".ci/lib"
+export PYTHONPATH="$PYTHONPATH:.ci/lib"
 # Run testcases
 pytest -vv --tb=native "$pmaports/.ci/testcases" "$@"
