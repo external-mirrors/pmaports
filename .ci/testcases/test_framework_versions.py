@@ -6,11 +6,7 @@
     version in all packages. We scan all packages, categorize them by URL
     and then compare the versions of all packages in each category. """
 
-import glob
 import logging
-import os
-import pytest
-import sys
 
 import pmb.config
 import pmb.parse

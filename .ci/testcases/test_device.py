@@ -2,15 +2,10 @@
 # Copyright 2024 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import fnmatch
-import glob
-import os
-import pytest
-import sys
 
 import pmb.parse
 import pmb.parse._apkbuild
-from pmb.core.pkgrepo import pkgrepo_default_path, pkgrepo_iglob, pkgrepo_relative_path
+from pmb.core.pkgrepo import pkgrepo_default_path, pkgrepo_iglob
 from pmb.core.arch import Arch
 
 # Don't complain if these nicknames are the only maintainers of an APKBUILD,

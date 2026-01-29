@@ -7,9 +7,7 @@ import pmb.parse
 from pmb.helpers.args import init as init_args
 from pmb.types import PmbArgs
 import pmb.config
-from pmb.core.pkgrepo import pkgrepo_default_path
 import pytest
-import sys
 import os
 
 @pytest.fixture(scope="session", autouse=True)

@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2023 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
-import glob
 import logging
-import os
-import pytest
-import sys
 import re
 
 import pmb.parse

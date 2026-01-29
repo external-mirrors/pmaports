@@ -6,8 +6,6 @@
 import glob
 import logging
 import os
-import pytest
-import sys
 
 import pmb.parse
 import pmb.parse._apkbuild

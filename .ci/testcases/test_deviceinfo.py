@@ -2,11 +2,7 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import glob
-import os
-import pytest
 import re
-import sys
 
 import pmb.parse
 from pmb.core.pkgrepo import pkgrepo_iglob
