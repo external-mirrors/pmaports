@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from pathlib import Path
-import add_pmbootstrap_to_import_path
 import pmb.parse
 from pmb.helpers.args import init as init_args
 from pmb.types import PmbArgs

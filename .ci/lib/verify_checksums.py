@@ -8,7 +8,6 @@ import sys
 import common
 
 # pmbootstrap
-import add_pmbootstrap_to_import_path
 import pmb.core
 from pmb.core.context import get_context
 

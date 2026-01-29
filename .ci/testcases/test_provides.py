@@ -8,7 +8,6 @@ import pytest
 import sys
 import re
 
-import add_pmbootstrap_to_import_path
 import pmb.parse
 import pmb.parse._apkbuild
 from pmb.core.pkgrepo import pkgrepo_iter_package_dirs, pkgrepo_relative_path

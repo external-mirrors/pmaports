@@ -8,7 +8,6 @@ import pytest
 import re
 import sys
 
-import add_pmbootstrap_to_import_path
 import pmb.parse
 from pmb.core.pkgrepo import pkgrepo_iglob
 

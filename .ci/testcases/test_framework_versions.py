@@ -12,7 +12,6 @@ import os
 import pytest
 import sys
 
-import add_pmbootstrap_to_import_path
 import pmb.config
 import pmb.parse
 from pmb.core.pkgrepo import pkgrepo_iter_package_dirs

@@ -9,7 +9,6 @@ import os
 import re
 from pathlib import Path
 
-import add_pmbootstrap_to_import_path
 import pmb.parse
 from pmb.core.pkgrepo import pkgrepo_iglob, pkgrepo_relative_path
 
