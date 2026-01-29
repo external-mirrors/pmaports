@@ -17,4 +17,4 @@ if [ "$(id -u)" = 0 ]; then
 	exec su "${TESTUSER:-pmos}" -c "sh -e $0"
 fi
 
-.ci/lib/check_changed_aports_versions.py
+.ci/lib/check_changed_versions.py

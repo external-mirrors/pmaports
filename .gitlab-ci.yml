@@ -85,7 +85,7 @@ pytest-commits:
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/pytest.sh
-    - .ci/commits.sh
+    - .ci/check-changed-versions.sh
   artifacts:
     when: on_failure
     paths:
