@@ -1,11 +1,12 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp4
 pkgver=20240313
-pkgrel=2
+pkgrel=3
 pkgdesc="Firmware for Fairphone 4"
 subpackages="
 	$pkgname-adreno
 	$pkgname-adsp
+	$pkgname-audio
 	$pkgname-bluetooth
 	$pkgname-cdsp
 	$pkgname-hexagonfs
@@ -50,6 +51,18 @@ adsp() {
 		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
 	install -Dm644 "$builddir"/adsp*.jsn -t \
 		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+}
+
+audio() {
+	pkgdesc="Fairphone 4 audio amplifier firmware"
+
+	# TODO: Should get a proper device-specific location long-term
+	install -Dm644 "$builddir"/aw882xx_monitor.bin -t \
+		"$subpkgdir/lib/firmware/postmarketos/"
+	install -Dm644 "$builddir"/aw882xx_spk_reg_l.bin -t \
+		"$subpkgdir/lib/firmware/postmarketos/"
+	install -Dm644 "$builddir"/aw882xx_spk_reg_r.bin -t \
+		"$subpkgdir/lib/firmware/postmarketos/"
 }
 
 bluetooth() {
