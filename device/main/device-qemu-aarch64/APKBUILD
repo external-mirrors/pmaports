@@ -3,7 +3,7 @@
 maintainer="Oliver Smith <ollieparanoid@postmarketos.org>"
 pkgname=device-qemu-aarch64
 pkgver=15
-pkgrel=4
+pkgrel=5
 pkgdesc="Simulated device in QEMU (aarch64)"
 url="https://postmarketos.org"
 arch="aarch64"
@@ -55,19 +55,19 @@ x11() {
 }
 
 kernel_stable() {
-	pkgdesc="postmarketOS Stable kernel"
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
 	depends="linux-postmarketos-stable linux-firmware-none"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-	pkgdesc="postmarketOS LTS kernel"
+	pkgdesc="Long-term maintainance kernel (most stability, not all security fixes & new features)"
 	depends="linux-postmarketos-lts linux-firmware-none"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_mainline() {
-	pkgdesc="postmarketOS Mainline kernel"
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
 	depends="linux-postmarketos-mainline linux-firmware-none"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
