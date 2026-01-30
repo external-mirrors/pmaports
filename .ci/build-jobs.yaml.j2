@@ -133,10 +133,6 @@ prepare-{{ device.name }}:
       {%- endif %}
   variables:
     CI_TRON__PMB_BUILD_JOB: "prepare-{{ device.name }}{% if device.has_kernel_variants %}: [$KERNEL_VARIANT]{% endif %}"
-    # FIXME: cmdline is hardcoded here, but ideally would be built from
-    # fragments using generate-kernel-cmdline...
-    # See: https://gitlab.freedesktop.org/gfx-ci/ci-tron/-/issues/317
-    CI_TRON_KERNEL_CMDLINE__DEVICEINFO: 'console=tty1 console=ttyS0,115200 PMOS_FORCE_PARTITION_RESIZE psi=1'
 
 # Include the gitlab ci yml fragment, as found in
 # `device/$category/device-$devicename/gitlab-ci.yml.j2` which defines the jobs
