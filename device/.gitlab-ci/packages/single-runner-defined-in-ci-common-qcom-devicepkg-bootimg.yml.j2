@@ -29,4 +29,6 @@ test-{{ device.name }}:
     CI_TRON_FASTBOOT__RAMDISK_OFFSET: 0x01000000
     CI_TRON_FASTBOOT__TAGS_OFFSET: 0x00000100
     CI_TRON_FASTBOOT__PAGESIZE: 4096
+    # Devices should not have the serial console enabled, but we want it
+    # to be able to get logs. And all qcom devices use the same one!
     CI_TRON_KERNEL_CMDLINE__CONSOLE: "console=ttyMSM0,115200"
