@@ -88,7 +88,7 @@ prepare-{{ device.name }}:
   extends:
     .pmos-ci-tron-build-boot-artifacts
   {%- if device.has_kernel_variants %}
-  # Let's build all the boot artifacts for all the supported kernel variants in
+  # Build all the boot artifacts for all the supported kernel variants in
   # different jobs, but hide them behind a single job name so as not to pollute
   # the pipeline.
   parallel:
@@ -112,10 +112,8 @@ prepare-{{ device.name }}:
 
 .test-{{ device.name }}:
   stage: hardware tests
-  extends:
-    - .pmos-ci-tron-initramfs-test
   {%- if device.has_kernel_variants %}
-  # Let's test all the kernels in different jobs, but hide them behind a single
+  # Test all the kernels in different jobs, but hide them behind a single
   # job name so as not to pollute the pipeline.
   parallel:
     matrix:
