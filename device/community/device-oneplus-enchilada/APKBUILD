@@ -3,7 +3,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
 pkgver=22
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -65,7 +65,7 @@ openrc() {
 }
 
 pmtest() {
-	depends="bootrr qrtr firmware-oneplus-sdm845 postmarketos-test-unl0kr"
+	depends="postmarketos-test-bootrr qrtr firmware-oneplus-sdm845 postmarketos-test-unl0kr"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 
 	mkdir -p "$subpkgdir"
