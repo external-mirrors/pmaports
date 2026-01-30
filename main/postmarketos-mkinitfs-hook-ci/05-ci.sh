@@ -45,3 +45,7 @@ fi
 # in a row, send a whole bunch just to be sure
 # In the worst case it will timeout.
 _report_ci "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+# CI tests done, disabling console and looping forever
+dmesg -n 1
+fail_halt_boot
