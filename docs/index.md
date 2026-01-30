@@ -20,6 +20,7 @@ in pmaports and the processes around device categorization.
    firmware
    generic-device-packages
    generic-kernels
+   hardware-ci
    kconfig-fragments
    kconfigcheck
    kernel-cmdline
