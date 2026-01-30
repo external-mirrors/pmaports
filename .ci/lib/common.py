@@ -139,7 +139,14 @@ def get_changed_packages(skip_archived: bool = False):
         # Skip files:
         # * in the root dir of pmaports (e.g. README.md)
         # * path with a dot (e.g. .ci/, device/.shared-patches/)
-        if not dirname or file.startswith(".") or "/." in file or skip_archived and dirname.startswith("device/archived"):
+        # * documentation
+        if (
+                not dirname
+                or file.startswith(".")
+                or "/." in file
+                or skip_archived and dirname.startswith("device/archived")
+                or dirname == "docs"
+        ):
             continue
 
         if filename != "APKBUILD":
