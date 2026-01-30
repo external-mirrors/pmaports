@@ -16,6 +16,7 @@ extensions = [
     "sphinxcontrib.autoprogram",
     "sphinxcontrib.jquery",
 ]
+myst_enable_extensions = ["colon_fence"]
 
 html_theme = "pmos"
 html_theme_options = {
