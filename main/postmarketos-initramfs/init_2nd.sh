@@ -32,12 +32,6 @@ setup_dynamic_partitions "${deviceinfo_super_partitions:=}"
 
 run_hooks /hooks
 
-if [ "$IN_CI" = "true" ]; then
-	echo "PMOS: CI tests done, disabling console and looping forever"
-	dmesg -n 1
-	fail_halt_boot
-fi
-
 if [ "$debug_shell" = "y" ]; then
 	debug_shell
 fi
