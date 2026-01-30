@@ -21,4 +21,5 @@ in pmaports and the processes around device categorization.
    kconfigcheck
    kernel-cmdline
    kernel-versions
+   packaging-guidelines
 ```
