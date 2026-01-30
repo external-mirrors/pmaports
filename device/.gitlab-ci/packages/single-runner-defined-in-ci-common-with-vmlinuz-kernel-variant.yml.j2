@@ -10,6 +10,7 @@ test-{{ device.name }}:
   extends:
     # Extended from jobs defined in ci-common's ci-tron/common.yml
     - .pmos-ci-tron-runner-{{ device.name }}
+    - .pmos-ci-tron-initramfs-test
 
     # Extended from build-jobs.yaml.j2
     - .device-boot-flow-separate-artifacts
