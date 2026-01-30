@@ -82,7 +82,7 @@ build:
 
 # Include all the devices that need and can to be tested
 
-{% for device in devices_under_test if device.is_present_in_ci %}
+{% for device in devices_under_test %}
 prepare-{{ device.name }}:
   stage: hardware tests
   extends:
