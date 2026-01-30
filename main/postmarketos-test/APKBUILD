@@ -1,6 +1,6 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=postmarketos-test
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=0
 pkgdesc="Common test utilities for postmarketOS"
 url="https://postmarketos.org"
@@ -35,10 +35,15 @@ _test() {
 	# Install the test script for both initramfs and rootfs
 	for _type in initramfs rootfs; do
 		_script="$srcdir/$_type-test-$_testname.sh"
+		_files="$srcdir/$_type-files-$_testname.files"
 
 		if [ -f "$_script" ]; then
 			install -Dm755 "$_script" \
 				"$subpkgdir"/usr/libexec/pmos-tests-"$_type"/90-"$_testname".sh
+		fi
+		if [ -f "$_files" ]; then
+			install -Dm644 "$_files" \
+				"$subpkgdir"/usr/share/mkinitfs/files/90-"$_testname".files
 		fi
 	done
 }
