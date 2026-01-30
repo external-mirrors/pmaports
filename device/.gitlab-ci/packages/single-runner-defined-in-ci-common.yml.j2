@@ -15,3 +15,8 @@ test-{{ device.name }}:
     # Extended from build-jobs.yaml.j2
     - .device-boot-flow-separate-artifacts
     - .test-{{ device.name }}
+  variables:
+    # FIXME: cmdline is hardcoded here, but ideally would be built from
+    # fragments using generate-kernel-cmdline...
+    # See: https://gitlab.freedesktop.org/gfx-ci/ci-tron/-/issues/317
+    CI_TRON_KERNEL_CMDLINE__DEVICEINFO: 'console=tty1 console=ttyS0,115200 pmos.force-partition-resize psi=1'
