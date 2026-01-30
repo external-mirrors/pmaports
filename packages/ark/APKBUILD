@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ark
-pkgver=99999_git20260125
+pkgver=99999_git20260127
 pkgrel=0
-_commit="311be7e9f9e4a399cbe86fe029e18dbf19882c33"
+_commit="3a53b64adac880689635b9008d56e2437986f70e"
 pkgdesc="Graphical file compression/decompression utility with support for multiple formats"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,7 +44,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/ark.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/ark-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-28/ark-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 # secfixes:
@@ -78,5 +78,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-318fa8a1715e8dd967d178aeb378df7b18e887cf1ef383b656b871fc4704b3d353a4f8965992bd1d38a32977d401be275d25ab8dc1755e8bf3fd57b0b2d46e16  ark-311be7e9f9e4a399cbe86fe029e18dbf19882c33.tar.xz
+a8dec12bfb36457232a4f7d778c5db0a077390693c05baaee0f5b0019288c15fe001968b5586c9f6ff2b538eaea42fc81c1486137456e5f94767787490fa27d3  ark-3a53b64adac880689635b9008d56e2437986f70e.tar.xz
 "

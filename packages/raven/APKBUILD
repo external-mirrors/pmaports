@@ -2,9 +2,9 @@
 # group=kde-other
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=raven
-pkgver=99999_git20260121
+pkgver=99999_git20260128
 pkgrel=0
-_commit="f910141ceef6eb5cc0c0dd425d5d25cadba8525b"
+_commit="77a82da804b187ae0968b60f551b21494541c50a"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -34,7 +34,7 @@ makedepends="
 	sccache
 	"
 _repo_url="https://invent.kde.org/plasma-mobile/raven.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-22/raven-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-28/raven-$_commit.tar.xz"
 options="net !check" # net required to download Rust crates
 
 builddir="$srcdir/raven-$_commit"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-fd8ad3c22371bf09b146fbcd55290d0c25c4a9fd7e340a4aed6a6690c67405a984541a193513aac530aaab8304a7c2bb40742e28b312cdcba54a2b5eeef566d0  raven-f910141ceef6eb5cc0c0dd425d5d25cadba8525b.tar.xz
+58df05689151bc23ab6c09e3cf239f0470a17281468676590e4cd90510e0f9f04941a8b76ee1782e7b0c800c3c4ecfbcaf6f3cbd03b5f0b09fec68924b5cb1bc  raven-77a82da804b187ae0968b60f551b21494541c50a.tar.xz
 "
