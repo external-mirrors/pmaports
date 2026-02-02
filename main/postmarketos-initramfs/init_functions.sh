@@ -18,6 +18,7 @@ deviceinfo_name="${deviceinfo_name:-}"
 deviceinfo_codename="${deviceinfo_codename:-}"
 deviceinfo_create_initfs_extra="${deviceinfo_create_initfs_extra:-}"
 deviceinfo_no_framebuffer="${deviceinfo_no_framebuffer:-}"
+deviceinfo_rootfs_image_sector_size="${deviceinfo_rootfs_image_sector_size:-}"
 
 # Does word start with prefix?
 startswith() {
@@ -351,6 +352,7 @@ setup_dynamic_partitions() {
 }
 
 mount_subpartitions() {
+	set -x
 	# skip if ran already (unmerged -extra)
 	if [ -n "$PMOS_ROOT" ] && [ -n "$PMOS_BOOT" ]; then
 		return
@@ -361,6 +363,11 @@ mount_subpartitions() {
 		[ -e "$x" ] && android_parts="$android_parts $x"
 	done
 
+	local loopdev
+	local losetup_args="-Pv --direct-io=on"
+	if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
+		losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
+	fi
 	attempt_start=$(get_uptime_seconds)
 	wait_seconds=10
 	echo "Trying to mount subpartitions for $wait_seconds seconds..."
@@ -373,21 +380,23 @@ mount_subpartitions() {
 		for partition in $partitions; do
 		    # Skip whole disks - only check partitions and logical device-mapper devices for subpartitions
 			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || [ -d "/sys/class/block/$(basename "$partition")/dm" ] || continue
-			subpart_count="$(kpartx -l "$partition" 2>/dev/null | wc -l)"
-			if [ "$subpart_count" -ge 2 ]; then
-					echo "Mount subpartitions of $partition"
-					SUBPARTITION_DEV="$partition"
-					kpartx -afs "$partition"
-					# Ensure that this was the *correct* subpartition
-					# Some devices have mmc partitions that appear to have
-					# subpartitions, but aren't our subpartition.
-					find_root_partition
-					find_boot_partition
-					if [ -n "$PMOS_ROOT" ] || [ -n "$PMOS_BOOT" ]; then
-						break
-					fi
-					kpartx -d "$partition"
-					SUBPARTITION_DEV=""
+			local part_count
+			part_count="$(parted -s "$partition" print 2>/dev/null | grep -c '^ [0-9]')"
+			if [ "$part_count" -ge 2 ]; then
+				echo "Mount subpartitions of $partition"
+				SUBPARTITION_DEV="$partition"
+				local loopdev
+				loopdev="$(losetup -f --show $losetup_args "$partition")"
+				# Ensure that this was the *correct* subpartition
+				# Some devices have mmc partitions that appear to have
+				# subpartitions, but aren't our subpartition.
+				find_root_partition
+				find_boot_partition
+				if [ -n "$PMOS_ROOT" ] || [ -n "$PMOS_BOOT" ]; then
+					break
+				fi
+				[ -n "$loopdev" ] && losetup -vd "$loopdev"
+				SUBPARTITION_DEV=""
 			fi
 		done
 		if [ "$(get_uptime_seconds)" -ge $(( attempt_start + wait_seconds )) ]; then

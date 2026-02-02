@@ -45,10 +45,11 @@ resize_root_partition() {
 		fi
 		if has_unallocated_space "$partition_dev"; then
 			echo "Resize root partition ($partition)"
-			# unmount subpartition, resize and remount it
-			kpartx -d "$partition"
+			# find and detach the backing loop device
+			loopdev=$(losetup -j "$partition_dev" -O NAME --noheadings)
+			[ -n "$loopdev" ] && losetup -vd "$loopdev"
 			parted -f -s "$partition_dev" resizepart 2 100%
-			kpartx -afs "$partition_dev"
+			losetup -f --show $losetup_args "$partition_dev"
 		else
 			echo "Not resizing root partition ($partition): no free space left"
 		fi
