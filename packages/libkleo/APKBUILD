@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=libkleo
-pkgver=99999_git20260124
+pkgver=99999_git20260129
 pkgrel=0
-_commit="be6a850fc5d2c2a09db3c30fd016c9c15083f03f"
+_commit="1b6182ce71ef0fc141844c0fc871c8a0fd199baa"
 pkgdesc="KDE PIM cryptographic library"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -34,7 +34,7 @@ makedepends="
 checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/libkleo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-26/libkleo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-31/libkleo-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/libkleo-$_commit"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-87054c72948b265794bfe979222bf59848c472966c0e6501137a866c99911d5f0d4da405f81dad17eaf2a1bc8a7944085edae9588133a095cc8fe1ae1764462d  libkleo-be6a850fc5d2c2a09db3c30fd016c9c15083f03f.tar.xz
+c126287ac8a93052e1d1faab93b76c3442a0b02c0dddae9f5e6e8f0060b6205a26575283e458ce025534563b37b5811f27a9ea7e70ee9d3dea236c32d3b967e2  libkleo-1b6182ce71ef0fc141844c0fc871c8a0fd199baa.tar.xz
 "
