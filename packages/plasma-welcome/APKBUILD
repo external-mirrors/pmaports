@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-welcome
-pkgver=99999_git20260130
+pkgver=99999_git20260203
 pkgrel=0
-_commit="24fed1f8a1877964802297500791f8b719925215"
+_commit="e04bb3861578e9e321714c3d4112b8c072d4d4e5"
 pkgdesc="A friendly onboarding wizard for Plasma"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kaccounts-integration
@@ -42,7 +42,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-welcome.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-31/plasma-welcome-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-03/plasma-welcome-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -65,5 +65,5 @@ package() {
 }
 
 sha512sums="
-939231d8b04e19ae9ac031c9cfc9dd37993da8b30e4544a94df40472cda347dcf3b14680435600e57ed466b70b7107e850636a2b7bbeb3d79a5bd29ed9ca768a  plasma-welcome-24fed1f8a1877964802297500791f8b719925215.tar.xz
+09f7288ac1817aa7c86b1ab3dd489b805bb8bdf8be1f4c0c410626d9570f3b3d1662606100a2ff746f651fb93dc96ea18bdc713804f78b98a897c58552634170  plasma-welcome-e04bb3861578e9e321714c3d4112b8c072d4d4e5.tar.xz
 "
