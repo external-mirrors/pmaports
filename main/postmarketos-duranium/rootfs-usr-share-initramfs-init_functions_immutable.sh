@@ -108,6 +108,7 @@ factory_reset_requested() {
 # Returns: 1 on error, else 0
 run_repart() {
 	local keyfile="$1"
+	set -x
 
 	# HACK: Symlink os-release --> initrd-release. Ideally this would be handled by
 	# mkinitfs config, but there's a bug preventing that from working correctly,
@@ -180,33 +181,17 @@ run_repart() {
 	fi
 	info "Running systemd-repart with args: $repart_args"
 
-	# For subpartitions, use a loop device so repart can work with the nested GPT
-	local loop_dev=""
 	local target_device="$BOOT_DEVICE"
 	if [ -n "$SUBPARTITION_DEV" ]; then
-	    losetup_args="-f --show --partscan"
-	    # losetup must be called with the correct sector size if it's not
-		# default(512), else no partitions show up to the party
-	    if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
-	        losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
-	    fi
-	    loop_dev="$(losetup $losetup_args "$BOOT_DEVICE")"
-		# Fix GPT backup header location, or else repart will complain/fail
-		parted -sf "$loop_dev" print >/dev/null 2>&1
-		target_device="$loop_dev"
+		target_device="$(losetup -j "$BOOT_DEVICE" -O NAME --noheadings)"
+		if [ -z "$target_device" ]; then
+			echo "ERROR: SUBPARTITION_DEV set but no loop device found"
+			return 1
+		fi
 	fi
 
-	# shellcheck disable=SC2086
 	if ! systemd-repart $repart_args "$target_device"; then
-		[ -n "$loop_dev" ] && losetup -d "$loop_dev"
 		return 1
-	fi
-
-	# Clean up loop device and refresh kpartx mappings
-	if [ -n "$loop_dev" ]; then
-		losetup -d "$loop_dev"
-		kpartx -d "$BOOT_DEVICE"
-		kpartx -afs "$BOOT_DEVICE"
 	fi
 
 	partprobe
@@ -613,12 +598,13 @@ find_root_on_boot_device() {
 
 	[ -z "$root_uuid" ] && return 1
 
+	set -x
 	# For subpartitions, search the nested partition table
 	if [ -n "$SUBPARTITION_DEV" ]; then
 		local partnum
 		partnum="$(sfdisk -d "$SUBPARTITION_DEV" 2>/dev/null | grep -i "type=$root_uuid" | sed -n 's/.*p\([0-9]\+\) :.*/\1/p')"
 		if [ -n "$partnum" ]; then
-			echo "/dev/mapper/$(basename "$SUBPARTITION_DEV")p${partnum}"
+			echo "${SUBPARTITION_LOOP}p${partnum}"
 			return
 		fi
 	else

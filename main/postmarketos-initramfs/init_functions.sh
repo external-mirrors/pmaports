@@ -7,6 +7,7 @@
 PMOS_BOOT="${PMOS_BOOT:-}"
 PMOS_ROOT="${PMOS_ROOT:-}"
 SUBPARTITION_DEV="${SUBPARTITION_DEV:-}"
+SUBPARTITION_LOOP="${SUBPARTITION_LOOP:-}"
 
 CONFIGFS="/config/usb_gadget"
 CONFIGFS_ACM_FUNCTION="acm.usb0"
@@ -364,7 +365,7 @@ mount_subpartitions() {
 	done
 
 	local loopdev
-	local losetup_args="-Pv --direct-io=on"
+	local losetup_args="--show -Pfv --direct-io=on"
 	if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
 		losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
 	fi
@@ -386,7 +387,8 @@ mount_subpartitions() {
 				echo "Mount subpartitions of $partition"
 				SUBPARTITION_DEV="$partition"
 				local loopdev
-				loopdev="$(losetup -f --show $losetup_args "$partition")"
+				loopdev="$(losetup $losetup_args "$partition")"
+				SUBPARTITION_LOOP="$loopdev"
 				# Ensure that this was the *correct* subpartition
 				# Some devices have mmc partitions that appear to have
 				# subpartitions, but aren't our subpartition.
@@ -397,6 +399,7 @@ mount_subpartitions() {
 				fi
 				[ -n "$loopdev" ] && losetup -vd "$loopdev"
 				SUBPARTITION_DEV=""
+				SUBPARTITION_LOOP=""
 			fi
 		done
 		if [ "$(get_uptime_seconds)" -ge $(( attempt_start + wait_seconds )) ]; then

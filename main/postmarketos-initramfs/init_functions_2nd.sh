@@ -49,7 +49,11 @@ resize_root_partition() {
 			loopdev=$(losetup -j "$partition_dev" -O NAME --noheadings)
 			[ -n "$loopdev" ] && losetup -vd "$loopdev"
 			parted -f -s "$partition_dev" resizepart 2 100%
-			losetup -f --show $losetup_args "$partition_dev"
+			local losetup_args="--show -Pfv --direct-io=on"
+			if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
+			    losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
+			fi
+			losetup $losetup_args "$partition_dev"
 		else
 			echo "Not resizing root partition ($partition): no free space left"
 		fi
