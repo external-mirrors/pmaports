@@ -31,24 +31,29 @@ resize_root_partition() {
 		return
 	fi
 
-	# Only resize the partition if it's inside the device-mapper, which means
-	# that the partition is stored as a subpartition inside another one.
-	# In this case we want to resize it to use all the unused space of the
-	# external partition.
-	if [ -z "${partition##"/dev/mapper/"*}" ] || [ -z "${partition##"/dev/dm-"*}" ]; then
-		# Get physical device
-		if [ -n "$SUBPARTITION_DEV" ]; then
-			partition_dev="$SUBPARTITION_DEV"
-		else
-			partition_dev=$(dmsetup deps -o blkdevname "$partition" | \
-				awk -F "[()]" '{print "/dev/"$2}')
-		fi
-		if has_unallocated_space "$partition_dev"; then
+	# Only resize the partition if using subpartitions, which means the partition
+	# is stored as a nested GPT inside another partition. In this case we want to
+	# resize it to use all the unused space of the external partition.
+	if [ -n "$SUBPARTITION_DEV" ]; then
+		if has_unallocated_space "$SUBPARTITION_DEV"; then
 			echo "Resize root partition ($partition)"
-			# unmount subpartition, resize and remount it
-			kpartx -d "$partition"
-			parted -f -s "$partition_dev" resizepart 2 100%
-			kpartx -afs "$partition_dev"
+			# detach the backing loop device
+			[ -n "$SUBPARTITION_LOOP" ] && losetup -vd "$SUBPARTITION_LOOP"
+			# losetup does "lazy destruction", this waits for removal:
+			udevadm settle
+			# resize it
+			parted -f -s "$SUBPARTITION_DEV" resizepart 2 100%
+			# re-attach it
+			local losetup_args="--show -Pfv --direct-io=on"
+			if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
+				losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
+			fi
+			# shellcheck disable=SC2086
+			SUBPARTITION_LOOP="$(losetup $losetup_args "$SUBPARTITION_DEV")"
+			if [ -z "$SUBPARTITION_LOOP" ]; then
+				echo "ERROR: failed to recreate loop device for $SUBPARTITION_DEV after resize"
+				return 1
+			fi
 		else
 			echo "Not resizing root partition ($partition): no free space left"
 		fi
