@@ -3,7 +3,7 @@
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
 pkgver=16
-pkgrel=10
+pkgrel=11
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -57,6 +57,10 @@ nonfree_firmware() {
 	pkgdesc="Wifi, Bluetooth and video-out firmware"
 	depends="linux-firmware-brcm linux-firmware-rockchip"
 	mkdir "$subpkgdir"
+	# Workaround for kernel load brcm43455 firmware bug
+	# details: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/4285
+	mkdir -p "$subpkgdir"/lib/firmware/brcm
+	ln -s brcmfmac43455-sdio.AW-CM256SM.txt.zst "$subpkgdir"/lib/firmware/brcm/brcmfmac43456-sdio.pine64,pinebook-pro.txt.zst
 }
 
 openrc() {
