@@ -1,44 +1,45 @@
-# Kernel config based on: arch/arm64/configs/defconfig
-maintainer="Casey Connolly <kcxt@postmarketos.org>"
+# Co-Maintainer: Achill Gilgenast <achill@achill.org>
+maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-next
 pkgver=7.2_git20260710
 pkgrel=0
 _nextver="${pkgver#*_git}"
 pkgdesc="Linux next kernel"
-arch="armv7 aarch64"
-case "$CARCH" in
-	aarch64) _carch="arm64";_defconfig="defconfig";;
-	# FIXME: We should not be using qcom_defconfig. Instead we should be using multi_v7_defconfig.
-	# The problem is two-fold:
-	# - We need to reduce the amount of mainline kernels.
-	# - We need to find a way to not duplicate upstream defconfigs into our repo.
-	# Please see: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/6133#note_468011
-	armv7) _carch="arm";_defconfig="qcom_defconfig";;
-esac
-_flavor="generic-trailblazer"
+# armhf: pmbootstrap cannot dynamically choose a defconfig, so it ends up using multi_v7_defconfig which isn't correct
+# s390x: kconfigcheck is not ready for it yet
+arch="all !armhf !s390x"
+_flavor="next"
 url="https://kernel.org"
 license="GPL-2.0-only"
-# FIXME: kconfigcheck isn't supported since we use fragments
-options="!strip !check !tracedeps pmb:cross-native"
-source="
-	https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/snapshot/linux-next-next-$_nextver.tar.gz
-	devices.config
-	pmos.config
+options="
+	!check
+	!strip
+	!tracedeps
+	pmb:cross-native
+	pmb:generic-kernel
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-immutable
+	pmb:kconfigcheck-lockdown
+	pmb:kconfigcheck-rust
+	pmb:kconfigcheck-selinux
+	pmb:kconfigcheck-uefi
+	pmb:kconfigcheck-virt
 "
 makedepends="
 	bash
-	bc
 	bison
 	clang
 	clang-libclang
-	devicepkg-dev
+	diffutils
 	elfutils-dev
 	findutils
 	flex
-	git
+	kmod
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -46,51 +47,83 @@ makedepends="
 	rust-bindgen
 	rust-src
 	rustfmt
+	sed
 	zstd
+"
+
+# powerpc boot wrapper patches:
+# Necessary for compilation without cross GCC in PATH, cherry-picked from
+# Nathan's fork, he does not have time to upstream them right now but would be
+# happy if someone else did:
+# https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
+source="
+	https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/snapshot/linux-next-next-$_nextver.tar.gz
+
+	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+	0002-WIP-arch-powerpc-boot-Add-z-norelro.patch
+
+	config-next.aarch64
+	config-next.armv7
+	config-next.loongarch64
+	config-next.ppc64le
+	config-next.riscv64
+	config-next.x86
+	config-next.x86_64
 "
 builddir="$srcdir/linux-next-next-$_nextver"
 
+case "$CARCH" in
+	aarch64*) _carch="arm64" ;;
+	arm*) _carch="arm" ;;
+	loongarch*) _carch="loongarch" ;;
+	ppc*) _carch="powerpc" ;;
+	riscv*) _carch="riscv" ;;
+	s390x) _carch="s390" ;;
+	x86) _carch="i386" ;;
+	x86_64) _carch="x86_64" ;;
+esac
+
 prepare() {
 	default_prepare
-	cp "$srcdir/pmos.config" "$builddir"/arch/"$_carch"/configs/
-	cp "$srcdir/devices.config" "$builddir"/arch/"$_carch"/configs/
-
-	# Generate .config
-	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-next-$_nextver" \
-		"$_defconfig" pmos.config devices.config
+	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
 
 build() {
 	unset LDFLAGS
-	make O="$_outdir" ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
-	if [ "$CARCH" != "armv7" ]; then
-		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
-			"$pkgdir/boot/linux.efi"
-	fi
+	local _install
+	case "$CARCH" in
+		arm*|aarch64|riscv*) _install="zinstall dtbs_install" ;;
+		*) _install="install" ;;
+	esac
 
-	mkdir -p "$pkgdir"/boot
-
-	make LLVM=1 zinstall modules_install dtbs_install \
+	make modules_install $_install \
 		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/next-"$_nextver"/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
 
 sha512sums="
 ce7f3b05ba652bb3089dc47dabdbf96c11c0e33a7de9a44f48f1546897e6aa75c9673d43da10fff9c10703cce4dab58d9b9208c5c1447ff98e488242494a71da  linux-next-next-20260710.tar.gz
-08ec500bd2f40c1c80e56ebd938d4e54af71972fdf00c4dfe8a911cf094e1c296766276010470bfa26c68093c90bcae01266acc5e59fa0ec4620d4becc2c53d4  devices.config
-25c07558cc7dc82485957c82246bbf1eef4a4188f007546b27336fcd84507b387c8afc3d0feb2a2760e90ccde804ff7d7112be38831bba92d5a1988780a42cdd  pmos.config
+1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0002-WIP-arch-powerpc-boot-Add-z-norelro.patch
+29ba7730c640ee7e7bdcef35f22beb618ecb08cca32891540457810d14ced385cd90be1066f2f90f021abd9d384f84f38d985191a808dc03d79914309c9c5b9d  config-next.aarch64
+589b9138a85083fefb9d1a4b5d922f250c0354fe2038eae4eeda207753963959827b345e21193479aae0c1d46f7d472b0a1133324c03a89002f2c6727f1106be  config-next.armv7
+35cf100b6964e95a69567f9075785778ab7de820ec285d228fc0eaaf71041feed7e2b0c7f7a4a3b0b8a538aab339668161d33c375f1a62cd0883a14070c0c55b  config-next.loongarch64
+9aae13449ccc7bf0f8a4625e648e85ee909f9a981fad000fd6284df7d44636a37bf11904da1fbb8ab9b63f1639680dbd04dfd274afe233a7ccacbdcc5fc3e42f  config-next.ppc64le
+508103ea909078f1a3d6eb0372b6a633d179f6d52546ac1f49bf69de47448b9d44b1bdc36c96315e126831fe12fdc65ea05c87ba2c693c3e264e4efa4ac72bb6  config-next.riscv64
+275cfafd5cda85510f2184cd99566412dc42bbe425bf9a817c3e808e724426ef6f9b6945b6878ebefc8bd3ee76e4d9009c817c5771426b45285596097ba59761  config-next.x86
+063ea31fc7eeb8a4f7f9dd59fb5b0b66cd4a09d72b1dcb624dbc99415b23482643bd2fe24e62ada8f799110110a7f5a435faec7b57f031879eb3dac97ec08499  config-next.x86_64
 "
