@@ -1,9 +1,10 @@
 # Reference: <https://postmarketos.org/devicepkg>
 # Co-Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
+# Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
-pkgname=device-postmarketos-trailblazer
-pkgdesc="postmarketOS Trailblazer generic ARM64"
-pkgver=19
+pkgname=device-generic-aarch64
+pkgdesc="Generic aarch64 system, with EFI"
+pkgver=20
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -32,13 +33,14 @@ _pmb_recommends="
 
 	dtbloader
 "
-install="$pkgname.pre-upgrade"
 makedepends="devicepkg-dev"
+provides="device-postmarketos-trailblazer=$pkgver-r$pkgrel"
+replaces="device-postmarketos-trailblazer"
 subpackages="
-	$pkgname-kernel-next:kernel_next
-	$pkgname-kernel-mainline:kernel_mainline
-	$pkgname-kernel-lts:kernel_lts
 	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-kernel-next:kernel_next
 	$pkgname-kernel-postmarketos-qcom-laptop:kernel_postmarketos_qcom_laptop
 	$pkgname-kernel-postmarketos-amlogic:kernel_postmarketos_amlogic
 "
@@ -57,45 +59,45 @@ package() {
 }
 
 kernel_next() {
-	pkgdesc="Unstable next kernel (linux-next)"
+	pkgdesc="Development kernel with patches aimed at the next kernel merge window (most breakages, for development)"
 	depends="linux-next"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_mainline() {
-	pkgdesc="Mainline postmarketOS kernel (linux-postmarketos-mainline)"
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
 	depends="linux-postmarketos-mainline"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-	pkgdesc="Long term support (LTS) kernel from Alpine Linux (linux-lts)"
-	depends="linux-lts"
+	pkgdesc="Long-term maintainance kernel (most stability, not all security fixes & new features)"
+	depends="linux-postmarketos-lts"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_stable() {
-	pkgdesc="Stable kernel from Alpine Linux (linux-stable)"
-	depends="linux-stable"
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
 	provides="$pkgname-kernel-edge=$pkgver-r$pkgrel"
 	replaces="$pkgname-kernel-edge"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_postmarketos_qcom_laptop() {
-	pkgdesc="Mainline kernel with additional patches for Qualcomm Snapdragon-based laptops (linux-postmarketos-qcom-laptop)"
+	pkgdesc="Close-To-Mainline kernel with additional patches for Qualcomm Snapdragon-based laptops (linux-postmarketos-qcom-laptop)"
 	depends="linux-postmarketos-qcom-laptop"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_postmarketos_amlogic() {
-	pkgdesc="Mainline kernel with additional patches for Amlogic AArch64-based devices (linux-postmarketos-amlogic)"
+	pkgdesc="Close-To-Mainline kernel with additional patches for Amlogic AArch64-based devices (linux-postmarketos-amlogic)"
 	depends="linux-postmarketos-amlogic"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 sha512sums="
-3f361d9a3993b7e17d213db848882fa6aa3ad51873b613a8633c97fdf3e9ec542f70b0d4c280a1208736f660d8681ad714dc8307ec01e4528170a2219edabd27  deviceinfo
+f3963439a91048944dc78faff486b2e492cd514148f06851237ae12ceb000f38d2efd008e1b341c41d9387fc8916091acf901bc6dc56220a31bf607e2b1b1cf1  deviceinfo
 81492d13da96e7718ca546a6e879c54fc105e4b1dc4316b6e91f8c51cfbc816bbb0673222579afb5ce5a38fad91d8be7639aa938e0e8f77ff29a8d5d301d4949  kernel-cmdline.conf
 e26948d1f5005b16fefcaa51985010a5e55adef9ba3ed9d1f3d046c4b8928afbdd317123d0ca2fb0904e5431536c0d995144f66ad9025c7937ff0aae0537dfef  modules-initfs
 "
