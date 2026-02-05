@@ -31,42 +31,23 @@ resize_root_partition() {
 		return
 	fi
 
-	# Only resize the partition if it's inside the device-mapper, which means
-	# that the partition is stored as a subpartition inside another one.
-	# In this case we want to resize it to use all the unused space of the
-	# external partition.
-	if [ -z "${partition##"/dev/mapper/"*}" ] || [ -z "${partition##"/dev/dm-"*}" ]; then
-		# Get physical device
-		if [ -n "$SUBPARTITION_DEV" ]; then
-			partition_dev="$SUBPARTITION_DEV"
-		else
-			partition_dev=$(dmsetup deps -o blkdevname "$partition" | \
-				awk -F "[()]" '{print "/dev/"$2}')
-		fi
-		if has_unallocated_space "$partition_dev"; then
-			echo "Resize root partition ($partition)"
-			# unmount subpartition, resize and remount it
-			kpartx -d "$partition"
-			parted -f -s "$partition_dev" resizepart 2 100%
-			kpartx -afs "$partition_dev"
-		else
-			echo "Not resizing root partition ($partition): no free space left"
-		fi
+	local resize_dev="" check_dev="" partnum=2
 
+	# Always resize if using subpartitions, which means the partition
+	# is stored as a nested GPT inside another partition. In this case we want to
+	# resize the GPT so the inner root partition can make use of all the available
+	# space.
+	if [ -n "$SUBPARTITION_LOOP" ]; then
+		#
+		resize_dev="$SUBPARTITION_LOOP"
+		check_dev="$SUBPARTITION_LOOP"
 	# Resize the root partition (non-subpartitions). Usually we do not want
 	# this, except for QEMU devices and non-android devices (e.g.
 	# PinePhone). For them, it is fine to use the whole storage device and
 	# so we pass PMOS_FORCE_PARTITION_RESIZE as kernel parameter.
 	elif [ "$force_partition_resize" = "y" ]; then
-		partition_dev="$(echo "$partition" | sed -E 's/p?2$//')"
-		if has_unallocated_space "$partition_dev"; then
-			echo "Resize root partition ($partition)"
-			parted -f -s "$partition_dev" resizepart 2 100%
-			partprobe
-		else
-			echo "Not resizing root partition ($partition): no free space left"
-		fi
-
+		check_dev="$(echo "$partition" | sed -E 's/p?2$//')"
+		resize_dev="$check_dev"
 	# Resize the root partition (non-subpartitions) on Chrome OS devices.
 	# Match $deviceinfo_cgpt_kpart not being empty instead of cmdline
 	# because it does not make sense here as all these devices use the same
@@ -74,17 +55,21 @@ resize_root_partition() {
 	# second, because these devices have an additional kernel partition
 	# at the start.
 	elif [ -n "$deviceinfo_cgpt_kpart" ]; then
-		partition_dev="$(echo "$partition" | sed -E 's/p?3$//')"
-		if has_unallocated_space "$partition_dev"; then
-			echo "Resize root partition ($partition)"
-			parted -f -s "$partition_dev" resizepart 3 100%
-			partprobe
-		else
-			echo "Not resizing root partition ($partition): no free space left"
-		fi
-
+		check_dev="$(echo "$partition" | sed -E 's/p?3$//')"
+		resize_dev="$check_dev"
+		partnum=3
 	else
 		echo "Unable to resize root partition: failed to find qualifying partition"
+		return
+	fi
+
+	# Resize if needed
+	if has_unallocated_space "$check_dev"; then
+		echo "Resize root partition ($partition)"
+		parted -f -s "$resize_dev" resizepart "$partnum" 100%
+		partprobe
+	else
+		echo "Not resizing root partition ($partition): no free space left"
 	fi
 }
 

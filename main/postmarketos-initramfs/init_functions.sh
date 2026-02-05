@@ -7,6 +7,7 @@
 PMOS_BOOT="${PMOS_BOOT:-}"
 PMOS_ROOT="${PMOS_ROOT:-}"
 SUBPARTITION_DEV="${SUBPARTITION_DEV:-}"
+SUBPARTITION_LOOP="${SUBPARTITION_LOOP:-}"
 
 CONFIGFS="/config/usb_gadget"
 CONFIGFS_ACM_FUNCTION="acm.usb0"
@@ -18,6 +19,7 @@ deviceinfo_name="${deviceinfo_name:-}"
 deviceinfo_codename="${deviceinfo_codename:-}"
 deviceinfo_create_initfs_extra="${deviceinfo_create_initfs_extra:-}"
 deviceinfo_no_framebuffer="${deviceinfo_no_framebuffer:-}"
+deviceinfo_rootfs_image_sector_size="${deviceinfo_rootfs_image_sector_size:-}"
 
 # Does word start with prefix?
 startswith() {
@@ -356,6 +358,10 @@ mount_subpartitions() {
 		[ -e "$x" ] && android_parts="$android_parts $x"
 	done
 
+	local losetup_args="--show -Pfv --direct-io=on"
+	if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
+		losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
+	fi
 	attempt_start=$(get_uptime_seconds)
 	wait_seconds=10
 	echo "Trying to mount subpartitions for $wait_seconds seconds..."
@@ -366,26 +372,30 @@ mount_subpartitions() {
 		for partition in $partitions; do
 		    # Skip whole disks - only check partitions and logical device-mapper devices for subpartitions
 			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || [ -d "/sys/class/block/$(basename "$partition")/dm" ] || continue
-			case "$(kpartx -l "$partition" 2>/dev/null | wc -l)" in
-				2)
-					echo "Mount subpartitions of $partition"
-					SUBPARTITION_DEV="$partition"
-					kpartx -afs "$partition"
-					# Ensure that this was the *correct* subpartition
-					# Some devices have mmc partitions that appear to have
-					# subpartitions, but aren't our subpartition.
-					find_root_partition
-					if [ -n "$PMOS_ROOT" ]; then
-						break
-					fi
-					kpartx -d "$partition"
+			local part_count
+			part_count="$(parted -s "$partition" print 2>/dev/null | grep -c '^ [0-9]')"
+			# It's probably the right "disk" if it has 2 partitions on it
+			if [ "$part_count" -eq 2 ]; then
+				echo "Mount subpartitions of $partition"
+				SUBPARTITION_DEV="$partition"
+				# shellcheck disable=SC2086
+				SUBPARTITION_LOOP="$(losetup $losetup_args "$partition")"
+				if [ -z "$SUBPARTITION_LOOP" ]; then
+					echo "WARNING: failed to create loop device for $partition"
 					SUBPARTITION_DEV=""
 					continue
-					;;
-				*)
-					continue
-					;;
-			esac
+				fi
+				# Ensure that this was the *correct* subpartition
+				# Some devices have mmc partitions that appear to have
+				# subpartitions, but aren't our subpartition.
+				find_root_partition
+				if [ -n "$PMOS_ROOT" ]; then
+					break
+				fi
+				[ -n "$SUBPARTITION_LOOP" ] && losetup -vd "$SUBPARTITION_LOOP"
+				SUBPARTITION_DEV=""
+				SUBPARTITION_LOOP=""
+			fi
 		done
 		if [ "$(get_uptime_seconds)" -ge $(( attempt_start + wait_seconds )) ]; then
 			echo "ERROR: failed to mount subpartitions!"
