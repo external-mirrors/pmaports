@@ -1,34 +1,29 @@
 maintainer="Dylan Van Assche <me@dylanvanassche.be>"
 pkgname=bootmac
-pkgver=0.6.0
-pkgrel=3
+pkgver=0.7.1
+pkgrel=0
 pkgdesc="Configure MAC addresses at boot"
 url="https://gitlab.postmarketos.org/postmarketOS/bootmac"
 arch="all"
 license="GPLv3-or-later"
 source="https://gitlab.postmarketos.org/postmarketOS/bootmac/-/archive/v$pkgver/bootmac-v$pkgver.tar.gz"
 depends="bluez-btmgmt bluez-deprecated"
+makedepends="meson"
 options="!check"
-subpackages="$pkgname-openrc $pkgname-systemd"
+subpackages="$pkgname-systemd"
 builddir="$srcdir/$pkgname-v$pkgver"
 
-package() {
-	install -Dm644 "$builddir"/bootmac-wifi.rules \
-		"$pkgdir"/usr/lib/udev/rules.d/90-bootmac-wifi.rules
-	install -Dm644 "$builddir"/bootmac-bluetooth.rules \
-		"$pkgdir"/usr/lib/udev/rules.d/90-bootmac-bluetooth.rules
-	install -Dm755 "$builddir"/bootmac \
-		"$pkgdir"/usr/bin/bootmac
-	install -Dm644 "$builddir"/bootmac-bluetooth.service \
-		-t "$pkgdir"/usr/lib/systemd/system/
+build() {
+	abuild-meson \
+		-Dsystemd_units=true \
+		output .
+	meson compile -C output
 }
 
-openrc() {
-	default_openrc
-	amove usr/lib/udev/rules.d/90-bootmac-bluetooth.rules
-	amove usr/lib/udev/rules.d/90-bootmac-wifi.rules
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
 sha512sums="
-164f35b2e008aa0f7b7ad42338e46d8fdac1ec2d4403123b390706437603b1d2060659130a477823734fbda56fa45e9987fb9a2c08cf1e87adebea979e634bbb  bootmac-v0.6.0.tar.gz
+1831fa7c7f1e485ee272bcc1ed800de51f368dc5a024e572b1e5d8a9085f7ac73bb05ad13f41d0691859b634625c76c810cda815eeb558f24e67884924532ad5  bootmac-v0.7.1.tar.gz
 "
