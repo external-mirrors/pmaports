@@ -14,6 +14,11 @@ test-{{ device.name }}:
     - .device-boot-flow-separate-artifacts
     - .test-{{ device.name }}
 
+  # NOTE: set the job to manually started and allow failure until HW CI is
+  # stable
+  allow_failure: true
+  when: manual
+
   variables:
     # Let CI-tron construct the bootimg accepted by U-boot in a standard
     # Qualcomm way
