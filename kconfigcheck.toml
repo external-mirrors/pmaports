@@ -85,10 +85,13 @@ LBDAF = "y"
 # Provide a proper dummy null console to improve compatibility
 # on devices that like to coerce console=null
 NULL_TTY = "m"
-["category:default".">=5.13.0"."all"]
+["category:default".">=6.2.0"."all"]
+# MODULE_COMPRESS_ZSTD exists since 5.13, but since kernels prior to 6.2 cannot
+# decompress it, we would break devices with split initramfs which use busybox
+# modprobe, so we only enforce it on 6.2 or newer
 MODULE_COMPRESS = "y"
 MODULE_COMPRESS_ZSTD = "y"
-["category:default".">=5.17.0"."all"]
+# MODULE_DECOMPRESS exists since 5.17, but can only decompress zstd since 6.2
 MODULE_DECOMPRESS = "y"
 ["category:default".">=5.19.0"."all"]
 FW_LOADER_COMPRESS = "y"
