@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpipewire
-pkgver=99999_git20260130
+pkgver=99999_git20260204
 pkgrel=0
-_commit="6900a390f9d357904892d836cdd18fdb51de2272"
+_commit="81539c4f6bbd601746c99cb30539fa0f475a5e4d"
 pkgdesc="Components relating to pipewire use in Plasma"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -39,7 +39,7 @@ case "$pkgver" in
 esac
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/plasma/kpipewire.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-31/kpipewire-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/kpipewire-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kpipewire-$_commit"
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-8006bb46a1f068df0d83afe4a3be3a7d1bf6b521bfd1687732782b22598aca402188217d4ca04c2a1b52907f57cb3d6ae4a34d00f8e0f54f07cfc9bb323db6a5  kpipewire-6900a390f9d357904892d836cdd18fdb51de2272.tar.xz
+cedb8ff10d700616b347f766dd4721ef775733469672bc58da776073c88a68bd4f400a6af0a4eeed3ddef75dd58c28599bc481bab1fa466190b57285dc9e462f  kpipewire-81539c4f6bbd601746c99cb30539fa0f475a5e4d.tar.xz
 "

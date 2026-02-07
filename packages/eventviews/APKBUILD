@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=eventviews
-pkgver=99999_git20260202
+pkgver=99999_git20260203
 pkgrel=0
-_commit="d468e557edcad4488cd61980fcf29b7701bb3b2e"
+_commit="31ade6db73cbc8bf4585d5c722469fba90ce2fa9"
 pkgdesc="Library for creating events"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -39,7 +39,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/eventviews.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-03/eventviews-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/eventviews-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/eventviews-$_commit"
@@ -68,5 +68,5 @@ package() {
 	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-090b459b6e39e383e0ce8304f65358d64adc4dadcf698804c2f3a6a5be58849270034c583bb377907f70ff7b267434ba69443f3c0056fee3dabefc9ff0de109a  eventviews-d468e557edcad4488cd61980fcf29b7701bb3b2e.tar.xz
+702a3bb08225e3170a7fb3486fab18ddd54f1bb9fdff358b6da2ad2dc4eecf064a3dabef539e995123f3bb4dcdd26d7937881c71b49c709442c3f71b1684ad7e  eventviews-31ade6db73cbc8bf4585d5c722469fba90ce2fa9.tar.xz
 "

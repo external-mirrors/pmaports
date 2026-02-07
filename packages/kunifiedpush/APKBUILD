@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kunifiedpush
-pkgver=99999_git20260131
+pkgver=99999_git20260204
 pkgrel=0
-_commit="960171759856e694364953997329ee425fca9dcd"
+_commit="47a4cf76e332b50bffc62775edd7e3a5981c3132"
 # armhf blocked by qt6-qtdeclarative -> kdeclarative
 arch="all !armhf"
 url="https://invent.kde.org/libraries/kunifiedpush"
@@ -25,11 +25,12 @@ makedepends="$depends_dev
 	samurai
 	"
 subpackages="
-	$pkgname-systemd
 	$pkgname-dev
+	$pkgname-libs
+	$pkgname-systemd
 	"
 _repo_url="https://invent.kde.org/libraries/kunifiedpush.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-03/kunifiedpush-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/kunifiedpush-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kunifiedpush-$_commit"
@@ -51,5 +52,5 @@ package() {
 }
 
 sha512sums="
-79749b9fc1335d0d0caa3303b74a3f962768fbf39cea641b0637a3df70bd772ef3b47a684c652b82da186bbdccf10e313f486d19018499a1ddb6f8159ec6d253  kunifiedpush-960171759856e694364953997329ee425fca9dcd.tar.xz
+04230680a827e1ee07e4543aa991b28b3bfc9708ac15f743859e82f021b41c865eb4d05895f6d32096059affe432cc63c8aaeb5faa0057acfc5f7d429d44e54c  kunifiedpush-47a4cf76e332b50bffc62775edd7e3a5981c3132.tar.xz
 "

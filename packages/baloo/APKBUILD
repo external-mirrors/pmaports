@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=baloo
-pkgver=99999_git20260202
+pkgver=99999_git20260204
 pkgrel=0
-_commit="79357008dc339d892e206e74cf18dd3855adf24d"
+_commit="0ab196b36fe5741baa9776710cf99ee5eba9ead0"
 pkgdesc="A framework for searching and managing metadata"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -34,11 +34,12 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/baloo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-03/baloo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/baloo-$_commit.tar.xz"
 subpackages="
 	$pkgname-dbg
 	$pkgname-dev
 	$pkgname-lang
+	$pkgname-libs
 	$pkgname-systemd
 	"
 options="!check" # Tons of broken tests
@@ -60,5 +61,5 @@ package() {
 }
 
 sha512sums="
-9e0379b9dffb965e05490dbbf8732896da9c76c54f79e03036225d5bdfcc4d11018d31406eba86396caaa96da294a7832c31ab7f892b4e5970a9f8ee4aea1a65  baloo-79357008dc339d892e206e74cf18dd3855adf24d.tar.xz
+f950676045764de4d40c1d81aef8f65570686d86ff56555dfe9d0211496bb61ec503e74b3f95fe0ebf8cb019dd74b736be229acc29f04c0a544050441681dd27  baloo-0ab196b36fe5741baa9776710cf99ee5eba9ead0.tar.xz
 "

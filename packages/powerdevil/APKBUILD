@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=powerdevil
-pkgver=99999_git20260203
+pkgver=99999_git20260204
 pkgrel=0
-_commit="2fa34849701f5d043de6aacdcd8712cde2d47d2a"
+_commit="5d25ad1382156c13044988a59351f94a716252d9"
 pkgdesc="Manages the power consumption settings of a Plasma Shell"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -51,7 +51,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/powerdevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-03/powerdevil-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/powerdevil-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/powerdevil-$_commit"
@@ -73,5 +73,5 @@ package() {
 }
 
 sha512sums="
-5a5fc84435235631b7f741127f59849202d9603dd916ef5c553a4084da4616454c77e96297cdd5ce1bbf5ed6482edfa73518070dbe3499c4f89989b75651a2c7  powerdevil-2fa34849701f5d043de6aacdcd8712cde2d47d2a.tar.xz
+b7169468706221a2675fe12fe0cdf52580bedf4934a183d658498279c66c9a28fd8b59368bf03109367ea5539dbc37204159aaa2c758ef46f9fa541c3a0f0224  powerdevil-5d25ad1382156c13044988a59351f94a716252d9.tar.xz
 "

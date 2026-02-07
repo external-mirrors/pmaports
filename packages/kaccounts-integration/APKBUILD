@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kaccounts-integration
-pkgver=99999_git20260130
+pkgver=99999_git20260204
 pkgrel=0
-_commit="d3d04c721b48821652097f2c01aacb827d9e9247"
+_commit="c0c3f0c81230d777e58e658ddb612a88737e85a2"
 # armhf blocked by qt6-qtdeclarative
 # s390x, ppc64le, riscv64 blocked by qt6-qtwebengine -> signon-ui
 arch="all !armhf !s390x !ppc64le !riscv64"
@@ -34,7 +34,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/network/kaccounts-integration.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-01-31/kaccounts-integration-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/kaccounts-integration-$_commit.tar.xz"
 options="!check" # No tests available
 
 builddir="$srcdir/kaccounts-integration-$_commit"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-0e9a3888bfab7682750fa83bb2033eff291ab6f5bb3d830ba35677cf21bad509090f65478cec2fefc2e0db6b426ecc27573b4e1bef7718ed35c922ae6779cbfb  kaccounts-integration-d3d04c721b48821652097f2c01aacb827d9e9247.tar.xz
+e165491317751a868429e0cc4f5822bbbde6d185fe4c22c425e8c36243d6c0faefe1940645b4c8a280f423442318fdf702336ff136f60d01f6bf85add9b0f825  kaccounts-integration-c0c3f0c81230d777e58e658ddb612a88737e85a2.tar.xz
 "
