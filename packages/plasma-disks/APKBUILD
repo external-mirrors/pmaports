@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-disks
-pkgver=99999_git20260204
+pkgver=99999_git20260206
 pkgrel=0
-_commit="523c1f8e5871c0ef0b110e2c2d3e3956367cdf92"
+_commit="2b11e90b0089f6bf3affc4a77bed5fb6b2975c4a"
 pkgdesc="Monitors S.M.A.R.T. capable devices for imminent failure"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -38,7 +38,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-disks.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/plasma-disks-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-07/plasma-disks-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-98808c5b1113a3d2b339305e2ae90f36c72acf3469ef0b3a935d3dd8a998aebd6aa423961c5aa3d2c5f39832a5a3ff0ebfe114f4454413ce055a3b544ef32b9f  plasma-disks-523c1f8e5871c0ef0b110e2c2d3e3956367cdf92.tar.xz
+916ebe5fdae2aaee4c2fdac430ded94df27f4d1d785b39596170a00de111d6aa59eb8bf6cf9c669def33023ab7ce2399afed93d8b8f7e86e6b04243f346ae856  plasma-disks-2b11e90b0089f6bf3affc4a77bed5fb6b2975c4a.tar.xz
 "

@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-remotecontrollers
-pkgver=99999_git20260204
+pkgver=99999_git20260206
 pkgrel=0
-_commit="303e08690b63eaee64f0ba766c1bc461de086781"
+_commit="f585cfd960cab515ab13b7a45cbc41e4f2164479"
 pkgdesc="Translate various input device events into keyboard and pointer events"
 url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers"
 # armhf blocked by qt6-qtdeclarative -> ki18n
@@ -41,7 +41,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-04/plasma-remotecontrollers-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-07/plasma-remotecontrollers-$_commit.tar.xz
 	uinput.conf
 	"
 options="!check" # No tests
@@ -65,6 +65,6 @@ package() {
 }
 
 sha512sums="
-2fc76266505368857e7485bcc95613743848d1ea73ff6f4d32d7e1ad57e4903457900e5f71a71aad4d2b76c6cfe163c3bec64bd3f70afe9029bb260c5e55bd17  plasma-remotecontrollers-303e08690b63eaee64f0ba766c1bc461de086781.tar.xz
+d585d65ab73aa471d7145c99b14c665f8e3c57294cb607e237b9827e1938d7fb7e3056ed287f78dea78d35229ea70ff470d896d03e0846382777285f01fd9860  plasma-remotecontrollers-f585cfd960cab515ab13b7a45cbc41e4f2164479.tar.xz
 a9b069ed121ffeee887e0583d8cb46035ecf1fa90a26a4ecb3aa11ff03178b2b08621f6676db6b2350f290694c04aabcf36f2ce3e0813a76dde9a33555edb112  uinput.conf
 "
