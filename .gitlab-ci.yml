@@ -62,6 +62,18 @@ ruff:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/ruff.sh
 
+# testcases typechecking
+mypy:
+  stage: lint
+  rules:
+    - if: *mr_rule
+      changes:
+        - .ci/**/*
+        - .gitlab-ci.yml
+  script:
+    - .ci/lib/gitlab_prepare_ci.sh
+    - .ci/mypy.sh
+
 # shellcheck and various grep checks
 shellcheck-grep:
   stage: lint
