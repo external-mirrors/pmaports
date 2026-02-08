@@ -3,8 +3,8 @@
 # Co-Maintainer: knuxify <knuxify@gmail.com>
 maintainer="Newbyte <newbyte@disroot.org>"
 pkgname=linux-postmarketos-exynos4
-pkgver=6.16.10
-pkgrel=1
+pkgver=6.18.9
+pkgrel=0
 pkgdesc="Mainline kernel fork for Samsung Exynos4 devices"
 arch="armv7"
 _carch="arm"
@@ -39,8 +39,6 @@ _tag="v${pkgver//_/-}-exynos4"
 source="
 	$pkgname-$_tag.tar.bz2::$url/-/archive/$_tag/linux-$_tag.tar.bz2
 	$_config
-
-	clang21.patch
 "
 builddir="$srcdir/linux-$_tag"
 
@@ -70,7 +68,6 @@ package() {
 }
 
 sha512sums="
-2b70d220163811efc79e21fc7ba3ff2a6d81c8633d9439f1c3b2fbea51c40b5fff42220af8ae5105665b49372cfa9ba30f4560b4c0d53bfbb83bbd84c94c0e64  linux-postmarketos-exynos4-v6.16.10-exynos4.tar.bz2
-5db5d60e509e833e7ee546ffb8bb206ebfea97dd5e209d4ba3a5d16520011959b952600998e9bed0f38141cadc0321e2bd6f8d8b761fa1ea6248c20f5de87e5c  config-postmarketos-exynos4.armv7
-bda4519e24c0e1c950d9f7cb69147df46758f41405193ad4eae71afea42b6c722757f7e23ce84f28e4da90d76322f83202eb0fa1c6d13174a2ff97d09b0c6c56  clang21.patch
+06d400fca544c3a38d54c6dada3ed6257eb13c64ab7b9c0459a87d1b6a01bde69b6488eb478b06da5c03e8083c2aca01d4a04424d7f91b4b1195a7b738ebd9ca  linux-postmarketos-exynos4-v6.18.9-exynos4.tar.bz2
+ce74c3a15b6b4935f8da8b0d418385aa84c89910442eb1247d44e2cba76c655db65b41d3c036f53a9d856dfec298a8e01f630da114b3ff21cd7dec4fe24049df  config-postmarketos-exynos4.armv7
 "
