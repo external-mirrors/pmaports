@@ -4,7 +4,7 @@ maintainer="Richard Acayan <mailingradian@gmail.com>"
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
 pkgver=6.18.5
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SDM670 devices"
 arch="aarch64"
 _carch="arm64"
@@ -12,7 +12,9 @@ url="https://gitlab.com/sdm670-mainline/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-community"
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
+"
 makedepends="
 	bison
 	clang
@@ -49,9 +51,12 @@ build() {
 }
 
 package() {
-	mkdir -p "$pkgdir"/boot
+	# ZBOOT EFI decompressor for EFI booting
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+		"$pkgdir/boot/linux.efi"
 
-	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+	# Old GZIP'd kernel image for boot.img compatibility
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
 		"$pkgdir/boot/vmlinuz"
 
 	make modules_install dtbs_install \
@@ -69,5 +74,5 @@ package() {
 
 sha512sums="
 e002e31904e0e9885e40d2054f297f8063e8720c663444019d333e64a6819a0dd3ecc48a9ab2891b420cbee702cfb0583e6ad51de1376be861989a6f15f37f30  linux-sdm670-v6.18.5.tar.gz
-e802780a87471490a8835abe03b10614df229b4f54a9139f0cc185bd55fe2ebfeca3ca52dcb56a7a3dc50c51a97a2ab5967eb2eadf6fb6690257f7513fb47a02  config-postmarketos-qcom-sdm670.aarch64
+9f73072a38ff8d8188556163a73bd6219262c252e30cfc4b2bef1b736269a41b3cc63463b9d5a8d2efa8a0297dbadb043255f60a0cce994021bd523651c6fd8c  config-postmarketos-qcom-sdm670.aarch64
 "
