@@ -77,7 +77,7 @@ class Device:
         return {"postmarketos-mkinitfs-hook-ci"}
 
     @cached_property
-    def package_dependencies(self) -> list[str]:
+    def package_dependencies(self) -> set[str]:
         # HACK: Work around a bug in depends_recurse which prevents listing all the dependencies
         # Bug: https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2623
         return {"postmarketos-initramfs"}
