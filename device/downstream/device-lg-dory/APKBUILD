@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-dory
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 pkgdesc="LG G Watch"
 url="https://postmarketos.org"
 arch="armhf"
@@ -14,13 +14,11 @@ depends="
 	"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-asteroid
 	$pkgname-udev
 "
 source="
 	90-touchscreen-dev.rules
 	deviceinfo
-	machine.conf
 	"
 options="!check !archcheck"
 
@@ -34,14 +32,7 @@ package() {
 		"$srcdir"/90-touchscreen-dev.rules
 }
 
-asteroid() {
-	install_if="$pkgname=$pkgver-r$pkgrel asteroid-launcher"
-	install -Dm644 -t "$subpkgdir"/etc/asteroid \
-		"$srcdir"/machine.conf
-}
-
 sha512sums="
 f52a0bfab7e0067c0837662b5297e6c6d3433a1fc1cbdfaf3000227452d88980b99ac196541fda3bd57fd789580cb4ef96299b24e1bdb277f21f42418fcf17fa  90-touchscreen-dev.rules
 d05f321b8b5a50940f1b242ddb348c6b57bfcdda22155a8cd6c82d5f8046a586f4b836a5c7a0053b0a62d795f717579a8c7e167c5f3d764eea2471760eb560e5  deviceinfo
-7ee094469dbced67c42ef3f3cb659af5004dc5140c9d9475ac602480936e2ad43a6e56f5957c5745252f045942daa4667c43246f5be8018ae189dc4586d21e1c  machine.conf
 "
