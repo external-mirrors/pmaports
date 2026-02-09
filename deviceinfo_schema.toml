@@ -280,12 +280,6 @@ description = "Set this to true for EFI device, so the mkinitfs command will gen
 datatype = "boolean"
 default_value = false
 
-[variable.flash.generate_systemd_boot]
-description = "Generate the configuration for systemd-boot or gummiboot, and install it on the system."
-datatype = "boolean"
-default_value = false
-allow_device_variant_suffix = true
-
 [variable.flash.generate_uboot_fit_images]
 description = "Set `true` to generate U-boot FIT images, one image per *.its file in board's u-boot directory"
 datatype = "boolean"
@@ -543,6 +537,11 @@ epitaph = "Replaced by kernel-cmdline.d pmaports!7708"
 description = "Additional kernel command line. Anything in this variable gets automatically added after `kernel_cmdline`. The purpose of this is to allow customising the `kernel_cmdline` by users without having to modify the package shipped by the device package."
 fate = "obsolete"
 epitaph = "Replaced by kernel-cmdline.d pmaports!7708"
+
+[variable.flash.generate_systemd_boot]
+description = "Generate the configuration for systemd-boot or gummiboot, and install it on the system."
+fate = "obsolete"
+epitaph = "No longer required to configure boot-deploy, see: boot-deploy!104"
 
 ## Splash
 
