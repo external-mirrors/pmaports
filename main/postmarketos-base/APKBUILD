@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base
-pkgver=53
+pkgver=54
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
@@ -27,14 +27,12 @@ depends="
 	umount
 	util-linux-login
 	"
-_pmb_recommends="
-	doas
-	doas-sudo-shim
-"
+_pmb_recommends="sudo-rs"
 install="$pkgname.post-install $pkgname.post-upgrade"
 triggers="$pkgname.trigger=/usr/share/deviceinfo"
 subpackages="
 	$pkgname-core
+	$pkgname-doas
 	$pkgname-fwupd
 	$pkgname-grub
 	$pkgname-mesa
@@ -42,17 +40,12 @@ subpackages="
 	$pkgname-nftables-openrc:nftables_openrc
 	$pkgname-openrc
 	$pkgname-ssh
+	$pkgname-sudo
+	$pkgname-sudo-rs:sudo_rs
 	postmarketos-release:release
 	postmarketos-baselayout:baselayout
 	"
 options="!check"
-
-replaces="
-	sudo
-	sudo-ldap
-	"
-replaces_priority=100  # leave plenty for alpine
-
 # Every postmarketos installation with pmbootstrap <= 3.3.2 has
 # alpine-base in /etc/apk/world. But for multiple reasons, we do not
 # want to depend on it. So have a versioned provides that conflicts
@@ -156,6 +149,13 @@ core() {
 	ln -s usr/sbin "$subpkgdir"/sbin
 }
 
+doas() {
+	pkgdesc="doas configuration"
+	install_if="$pkgname=$pkgver-r$pkgrel doas"
+
+	amove etc/doas.d/10-postmarketos.conf
+}
+
 fwupd() {
 	pkgdesc="fwupd configuration"
 	install_if="$pkgname=$pkgver-r$pkgrel systemd-boot fwupd"
@@ -198,6 +198,27 @@ ssh() {
 	replaces="postmarketos-base-ui"
 
 	amove etc/ssh/sshd_config.d/50-postmarketos-ui-policy.conf
+}
+
+sudo() {
+	pkgdesc="sudo configuration"
+	install_if="$pkgname=$pkgver-r$pkgrel sudo"
+	replaces="sudo"
+	replaces_priority=100  # leave plenty for alpine
+
+	install -Dm644 "$pkgdir"/etc/sudoers \
+		-t "$subpkgdir"/etc/
+}
+
+sudo_rs() {
+	pkgdesc="sudo-rs configuration"
+	install_if="$pkgname=$pkgver-r$pkgrel sudo-rs"
+	replaces="sudo-rs"
+	replaces_priority=100 # leave plenty for alpine
+
+	amove etc/sudoers
+	# sudo-rs requires all listed directories in sudoers to exist at runtime
+	mkdir -p "$subpkgdir"/etc/sudoers.d
 }
 
 openrc() {
@@ -254,7 +275,7 @@ release() {
 }
 
 sha512sums="
-e529f5cef1f31481b577f99b8917704f2cfefb963d98bf40a14b017938e55a00134d2033f81d2cb0b8489c5e9b4a92fdc0a788013f1adb4cd46d9580c9988186  rootfs-etc-sudoers
+dbdf6d22077234a9e51459d1bc7706faa4f7cb5af1509e86247497d430d31c53a5ad4f177fa39864e5eee6a446d0fd7f86fdec93ff0a9263543c502d4d070e29  rootfs-etc-sudoers
 49cff0dbf37fc3c3ca30709be3bc4bbac9b2c05d1f88356922c6ab849e1fe893da7eca92b42a4095cfa00fe475470a711a93bfa60f1cedfde9c890a6dcc61de9  rootfs-etc-doas.d-10-postmarketos.conf
 1d2975e7e2745020f88fac639021cc9a47b477fb0390c3e146a070d98faab32c3f1c7bd1121f45a26be97301ab65c736ae0a4905d28a7251919a1994895f9c8d  rootfs-etc-ssh-sshd_config.d-50-postmarketos-ui-policy.conf
 e0d2d48b82a03239a4c0a00acaf83e00d397c23a8d7c71053d4e2a383357c22dcedef9e81b0e12a1d7514e1fdbe0bb3eb82613d18b29034a7ce5447f13c84a53  rootfs-etc-conf.d-swapfile
