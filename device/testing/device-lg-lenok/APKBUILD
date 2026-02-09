@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-lg-lenok
 pkgdesc="LG G Watch R"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -19,13 +19,9 @@ depends="
 	soc-qcom-msm8226
 	"
 makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-asteroid
-	"
 source="
 	deviceinfo
 	kernel-cmdline.conf
-	machine.conf
 	modules-initfs
 	"
 
@@ -37,16 +33,8 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-asteroid() {
-	install_if="$pkgname=$pkgver-r$pkgrel asteroid-launcher"
-
-	install -Dm644 -t "$subpkgdir"/etc/asteroid \
-		"$srcdir"/machine.conf
-}
-
 sha512sums="
 be707c05873f52c83c8d546fe8e6a8a48fd4fa412e2b6155834abf1e76e22d772bf884df12cbbd3640010bb91466aeb9d02c0a3b35350ec8c2e99a8aa1ab731d  deviceinfo
 0e25257eb8f48d3b6b0d88855af31d3fb7cf4c494ea3a12e09e46d51f351d5e77af6f5d9812dc6a424bc00d65999195569a2a84cdfb01fa0c307e499aa3a27e5  kernel-cmdline.conf
-81cf2c20d2efa0f71f18116efeda11ae4f18fee96ba998dc4d6a36205626dce496cb36711af5c4e3215578b174942e721290cfcff8db6fb1c998b90b7345244d  machine.conf
 36b66e90934e267238384c36b4e41b6b796e9df99892fd18ba416098fd66f48911c34a7f7585b1c472b09047e7a149f4d937a732140f8292f3d043b1e4ba9c87  modules-initfs
 "
