@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 _flavor="postmarketos-qcom-milos"
 pkgname=linux-$_flavor
-pkgver=6.18.5
+pkgver=6.19.0
 pkgrel=0
 pkgdesc="Mainline Kernel fork for Qualcomm Milos SoC (SM7635, etc.) devices"
 arch="aarch64"
@@ -13,7 +13,19 @@ options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
 	"
-makedepends="bison clang findutils flex installkernel lld llvm openssl-dev perl python3"
+makedepends="
+	bison
+	clang
+	findutils
+	flex
+	installkernel
+	lld
+	llvm
+	openssl-dev
+	perl
+	python3
+	zstd
+"
 
 _repo="linux"
 _config="config-$_flavor.$arch"
@@ -55,6 +67,6 @@ package() {
 }
 
 sha512sums="
-c633d75bdf651b38292e49fff1d4a1dd0d8965e7ad509183304df5bfa4cd7aa561f6e4d57779b998b2ea4daa77b5b4c59b3741c2c1784a0a576f6dcd6b03dadc  linux-v6.18.5-milos.tar.gz
-08bd5984703ef3951cbd70f169394bfd6111a9248552e2de241bbee5d24e41cd475e299ea968fe15e1692ac22fe88200280dadc27e042232f4ae171baaef16b1  config-postmarketos-qcom-milos.aarch64
+377cc068ddae611c42539686920cd6f113a89dbd823e216ae4bb65e1257306d0b1b42d28db1388da1b3e21e5730bdb66714087bcf92af82ad7678f65526d450d  linux-v6.19.0-milos.tar.gz
+eb0c1a983a7c5e4f9469f28a23880a84b553f3375d9363d15a2416bd21ad69397ae584a6599147ce7dc77db3a603a87c50155a4eeb3b6f2f2fb8041eba2449f4  config-postmarketos-qcom-milos.aarch64
 "
