@@ -156,6 +156,7 @@ subpackages="
 
 source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
+	bless-boot.patch
 	"
 builddir="$srcdir/systemd-$_pkgver"
 
@@ -181,15 +182,6 @@ _default_zshcomp() {
 }
 
 build() {
-	# The "bless boot" is built conditionally on -Dbootloader=enabled, but it
-	# doesn't seem to actually depend on anything in src/systemd/boot. There's a lot
-	# of stuff that gets enabled with that flag, and we don't actually want any of
-	# it (it's packaged separately as 'systemd-boot' in Alpine aports). By removing
-	# the condition, we can build/package the bless boot stuff without having to
-	# unnecessarily build the bootloader.
-	sed -i "/'ENABLE_BOOTLOADER',/d" src/bless-boot/meson.build
-	sed -i "/systemd-bless-boot.service.in/,/},/ s/'ENABLE_BOOTLOADER', //" units/meson.build
-
 	# TODO: after usr-merge completion: remove hardcoded "-D*-path" options
 	abuild-meson \
 		-Dlibc=musl \
@@ -479,4 +471,5 @@ libs() {
 sha512sums="
 7cbeca5dad6413a876809200583854ddc706b7a69deff958eb1ca1afb726cf4dec014006c10d1945c450b754811d4b95a80fe1778cb3136997f6d11b11c0560e  systemd-259.1.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
+8b0360acd46f8918ccaf4bcfbf8b2e60ba0d1d6ea6c575fa51668e129b421edc3e7503db7790b6abce8d926b6c8493c02893f70eb481e3fdd935c7b90f442474  bless-boot.patch
 "

@@ -1,0 +1,78 @@
+From 92d7efca25415462fae8c20eafde1f826c017bb5 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Thu, 24 Jul 2025 18:26:37 -0700
+Subject: [PATCH] Enable bless-boot generator
+
+This does a hack to removing the need to build the stuff in src/boot for
+enabling bless-boot. Previously I tried to enable bless-boot by adding
+-Dbootloader=enable, which would be required without this hack, but
+cross-compiling systemd/src/boot failed on 32-bit archs and it seemed
+unnecessary to go down that rabbit hole to debug/fix.
+
+Why? Because:
+
+1) It's not actually needed for building the stuff I care about enabling
+in this MR (systemd-bless-boot and its generator). These things build
+and work just fine without building stuff in src/boot.
+
+2) Even if it worked, we would have to remove the artifacts made
+from src/boot and not package them here. They would conflict with the
+systemd-boot package in Alpine.
+
+So it seems pointless to waste time fixing some weird cross-compiling
+issue for some components that don't actually need to be built to enable
+the extra features I want and would be discarded anyways in package()
+
+Part-of: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/6840
+
+---
+
+The "bless boot" is built conditionally on -Dbootloader=enabled, but it
+doesn't seem to actually depend on anything in src/systemd/boot. There's a lot
+of stuff that gets enabled with that flag, and we don't actually want any of
+it (it's packaged separately as 'systemd-boot' in Alpine aports). By removing
+the condition, we can build/package the bless boot stuff without having to
+unnecessarily build the bootloader.
+
+Signed-off-by: Achill Gilgenast <achill@achill.org>
+---
+ src/bless-boot/meson.build | 2 --
+ units/meson.build          | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/bless-boot/meson.build b/src/bless-boot/meson.build
+index ae814f1b29d1..a8815f288712 100644
+--- a/src/bless-boot/meson.build
++++ b/src/bless-boot/meson.build
+@@ -15,7 +15,6 @@ executables += [
+                 'public' : true,
+                 'conditions' : [
+                         'HAVE_BLKID',
+-                        'ENABLE_BOOTLOADER',
+                 ],
+                 'sources' : files('bless-boot.c'),
+                 'link_with' : boot_link_with,
+@@ -24,7 +23,6 @@ executables += [
+                 'name' : 'systemd-bless-boot-generator',
+                 'conditions' : [
+                         'HAVE_BLKID',
+-                        'ENABLE_BOOTLOADER',
+                 ],
+                 'sources' : files('bless-boot-generator.c'),
+                 'link_with' : boot_link_with,
+diff --git a/units/meson.build b/units/meson.build
+index 113a935c90b0..2d0444c0b10a 100644
+--- a/units/meson.build
++++ b/units/meson.build
+@@ -277,7 +277,7 @@ units = [
+         },
+         {
+           'file' : 'systemd-bless-boot.service.in',
+-          'conditions' : ['ENABLE_BOOTLOADER', 'HAVE_BLKID'],
++          'conditions' : ['HAVE_BLKID'],
+         },
+         { 'file' : 'systemd-boot-check-no-failures.service.in' },
+         {
+-- 
+2.53.0
+
