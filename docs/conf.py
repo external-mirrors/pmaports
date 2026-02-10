@@ -29,7 +29,7 @@ html_title = "postmarketOS Packaging"
 
 def run_dint_doc(app):
     with Path(__file__).parent.joinpath("deviceinfo-reference.md").open("w") as f:
-        subprocess.call(["dint", "doc"], stdout=f)
+        subprocess.run(["dint", "doc"], stdout=f, check=True)
 
 
 def setup(app):
