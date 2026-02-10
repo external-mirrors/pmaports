@@ -211,6 +211,7 @@ build-docs:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
+        - deviceinfo_schema.toml
         - docs/**
 
 deploy-docs:
@@ -221,6 +222,7 @@ deploy-docs:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAMESPACE == "postmarketOS"
       changes:
+        - deviceinfo_schema.toml
         - docs/**
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
