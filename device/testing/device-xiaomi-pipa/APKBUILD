@@ -2,8 +2,8 @@
 maintainer="bluebunny <kalorin.bok084@passinbox.com>"
 pkgname=device-xiaomi-pipa
 pkgdesc="Xiaomi Pad 6"
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,11 +21,25 @@ depends="
 makedepends="devicepkg-dev"
 _pmb_recommends="
 	firmware-qcom-adreno-a650
+	firmware-xiaomi-pipa-adreno
+	firmware-xiaomi-pipa-adsp
+	firmware-xiaomi-pipa-awinic
+	firmware-xiaomi-pipa-cdsp
+	firmware-xiaomi-pipa-hexagonfs
+	firmware-xiaomi-pipa-novatek
+	firmware-xiaomi-pipa-nuvolta
+	firmware-xiaomi-pipa-slpi
+	firmware-xiaomi-pipa-venus
 	linux-firmware-ath11k
 	linux-firmware-qca
 "
 source="
+	81-libssc-xiaomi-pipa.rules
+	HiFi.conf
 	deviceinfo
+	hexagonrpcd-sdsp.conf
+	modules-initfs
+	pipa.conf
 "
 
 build() {
@@ -34,8 +48,29 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/81-libssc-xiaomi-pipa.rules -t \
+		"$pkgdir/usr/lib/udev/rules.d/"
+
+	install -Dm644 "$srcdir"/hexagonrpcd-sdsp.conf -t \
+		"$pkgdir/usr/share/hexagonrpcd/"
+
+	install -Dm644 "$srcdir"/pipa.conf -t \
+		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/pipa/"
+
+	install -Dm644 "$srcdir"/HiFi.conf -t \
+		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/pipa/"
+
+	mkdir -p "$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250"
+	ln -s ../../Xiaomi/pipa/pipa.conf \
+		"$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
 }
 
 sha512sums="
+d0e8f2e378130130ac72703aed957f7638e2dd75acf4aa421e1b4592c6cb6d296b652db0d9c242be4e56326760ce18d28c1e36ae553d0b7a7f91e12ab0353f22  81-libssc-xiaomi-pipa.rules
+1c8cef1f2de5fd7e734796dfffc684255b047bdb07a0965676a4d8d512aee4963ce91aeabf8627ce3aea72aeade776a3529f205badd2ed27ba072cadc38f9918  HiFi.conf
 4e7afb0c324daed0679d8152d83a5de89357ef92c3152342db21179f5d71f18caae6464b121fe5e93e80430949f7be47e5ea67f1177549bbd0891017f458315a  deviceinfo
+7f9d9760791639fdd5606070d6a3bd9a5e2d8fdadff0af380b847c7eaf28131000f4909b99e866eafb77272a4fe20ed0c35d5a4f64bb7d16e2dbf82612aa8b22  hexagonrpcd-sdsp.conf
+5f82a7f3cd485a947700a8fa02a360679536ddf3c577b13e381810fcb8ebf146925dfac931bd53b9e784ce23158d1da96aa8579a3e6221b4c9bcc94e4818476c  modules-initfs
+007908c49db107dd8289a96049ed4d77a55c7846e21f76fa7f97306df953ccdec7d821cbc7732a3ff7c532285175ebf0d6a4e3f224740ac002b23f3608cbf76d  pipa.conf
 "
