@@ -1,8 +1,8 @@
 # Kernel config based on: arch/arm/configs/kobo_defconfig
 maintainer="Andreas Kemnade <andreas@kemnade.info>"
 pkgname=linux-postmarketos-imx-ereader
-pkgver=6.13.0
-pkgrel=1
+pkgver=6.19.0
+pkgrel=0
 pkgdesc="i.MX E-Book reader kernel fork, close to mainline"
 replaces="linux-kobo-clara-mainline"
 provides="linux-kobo-clara-mainline=$pkgver-r$pkgrel"
@@ -16,42 +16,45 @@ makedepends="
 	bash
 	bc
 	bison
+	clang
 	devicepkg-dev
 	findutils
 	flex
-	gmp-dev
 	lzop
-	mpc1-dev
-	mpfr-dev
+	llvm
+	lld
 	openssl-dev
 	perl
+	postmarketos-installkernel
+	zstd
 "
 
 # Source
 _repository="linux"
-_commit="09bacc073f275377698322258cf9e2cd19aecc97"
+_commit="ccddaba42e0abafbce84cc2243cbe0c98d400944"
 _rtl8189fs_repository="rtl8189ES_linux"
-_rtl8189fs_commit="94cc959d56c1425fbca4f6e49e949cf58ec5dc8d"
+_rtl8189fs_commit="876e627a5b6a8021700391b4249a4a31edfebe5c"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/akemnade/$_repository/archive/$_commit.tar.gz
 	$_rtl8189fs_repository-$_rtl8189fs_commit.tar.gz::https://github.com/jwrdegoede/$_rtl8189fs_repository/archive/$_rtl8189fs_commit.tar.gz
+	0001-fix-tasklet-struct-function-pointer.ppatch
 	$_config
 "
 builddir="$srcdir/$_repository-$_commit"
-_outdir="out"
 _rtl8189fs_dir="$srcdir/$_rtl8189fs_repository-$_rtl8189fs_commit"
 
 prepare() {
 	default_prepare
-	REPLACE_GCCH=0 . downstreamkernel_prepare
+	cp -v "$srcdir"/$_config .config
+	patch -d "$_rtl8189fs_dir" -p1 <"$srcdir"/0001-fix-tasklet-struct-function-pointer.ppatch
 }
 
 build() {
 	unset LDFLAGS
-	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-postmarketOS"
-	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-postmarketOS" \
 		CONFIG_RTW_SDIO_PM_KEEP_POWER=n \
 		CONFIG_RTW_DEBUG=n \
@@ -59,16 +62,22 @@ build() {
 }
 
 package() {
-	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
-	make modules_install dtbs_install \
+	mkdir -p "$pkgdir"/boot
+	make zinstall modules_install dtbs_install \
+		LLVM=1 \
 		O="$_outdir" ARCH="$_carch" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 	install -Dm644 "$_rtl8189fs_dir"/8189fs.ko -t "$pkgdir/lib/modules/$(make -s O="$_outdir" ARCH="$_carch" kernelrelease)/kernel/drivers/net/wireless"
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 }
 
 sha512sums="
-9f69a012b094fda122f8a209b89ea1c0cf7feae85eaf21312c36e292c30c2eaabba9ec81a5bce3a30fde0d43d57aa7c1fd3a6d7b2d210dca2e4826ef706ce424  linux-postmarketos-imx-ereader-09bacc073f275377698322258cf9e2cd19aecc97.tar.gz
-43b9b4969cb7740893ecf3c6aeb0e63ad576808df143ed94f866b44431fd7f3f262d63905e372ad367129e7e9b6a3d4e468cfe33fb803e667304b11bf6328fe1  rtl8189ES_linux-94cc959d56c1425fbca4f6e49e949cf58ec5dc8d.tar.gz
-0bbdeb74bbee2893e94458604afefac69c7162e993cc21b7abb9c7952b1697ade631f248cf72927fed3557cd651e9379762c11fd48c8927d08c4e1159589e6c4  config-postmarketos-imx-ereader.armv7
+1810907d1882fd108f1832281e94db3947285d44239daf5e8a2a9c1ae7ed4c619b17dbe5b1a15c9a5d547089d3d5585961938451ccf3491d359dc765617e56a2  linux-postmarketos-imx-ereader-ccddaba42e0abafbce84cc2243cbe0c98d400944.tar.gz
+5838054a43d9472133b3eb38c6bdb0480339156cefa80b2a3b605b27e8e45d07eb7ae06d51d3646befa4527675c8cf1f023817a0943ec2e4124ddb9fe3b67134  rtl8189ES_linux-876e627a5b6a8021700391b4249a4a31edfebe5c.tar.gz
+6c6e7b8361501ae1d4fedef04136e0c0476d4f0671c8428c62aa170bcde3390dd5f78b76cf6626380483f765279910e027e69cc67b19613ddf23a9d781c5fa77  0001-fix-tasklet-struct-function-pointer.ppatch
+a2023bcdc201fef1a30a70a4b47c85b37bf7cc163d63e8bde4bf538876618c9b15692b1119dd093267e0fdcdc80efd5edb2d7d85f91144b23c722cdc2227b991  config-postmarketos-imx-ereader.armv7
 "
