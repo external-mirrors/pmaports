@@ -5,7 +5,7 @@
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
 pkgver=6.18.5
-pkgrel=0
+pkgrel=2
 pkgdesc="Mainline Kernel fork for SDM670 devices"
 arch="aarch64"
 _carch="arm64"
@@ -34,6 +34,7 @@ _tag="sdm670-v$pkgver"
 # Source
 source="
 	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -70,5 +71,6 @@ package() {
 
 sha512sums="
 e002e31904e0e9885e40d2054f297f8063e8720c663444019d333e64a6819a0dd3ecc48a9ab2891b420cbee702cfb0583e6ad51de1376be861989a6f15f37f30  linux-sdm670-v6.18.5.tar.gz
+c30da4fb13415b0c30072cfb0c984454aaafbc90124ea399dce65f35baee0acc30f52f381ca44ebbddd028e4ff1b32b2c65eab2af8264309f0b2085bfb1ada5b  0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
 e5a6378044c99373da2331ff6918317ed36b8a5df4675b0b10ff25814bb98fc05ccdec3a12e3dbc6c5f6324446af5e130793186e0a34894134d5fdcbd5b55496  config-postmarketos-qcom-sdm670.aarch64
 "
