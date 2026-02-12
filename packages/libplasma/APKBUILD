@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=libplasma
-pkgver=99999_git20260206
+pkgver=99999_git20260209
 pkgrel=0
-_commit="8c49601173497356a07951811b9046be79ba10fb"
+_commit="2034275a7aafb1360c4a290e139c60a530afe777"
 pkgdesc="Plasma library and runtime components based upon KDE Frameworks and Qt"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -50,7 +50,7 @@ checkdepends="
 	xwayland-run
 	"
 _repo_url="https://invent.kde.org/plasma/libplasma.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-07/libplasma-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-10/libplasma-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="!check" # 8 out of 13 tests fail
 
@@ -76,5 +76,5 @@ package() {
 }
 
 sha512sums="
-f7431222bdc905ee9ef902cd0f84f9a7f46ff95761e1b0a7475778ca40d937dd7961272c3ce067ece87316b3c125766e1d5bac0968a9d102da4f2630bea3bdb0  libplasma-8c49601173497356a07951811b9046be79ba10fb.tar.xz
+d04771d6e398062cddb676f8ac48d1276dcccdb06b0a3dee54cdd6e1a10552bdbeaf51a2f10691fe6ba17657de73568c9ae5d844db9a72b778026981931c005f  libplasma-2034275a7aafb1360c4a290e139c60a530afe777.tar.xz
 "

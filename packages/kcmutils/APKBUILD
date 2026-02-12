@@ -2,14 +2,15 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kcmutils
-pkgver=99999_git20260206
+pkgver=99999_git20260210
 pkgrel=0
-_commit="f5c369905e83e8b963cfcdfd326446e556e64968"
+_commit="44a98944db95702c3b7bc708d18d04aefc8e0e16"
 pkgdesc="Utilities for interacting with KCModules"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://community.kde.org/Frameworks"
 license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends="kirigami"
 depends_dev="
 	kconfigwidgets-dev
 	kcoreaddons-dev
@@ -24,13 +25,14 @@ makedepends="$depends_dev
 	doxygen
 	extra-cmake-modules
 	kde-qdoc-common
+	kirigami
 	qt6-qtdeclarative-private-dev
 	qt6-qttools-dev
 	samurai
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcmutils.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-07/kcmutils-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-10/kcmutils-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -60,5 +62,5 @@ package() {
 }
 
 sha512sums="
-0b69d9de844870316036e8929afee099101500491f049f60d1593dfd5149d416a655d7c251972ffbdbe86ae04c2c737a6575f22ca70d32555306b0f2d2e83e20  kcmutils-f5c369905e83e8b963cfcdfd326446e556e64968.tar.xz
+d1fd9cdb6b9225a30de9a917a73aed4213eb8932809b06399aeadbf0a2eb0327d2eb28886bcfbd86ad014ee0e9658b25354ae4d2e20dfa4647cafe208ca4ad0c  kcmutils-44a98944db95702c3b7bc708d18d04aefc8e0e16.tar.xz
 "
