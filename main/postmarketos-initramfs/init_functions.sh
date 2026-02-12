@@ -373,7 +373,7 @@ mount_subpartitions() {
 		    # Skip whole disks - only check partitions and logical device-mapper devices for subpartitions
 			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || [ -d "/sys/class/block/$(basename "$partition")/dm" ] || continue
 			local part_count
-			part_count="$(parted -s "$partition" print 2>/dev/null | grep -c '^ [0-9]')"
+			part_count="$(fdisk -l "$partition" 2>/dev/null | grep -c '^ *[0-9]')"
 			# It's probably the right "disk" if it has 2 partitions on it
 			if [ "$part_count" -eq 2 ]; then
 				echo "Mount subpartitions of $partition"
