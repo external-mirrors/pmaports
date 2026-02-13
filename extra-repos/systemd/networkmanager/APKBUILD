@@ -2,7 +2,7 @@
 # integrates with logind for sleepmonitor and sessionmonitor.
 maintainer="Jane Rachinger <jane400+pmaports@postmarketos.org>"
 pkgname=networkmanager
-_pkgver=1.54.3
+_pkgver=1.56.0
 pkgver=9999$_pkgver
 pkgrel=0
 pkgdesc="Network Management daemon"
@@ -61,12 +61,14 @@ subpackages="
 	$pkgname-dbg
 	libnm
 	$pkgname-dev
+	$pkgname-doc
 	$pkgname-lang
 	$pkgname-systemd
 	$pkgname-adsl
 	$pkgname-bluetooth
 	$pkgname-ovs
 	$pkgname-ppp
+	$pkgname-udev
 	$pkgname-wwan
 	$pkgname-wifi
 	$pkgname-cli
@@ -240,7 +242,7 @@ _default_plugin() {
 }
 
 sha512sums="
-c40bdf3bf4ec8a17ec22d5c08d4035d3005d7c8c62b0f82649043834a7f7894f4e342c1e93957a86117dafbe6086d22eea3943180bee4774d3a54d5df4dbeeb5  networkmanager-1.54.3.tar.gz
+38649318e96f645232da31aca00c63236af0bd5d90ec0172be34886ed988afb646f86b3f629e0651f46e8233041afa0472a3a79df6e7a479eb98f43a52fa6dd0  networkmanager-1.56.0.tar.gz
 0f79016bf717dea43830962f524deae8d1cedc274376e40bd912ebe63208c5b1c3b7a5aa14379da19020c587dbd5588df2f0066ca1540070a226983a43e4159b  networkmanager.conf
 9820ed2ead0af689644842de57657bb10330a1eaff0e85b21ae9913f55e399e47d8b41b0a12956f30de80272b4424c6e55f33acbc88e156879003a260bf576f6  networkmanager.rules
 528456c7b954e984781e8e038e125c9e0654adba0499512a767142d106909b5be3c32b14328eed505a3c313fb05a86bde0fb0985009ccc7c5ff3a719ad76c3e0  0001-hack-wifi-Disable-WPA-PSK-SHA256-for-brcmfmac-in-AP-.patch
