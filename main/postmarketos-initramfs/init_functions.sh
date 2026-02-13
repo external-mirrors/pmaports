@@ -372,9 +372,21 @@ mount_subpartitions() {
 		for partition in $partitions; do
 		    # Skip whole disks - only check partitions and logical device-mapper devices for subpartitions
 			[ -e "/sys/class/block/$(basename "$partition")/partition" ] || [ -d "/sys/class/block/$(basename "$partition")/dm" ] || continue
+			# Count subpartitions and only attempt to probe deeper if there are an expected
+			# number of them present on the partition. This prevents us from calling losetup
+			# (and then cleanup) on every single partition on the device
+			#
+			# Subpartitions, if there are any, are counted with fdisk because there doesn't
+			# seem to be a better way to do this without adding more dependencies to the 1st
+			# stage initramfs. fdisk's output differs if it's reading a GPT or MBR partition
+			# table, so this regex needs to account for both, e.g.:
+			#  GPT:
+			#   1     2048   499711  243M primary
+			#  MBR:
+			# /dev/mmcblk0p62p1 *  4,4,1   979,210,2   2048  499711   97664  243M 83 Linux
 			local part_count
-			part_count="$(fdisk -l "$partition" 2>/dev/null | grep -c '^ *[0-9]')"
-			# It's probably the right "disk" if it has 2 partitions on it
+			part_count="$(fdisk -l "$partition" 2>/dev/null | grep -cE '^ +[0-9]|^'"$partition")"
+			# It's probably the right "disk" if it has 2 partitions on it.
 			if [ "$part_count" -eq 2 ]; then
 				echo "Mount subpartitions of $partition"
 				SUBPARTITION_DEV="$partition"
