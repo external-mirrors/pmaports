@@ -2,7 +2,7 @@
 maintainer="bluebunny <kalorin.bok084@passinbox.com>"
 pkgname=device-xiaomi-pipa
 pkgdesc="Xiaomi Pad 6"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,7 +11,6 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	hexagonrpcd
-	linux-postmarketos-qcom-sm8250
 	make-dynpart-mappings
 	mkbootimg
 	postmarketos-base
@@ -19,6 +18,12 @@ depends="
 	soc-qcom-qbootctl
 "
 makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-kernel-device:kernel_device
+	$pkgname-kernel-soc:kernel_soc
+	$pkgname-kernel-soc-csot:kernel_soc_csot
+	$pkgname-kernel-soc-tianma:kernel_soc_tianma
+"
 _pmb_recommends="
 	firmware-qcom-adreno-a650
 	firmware-xiaomi-pipa-adreno
@@ -66,11 +71,35 @@ package() {
 		"$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
 }
 
+kernel_device() {
+	pkgdesc="Device-specific kernel (recommended, most features)"
+	depends="linux-xiaomi-pipa"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_soc() {
+	pkgdesc="SoC kernel (experimental, not for daily use)"
+	depends="linux-postmarketos-qcom-sm8250"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_soc_csot() {
+	pkgdesc="SoC kernel with csot panel (experimental, not for daily use)"
+	depends="linux-postmarketos-qcom-sm8250"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_soc_tianma() {
+	pkgdesc="SoC kernel with tianma panel (experimental, not for daily use)"
+	depends="linux-postmarketos-qcom-sm8250"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
 sha512sums="
 d0e8f2e378130130ac72703aed957f7638e2dd75acf4aa421e1b4592c6cb6d296b652db0d9c242be4e56326760ce18d28c1e36ae553d0b7a7f91e12ab0353f22  81-libssc-xiaomi-pipa.rules
 1c8cef1f2de5fd7e734796dfffc684255b047bdb07a0965676a4d8d512aee4963ce91aeabf8627ce3aea72aeade776a3529f205badd2ed27ba072cadc38f9918  HiFi.conf
-683ece5c25bfe4c690e5c26823623bc164274f236740d2bd42914a5058582359803bae654156054e7519cd76e5c5c1155b074aa04ab38978e377995c926a6828  deviceinfo
+14bcd89c2294c2ddf2371af01dc97437a1d3f231f92c011c8ca78c1f8c0cfb3d991a87bcff3153565e87df1bc14214405cebcd56e27c33d9ceacbc5d5467d6b5  deviceinfo
 7f9d9760791639fdd5606070d6a3bd9a5e2d8fdadff0af380b847c7eaf28131000f4909b99e866eafb77272a4fe20ed0c35d5a4f64bb7d16e2dbf82612aa8b22  hexagonrpcd-sdsp.conf
-5f82a7f3cd485a947700a8fa02a360679536ddf3c577b13e381810fcb8ebf146925dfac931bd53b9e784ce23158d1da96aa8579a3e6221b4c9bcc94e4818476c  modules-initfs
+514de5c7686457c665e4e8218a196882e7d69b44287474494c3d17d5e60e14a29af5e992d966728bef2d46a771e07f34a892c9e372c651ba340b1b6bbae341f4  modules-initfs
 007908c49db107dd8289a96049ed4d77a55c7846e21f76fa7f97306df953ccdec7d821cbc7732a3ff7c532285175ebf0d6a4e3f224740ac002b23f3608cbf76d  pipa.conf
 "
