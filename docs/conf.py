@@ -28,8 +28,12 @@ html_title = "postmarketOS Packaging"
 
 
 def run_dint_doc(app):
-    with Path(__file__).parent.joinpath("deviceinfo-reference.md").open("w") as f:
-        subprocess.run(["dint", "doc"], stdout=f, check=True)
+    docs_dir = Path(__file__).parent
+
+    with docs_dir.joinpath("deviceinfo-reference.md").open("w") as f:
+        schema_path = docs_dir.parent / "deviceinfo_schema.toml"
+
+        subprocess.run(["dint", "doc"], stdout=f, check=True, env={"DINT_SCHEMA_PATH": schema_path})
 
 
 def setup(app):
