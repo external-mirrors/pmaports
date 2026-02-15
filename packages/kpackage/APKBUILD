@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kpackage
-pkgver=99999_git20260206
+pkgver=99999_git20260210
 pkgrel=0
-_commit="f8451e553b0d6b3f914e9aa0d9288894b2956b79"
+_commit="fe8f60b64e0b0d72a842bc709cd14c1348060571"
 pkgdesc="Framework that lets applications manage user installable packages of non-binary assets"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kpackage.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-07/kpackage-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-12/kpackage-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="!check" # Fails due to requiring installed Plasma, which causes a circular dependency
 
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-75f2608942be5e3a0aee660ad88eccf95a14d4bd2d8cd5e82bef257831699de7288428970a3e60ac087d6a8bbc4082d6f929339bc2518e8187939cef39bdd3c9  kpackage-f8451e553b0d6b3f914e9aa0d9288894b2956b79.tar.xz
+13a470c1346183683393d81702fe5d8571f49ab1414bcf1f5ff17e6e05368beb97698bb8b0e9ef6f67f57b5bda00bde70cd51cc23c187671cf648afd5b82442b  kpackage-fe8f60b64e0b0d72a842bc709cd14c1348060571.tar.xz
 "

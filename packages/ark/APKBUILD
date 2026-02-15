@@ -6,7 +6,7 @@
 pkgname=ark
 pkgver=99999_git20260210
 pkgrel=0
-_commit="df5d57bbc2aa02981b3ef9e600dd29c7c2833fa8"
+_commit="049dfc1151c223a0d1586ba90d40614132bc8219"
 pkgdesc="Graphical file compression/decompression utility with support for multiple formats"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,7 +44,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/ark.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-10/ark-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-12/ark-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 # secfixes:
@@ -78,5 +78,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-d5b57206aafb895c6164285297673479bee83622c61e8f7658ab016241c42ef4a5d0292319961e85c01d8d96421391a04021cb1ebb58573883b9f5da3d3c3fa5  ark-df5d57bbc2aa02981b3ef9e600dd29c7c2833fa8.tar.xz
+fbc26327d4193d4b2dbcc439b654a5b2cc19f262674959606f804151c1ebe6e757cc3b7e15f5c5d5cc49beb4f9560563081ec356cf9793137553be9db5e6021c  ark-049dfc1151c223a0d1586ba90d40614132bc8219.tar.xz
 "
