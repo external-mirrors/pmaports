@@ -69,3 +69,14 @@ review. Please do **not** regenerate the kernel configurations; your change
 will be included as part of the next kernel upgrade. Rebuilds of the kernel
 packages take a long time and they get updated regularly, so you'll only need
 to wait a few days until your change makes it into the released binaries.
+
+## Policy for patches
+
+The following types of patches can be temporarily added to the generic kernels:
+
+* Backporting of patches that are in `linux-next` to our `-mainline` and
+  `-stable` kernels (not to `-lts`).
+* Reverting patches that broke something (while also following up upstream to
+  get the patch fixed or reverted).
+
+Out-of-tree patches are not acceptable for the generic kernels.
