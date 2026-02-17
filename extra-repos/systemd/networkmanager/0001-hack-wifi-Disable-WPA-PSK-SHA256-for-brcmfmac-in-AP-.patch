@@ -1,4 +1,4 @@
-From 5c56eb74781b6aa7b5f4b0dbc50da414137d0074 Mon Sep 17 00:00:00 2001
+From 058e19a3f5025501454a0237ff926b67cbcbef68 Mon Sep 17 00:00:00 2001
 From: Jane Rachinger <jane400@postmarketos.org>
 Date: Wed, 16 Apr 2025 14:21:09 +0200
 Subject: [PATCH] hack: wifi: Disable WPA-PSK-SHA256 for brcmfmac in AP mode
@@ -8,17 +8,17 @@ but doesn't affect other drivers.
 
 https://source.puri.sm/pureos/packages/network-manager/-/blob/pureos/latest/debian/patches/pureos/wifi-Disable-WPA-PSK-SHA256-in-AP-mode.patch
 ---
- src/core/devices/wifi/nm-device-wifi.c         |  4 ++++
+ src/core/devices/wifi/nm-device-wifi.c         |  3 +++
  src/core/supplicant/nm-supplicant-config.c     | 18 +++++++++++++++++-
  src/core/supplicant/nm-supplicant-config.h     |  1 +
  .../supplicant/tests/test-supplicant-config.c  |  1 +
- 4 files changed, 23 insertions(+), 1 deletion(-)
+ 4 files changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/src/core/devices/wifi/nm-device-wifi.c b/src/core/devices/wifi/nm-device-wifi.c
-index 06eee14245..ec1bf8332f 100644
+index 2536622f1c..ca2f099e2a 100644
 --- a/src/core/devices/wifi/nm-device-wifi.c
 +++ b/src/core/devices/wifi/nm-device-wifi.c
-@@ -2929,12 +2929,15 @@ build_supplicant_config(NMDeviceWifi         *self,
+@@ -2929,12 +2929,14 @@ build_supplicant_config(NMDeviceWifi         *self,
      NMSettingWirelessSecurityPmf  pmf;
      NMSettingWirelessSecurityFils fils;
      NMTernary                     ap_isolation;
@@ -30,31 +30,30 @@ index 06eee14245..ec1bf8332f 100644
      g_return_val_if_fail(s_wireless != NULL, NULL);
  
 +    quirk_is_brcmfmac = nm_streq(nm_device_get_driver(NM_DEVICE(self)), "brcmfmac");
-+
-     config = nm_supplicant_config_new(nm_supplicant_interface_get_capabilities(priv->sup_iface));
+     config = nm_supplicant_config_new(nm_supplicant_interface_get_capabilities(priv->sup_iface),
+                                       nm_utils_get_connection_first_permissions_user(connection));
  
-     /* Warn if AP mode may not be supported */
-@@ -3011,6 +3014,7 @@ build_supplicant_config(NMDeviceWifi         *self,
-                 mtu,
+@@ -3013,6 +3015,7 @@ build_supplicant_config(NMDeviceWifi         *self,
                  pmf,
                  fils,
-+		quirk_is_brcmfmac,
+                 nm_device_get_private_files(NM_DEVICE(self)),
++                quirk_is_brcmfmac,
                  error)) {
              g_prefix_error(error, "802-11-wireless-security: ");
              goto error;
 diff --git a/src/core/supplicant/nm-supplicant-config.c b/src/core/supplicant/nm-supplicant-config.c
-index 951f153653..cb1a8a9eb8 100644
+index 56cc832b57..5d89e1e478 100644
 --- a/src/core/supplicant/nm-supplicant-config.c
 +++ b/src/core/supplicant/nm-supplicant-config.c
-@@ -930,6 +930,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
-                                                    guint32                       mtu,
+@@ -934,6 +934,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
                                                     NMSettingWirelessSecurityPmf  pmf,
                                                     NMSettingWirelessSecurityFils fils,
-+						   gboolean                      quirk_is_brcmfmac,
+                                                    GHashTable                   *files,
++                                                   gboolean                      quirk_is_brcmfmac,
                                                     GError                      **error)
  {
      NMSupplicantConfigPrivate    *priv          = NM_SUPPLICANT_CONFIG_GET_PRIVATE(self);
-@@ -938,6 +939,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
+@@ -942,6 +943,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
      const char                   *psk;
      gboolean                      set_pmf, wps_disabled;
      gboolean                      is_ap;
@@ -62,7 +61,7 @@ index 951f153653..cb1a8a9eb8 100644
  
      g_return_val_if_fail(NM_IS_SUPPLICANT_CONFIG(self), FALSE);
      g_return_val_if_fail(setting != NULL, FALSE);
-@@ -951,6 +953,20 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
+@@ -955,6 +957,20 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
       */
      is_ap = nm_streq0(mode, NM_SETTING_WIRELESS_MODE_AP);
  
@@ -83,7 +82,7 @@ index 951f153653..cb1a8a9eb8 100644
      /* Check if we actually support FILS */
      if (!_get_capability(priv, NM_SUPPL_CAP_TYPE_FILS)) {
          if (fils == NM_SETTING_WIRELESS_SECURITY_FILS_REQUIRED) {
-@@ -980,7 +996,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
+@@ -984,7 +1000,7 @@ nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
      } else if (nm_streq(key_mgmt, "wpa-psk")) {
          if (pmf != NM_SETTING_WIRELESS_SECURITY_PMF_REQUIRED)
              g_string_append(key_mgmt_conf, "WPA-PSK");
@@ -93,29 +92,29 @@ index 951f153653..cb1a8a9eb8 100644
          if (!is_ap && _get_capability(priv, NM_SUPPL_CAP_TYPE_FT))
              g_string_append(key_mgmt_conf, " FT-PSK");
 diff --git a/src/core/supplicant/nm-supplicant-config.h b/src/core/supplicant/nm-supplicant-config.h
-index c52b756e78..1b441799f3 100644
+index 96460b86c7..2cb393bed3 100644
 --- a/src/core/supplicant/nm-supplicant-config.h
 +++ b/src/core/supplicant/nm-supplicant-config.h
-@@ -57,6 +57,7 @@ gboolean nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
-                                                             guint32         mtu,
+@@ -58,6 +58,7 @@ gboolean nm_supplicant_config_add_setting_wireless_security(NMSupplicantConfig
                                                              NMSettingWirelessSecurityPmf  pmf,
                                                              NMSettingWirelessSecurityFils fils,
-+							    gboolean                      quirk_is_brcmfmac,
+                                                             GHashTable                   *files,
++                                                            gboolean                      quirk_is_brcmfmac,
                                                              GError                      **error);
  
  gboolean nm_supplicant_config_add_no_security(NMSupplicantConfig *self, GError **error);
 diff --git a/src/core/supplicant/tests/test-supplicant-config.c b/src/core/supplicant/tests/test-supplicant-config.c
-index 1ca5b26e56..812e4d6e9d 100644
+index 416fe0054f..d934ba1b58 100644
 --- a/src/core/supplicant/tests/test-supplicant-config.c
 +++ b/src/core/supplicant/tests/test-supplicant-config.c
-@@ -120,6 +120,7 @@ build_supplicant_config(NMConnection  *connection,
-                                                                mtu,
+@@ -122,6 +122,7 @@ build_supplicant_config(NMConnection  *connection,
                                                                 pmf,
                                                                 fils,
-+							       FALSE,
+                                                                NULL,
++                                                               FALSE,
                                                                 &error);
      } else {
          success = nm_supplicant_config_add_no_security(config, &error);
 -- 
-2.49.0
+2.53.0
 
