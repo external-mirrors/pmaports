@@ -1,12 +1,13 @@
 # Forked from Alpine to add systemd!
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=plasma-workspace
-_pkgver=6.5.5
+_pkgver=6.6.0
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=0
 pkgdesc="KDE Plasma Workspace"
 # armhf blocked by qt6-qtdeclarative
-arch="all !armhf"
+# riscv64: slow Alpine builders
+arch="all !armhf !riscv64"
 url="https://kde.org/plasma-desktop/"
 license="(GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-or-later AND GPL-2.0-or-later AND MIT AND LGPL-2.1-only AND LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only) AND LGPL-2.0-only"
 depends="
@@ -208,5 +209,5 @@ x11() {
 }
 
 sha512sums="
-469041af2975f742748b2ea812e29adcbbe2f133ba4f3821be3def2bd784856fb560219cc6d42949ea9fb481799e7bdf46c07c0e65058b8d027b295c5e4d474a  plasma-workspace-6.5.5.tar.xz
+0c0523b787f9f14270b7f73d5315f181c94b484107673ec5f796b9aff4bb1e7b116785666762227facc8fa722d39b55ce5b7d8223f998fc83f1284af0da334c1  plasma-workspace-6.6.0.tar.xz
 "
