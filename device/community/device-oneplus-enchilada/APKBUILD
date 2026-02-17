@@ -3,7 +3,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
 pkgver=24
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -56,6 +56,8 @@ package() {
 		"$pkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+	install -Dm644 -t "$pkgdir"/usr/lib/systemd/system-preset \
+		"$srcdir"/80-device-oneplus-enchilada.preset
 }
 
 openrc() {
@@ -69,12 +71,6 @@ pmtest() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 
 	mkdir -p "$subpkgdir"
-}
-
-systemd() {
-	install -Dm644 -t "$subpkgdir"/usr/lib/systemd/system-preset \
-		"$srcdir"/80-device-oneplus-enchilada.preset
-	default_systemd
 }
 
 sha512sums="

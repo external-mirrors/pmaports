@@ -1,7 +1,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=woa-firmware-yoinker
 pkgver=0.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Automatically pull firmware from Windows on X1 Elite devices"
 url="https://github.com/CadmiumLinux/woa-firmware-yoinker"
 arch="aarch64"
@@ -16,16 +16,8 @@ package() {
 	install -Dm755 yoink-firmware "$pkgdir"/usr/libexec/yoink-firmware
 	install -Dm755 yoink-firmware.initd "$pkgdir"/etc/init.d/yoink-firmware
 	install -Dm644 yoink-firmware.service "$pkgdir"/usr/lib/systemd/system/yoink-firmware.service
-}
 
-systemd() {
-	# FIXME: once systemd support is merged we can rely on abuild to do
-	# this automatically
 	# FIXME: add a preset for yoink-firmware.service
-	depends="systemd $pkgname"
-	install_if="$pkgname systemd"
-
-	amove usr/lib/systemd/system/yoink-firmware.service
 }
 
 sha512sums="

@@ -2,7 +2,7 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=postmarketos-ui-plasma-mobile
 pkgver=6
-pkgrel=6
+pkgrel=7
 pkgdesc="(Wayland) Mobile variant of KDE Plasma"
 url="https://wiki.postmarketos.org/wiki/Plasma_Mobile"
 # armhf blocked by pmaports#75
@@ -55,6 +55,8 @@ package() {
 
 	install -Dm644 "$srcdir"/org.kde.plasma.mobile.homescreen.folio.js \
 		"$pkgdir"/usr/share/plasma/look-and-feel/org.kde.breeze.mobile/contents/plasmoidsetupscripts/org.kde.plasma.mobile.homescreen.folio.js
+	install -Dm755 "$srcdir"/system-generators-plasma-mobile-user-override \
+		-t "$pkgdir"/usr/lib/systemd/system-generators
 }
 
 extras() {
@@ -88,13 +90,6 @@ openrc() {
 	"
 
 	mkdir -p "$subpkgdir"
-}
-
-systemd() {
-	default_systemd
-
-	install -Dm755 "$srcdir"/system-generators-plasma-mobile-user-override \
-		-t "$subpkgdir"/usr/lib/systemd/system-generators
 }
 
 sha512sums="
