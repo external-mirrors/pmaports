@@ -1,6 +1,6 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=postmarketos-test
-pkgver=1.1.0
+pkgver=1.2.0
 pkgrel=0
 pkgdesc="Common test utilities for postmarketOS"
 url="https://postmarketos.org"
@@ -9,7 +9,7 @@ license="GPL2"
 depends="devicepkg-utils"
 source="
 	30-unl0kr-test.sh
-	90-test-suspend.sh
+	90-suspend-test.sh
 "
 options="!check"
 
@@ -32,10 +32,10 @@ _test() {
 	# pmtest subpackage
 	_testname=${subpkgname#postmarketos-test-}
 
-	_script="$srcdir/90-test-$_testname.sh"
+	_script="$srcdir"/*"$_testname"-test.sh
 
-	if [ -f "$_script" ]; then
-		install -Dm755 "$_script" \
+	if [ -f $_script ]; then
+		install -Dm755 $_script \
 			-t "$subpkgdir"/usr/libexec/pmos-tests-initramfs/
 	fi
 }
@@ -49,9 +49,7 @@ shell() {
 
 unl0kr() {
 	depends="unl0kr"
-
-	install -Dm755 "$srcdir"/30-unl0kr-test.sh \
-		-t "$subpkgdir"/usr/libexec/pmos-tests-initramfs/
+	_test
 }
 sha512sums="
 407180b49c1a05f12bd6ee6e59dca0a6e74fe7b01f195087dcf2865598c47827d0bb569afdba55defa2f9a16437230fa62aa64f35111508b906bcbf9537acba4  30-unl0kr-test.sh
