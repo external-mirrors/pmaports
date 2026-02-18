@@ -1,6 +1,6 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=postmarketos-test
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=0
 pkgdesc="Common test utilities for postmarketOS"
 url="https://postmarketos.org"
@@ -9,7 +9,7 @@ license="GPL2"
 depends="devicepkg-utils"
 source="
 	30-unl0kr-test.sh
-	initramfs-test-suspend.sh
+	90-test-suspend.sh
 "
 options="!check"
 
@@ -32,15 +32,12 @@ _test() {
 	# pmtest subpackage
 	_testname=${subpkgname#postmarketos-test-}
 
-	# Install the test script for both initramfs and rootfs
-	for _type in initramfs rootfs; do
-		_script="$srcdir/$_type-test-$_testname.sh"
+	_script="$srcdir/90-test-$_testname.sh"
 
-		if [ -f "$_script" ]; then
-			install -Dm755 "$_script" \
-				"$subpkgdir"/usr/libexec/pmos-tests-"$_type"/90-"$_testname".sh
-		fi
-	done
+	if [ -f "$_script" ]; then
+		install -Dm755 "$_script" \
+			-t "$subpkgdir"/usr/libexec/pmos-tests-initramfs/
+	fi
 }
 
 # Installs a "test" which just runs a shell on the console for debugging
@@ -56,8 +53,7 @@ unl0kr() {
 	install -Dm755 "$srcdir"/30-unl0kr-test.sh \
 		-t "$subpkgdir"/usr/libexec/pmos-tests-initramfs/
 }
-
 sha512sums="
 407180b49c1a05f12bd6ee6e59dca0a6e74fe7b01f195087dcf2865598c47827d0bb569afdba55defa2f9a16437230fa62aa64f35111508b906bcbf9537acba4  30-unl0kr-test.sh
-73d75e067f6bb99dab219e0154514841462dc171644756dcdfcb2daa039bd3052d61f35996608499fb0958042cc817ba0ac8196410c68e9133c2670d4cf36529  initramfs-test-suspend.sh
+73d75e067f6bb99dab219e0154514841462dc171644756dcdfcb2daa039bd3052d61f35996608499fb0958042cc817ba0ac8196410c68e9133c2670d4cf36529  90-test-suspend.sh
 "
