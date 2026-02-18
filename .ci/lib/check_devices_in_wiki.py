@@ -108,7 +108,7 @@ def main() -> int:
     if args.all:
         devices = get_devices()
     else:
-        devices = common.get_changed_devices()
+        devices = common.get_changed_devices(skip_archived=True)
         # remove 'device-' prefix
         devices = [d[7:] for d in devices]
         devices = [d.removesuffix("-downstream") for d in devices]

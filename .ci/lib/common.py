@@ -175,9 +175,9 @@ def get_changed_kernels(skip_archived: bool = False):
             ret += [pkgname]
     return ret
 
-def get_changed_devices():
+def get_changed_devices(skip_archived: bool = False):
     ret = []
-    for pkgname in get_changed_packages():
+    for pkgname in get_changed_packages(skip_archived):
         if pkgname.startswith("device-"):
             ret += [pkgname]
     return ret
