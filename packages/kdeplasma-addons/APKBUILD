@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kdeplasma-addons
-pkgver=99999_git20260215
+pkgver=99999_git20260217
 pkgrel=0
-_commit="0106034a3c3229f486cd0e20d04c46fe647c47e0"
+_commit="4341a77e2577c49cac52fa81145942e381bd5f41"
 pkgdesc="All kind of addons to improve your Plasma experience"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -49,7 +49,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kdeplasma-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-16/kdeplasma-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-17/kdeplasma-addons-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -74,5 +74,5 @@ package() {
 }
 
 sha512sums="
-5ea96e2e9e89f125dd036894311b17121ca04f407d9a07320db064bd7e834217743d39797ce3d8fab44220356796221dda9c3d1cc5a9985e1cec1a49a91b6654  kdeplasma-addons-0106034a3c3229f486cd0e20d04c46fe647c47e0.tar.xz
+83169c29832cb7f60ca22710c1ac92df84b57167920d575537c0b7c91bab1a33c35504c15361b3ef3d0883a7179cfc0cd1945811378f4604ebf35d4667554b17  kdeplasma-addons-4341a77e2577c49cac52fa81145942e381bd5f41.tar.xz
 "
