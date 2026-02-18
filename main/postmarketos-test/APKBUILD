@@ -7,6 +7,11 @@ url="https://postmarketos.org"
 arch="noarch"
 license="GPL2"
 depends="devicepkg-utils"
+# The _test split function will take files and prepare them for running
+# in the initramfs test for postmarketos-mkinitfs-hook-ci. The function
+# will match the suffix of the subpackage name and:
+# * sources with -files.files as mkinitfs include files
+# * sources with -test.sh as files to be executed in initramfs tests
 source="
 	00-bootrr-files.files
 	00-bootrr-test.sh
