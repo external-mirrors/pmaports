@@ -8,7 +8,6 @@ android_multiboot = "Android multiboot"
 usb = "USB"
 cros = "cgpt/Depthcharge"
 of = "Open Firmware"
-device = "Device"
 splash = "Splash"
 weston = "Weston"
 
@@ -489,29 +488,29 @@ fate = "obsolete"
 epitaph = "Removed as it required patching Weston, kernels should instead be patched to report the right framebuffer mode."
 # TODO: Add support for generating a list of helpful links along with explanations
 
-## Device
+## Device metadata
 
-[variable.device.nonfree]
+[variable.metadata.nonfree]
 description = "Components of a device that only run with closed-source firmware"
 fate = "obsolete"
 epitaph = "No devices ever used it."
 
-[variable.device.dev_keyboard]
+[variable.metadata.dev_keyboard]
 description = "Path to hardware keyboard"
 fate = "obsolete"
 epitaph = "Originally intended to point osk-sdl to the hardware keyboard, but was never used and osk-sdl has now been replaced by unl0kr."
 
-[variable.device.keyboard]
+[variable.metadata.keyboard]
 description = "Whether the device has a hardware keyboard"
 fate = "obsolete"
 epitaph = "Programs should automatically detect if the device currently has a keyboard or not (often it can be hotplugged anyway)."
 
-[variable.device.modules_initfs]
+[variable.metadata.modules_initfs]
 description = "List of kernel modules to include in the initramfs."
 fate = "obsolete"
 epitaph = "Replaced by the modules-initfs file in device packages"
 
-[variable.device.mesa_driver]
+[variable.metadata.mesa_driver]
 description = "Name of the Mesa driver used by a given device."
 fate = "obsolete"
 epitaph = "This was used by osk-sdl, which has been replaced by unl0kr."
