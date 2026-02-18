@@ -52,11 +52,13 @@ allow_device_variant_suffix = true
 [variable.metadata.append_dtb]
 description = "Set to `true` if the dtb should be appended to the Linux kernel image, if set to `false` the dtb will be copied to the /boot partition instead"
 datatype = "boolean"
+default_value = false
 allow_device_variant_suffix = true
 
 [variable.metadata.external_storage]
 description = "Does the device have an SD card slot or other external storage medium?"
 datatype = "boolean"
+default_value = false
 
 [variable.metadata.flash_method]
 description = "Method used to flash the device"
@@ -80,6 +82,7 @@ Allow the internal storage to be repartitioned by postmarketOS in the on-device 
 **This is dangerous and should not be enabled for Android devices**! For Android devices, we never change the partition table, because the bootloader expects the boot.img to be at a specific partition and changing the partition scheme would likely result in the original OS not being usable anymore.
 """
 datatype = "boolean"
+default_value = false
 
 [variable.metadata.dev_touchscreen]
 description = "Path to the touchscreen device (only necessary if not automatically detected)"
@@ -121,10 +124,12 @@ This value is passed directly to the tmpfs size= param, e.g., 50% and 2g. See `m
 [variable.metadata.disable_dhcpd]
 description = "Do not set the static ip to the network interface and do not run the DHCP daemon on it. This makes sense for devices with an ethernet port, like the Raspberry Pi"
 datatype = "boolean"
+default_value = false
 
 [variable.metadata.no_framebuffer]
 description = "Do not wait up to 10 seconds until a framebuffer device shows up and do not try to configure it"
 datatype = "boolean"
+default_value = false
 
 [variable.metadata.initfs_compression]
 description = "Format and compression level to use when compressing the initramfs. The format for this is: FORMAT:LEVEL, for example zstd:fast. Supported formats are zstd, lz4, lzma, gzip, none. Supported compression levels are: default, fast, best. This option does not impact the initramfs-extra archive, it is generated without any compression"
@@ -207,6 +212,7 @@ default_value = "false"
 [variable.flash.bootimg_qcdt]
 description = "Append dtb file to boot.img"
 datatype = "boolean"
+default_value = false
 
 [variable.flash.bootimg_qcdt_type]
 description = "Define the format of `dt.img`"
