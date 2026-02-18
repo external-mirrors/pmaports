@@ -365,6 +365,10 @@ mount_subpartitions() {
 	attempt_start=$(get_uptime_seconds)
 	wait_seconds=10
 	echo "Trying to mount subpartitions for $wait_seconds seconds..."
+
+	# Subpartition init uses losetup, so make sure the loop module is loaded.
+	modprobe loop 2>/dev/null || true
+
 	find_root_partition
 	while [ -z "$PMOS_ROOT" ]; do
 		partitions="$android_parts $(grep -v "loop\|ram" < /proc/diskstats |\
