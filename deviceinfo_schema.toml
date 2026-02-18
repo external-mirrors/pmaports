@@ -54,11 +54,6 @@ datatype = "boolean"
 default_value = false
 allow_device_variant_suffix = true
 
-[variable.metadata.external_storage]
-description = "Does the device have an SD card slot or other external storage medium?"
-datatype = "boolean"
-default_value = false
-
 [variable.metadata.flash_method]
 description = "Method used to flash the device"
 datatype = "enumeration"
@@ -504,6 +499,13 @@ epitaph = "Originally intended to point osk-sdl to the hardware keyboard, but wa
 description = "Whether the device has a hardware keyboard"
 fate = "obsolete"
 epitaph = "Programs should automatically detect if the device currently has a keyboard or not (often it can be hotplugged anyway)."
+
+[variable.metadata.external_storage]
+description = "Does the device have an SD card slot or other external storage medium?"
+datatype = "boolean"
+default_value = false
+fate = "obsolete"
+epitaph = "No longer used by any tooling."
 
 [variable.metadata.modules_initfs]
 description = "List of kernel modules to include in the initramfs."
