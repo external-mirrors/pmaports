@@ -9,7 +9,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
 pkgver=260.1
 _pkgver="${pkgver/_/-}"
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -204,6 +204,7 @@ build() {
 		-Dpam=enabled \
 		-Dpamlibdir=/usr/lib/security \
 		-Dpamconfdir=/usr/lib/pam.d \
+		-Dinstall-sysconfdir=false \
 		\
 		-Dsysupdate=enabled \
 		-Dsysupdated=enabled \
@@ -294,7 +295,6 @@ udevd() {
 	provides="eudev udev eudev-libs"
 	provider_priority=100
 
-	amove etc/udev
 	amove usr/bin/udevadm
 	amove usr/lib/libudev*
 	amove usr/lib/systemd/system/sockets.target.wants/systemd-udev*
@@ -323,11 +323,11 @@ timesyncd() {
 	pkgdesc="systemd Time Synchronization"
 	depends="$pkgname=$pkgver-r$pkgrel"
 
-	amove etc/systemd/timesyncd.conf
 	amove usr/bin/timedatectl
 	amove usr/lib/systemd/ntp-units.d/80-systemd-timesync.list
 	amove usr/lib/systemd/systemd-timesyncd
 	amove usr/lib/systemd/system/systemd-timesyncd.service
+	amove usr/lib/sysusers.d/systemd-timesync.conf
 	amove usr/share/dbus-1/system-services/org.freedesktop.timesync1.service
 	amove usr/share/dbus-1/system.d/org.freedesktop.timesync1.conf
 	amove usr/share/polkit-1/actions/org.freedesktop.timesync1.policy
@@ -346,8 +346,6 @@ networkd() {
 	depends="$pkgname=$pkgver-r$pkgrel"
 
 	amove usr/bin/networkctl
-	amove etc/systemd/network
-	amove etc/systemd/networkd.conf
 	amove usr/share/polkit-1/rules.d/systemd-networkd.rules
 	amove usr/lib/systemd/systemd-networkd
 	amove usr/lib/systemd/systemd-networkd-wait-online
@@ -355,6 +353,7 @@ networkd() {
 	amove usr/lib/systemd/system/systemd-networkd.service
 	amove usr/lib/systemd/system/systemd-networkd.socket
 	amove usr/lib/systemd/system/systemd-networkd-wait-online.service
+	amove usr/lib/sysusers.d/systemd-network.conf
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.DHCPServer.xml
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.Link.xml
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.Manager.xml
@@ -380,12 +379,13 @@ resolved() {
 	replaces="resolvconf"
 	provides="resolvconf"
 
-	amove etc/systemd/resolved.conf
+	amove usr/bin/resolvectl
 	amove usr/sbin/resolvconf
+	amove usr/bin/systemd-resolve
+	amove usr/lib/systemd/resolv.conf
 	amove usr/lib/systemd/system/systemd-resolved.service
 	amove usr/lib/systemd/systemd-resolved
-	amove usr/bin/resolvectl
-	amove usr/bin/systemd-resolve
+	amove usr/lib/sysusers.d/systemd-resolve.conf
 	amove usr/lib/tmpfiles.d/systemd-resolve.conf
 	amove usr/share/dbus-1/interfaces/org.freedesktop.resolve1*
 	amove usr/share/dbus-1/system-services/org.freedesktop.resolve1.service
@@ -414,8 +414,8 @@ logind() {
 	provider_priority=100
 
 	amove usr/bin/loginctl
-	amove etc/systemd/logind.conf
 	amove usr/lib/systemd/systemd-logind
+	amove usr/lib/systemd/system/systemd-logind-varlink.socket
 	amove usr/lib/systemd/system/systemd-logind.service
 
 	amove usr/lib/systemd/system/dbus-org.freedesktop.login1.service
@@ -439,11 +439,10 @@ journald() {
 	# is a dependency of systemd
 
 	amove usr/bin/journalctl
-	amove etc/systemd/journal-remote.conf
-	amove etc/systemd/journald.conf
 	amove usr/lib/systemd/system/sockets.target.wants/systemd-journal*
 	amove usr/lib/systemd/system/systemd-journal*
 	amove usr/lib/systemd/systemd-journal*
+	amove usr/lib/sysusers.d/systemd-journal.conf
 	amove usr/lib/tmpfiles.d/journal-nocow.conf
 	amove var/log/journal
 }
@@ -460,7 +459,7 @@ x11() {
 	pkgdesc="systemd x11"
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server-common"
 
-	amove etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+	amove usr/lib/tmpfiles.d/x11.conf
 }
 
 dev() {

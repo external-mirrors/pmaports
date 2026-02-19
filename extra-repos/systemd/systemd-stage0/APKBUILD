@@ -5,7 +5,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd-stage0
 pkgver=260.1
 _pkgver="${pkgver/_/-}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -80,6 +80,7 @@ build() {
 		-Dsysext=true \
 		-Dsysusers=true \
 		-Dselinux=disabled \
+		-Dinstall-sysconfdir=false \
 		\
 		-Dsystem-alloc-uid-min=101 \
 		-Dsystem-alloc-gid-min=101 \
