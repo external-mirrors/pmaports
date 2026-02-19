@@ -108,6 +108,12 @@ description = "Set recommended swap file size for device."
 datatype  = "integer"
 integer_interval = "[1, 1000000]"
 
+[variable.metadata.zram_swap_algo]
+description = "The compression algorithm to be used for zram-based swap."
+datatype = "enumeration"
+enum_values = ["lzo-rle", "lzo", "lz4", "lz4hc", "zstd", "deflate", "842"]
+default_value = "zstd"
+
 [variable.metadata.zram_swap_pct]
 description = "The size of the ZRAM swap is based on a percentage of the device's RAM, this allows overriding the default percentage to use in the calculation. If set to 0, ZRAM swap is disabled for the device."
 datatype  = "integer"
