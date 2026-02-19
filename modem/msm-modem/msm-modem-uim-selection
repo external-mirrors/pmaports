@@ -86,6 +86,11 @@ fi
 FIRST_PRESENT_SLOT=$(printf "%s" "$QMI_CARDS" | grep "Card state: 'present'" -m1 -B1 | head -n1 | cut -c7-7)
 FIRST_PRESENT_AID=$(printf "%s" "$QMI_CARDS" | grep "usim (2)" -m1 -A3 | tail -n1 | awk '{print $1}')
 
+if [ -z "$FIRST_PRESENT_AID" ]; then
+	echo "No usim application found."
+	exit 0
+fi
+
 echo "Selecting $FIRST_PRESENT_AID on slot $FIRST_PRESENT_SLOT"
 
 # Finally send the new configuration to the modem.
