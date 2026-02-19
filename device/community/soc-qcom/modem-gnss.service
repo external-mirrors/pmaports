@@ -6,11 +6,18 @@ Description=Qualcomm GNSS Modem Setup
 # a ConditionPathExists= on...
 After=ModemManager.service
 Requires=ModemManager.service
+# Give up after 5 minutes
+StartLimitInterval=300
+StartLimitBurst=10
 
 [Service]
 ExecStart=qmicli -d qrtr://0 --loc-set-engine-lock=mt
 ExecStart=qmicli -d qrtr://0 --loc-set-nmea-types=all
 Type=oneshot
+# Apparently starting after MM isn't always enough time for the location service
+# to be up
+Restart=on-failure
+RestartSec=30
 
 [Install]
 WantedBy=default.target
