@@ -2,7 +2,7 @@
 # Co-Maintainer: Ingo Reitz <9l@9lo.re>
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=linux-postmarketos-mediatek-mt81
-pkgver=6.18.9
+pkgver=6.18.13
 pkgrel=0
 pkgdesc="Mainline kernel for mediatek mt8183/mt8192/mt8195/mt8186"
 arch="aarch64"
@@ -50,7 +50,6 @@ source="
 	mt8186-drm-bridge-it6505-Add-audio-support.patch
 	mt8186-ASoC-mediatek-mt8186-make-FE-nonatomic-and-no_pcm.patch
 	mtk-pmdomain.patch
-	mtk-drm.patch
 	config-$_flavor.aarch64
 "
 builddir="$srcdir/linux-$_kernver"
@@ -84,7 +83,7 @@ package() {
 
 
 sha512sums="
-f7f8e77d6badefb5fd4d7b9ce08eca1a32201906ed390c7cbd8025ec00174fec21cf6b55aae82700bc656662c7f5e86e186edfbd3125f1cae583df1d6c6313a2  linux-6.18.9.tar.xz
+361052a6d964dbe33b958d35c63a6695a0b2f9d06c21c924141f67060f2f44fd995a977129dc053ab74b3132fa3921a7e7ad8fa5d69113442b5ab9ba431a2967  linux-6.18.13.tar.xz
 d74da1231181835bec82015da1b3f5b08a1fe9c3c35dd712e285891094d94d9427ceac75d32f74be3a635e17d93ad82b37adf97db8176efc91aed17535023fc2  mt8183-fix-bluetooth.patch
 e4eaff9d3ec1a56ae2503dd353ad57bf072219e68c26ba8b894feb90d6ccb01bd131cdde8d238451258679aca1203a9ebdd888f01ee2a118d46f981ff4bcf54c  mt8186-enable-dpi.patch
 2c282b7cd4f72c998d65e4160b9d1f9122676a6392ef45f734dbd5428754eccc06404a057ea19ea097bf6237e27b3483c271c1ed15b20e359419ab9fb61b8d83  mt8186-ASoC-hdmi-codec-Add-event-handler-for-hdmi-TX.patch
@@ -92,6 +91,5 @@ b2dcf3e3b9f80d185f587972ab6fc1f07e8ec7c7dbe3aa75c53ff6d3c7380ff4c3e6f39479297658
 e09b8fc578742b0efcfb7e4419b30de39feecf3303def62576110c98e3a7101c68c78d1276f885e585ee21536df1f2474df5816f0dffa8f99ea1df1c787fe2c6  mt8186-drm-bridge-it6505-Add-audio-support.patch
 b4c005f705bbae87b93dd061b4d02f982f2dbce1c59635a02b501def1eb784b057d1555c2c11e868f81a91365dcd1c0fbecf85034b6da701011cb2b68ecb3404  mt8186-ASoC-mediatek-mt8186-make-FE-nonatomic-and-no_pcm.patch
 06539b9c5cdaa41e4e0a4bfb8e300548cf95387db716a2f896062690075f07419e9e211c0cb5537caaa046cfae646e47413e12fde0a3c71c9f94868f464de208  mtk-pmdomain.patch
-517c26cf92cb3f71f71f0957a0817706fc426beaca2ba8cc48adf17bbca4057b9970202cca68e8574f8cbad69be8a7cf130a5dd1849cca9fd0d94c57266c8715  mtk-drm.patch
 b5e9ec3ae66b9e4052ec244a1cfdc3fdb70a22a1e53b00d026300d30dbba011b6e3642771002860c2760118b5001de8a12eb98808ff644bc3fae04e639b3a7ff  config-postmarketos-mediatek-mt81.aarch64
 "
