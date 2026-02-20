@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ksshaskpass
-pkgver=99999_git20260215
+pkgver=99999_git20260218
 pkgrel=0
-_commit="27b29a3faeec0778c4b9e6733afb1231e8f9119a"
+_commit="31ec9bb544ff20d1a0b2675006732194a74151e3"
 pkgdesc="ssh-add helper that uses kwallet and kpassworddialog"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -27,7 +27,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/ksshaskpass.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-16/ksshaskpass-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-19/ksshaskpass-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-d5979670cae7822eb400a8c49052e0d0b4cb5dd2457a85c72102a256694ee1f51694295507c3640802929f5f4fa8956c8d6f3f56a3df49ef5b2b695dcce75823  ksshaskpass-27b29a3faeec0778c4b9e6733afb1231e8f9119a.tar.xz
+0759f77e766601243d850d5f254d2abf3df55dd2fb35a1c9a0f054955f59171fd45d87171789cb5202119cf641905ee54ee0d581f4c260dfee2de1487764b909  ksshaskpass-31ec9bb544ff20d1a0b2675006732194a74151e3.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=sddm-kcm
-pkgver=99999_git20260215
+pkgver=99999_git20260218
 pkgrel=0
-_commit="64a72995b2ea5a392897511596a2d578cd00d12b"
+_commit="6c09e3fab17b72eb7bf19f6985f760b2993de607"
 pkgdesc="Config module for SDDM"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -41,7 +41,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/sddm-kcm.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-16/sddm-kcm-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-19/sddm-kcm-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -60,5 +60,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-a04c78afc8f9dfc3daacb0d4060a08df36692a513e314edecf0e97c5941e0cc2d3b04d4b38523c0b0c3df6e44ddbbf2862002c4938cdc304a420f9de5a437d18  sddm-kcm-64a72995b2ea5a392897511596a2d578cd00d12b.tar.xz
+a88fbe8ec4dcaaca36087f4e89c32fd3e3aee4e365b224cc55f236114af478e51b616b4d41dd1f83b880b46f64f8560d65e4629fb5a4fb0f107d28c16ae61e60  sddm-kcm-6c09e3fab17b72eb7bf19f6985f760b2993de607.tar.xz
 "

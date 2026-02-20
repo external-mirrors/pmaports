@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=ksystemstats
-pkgver=99999_git20260215
+pkgver=99999_git20260218
 pkgrel=0
-_commit="eae4fd56e448985b46ee67141e00c6dcf185f332"
+_commit="f2fbc3f1266cf2ea1142b704ca5fdc9c407a2333"
 pkgdesc="A plugin based system monitoring daemon"
 # armhf blocked by qt6-qtdeclarative -> kio
 arch="all !armhf"
@@ -33,7 +33,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/ksystemstats.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-16/ksystemstats-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-19/ksystemstats-$_commit.tar.xz"
 options="!check" # Broken, requires specific sensor setup
 
 builddir="$srcdir/ksystemstats-$_commit"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-e074c0e7dac968102fdf60b8f16f899b2aad4d4c474afdf6d88e723addb39bc2d6214591909244b870410f6f7dc77815496d3f3f241de604ce0cba7b19890ad3  ksystemstats-eae4fd56e448985b46ee67141e00c6dcf185f332.tar.xz
+44126677b42081c7336a4041c5228d25faed7cf0b9d497978fdb5c97e14dab58d9e6aa7acb18d751a103054acdda7dba8c70fe95e0754d6579f43d5e1bf9ab4f  ksystemstats-f2fbc3f1266cf2ea1142b704ca5fdc9c407a2333.tar.xz
 "
