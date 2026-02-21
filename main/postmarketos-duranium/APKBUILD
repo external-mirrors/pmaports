@@ -9,14 +9,15 @@ depends="
 	f0rmz
 	shadow
 	tar
-	unl0kr
 "
 # x86: f0rmz
 arch="noarch !x86"
 license="GPL-3.0-or-later"
 replaces="systemd"  # For overwriting tmpfiles.d/{opt,var}.conf
+subpackages="$pkgname-initramfs"
 
 _source644="
+	etc/crypttab
 	usr/lib/repart.d/00-esp.conf
 	usr/lib/repart.d/10-usr-verity-sig.conf
 	usr/lib/repart.d/11-usr-verity.conf
@@ -25,7 +26,15 @@ _source644="
 	usr/lib/repart.d/21-usr-verity.conf
 	usr/lib/repart.d/22-usr.conf
 	usr/lib/repart.d/30-root.conf
+	usr/lib/systemd/initrd-preset/80-duranium.preset
 	usr/lib/systemd/system-preset/80-duranium.preset
+	usr/lib/systemd/system/duranium-firstboot.service
+	usr/lib/systemd/system/initramfs-buffyboard.service
+	usr/lib/systemd/system/initramfs-telnetd.service
+	usr/lib/systemd/system/initramfs-unudhcpd.service
+	usr/lib/systemd/system/initramfs-usb-gadget.service
+	usr/lib/systemd/system/getty@.service.d/wait-firstboot.conf
+	usr/lib/systemd/system/mount-subpartitions.service
 	usr/lib/systemd/system/systemd-veritysetup@usr.service.d/10-skip-usr-verified.conf
 	usr/lib/sysupdate.d/10-usr-verity-sig.transfer
 	usr/lib/sysupdate.d/11-usr-verity.transfer
@@ -36,15 +45,14 @@ _source644="
 	usr/lib/tmpfiles.d/var.conf
 	usr/lib/udev/rules.d/09-dm-hack.rules
 	usr/lib/udev/rules.d/90-udisks-ignore-verity-hack.rules
-	usr/share/f0rmz/f0rmz.conf.d/firstboot.conf
-	usr/share/initramfs/init_functions_immutable.sh
-	usr/share/mkinitfs/files-extra/10-duranium-base.files
-	usr/share/mkinitfs/modules-extra/10-duranium-base.modules
+	usr/share/duranium/f0rmz-firstboot.conf
 "
 
 _source755="
-	usr/bin/do-factory-reset
 	etc/profile.d/99-local-bin.sh
+	usr/libexec/duranium/first-boot
+	usr/libexec/duranium/mount-subpartitions
+	usr/libexec/duranium/usb-gadget-setup
 "
 
 # Avoid filename based checksum conflicts by including the whole path:
@@ -66,16 +74,54 @@ package() {
 	done
 }
 
+initramfs() {
+	# musl-utils: for ldconfig.service
+	# scanelf: for ldconfig.service
+	# util-linux-login: for sulogin in emergency/debug shell
+	depends="
+		buffyboard
+		busybox-extras
+		device-mapper
+		device-mapper-udev
+		e2fsprogs
+		musl-utils
+		scanelf
+		unl0kr
+		unudhcpd
+		util-linux-login
+	"
+
+	amove etc/crypttab
+	amove usr/lib/systemd/initrd-preset/80-duranium.preset
+	amove usr/lib/systemd/system/initramfs-buffyboard.service
+	amove usr/lib/systemd/system/initramfs-telnetd.service
+	amove usr/lib/systemd/system/initramfs-unudhcpd.service
+	amove usr/lib/systemd/system/initramfs-usb-gadget.service
+	amove usr/lib/systemd/system/mount-subpartitions.service
+
+	amove usr/libexec/duranium/mount-subpartitions
+	amove usr/libexec/duranium/usb-gadget-setup
+}
+
 sha512sums="
+ac441c8a690b89a92c2d7db37145e54d918bb9838a45cf76d20de82d46848a80477a8035d9cbaa39fb6ea4747c2762789f71736aa11a78e3adcca0c339dc5677  rootfs-etc-crypttab
 b0f320f2ea81c29fa9030abac998e725e098c74bb2ffb76ee2711da4c88615ad46a0e5359b98198648879551781580a0128b57a2ef1ca6a3e03448b01f533065  rootfs-usr-lib-repart.d-00-esp.conf
 be7f90bd96fcad6ccf2b434a4b9ce9bc620b63558df0eddd088d86bcbeb778ff097b6d7db0a021d4322bb2ff908eb65f41840e10b11a479e15986a0b02331bf0  rootfs-usr-lib-repart.d-10-usr-verity-sig.conf
 8dab35b6c5b61936a8a5f7c6872efe77550f70603a90286c874e9b3c12b25214823c89dd32517b0733110a2f92d0908d0adb6a7bff68f83163d2882e4167b4f6  rootfs-usr-lib-repart.d-11-usr-verity.conf
 a2ebcf35620a8c2dcd06dff50b6d17b02e8b688f98c6f7e1bb9727733df20742669cb3926a003ccdb1091bc8a337fdc39cc774de509f1b155f3bd3b45a86f8ef  rootfs-usr-lib-repart.d-12-usr.conf
-9aa66e6472ce58da316357c61b8a1538d0d8829f6568ec404efc58ea7ad5d06f5f806cb7e1bf726eb9941181971d0f7131c34a446a52eedc96f3388d1c31c18f  rootfs-usr-lib-repart.d-20-usr-verity-sig.conf
-1c452cec92a07859e7bed68ea6b67143d9329446db36eb4aa796424609cc6d96ad2e19d8be53bba776fc2efa75b02c87ec7557eaf233926afd1609611f38a81a  rootfs-usr-lib-repart.d-21-usr-verity.conf
-f1833d1627640a30dcb7aebc4ad4296c00f1799168712bf556e54ce74f7e56002b0a37e42ea20bfd10a02d32a9e7b7750c6e8d1b957c416903cd6e1bb19d25c6  rootfs-usr-lib-repart.d-22-usr.conf
-6a19d03120277d157aec69c24fd4068d27d05819d9691e09e0d7b5b8d33dc230b1f3ead434526a0b553084246deeac53bf1b93601b72589991ef16a0c29c990a  rootfs-usr-lib-repart.d-30-root.conf
-52a0cddde45bf17e7a7274b804ec818bf7a471ec6fe365931f8e14e2f7279111e9724cbd9941c66ee638e92ecb3579a269e75912130590fc4856bd00b7b86a23  rootfs-usr-lib-systemd-system-preset-80-duranium.preset
+f5688dbd32ae55ea19f5cafff614f2cfc775c1c7078191d4081b254ed25dad58ac5bed0084e5e07aae192591f3b166aae6e5d1ae4eb585f6b1773f03104eee88  rootfs-usr-lib-repart.d-20-usr-verity-sig.conf
+730aa98894ec4586d5a97b2faed5ec30ae6679b9ebf4e6dd7e1d4f039279691040232ba30d0f88b4a2696131618b17753d0d8262b88d4ff6f1f120cbd0d22acd  rootfs-usr-lib-repart.d-21-usr-verity.conf
+d88e87fb22b8efdc2617e8a3d52102032ce2b0dbde0e7d40a8d7679f507acc9cea271faa7004f96611631dfa0351cd5175dc1574f907176c9e4ebc5561b9a6d6  rootfs-usr-lib-repart.d-22-usr.conf
+84036b008042766e89bc02ecb7d77b52f80973a385a21faa1fbb2348ff0c216c302e29bd52c6cb40e5e547ad58aa955e06a9e94bd2ca0c512903a200f44c9a63  rootfs-usr-lib-repart.d-30-root.conf
+302d9846e4fa16aa984bf20339f81d98cd9258d3daaa68329f068b52dbf7815d02813d46091818da6f19452f7f9f740909d7466d1ebd1737f18c747e4db5a93a  rootfs-usr-lib-systemd-initrd-preset-80-duranium.preset
+74b33ebdbb960fc684906b6e6985077b9e3813cbcb367ce3a6e3fa9421b4a2af4fcae94392224245714f9c591cf81e852252494ea6da47bec4ce56ead456b6fc  rootfs-usr-lib-systemd-system-preset-80-duranium.preset
+39e4b91c96c3f6542cccf8b58bc6c9f39ec25a1424d86aa8a6caecc0163fb268495bcacf895fc7c583c4a3466cefedcacf4ddd9a03d1fa9ceac37d397a21dae0  rootfs-usr-lib-systemd-system-duranium-firstboot.service
+786a057e3f1eab37773b5255a5abde060b6bc6f42fd2cdaa82ce678263db6177ca30b49decb795293a4a0ccaf02346684acd0469cc8222898c43768376f2218d  rootfs-usr-lib-systemd-system-initramfs-buffyboard.service
+c8248ea993050d0d20bc2b0747d6186bb059254b245188196d31466212264317466a0363905744d96b74d5e0a48aa901a7f2a958254e88cdb08e80990fc54912  rootfs-usr-lib-systemd-system-initramfs-telnetd.service
+2b3208663fde6588810f5b12ef9e094238fa37dfc7d99ec7a53b41c07316106f0e42ff99295b1cd3c8eb447e20737d0d465b99da75ff3b98ce9e9835970c4319  rootfs-usr-lib-systemd-system-initramfs-unudhcpd.service
+9c0eb915c09fc3d8de3a1a486f3e2202be05b11ba924d13349a70d93355ca0c72fe2417504e4b7e0c74aa1bb7f5ae77e3497f09dd67e48c0b8f2432f382f2f38  rootfs-usr-lib-systemd-system-initramfs-usb-gadget.service
+16fc787401e1fbbd1421257781270d2be6cb879ab9cc99412044df25af72c5525567f7b7f1066f022c0b7e03dd33c62f2d871fed9e9121ed309564c207795c38  rootfs-usr-lib-systemd-system-getty@.service.d-wait-firstboot.conf
+221844a2fe5af2c9c675d7d7c118f3db82afbf8b28db77ea049db74813b62881fe40ada30630f5fd777c6503e2936e22251be75e278635274fe6ac08eba8e56b  rootfs-usr-lib-systemd-system-mount-subpartitions.service
 d8de011bdaa98045b23fe37540663371602bb48f75314343c60faab39e7cd4f336ace6eddde745517bb99d8b5f3bf40d78584bd3535375b5f5fc9c7ae03de315  rootfs-usr-lib-systemd-system-systemd-veritysetup@usr.service.d-10-skip-usr-verified.conf
 2e4d532a0d996d8e68007b6036b4564ca3d654dd91cadd80ed904536d0c3ed1e019b4081f7bdb6d128e695cacfe6949bfb20c074b95d10ef25f948f8eb307e24  rootfs-usr-lib-sysupdate.d-10-usr-verity-sig.transfer
 2dbe55c05b8237ad85c4f333a8c02eec26aad14032f159830696ad9b9c6442d624b0190b2e6780e4b8aed590eb12d0c7454d39ab739e55d420300cdba2a78f58  rootfs-usr-lib-sysupdate.d-11-usr-verity.transfer
@@ -86,10 +132,9 @@ fa1c3dd727fd20d16d18695d58dd10ec335d64ece00152346c84ae750ed5ade8faf5ba11747135d7
 7d98cb314472d7db64599c8abfc2e21ef6437b0c5bf407f0c21a42ec2f14f660fb3aef64c99a13aada124a822a85d8e4a6674838d1fe07719774331121d5414b  rootfs-usr-lib-tmpfiles.d-var.conf
 e218e7823a5b54dcd65a7b5bd6bd130db58adde585ad5b96969f47dae27c323151ae63569a5f1b638f639082e0948e499a562c9ca87839ab1759f409fd6ee3b7  rootfs-usr-lib-udev-rules.d-09-dm-hack.rules
 ede57bf8696dce4ee295dc2a1dfe31dec415e7ce994600ce3bf7386ac1ad63797a6c5a88434ca0cc854cdad6618647845126b1f8757c48f83ce308d394b8c68d  rootfs-usr-lib-udev-rules.d-90-udisks-ignore-verity-hack.rules
-4aa9c49faa69f66750eec519762fbf85715a9ce0882764b4dece795e391bead4dd6a02a5773e3a81382a8405f57a1e2f70fce31ae6e54c5182c9f2baf30993dd  rootfs-usr-share-f0rmz-f0rmz.conf.d-firstboot.conf
-74ddbe773c9456f89e0a7cae7e4b82aeb8149c06b0bb13b014b540ef0faeefc35d69f16e8661775a876a767d3bcb19fbd4314898591bcbdc13461ed899e8f43a  rootfs-usr-share-initramfs-init_functions_immutable.sh
-d47f3d0ea250dc543829f9365249dd5b05ef7379218031dd344dd583d37484694a4bbd71308fda8546b4f7cb57fa546da4d229641ad794eb20e9601455e1e27a  rootfs-usr-share-mkinitfs-files-extra-10-duranium-base.files
-99325a25d1a588923bf55c9c803ea6aa8d7b7e82b929e4edafc47b39630d0c229bda89ea3afff1adde4136c2378ffb8ef24a4edbac015032975f40edcbad74ed  rootfs-usr-share-mkinitfs-modules-extra-10-duranium-base.modules
-97bce380b5c4019aafad6f52856586ffaa4e17efd83f61f133e197bd833a35140406d206f572fb38444c42051b0d1dc789f44313aaf63bf0d4028499cc942b7e  rootfs-usr-bin-do-factory-reset
+d632bb0806b8f37e5d29539f76c083a52cf5278b9e64178046a0d86f4ca80c3013953b6d85ef53a0f320b01b64926328c1191606664e7f7f7f7dfdd70ad75d69  rootfs-usr-share-duranium-f0rmz-firstboot.conf
 765797421f9123cdcf85e1496d01884cce1c8c304d15369b7eee32a8fc5abcd860dc5856c0d493f1cd3c6ad2a0ccdc4d6ba7d2ae356f0fc824dc16cdb84ebf37  rootfs-etc-profile.d-99-local-bin.sh
+a14374ef83ca4022a695f40eb2bee285e81cc16993578dfc0dd01a5013dc3679451897d3fb906fc081e764d5d5e51cc4593d7dc5e5a2e79e08d54ed0f8c9d44e  rootfs-usr-libexec-duranium-first-boot
+bb3ec1693f88a61563876cd069b49351861a31c15b1795702031e5beb4e89cefe302644c1ea9d0bb74746aa97007664c1782857900e2b85dd71182e95efd66ae  rootfs-usr-libexec-duranium-mount-subpartitions
+9912109374399bf6df4d45c05baff5b3c424e05380b81b2be5b55e28e95f07bda71b5a4f7345a40498c1b11df465a9f4410e740d119ab98543ce28b75c53eb0f  rootfs-usr-libexec-duranium-usb-gadget-setup
 "

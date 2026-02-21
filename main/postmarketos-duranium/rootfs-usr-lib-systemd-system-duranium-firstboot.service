@@ -1,0 +1,12 @@
+[Unit]
+Description=Duranium First Boot Setup
+ConditionFirstBoot=yes
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/duranium/first-boot
+
+[Install]
+WantedBy=multi-user.target
+RequiredBy=display-manager.service
