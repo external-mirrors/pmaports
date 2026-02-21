@@ -9,7 +9,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
 pkgver=259.3
 _pkgver="${pkgver/_/-}"
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -213,7 +213,7 @@ build() {
 		-Dimportd=enabled \
 		\
 		-Dbootloader=disabled \
-		-Dinitrd=false \
+		-Dinitrd=true \
 		-Dhibernate=false \
 		-Dselinux=disabled \
 		-Dsysvinit-path="" \
