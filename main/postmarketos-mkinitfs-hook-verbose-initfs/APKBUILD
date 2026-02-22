@@ -8,6 +8,8 @@ depends="postmarketos-mkinitfs"
 source="10-verbose-initfs.sh"
 arch="noarch"
 license="GPL2"
+# no tests
+options="!check"
 
 package() {
 	install -Dm644 "$srcdir"/10-verbose-initfs.sh \

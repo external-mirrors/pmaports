@@ -9,6 +9,8 @@ depends="git python3"
 arch="noarch"
 license="GPL-3.0-or-later"
 source="https://gitlab.postmarketos.org/postmarketOS/postmarketos-install-recommends/-/archive/$pkgver/postmarketos-install-recommends-$pkgver.tar.gz"
+# no tests
+options="!check"
 
 package() {
 	install -Dm755 "$builddir/install-recommends.py" \

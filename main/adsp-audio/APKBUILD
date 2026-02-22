@@ -8,6 +8,8 @@ arch="noarch"
 license="GPL-3.0-or-later"
 source="$pkgname.initd"
 subpackages="$pkgname-openrc"
+# no tests
+options="!check"
 
 package() {
 	install -Dm755 "$srcdir"/$pkgname.initd "$pkgdir"/etc/init.d/adsp-audio

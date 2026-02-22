@@ -10,6 +10,8 @@ subpackages="$pkgname-openrc"
 source="
 	clear-rtc-wakealarm.shutdown.initd
 	"
+# no tests
+options="!check"
 
 package() {
 	install -Dm755 "$srcdir"/clear-rtc-wakealarm.shutdown.initd "$pkgdir"/etc/init.d/clear-rtc-wakealarm
