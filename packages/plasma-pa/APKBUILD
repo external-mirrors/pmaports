@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-pa
-pkgver=99999_git20260218
+pkgver=99999_git20260220
 pkgrel=0
-_commit="a7239712cb4defeb243ec026ccea9f5dfd9b67f1"
+_commit="707a99f0bf0b3ade4c61cc67462f0265fecd493a"
 pkgdesc="Plasma applet for audio volume management using PulseAudio"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -40,7 +40,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-pa.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-19/plasma-pa-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-20/plasma-pa-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/plasma-pa-$_commit"
@@ -62,5 +62,5 @@ package() {
 }
 
 sha512sums="
-a347174ea40c4fbca68e5c135e5b78b7bf5c0fedd700af1e5077a14f284d4500c40d1bed5039403c0e17439f430d2f36755e57774cb71906ba2aa018f5f25a04  plasma-pa-a7239712cb4defeb243ec026ccea9f5dfd9b67f1.tar.xz
+71e39d54fd32c20fe707ff9978ace7737ad4afccbbc0fff290ad40ea95f77b28a710014254ec165a43cecfd4e4798ec1bf948d56716936b68002c801770cfc1b  plasma-pa-707a99f0bf0b3ade4c61cc67462f0265fecd493a.tar.xz
 "

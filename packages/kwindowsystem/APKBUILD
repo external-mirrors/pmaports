@@ -2,9 +2,9 @@
 # group=kde-frameworks
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=kwindowsystem
-pkgver=99999_git20260213
+pkgver=99999_git20260220
 pkgrel=0
-_commit="e873d640dc3338a57c1f5da445d0d10450cec845"
+_commit="972792f86fed5c7747a308a0b82bbb5c0151810c"
 pkgdesc="Access to the windowing system"
 # armhf blocked by qt-6qtdeclarative
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="$depends_dev
 checkdepends="xwayland-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/frameworks/kwindowsystem.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-16/kwindowsystem-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-20/kwindowsystem-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kwindowsystem-$_commit"
@@ -79,5 +79,5 @@ package() {
 }
 
 sha512sums="
-2b79df6b4f1cf95f8871942de84bc3393769f1f343ac3b26d67a2ab76a8a610890ca74386691eb945e570ff9b4edd1bad5395026a35b5058651d2db8e0e030f0  kwindowsystem-e873d640dc3338a57c1f5da445d0d10450cec845.tar.xz
+86594434156e1123919089b517560c8f21f434acca1960bd5fd61a606dcc27c26da8a87353bf9b5d15e6c6435b6eb7b9e31f6b6cd9242eca2d4ce35607ddafa0  kwindowsystem-972792f86fed5c7747a308a0b82bbb5c0151810c.tar.xz
 "

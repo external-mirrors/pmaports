@@ -2,9 +2,9 @@
 # group=kde-applications
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=grantleetheme
-pkgver=99999_git20260218
+pkgver=99999_git20260220
 pkgrel=0
-_commit="2377dc866dbad4a9505fa8b3f660947e8e20da45"
+_commit="dba6c5cd69696e6e8adacc1a541fd734aadfedfb"
 pkgdesc="KDE PIM mail related libraries"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # s390x and riscv64 blocked by knewstuff
@@ -31,7 +31,7 @@ subpackages="
 	$pkgname-lang
 	"
 _repo_url="https://invent.kde.org/pim/grantleetheme.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-19/grantleetheme-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-20/grantleetheme-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/grantleetheme-$_commit"
@@ -60,5 +60,5 @@ package() {
 	#DESTDIR="$pkgdir" cmake --build build --target install_qch_docs
 }
 sha512sums="
-60a5bf2d8a1f3ff949d1be50b35ee5f0f46d7c07611cf2f4fe49331c49dce3ca2af2948bd82c517081c7bbf47eb7a39dc85cb1baeb1cce34357871131d3c4339  grantleetheme-2377dc866dbad4a9505fa8b3f660947e8e20da45.tar.xz
+5db5d66c801a480d2a771a4eaa20acb62fae54ed8d63ee8e9e96b605c1728d52f904ec0b03178f6e97e0e6916c6fbe970faec031c72ebef318de3a0d4b5d371d  grantleetheme-dba6c5cd69696e6e8adacc1a541fd734aadfedfb.tar.xz
 "
