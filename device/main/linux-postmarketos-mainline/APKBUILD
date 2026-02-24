@@ -49,9 +49,17 @@ makedepends="
 	zstd
 "
 
-# Source
+# powerpc boot wrapper patches:
+# Necessary for compilation without cross GCC in PATH, cherry-picked from
+# Nathan's fork, he does not have time to upstream them right now but would be
+# happy if someone else did:
+# https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
 source="
 	$pkgname-$pkgver.tar.gz::https://git.kernel.org/torvalds/t/linux-${pkgver/_/-}.tar.gz
+
+	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 
 	config-mainline.aarch64
 	config-mainline.armv7
@@ -109,6 +117,9 @@ package() {
 
 sha512sums="
 8f52207ee68fee8880c085db8033367c18cd2c44854add726eb4cdb90ab7502e5394d6c7ccc6896ce589f93ad081af1edc8cc011374cf7f24d37a1ade4e846e8  linux-postmarketos-mainline-7.0_rc3.tar.gz
+1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 395095e082da9a17f18b9d33a0ec9ae649031924aab436f4a8461295bbc926fda85b64e9eb8fc062843f9e76a3ec6536a37a8fe7bf3ecb7454624b4009f6b755  config-mainline.aarch64
 39b64f3e78d87d2d5c8cc66a570c92def6ae9c8cac8eb83b8f0791444cfbb2913fd2b6a2095ee0aeaef9d249fd3a9e4c0b2e854b940141c5264b3cb8283dcf55  config-mainline.armv7
 c8bb1565ce324c57baebe4f961bd3db0c98f4423ae289cb7a255f827bf3e9685184bf2e40b0134c2f4be83470f2d17df11bce01a8d44bc3c4d186244ffd4e30a  config-mainline.loongarch64
