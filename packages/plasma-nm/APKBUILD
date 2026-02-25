@@ -2,9 +2,9 @@
 # group=kde-plasma
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-nm
-pkgver=99999_git20260222
+pkgver=99999_git20260223
 pkgrel=0
-_commit="62cfb1a72a7522e48c20516401d14dae05f23d74"
+_commit="9e0176af5430630992910136f905d5c2d4348959"
 pkgdesc="Plasma applet written in QML for managing network connections"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -50,7 +50,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-nm.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-22/plasma-nm-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2026-02-24/plasma-nm-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 replaces="plasma-mobile<=6.4.0-r0"
@@ -83,5 +83,5 @@ mobile() {
 }
 
 sha512sums="
-d991964e5dff39a686514f73c7aa3fd561457bf90ed2f70d2034b7ec448787a810eb45431e442ab0e4292ef876b12399816f68166241e1f97de15d8ee5a4832d  plasma-nm-62cfb1a72a7522e48c20516401d14dae05f23d74.tar.xz
+7d231861f589bda51a6e2ad8eb43db6528083738ffd2ac0299cdcadddd70185c9e40441f03041fdb5016cc80cf0d3040d36f3f7caa6b6c605e3d2866b1c17b28  plasma-nm-9e0176af5430630992910136f905d5c2d4348959.tar.xz
 "
