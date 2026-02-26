@@ -4,7 +4,7 @@ _flavor="postmarketos-stericsson"
 _config="config-$_flavor.armv7"
 pkgname=linux-$_flavor
 pkgver=6.18.2
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline kernel for ST-Ericsson NovaThor devices"
 arch="armv7"
 _carch="arm"
@@ -28,6 +28,7 @@ makedepends="
 	openssl-dev
 	perl
 	postmarketos-installkernel
+	zstd
 "
 case $pkgver in
 	*.*.*)	_kernver=${pkgver%.0};;
@@ -40,6 +41,7 @@ source="
 	drm-regressions.patch
 	"
 builddir="$srcdir/linux-${_kernver//_/-}"
+_defconfig="u8500_defconfig"
 
 prepare() {
 	default_prepare
@@ -67,6 +69,6 @@ package() {
 
 sha512sums="
 15989d1a26c6a5200b8eab4ba348b308466398aa75dda3844b37e7eb320206236d47c94cbc0e0b1d7ead10385ca84d34d0f2aa02ba5c1bd65ca6a5aa71c57117  linux-6.18.2.tar.xz
-7c9a0bafece9390e7af9b86835a216227ee2237bf8595f757c918a0fbf7a1836e3b41b35342eee19aa3205d6add972d7ab6361a45777a0632a342e47a88a7fc6  config-postmarketos-stericsson.armv7
+4a5ceb68b2e84fd69b4bbcdc09eb5b7e0a3fc22a382f22f93f1f32e7407372f38a83310bb5cdf3d7ec1fbdf00e38f398768eb9c239069d1e8556cf40363b2d04  config-postmarketos-stericsson.armv7
 2ba9304f4f2d8578906017699255aadb10d1f0dc62704400632859b9bdad06a10c5837ce1a524813b1d205b33e8b5f7990038a700942e2ee728b79b7ecc45282  drm-regressions.patch
 "
