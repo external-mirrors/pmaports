@@ -2,8 +2,8 @@
 maintainer="askiiart <mail@askiiart.net>"
 pkgname=device-hp-elitebook-ultra-g1q
 pkgdesc="HP EliteBook Ultra G1q"
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -31,11 +31,10 @@ _pmb_recommends="
 install="$pkgname.pre-upgrade"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-kernel-next:kernel_next
-	$pkgname-kernel-mainline:kernel_mainline
-	$pkgname-kernel-lts:kernel_lts
 	$pkgname-kernel-stable:kernel_stable
-	$pkgname-kernel-postmarketos-qcom-laptop:kernel_postmarketos_qcom_laptop
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-kernel-next:kernel_next
 "
 source="
 	deviceinfo
@@ -54,35 +53,27 @@ package() {
 	install -Dm644 "$srcdir/noremote_proc.conf" "$pkgdir/usr/lib/modprobe.d/noremote_proc.conf"
 }
 
-kernel_next() {
-	pkgdesc="Unstable next kernel (linux-next)"
-	depends="linux-next"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
-
-kernel_mainline() {
-	pkgdesc="Mainline postmarketOS kernel (linux-postmarketos-mainline)"
-	depends="linux-postmarketos-mainline"
+kernel_stable() {
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-	pkgdesc="Long term support (LTS) kernel from Alpine Linux (linux-lts)"
-	depends="linux-lts"
+	pkgdesc="Long-term maintenance kernel (most stability, not all security fixes & new features)"
+	depends="linux-postmarketos-lts"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-kernel_stable() {
-	pkgdesc="Stable kernel from Alpine Linux (linux-stable)"
-	depends="linux-stable"
-	provides="$pkgname-kernel-edge=$pkgver-r$pkgrel"
-	replaces="$pkgname-kernel-edge"
+kernel_mainline() {
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
+	depends="linux-postmarketos-mainline"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-kernel_postmarketos_qcom_laptop() {
-	pkgdesc="Mainline kernel with additional patches for Qualcomm Snapdragon-based laptops (linux-postmarketos-qcom-laptop)"
-	depends="linux-postmarketos-qcom-laptop"
+kernel_next() {
+	pkgdesc="Unstable next kernel (linux-next)"
+	depends="linux-next"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
