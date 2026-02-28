@@ -1,7 +1,7 @@
 # Co-Maintainer: Victor Pavlov (vipaoL) <vipaolmail@gmail.com>
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 pkgname=firmware-qcom-msm8953
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Firmware files for Qualcomm MSM8953 devices"
 url="https://postmarketos.org"
@@ -26,6 +26,7 @@ _xiaomi_rosy_commit="69c6d964bc0034bd93292286ac101c23fc804d72"
 _xiaomi_tissot_commit="bf686895224cae33c2130932b4a5914fea415287"
 _xiaomi_vince_commit="9acb58a25d66314700eeea15c69c4571154f19cc"
 _xiaomi_ysl_commit="ccfd274b825aec2d80e834b16499a6d9ba96c3f5"
+_xiaomi_oxygen_commit="081f28c6b65e295dbbf777b52b7e36cda2e21e2a"
 
 source="
 	firmware-asus-ze520kl-$_asus_ze520kl_commit.tar.gz::https://gitlab.com/Smankusors/firmware-asus-zenfone3/-/archive/$_asus_ze520kl_commit/firmware-asus-zenfone3-$_asus_ze520kl_commit.tar.gz
@@ -45,6 +46,7 @@ source="
 	firmware-xiaomi-tissot-$_xiaomi_tissot_commit.tar.gz::https://gitlab.com/jiaxyga/firmware-xiaomi-tissot/-/archive/$_xiaomi_tissot_commit/firmware-xiaomi-tissot-$_xiaomi_tissot_commit.tar.gz
 	firmware-xiaomi-vince-$_xiaomi_vince_commit.tar.gz::https://github.com/M0Rf30/postmarketos-vendor-xiaomi-vince/archive/$_xiaomi_vince_commit.tar.gz
 	firmware-xiaomi-ysl-$_xiaomi_ysl_commit.tar.gz::https://gitlab.com/barni2000/firmware-xiaomi-ysl/-/archive/$_xiaomi_ysl_commit/firmware-xiaomi-ysl-$_xiaomi_ysl_commit.tar.gz
+	firmware-xiaomi-oxygen-$_xiaomi_oxygen_commit.tar.gz::https://github.com/KnoyanMitsu/firmware-xiaomi-oxygen/archive/$_xiaomi_oxygen_commit.tar.gz
 "
 
 _basefwdir="/usr/lib/firmware"
@@ -128,6 +130,11 @@ package() {
 	xiaomi_ysl_dir="$srcdir/firmware-xiaomi-ysl-$_xiaomi_ysl_commit/lib/firmware/postmarketos"
 	install -Dm644 "$xiaomi_ysl_dir/a506_zap.b02" -t "$pkgdir/$_fwdir/xiaomi/ysl"
 	install -Dm644 "$xiaomi_ysl_dir/a506_zap.mdt" -t "$pkgdir/$_fwdir/xiaomi/ysl"
+
+	xiaomi_oxygen_dir="$srcdir/firmware-xiaomi-oxygen-$_xiaomi_oxygen_commit/"
+	install -Dm644 "$xiaomi_oxygen_dir/a506_zap.b02" -t "$pkgdir/$_fwdir/xiaomi/oxygen"
+	install -Dm644 "$xiaomi_oxygen_dir/a506_zap.mdt" -t "$pkgdir/$_fwdir/xiaomi/oxygen"
+	install -Dm644 "$xiaomi_oxygen_dir/WCNSS_qcom_wlan_nv.bin" -t "$pkgdir/$_fwdir/xiaomi/oxygen"
 }
 
 sha512sums="
@@ -148,4 +155,5 @@ e1f0cd1383ba95cef08236dc470e4be05852387152be7772488f423f5a2e9ec1f7b27203ebf1e3bc
 e82c953fd1a1a665bcfcfc4eaab95fe8a017f1804e4bc66f6449cfeb21137f2ebcc0f8abab9ef9975c438d9836d68974b417bbe58c128b06cec605abecfad008  firmware-xiaomi-tissot-bf686895224cae33c2130932b4a5914fea415287.tar.gz
 edf6dceb50c34c2bed55365ba8322974df6ecac4aafe04af2a95ab2d9cf7f7f69e3182f77747d676a0c20f097a87a1a61f771bcec570f7b0d0021dbddd5cdfac  firmware-xiaomi-vince-9acb58a25d66314700eeea15c69c4571154f19cc.tar.gz
 cd2d84dac3660fe554cba6d6d2ac0c6c7468cfd37bc443400ee1c2bc4a2ed3cb3e7120a413d7bed3c0bad2b5acb234599dd5a0f2e42f6696779c07c3e5c3c575  firmware-xiaomi-ysl-ccfd274b825aec2d80e834b16499a6d9ba96c3f5.tar.gz
+b4063caaa37a6d1853ce2d0500736d1a7f3775784d60882c59ae420b7a841a84b93a51b53d7cbdecec9009c3f5282754830e1b1566f3ec86520a85c9d2c256c9  firmware-xiaomi-oxygen-081f28c6b65e295dbbf777b52b7e36cda2e21e2a.tar.gz
 "
