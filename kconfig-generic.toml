@@ -12,15 +12,26 @@
 
 # audio devices and codecs
 ["category:audio".">=0.0.0"."all"]
+SND_DESIGNWARE_I2S = "m"
+SND_DESIGNWARE_PCM = "y"
+SND_DMAENGINE_PCM = "m"
 SND_SEQUENCER = "m"
 SND_SOC = "m"
 SND_SOC_AW88261 = "m"
 SND_SOC_CS35L36 = "m"
 SND_SOC_CS35L41_I2C = "m"
 SND_SOC_CS35L41_SPI = "m"
+SND_SOC_GENERIC_DMAENGINE_PCM = "y"
+SND_SOC_SOF_PCI = "m"
+SND_SOC_SOF_TOPLEVEL = "y"
 SND_SOC_TFA989X = "m"
 ["category:audio".">=0.0.0"."aarch64"]
 SND_SOC_WCD938X_SDW = "m"
+["category:audio".">=0.0.0"."x86_64"]
+SND_SOC_AMD_ACP5x = "m"
+SND_SOC_AMD_VANGOGH_MACH = "m"
+SND_SOC_SOF_AMD_TOPLEVEL = "m"
+SND_SOC_SOF_AMD_VANGOGH = "m"
 
 ["category:bluetooth".">=0.0.0"."all"]
 BT_HCIBTUSB = "m"
@@ -44,7 +55,7 @@ SM_VIDEOCC_8350 = "m"
 ["category:crypto".">=0.0.0"."x86 x86_64"]
 CRYPTO_AES_NI_INTEL = "m"
 CRYPTO_DEV_CCP = "y"
-CRYPTO_DEV_CCP_DD = "m"
+CRYPTO_DEV_CCP_DD = "y"
 ["category:crypto"."<7.1.0"."x86_64"]
 CRYPTO_GHASH_CLMUL_NI_INTEL = "m"
 
@@ -123,10 +134,13 @@ HID_GOOGLE_HAMMER = "m"
 I2C_HID_OF_GOODIX = "m"
 ["category:input".">=0.0.0"."aarch64 loongarch64 riscv64 x86 x86_64"]
 I2C_HID_ACPI = "m"
+["category:input".">=0.0.0"."x86_64"]
+STEAM_FF = "y"
 
 # led and light devices
 ["category:led".">=0.0.0"."all"]
 LEDS_MAX77705 = "m"
+LTRF216A = "m"
 
 # localversion
 ["category:localversion".">=0.0.0"."all"]
@@ -173,6 +187,21 @@ IWLMLD = "m"
 IWLMVM = "m"
 IWLWIFI = "m"
 MAC80211 = "m"
+RTW88 = "m"
+RTW88_8822C = "m"
+RTW88_8822CE = "m"
+RTW88_PCI = "m"
+
+# platform/bus
+["category:platform".">=0.0.0"."all"]
+I2C_DESIGNWARE_CORE = "y"
+I2C_DESIGNWARE_PLATFORM = "y"
+PINCTRL = "y"
+SPI_MEM = "y"
+["category:platform".">=0.0.0"."x86_64"]
+I2C_DESIGNWARE_AMDPSP = "y"
+PINCTRL_AMD = "y"
+SPI_AMD = "m"
 
 # power supplies, fuel gauges, etc.
 ["category:power".">=0.0.0"."all"]
