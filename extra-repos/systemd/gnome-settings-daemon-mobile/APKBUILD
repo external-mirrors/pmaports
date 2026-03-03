@@ -3,9 +3,9 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-settings-daemon-mobile
-_pkgver=48.0
+_pkgver=49
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=0
 pkgdesc="GNOME settings daemon"
 url="https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile"
 # armhf: pmb#2618
@@ -57,7 +57,7 @@ subpackages="
 	$pkgname-lang
 	$pkgname-systemd
 	"
-_commit=48.mobile.0
+_commit=11b4c4a7812a9ad6cca4796b715e6ec8b7c55c3e
 _gvc_commit="47c47a423ff2f55bb038d92517e4782cf051496a"
 source="gnome-settings-daemon-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile/-/archive/$_commit/gnome-settings-daemon-mobile-$_commit.tar.gz
 	https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/archive/$_gvc_commit/libgnome-volume-control-$_gvc_commit.tar.gz
@@ -99,7 +99,7 @@ package() {
 }
 
 sha512sums="
-a09224513481df755e8461bdedb4c3a933a840c67ae9cd1efbb0bf42f0b7eb711d8d963d32c8e010491ac5e881c1152296c0c0d2454876e0048fe3e9af1be1e4  gnome-settings-daemon-mobile-48.mobile.0.tar.gz
+1bc622f60838107b2ecf361da37b7b930182084ca76e97a6dc7a06e505838e28f8ad024bb777bece34fc3aab6858bb68b06c66ffff59e52643c397710fae279d  gnome-settings-daemon-mobile-11b4c4a7812a9ad6cca4796b715e6ec8b7c55c3e.tar.gz
 f1575dd86772e4bad9357f0322b2ba396478ec45a691c072c4ff98c299d8814aaaf0386fb90f883b3862f88495a07177453ac0fb163ce2b17eb7bb5e65ca5d6c  libgnome-volume-control-47c47a423ff2f55bb038d92517e4782cf051496a.tar.gz
-8639f116d56710eb204091fde66c250349f1d3f01951afc5218a59b53125320347fdefd432d19470ca00e105473640946d7ad0b620ae1162ab67f7d13653c987  pcver.patch
+374d2bc8929eb3abe0d781de0a856f93f4bfee75e8fb4fd3912f8a8d2c2c988091d676c8cdb70a27741fc0885773f3a59894f9a9e8a6c2c286fe5ec5114fbf21  pcver.patch
 "

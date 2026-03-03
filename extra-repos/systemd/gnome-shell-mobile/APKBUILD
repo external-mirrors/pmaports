@@ -3,9 +3,9 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-shell-mobile
-_pkgver=48.0
+_pkgver=49
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=0
 pkgdesc="GNOME shell mobile"
 url="https://wiki.gnome.org/Projects/GnomeShell"
 # armhf: mutter-mobile, gjs
@@ -76,13 +76,12 @@ subpackages="
 	$pkgname-schemas::noarch
 	gnome-mobile-extensions-app:extensions_app:noarch
 	"
-_commit="48.mobile.0"
+_commit="f9e97c2f43827f22a1a3d7bbda8f8c7e88b450f9"
 _gvc_commit="47c47a423ff2f55bb038d92517e4782cf051496a"
 source="gnome-shell-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/gnome-shell-mobile/-/archive/$_commit/gnome-shell-mobile-$_commit.tar.gz
 	https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/archive/$_gvc_commit/libgnome-volume-control-$_gvc_commit.tar.gz
 	gsh.patch
 	pcver.patch
-	gjs-1.85.90-girepository.patch
 	"
 builddir="$srcdir/gnome-shell-mobile-$_commit"
 options="!check" # Tests have circular dependency 'gnome-shell <-> gdm'
@@ -100,7 +99,7 @@ prepare() {
 }
 
 build() {
-	abuild-meson \
+	abuild-meson --wrap-mode=default \
 		-Dtests=false \
 		. output
 	meson compile ${JOBS:+-j ${JOBS}} -C output
@@ -145,9 +144,8 @@ package() {
 }
 
 sha512sums="
-01a4beb195f48a7ce00a50453695ccc10c7a00fcda81428bf1bb07aacef70a14ffed8124faa50ac98d601d4d43f291c2cd48835bdb79d5e8e751677d877a6953  gnome-shell-mobile-48.mobile.0.tar.gz
+3637a1510b800e73164763bc777635aca59ad7986301b3a0f4a2a0ceddf4ab95c75488794bdeb82a7235a3b41d5058175f8d2ce907a4257884f1ae92755a14f0  gnome-shell-mobile-f9e97c2f43827f22a1a3d7bbda8f8c7e88b450f9.tar.gz
 f1575dd86772e4bad9357f0322b2ba396478ec45a691c072c4ff98c299d8814aaaf0386fb90f883b3862f88495a07177453ac0fb163ce2b17eb7bb5e65ca5d6c  libgnome-volume-control-47c47a423ff2f55bb038d92517e4782cf051496a.tar.gz
 40cafbd0da2f2a40ff9e9db1026179d52a3b296a81fa43a98e433c0919800f0ec5231fcad32d523b8f01b8f7c0205dce1332e48493b0101ad02dae9469ac3de0  gsh.patch
-0503440b547b78859c3bb87a66308899bcf33cc0b543e04e9c865904ff7fb86b10b66594c37a1726828ee1a497b0e034150be8cf1a9fbd06c59809619f6a31c8  pcver.patch
-7d1bd0a60ee389c8fbc830ac573235ac1053fe44e8c249d32fb34427d9a1c0129444d781d311a6474d5e0b97897a14a52013a3aec0c85c120b8b525b835378bb  gjs-1.85.90-girepository.patch
+8f1118f3e32153e2893dbdd443ea3f8380f9b6cd2d4d3a657e7a06d86b4606592d03c6f1a4e152762014f9fecb6e5b8a39cbaf3e7f9e79ba156f045c71fd35c0  pcver.patch
 "

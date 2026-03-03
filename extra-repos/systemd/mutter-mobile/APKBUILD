@@ -3,7 +3,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=mutter-mobile
-_pkgver=48.0
+_pkgver=49
 pkgver=9999$_pkgver
 pkgrel=0
 pkgdesc="clutter-based window manager and compositor"
@@ -72,7 +72,7 @@ makedepends="
 options="!check" # Can't be run with release builds
 provides="mutter=$pkgver-r$pkgrel"
 subpackages="$pkgname-dbg $pkgname-dev $pkgname-doc $pkgname-lang $pkgname-schemas::noarch"
-_commit="48.mobile.0"
+_commit="3d1ac0577cb13baa11e8fe6ee4b192d4b26c7a7a"
 _gvdb_commit="b54bc5da25127ef416858a3ad92e57159ff565b3"
 source="mutter-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/mutter-mobile/-/archive/$_commit/mutter-mobile-$_commit.tar.gz
 	https://gitlab.gnome.org/GNOME/gvdb/-/archive/$_gvdb_commit/gvdb-$_gvdb_commit.tar.gz
@@ -129,8 +129,8 @@ package() {
 }
 
 sha512sums="
-c1aef60e14662b373ddeab88d7b49f153165ab2bfb63906aeb64f6de9d224ed3d4c9c5b3cd8a7b12ba29b8de8a5b9fa738dfa681e83cd51e7a33d0695b6410f2  mutter-mobile-48.mobile.0.tar.gz
+ab04741341c1c047d304250a703e17fc7d2b7db33a240159205d0df99ff40f35dd3aeed4377e5ace07de6602fd0aabe116be7a5706d546f3a1d5637991d31cba  mutter-mobile-3d1ac0577cb13baa11e8fe6ee4b192d4b26c7a7a.tar.gz
 1cd8d689758cda662737e5ec78d55e4f4c6934b0f429d8cadcec4a423bafd8765040f8d62c51d8797b101fff89df75a7b85e37006ea133ab81e600f205c2ef1e  gvdb-b54bc5da25127ef416858a3ad92e57159ff565b3.tar.gz
-5b4851ba1728f9d539cebdf5feb8e49dffc61c5b8f992e84145b654b0c3cadb4e585a4c1d53a4992132e4472771c97bbad2c261525fb17f91c4715da7eea799d  pcver.patch
+1392d6ec1cd35c83e52c59734d4faec80f850039a4c8f9927bb74b8fa6e67864e61cf4658a8fb656fe84916eaa9a65b647ff74b5890c7724358242b885b57fdc  pcver.patch
 b7d0bea395c47558a089f75c2c30ac04da2ffc60d044364653098dcb30302aeeb839631fc51c5b5673d11f07fe85af645ea6fe9b2ebe107f8fc67541d5a8e3eb  fix-freeze.patch
 "
