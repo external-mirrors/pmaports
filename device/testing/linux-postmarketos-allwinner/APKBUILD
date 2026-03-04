@@ -4,7 +4,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=6.18.3_git20260105
-pkgrel=3
+pkgrel=4
 _tag="orange-pi-6.18-20260105-0049"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -13,20 +13,18 @@ license="GPL-2.0-only"
 makedepends="
 	bison
 	clang
-	devicepkg-dev
+	elfutils-dev
 	findutils
 	flex
-	gmp-dev
-	installkernel
+	linux-headers
 	lld
 	llvm
-	mpc1-dev
-	mpfr-dev
 	openssl-dev
+	pahole
 	perl
-	rsync
+	postmarketos-installkernel
+	python3
 	zstd
-	bash
 	"
 options="!strip !check !tracedeps
 	pmb:cross-native
@@ -58,35 +56,36 @@ esac
 
 prepare() {
 	default_prepare
-
-	REPLACE_GCCH=0 LLVM=1 \
-		. downstreamkernel_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
 
 build() {
 	unset LDFLAGS
-	# V=1: workaround for pma#1990
 	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
 		CFLAGS_MODULE=-fno-pic \
-		DTC_FLAGS="-@" \
-		V=1
+		DTC_FLAGS="-@"
 }
 
 package() {
-	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
-
-	make -j1 modules_install dtbs_install \
+	make dtbs_install modules_install zinstall \
 		ARCH="$_carch" \
 		LLVM=1 \
+		INSTALL_PATH="$pkgdir/boot" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
+
 sha512sums="
 3f291658f6e9183d4a7c56c96bd6b6c84f16c3ce96c023a78b80695d90e029de53a19126b34cd770d72fc67204d59bb0f16c9a1a87876cdaa4d5d21f18dc6c49  linux-postmarketos-allwinner-orange-pi-6.18-20260105-0049.tar.gz
-6b3254e0d44570d603c9a66941fcb47750e1999691218d749b4b6f29af44fa3de73ba72b5115b9136c852ec4c17cd3d3c91a6422bb54d729b9189673d3001c44  config-postmarketos-allwinner.aarch64
-f12b53ed42811fc7fa90d7efda9372bb2e10c649f433b4eca2a9c2c7e9dc0b3e82450c3c94e18fcf287199d8aa4a5358daf005fbbaf363bdea9ad215a12241ec  config-postmarketos-allwinner.armv7
+18f97fa15791fc33ce3ecbff3d2a14dae1611d353253a1db5ee2ef5c64d01fb7b11c300879d98357fb7e2a68aa76550ce2f31ffb9d10e11d9bf526ea10b06f1d  config-postmarketos-allwinner.aarch64
+c11bbb4552787858c11de9a06ed13569f7636e75397df17a7ac2dd8b9fbeb5f2bb0f0d0ca25eeeaf09adc35076619de82aa54262436f8376ad147899a16294a7  config-postmarketos-allwinner.armv7
 5ee446b124ae551fab659fe51e4bf9a617218f464398ed899bb438c469e93bacc248b1a6d3936ac36ba812971170696765117f2b619fdd37e5ff21b46f01bde9  0001-dts-add-dontbeevil-pinephone-devkit.patch
 ffb0e0b553eeb2a8b0db6302ad524aee80b4c8141d6becb4d614689b5f2fd1a07ba0df6d2ceec73634f3cc66e581013b44deb7c0df79afc1a9e5fa4bf9e56fec  0002-dts-add-pinetab-dev-old-display-panel.patch
 eaff5d1167e2fa1a46619dc15623d1ac979a76f67b385d43cc026150efeb98dd46ab3e824e1bcf2423b644c693b2543186278cb8f74bc68a151e88e27dbc1f8c  0003-dts-pinetab-add-missing-ohci1.patch
