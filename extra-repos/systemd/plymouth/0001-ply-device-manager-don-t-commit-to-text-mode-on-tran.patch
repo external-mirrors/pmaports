@@ -1,0 +1,48 @@
+From d845d2a7bb4ca3d7212bcb8cb65e4e23927ee758 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Wed, 4 Mar 2026 08:28:03 -0800
+Subject: [PATCH] ply-device-manager: don't commit to text mode on transient
+ DRM ENOENT
+
+When plymouth starts on systems where the DRM device isn't ready yet,
+ply_render_open fails with ENOENT. This was treated as if there weren't
+any renderer plugins installed, and immediately fell back to text mode.
+
+This was noticed during boot where a udev change event fired for
+/dev/dri/card0 before the driver is "ready", plymouth failed to open it,
+plymouth falls back to text mode, then ~30ms later there's a udev add
+event for the DRM device.
+
+This patch changes the flow so that the text fallback is only chosen
+after DeviceTimeout is reached. Otherwise, local_console_managed is
+*not* set and any subsequent udev add events are not ignored so a DRM
+device that is late to the party will get picked up. If no device is
+ready by the configured timeout, then it will fall back to text mode.
+---
+ src/libply-splash-core/ply-device-manager.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/libply-splash-core/ply-device-manager.c b/src/libply-splash-core/ply-device-manager.c
+index 56dfd562..7267703b 100644
+--- a/src/libply-splash-core/ply-device-manager.c
++++ b/src/libply-splash-core/ply-device-manager.c
+@@ -1103,10 +1103,13 @@ create_devices_for_terminal_and_renderer_type (ply_device_manager_t *manager,
+
+                 if (renderer != NULL && !ply_renderer_open (renderer)) {
+                         if (errno == ENOENT) {
+-                                ply_trace ("No renderer plugins installed, creating non-graphical devices");
+                                 ply_renderer_free (renderer);
+-                                create_non_graphical_devices (manager);
+-                                manager->device_timeout_elapsed = true;
++                                if (manager->device_timeout_elapsed) {
++                                        ply_trace ("No renderer plugins installed, creating non-graphical devices");
++                                        create_non_graphical_devices (manager);
++                                } else {
++                                        ply_trace ("Renderer open failed with ENOENT before timeout, will retry");
++                                }
+                                 return false;
+                         }
+                         ply_trace ("could not open renderer for %s", device_path);
+--
+2.53.0
+
