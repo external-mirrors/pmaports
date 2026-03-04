@@ -17,6 +17,7 @@ in pmaports and the processes around device categorization.
    device-categorization
    deviceinfo-reference
    ci-tags
+   firmware
    generic-device-packages
    generic-kernels
    kconfig-fragments
