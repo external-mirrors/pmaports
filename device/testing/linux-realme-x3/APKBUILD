@@ -2,7 +2,7 @@
 maintainer="Patriot-06 <mbmc172@gmail.com>"
 pkgname=linux-realme-x3
 pkgver=6.12_rc7
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline Kernel fork for Realme X3"
 arch="aarch64"
 _carch="arm64"
@@ -13,7 +13,19 @@ options="!strip !check !tracedeps
 		pmb:cross-native
 		pmb:kconfigcheck-nftables
 		"
-makedepends="bash bc bison findutils flex installkernel openssl-dev perl zstd python3"
+makedepends="
+	bison
+	clang
+	findutils
+	flex
+	lld
+	llvm
+	openssl-dev
+	perl
+	postmarketos-installkernel
+	python3
+	zstd
+	"
 
 # Source
 _repository="linux"
@@ -22,6 +34,7 @@ _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/sm8150-linux-mainline/$_repository/archive/$_commit.tar.gz
 	$_config
+	disable-builtin-wcslen.patch
 "
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
@@ -33,7 +46,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
@@ -45,6 +58,7 @@ package() {
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
@@ -59,5 +73,6 @@ package() {
 
 sha512sums="
 0adb5b750da3cad2b95654e57f887691d8e2d63f79e350d9640fc3a6012c4b631b342934b119fc24fb3eb954ac6e3545c050b83c5db433f7bcdcd3fb54c6eadb  linux-realme-x3-91911e069acbb9d38e5dcc633d454f7b1ff9bc4b.tar.gz
-6013af04162f50bef2f455caba979d59ff8bcd3182d61862a353d9af7f864eae322f51d67a85e998d88530cab103e5869d1471767bff4bedc5836729b7933cd7  config-realme-x3.aarch64
+a8abea661d686a3a27b1294749dc151194a4c5ec469e481fdc10519323baa972da59e3701195214b35d262a583164fee1926738f7ca5d4709bcd767623c4c462  config-realme-x3.aarch64
+1b15a999007ea399814bd8be23bc3d3ab9c8602e145f8b016f0c84a613d5c48f7b319124ef11514927277b670ba4beeb43d375836f8bf1bb97dcc4479c54338d  disable-builtin-wcslen.patch
 "
