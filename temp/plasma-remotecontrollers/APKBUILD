@@ -1,0 +1,66 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=plasma-remotecontrollers
+pkgver=6.6.80_git20260305
+pkgrel=0
+_commit="b4f43e8bb588f28a165c0bd42f05dda3c67a62c5"
+pkgdesc="Translate various input device events into keyboard and pointer events"
+url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers"
+# armhf blocked by qt6-qtdeclarative -> ki18n
+arch="all !armhf"
+license="BSD-2-Clause AND (GPL-2.0-only OR GPL-3.0-only) AND CC0-1.0"
+# For some reason there is no dep on so:libcec but it crashes without it
+depends="libcec"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kconfig-dev
+	kdeclarative-dev
+	ki18n-dev
+	knotifications-dev
+	kpackage-dev
+	kstatusnotifieritem-dev
+	kwindowsystem-dev
+	libcec-dev
+	libevdev-dev
+	plasma-workspace-dev
+	qt6-qtbase-dev
+	qt6-qtwayland-dev
+	samurai
+	solid-dev
+	xwiimote-dev
+	"
+subpackages="$pkgname-lang"
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers.git"
+source="https://invent.kde.org/plasma-bigscreen/plasma-remotecontrollers/-/archive/$_commit/plasma-remotecontrollers-$_commit.tar.gz
+	uinput.conf
+	"
+options="!check" # No tests
+
+builddir="$srcdir/plasma-remotecontrollers-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	install -Dm644 \
+		"$srcdir"/uinput.conf \
+		-t "$pkgdir"/usr/lib/modules-load.d
+}
+
+sha512sums="
+390bd2e623dbccc055712687a816e61fcd84d735caae625754f0d4daac444f77f082ab804a0520d32dbb9cd2d986278f90a63fa3bf599f9fcc7b4d8ade71e8b9  plasma-remotecontrollers-b4f43e8bb588f28a165c0bd42f05dda3c67a62c5.tar.gz
+a9b069ed121ffeee887e0583d8cb46035ecf1fa90a26a4ecb3aa11ff03178b2b08621f6676db6b2350f290694c04aabcf36f2ce3e0813a76dde9a33555edb112  uinput.conf
+"
