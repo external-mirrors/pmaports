@@ -3,7 +3,7 @@
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-login-manager
 pkgver=6.6.2
-pkgrel=0
+pkgrel=1
 pkgdesc="A display manager for KDE Plasma"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -60,8 +60,10 @@ build() {
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DINSTALL_PAM_CONFIGURATION=OFF
-	cmake --build build
+		-DINSTALL_PAM_CONFIGURATION=OFF \
+		-DUID_MIN=1000 \
+		-DUID_MAX=65000
+		cmake --build build
 }
 
 check() {
