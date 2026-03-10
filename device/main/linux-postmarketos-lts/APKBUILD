@@ -48,9 +48,17 @@ makedepends="
 "
 replaces="linux-lts"
 
-# Source
+# powerpc boot wrapper patches:
+# Necessary for compilation without cross GCC in PATH, cherry-picked from
+# Nathan's fork, he does not have time to upstream them right now but would be
+# happy if someone else did:
+# https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
 source="
 	linux-$_kver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kver.tar.xz
+
+	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 
 	config-lts.aarch64
 	config-lts.armv7
@@ -114,6 +122,9 @@ package() {
 sha512sums="
 bf7844571f282c161f1c064bfe9f258d64ef3c026a36cc4406b18323ad919640343de6d3fd35f1a5a67250289112c01bc192c84434e46a62902326dc3b2af175  patch-6.18.16.patch.xz
 88599ffdec96d150c1feb9b261ba93bb0301a9d0e1ad6bef7aeab1f5372cbfc57d8b43c7e902bd8f76921d1dbd8189663c142ea869e51d0e2b483b150ee00fe0  linux-6.18.tar.xz
+1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 b7b0df7ce6a20c25f45072b9aa38eb1c47911fe0c2e06bf1dad03b96049dbef52ef253e893b37002682a32f7d58075222baed85625a621f1fc4d0d7d4cf91a5c  config-lts.aarch64
 2389669f774de3b107e59d273118150eab37db15d5643e994479609f63bcbc2680d11c34d3e69686365aef7f0cd4b6a5b2ca34caf4c6694bf8681ad284816c56  config-lts.armv7
 0cfe41cd172320fc2f708eb2ae3fd14417b38d178fc8a5d00adc038b32bd46c95866ede7a0ebc2144de7b1d8ecca9154d7864f97db7cac17e7b7b65d288fdb3b  config-lts.loongarch64
