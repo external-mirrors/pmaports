@@ -78,8 +78,11 @@ The following types of patches can be temporarily added to the generic kernels:
   `-stable` kernels (not to `-lts`).
 * Reverting patches that broke something (while also following up upstream to
   get the patch fixed or reverted).
+* Patches to build the kernel with our toolchains (while also making sure those
+  get upstreamed eventually)
 
-Out-of-tree patches are not acceptable for the generic kernels.
+Generally speaking, out-of-tree patches or non-upstreamable patches are not
+acceptable for the generic kernels.
 
 ## Device package template
 
