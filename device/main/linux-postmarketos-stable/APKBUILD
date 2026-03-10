@@ -48,9 +48,17 @@ makedepends="
 "
 replaces="linux-stable"
 
-# Source
+# powerpc boot wrapper patches:
+# Necessary for compilation without cross GCC in PATH, cherry-picked from
+# Nathan's fork, he does not have time to upstream them right now but would be
+# happy if someone else did:
+# https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
 source="
 	linux-$_kver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kver.tar.xz
+
+	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 
 	config-stable.aarch64
 	config-stable.armv7
@@ -114,6 +122,9 @@ package() {
 sha512sums="
 bcc0f5c7239f973b9c41a4ea99bd10a3df70f34c78f3f22b60098f41cca16c872563b2764e239fa49ba7a9a67c4f2c52f37684239ed93d22f8d08d3affb3daea  patch-6.19.6.patch.xz
 01b29c7f4e5bc0c9802794c2cd027fece825f90417be229a71e60eefce530010d5d301749c54ae744e9d4a483518e769e2bb7e6e9209687681ad7fff11c3ed86  linux-6.19.tar.xz
+1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
+26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
+302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 ba4821e5036df37212ae1a59929c9e6ac92d51ff1061eac241426860af0540b1816e8fd6e82bed0d7c127354fc8da5cbda82b1c726384e408b093300b123ece0  config-stable.aarch64
 d41f0c73329959d1a69011001718266ab76d1b884c75a85ef3393831442e2c609e2476a324e26db75aa07ffd3c15ce1bc995b50ae47c452b46c7cf0e8864ec22  config-stable.armv7
 2687ef98db28ea6509633121d3d701fbed68e0aea558745a4d2fcc6eb879808078f32f819b1f8bc43912194b0ab5ab74d0c75492461ab921a1684975b06f8b62  config-stable.loongarch64
