@@ -3,8 +3,8 @@
 maintainer="Richard Acayan <mailingradian@gmail.com>"
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
-pkgver=6.18.5
-pkgrel=3
+pkgver=6.19.10
+pkgrel=0
 pkgdesc="Mainline Kernel fork for SDM670/SDM710 devices"
 arch="aarch64"
 _carch="arm64"
@@ -36,8 +36,6 @@ _tag="sdm670-v$pkgver"
 source="
 	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
 	0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
-	add-sdm710.patch
-	add-xiaomi-pyxis.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -76,9 +74,7 @@ package() {
 }
 
 sha512sums="
-e002e31904e0e9885e40d2054f297f8063e8720c663444019d333e64a6819a0dd3ecc48a9ab2891b420cbee702cfb0583e6ad51de1376be861989a6f15f37f30  linux-sdm670-v6.18.5.tar.gz
+e88abf25ae6e6da37069a2147b5c06aeffe9083879fe5877e17f8d27da73a05bfa60c80af68a73f2402ab9a009b2f1d13a96602a6ead9b63732e019d975dfee1  linux-sdm670-v6.19.10.tar.gz
 c30da4fb13415b0c30072cfb0c984454aaafbc90124ea399dce65f35baee0acc30f52f381ca44ebbddd028e4ff1b32b2c65eab2af8264309f0b2085bfb1ada5b  0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
-65d28202bb77d6ab8c989ec353e5e864215a63dd901873d15e31eb08514e683947ec8be0e3d7285e0c50653eada182acb7b8f18241c8713ff15f8f52b9d5f645  add-sdm710.patch
-8f01d760444c3b2ef64c7a41c46e0e88e00e3b9753450da2d23ea89f90004b9be1b42c6dd5ab18c0aeb235eec1af7224ecb26e26dbe2b56ee483a9cd8408f286  add-xiaomi-pyxis.patch
-43fc0fa50b36ca5c8dbba3ab3e16404bc28951c936e24443188a8182f9de2d55d9c19e716141d064f3e52e65cdac2d37124eac8f7eebb932c90188a5a7ee702a  config-postmarketos-qcom-sdm670.aarch64
+d014bb29168811406eded72037b27155398e5b423eccaae1c3d65fe35b67eb4a565fd2c014ee152fc598d948d0be40443a76ba9c481d13591d5774b5788dec10  config-postmarketos-qcom-sdm670.aarch64
 "
