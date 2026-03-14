@@ -9,7 +9,7 @@ PMOS_ROOT="${PMOS_ROOT:-}"
 SUBPARTITION_DEV="${SUBPARTITION_DEV:-}"
 SUBPARTITION_LOOP="${SUBPARTITION_LOOP:-}"
 
-CONFIGFS="/config/usb_gadget"
+CONFIGFS="/sys/kernel/config/usb_gadget"
 CONFIGFS_ACM_FUNCTION="acm.usb0"
 CONFIGFS_MASS_STORAGE_FUNCTION="mass_storage.0"
 HOST_IP="${unudhcpd_host_ip:-172.16.42.1}"
@@ -269,8 +269,8 @@ mount_proc_sys_dev() {
 	mount -t devtmpfs -o mode=0755,nosuid dev /dev || echo "Couldn't mount /dev"
 	mount -t tmpfs -o nosuid,nodev,mode=0755 run /run || echo "Couldn't mount /run"
 
-	mkdir /config
-	mount -t configfs -o nodev,noexec,nosuid configfs /config
+	modprobe libcomposite 2>/dev/null || true
+	mount -t configfs -o nodev,noexec,nosuid configfs "$(dirname "$CONFIGFS")"
 
 	# /dev/pts (needed for telnet)
 	mkdir -p /dev/pts
@@ -895,7 +895,6 @@ setup_usb_network() {
 	[ -e "$_marker" ] && return
 	touch "$_marker"
 	info "Setup usb network"
-	modprobe libcomposite
 	# Run all usb network setup functions (add more below!)
 	setup_usb_network_android
 	setup_usb_network_configfs
