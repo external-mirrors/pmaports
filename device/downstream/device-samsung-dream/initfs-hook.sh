@@ -4,7 +4,7 @@
 # pmOS's init_functions.sh
 
 # See: https://www.kernel.org/doc/Documentation/usb/gadget_configfs.txt
-CONFIGFS=/config/usb_gadget
+CONFIGFS=/sys/kernel/config/usb_gadget
 
 # Create an usb gadet configuration
 mkdir $CONFIGFS/g1 || echo "initfs-hook: Couldn't create $CONFIGFS/g1"
