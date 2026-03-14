@@ -4,7 +4,7 @@
 # pmOS's init_functions.sh
 
 # See: https://www.kernel.org/doc/Documentation/usb/gadget_configfs.txt
-CONFIGFS=/config/usb_gadget
+CONFIGFS=/sys/kernel/config/usb_gadget
 SYS=/sys/class/android_usb/android0
 
 # Create an usb gadet configuration
