@@ -11,7 +11,7 @@
 if [ "$(id -u)" = 0 ]; then
 	set -x
 	apk -q add py3-pip make git
-	apk add dint --allow-untrusted --repository=https://mirror.postmarketos.org/postmarketos/master
+	apk add dint --allow-untrusted --repository=https://mirror.postmarketos.org/postmarketos/main
 	exec su "${TESTUSER:-build}" -c "sh -e $0"
 fi
 

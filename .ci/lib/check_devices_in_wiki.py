@@ -90,7 +90,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--booting", help="devices must be in the upper table,"
                         " being in the 'not booting' table below is not"
-                        " enough (all devices in pmaports master and stable"
+                        " enough (all devices in pmaports main and stable"
                         " branches and should be in the upper table)",
                         action="store_true")
     parser.add_argument("--path", help="instead of downloading the devices"
