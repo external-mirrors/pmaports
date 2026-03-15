@@ -3,12 +3,12 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-shell
-_pkgver=49.4
+_pkgver=50.0
 pkgver=9999$_pkgver
 pkgrel=0
 pkgdesc="GNOME shell"
 url="https://gitlab.gnome.org/GNOME/gnome-shell"
-# gjs -> mozjs
+# armhf: gjs -> mozjs
 arch="all !armhf"
 license="GPL-2.0-or-later"
 depends="
@@ -73,10 +73,8 @@ subpackages="
 	$pkgname-schemas::noarch
 	gnome-extensions-app:extensions_app:noarch
 	"
-_gvc_commit="47c47a423ff2f55bb038d92517e4782cf051496a"
 source="https://download.gnome.org/sources/gnome-shell/${_pkgver%.*}/gnome-shell-$_pkgver.tar.xz
 	gsh.patch
-	revert-gnome-session-49.patch
 	"
 # TODO: crossdirect disabled due to armv7 crosscompile failure on x86_64, see
 # https://gitlab.com/postmarketOS/pmaports/-/merge_requests/5115#note_1899890119
@@ -90,6 +88,7 @@ builddir="$srcdir/$pkgname-$_pkgver"
 build() {
 	abuild-meson \
 		-Db_lto=true \
+		-Dsystemd=true \
 		-Dtests=false \
 		. output
 	meson compile -C output
@@ -125,7 +124,6 @@ schemas() {
 }
 
 sha512sums="
-f101a8f261f6e3ac9f2b08efad71fd6be85f3c7d9070c747e5b9420fa9faa9e86281f76774385807bd9b1ce100fc82b37fa646147e7a4003c7ce3f8cf66b5670  gnome-shell-49.4.tar.xz
+de754fdc7a1ab8dfa793f82d6cfbf8b8f3d625a5998bc6992b256fd51d652c02c07c40a8a17425defac75052ce76d6c4043d0b414066eb4c3f2580b01050bf6d  gnome-shell-50.0.tar.xz
 ae4ac679bacd35948b44068e5a70407f473bd96986ee126abb1bdf066db5cbc2087a3ffae0b390286689cacbe8325870fd43663ba39f4f7543216e02bf083934  gsh.patch
-9fc784ef42f3b64f242be05fefc5014f88c20292b433c04fb20acb4f2d481d6421eb1836652ec38dc358945d950abf8b36b4efd30b281efc32ff26331341bd21  revert-gnome-session-49.patch
 "
