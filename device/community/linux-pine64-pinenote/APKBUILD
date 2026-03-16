@@ -2,7 +2,7 @@
 # Kernel config based on: arch/arm64/configs/pinenote_defconfig
 maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=linux-pine64-pinenote
-pkgver=6.19.3
+pkgver=6.19.8
 _kernver=${pkgver%.*}
 pkgrel=0
 pkgdesc="Pine64 PineNote close to mainline fork"
@@ -34,6 +34,7 @@ _commit="526524233b7156b194cf6f0869d2059dfa4c90e9"
 source="
 	https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver.tar.xz
 	$pkgname-$_kernver-$_commit.patch::https://ayakael.net/forge/linux-pinenote/compare/$_commit..v$_kernver.patch
+	enable-ultra-suspend.patch
 	$_config
 "
 # get patch releases
@@ -82,6 +83,7 @@ package() {
 sha512sums="
 01b29c7f4e5bc0c9802794c2cd027fece825f90417be229a71e60eefce530010d5d301749c54ae744e9d4a483518e769e2bb7e6e9209687681ad7fff11c3ed86  linux-6.19.tar.xz
 468c7d0ab2463adc8b9a56448ddd0819d56a5914b99baa921e2989ec1fdc5c414c02ef72e55691acc9b75ddd1afff5c17953fc2d2e1ed81210e5f7c40cd01765  linux-pine64-pinenote-6.19-526524233b7156b194cf6f0869d2059dfa4c90e9.patch
-7e8071c98f94b6cc5c6dae72e9045a3956145cae4b25ac07868379ddda0d22b17413136bff4ff92700a728d07c520c878fad163693fa1e6c3258b7deb0bdc400  config-pine64-pinenote.aarch64
-42cf563be07254942e3873a91241f423753d4a4dc70e18bc8ac210519c0642aef45ea91fdd0e359b7e428a87c5e091e8be3e1199ebeaf679bfc7a09af5e1206e  linux-pine64-pinenote-6.19.3.patch.xz
+665bdc843912a22bc9f1840bf89195f6cccabd2b8ca3313f3c61b5503c84f98395e3de0d28bc31cbc9f1b4be4a41a483db156fad353506bb5be7abdc22e46501  enable-ultra-suspend.patch
+b58e25a844d1cef9179a71fc0b93e0e97e3a5f7b54e40ae086771a1c3ff30da2f83c3325da5912f09f749f9c8a8b669bf38d97d765feedf007d9126d198ecf75  config-pine64-pinenote.aarch64
+21954614fc95f8e6f76f82d702eaea7e7ce75af041e95fe0e230b8030825c6538e4f8b20df7d98e955d8d353ab5cdf4025868f0ca074efd417064c72f5c42631  linux-pine64-pinenote-6.19.8.patch.xz
 "
