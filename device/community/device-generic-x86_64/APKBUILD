@@ -4,7 +4,7 @@ maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=device-generic-x86_64
 pkgdesc="Generic x86_64 system, with EFI"
 pkgver=24
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -39,8 +39,6 @@ _pmb_recommends="
 	oem-intel
 	oem-nvidia
 "
-provides="device-tablet-x64uefi=$pkgver-r$pkgrel device-tablet-x86uefi=$pkgver-r$pkgrel"
-replaces="device-tablet-x64uefi device-tablet-x86uefi"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -65,18 +63,14 @@ kernel_mainline() {
 }
 
 kernel_stable() {
-	pkgdesc="Alpine Stable kernel"
-	provides="device-tablet-x64uefi-kernel-edge=$pkgver-r$pkgrel device-tablet-x86uefi-kernel-edge=$pkgver-r$pkgrel $pkgname-kernel-edge=$pkgver-r$pkgrel"
-	replaces="device-tablet-x64uefi-kernel-edge device-tablet-x86uefi-kernel-edge $pkgname-kernel-edge"
-	depends="linux-stable"
+	pkgdesc="postmarketOS Stable kernel"
+	depends="linux-postmarketos-stable"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-	pkgdesc="Alpine LTS kernel"
-	provides="device-tablet-x64uefi-kernel-lts=$pkgver-r$pkgrel device-tablet-x86uefi-kernel-lts=$pkgver-r$pkgrel"
-	replaces="device-tablet-x64uefi-kernel-lts device-tablet-x86uefi-kernel-lts"
-	depends="linux-lts"
+	pkgdesc="postmarketOS LTS kernel"
+	depends="linux-postmarketos-lts"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
