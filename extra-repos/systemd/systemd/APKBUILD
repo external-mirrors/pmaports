@@ -7,7 +7,7 @@
 
 maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
-pkgver=259.5
+pkgver=260
 _pkgver="${pkgver/_/-}"
 pkgrel=0
 pkgdesc="System and service manager"
@@ -267,6 +267,10 @@ package() {
 
 	DESTDIR="$pkgdir" meson install --no-rebuild -C build
 
+
+	# NOTE: Uncomment to print dlopened dependencies and crash the build:
+	# _dump_dlopen_metadata "$pkgdir" | _extract_sonames | _resolve_packages; exit 1
+
 	# ship default policy to leave services disabled
 	for type in system user; do
 		mkdir -p "$pkgdir"/usr/lib/systemd/"$type"-preset
@@ -472,8 +476,49 @@ libs() {
 	default_libs
 }
 
+# Scan for dlopened dependencies
+_dump_dlopen_metadata() {
+	mkdir -p "$pkgbasedir/.dlopen-metadata-tmp"
+	mkdir -p "$pkgbasedir/.dlopen-metadata"
+	scanelf -RyB -E ET_DYN --section '.note.dlopen' "$pkgdir" | while read type section src; do
+		[ "$section" != ".note.dlopen" ] && continue
+
+		section_data="$(readelf -j .note.dlopen "$src")"
+		local filename="${src##*/}"
+		if [ -e "$pkgbasedir/.dlopen-metadata/$filename" ]; then
+			error "filename reused, cannot handle this yet: $filename"
+		fi
+		readelf -j .note.dlopen "$src" | tee "$pkgbasedir/.dlopen-metadata/$filename"
+		local tmp="$pkgbasedir/.dlopen-metadata-tmp/$filename"
+		strip --remove-section=.note.dlopen -o "$tmp" "$src"
+		# only replace content to preserve attributes
+		cat "$tmp" > "$src"
+		rm "$tmp"
+	done
+
+	rm -r "$pkgbasedir/.dlopen-metadata-tmp"
+}
+
+# Extract sonames from readelf output
+_extract_sonames() {
+	grep 'Dlopen Metadata:' | \
+	sed 's/.*"soname":\[//' | \
+	sed 's/\].*//' | \
+	tr ',' '\n' | \
+	sed 's/"//g' | \
+	sort -u
+}
+
+# Resolve each soname to package
+_resolve_packages() {
+	while read -r soname; do
+		apk search "so:$soname" 2>/dev/null || true
+	done | sed 's/-[0-9].*//' | sort -u
+}
+
+
 sha512sums="
-cb76b3a11b400fea94de2be74bcd9178b2e986c1965cbc19824114fe14fdd9b6aed43ae325cf5bc505efa1333adc71e131e0a8b54519e6741baa090392bf0a98  systemd-259.5.tar.gz
+2b81a327319c6b06c04742aa8ee5f36ebc7b78aa6db2a82f2a7376fda8bf2079bfc418db290b0522e1d01a3449b3a4e847ebe22d260cc83aeb86a7a4de714d41  systemd-260.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
 8b0360acd46f8918ccaf4bcfbf8b2e60ba0d1d6ea6c575fa51668e129b421edc3e7503db7790b6abce8d926b6c8493c02893f70eb481e3fdd935c7b90f442474  bless-boot.patch
 "

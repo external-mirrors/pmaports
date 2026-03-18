@@ -75,7 +75,7 @@ trigger_user_and_system_services() {
 	# respective package post-upgrade scripts
 	if $SYSTEM_SERVICES_CHANGED; then
 		echo "Reloading/restarting marked system services..."
-		systemctl reload-or-restart --marked
+		systemctl enqueue-marked
 	fi
 
 	if $USER_SERVICES_CHANGED; then
@@ -87,8 +87,7 @@ trigger_user_and_system_services() {
 			systemctl \
 				--user \
 				-M "$uid@" \
-				reload-or-restart \
-				--marked &
+				enqueue-marked &
 		done
 		wait
 	fi
