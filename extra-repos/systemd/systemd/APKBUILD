@@ -37,7 +37,6 @@ makedepends="
 	audit-dev
 	bash
 	bash-completion
-	bpftool
 	clang
 	cmake
 	coreutils
@@ -48,7 +47,6 @@ makedepends="
 	gperf
 	kmod-dev
 	libapparmor-dev
-	libbpf-dev
 	libbz2
 	libcap-dev
 	libfido2-dev
@@ -95,7 +93,6 @@ depends="
 	kmod-libs
 	libapparmor
 	libblkid
-	libbpf
 	libcap2
 	libdw
 	libelf
@@ -240,7 +237,7 @@ build() {
 		-Ddns-servers="9.9.9.10#dns10.quad9.net 149.112.112.10#dns10.quad9.net 2620:fe::10#dns10.quad9.net 2620:fe::fe:10#dns10.quad9.net" \
 		-Dntp-servers="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 4.pool.ntp.org" \
 		\
-		-Dbpf-framework=enabled \
+		-Dbpf-framework=disabled\
 		-Dvmlinux-h=provided \
 		-Dvmlinux-h-path="$(find /usr/src -path "/usr/src/linux-headers-*-stable/vmlinux.h" | sort -V | tail -n1)" \
 		build .
