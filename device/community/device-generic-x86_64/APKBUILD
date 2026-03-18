@@ -3,7 +3,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=device-generic-x86_64
 pkgdesc="Generic x86_64 system, with EFI"
-pkgver=26
+pkgver=27
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -27,9 +27,9 @@ source="
 install="$pkgname.post-install $pkgname.post-upgrade"
 subpackages="
 	$pkgname-intel
-	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-mainline:kernel_mainline
 "
 _pmb_recommends="
 	firmware-b43xx
@@ -40,7 +40,6 @@ _pmb_recommends="
 	oem-nvidia
 "
 provides="device-tablet-x64uefi=$pkgver-r$pkgrel device-tablet-x86uefi=$pkgver-r$pkgrel"
-replaces="device-tablet-x64uefi device-tablet-x86uefi"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -58,25 +57,21 @@ intel() {
 		-t "$subpkgdir"/usr/share/mkinitfs/files/
 }
 
-kernel_mainline() {
-	pkgdesc="postmarketOS Mainline kernel"
-	depends="linux-postmarketos-mainline"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
-
 kernel_stable() {
-	pkgdesc="Alpine Stable kernel"
-	provides="device-tablet-x64uefi-kernel-edge=$pkgver-r$pkgrel device-tablet-x86uefi-kernel-edge=$pkgver-r$pkgrel $pkgname-kernel-edge=$pkgver-r$pkgrel"
-	replaces="device-tablet-x64uefi-kernel-edge device-tablet-x86uefi-kernel-edge $pkgname-kernel-edge"
-	depends="linux-stable"
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-	pkgdesc="Alpine LTS kernel"
-	provides="device-tablet-x64uefi-kernel-lts=$pkgver-r$pkgrel device-tablet-x86uefi-kernel-lts=$pkgver-r$pkgrel"
-	replaces="device-tablet-x64uefi-kernel-lts device-tablet-x86uefi-kernel-lts"
-	depends="linux-lts"
+	pkgdesc="Long-term maintenance kernel (most stability, not all security fixes & new features)"
+	depends="linux-postmarketos-lts"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
+	depends="linux-postmarketos-mainline"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
