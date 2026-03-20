@@ -53,7 +53,7 @@ def run_pmbootstrap(parameters):
 
 def get_upstream_branch():
     """ Use pmaports.cfg from current branch (e.g. "v20.05_fix-ci") and
-        channels.cfg from master to retrieve the upstream branch.
+        channels.cfg from main to retrieve the upstream branch.
 
         :returns: branch name, e.g. "v20.05" """
 
@@ -74,13 +74,13 @@ def get_upstream_branch():
 
     # Get branch_pmaports (e.g. "v20.05") from channels.cfg
     # https://postmarketos.org/channels.cfg
-    channels_cfg_str = run_git(["show", "upstream/master:channels.cfg"])
+    channels_cfg_str = run_git(["show", "upstream/main:channels.cfg"])
     channels_cfg = configparser.ConfigParser()
     channels_cfg.read_string(channels_cfg_str)
     assert channel in channels_cfg, \
         f"Channel '{channel}' from pmaports.cfg in your branch is unknown." \
         " This appears to be an old branch, consider recreating your change" \
-        " on top of master."
+        " on top of main."
 
     ret = channels_cfg[channel]["branch_pmaports"]
     cache["upstream_branch"] = ret

@@ -153,7 +153,7 @@ mr-settings:
   before_script:
     - apk -q add python3
   script:
-    - wget -q "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/master/check_mr_settings.py"
+    - wget -q "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/check_mr_settings.py"
     - python3 ./check_mr_settings.py
 
 # Calculate build of changed aports using a dynamic downstream pipelines:
@@ -172,7 +172,7 @@ generate-build-jobs:
     - .ci/lib/gitlab_prepare_ci.sh
   needs: []
   script:
-    - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+    - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh py3-jinja2
 
     # HACK: Make the pmb library happy to use the currently-cloned pmaports repo

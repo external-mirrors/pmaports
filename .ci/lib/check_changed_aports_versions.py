@@ -25,7 +25,7 @@ def get_package_contents(package, revision, check=True):
     if not check:
         stderr = subprocess.DEVNULL
 
-    # Run something like "git show upstream/master:main/hello-world/APKBUILD"
+    # Run something like "git show upstream/main:main/hello-world/APKBUILD"
     pmaports_dir = common.get_pmaports_dir()
     pattern = pmaports_dir + "/**/" + package + "/APKBUILD"
     path = glob.glob(pattern, recursive=True)[0][len(pmaports_dir + "/"):]
