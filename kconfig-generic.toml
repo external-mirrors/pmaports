@@ -16,6 +16,18 @@ DRM_PANEL_SAMSUNG_S6E8AA5X01_AMS561RA01 = "m"
 DRM_PANEL_SYNAPTICS_TDDI = "m"
 ["category:graphics".">=0.0.0"."aarch64 armv7"]
 EXYNOS_IOMMU = "y"
+NOUVEAU_PLATFORM_DRIVER = "y"
+["category:graphics".">=0.0.0"."all"]
+DRM_AMDGPU = "m"
+["category:graphics".">=0.0.0"."x86 x86_64"]
+DRM_I915 = "m"
+# depends on 4k page sizes
+["category:graphics".">=0.0.0"."aarch64 armv7 riscv64 x86 x86_64"]
+DRM_NOUVEAU = "m"
+DRM_NOUVEAU_BACKLIGHT = "y"
+DRM_NOUVEAU_CH7006 = "m"
+DRM_NOUVEAU_SIL164 = "m"
+DRM_XE = "m"
 
 # input devices
 ["category:input".">=0.0.0"."all"]
@@ -73,3 +85,8 @@ PPC_SUBPAGE_PROT = "y"
 # enable all loongarch64 CPU features
 ["category:misc".">=0.0.0"."loongarch64"]
 CPU_HAS_LBT = "y"
+
+# storage devices
+["category:storage".">=0.0.0"."all"]
+NVME_CORE = "m"
+BLK_DEV_NVME = "m"
