@@ -636,10 +636,10 @@ EFIVAR_FS = "m"
 ["category:immutable".">=0.0.0"."all"]
 DM_VERITY = "m"
 
-# In 6.18+, CFI_CLANG is CFI
-["category:hardening".">=6.18_rc1"."x86_64 aarch64 armv7 riscv64"]
-CFI = "y"
-CFI_PERMISSIVE = "n"
+# # In 6.18+, CFI_CLANG is CFI
+# ["category:hardening".">=6.18_rc1"."x86_64 aarch64 armv7 riscv64"]
+# CFI = "y"
+# CFI_PERMISSIVE = "n"
 # All older versions use CFI_CLANG
 ["category:hardening".">=6.10.0 <6.18_rc1"."armv7"]
 CFI_CLANG = "y"
@@ -655,8 +655,8 @@ CFI_CLANG = "y"
 CFI_PERMISSIVE = "n"
 ["category:hardening".">=5.13.0 <6.1_rc1"."aarch64"]
 LTO_CLANG_THIN = "y" # Required for CFI pre-6.1
-["category:hardening".">=6.12.0"."x86_64 aarch64 armv7 riscv64"]
-CFI_ICALL_NORMALIZE_INTEGERS = "y" # Required for CFI with Rust
+# ["category:hardening".">=6.12.0"."x86_64 aarch64 armv7 riscv64"]
+# CFI_ICALL_NORMALIZE_INTEGERS = "y" # Required for CFI with Rust
 
 # Shadow Call Stack is currently only implemented on arm64 and riscv
 ["category:hardening".">=5.8.0"."aarch64"]
