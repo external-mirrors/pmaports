@@ -1,7 +1,8 @@
 # Contributor: Quade Curry <qc8086@qc8086.com>
 maintainer="Sebastian Fleer <dev@dwurp.de>"
 pkgname=linux-postmarketos-rockchip
-pkgver=6.18.13
+pkgver=6.19.9
+_kernver=${pkgver%.*}
 pkgrel=0
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64"
@@ -32,17 +33,15 @@ makedepends="
 
 # Source
 _config="config-$_flavor.$arch"
-case $pkgver in
-	*_rc*)	_kernver=${pkgver/_/-};;
-	*.*.*)	_kernver=${pkgver%.0};;
-	*.*)	_kernver=$pkgver;;
-esac
-
 source="
-	https://cdn.kernel.org/pub/linux/kernel/v${_kernver%%.*}.x/linux-$_kernver.tar.xz
+	https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver.tar.xz
 	$_config
 "
-builddir="$srcdir/linux-$_kernver"
+# get patch releases
+if [ "${pkgver/*.}" -ne 0 ]; then
+	source="$source $pkgname-$pkgver.patch.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/patch-$pkgver.xz"
+fi
+builddir="$srcdir"/linux-$_kernver
 
 prepare() {
 	default_prepare
@@ -70,8 +69,8 @@ package() {
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
-
 sha512sums="
-361052a6d964dbe33b958d35c63a6695a0b2f9d06c21c924141f67060f2f44fd995a977129dc053ab74b3132fa3921a7e7ad8fa5d69113442b5ab9ba431a2967  linux-6.18.13.tar.xz
-c6f4c921db51a8ff52950990b7c70eed6334320085fea3150ef9465c5373b929cfc12b0049f12d687195e6f3a656934d898a861e8e65e684c3841879a25a8616  config-postmarketos-rockchip.aarch64
+01b29c7f4e5bc0c9802794c2cd027fece825f90417be229a71e60eefce530010d5d301749c54ae744e9d4a483518e769e2bb7e6e9209687681ad7fff11c3ed86  linux-6.19.tar.xz
+c7c7e901b771b2cf84df357b7604098c55b12179f919bd4deef5d54183882b0fd037ca9dd40f301c629b584b8f59d41dc49452a5ded91a545d96c35d3501be1f  config-postmarketos-rockchip.aarch64
+6c633cd46a9a14db97c31e0e84fe410fccd4966affafbdfa8e511485a80a4a81b7c40deb9034e268f8401611ba3b1669eb3a5efc0bf2b96efc905a344523dccc  linux-postmarketos-rockchip-6.19.9.patch.xz
 "
