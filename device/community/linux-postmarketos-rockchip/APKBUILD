@@ -58,20 +58,35 @@ build() {
 package() {
 	mkdir -p "$pkgdir"/boot
 
-	make zinstall modules_install dtbs_install \
+	if [ -e "$builddir/arch/$_carch/boot/vmlinuz.efi" ]; then
+		# ZBOOT EFI decompressor for EFI booting
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+			"$pkgdir/boot/linux.efi"
+
+		# Old GZIP'd kernel image for boot.img/crOS compatibility
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
+			"$pkgdir/boot/vmlinuz"
+	else
+		echo "WARNING: CONFIG_EFI_ZBOOT not enabled!"
+		install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+			"$pkgdir/boot/vmlinuz"
+	fi
+
+	make modules_install dtbs_install \
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
-		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
+
 sha512sums="
 01b29c7f4e5bc0c9802794c2cd027fece825f90417be229a71e60eefce530010d5d301749c54ae744e9d4a483518e769e2bb7e6e9209687681ad7fff11c3ed86  linux-6.19.tar.xz
-c7c7e901b771b2cf84df357b7604098c55b12179f919bd4deef5d54183882b0fd037ca9dd40f301c629b584b8f59d41dc49452a5ded91a545d96c35d3501be1f  config-postmarketos-rockchip.aarch64
+b01cecf1fefc1b954f1322b5a3c50439ac203c7c120a2f1f2639ab0ba0d5b190931c425aa6d08803420a178ba9a15528f89ae12f93cae7cd9a3a202a3b924cd5  config-postmarketos-rockchip.aarch64
 6c633cd46a9a14db97c31e0e84fe410fccd4966affafbdfa8e511485a80a4a81b7c40deb9034e268f8401611ba3b1669eb3a5efc0bf2b96efc905a344523dccc  linux-postmarketos-rockchip-6.19.9.patch.xz
 "
