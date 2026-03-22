@@ -9,7 +9,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
 pkgver=260
 _pkgver="${pkgver/_/-}"
-pkgrel=0
+pkgrel=1
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -217,6 +217,9 @@ build() {
 		\
 		-Dhomed=disabled \
 		-Duserdb=false \
+		\
+		-Dstatic-libsystemd=true \
+		-Dstatic-libudev=true \
 		\
 		-Dman=enabled \
 		-Dhtml=disabled \
