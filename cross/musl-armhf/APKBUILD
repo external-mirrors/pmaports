@@ -6,9 +6,10 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 	arch_to_hostspec() { :; }
 fi
 
+maintainer=""
 pkgname=musl-armhf
-pkgver=1.2.5
-pkgrel=21
+pkgver=1.2.6
+pkgrel=0
 arch="x86_64"
 subpackages="musl-dev-armhf:package_dev"
 
@@ -57,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-b5411d6b4e03c1c8767906733d091e3438b5ca61959395e5de969a311c131d460052d6ad0c776740bce51a57ea7956ceb11e76355ddc9cc7b045804dfea9927e  musl-1.2.5-r21-armhf-edge.apk
-cb52d3a273cfe102f1c782412d0fa5cb24d735527c99e6702aa456d04655bb09f2939c8c64db86c7e256579cc4179c5fbf1f56b6461596a5e298494c4464c35d  musl-dev-1.2.5-r21-armhf-edge.apk
+000a32ed13f56693fda113ce83328c6bebd6b1d6d9265f3b39149c19f5d5cdda7fee414fdf7c0ce365211a5f8a266a1d88b74432849c1c938742cad059f6fe39  musl-1.2.6-r0-armhf-edge.apk
+6bab03b4ce5260fc655f1d7963bf81689cc4521f8f22bc28139571aa56f1e09d3c1c88deb934d3901b21d5101257a65d9b89aebff1c5abb184659e01261a404e  musl-dev-1.2.6-r0-armhf-edge.apk
 "

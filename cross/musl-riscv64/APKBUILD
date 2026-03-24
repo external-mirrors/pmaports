@@ -6,9 +6,10 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 	arch_to_hostspec() { :; }
 fi
 
+maintainer=""
 pkgname=musl-riscv64
-pkgver=1.2.5
-pkgrel=21
+pkgver=1.2.6
+pkgrel=0
 arch="x86_64"
 subpackages="musl-dev-riscv64:package_dev"
 
@@ -57,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-c3f9b76c99bd9c1426f4f87b1d60405e3b4fc6c93451d08b72338496b4cefae6692ef0b0ab9f09b78317d944289060b38c0a7072737d92b3f75fbb0fd8e81132  musl-1.2.5-r21-riscv64-edge.apk
-2b28646a759b54c3b2846499c04df7d9b8195da8892a004cbefb69625bbbb874bbc1748ce3d49738931e1e321ab5d90482b08783d07efe28f55d8d1657d451dd  musl-dev-1.2.5-r21-riscv64-edge.apk
+92fdfc025e63682a2451486b2c4edbd37a2d6f8cb7a0ae978289dbaeb507958f78be0437075e0994b8c99fc30806e6a65e1c195a7629087795babfbcf60d84b5  musl-1.2.6-r0-riscv64-edge.apk
+6c9f66996617573e89cbf0e8d51b2cc2a2c0fbf5043ed96dc21d1f892fdebe0f82456276bf8d21bf951eee6a36c3db0153670ac5dff84e3690abadbb898d37fb  musl-dev-1.2.6-r0-riscv64-edge.apk
 "

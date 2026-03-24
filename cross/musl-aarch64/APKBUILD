@@ -6,9 +6,10 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 	arch_to_hostspec() { :; }
 fi
 
+maintainer=""
 pkgname=musl-aarch64
-pkgver=1.2.5
-pkgrel=21
+pkgver=1.2.6
+pkgrel=0
 arch="x86_64"
 subpackages="musl-dev-aarch64:package_dev"
 
@@ -57,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-dce3b131910f7596f8f1d7c2662805b619a151313c7822cf56a7529b6a8b3baf708bfab649be42d920b173dbd7caf33c667ab120779728b9c271439e1190d4ce  musl-1.2.5-r21-aarch64-edge.apk
-e635424ca037e3d949f793de68218e43fc25f0633aa27d1c330d96d97a8473643683f37bd545022bcb25c8298b8ed54288cf48ccc9633b6dda849cfa187d1019  musl-dev-1.2.5-r21-aarch64-edge.apk
+2f63e2a3bfab917f99b1285cd5822345b9a17e6d74f86671364d7cdc9c484c89e221e1b59d980eec86b2745dce2f4e3e503c9dd73e5ee9b69b45517cb2184371  musl-1.2.6-r0-aarch64-edge.apk
+04215167e36c980a9078ef846f5a0aa2ec7785d39b06d9112070e00566f296292f580472cf9ff093a1d04b79a3efe052b3354fff8e651cbd7d0b4111b086c9ac  musl-dev-1.2.6-r0-aarch64-edge.apk
 "

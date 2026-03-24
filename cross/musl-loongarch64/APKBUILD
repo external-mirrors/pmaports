@@ -6,9 +6,10 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 	arch_to_hostspec() { :; }
 fi
 
+maintainer=""
 pkgname=musl-loongarch64
-pkgver=1.2.5
-pkgrel=21
+pkgver=1.2.6
+pkgrel=0
 arch="x86_64"
 subpackages="musl-dev-loongarch64:package_dev"
 
@@ -57,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-ec3cafd077ad5d07aadd75fdefadb6bcb625979eec47f2ac4ac675471c4d57c956c563bbcb1a455fe30b72212047cff8a1d7f4e4d143ad681a1f3c71c98614fd  musl-1.2.5-r21-loongarch64-edge.apk
-6bfff1beebaa45f409e414e3213c1260a98fc6a1345e11f41d23dcc1a7d37380ae21c538e28e72ab1c4ce5370f3e776dad6e827f741358ce85888bf5ab4e027c  musl-dev-1.2.5-r21-loongarch64-edge.apk
+6321c1d76ac231924b6f4e4b87309443990a544a377ea64e6b383dd5caf99d042c593cb1b37273971a3f815d499f8f91fc6ee51fa4c66499d6b192d16b43097e  musl-1.2.6-r0-loongarch64-edge.apk
+5d261c6a6698f0198aa68eb7b85d37fdb69b393187c31f83cbd8f9f0437882dc5b27112664ca09f563d70cc60c194a38fe689609b09f5ecf8c4c91f45710b45c  musl-dev-1.2.6-r0-loongarch64-edge.apk
 "
