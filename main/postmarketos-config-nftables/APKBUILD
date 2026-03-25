@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-config-nftables
 pkgver=1
-pkgrel=1
+pkgrel=2
 pkgdesc="nftables firewall configuration for postmarketOS"
 url="https://gitlab.com/postmarketos"
 arch="noarch"
@@ -17,6 +17,7 @@ subpackages="
 	$pkgname-mdns
 	$pkgname-moshserver
 	$pkgname-networkmanager
+	$pkgname-rdpserver
 	$pkgname-upnp-client:upnp_client
 	$pkgname-vlc-chromecast:vlc_chromecast
 	$pkgname-vncserver
@@ -28,6 +29,7 @@ source="
 	rules/10_dhcp.nft
 	rules/50_ausweisapp2.nft
 	rules/50_mdns.nft
+	rules/50_rdpserver.nft
 	rules/50_upnp_client.nft
 	rules/50_vlc_chromecast.nft
 	rules/50_vncserver.nft
@@ -114,6 +116,14 @@ vlc_chromecast() {
 	amove etc/nftables.d/50_vlc_chromecast.nft
 }
 
+rdpserver() {
+	depends="$pkgname"
+	description="Enables networking for RDP Server"
+	install_if="$pkgname=$pkgver-r$pkgrel freerdp-libs"
+
+	amove etc/nftables.d/50_rdpserver.nft
+}
+
 vncserver() {
 	depends="$pkgname"
 	description="Enables networking for VNC Server"
@@ -143,6 +153,7 @@ sha512sums="
 ae6a8ac03d4643004f5ce9279083bc12a215ceb2ee66993a26ab5620bb1aab347541eb1729b38cc7ec9d232de07e0176bc59475669741dfa2588c9e1ec4a4958  10_dhcp.nft
 a3f3fc76a636b1bed9de251f93cef46139b06e1c13113a6b6100ef08e79d249cb89a1b61d9b6bfbec73bdefdeb47360a6bb048488b4bccc2dccfc26d0635b579  50_ausweisapp2.nft
 597bf66783379691962f4b87a29e6219d5f87ef17d49b261c7b1eebe54561deafce4be77de3b39252c10b7b4452ac5b55870dd30605d7d0f074d27b06d1dfa6d  50_mdns.nft
+54f7e043b22097fd31d925b1fb34c57f1b4b01331efa34ec0552a8259c217a29e317335df4ce6b4c2abcf2f6565c582c4304be5ac08ba8fd2a988c0af89412f3  50_rdpserver.nft
 5779bbcc55e411ec4da58e4e7eaaa6918cdcea5b8818cd72ab93be2d1108f020861457dbd8079a60b0912f84d05eb7b42274cc9a0577f66e8322f3596b89b411  50_upnp_client.nft
 9207bef8d2df8d728521aef19f3c6ccb5c645a0295617b54722a6867c86b29c13502a01747eb3c91602f416f60bdc2bfa18dfb4906e17494923996596b6b1444  50_vlc_chromecast.nft
 c688e768c709ad17685641a6ba543f84e8466080356712073e06108fc1707109f590be45b8a0aca8d0d95171c5afe69887f71b78fe56444912dd0582a461f477  50_vncserver.nft
