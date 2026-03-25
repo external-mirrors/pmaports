@@ -4,9 +4,9 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-keyring
-_pkgver=48.0
+_pkgver=50.0
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=0
 pkgdesc="GNOME keyring"
 url="https://gitlab.gnome.org/GNOME/gnome-keyring"
 # armhf: pmb#2618
@@ -42,8 +42,7 @@ subpackages="
 	$pkgname-pam
 	$pkgname-systemd
 	"
-source="https://download.gnome.org/sources/gnome-keyring/${_pkgver%.*}/gnome-keyring-$_pkgver.tar.xz
-	libgkm-source-gkm-marshal.patch"
+source="https://download.gnome.org/sources/gnome-keyring/${_pkgver%.*}/gnome-keyring-$_pkgver.tar.xz"
 builddir="$srcdir/gnome-keyring-$_pkgver"
 
 build() {
@@ -74,6 +73,5 @@ pam() {
 }
 
 sha512sums="
-9eac06164c22a854a171f538467403c6764a6a6c2665959d721f5e3515bd91c8709a374c292cde93143f944b4ed7ec9b5613d28808d7e79839a9377d5aaa5daa  gnome-keyring-48.0.tar.xz
-7e2494f11423136856813349d4c0363b3cb11f0ea147048cfce10e383f93c8901b903bdcb02581268de7cd8f2513acf169f767de860134beb4716b5ee5323410  libgkm-source-gkm-marshal.patch
+20786486655c2188d8d0eae129d1c14a61d995d55a2339b166aa914287cf5ddd29b67d6a2fbc9d4b3d73705459cd3d17c696369500e4a0f0d12087aac78a8c15  gnome-keyring-50.0.tar.xz
 "
