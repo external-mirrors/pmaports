@@ -9,22 +9,53 @@ devices postmarketOS runs on have been grouped into the following categories.
 ### Main
 
 Requirements:
-* Maintained by >= 2 people
-* Working device features (where available):
-  * Usable phone UI (i.e. Plasma Mobile or Phosh)
-  * Calls (incl. call audio with earpiece)
-  * SMS
-  * Mobile Data
-  * WiFi
-  * Audio (speaker, main microphone ; headset, headset microphone ; jack
-    detection, headset buttons)
-  * Battery charging
-  * Bluetooth
-* Everything from community (see below)
+* The [postmarketOS team](https://postmarketos.org/team) must endorse the new
+  device.
+* A device maintainer team of at least 5 people, of which the majority are
+  part of the [postmarketOS team](https://postmarketos.org/team).
+* The postmarketOS team and device maintainer teams must cover their
+  responsibilities as listed below. Within the teams, they must figure out
+  themselves who covers what responsibilities.
+* Hardware CI in at least two locations for (in total) at least 3 devices.
+* Boot via UEFI.
+* Must use
+  [generic postmarketOS kernels](https://docs.postmarketos.org/pmaports/main/generic-kernels.html)
+* Must not depend on forked device-specific packages, such as forks of
+  `alsa-ucm-conf`.
+* Must use a generic device package for the target architecture.
+* Everything from community (see below).
 
-Not required yet (shall change in the future):
+Responsibilities for the postmarketOS team:
+* Regularly checking if requirements are still fulfilled, and if not:
+  * Discuss with the device maintainers team.
+  * Make calls for help early to e.g. find new members for the device
+    maintainers team.
+* Remove the device from main after 6 months of having the requirements
+  unfulfilled.
 
-* Camera
+Responsibilities for the device maintainer team:
+* `device-$vendor-$codename.md`:
+  * Maintain a file inside pmaports that
+    explains what features are working, and which ones are not.
+  * The working features should allow to use the device in most common use
+    cases. A phone for example would typically have calls, SMS, mobile data,
+    Wi-Fi, audio, battery charging, Bluetooth and camera. Exceptions can be
+    made by the device maintainer team, together with reasoning why they are
+    necessary (e.g. fingerprint reader is not working because the driver is
+    missing). The postmarketOS team decides if the port is complete enough for
+    the main category based on that list.
+* Organize regular meetings with device maintainers.
+* Organize regular meetings with vendors (if we have contacts there).
+* Long-term commitment for the device.
+  * People can step down as needed of course, if possible try to give an
+    advance notice.
+  * Please don't try to get a device in main if you plan to be away soon.
+* Kernel maintenance (Fixing regressions on the kernel side, new kernel
+  developments).
+* Triage issues found by the community and HW CI regressions.
+* Documentation for this device.
+* Making sure Hardware CI works (wires are connected, preparing CI).
+* Manual testing where necessary.
 
 ### Community
 
