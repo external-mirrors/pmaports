@@ -1,8 +1,8 @@
 # Maintainer: Antoine Martin (ayakael) <dev@ayakael.net>
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
-pkgver=8
-pkgrel=2
+pkgver=9
+pkgrel=0
 _commit="28d2c05ab4e80a7972611cd3188f3e8be4197f6a"
 url="https://postmarketos.org"
 license="GPL-3.0-only"
@@ -35,12 +35,14 @@ source="
 	30-eink-waveform.files
 	50-touchscreen.conf
 	panfrost.conf
-	tinydm-ebc-workaround-override.conf
+	tinydm-ebc-workaround-systemd.conf
+	tinydm-ebc-workaround-openrc.initd
 "
 subpackages="
 	$pkgname-nonfree-firmware
 	$pkgname-nonfree-firmware-openrc:firmware_openrc
 	$pkgname-nonfree-firmware-systemd:firmware_systemd
+	$pkgname-openrc
 	$pkgname-sway
 	$pkgname-sway-hrdl
 	$pkgname-systemd
@@ -103,13 +105,6 @@ package() {
 	# panfront sometimes insists on loading after rockchip_ebc
 	install -Dm644 "$srcdir"/panfrost.conf \
 		-t "$pkgdir"/usr/lib/modprobe.d
-
-	# rockchip_ebc sometimes fails to load the initial waveform.
-	# This forces a reload before starting tinydm
-	# TODO: openrc workaround
-	install -Dm644 \
-		"$srcdir"/tinydm-ebc-workaround-override.conf \
-		"$pkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
 }
 
 hrdl() {
@@ -210,12 +205,30 @@ sway() {
 	mkdir -p "$subpkgdir"
 }
 
+openrc() {
+	# rockchip_ebc sometimes fails to load the initial waveform.
+	# This forces a reload before starting tinydm
+	install="$subpkgname.post-install"
+	install -Dm755 "$srcdir"/tinydm-ebc-workaround-openrc.initd \
+		"$subpkgdir"/etc/init.d/tinydm-ebc
+
+	# source `install_if`, `pkgdesc` and `depends`
+	default_openrc
+}
+
 systemd() {
 	# post-install enables tinydm if tinydm-ebc was enabled
 	# enables seamless upgrade 7-r0 to 8-r0
 	# TODO: remove in preparation for v26.06
 	install="$subpkgname.post-install"
 
+	# rockchip_ebc sometimes fails to load the initial waveform.
+	# This forces a reload before starting tinydm
+	install -Dm644 \
+		"$srcdir"/tinydm-ebc-workaround-systemd.conf \
+		"$subpkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
+
+	# source `install_if`, `pkgdesc` and `depends`
 	default_systemd
 }
 
@@ -260,5 +273,6 @@ df0565391a66eed53ed817d3d1415bef000f9ed33ef2e8aa3016be3ecc21dd4a357e57838979d271
 8f7a5ad2f407de8c474d54dfdb9cc099c96e8918fc123f8b2a8ff911d7e1c7ca6fe30f9cea8ee2f0c1ba5f3e53359193d0683ca912f0b66e79a12814ce38dd98  30-eink-waveform.files
 ac433eebbc35a48561837495997aee4e55510b979bc0d8e3bafb761bc1be5b4bdeed2f456369dcbc582688aefd07c63966b0d72b6ffa99e84cfd868e677f02c8  50-touchscreen.conf
 6ba6638754e00908243de2f73ed6898dac03638a200dcf7b7cd9684757355ee1eb0ac874af0f971ad2e054c1a8c471867bdaea4d9aaf7eea6d3cf81ac7dd73a2  panfrost.conf
-3b95a2292a7367d228f281a1f0e031fffb3d26748350d7010d26b18a3fb46bceb214b083e0c8e2d5fe318c67ae3776663ad78fef83ce9030529d3a89b581b703  tinydm-ebc-workaround-override.conf
+3b95a2292a7367d228f281a1f0e031fffb3d26748350d7010d26b18a3fb46bceb214b083e0c8e2d5fe318c67ae3776663ad78fef83ce9030529d3a89b581b703  tinydm-ebc-workaround-systemd.conf
+2432031a5785eecf84697c70e7ed17d4b10b9a36ebb73969b0016aefbc4feb1768b144031966fdf478c47f7b1032566975aa4affcbb66293c5f348e1d2151b37  tinydm-ebc-workaround-openrc.initd
 "
