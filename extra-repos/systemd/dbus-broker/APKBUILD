@@ -3,7 +3,7 @@ maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=dbus-broker
 _pkgver=37
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux D-Bus Message Broker"
 url="https://github.com/bus1/dbus-broker"
 # armhf: no systemd
@@ -23,13 +23,11 @@ build() {
 }
 
 check() {
-	# Some tests timeout on these archs, since they run in qemu, even when the
-	# timeout is >10minutes per test
+	# Some tests timeout when run under qemu, so only run tests if we're on x86_64
+	# since we know this is a "native" arch in gitlab CI and bpo
 	case "$CARCH" in
-	armv7|riscv64) return;;
+	x86_64) meson test --print-errorlogs -C build;;
 	esac
-
-	meson test --print-errorlogs -C build
 }
 
 package() {
