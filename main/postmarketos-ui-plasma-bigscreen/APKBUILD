@@ -12,8 +12,8 @@ arch="all !armhf !x86 !riscv64 !s390x"
 license="GPL-3.0-or-later"
 depends="
 	plasma-bigscreen
-	plasma-login-manager
 	postmarketos-base-ui-plasma
+	postmarketos-base-ui-tinydm
 	"
 _pmb_recommends="
 	aura-browser
@@ -21,16 +21,18 @@ _pmb_recommends="
 	nymphcast
 	plank-player
 	"
+install="
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	"
 source="$pkgname-$_commit_configs.tar.gz::https://invent.kde.org/plasma-bigscreen/bigscreen-image-settings/-/archive/$_commit_configs/bigscreen-image-settings-$_commit_configs.tar.gz
 	nymphcast.desktop
-	plm-autologin.conf
 	"
 options="!check pmb:systemd" # No tests for a meta package
 
 package() {
 	install -Dm644 -t "$pkgdir"/etc/xdg/autostart \
 		"$srcdir"/nymphcast.desktop
-	install -Dm644 "$srcdir"/plm-autologin.conf "$pkgdir"/etc/plasmalogin.conf.d/autologin.conf
 
 	install -dm755 "$pkgdir"/etc/skel
 	mv "$srcdir"/bigscreen-image-settings-"$_commit_configs"/etc/xdg/* "$pkgdir"/etc/xdg
@@ -40,5 +42,4 @@ package() {
 sha512sums="
 a3b877e15f06078c4ac6017d2b6ce57902d23d40c0fbbc8e7ad0af8f5b9ddc802e8e353ee4f48a07315dd2d1fd1b34ed3bfc4235649ba27729cbfd67dad3675a  postmarketos-ui-plasma-bigscreen-a8bd93e279c222be6058ef46b065c11e88aa8400.tar.gz
 04b0dc1385072b5e9004068594c110678ed9efd6254fd98dee302524e0edf139f936de849d80253301552f9927409a8b0cf5ad32cdb9f7861ef0e72787610d3c  nymphcast.desktop
-78ab2c43da7d54cab13bfbd2957773abdefa30ff1680739537063e88065659b571bd33ded91109dc26b897f14521cabc073340f77b30f2f1ae07f3e58dc870d7  plm-autologin.conf
 "
