@@ -2,12 +2,14 @@
 
 _flavor="postmarketos-qcom-sm7125"
 pkgname=linux-$_flavor
-pkgver=6.14.7
+_pkgver=6.10.0
+pkgver=9999$_pkgver
+_commit=cf8cf25f8dfe6e8897e2bb37c2c0288565c39c1e
 pkgrel=0
 pkgdesc="Mainline Kernel fork for SM7125 devices"
 arch="aarch64"
 _carch="arm64"
-url="https://github.com/sm7125-mainline/linux"
+url="https://github.com/map220v/sm7125-mainline"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
@@ -23,13 +25,11 @@ makedepends="
 	python3
 	"
 
-_tag="sm7125-$pkgver"
-
 source="
-	linux-$_tag.tar.gz::$url/archive/$_tag/linux-$_tag.tar.gz
+	linux-$_commit.tar.gz::$url/archive/$_commit/linux-$_commit.tar.gz
 	config-$_flavor.$arch
 "
-builddir="$srcdir/linux-$_tag"
+builddir="$srcdir/sm7125-mainline-$_commit"
 
 prepare() {
 	default_prepare
@@ -58,6 +58,6 @@ package() {
 
 
 sha512sums="
-11c619335ee39c73f7a67d890f3fa1e4b80836e0223bb406f82dec1c81e154384b6093af48ce280e51d4927b14cf0f8f2736cb49ea56fd751981ac6b3c693d37  linux-sm7125-6.14.7.tar.gz
-efde0578e85dff8f09704c9dde7c35b8482c4429ade475eb0774a10062d7424de61920b42143daea76c8df732d8830bde168d98c9cf9652ec70dfb0bb63ec932  config-postmarketos-qcom-sm7125.aarch64
+f1062502f7a0bb75323a74a5e8a29d38171f4d07e19f6068e7235f89406d4ff9b3173a0f7df7aee9cedba43ea051e9aa861728aae148f11f2060bd1a4ad2da8f  linux-cf8cf25f8dfe6e8897e2bb37c2c0288565c39c1e.tar.gz
+9f71ea3436515ae042ade6f2929612a1211589462bf811d77ab6cc392a36c41a1986b52577caefb28ba50ae31bb0b28b06521df4acd36ab4fe155d591c04e791  config-postmarketos-qcom-sm7125.aarch64
 "
