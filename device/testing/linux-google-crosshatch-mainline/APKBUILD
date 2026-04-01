@@ -8,13 +8,24 @@ _config="config-$_flavor.$CARCH"
 maintainer=""
 pkgname=linux-$_flavor
 pkgver=5.3_rc5
-pkgrel=6
+pkgrel=7
 arch="aarch64"
 _carch="arm64"
 pkgdesc="Google Pixel 3 XL kernel fork, close to mainline"
 url="https://kernel.org/"
-license="GPL2-2.0-only"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev openssl-dev file bison flex"
+license="GPL-2.0-only"
+makedepends="
+	bison
+	clang
+	findutils
+	flex
+	lld
+	llvm
+	openssl-dev
+	perl
+	postmarketos-installkernel
+	zstd
+"
 options="!strip !check !tracedeps
 		pmb:cross-native
 "
@@ -38,7 +49,7 @@ prepare() {
 build() {
 	unset LDFLAGS
 	# V=1: workaround for pma#1990
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
 		CFLAGS_MODULE=-fno-pic V=1
 }
@@ -50,6 +61,7 @@ package() {
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
@@ -62,6 +74,6 @@ package() {
 
 sha512sums="
 1ce235689d7ce0b40be203cb16c1bdfe9bc7b2c5e793a942afc5ea4f3268a0a15b684d9c4017a87916d989d8592a96a4223976c95bf7fcca603e71d2f20fee86  linux-google-crosshatch-mainline-9c9b87cec239101274451cc9c086da60108f9fda.tar.gz
-c5ad0da2c43bdc6ba482ed2f087622e9c6d8f05e4a68c7af331fe7ad5403cac22bd25d2e366b8f1a5491dbd43d79b32cb3096c3a3e24ea13950400d0fa26725b  config-google-crosshatch-mainline.aarch64
+62eb29876da044ee5b112a80e750b7511280a2a1624d7264ee41ec09d09072c03ba8052f27df644b116dded1becc86c807de9fe3ba31fca54dcdc12b58345f12  config-google-crosshatch-mainline.aarch64
 27827877040007fc1c4c719f7e2e19e5c272d44972415cfc53feba0313d87e4074f8204bdb13cbc5fe21ea61bf595314b68f10c081e7b7bac3c888b60f008acf  0001-linux4.17-gcc10-extern_YYLOC_global_declaration.patch
 "
