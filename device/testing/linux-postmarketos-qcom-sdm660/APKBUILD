@@ -1,9 +1,9 @@
 # Kernel config based on: arch/arm64/configs/sdm660_defconfig
-maintainer="Alexey Minnekhanov <alexeymin@postmarketos.org>"
+maintainer="Alexey Minnekhanov <alexeymin@minlexx.ru>"
 _flavor="postmarketos-qcom-sdm660"
 pkgname=linux-$_flavor
-pkgver=6.17.4
-pkgrel=1
+pkgver=6.19.10
+pkgrel=0
 pkgdesc="Close to mainline linux kernel for Qualcomm Snapdragon 660 SoC"
 arch="aarch64"
 url="https://kernel.org/"
@@ -13,10 +13,12 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-community
 	"
 makedepends="
-	bash
 	bison
+	clang
 	findutils
 	flex
+	lld
+	llvm
 	openssl-dev
 	perl
 	postmarketos-installkernel
@@ -45,7 +47,7 @@ prepare() {
 build() {
 	unset LDFLAGS
 
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" all Image.gz
 }
 
@@ -54,6 +56,7 @@ package() {
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
@@ -80,6 +83,6 @@ package() {
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 }
 sha512sums="
-27b33c08162ff76f29095641b3913f61f301728eb3d341be4d8e03614a136783a7ee79842154614d11c76a84a06c6f2f0014f0ffeb378f7cd760e5e6fe138a88  linux-v6.17.4-sdm660.tar.gz
-dcc2a71ec15550718572c4af0b8faf137f8e761028ef3872ad732e28f7720b6bdf216f33fbe33ca859a83f5721fe3e26bcfbccfbbdeec23a6d571f745bae7543  config-postmarketos-qcom-sdm660.aarch64
+abf0ec97c2530ad3543a64019cefde3396c3361d7550513bf17948c6f4bf2621d88bb1947a519e8bddc97f1c6fdc7d12989cc8292a41805acac9f8f16f7a14df  linux-v6.19.10-sdm660.tar.gz
+489b4cc74e49164971e7467e2884a724d9e1be51edd0054c7e4c4d233bd5fd31e011e0b3e79d855d94f6980886675ab195130d6aa4c62592b9e981aca217884e  config-postmarketos-qcom-sdm660.aarch64
 "
