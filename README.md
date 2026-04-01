@@ -5,6 +5,8 @@ This repository contains the APKBUILD files for postmarketOS-specific packages, 
 There are many more packages defined in the [Alpine Linux aports](https://gitlab.alpinelinux.org/alpine/aports/) on which these packages depend.
 
 Helpful resources:
+
+* [Issues](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items)
 * [How to create a package](https://wiki.postmarketos.org/wiki/Create_a_package)
 * [APKBUILD reference](https://wiki.alpinelinux.org/wiki/APKBUILD_Reference)
 * [pmaports commit style](./COMMITSTYLE.md)
