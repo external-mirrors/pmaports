@@ -9,7 +9,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
 pkgver=260.1
 _pkgver="${pkgver/_/-}"
-pkgrel=2
+pkgrel=3
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -157,6 +157,11 @@ subpackages="
 source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
 	bless-boot.patch
+
+	41416.patch
+	41418.patch
+	41419.patch
+	41483.patch
 	"
 builddir="$srcdir/systemd-$_pkgver"
 
@@ -520,4 +525,8 @@ sha512sums="
 9f975dce6861853a817a7ceab18a24449a85d1bda6939b3a5173430c02a4d8a9a2b34ebb8cce1c51db9b0ff9078fcc65da7b0f44e3bdcbbe013b9e04bb6f0ff9  systemd-260.1.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
 8b0360acd46f8918ccaf4bcfbf8b2e60ba0d1d6ea6c575fa51668e129b421edc3e7503db7790b6abce8d926b6c8493c02893f70eb481e3fdd935c7b90f442474  bless-boot.patch
+c33c552c6b8c74d3c15f339ec0ebc6d179022f18ba13d8524ce22e9311deb4bbba369a3a737222c9954817398c44998f3169f7f55122d6ee7b96f7d3fd6bcc78  41416.patch
+ca2f3a1326b3367aef0c1961c6dbbce0659b81ef39a0a546db69129b2edeba2f5141a663ae0d926bca96d7a9d1d09c7d840c63165f317f778a489b44f9b431c6  41418.patch
+394fb47e88f5ae766ffcb226bd55df25771e45099ba3cbed6b034e9a36a77a13029d24b2e2f27ef6624f6dfb87f1165da4654d4043fe8b88bcd34d81f786f902  41419.patch
+cb564eec45452df51eb8cbca8f8f92f1715d20867ac156c4b3d9b453862a328b8bde98948978d8de05e9c3e49a6c21b3bc5c0a128273b6d814a435ad7bd41d5c  41483.patch
 "
