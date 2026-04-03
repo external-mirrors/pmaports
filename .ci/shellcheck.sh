@@ -16,6 +16,10 @@ fi
 sh_files="
 	./main/mdss-fb-init-hack/mdss-fb-init-hack.sh
 	./main/postmarketos-base-ui/rootfs-usr-lib-NetworkManager-dispatcher.d-50-dns-filter.sh
+	./main/postmarketos-duranium/rootfs-usr-bin-duranium-set-channel
+	./main/postmarketos-duranium/rootfs-usr-libexec-duranium-first-boot
+	./main/postmarketos-duranium/rootfs-usr-libexec-duranium-mount-subpartitions
+	./main/postmarketos-duranium/rootfs-usr-libexec-duranium-usb-gadget-setup
 	./main/postmarketos-installkernel/installkernel-pmos
 	./main/postmarketos-initramfs/init.sh
 	./main/postmarketos-initramfs/init_functions.sh
