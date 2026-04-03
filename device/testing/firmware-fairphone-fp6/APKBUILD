@@ -1,7 +1,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp6
 pkgver=20250606
-pkgrel=1
+pkgrel=2
 pkgdesc="Firmware for The Fairphone (Gen. 6)"
 subpackages="
 	$pkgname-adreno
@@ -38,6 +38,11 @@ adreno() {
 
 	install -Dm644 "$builddir"/gen80300_zap.mbn -t \
 		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
+	# TODO: Remove once firmware files are in linux-firmware
+	install -Dm644 "$builddir"/gen80300_gmu.bin -t \
+		"$subpkgdir/lib/firmware/postmarketos/"
+	install -Dm644 "$builddir"/gen80300_sqe.fw -t \
+		"$subpkgdir/lib/firmware/postmarketos/"
 }
 
 adsp() {
