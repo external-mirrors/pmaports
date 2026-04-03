@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp6
 pkgdesc="The Fairphone (Gen. 6)"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -28,7 +28,6 @@ depends="
 "
 makedepends="devicepkg-dev"
 source="
-	00-mesa.sh
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
@@ -39,14 +38,10 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-
-	install -Dm644 "$srcdir"/00-mesa.sh \
-		"$pkgdir"/etc/profile.d/00-mesa.sh
 }
 
 sha512sums="
-17533b261db6ead91b360e2d71355297fc3ad37f3fc68f6f03a8f7bb31e1ca82ecc403454aa360c7eace9164199086422f9e2d7507e24e4695caa8d3c117034f  00-mesa.sh
 da360c976442b4d804e15ad9978eba45db7514be073040db289a1f3ddc00b8d796c8548b9f499c83cfdc5ae8a6116ed7a02b8c5bfd6d7216bf09372db18307cf  deviceinfo
 a230e30a05453491d41ba4a6a4c504e3dbe7b630402ac2b837aa5d977c2d38c73c93fb198e8aff892a12005de8d2355593fe2fae8e3e9412418efb1d32250022  kernel-cmdline.conf
-c535c211a6d594605e0e2af3536e457b4b6a4b833f26efda4dbd514597d080393a621338c274173f4633eadefc0c2ae830f7ceaa4cbe56a1e6715ff825af18f1  modules-initfs
+178bb66a35b50aee147e3ce995b0aaf052715057025261e28a3d48e7a6449b981ceff1280799a8806529abb5c1882cea867991320594f9a291cc405d15b3e204  modules-initfs
 "
