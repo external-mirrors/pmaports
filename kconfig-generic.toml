@@ -10,10 +10,20 @@
 # Aelin <aelin@postmarketos.org>
 # Achill Gilgenast <achill@achill.org>
 
+# clock controllers
+["category:clocks".">=0.0.0"."aarch64"]
+SC_DISPCC_7180 = "m"
+SC_GPUCC_7180 = "m"
+SC_LPASS_CORECC_7180 = "m"
+SC_VIDEOCC_7180 = "m"
+
 # display controllers, bridges, panels, etc.
 ["category:graphics".">=6.19_rc1"."aarch64 armv7"]
 DRM_PANEL_SAMSUNG_S6E8AA5X01_AMS561RA01 = "m"
 DRM_PANEL_SYNAPTICS_TDDI = "m"
+["category:graphics".">=0.0.0"."aarch64"]
+DRM_PANEL_SAMSUNG_SOFEF00 = "m"
+DRM_PANEL_VISIONOX_RM69299 = "m"
 ["category:graphics".">=0.0.0"."aarch64 armv7"]
 EXYNOS_IOMMU = "y"
 NOUVEAU_PLATFORM_DRIVER = "y"
@@ -46,6 +56,14 @@ STK3310 = "m"
 # localversion
 ["category:localversion".">=0.0.0"."all"]
 LOCALVERSION_AUTO = "n"
+
+# power supplies, fuel gauges, etc.
+["category:power".">=0.0.0"."aarch64"]
+BATTERY_LENOVO_YOGA_C630 = "m"
+
+# usb drivers, type-c role switching, etc.
+["category:usb".">=0.0.0"."aarch64"]
+UCSI_LENOVO_YOGA_C630 = "m"
 
 # virtio devices
 ["category:virtio".">=0.0.0"."all"]
