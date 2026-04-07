@@ -4,7 +4,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=6.18.3_git20260105
-pkgrel=0
+pkgrel=1
 _tag="orange-pi-6.18-20260105-0049"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -59,7 +59,7 @@ esac
 prepare() {
 	default_prepare
 
-	REPLACE_GCCH=0 \
+	REPLACE_GCCH=0 LLVM=1 \
 		. downstreamkernel_prepare
 }
 
