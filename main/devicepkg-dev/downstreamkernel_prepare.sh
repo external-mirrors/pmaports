@@ -36,6 +36,8 @@ fi
 # Set _hostcc when HOSTCC is set
 [ -z "$HOSTCC" ] || _hostcc="HOSTCC=$HOSTCC"
 
+[ -z "$LLVM" ] || _llvm="LLVM=$LLVM"
+
 # Support newer GCC versions
 install_gcc_h
 
@@ -55,4 +57,4 @@ mkdir -p "$builddir/$_outdir"
 cp "$srcdir/$_config" "$builddir"/"$_outdir"/.config
 # shellcheck disable=SC2086,SC2154
 yes "" | make -C "$builddir" ARCH="$_carch" O="$_outdir" \
-	$_hostcc oldconfig
+	$_hostcc $_llvm oldconfig
