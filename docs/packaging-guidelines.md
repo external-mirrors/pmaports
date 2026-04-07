@@ -264,3 +264,13 @@ only in some specific circumstances? In those situations we have to:
     versioned provider to disambiguate (e.g:
     `provides="audio-conf=$pkgver-r$pkgrel"`), or to force the forked packages
     to provide a lower version than the other package.
+
+## Meta packages
+
+### Package versioning (pkgver, pkgrel)
+
+Packages without upstream sources are a bit special. These are `device-*`
+packages and other packages like `main/postmarketos-base`, where the source
+files are included in the package directory. For these packages, the `pkgver`
+should always be incremented instead of the `pkgrel` (so that `pkgrel` always
+is `0`).

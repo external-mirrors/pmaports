@@ -137,7 +137,7 @@ def check_versions(packages):
         pkgver = head.rpartition('-r')[0]
         if package.startswith('device-') and not pkgver.isdigit():
             print(f" - {package}: invalid pkgver \"{pkgver}\""
-                  "See: https://wiki.postmarketos.org/wiki/Packaging#device_packages_and_other_packages_without_sources")
+                  "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
             error = True
 
         # Additional checks for device packages
@@ -145,27 +145,11 @@ def check_versions(packages):
             head_parsed = get_package_contents(package, "HEAD", False)
             upstream_parsed = get_package_contents(package, commit, False)
 
-            # checksums did not change
-            if head_parsed["sha512sums"] == upstream_parsed["sha512sums"]:
-                # Check that pkgver did not change
-                if head_parsed["pkgver"] != upstream_parsed["pkgver"]:
-                    print(f" - {package}: pkgver should not change when package source checksums did not change."
-                          "See: https://wiki.postmarketos.org/wiki/Packaging#device_packages_and_other_packages_without_sources")
-                    error = True
-                # We do not check for a bumped pkgrel, because not everything
-                # needs it, e.g: pmb_recommends
-            # checksums changed
-            else:
-                # Check that pkgrel was reset to 0
-                if head_parsed["pkgrel"] != "0":
-                    print(f" - {package}: pkgrel should be 0 when package source checksums change."
-                          "See: https://wiki.postmarketos.org/wiki/Packaging#device_packages_and_other_packages_without_sources")
-                    error = True
-                # Check that pkgver was changed
-                if head_parsed["pkgver"] == upstream_parsed["pkgver"]:
-                    print(f" - {package}: pkgver should change when package source checksums change."
-                          "See: https://wiki.postmarketos.org/wiki/Packaging#device_packages_and_other_packages_without_sources")
-                    error = True
+            # Check that pkgrel was reset to 0 when pkgver was changed
+            if head_parsed["pkgver"] != upstream_parsed["pkgver"] and head_parsed["pkgrel"] != "0":
+                print(f" - {package}: pkgrel should be 0 when pkgver changes."
+                      "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
+                error = True
 
         # Compare head and upstream versions
         result = pmb.parse.version.compare(head, upstream)
