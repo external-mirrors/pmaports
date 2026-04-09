@@ -1,7 +1,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp6
 pkgver=20250606
-pkgrel=2
+pkgrel=3
 pkgdesc="Firmware for The Fairphone (Gen. 6)"
 subpackages="
 	$pkgname-adreno
@@ -10,7 +10,7 @@ subpackages="
 	$pkgname-cdsp
 	$pkgname-ipa
 	$pkgname-modem
-	$pkgname-venus
+	$pkgname-vpu
 	$pkgname-wpss
 	"
 url="https://github.com/FairBlobs/FP6-firmware"
@@ -95,11 +95,11 @@ modem() {
 		-type f -exec chmod 0644 {} \;
 }
 
-venus() {
-	pkgdesc="The Fairphone (Gen. 6) venus firmware"
+vpu() {
+	pkgdesc="The Fairphone (Gen. 6) vpu firmware"
 
-	install -Dm644 "$builddir"/vpu20_2v.mbn \
-		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/venus.mbn"
+	install -Dm644 "$builddir"/vpu20_2v.mbn -t \
+		"$subpkgdir/lib/firmware/qcom/milos/fairphone/fp6/"
 }
 
 wpss() {
