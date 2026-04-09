@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base
-pkgver=56
+pkgver=57
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
@@ -38,6 +38,7 @@ subpackages="
 	$pkgname-mesa
 	$pkgname-nftables
 	$pkgname-nftables-openrc:nftables_openrc
+	$pkgname-nosplash
 	$pkgname-openrc
 	$pkgname-ssh
 	$pkgname-sudo
@@ -71,6 +72,7 @@ _source644="
 	usr/lib/apk/config
 	usr/lib/os-release
 	usr/lib/kernel-cmdline.d/00-base.conf
+	usr/lib/kernel-cmdline.d/90-nosplash.conf
 	usr/lib/sysctl.d/90-disable-rp-filter.conf
 	usr/lib/sysctl.d/90-steam.conf
 	usr/lib/udev/rules.d/20-imagis-input.rules
@@ -192,6 +194,12 @@ nftables_openrc() {
 	mkdir -p "$subpkgdir"
 }
 
+nosplash() {
+	pkgdesc="Config to disable splash screen"
+
+	amove usr/lib/kernel-cmdline.d/90-nosplash.conf
+}
+
 ssh() {
 	install_if="$pkgname=$pkgver-r$pkgrel openssh-server-pam"
 	# Config file moved from there
@@ -286,6 +294,7 @@ e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67
 224d58717f7f95851c91914753f4aefaf8964a2e62350ed898783c295c509cdadd85c325ee00baceb21ff2763ca2f4c7b1478a5638eb7d86836f91336b739376  rootfs-usr-lib-apk-config
 6593a61cb4cbb5d557bdd0f98ce09bf91a6e076cfe0023fe3f495e17044c8d586708328a0fae52b58b3ff008a347b1f63a222a2a4d4f3f4d95777531f8a5c1a8  rootfs-usr-lib-os-release
 2c251920d837bfef95f1ba5f768cd5365d2efce9f1b6454ceed574a16e04d29b7c8e866a9e811abd4699ce57c73962421a1859799f76c24c157b87b21f9039f3  rootfs-usr-lib-kernel-cmdline.d-00-base.conf
+4508cf512fa53236779c70e163fd2f13de8c8e8a53d0ee1a8b4214c12c88979f087614bec9b543662162b3665f4d3412d69fb2de1646342bf4cc5ec076b311cd  rootfs-usr-lib-kernel-cmdline.d-90-nosplash.conf
 b70ee1b39b5f33c9a3e6bf4259158519691c82c8cefb700d4df49eb749a2cce208082e00d4905b9eea2c4f75b6da62f73931931c92157b4132adb35dcf0e0a6f  rootfs-usr-lib-sysctl.d-90-disable-rp-filter.conf
 6b16fd00756926c6fdc6f01960f59c854c90920dd9c0e67c19506a90fd26ac887a8dbfd5b1ec2712fff91f0369ddc5b91d56041360018d4d0c4d78e49733b644  rootfs-usr-lib-sysctl.d-90-steam.conf
 560d30c08856714f4bec805ca95fad767330d6fb3760096ffebdf35cad42d4ebea7dd2f5ee2e4d88596743e6717ca6ac2339d4d753feb3ca28e0090c585bf81e  rootfs-usr-lib-udev-rules.d-20-imagis-input.rules
