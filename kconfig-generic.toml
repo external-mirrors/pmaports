@@ -65,6 +65,13 @@ BATTERY_LENOVO_YOGA_C630 = "m"
 ["category:usb".">=0.0.0"."aarch64"]
 UCSI_LENOVO_YOGA_C630 = "m"
 
+# vhost acceleration
+["category:vhost".">=0.0.0"."all"]
+TARGET_CORE = "m" # required for SCSI and VSOCK
+VHOST_NET = "m"
+VHOST_SCSI = "m"
+VHOST_VSOCK = "m"
+
 # virtio devices
 ["category:virtio".">=0.0.0"."all"]
 NET_9P = "m"
@@ -85,6 +92,7 @@ VIRTIO_MMIO_CMDLINE_DEVICES = "y"
 RPMSG_VIRTIO = "m"
 VIRTIO_FS = "m"
 CRYPTO_DEV_VIRTIO = "m"
+VSOCKETS = "m"
 
 # EFI framebuffer support is explicitly disabled in some close-to-mainline
 # kernels, so it cannot go in kconfigcheck
