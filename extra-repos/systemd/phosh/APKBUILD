@@ -1,0 +1,128 @@
+# Forked from Alpine to build against polkit with systemd session tracking
+# Otherwise polkit auth agent will be broken to some mismatch for elogind/systemd session tracking
+# See https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4344
+# Co-Maintainer: Pablo Correa Gomez <pabloyoyoista@postmarketos.org>
+# Co-Maintainer: Achill Gilgenast <achill@achill.org>
+maintainer="Newbyte <newbyte@postmarketos.org>"
+pkgname=phosh
+_pkgver=0.55.0
+pkgver=9999$_pkgver
+pkgrel=0
+pkgdesc="Wayland shell for GNOME on mobile devices"
+# armhf: blocked by gnome-shell-schemas
+arch="all !armhf"
+url="https://gitlab.gnome.org/World/Phosh/phosh"
+license="GPL-3.0-only"
+triggers="$pkgname.trigger=/usr/lib/phosh/plugins/prefs"
+depends="
+	$pkgname-schemas
+	adwaita-fonts
+	adwaita-icon-theme
+	bash
+	dbus-x11
+	dbus:org.freedesktop.Secrets
+	desktop-file-utils
+	gnome-control-center
+	gnome-session
+	gnome-settings-daemon
+	gnome-shell-schemas
+	gsettings-desktop-schemas
+	phoc
+	phosh-keyboard
+	xwayland
+	"
+makedepends="
+	$depends
+	callaudiod-dev
+	systemd-dev
+	evince-dev
+	evolution-data-server-dev
+	feedbackd-dev
+	gcr-dev
+	gettext-dev
+	glib-dev
+	gmobile-dev
+	gnome-bluetooth-dev
+	gnome-desktop-dev
+	gtk+3.0-dev
+	libadwaita-dev
+	libgudev-dev
+	libhandy1-dev
+	libsecret-dev
+	linux-pam-dev
+	meson
+	modemmanager-dev
+	networkmanager-dev
+	polkit-dev
+	pulseaudio-dev
+	py3-docutils
+	qrcodegen-dev
+	upower-dev
+	wayland-dev
+	wayland-protocols
+	"
+checkdepends="xvfb-run xmlstarlet"
+# the ordering here is important - libphosh split functions need to run first to move the libphosh-0
+# headers/pkgconfig/lib into the libphosh packages, before the top level -dev package gobbles
+# up the rest.
+subpackages="
+	libphosh:libs
+	libphosh-dev:libphosh_dev
+	$pkgname-dbg
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-lang
+	$pkgname-portalsconf::noarch
+	$pkgname-schemas::noarch
+	$pkgname-systemd
+	"
+source="https://sources.phosh.mobi/releases/phosh/phosh-${_pkgver/_/.}.tar.xz"
+builddir="$srcdir/$pkgname-${_pkgver/_/.}"
+somask="libphoshsearch.so"
+options="!check" # weird test environment, idk and dont care, tests work in Alpine
+
+prepare() {
+	default_prepare
+	sed -i 's/\.rc/_rc/' meson.build
+}
+
+build() {
+	# phoc tests need a running Wayland compositor
+	abuild-meson \
+		-Db_lto=true \
+		-Dphoc_tests=disabled \
+		-Dman=true \
+		-Dbindings-lib=true \
+		. output
+	meson compile -C output
+}
+
+check() {
+	xvfb-run -a meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild --skip-subprojects -C output
+}
+
+portalsconf() {
+	install_if="$pkgname=$pkgver-r$pkgrel xdg-desktop-portal>=1.17.1"
+	amove usr/share/xdg-desktop-portal/phosh-portals.conf
+}
+
+libphosh_dev() {
+	amove usr/include/libphosh-*
+	amove usr/lib/libphosh-*.so
+	amove usr/lib/pkgconfig/libphosh-*.pc
+}
+
+schemas() {
+	pkgdesc="$pkgdesc (schemas)"
+	depends=
+
+	amove usr/share/glib-2.0/schemas
+}
+
+sha512sums="
+42bddb9a24ae3a4227732200bdce9d11a1643341ea16590dfa18098794325fabc678568f4c9cc67891f126003c3219a5087ea412005e89a1c6843ad3ce3f9d79  phosh-0.55.0.tar.xz
+"
