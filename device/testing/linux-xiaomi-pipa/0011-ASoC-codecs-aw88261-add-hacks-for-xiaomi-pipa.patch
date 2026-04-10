@@ -1,16 +1,18 @@
-From 1876ed85b33282e67f3bf85e97c0920b8fbe7ee3 Mon Sep 17 00:00:00 2001
+From 6e26f796af8264cc0c9f6a6c923e77a0e98e9a72 Mon Sep 17 00:00:00 2001
 From: domin746826 <ominek.pl91@gmail.com>
 Date: Fri, 11 Apr 2025 13:46:25 +0400
 Subject: [PATCH 11/12] ASoC: codecs: aw88261: add hacks for xiaomi-pipa
 
 aw88261 requires some hacks to work on pipa, including device tree support and non-standard firmware requests to the codec itself.
+
+The overall hack was reduced, but it still needs rework when linux-next changes land on stable.
 ---
- sound/soc/codecs/aw88261.c | 541 ++++++++++++++++++++-----------------
- sound/soc/codecs/aw88261.h |   8 +-
- 2 files changed, 297 insertions(+), 252 deletions(-)
+ sound/soc/codecs/aw88261.c | 210 +++++++++++++++++++++++++++++++++++--
+ sound/soc/codecs/aw88261.h |   4 +
+ 2 files changed, 208 insertions(+), 6 deletions(-)
 
 diff --git a/sound/soc/codecs/aw88261.c b/sound/soc/codecs/aw88261.c
-index 96b1a85c26aa..8f9770d46517 100644
+index 96b1a85c26aa..f69fb56ec6b0 100644
 --- a/sound/soc/codecs/aw88261.c
 +++ b/sound/soc/codecs/aw88261.c
 @@ -10,11 +10,13 @@
@@ -27,288 +29,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  
  static const struct regmap_config aw88261_remap_config = {
  	.val_bits = 16,
-@@ -29,6 +31,10 @@ static void aw88261_dev_set_volume(struct aw_device *aw_dev, unsigned int value)
- 	struct aw_volume_desc *vol_desc = &aw_dev->volume_desc;
- 	unsigned int real_value, volume;
- 	unsigned int reg_value;
-+	unsigned int volume_boost = 3; // Apply a 3dB boost to all volume settings
-+
-+	/* Apply boosted volume - increase output level for Xiaomi Pad 6 */
-+	value = (value > volume_boost) ? (value - volume_boost) : 0;
- 
- 	volume = min((value + vol_desc->init_volume), (unsigned int)AW88261_MUTE_VOL);
- 	real_value = DB_TO_REG_VAL(volume);
-@@ -37,7 +43,7 @@ static void aw88261_dev_set_volume(struct aw_device *aw_dev, unsigned int value)
- 
- 	real_value = (real_value | (reg_value & AW88261_VOL_START_MASK));
- 
--	dev_dbg(aw_dev->dev, "value 0x%x , real_value:0x%x", value, real_value);
-+	dev_dbg(aw_dev->dev, "value 0x%x , real_value:0x%x (boosted)", value, real_value);
- 
- 	regmap_write(aw_dev->regmap, AW88261_SYSCTRL2_REG, real_value);
- }
-@@ -88,12 +94,12 @@ static void aw88261_dev_fade_out(struct aw_device *aw_dev)
- 
- static void aw88261_dev_i2s_tx_enable(struct aw_device *aw_dev, bool flag)
- {
--	if (flag)
--		regmap_update_bits(aw_dev->regmap, AW88261_I2SCFG1_REG,
--			~AW88261_I2STXEN_MASK, AW88261_I2STXEN_ENABLE_VALUE);
--	else
--		regmap_update_bits(aw_dev->regmap, AW88261_I2SCFG1_REG,
--			~AW88261_I2STXEN_MASK, AW88261_I2STXEN_DISABLE_VALUE);
-+	// if (flag)
-+	//	regmap_update_bits(aw_dev->regmap, AW88261_I2SCFG1_REG,
-+	//		~AW88261_I2STXEN_MASK, AW88261_I2STXEN_ENABLE_VALUE);
-+	// else
-+	//	regmap_update_bits(aw_dev->regmap, AW88261_I2SCFG1_REG,
-+	//		~AW88261_I2STXEN_MASK, AW88261_I2STXEN_DISABLE_VALUE);
- }
- 
- static void aw88261_dev_pwd(struct aw_device *aw_dev, bool pwd)
-@@ -108,11 +114,12 @@ static void aw88261_dev_pwd(struct aw_device *aw_dev, bool pwd)
- 
- static void aw88261_dev_amppd(struct aw_device *aw_dev, bool amppd)
- {
-+	int ret;
- 	if (amppd)
--		regmap_update_bits(aw_dev->regmap, AW88261_SYSCTRL_REG,
-+		ret = regmap_update_bits(aw_dev->regmap, AW88261_SYSCTRL_REG,
- 				~AW88261_AMPPD_MASK, AW88261_AMPPD_POWER_DOWN_VALUE);
- 	else
--		regmap_update_bits(aw_dev->regmap, AW88261_SYSCTRL_REG,
-+		ret = regmap_update_bits(aw_dev->regmap, AW88261_SYSCTRL_REG,
- 				~AW88261_AMPPD_MASK, AW88261_AMPPD_WORKING_VALUE);
- }
- 
-@@ -149,11 +156,19 @@ static int aw88261_dev_get_iis_status(struct aw_device *aw_dev)
- 	ret = regmap_read(aw_dev->regmap, AW88261_SYSST_REG, &reg_val);
- 	if (ret)
- 		return ret;
--	if ((reg_val & AW88261_BIT_PLL_CHECK) != AW88261_BIT_PLL_CHECK) {
--		dev_err(aw_dev->dev, "check pll lock fail,reg_val:0x%04x", reg_val);
--		return -EINVAL;
--	}
- 
-+	bool pll_lock = (reg_val & (1 << 0)) == 0x0001;
-+	bool clks_available = (reg_val & (1 << 5)) == 0x0000;
-+
-+	if (pll_lock && clks_available) {
-+		dev_dbg(aw_dev->dev, "IIS signal is OK");
-+		ret = 0;
-+	} else {
-+		dev_err(aw_dev->dev,
-+			"IIS signal is not OK, pll_lock:%d, clks_available:%d",
-+			pll_lock, clks_available);
-+		ret = -EINVAL;
-+	}
- 	return ret;
- }
- 
-@@ -174,68 +189,27 @@ static int aw88261_dev_check_mode1_pll(struct aw_device *aw_dev)
- 	return -EPERM;
- }
- 
--static int aw88261_dev_check_mode2_pll(struct aw_device *aw_dev)
-+static int aw88261_dev_check_syspll(struct aw_device *aw_dev)
- {
--	unsigned int reg_val;
--	int ret, i;
--
--	ret = regmap_read(aw_dev->regmap, AW88261_PLLCTRL1_REG, &reg_val);
--	if (ret)
--		return ret;
--
--	reg_val &= (~AW88261_CCO_MUX_MASK);
--	if (reg_val == AW88261_CCO_MUX_DIVIDED_VALUE) {
--		dev_dbg(aw_dev->dev, "CCO_MUX is already divider");
--		return -EPERM;
--	}
--
--	/* change mode2 */
--	ret = regmap_update_bits(aw_dev->regmap, AW88261_PLLCTRL1_REG,
--			~AW88261_CCO_MUX_MASK, AW88261_CCO_MUX_DIVIDED_VALUE);
--	if (ret)
--		return ret;
--
--	for (i = 0; i < AW88261_DEV_SYSST_CHECK_MAX; i++) {
--		ret = aw88261_dev_get_iis_status(aw_dev);
--		if (ret) {
--			dev_err(aw_dev->dev, "mode2 iis signal check error");
--			usleep_range(AW88261_2000_US, AW88261_2000_US + 10);
--		} else {
-+	int ret;
-+	int retry_count = 0;
-+	const int max_retries = 20; // Increase retries for PLL stabilization
-+
-+	while (retry_count < max_retries) {
-+		ret = aw88261_dev_check_mode1_pll(aw_dev);
-+		if (ret != 0)
-+			retry_count++;
-+		else
- 			break;
--		}
- 	}
- 
--	/* change mode1 */
--	ret = regmap_update_bits(aw_dev->regmap, AW88261_PLLCTRL1_REG,
--			~AW88261_CCO_MUX_MASK, AW88261_CCO_MUX_BYPASS_VALUE);
--	if (ret == 0) {
--		usleep_range(AW88261_2000_US, AW88261_2000_US + 10);
--		for (i = 0; i < AW88261_DEV_SYSST_CHECK_MAX; i++) {
--			ret = aw88261_dev_check_mode1_pll(aw_dev);
--			if (ret) {
--				dev_err(aw_dev->dev, "mode2 switch to mode1, iis signal check error");
--				usleep_range(AW88261_2000_US, AW88261_2000_US + 10);
--			} else {
--				break;
--			}
--		}
-+	if (retry_count == max_retries) {
-+		dev_err(aw_dev->dev,
-+			"Failed to stabilize PLL after %d attempts, we're cooked", max_retries);
-+		return -ETIMEDOUT;
- 	}
--
--	return ret;
--}
--
--static int aw88261_dev_check_syspll(struct aw_device *aw_dev)
--{
--	int ret;
--
--	ret = aw88261_dev_check_mode1_pll(aw_dev);
--	if (ret) {
--		dev_dbg(aw_dev->dev, "mode1 check iis failed try switch to mode2 check");
--		ret = aw88261_dev_check_mode2_pll(aw_dev);
--		if (ret) {
--			dev_err(aw_dev->dev, "mode2 check iis failed");
--			return ret;
--		}
-+	if (ret == 0) {
-+		dev_info(aw_dev->dev, "PLL stabilized successfully");
- 	}
- 
- 	return ret;
-@@ -278,123 +252,13 @@ static void aw88261_dev_uls_hmute(struct aw_device *aw_dev, bool uls_hmute)
- 				AW88261_ULS_HMUTE_DISABLE_VALUE);
- }
- 
--static void aw88261_reg_force_set(struct aw88261 *aw88261)
--{
--	if (aw88261->frcset_en == AW88261_FRCSET_ENABLE) {
--		/* set FORCE_PWM */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL3_REG,
--				AW88261_FORCE_PWM_MASK, AW88261_FORCE_PWM_FORCEMINUS_PWM_VALUE);
--		/* set BOOST_OS_WIDTH */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL5_REG,
--				AW88261_BST_OS_WIDTH_MASK, AW88261_BST_OS_WIDTH_50NS_VALUE);
--		/* set BURST_LOOPR */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL6_REG,
--				AW88261_BST_LOOPR_MASK, AW88261_BST_LOOPR_340K_VALUE);
--		/* set RSQN_DLY */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL7_REG,
--				AW88261_RSQN_DLY_MASK, AW88261_RSQN_DLY_35NS_VALUE);
--		/* set BURST_SSMODE */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL8_REG,
--				AW88261_BURST_SSMODE_MASK, AW88261_BURST_SSMODE_FAST_VALUE);
--		/* set BST_BURST */
--		regmap_update_bits(aw88261->regmap, AW88261_BSTCTRL9_REG,
--				AW88261_BST_BURST_MASK, AW88261_BST_BURST_30MA_VALUE);
--	} else {
--		dev_dbg(aw88261->aw_pa->dev, "needn't set reg value");
--	}
--}
--
--static int aw88261_dev_get_icalk(struct aw_device *aw_dev, int16_t *icalk)
--{
--	u16 reg_icalk, reg_icalkl;
--	unsigned int reg_val;
--	int ret;
--
--	ret = regmap_read(aw_dev->regmap, AW88261_EFRH4_REG, &reg_val);
--	if (ret)
--		return ret;
--
--	reg_icalk = reg_val & (~AW88261_EF_ISN_GESLP_H_MASK);
--
--	ret = regmap_read(aw_dev->regmap, AW88261_EFRL4_REG, &reg_val);
--	if (ret)
--		return ret;
--
--	reg_icalkl = reg_val & (~AW88261_EF_ISN_GESLP_L_MASK);
--
--	reg_icalk = (reg_icalk >> AW88261_ICALK_SHIFT) & (reg_icalkl >> AW88261_ICALKL_SHIFT);
--
--	if (reg_icalk & (~AW88261_EF_ISN_GESLP_SIGN_MASK))
--		reg_icalk = reg_icalk | ~AW88261_EF_ISN_GESLP_NEG;
--
--	*icalk = (int16_t)reg_icalk;
--
--	return ret;
--}
--
--static int aw88261_dev_get_vcalk(struct aw_device *aw_dev, int16_t *vcalk)
--{
--	u16 reg_vcalk, reg_vcalkl;
--	unsigned int reg_val;
--	int ret;
--
--	ret = regmap_read(aw_dev->regmap, AW88261_EFRH3_REG, &reg_val);
--	if (ret)
--		return ret;
--
--	reg_vcalk = (u16)reg_val & (~AW88261_EF_VSN_GESLP_H_MASK);
--
--	ret = regmap_read(aw_dev->regmap, AW88261_EFRL3_REG, &reg_val);
--	if (ret)
--		return ret;
--
--	reg_vcalkl = (u16)reg_val & (~AW88261_EF_VSN_GESLP_L_MASK);
--
--	reg_vcalk = (reg_vcalk >> AW88261_VCALK_SHIFT) & (reg_vcalkl >> AW88261_VCALKL_SHIFT);
--
--	if (reg_vcalk & AW88261_EF_VSN_GESLP_SIGN_MASK)
--		reg_vcalk = reg_vcalk | (~AW88261_EF_VSN_GESLP_NEG);
--	*vcalk = (int16_t)reg_vcalk;
--
--	return ret;
--}
--
--static int aw88261_dev_set_vcalb(struct aw_device *aw_dev)
--{
--	int16_t icalk_val, vcalk_val;
--	int icalk, vcalk, vcalb;
--	u32 reg_val;
--	int ret;
--
--	ret = aw88261_dev_get_icalk(aw_dev, &icalk_val);
--	if (ret)
--		return ret;
--
--	ret = aw88261_dev_get_vcalk(aw_dev, &vcalk_val);
--	if (ret)
--		return ret;
--
--	icalk = AW88261_CABL_BASE_VALUE + AW88261_ICABLK_FACTOR * icalk_val;
--	vcalk = AW88261_CABL_BASE_VALUE + AW88261_VCABLK_FACTOR * vcalk_val;
--	if (!vcalk)
--		return -EINVAL;
--
--	vcalb = AW88261_VCAL_FACTOR * icalk / vcalk;
--	reg_val = (unsigned int)vcalb;
--
--	dev_dbg(aw_dev->dev, "icalk=%d, vcalk=%d, vcalb=%d, reg_val=0x%04x",
--			icalk, vcalk, vcalb, reg_val);
--	ret = regmap_write(aw_dev->regmap, AW88261_VSNTM1_REG, reg_val);
--
--	return ret;
--}
--
--static int aw88261_dev_reg_update(struct aw88261 *aw88261,
--					unsigned char *data, unsigned int len)
-+static int aw88261_dev_reg_update(struct aw88261 *aw88261, unsigned char *data, unsigned int len)
- {
+@@ -395,6 +397,8 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
  	struct aw_device *aw_dev = aw88261->aw_pa;
  	struct aw_volume_desc *vol_desc = &aw_dev->volume_desc;
  	unsigned int read_val, efcheck_val, read_vol;
@@ -317,7 +38,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  	int data_len, i, ret;
  	int16_t *reg_data;
  	u16 reg_val;
-@@ -417,6 +281,31 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
+@@ -417,6 +421,31 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
  		reg_addr = reg_data[i];
  		reg_val = reg_data[i + 1];
  
@@ -349,20 +70,10 @@ index 96b1a85c26aa..8f9770d46517 100644
  		if (reg_addr == AW88261_SYSCTRL_REG) {
  			aw88261->amppd_st = reg_val & (~AW88261_AMPPD_MASK);
  			ret = regmap_read(aw_dev->regmap, reg_addr, &read_val);
-@@ -432,21 +321,45 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
- 			/* enable uls hmute */
- 			reg_val &= AW88261_ULS_HMUTE_MASK;
- 			reg_val |= AW88261_ULS_HMUTE_ENABLE_VALUE;
-+
-+			reg_val = 0b0011001001000000;
+@@ -442,6 +471,35 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
+ 				aw88261->efuse_check = AW88261_EF_AND_CHECK;
  		}
  
--		if (reg_addr == AW88261_DBGCTRL_REG) {
--			efcheck_val = reg_val & (~AW88261_EF_DBMD_MASK);
--			if (efcheck_val == AW88261_OR_VALUE)
--				aw88261->efuse_check = AW88261_EF_OR_CHECK;
--			else
--				aw88261->efuse_check = AW88261_EF_AND_CHECK;
 +		/* Special handling for I2SCTRL registers for Xiaomi Pad 6 */
 +		if (reg_addr == AW88261_I2SCTRL1_REG &&
 +			(of_machine_is_compatible("xiaomi,pipa") ||
@@ -390,57 +101,12 @@ index 96b1a85c26aa..8f9770d46517 100644
 +				aw_dev->dev,
 +				"Setting TDM mode for Xiaomi Pad 6, channel: %d",
 +				slot_num);
- 		}
- 
++		}
++
  		/* i2stxen */
  		if (reg_addr == AW88261_I2SCTRL3_REG) {
  			/* close tx */
--			reg_val &= AW88261_I2STXEN_MASK;
--			reg_val |= AW88261_I2STXEN_DISABLE_VALUE;
-+			// reg_val &= AW88261_I2STXEN_MASK;
-+			// reg_val |= AW88261_I2STXEN_DISABLE_VALUE;
-+			reg_val = 0b0000000011110110; // 0b00000000_0_0_0_1_0_0_1_0;
- 		}
- 
- 		if (reg_addr == AW88261_SYSCTRL2_REG) {
-@@ -456,18 +369,11 @@ static int aw88261_dev_reg_update(struct aw88261 *aw88261,
- 				REG_VAL_TO_DB(read_vol);
- 		}
- 
--		if (reg_addr == AW88261_VSNTM1_REG)
--			continue;
--
- 		ret = regmap_write(aw_dev->regmap, reg_addr, reg_val);
- 		if (ret)
- 			break;
- 	}
- 
--	ret = aw88261_dev_set_vcalb(aw_dev);
--	if (ret)
--		return ret;
--
- 	if (aw_dev->prof_cur != aw_dev->prof_index)
- 		vol_desc->ctl_volume = 0;
- 
-@@ -580,8 +486,6 @@ static int aw88261_dev_start(struct aw88261 *aw88261)
- 	if (aw88261->amppd_st)
- 		aw88261_dev_amppd(aw_dev, true);
- 
--	aw88261_reg_force_set(aw88261);
--
- 	/* close uls mute */
- 	aw88261_dev_uls_hmute(aw_dev, false);
- 
-@@ -609,7 +513,7 @@ static int aw88261_dev_start(struct aw88261 *aw88261)
- static int aw88261_dev_stop(struct aw_device *aw_dev)
- {
- 	if (aw_dev->status == AW88261_DEV_PW_OFF) {
--		dev_info(aw_dev->dev, "already power off");
-+		dev_dbg(aw_dev->dev, "already power off");
- 		return 0;
- 	}
- 
-@@ -711,6 +615,86 @@ static void aw88261_start(struct aw88261 *aw88261, bool sync_start)
+@@ -711,6 +769,70 @@ static void aw88261_start(struct aw88261 *aw88261, bool sync_start)
  			AW88261_START_WORK_DELAY_MS);
  }
  
@@ -501,23 +167,7 @@ index 96b1a85c26aa..8f9770d46517 100644
 +	return 0;
 +}
 +
-+static int aw88261_startup(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
-+{
-+	// aw_snd_soc_codec_t *codec = dai->component;
-+
-+	// struct aw88261 *aw88261 = snd_soc_component_get_drvdata(codec);
-+
-+	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
-+		// handle playback
-+	} else {
-+		// handle capture
-+	}
-+
-+	return 0;
-+}
-+
 +static const struct snd_soc_dai_ops aw88261_dai_ops = {
-+	.startup = aw88261_startup,
 +	.set_stream = aw88261_dai_set_stream,
 +	.set_sysclk = aw88261_dai_set_sysclk,
 +	.set_fmt = aw88261_dai_set_fmt,
@@ -527,20 +177,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  static struct snd_soc_dai_driver aw88261_dai[] = {
  	{
  		.name = "aw88261-aif",
-@@ -718,17 +702,18 @@ static struct snd_soc_dai_driver aw88261_dai[] = {
- 		.playback = {
- 			.stream_name = "Speaker_Playback",
- 			.channels_min = 1,
--			.channels_max = 2,
-+			.channels_max = 1,
- 			.rates = AW88261_RATES,
- 			.formats = AW88261_FORMATS,
- 		},
- 		.capture = {
- 			.stream_name = "Speaker_Capture",
- 			.channels_min = 1,
--			.channels_max = 2,
-+			.channels_max = 1,
+@@ -729,6 +851,7 @@ static struct snd_soc_dai_driver aw88261_dai[] = {
  			.rates = AW88261_RATES,
  			.formats = AW88261_FORMATS,
  		},
@@ -548,7 +185,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  	},
  };
  
-@@ -956,6 +941,25 @@ static int aw88261_set_fade_step(struct snd_kcontrol *kcontrol,
+@@ -956,6 +1079,25 @@ static int aw88261_set_fade_step(struct snd_kcontrol *kcontrol,
  	return 0;
  }
  
@@ -574,59 +211,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  static const struct snd_kcontrol_new aw88261_controls[] = {
  	SOC_SINGLE_EXT("PCM Playback Volume", AW88261_SYSCTRL2_REG,
  		6, AW88261_MUTE_VOL, 0, aw88261_volume_get,
-@@ -1009,38 +1013,6 @@ static const struct snd_soc_dapm_route aw88261_audio_map[] = {
- 	{"AIF_TX", NULL, "ADC Input"},
- };
- 
--static int aw88261_frcset_check(struct aw88261 *aw88261)
--{
--	unsigned int reg_val;
--	u16 temh, teml, tem;
--	int ret;
--
--	ret = regmap_read(aw88261->regmap, AW88261_EFRH3_REG, &reg_val);
--	if (ret)
--		return ret;
--	temh = ((u16)reg_val & (~AW88261_TEMH_MASK));
--
--	ret = regmap_read(aw88261->regmap, AW88261_EFRL3_REG, &reg_val);
--	if (ret)
--		return ret;
--	teml = ((u16)reg_val & (~AW88261_TEML_MASK));
--
--	if (aw88261->efuse_check == AW88261_EF_OR_CHECK)
--		tem = (temh | teml);
--	else
--		tem = (temh & teml);
--
--	if (tem == AW88261_DEFAULT_CFG)
--		aw88261->frcset_en = AW88261_FRCSET_ENABLE;
--	else
--		aw88261->frcset_en = AW88261_FRCSET_DISABLE;
--
--	dev_dbg(aw88261->aw_pa->dev, "tem is 0x%04x, frcset_en is %d",
--						tem, aw88261->frcset_en);
--
--	return ret;
--}
--
- static int aw88261_dev_init(struct aw88261 *aw88261, struct aw_container *aw_cfg)
- {
- 	struct aw_device *aw_dev = aw88261->aw_pa;
-@@ -1067,12 +1039,6 @@ static int aw88261_dev_init(struct aw88261 *aw88261, struct aw_container *aw_cfg
- 		return ret;
- 	}
- 
--	ret = aw88261_frcset_check(aw88261);
--	if (ret) {
--		dev_err(aw_dev->dev, "aw88261_frcset_check ret = %d\n", ret);
--		return ret;
--	}
--
- 	aw88261_dev_clear_int_status(aw_dev);
- 
- 	aw88261_dev_uls_hmute(aw_dev, true);
-@@ -1097,13 +1063,13 @@ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
+@@ -1097,13 +1239,13 @@ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
  
  	aw88261->aw_pa->fw_status = AW88261_DEV_FW_FAILED;
  
@@ -643,7 +228,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  
  	aw88261->aw_cfg = devm_kzalloc(aw88261->aw_pa->dev, cont->size + sizeof(int), GFP_KERNEL);
  	if (!aw88261->aw_cfg) {
-@@ -1116,7 +1082,7 @@ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
+@@ -1116,7 +1258,7 @@ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
  
  	ret = aw88395_dev_load_acf_check(aw88261->aw_pa, aw88261->aw_cfg);
  	if (ret) {
@@ -652,7 +237,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  		return ret;
  	}
  
-@@ -1135,28 +1101,65 @@ static int aw88261_codec_probe(struct snd_soc_component *component)
+@@ -1135,6 +1277,10 @@ static int aw88261_codec_probe(struct snd_soc_component *component)
  	struct snd_soc_dapm_context *dapm = snd_soc_component_to_dapm(component);
  	struct aw88261 *aw88261 = snd_soc_component_get_drvdata(component);
  	int ret;
@@ -663,30 +248,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  
  	INIT_DELAYED_WORK(&aw88261->start_work, aw88261_startup_work);
  
-+	/* Log device info for debugging */
-+	dev_info(component->dev,
-+		 "Probing AW88261 codec for Xiaomi Pad 6 (channel %d)",
-+		 aw88261->aw_pa->channel);
-+
- 	ret = aw88261_request_firmware_file(aw88261);
- 	if (ret)
- 		return dev_err_probe(aw88261->aw_pa->dev, ret,
- 				"aw88261_request_firmware_file failed\n");
- 
--	/* add widgets */
-+	/* add widgets with unique names for each channel */
- 	ret = snd_soc_dapm_new_controls(dapm, aw88261_dapm_widgets,
- 							ARRAY_SIZE(aw88261_dapm_widgets));
-+	dev_info(component->dev, "Widget return status: %d\n", ret);
- 	if (ret)
- 		return ret;
- 
--	/* add route */
-+	/* add route with unique widget names */
-+
- 	ret = snd_soc_dapm_add_routes(dapm, aw88261_audio_map,
- 							ARRAY_SIZE(aw88261_audio_map));
-+	dev_info(component->dev, "Route return status: %d\n", ret);
+@@ -1155,8 +1301,24 @@ static int aw88261_codec_probe(struct snd_soc_component *component)
  	if (ret)
  		return ret;
  
@@ -710,19 +272,10 @@ index 96b1a85c26aa..8f9770d46517 100644
 +		dev_err(component->dev, "Failed to add controls: %d\n", ret);
 +		return ret;
 +	}
-+
-+	/* Apply Xiaomi Pad 6 specific optimizations */
-+	if (of_machine_is_compatible("xiaomi,pipa") ||
-+		of_machine_is_compatible("qcom,sm8250-mtp")) {
-+		dev_info(
-+			component->dev,
-+			"Applying Xiaomi Pad 6 specific optimizations for channel %d",
-+			aw88261->aw_pa->channel);
-+	}
  
  	return ret;
  }
-@@ -1173,6 +1176,14 @@ static const struct snd_soc_component_driver soc_codec_dev_aw88261 = {
+@@ -1173,6 +1335,14 @@ static const struct snd_soc_component_driver soc_codec_dev_aw88261 = {
  	.remove = aw88261_codec_remove,
  };
  
@@ -737,7 +290,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  static void aw88261_parse_channel_dt(struct aw88261 *aw88261)
  {
  	struct aw_device *aw_dev = aw88261->aw_pa;
-@@ -1185,6 +1196,19 @@ static void aw88261_parse_channel_dt(struct aw88261 *aw88261)
+@@ -1185,6 +1355,19 @@ static void aw88261_parse_channel_dt(struct aw88261 *aw88261)
  	aw_dev->channel = channel_value;
  }
  
@@ -757,13 +310,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  static int aw88261_init(struct aw88261 *aw88261, struct i2c_client *i2c, struct regmap *regmap)
  {
  	struct aw_device *aw_dev;
-@@ -1218,11 +1242,12 @@ static int aw88261_init(struct aw88261 *aw88261, struct i2c_client *i2c, struct
- 	aw_dev->prof_info.count = 0;
- 	aw_dev->prof_info.prof_type = AW88395_DEV_NONE_TYPE_ID;
- 	aw_dev->channel = 0;
--	aw_dev->fw_status = AW88261_DEV_FW_FAILED;
-+	aw_dev->fw_status = AW88261_DEV_FW_OK;
- 	aw_dev->fade_step = AW88261_VOLUME_STEP_DB;
+@@ -1223,6 +1406,7 @@ static int aw88261_init(struct aw88261 *aw88261, struct i2c_client *i2c, struct
  	aw_dev->volume_desc.ctl_volume = AW88261_VOL_DEFAULT_VALUE;
  	aw_dev->volume_desc.mute_volume = AW88261_MUTE_VOL;
  	aw88261_parse_channel_dt(aw88261);
@@ -771,16 +318,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  
  	return ret;
  }
-@@ -1232,6 +1257,8 @@ static int aw88261_i2c_probe(struct i2c_client *i2c)
- 	struct aw88261 *aw88261;
- 	int ret;
- 
-+	dev_info(&i2c->dev, "Probing AW88261 at address 0x%x, name: %s\n",
-+		 i2c->addr, dev_name(&i2c->dev));
- 	ret = i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C);
- 	if (!ret)
- 		return dev_err_probe(&i2c->dev, -ENXIO, "check_functionality failed");
-@@ -1244,6 +1271,13 @@ static int aw88261_i2c_probe(struct i2c_client *i2c)
+@@ -1244,6 +1428,13 @@ static int aw88261_i2c_probe(struct i2c_client *i2c)
  
  	i2c_set_clientdata(i2c, aw88261);
  
@@ -794,7 +332,7 @@ index 96b1a85c26aa..8f9770d46517 100644
  	aw88261->regmap = devm_regmap_init_i2c(i2c, &aw88261_remap_config);
  	if (IS_ERR(aw88261->regmap)) {
  		ret = PTR_ERR(aw88261->regmap);
-@@ -1270,9 +1304,16 @@ static const struct i2c_device_id aw88261_i2c_id[] = {
+@@ -1270,9 +1461,16 @@ static const struct i2c_device_id aw88261_i2c_id[] = {
  };
  MODULE_DEVICE_TABLE(i2c, aw88261_i2c_id);
  
@@ -812,36 +350,27 @@ index 96b1a85c26aa..8f9770d46517 100644
  	.probe = aw88261_i2c_probe,
  	.id_table = aw88261_i2c_id,
 diff --git a/sound/soc/codecs/aw88261.h b/sound/soc/codecs/aw88261.h
-index 734d0f93ced9..4cfa84c1b3f3 100644
+index 734d0f93ced9..c62043ed5e07 100644
 --- a/sound/soc/codecs/aw88261.h
 +++ b/sound/soc/codecs/aw88261.h
-@@ -372,8 +372,8 @@
+@@ -374,6 +374,7 @@
  
- #define AW88261_I2C_NAME		"aw88261"
- 
--#define AW88261_RATES (SNDRV_PCM_RATE_8000_48000 | \
--			SNDRV_PCM_RATE_96000)
-+#define AW88261_RATES SNDRV_PCM_RATE_48000
+ #define AW88261_RATES (SNDRV_PCM_RATE_8000_48000 | \
+ 			SNDRV_PCM_RATE_96000)
 +
  #define AW88261_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | \
  			SNDRV_PCM_FMTBIT_S24_LE | \
  			SNDRV_PCM_FMTBIT_S32_LE)
-@@ -448,11 +448,15 @@ struct aw88261 {
+@@ -448,6 +449,9 @@ struct aw88261 {
  	struct regmap *regmap;
  	struct aw_container *aw_cfg;
  
 +	const char *fw_name;
++	int sysclk;
 +
  	int efuse_check;
  	int frcset_en;
  	unsigned int mute_st;
- 	unsigned int amppd_st;
- 
-+	int sysclk;
-+
- 	bool phase_sync;
- };
- 
 -- 
 2.52.0
 

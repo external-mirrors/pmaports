@@ -1,4 +1,4 @@
-From c6a632815c2f558bf8f8b29a17df05f5a914eecd Mon Sep 17 00:00:00 2001
+From 4fdf0e7715ba08b393fb80fac427f44d02b71374 Mon Sep 17 00:00:00 2001
 From: Jun Nie <jun.nie@linaro.org>
 Date: Wed, 1 Oct 2025 21:59:13 +0800
 Subject: [PATCH 08/12] drm/msm/dsi: support DSC configurations with
@@ -19,7 +19,7 @@ Signed-off-by: Junjie Cao <caojunjie650@gmail.com>
  2 files changed, 12 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index e0de545d4077..773ce8520698 100644
+index db6da99375a1..519410ec5197 100644
 --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
 +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
 @@ -166,6 +166,7 @@ struct msm_dsi_host {
@@ -30,7 +30,7 @@ index e0de545d4077..773ce8520698 100644
  
  	/* connected device info */
  	unsigned int channel;
-@@ -910,17 +911,10 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
+@@ -927,17 +928,10 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
  	slice_per_intf = dsc->slice_count;
  
  	total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
@@ -50,7 +50,7 @@ index e0de545d4077..773ce8520698 100644
  
  	if (is_cmd_mode) /* packet data type */
  		reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
-@@ -1069,12 +1063,8 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+@@ -1088,12 +1082,8 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
  		else
  			/*
  			 * When DSC is enabled, WC = slice_chunk_size * slice_per_pkt + 1.
@@ -64,7 +64,7 @@ index e0de545d4077..773ce8520698 100644
  
  		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
  			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
-@@ -1683,8 +1673,13 @@ static int dsi_host_attach(struct mipi_dsi_host *host,
+@@ -1702,8 +1692,13 @@ static int dsi_host_attach(struct mipi_dsi_host *host,
  	msm_host->lanes = dsi->lanes;
  	msm_host->format = dsi->format;
  	msm_host->mode_flags = dsi->mode_flags;
