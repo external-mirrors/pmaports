@@ -5,7 +5,7 @@ maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gdm
 _pkgver=50.0
 pkgver=9999$_pkgver
-pkgrel=2
+pkgrel=3
 pkgdesc="GNOME display manager"
 url="https://gitlab.gnome.org/GNOME/gdm"
 # blocked by gnome-shell
@@ -23,6 +23,7 @@ depends="
 	"
 makedepends="
 	accountsservice-dev
+	audit-dev
 	dconf
 	eudev-dev
 	gettext
@@ -32,6 +33,7 @@ makedepends="
 	json-glib-dev
 	libcanberra-dev
 	libgudev-dev
+	libselinux-dev
 	libsm-dev
 	libx11-dev
 	libxau-dev
@@ -59,8 +61,8 @@ build() {
 		-Ddefault-pam-config=openembedded \
 		-Dgdm-xsession=false \
 		-Dpam-mod-dir=/usr/lib/security \
-		-Dselinux=disabled \
-		-Dlibaudit=disabled \
+		-Dselinux=enabled \
+		-Dlibaudit=enabled \
 		-Dsystemdsystemunitdir=/usr/lib/systemd/system \
 		-Dsystemduserunitdir=/usr/lib/systemd/user \
 		-Dx11-support=false \
