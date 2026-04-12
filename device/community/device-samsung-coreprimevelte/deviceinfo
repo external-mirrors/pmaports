@@ -17,15 +17,11 @@ deviceinfo_screen_height="800"
 deviceinfo_drm="true"
 
 # Bootloader related
-deviceinfo_create_initfs_extra="true"
 deviceinfo_dtb="marvell/mmp/pxa1908-samsung-coreprimevelte"
-deviceinfo_generate_uboot_fit_images="true"
 deviceinfo_flash_method="heimdall-bootimg"
 deviceinfo_generate_bootimg="true"
 deviceinfo_bootimg_qcdt="true"
 deviceinfo_bootimg_pxa="true"
-deviceinfo_bootimg_override_payload="u-boot.uImage"
-deviceinfo_bootimg_override_initramfs="boot-image.itb"
 deviceinfo_flash_kernel_on_update="true"
 deviceinfo_flash_offset_kernel="0x00008000"
 deviceinfo_flash_offset_ramdisk="0x01000000"
@@ -35,3 +31,9 @@ deviceinfo_flash_pagesize="2048"
 deviceinfo_flash_sparse="true"
 deviceinfo_flash_sparse_samsung_format="1"
 deviceinfo_bootimg_append_seandroidenforce="true"
+
+# U-Boot related stuff. U-Boot is wrapped into an uImage and chainloaded by
+# Samsung's bootloader, after which the OS is located and booted through UEFI.
+# We only need a dummy initfs for boot-deploy (inspired by jolla-c2).
+deviceinfo_bootimg_override_payload="u-boot.uImage"
+deviceinfo_bootimg_override_initramfs="dummy-initramfs"
