@@ -673,6 +673,15 @@ SHADOW_CALL_STACK = "y"
 DEBUG_INFO_BTF = "n" # Conflicts with LTO when Rust is enabled
 DEBUG_INFO_BTF_MODULES = "n" # Conflicts with LTO when Rust is enabled
 
+# SELinux support, separate from hardening to keep it opt-in for now
+["category:selinux".">=0.0.0"."all"]
+DEFAULT_SECURITY_SELINUX = "y"
+AUDIT = "y" # Required by SELinux
+SECURITY_NETWORK = "y" # Required by SELinux
+SECURITY_SELINUX = "y"
+SECURITY_SELINUX_BOOTPARAM = "y"
+LSM = "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,ipe,bpf"
+
 # Wine / Proton support
 ["category:wine".">=6.14.0"."all"]
 NTSYNC = "m"
