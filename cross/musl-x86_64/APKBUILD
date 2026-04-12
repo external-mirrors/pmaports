@@ -6,9 +6,10 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 	arch_to_hostspec() { :; }
 fi
 
+maintainer=""
 pkgname=musl-x86_64
 pkgver=1.2.5
-pkgrel=21
+pkgrel=23
 arch="aarch64"
 subpackages="musl-dev-x86_64:package_dev"
 
@@ -23,8 +24,8 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	musl-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-$pkgver-r$pkgrel.apk
-	musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch-v3.23.apk::$_mirror/v3.23/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch-v3.23.apk::$_mirror/v3.23/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
@@ -32,7 +33,7 @@ package() {
 	cd "$pkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-v3.23.apk
 	rm .PKGINFO .SIGN.*
 }
 package_dev() {
@@ -40,7 +41,7 @@ package_dev() {
 	cd "$subpkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-v3.23.apk
 	rm .PKGINFO .SIGN.*
 
 	# symlink everything from /usr/$_target/usr/*
@@ -57,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-a378f3015c9222161aaa8ffd34038880f923e7a86cb400dac886d1c1adcf691e55798844f8fa6a4ee3ca9ee4d1a1a5d5ea616a550ac0d99933e64a68c2d65332  musl-1.2.5-r21-x86_64-edge.apk
-87296e7eb778ba4153c6fb27f596561ea7997ee5aa67346aeee9b42687ccb6a5d45e1c1faa2f13d1742e45f47898d78629db3320f640ef8700b55f710584662a  musl-dev-1.2.5-r21-x86_64-edge.apk
+6f12a6d4ccef484715f817e02ce05e42d2ef30c9387e02b3f369b61190fa8531ead299cfb6210f019b8c66b5b651aa315dccc5be026c2c39abfa76962b2488e5  musl-1.2.5-r23-x86_64-v3.23.apk
+5926c0670e1354b8cfd0f526225357eb121b672bf019ec46637d5b90545d36ee0f7fc316a6cbcd95edc5a057b998330d79fb45262b1189da030babe7bcfc65a5  musl-dev-1.2.5-r23-x86_64-v3.23.apk
 "
