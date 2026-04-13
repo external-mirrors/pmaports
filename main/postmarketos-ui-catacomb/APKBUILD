@@ -1,0 +1,94 @@
+# Reference: https://postmarketos.org/uipkg
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=postmarketos-ui-catacomb
+pkgver=1
+pkgrel=0
+pkgdesc="(Wayland) Lightweight Mobile interface optimized to run on low-end hardware"
+url="https://catacombing.org"
+# riscv64: catacomb suite takes a loooong time to build
+# loongarch64: squeekboard (will be re-enabled when switching to wvkbd)
+# ppc64le s390x: rustix
+arch="noarch !loongarch64 !ppc64le !riscv64 !s390x"
+license="GPL-3.0-or-later"
+depends="
+	bluez
+	catacomb
+	dnsmasq
+	elogind
+	iio-sensor-proxy
+	mesa-egl
+	modemmanager
+	polkit-elogind
+	postmarketos-artwork-wallpapers
+	postmarketos-base-ui
+	postmarketos-base-ui-audio
+	postmarketos-base-ui-networkmanager
+	squeekboard
+	tinydm
+	upower
+	"
+depends_openrc="
+	elogind-openrc
+	iio-sensor-proxy-openrc
+	networkmanager-openrc
+	tinydm-openrc
+	"
+_pmb_recommends="
+	adwaita-icon-theme
+	alacritty
+	epitaph
+	gorm
+	grim
+	slurp
+	swayidle
+	tabula
+	ttyescape
+	tremor
+	tzompantli
+	"
+replaces="catacomb" # custom initrc for the wallpaper
+source="initrc"
+install="
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	"
+subpackages="$pkgname-openrc $pkgname-extras"
+options="
+	!check
+	pmb:drm
+	pmb:default-openrc
+	pmb:support-openrc
+	pmb:support-systemd
+	"
+
+package() {
+	mkdir -p "$pkgdir"
+	install -Dm755 initrc "$pkgdir"/etc/catacomb/initrc
+}
+
+extras() {
+	pkgdesc="Meta package for additional apps useful in Catacomb"
+	_pmb_recommends="
+		calls
+		chatty
+		imv
+		mako
+		mpv
+		pavucontrol
+		portfolio
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+openrc() {
+	default_openrc
+
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="
+d7d8e30557e1b86063b1632e66be8908e5792238dbc4b01d0513814d05a43282ff828312e36bacb0e3086c6b0f4e21e423b571e5ffcee9c1f93ffd04ae026d0c  initrc
+"

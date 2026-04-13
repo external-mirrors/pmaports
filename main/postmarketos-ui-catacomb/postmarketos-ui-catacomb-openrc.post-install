@@ -1,0 +1,26 @@
+#!/bin/sh
+
+rc_update_user() {
+	local svc="$1"
+	local runlvl="$2"
+
+	echo "* adding user service $svc to runlevel $runlvl"
+
+	mkdir -p /etc/skel/.config/rc/runlevels/$runlvl
+	ln -sf /etc/user/init.d/$svc /etc/skel/.config/rc/runlevels/$runlvl
+
+	# No-op under pmbootstrap install, but serves to migrate existing installs.
+	for user in /home/*; do
+		[ -e "$user" ] || break
+		mkdir -p $user/.config/rc/runlevels/$runlvl
+		ln -sf /etc/user/init.d/$svc $user/.config/rc/runlevels/$runlvl
+	done
+}
+
+rc-update add bluetooth default
+rc-update add elogind default
+rc-update add iio-sensor-proxy default
+rc-update add networkmanager default
+rc-update add tinydm default
+
+rc_update_user dbus boot
