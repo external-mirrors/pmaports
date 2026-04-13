@@ -3,7 +3,7 @@ maintainer="Duje Mihanović <duje@dujemihanovic.xyz>"
 _flavor=samsung-coreprimevelte
 pkgname=linux-$_flavor
 pkgver=6.19.10
-pkgrel=0
+pkgrel=1
 pkgdesc="Samsung Galaxy Core Prime VE LTE mainline kernel"
 arch="aarch64"
 _carch="arm64"
@@ -60,7 +60,21 @@ build() {
 }
 
 package() {
-	make zinstall modules_install dtbs_install \
+	if [ -e "$builddir/arch/$_carch/boot/vmlinuz.efi" ]; then
+		# ZBOOT EFI decompressor for EFI booting
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+			"$pkgdir/boot/linux.efi"
+
+		# Old ZSTD'd kernel image for boot.img compatibility
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
+			"$pkgdir/boot/vmlinuz"
+	else
+		echo "WARNING: CONFIG_EFI_ZBOOT not enabled!"
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
+			"$pkgdir/boot/vmlinuz"
+	fi
+
+	make modules_install dtbs_install \
 		ARCH=$_carch \
 		LLVM=1 \
 		INSTALL_MOD_STRIP=1 \
@@ -85,5 +99,5 @@ fcd10232882fcdabc122689aad63cb32eab6f626f76fea67a92928affe48705d92a4a75ff6e58741
 2cd76bf89f2b8baa9eb998f7a6553782c0b8e213fc9d0ed6cf8707af5a8d3e4722f00626642571a9d381078ada6fcf8f39763edab869db459455d3f6b66a1edd  0007-arm64-dts-marvell-samsung-coreprimevelte-Increase-to.patch
 e5cf0fbe4a727bfe83d582714b5a109e989f9b325303d33905cace7534c63462d5ee3374388b802b973fb288d3d7d390806982269465ea461312f8e6940ae534  0008-arm64-dts-marvell-samsung-coreprimevelte-Add-missing.patch
 b454382126dd51ebd51dd7b596088a937dec339f2763233ba1ed39b087a84b3342fbec15f03cab6829a55b6342fb80670490e09ee292188670673e0f5bab3fe7  0009-backlight-ktd2801-enable-BL_CORE_SUSPENDRESUME.patch
-5f63b452563505bc16d613cd7051706bfb08b51752562b696b7aec9b320b5b57968ce08bcc7751c459580a3c19a4bb08461ede4f39f0fd0e8501c20edab1eba0  config-samsung-coreprimevelte.aarch64
+f3d05d84b38b8429857d572e825ebee8ebe881eccdc29ed87fc4ce371d5aec823e36aa6cb6bf1f14f0325c758e79c33f83c34b74955fcc205d76e14c2454e5e0  config-samsung-coreprimevelte.aarch64
 "
