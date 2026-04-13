@@ -1,0 +1,23 @@
+#!/bin/sh
+
+rc_update_user() {
+	local svc="$1"
+	local runlvl="$2"
+
+	# serves to migrate existing installs
+	for user in /home/*; do
+		[ -e "$user" ] || break
+		mkdir -p $user/.config/rc/runlevels/$runlvl
+		ln -sf /etc/user/init.d/$svc $user/.config/rc/runlevels/$runlvl
+	done
+	echo "* service $svc added to runlevel $runlvl (user)"
+}
+
+rc-update add bluetooth default
+rc-update add elogind default
+rc-update add iio-sensor-proxy default
+rc-update add networkmanager default
+rc-update add tinydm default
+
+# to make sure existing installs have it
+rc_update_user dbus boot
