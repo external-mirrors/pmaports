@@ -1,0 +1,72 @@
+# Reference: https://postmarketos.org/uipkg
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=postmarketos-ui-catacomb
+pkgver=1
+pkgrel=0
+pkgdesc="(Wayland) Lightweight Mobile interface optimized to run on low-end hardware"
+url="https://catacombing.org"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="
+	catacomb
+	dnsmasq
+	elogind
+	mesa-egl
+	polkit-elogind
+	postmarketos-artwork-wallpapers
+	postmarketos-base-ui
+	postmarketos-base-ui-audio
+	postmarketos-base-ui-networkmanager
+	tinydm
+	"
+_pmb_recommends="
+	alacritty
+	bash
+	epitaph
+	gorm
+	grim
+	iio-sensor-proxy
+	slurp
+	squeekboard
+	swayidle
+	tabula
+	ttyescape
+	tzompantli
+	"
+replaces="catacomb" # custom initrc for the wallpaper
+install="postmarketos-ui-catacomb.post-install postmarketos-ui-catacomb.post-upgrade"
+subpackages="$pkgname-openrc $pkgname-extras"
+options="!check pmb:drm"
+
+package() {
+	mkdir -p "$pkgdir"
+	install -Dm755 initrc "$pkgdir"/etc/catacomb/initrc
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
+	depends="
+		elogind-openrc
+		networkmanager-openrc
+		tinydm-openrc
+		"
+	_pmb_recommends="iio-sensor-proxy"
+
+	mkdir -p "$subpkgdir"
+}
+
+extras() {
+	pkgdesc="Meta package for additional apps useful in Catacomb"
+	_pmb_recommends="
+		calls
+		chatty
+		imv
+		mako
+		mpv
+		pavucontrol
+		portfolio
+		"
+
+	mkdir -p "$subpkgdir"
+}
