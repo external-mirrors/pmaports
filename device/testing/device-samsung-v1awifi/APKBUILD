@@ -2,7 +2,7 @@
 maintainer="Hendrik Noack <hendrik.noack@protonmail.com>"
 pkgname=device-samsung-v1awifi
 pkgdesc="Samsung Galaxy Note Pro 12.2 WiFi"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -13,8 +13,9 @@ depends="
 	linux-firmware-brcm
 	linux-firmware-s5p-mfc
 	linux-postmarketos-exynos5
-	mkbootimg
 	postmarketos-base
+	u-boot-exynos5420
+	systemd-boot
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-disable-gsd-color:disable_gsd_color"
@@ -40,6 +41,6 @@ disable_gsd_color() {
 }
 
 sha512sums="
-35e109d6145bd13ff0e400d80b1b57cdf68792303274907a7cd6ffbd85e38d410d738c9f6e791b628b9d891f2ced58dbf4cc7c4c8d67e624e0874f222e09eab9  deviceinfo
+943f1f2069a58397f6ea87778d41233fc9992cd5681d714a697de0d0f52494fd3c4239582f98f83a41b54fb67ce015e85e9d6ef01c8851975b2d68bec5370048  deviceinfo
 4b3cb9dca85c04f1bfc5676029a6ae225409f173c6f0fc025786c1a72326dabad4b5ad75d0dd9a41cdebe8c15db5ca9761e15f3b9f99f8bf70b19769bb116fe6  modules-initfs
 "
