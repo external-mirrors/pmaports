@@ -1,18 +1,18 @@
-From bf64a74631c1df015388ff572c8479084b625da1 Mon Sep 17 00:00:00 2001
+From 6d0532d49fd73320eabcb087a0e98d5c7acb3326 Mon Sep 17 00:00:00 2001
 From: bluebunny <1812-bluebunny@users.noreply.gitlab.postmarketos.org>
 Date: Thu, 19 Mar 2026 14:52:20 +0900
-Subject: [PATCH 01/12] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree
+Subject: [PATCH 01/11] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree
  for Xiaomi Pad 6
 
 Co-developed-by: Ryo Kenrie Wongso <developer@damillora.com>
 Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
 ---
  arch/arm64/boot/dts/qcom/Makefile             |    3 +-
- .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1433 +++++++++++++++++
+ .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1409 +++++++++++++++++
  .../boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts |   23 +
  .../dts/qcom/sm8250-xiaomi-pipa-tianma.dts    |   23 +
  .../boot/dts/qcom/sm8250-xiaomi-pipa.dts      |  541 -------
- 5 files changed, 1481 insertions(+), 542 deletions(-)
+ 5 files changed, 1457 insertions(+), 542 deletions(-)
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-tianma.dts
@@ -34,10 +34,10 @@ index 6f34d5ed331c..1b9fda91c0e5 100644
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
 diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
 new file mode 100644
-index 000000000000..0618746358b7
+index 000000000000..65eba9270998
 --- /dev/null
 +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-@@ -0,0 +1,1433 @@
+@@ -0,0 +1,1409 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +/*
 + * Copyright (c) 2023 Luka Panio <lukapanio@gmail.com>
@@ -784,42 +784,18 @@ index 000000000000..0618746358b7
 +	clock-frequency = <400000>;
 +	status = "okay";
 +
-+	bq2597x-standalone@66 {
-+		compatible = "ti,bq2597x-standalone";
++	bq25975: charger@66 {
++		compatible = "ti,bq25975";
 +		reg = <0x66>;
 +		interrupt-parent = <&tlmm>;
-+		interrupts = <68 0x2002>;
++		interrupts = <68 IRQ_TYPE_EDGE_FALLING>;
++
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&bq2597x_master_int_default>;
-+		/*ti,bq2597x,bat-ovp-disable;*/
-+		ti,bq2597x,bat-ovp-alarm-disable;
-+		ti,bq2597x,bat-ocp-disable;
-+		ti,bq2597x,bat-ocp-alarm-disable;
-+		ti,bq2597x,bat-ucp-alarm-disable;
-+		ti,bq2597x,bat-ucp-disable;
-+		/*ti,bq2597x,bus-ovp-alarm-disable;
-+		ti,bq2597x,bus-ocp-disable;
-+		ti,bq2597x,bus-ocp-alarm-disable;*/
-+		ti,bq2597x,bat-therm-disable;
-+		ti,bq2597x,bus-therm-disable;
-+		ti,bq2597x,die-therm-disable;
-+		ti,bq2597x,bat-ovp-threshold = <4550>;
-+		ti,bq2597x,bat-ovp-alarm-threshold = <4525>;
-+		//ti,bq2597x,bat-ocp-threshold = <8000>;
-+		//ti,bq2597x,bat-ocp-alarm-threshold = <7500>;
-+		ti,bq2597x,bus-ovp-threshold = <12000>;
-+		ti,bq2597x,bus-ovp-alarm-threshold = <11000>;
-+		ti,bq2597x,bus-ocp-threshold = <3800>;
-+		ti,bq2597x,bus-ocp-alarm-threshold = <3500>;
++		pinctrl-0 = <&bq25975_default>;
 +
-+		//ti,bq2597x,bat-ucp-alarm-threshold = <2000>;
-+		ti,bq2597x,bat-therm-threshold = <0x15>;/*4.1%*/
-+		ti,bq2597x,bus-therm-threshold = <0x15>;/*4.1%*/
-+		ti,bq2597x,die-therm-threshold = <145>;
-+		ti,bq2597x,ac-ovp-threshold = <14>;
-+		//ti,bq2597x,sense-resistor-mohm = <2>;
-+
-+		sc8551,ac-ovp-threshold = <14>;
++		ti,watchdog-timeout-ms = <0>;
++		ti,sc-ocp-limit-microamp = <5750000>;
++		ti,sc-ovp-limit-microvolt = <12750000>;
 +	};
 +};
 +
@@ -1301,7 +1277,7 @@ index 000000000000..0618746358b7
 +		};
 +	};
 +
-+	bq2597x_master_int_default: bq2597x-master-int-default {
++	bq25975_default: bq25975-default-state {
 +		pins = "gpio68";
 +		function = "gpio";
 +		drive-strength = <2>;
