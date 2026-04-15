@@ -11,11 +11,14 @@
 # Achill Gilgenast <achill@achill.org>
 
 # clock controllers
+["category:clocks".">=0.0.0"."all"]
+COMMON_CLK = "y"
 ["category:clocks".">=0.0.0"."aarch64"]
 SC_DISPCC_7180 = "m"
 SC_GPUCC_7180 = "m"
 SC_LPASS_CORECC_7180 = "m"
 SC_VIDEOCC_7180 = "m"
+SM_VIDEOCC_8350 = "m"
 
 # display controllers, bridges, panels, etc.
 ["category:graphics".">=6.19_rc1"."aarch64 armv7"]
@@ -38,6 +41,14 @@ DRM_NOUVEAU_BACKLIGHT = "y"
 DRM_NOUVEAU_CH7006 = "m"
 DRM_NOUVEAU_SIL164 = "m"
 DRM_XE = "m"
+
+# cameras
+["category:video".">=0.0.0"."all"]
+MEDIA_SUPPORT = "m"
+MEDIA_SUPPORT_FILTER = "n"
+VIDEO_DEV = "m"
+VIDEO_CAMERA_SENSOR = "y"
+VIDEO_OV5675 = "m"
 
 # input devices
 ["category:input".">=0.0.0"."all"]
