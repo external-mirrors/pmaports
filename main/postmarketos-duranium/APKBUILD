@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
 pkgver=3
-pkgrel=1
+pkgrel=2
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
 options="!check"  # no tests
@@ -22,7 +22,10 @@ depends="
 # ppc64le s390x: EFI
 arch="noarch !x86 !armhf !ppc64le !s390x"
 license="GPL-3.0-or-later"
-subpackages="$pkgname-initramfs"
+subpackages="
+	$pkgname-initramfs
+	$pkgname-sysext-dev-tools:sysext_dev_tools
+"
 
 _source644="
 	etc/crypttab
@@ -137,6 +140,44 @@ initramfs() {
 	# to work with a file that has \ in the name is torture.
 	install -Dm644 "$srcdir"/dev-gpt-auto-root-no-timeout.conf \
 		"$subpkgdir"/usr/lib/systemd/system/dev-gpt\\x2dauto\\x2droot.device.d/no-timeout.conf
+}
+
+sysext_dev_tools() {
+	description="meta package for Duranium Developer Tools system extension"
+	depends="
+		android-tools
+		android-udev-rules
+
+		devpod
+		distrobox
+		podman
+
+		libvirt-client
+		libvirt-common-drivers
+		libvirt-daemon
+		libvirt-qemu
+		qemu
+		qemu-img
+		qemu-modules
+		qemu-system-aarch64
+		qemu-system-arm
+		qemu-system-i386
+		qemu-system-loongarch64
+		qemu-system-ppc64
+		qemu-system-riscv64
+		qemu-system-x86_64
+	"
+
+	case "$CARCH" in
+	x86_64|riscv64)
+		depends="$depends ovmf" ;;
+	aarch64)
+		depends="$depends aavmf" ;;
+	loongarch64)
+		depends="$depends edk2-loongarch64" ;;
+	esac
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
