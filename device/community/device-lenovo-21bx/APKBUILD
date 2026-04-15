@@ -4,7 +4,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=device-lenovo-21bx
 pkgdesc="Lenovo ThinkPad X13s"
-pkgver=20
+pkgver=21
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -17,7 +17,6 @@ depends="
 	linux-firmware-ath11k
 	linux-firmware-qca
 	linux-firmware-qcom
-	linux-postmarketos-qcom-laptop
 	postmarketos-base
 	qmi-utils
 	systemd-boot
@@ -32,6 +31,9 @@ source="
 	kernel-cmdline.conf
 "
 subpackages="
+	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-pipewire
 	$pkgname-usbguard
 	$pkgname-vulkan
@@ -42,6 +44,9 @@ build() {
 }
 
 package() {
+	# Cannot be top-level since this is provided by subpackages of this package
+	depends="$depends $pkgname-kernel-any"
+
 	devicepkg_package $startdir $pkgname
 
 	install -Dm644 "$srcdir"/firmware.files \
@@ -68,6 +73,31 @@ usbguard() {
 	install_if="$pkgname=$pkgver-r$pkgrel usbguard"
 
 	amove etc/usbguard/rules.d/"$pkgname".conf
+}
+
+kernel_stable() {
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
+	provides="$pkgname-kernel-any"
+	provider_priority=3
+	replaces="linux-postmarketos-qcom-laptop"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_lts() {
+	pkgdesc="Long-term maintainance kernel (most stability, not all security fixes & new features)"
+	depends="linux-postmarketos-lts"
+	provides="$pkgname-kernel-any"
+	provider_priority=2
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
+	depends="linux-postmarketos-mainline"
+	provides="$pkgname-kernel-any"
+	provider_priority=1
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 sha512sums="
