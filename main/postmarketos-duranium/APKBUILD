@@ -1,18 +1,26 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
 pkgver=3
-pkgrel=0
-pkgdesc="Configuration files for building and booting immutable postmarketOS images"
+pkgrel=1
+pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
 options="!check"  # no tests
 depends="
+	coldbrew
+	e2fsprogs
+	erofs-utils
 	f0rmz
+	postmarketos-base
+	postmarketos-base-systemd
 	shadow
 	shadow-subids
+	systemd-efistub
 	tar
 "
 # x86: f0rmz
-arch="noarch !x86"
+# armhf: linux-stable, systemd
+# ppc64le s390x: EFI
+arch="noarch !x86 !armhf !ppc64le !s390x"
 license="GPL-3.0-or-later"
 subpackages="$pkgname-initramfs"
 
