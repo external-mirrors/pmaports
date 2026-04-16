@@ -2,13 +2,12 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=postmarketos-ui-plasma-mobile
 pkgver=6
-pkgrel=7
+pkgrel=8
 pkgdesc="(Wayland) Mobile variant of KDE Plasma"
 url="https://wiki.postmarketos.org/wiki/Plasma_Mobile"
 # armhf blocked by pmaports#75
 # x86 blocked by aports#11807
-# armv7, riscv64 blocked by qt6-qtwebengine -> angelfish,koko
-arch="noarch !armhf !armv7 !x86 !riscv64"
+arch="noarch !armhf !x86"
 license="GPL-3.0-or-later"
 depends="
 	callaudiod
@@ -19,10 +18,8 @@ depends="
 	udisks2
 	"
 _pmb_recommends="
-	angelfish
 	dolphin
 	kclock
-	koko
 	krecorder
 	kweather
 	plasma-camera
@@ -39,6 +36,10 @@ source="
 	system-generators-plasma-mobile-user-override
 	"
 subpackages="$pkgname-extras $pkgname-openrc $pkgname-systemd"
+# armv7 and riscv64 do not have qtwebengine in alpine
+if [ "$CARCH" != "armv7" ] && [ "$CARCH" != "riscv64" ]; then
+	subpackages="$subpackages $pkgname-extras-web:extras_web"
+fi
 install="
 	$pkgname-openrc.post-install
 	$pkgname-openrc.post-upgrade
@@ -63,7 +64,6 @@ extras() {
 	pkgdesc="Meta package for additional Plasma mobile apps"
 	_pmb_recommends="
 		alligator
-		arianna
 		audiotube
 		elisa
 		itinerary
@@ -72,6 +72,18 @@ extras() {
 		kasts
 		kdeconnect
 		keysmith
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+extras_web() {
+	pkgdesc="Meta package for additional Plasma mobile apps relying on qtwebengine"
+	install_if="$pkgname-extras=$pkgver-r$pkgrel"
+	_pmb_recommends="
+		angelfish
+		arianna
+		koko
 		neochat
 		okular-mobile
 		tokodon
