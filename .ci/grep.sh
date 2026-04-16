@@ -130,6 +130,34 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 		fi
 	fi
 
+	# Find all moved, added, or generally modified kernel APKBUILDs
+	MODIFIED_KERNEL_PACKAGES=$(git show --pretty="" --name-only --diff-filter=AMR "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep "device/\(main\|community\|testing\|downstream\)/linux-.*/APKBUILD" || true)
+
+	if [ -n "$MODIFIED_KERNEL_PACKAGES" ]; then
+		# Disallow installing kernel modules outside /usr/
+		_bad_module_path_packages=""
+		for package in $MODIFIED_KERNEL_PACKAGES; do
+			# Check for INSTALL_MOD_PATH being set
+			if grep -qr 'INSTALL_MOD_PATH="$pkgdir"' "$package"; then
+				# Check if INSTALL_MOD_PATH is set to install to usr
+				if ! grep -qr 'INSTALL_MOD_PATH="$pkgdir"/usr' "$package"; then
+					# If INSTALL_MOD_PATH doesn't include usr, add package to list and
+					# setup failure
+					_bad_module_path_packages="$_bad_module_path_packages $package"
+					_module_error=1
+				fi
+			fi
+		done
+		# Fail with error and pretty print bad packages for logging
+		if [ -n "$_module_error" ]; then
+			echo "ERROR: Please set INSTALL_MOD_PATH to '\"\$pkgdir\"/usr'."
+			for package in $_bad_module_path_packages; do
+				printf "$package\n"
+			done
+			exit_code=1
+		fi
+	fi
+
 	# Disallow adding packages without a maintainer set
 	NEW_APKBUILDS=$(git show --pretty="" --name-only --diff-filter=A "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep APKBUILD || true)
 
