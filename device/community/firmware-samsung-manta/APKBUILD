@@ -1,8 +1,8 @@
 # Co-Maintainer: Lukas Timmermann <lukas@timmermann.space>
 maintainer="Alexandre Marquet <tb@a-marquet.fr>"
 pkgname=firmware-samsung-manta
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 pkgdesc="Firmware for Samsung Manta (Nexus 10)"
 url="https://developers.google.com/android/drivers#mantalmy49j"
 arch="armv7"
@@ -22,19 +22,19 @@ package() {
 
 	# Wifi
 	install -Dm644 "brcmfmac43241b0-sdio.samsung,nexus10-manta.txt" \
-		-t "$pkgdir/lib/firmware/postmarketos/brcm/"
+		-t "$pkgdir/usr/lib/firmware/postmarketos/brcm/"
 
 	# Bluetooth
 	install -Dm644 "BCM.samsung,nexus10-manta.hcd" \
-		-t "$pkgdir/lib/firmware/postmarketos/brcm/"
+		-t "$pkgdir/usr/lib/firmware/postmarketos/brcm/"
 
 	# Touchscreen
 	install -Dm644 "maxtouch.fw" \
-		-t "$pkgdir/lib/firmware/postmarketos/"
+		-t "$pkgdir/usr/lib/firmware/postmarketos/"
 
 	# Audience eS305
 	install -Dm644 "es305_fw.bin" \
-		-t "$pkgdir/lib/firmware/postmarketos/"
+		-t "$pkgdir/usr/lib/firmware/postmarketos/"
 }
 
 sha512sums="

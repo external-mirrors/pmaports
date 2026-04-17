@@ -1,7 +1,7 @@
 maintainer="Marijn Suijten <marijn.suijten@somainline.org>"
 pkgname=firmware-qcom-adreno
 pkgver=20260110
-pkgrel=0
+pkgrel=1
 pkgdesc="Qualcomm Adreno GPU firmware from linux-firmware"
 url="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/"
 arch="aarch64 armv7"
@@ -20,7 +20,7 @@ builddir="$srcdir/linux-firmware-$pkgver"
 # This package is a replacement for linux-firmware-qcom (packaging all GPU firmware
 # in separate subpackages), so it's packaged in /qcom, not /postmarketos.
 replaces="linux-firmware-qcom"
-_fwdir="/lib/firmware/qcom"
+_fwdir="/usr/lib/firmware/qcom"
 
 _gpus="a300 a330 a420 a530 a650 a660 gen70500"
 for gpu in $_gpus; do

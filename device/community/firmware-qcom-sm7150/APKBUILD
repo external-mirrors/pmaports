@@ -1,8 +1,7 @@
-
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=firmware-qcom-sm7150
-pkgver=1
-pkgrel=2
+pkgver=2
+pkgrel=0
 url="https://github.com/sm7150-mainline"
 pkgdesc="Firmware for Qualcomm SM7150 devices"
 arch="aarch64"
@@ -59,17 +58,17 @@ package() {
 
 	install -Dm644 \
 		"$srcdir"/"$pkgname-ath10k-$_ath10k_fw_commit"/*.bin.zst \
-		-t "$pkgdir"/lib/firmware/ath10k/WCN3990/hw1.0
+		-t "$pkgdir"/usr/lib/firmware/ath10k/WCN3990/hw1.0
 }
 
 ath10k() {
 	pkgdesc="WiFi firmware for Qualcomm SM7150 devices"
 	replaces="linux-firmware-ath10k"
 
-	amove lib/firmware/ath10k/WCN3990/hw1.0/*
+	amove usr/lib/firmware/ath10k/WCN3990/hw1.0/*
 }
 
 sha512sums="
-ee2efa2a26a45abb86247068877f2e977126357e8048ca41e98554917d393bff23e000de6e831a1b435e3304c31e237192f5d9d772c08e59cb29ace37296af74  30-initramfs-firmware-qcom-sm7150.files
+913ee0ccde7f9fc2745a25aedf38ad19f5b5ed5fcf0dcb570c6ee1e651247ef67ac9322031e2b5fa234d04f12e7392dca03d9aea674db75537fa76a7fef5d842  30-initramfs-firmware-qcom-sm7150.files
 0e548ef14ec0bb1af9c62e25b3b0a98732b46a081d506cc1f0d52145b288b59b88317816c50521364d0f44431a2b5fd814200313095291d981eca80adec9d094  firmware-qcom-sm7150-ath10k-792c716c85c06861c4d17bce5ec21fba7f0f7de6.tar.gz
 "

@@ -3,7 +3,7 @@
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=firmware-siliconlabs-rs9116
 pkgver=2.5.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for the SiliconLabs RS9116 Wifi/BT adapter"
 url="https://github.com/SiliconLabs/RS911X-nLink-OSD"
 arch="aarch64"
@@ -14,7 +14,7 @@ builddir="$srcdir/RS911X-nLink-OSD-$pkgver"
 
 package() {
 	install -Dm644 Firmware/pmemdata_wlan_bt_classic \
-		"$pkgdir"/lib/firmware/postmarketos/pmemdata_wlan_bt_classic
+		"$pkgdir"/usr/lib/firmware/postmarketos/pmemdata_wlan_bt_classic
 }
 
 sha512sums="

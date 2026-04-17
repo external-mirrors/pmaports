@@ -1,7 +1,7 @@
 maintainer="Richard Acayan <mailingradian@gmail.com>"
 pkgname=firmware-google-sargo
 pkgver=220505.008
-pkgrel=10
+pkgrel=11
 pkgdesc="Proprietary firmware blobs from the Google Pixel 3a factory image"
 url="https://github.com/TheMuppets/proprietary_vendor_google_sargo"
 arch="aarch64"
@@ -46,33 +46,33 @@ build() {
 
 package() {
 	install -Dm644 "$builddir"/a615_zap.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/a615_zap.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/a615_zap.mbn.zst
 	install -Dm644 "$builddir"/ipa_fws.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/ipa_fws.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/ipa_fws.mbn.zst
 
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/adsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/adsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/adsp.mbn.zst
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/adspr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/adspr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/adspr.jsn
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/adspua.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/adspua.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/adspua.jsn
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/cdsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/cdsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/cdsp.mbn.zst
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/cdspr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/cdspr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/cdspr.jsn
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/modemuw.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/modemuw.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/modemuw.jsn
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/venus.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/venus.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/venus.mbn.zst
 	install -Dm644 "$builddir"/proprietary/vendor/firmware/wlanmdsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/wlanmdsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/wlanmdsp.mbn.zst
 
 	install -Dm644 "$_modemfw_dir"/modemfw/mba.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/mba.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/mba.mbn.zst
 	install -Dm644 "$_modemfw_dir"/modemfw/modem.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/modem.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/modem.mbn.zst
 	install -Dm644 "$_modemfw_dir"/modemfw/modemr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/modemr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/modemr.jsn
 
 	mkdir -p "$pkgdir"/usr/share/qcom/sdm670/Google/sargo/sensors/
 	cp -r "$builddir"/sensors-registry \
@@ -81,7 +81,7 @@ package() {
 	ln -s sargo "$pkgdir"/usr/share/qcom/sdm670/Google/b4s4-sdm670
 
 	install -Dm644 "$srcdir"/Global_cal.acdb \
-		       "$pkgdir"/lib/firmware/qcom/sdm670/sargo/Global_cal.acdb
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm670/sargo/Global_cal.acdb
 }
 
 hexagon_nn() {

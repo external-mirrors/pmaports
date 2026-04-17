@@ -1,7 +1,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp4
 pkgver=20240313
-pkgrel=3
+pkgrel=4
 pkgdesc="Firmware for Fairphone 4"
 subpackages="
 	$pkgname-adreno
@@ -41,18 +41,18 @@ adreno() {
 	# TODO: replace with firmware-qcom-adreno-a619 when released to linux-firmware.
 	# The parent device package currently depends on a630-sqe
 	install -Dm644 "$builddir"/a619_gmu.bin -t \
-		"$subpkgdir/lib/firmware/qcom/"
+		"$subpkgdir/usr/lib/firmware/qcom/"
 	install -Dm644 "$builddir"/a615_zap.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 }
 
 adsp() {
 	pkgdesc="Fairphone 4 adsp firmware"
 
 	install -Dm644 "$builddir"/adsp.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 	install -Dm644 "$builddir"/adsp*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 }
 
 audio() {
@@ -60,29 +60,29 @@ audio() {
 
 	# TODO: Should get a proper device-specific location long-term
 	install -Dm644 "$builddir"/aw882xx_monitor.bin -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 	install -Dm644 "$builddir"/aw882xx_spk_reg_l.bin -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 	install -Dm644 "$builddir"/aw882xx_spk_reg_r.bin -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 bluetooth() {
 	pkgdesc="Fairphone 4 bluetooth firmware"
 
 	install -Dm644 "$builddir"/apbtfw11.tlv -t \
-		"$subpkgdir/lib/firmware/qca/"
+		"$subpkgdir/usr/lib/firmware/qca/"
 	install -Dm644 "$builddir"/apnv11.bin -t \
-		"$subpkgdir/lib/firmware/qca/"
+		"$subpkgdir/usr/lib/firmware/qca/"
 }
 
 cdsp() {
 	pkgdesc="Fairphone 4 cdsp firmware"
 
 	install -Dm644 "$builddir"/cdsp.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 	install -Dm644 "$builddir"/cdsp*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 }
 
 hexagonfs() {
@@ -104,20 +104,20 @@ ipa() {
 	pkgdesc="Fairphone 4 ipa firmware"
 
 	install -Dm644 "$builddir"/lagoon_ipa_fws.mbn \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/ipa_fws.mbn"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/ipa_fws.mbn"
 }
 
 modem() {
 	pkgdesc="Fairphone 4 modem firmware"
 
 	install -Dm644 "$builddir"/modem.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 	install -Dm644 "$builddir"/modem*.jsn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 
 	cp -r "$builddir"/modem_pr/ \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
-	find "$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/" \
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
+	find "$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/" \
 		-type f -exec chmod 0644 {} \;
 }
 
@@ -125,14 +125,14 @@ venus() {
 	pkgdesc="Fairphone 4 venus firmware"
 
 	install -Dm644 "$builddir"/venus.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 }
 
 wlan() {
 	pkgdesc="Fairphone 4 wlan firmware"
 
 	install -Dm644 "$builddir"/wlanmdsp.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7225/fairphone4/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7225/fairphone4/"
 }
 
 sha512sums="

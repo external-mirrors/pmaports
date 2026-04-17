@@ -1,8 +1,8 @@
 # Co-Maintainer: Bart Ribbers <bribbers@disroot.org>
 maintainer="@exkc <exkc@exkc.moe>"
 pkgname=firmware-pine64-rockpro64
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 _commit="4b370cd415a2dd7b0ecdbe8bbf1d86fb35ce6985"
 pkgdesc="Firmware for the RockPro64 (pine64-rockpro64)"
 url="https://github.com/LibreELEC/brcmfmac_sdio-firmware"
@@ -20,7 +20,7 @@ package() {
 	mv brcmfmac4359-sdio.txt brcmfmac4359-sdio.pine64,rockpro64-v2.1.txt
 
 	for file in BCM4359C0.hcd brcmfmac4359-sdio.*; do
-		install -Dm 0644 "$file" -t "$pkgdir"/lib/firmware/postmarketos/brcm
+		install -Dm 0644 "$file" -t "$pkgdir"/usr/lib/firmware/postmarketos/brcm
 	done
 }
 

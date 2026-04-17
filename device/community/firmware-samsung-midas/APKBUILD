@@ -1,7 +1,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=firmware-samsung-midas
-pkgver=8
-pkgrel=2
+pkgver=9
+pkgrel=0
 pkgdesc="Samsung Galaxy Midas board firmware (m0, m3, t0lte, ...)"
 _commit="fdd8c44568a148c22fbf008de822ff4e27992da1"
 url="https://github.com/TheMuppets/proprietary_vendor_samsung"
@@ -45,7 +45,7 @@ bluetooth() {
 	replaces="firmware-samsung-m0-mainline"
 
 	install -Dm644 "$srcdir"/bcm4334.hcd-$_commit \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/BCM4334B0.hcd
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/BCM4334B0.hcd
 }
 
 wifi() {
@@ -53,20 +53,20 @@ wifi() {
 	replaces="firmware-samsung-m0-mainline"
 
 	install -Dm644 "$srcdir"/brcmfmac4334-sdio.bin?id=dc9576448222cc1922462d58796ab1c62b523ada \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.bin
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.bin
 
 	install -Dm644 "$srcdir"/brcmfmac4334-sdio.samsung,i9300-$_armbian_commit.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt
 	install -Dm644 "$srcdir"/brcmfmac4334-sdio.samsung,i9305-$_androguide_commit.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt
-	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n7100.txt
-	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n7105.txt
-	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n8010.txt
-	ln -s /lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
-		"$subpkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n5110.txt
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt
+	ln -s /usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt \
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n7100.txt
+	ln -s /usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9305.txt \
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n7105.txt
+	ln -s /usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n8010.txt
+	ln -s /usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,i9300.txt \
+		"$subpkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4334-sdio.samsung,n5110.txt
 }
 
 sha512sums="

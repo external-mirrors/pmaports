@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=firmware-b43xx
 pkgver=6.30.163.46
-pkgrel=1
+pkgrel=2
 pkgdesc="Firmware for Broadcom B43xx WiFi chipsets"
 url="https://www.lwfinger.com/b43-firmware/"
 arch="x86_64"
@@ -12,9 +12,9 @@ makedepends="b43-fwcutter"
 builddir="$srcdir"
 
 package() {
-	mkdir -p "$pkgdir"/lib/firmware/postmarketos
+	mkdir -p "$pkgdir"/usr/lib/firmware/postmarketos
 	b43-fwcutter \
-		-w "$pkgdir"/lib/firmware/postmarketos/ \
+		-w "$pkgdir"/usr/lib/firmware/postmarketos/ \
 		broadcom-wl-"$pkgver".wl_apsta.o
 }
 

@@ -1,7 +1,7 @@
 maintainer="Jianhua Lu <lujianhua000@gmail.com>"
 pkgname=firmware-xiaomi-elish
 pkgver=20240917
-pkgrel=2
+pkgrel=3
 pkgdesc="Firmware for Xiaomi Mi Pad 5 Pro"
 subpackages="
 	$pkgname-adreno
@@ -36,28 +36,28 @@ adreno() {
 	depends="firmware-qcom-adreno-a650"
 
 	install -Dm644 "$builddir"/sm8250/a650_zap.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm8250/xiaomi/elish/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm8250/xiaomi/elish/"
 }
 
 adsp() {
 	pkgdesc="Xiaomi elish adsp firmware"
 
 	install -Dm644 "$builddir"/sm8250/adsp* -t \
-		"$subpkgdir/lib/firmware/qcom/sm8250/xiaomi/elish/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm8250/xiaomi/elish/"
 }
 
 cdsp() {
 	pkgdesc="Xiaomi elish cdsp firmware"
 
 	install -Dm644 "$builddir"/sm8250/cdsp* -t \
-		"$subpkgdir/lib/firmware/qcom/sm8250/xiaomi/elish/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm8250/xiaomi/elish/"
 }
 
 cirrus() {
 	pkgdesc="Xiaomi elish cirrus firmware"
 
 	install -Dm644 "$builddir"/cirrus/cs35l41* -t \
-		"$subpkgdir/lib/firmware/cirrus/"
+		"$subpkgdir/usr/lib/firmware/cirrus/"
 }
 
 hexagonfs() {
@@ -83,24 +83,24 @@ slpi() {
 	pkgdesc="Xiaomi elish slpi firmware"
 
 	install -Dm644 "$builddir"/sm8250/slpi* -t \
-		"$subpkgdir/lib/firmware/qcom/sm8250/xiaomi/elish/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm8250/xiaomi/elish/"
 }
 
 touchscreen() {
 	pkgdesc="Xiaomi elish touchscreen firmware"
 
 	install -Dm644 "$builddir"/novatek/nt36523* -t \
-		"$subpkgdir/lib/firmware/novatek/"
+		"$subpkgdir/usr/lib/firmware/novatek/"
 }
 
 venus() {
 	pkgdesc="Xiaomi elish venus firmware"
 
 	install -Dm644 "$builddir"/sm8250/venus.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm8250/xiaomi/elish/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm8250/xiaomi/elish/"
 }
 
 sha512sums="
 c1ebaf280313a00a64c9bc9ebf820574f0bffe26cdf0652a9897068d46e251ae03853e684bf7b26591d557d218c56eb10c36e50358778bcffb36caea948466b5  xiaomi-elish-firmware-51e9ac8cd91d88de43fb016530b9421a2713467a.tar.gz
-6faf55b7804e4cc0ceda959b3c19010d0052c18cc1bc1fc4364ddc65ec6d8715175d754b8d4aa837e23a66150b48ebc94c1c16a9ee0b405e824fae1fb6e5ae32  30-dsp-firmware.files
+498ca1e76de8a7cb6d7141b8537fe9cb32e7dae8ccb4d68b9e0e92863f5ac03b6f0cde1fe71f8d9e0248f3ffcf4e0d1fbaf027e6c7d6df2ad78786173594433e  30-dsp-firmware.files
 "
