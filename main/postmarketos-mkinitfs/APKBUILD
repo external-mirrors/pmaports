@@ -2,7 +2,7 @@
 maintainer="Oliver Smith <ollieparanoid@postmarketos.org>"
 pkgname=postmarketos-mkinitfs
 pkgver=2.9.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Tool to generate initramfs images for postmarketOS"
 url="https://gitlab.postmarketos.org/postmarketOS/postmarketos-mkinitfs"
 depends="
@@ -20,7 +20,8 @@ triggers="$pkgname.trigger=\
 /usr/share/deviceinfo:\
 /usr/share/kernel/*:\
 /usr/share/mkinitfs-triggers:\
-/usr/share/mkinitfs/*\
+/usr/share/mkinitfs/*:\
+/usr/share/plymouth:\
 "
 
 # mkinitfs-vendor-$pkgver.tar.gz: vendored Go deps, is part of the release:
