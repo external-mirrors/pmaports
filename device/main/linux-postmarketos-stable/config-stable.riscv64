@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/riscv 6.19.12 Kernel Configuration
+# Linux/riscv 6.19.13 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="Alpine clang version 22.1.3"
 CONFIG_GCC_VERSION=0
@@ -11,9 +11,9 @@ CONFIG_AS_VERSION=220103
 CONFIG_LD_VERSION=0
 CONFIG_LD_IS_LLD=y
 CONFIG_LLD_VERSION=220103
-CONFIG_RUSTC_VERSION=109401
+CONFIG_RUSTC_VERSION=109500
 CONFIG_RUST_IS_AVAILABLE=y
-CONFIG_RUSTC_LLVM_VERSION=220101
+CONFIG_RUSTC_LLVM_VERSION=220103
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
 CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
@@ -3934,23 +3934,28 @@ CONFIG_CEC_NOTIFIER=y
 # end of CEC support
 
 CONFIG_MEDIA_SUPPORT=m
-CONFIG_MEDIA_SUPPORT_FILTER=y
+# CONFIG_MEDIA_SUPPORT_FILTER is not set
 CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
 
 #
 # Media device types
 #
-# CONFIG_MEDIA_CAMERA_SUPPORT is not set
-# CONFIG_MEDIA_ANALOG_TV_SUPPORT is not set
-# CONFIG_MEDIA_DIGITAL_TV_SUPPORT is not set
-# CONFIG_MEDIA_RADIO_SUPPORT is not set
-# CONFIG_MEDIA_SDR_SUPPORT is not set
+CONFIG_MEDIA_CAMERA_SUPPORT=y
+CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
+CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
+CONFIG_MEDIA_RADIO_SUPPORT=y
+CONFIG_MEDIA_SDR_SUPPORT=y
 CONFIG_MEDIA_PLATFORM_SUPPORT=y
-# CONFIG_MEDIA_TEST_SUPPORT is not set
+CONFIG_MEDIA_TEST_SUPPORT=y
 # end of Media device types
 
+#
+# Media core support
+#
 CONFIG_VIDEO_DEV=m
 CONFIG_MEDIA_CONTROLLER=y
+CONFIG_DVB_CORE=m
+# end of Media core support
 
 #
 # Video4Linux options
@@ -3966,14 +3971,22 @@ CONFIG_V4L2_ASYNC=m
 #
 # Media controller options
 #
+# CONFIG_MEDIA_CONTROLLER_DVB is not set
 # end of Media controller options
 
 #
-# Media drivers
+# Digital TV options
 #
+# CONFIG_DVB_MMAP is not set
+CONFIG_DVB_NET=y
+CONFIG_DVB_MAX_ADAPTERS=16
+CONFIG_DVB_DYNAMIC_MINORS=y
+# CONFIG_DVB_DEMUX_SECTION_LOSS_LOG is not set
+# CONFIG_DVB_ULE_DEBUG is not set
+# end of Digital TV options
 
 #
-# Drivers filtered as selected at 'Filter media drivers'
+# Media drivers
 #
 
 #
@@ -3981,8 +3994,24 @@ CONFIG_V4L2_ASYNC=m
 #
 # CONFIG_MEDIA_USB_SUPPORT is not set
 # CONFIG_MEDIA_PCI_SUPPORT is not set
+CONFIG_RADIO_ADAPTERS=m
+# CONFIG_RADIO_MAXIRADIO is not set
+# CONFIG_RADIO_SAA7706H is not set
+# CONFIG_RADIO_SHARK is not set
+# CONFIG_RADIO_SHARK2 is not set
+# CONFIG_RADIO_SI4713 is not set
+# CONFIG_RADIO_TEA5764 is not set
+# CONFIG_RADIO_TEF6862 is not set
+# CONFIG_USB_DSBR is not set
+# CONFIG_USB_KEENE is not set
+# CONFIG_USB_MA901 is not set
+# CONFIG_USB_MR800 is not set
+# CONFIG_USB_RAREMONO is not set
+# CONFIG_RADIO_SI470X is not set
 CONFIG_MEDIA_PLATFORM_DRIVERS=y
 # CONFIG_V4L_PLATFORM_DRIVERS is not set
+# CONFIG_SDR_PLATFORM_DRIVERS is not set
+# CONFIG_DVB_PLATFORM_DRIVERS is not set
 # CONFIG_V4L_MEM2MEM_DRIVERS is not set
 
 #
@@ -4091,6 +4120,13 @@ CONFIG_VIDEO_CADENCE_CSI2RX=m
 #
 # Xilinx media platform drivers
 #
+
+#
+# MMC/SDIO DVB adapters
+#
+# CONFIG_SMS_SDIO_DRV is not set
+# CONFIG_V4L_TEST_DRIVERS is not set
+# CONFIG_DVB_TEST_DRIVERS is not set
 # end of Media drivers
 
 CONFIG_MEDIA_HIDE_ANCILLARY_SUBDRV=y
@@ -4098,6 +4134,113 @@ CONFIG_MEDIA_HIDE_ANCILLARY_SUBDRV=y
 #
 # Media ancillary drivers
 #
+CONFIG_MEDIA_ATTACH=y
+CONFIG_VIDEO_CAMERA_SENSOR=y
+# CONFIG_VIDEO_ALVIUM_CSI2 is not set
+# CONFIG_VIDEO_AR0521 is not set
+# CONFIG_VIDEO_GC0308 is not set
+# CONFIG_VIDEO_GC0310 is not set
+# CONFIG_VIDEO_GC05A2 is not set
+# CONFIG_VIDEO_GC08A3 is not set
+# CONFIG_VIDEO_GC2145 is not set
+# CONFIG_VIDEO_HI556 is not set
+# CONFIG_VIDEO_HI846 is not set
+# CONFIG_VIDEO_HI847 is not set
+# CONFIG_VIDEO_IMX111 is not set
+# CONFIG_VIDEO_IMX208 is not set
+# CONFIG_VIDEO_IMX214 is not set
+# CONFIG_VIDEO_IMX219 is not set
+# CONFIG_VIDEO_IMX258 is not set
+# CONFIG_VIDEO_IMX274 is not set
+# CONFIG_VIDEO_IMX283 is not set
+# CONFIG_VIDEO_IMX290 is not set
+# CONFIG_VIDEO_IMX296 is not set
+# CONFIG_VIDEO_IMX319 is not set
+# CONFIG_VIDEO_IMX334 is not set
+# CONFIG_VIDEO_IMX335 is not set
+# CONFIG_VIDEO_IMX355 is not set
+# CONFIG_VIDEO_IMX412 is not set
+# CONFIG_VIDEO_IMX415 is not set
+# CONFIG_VIDEO_MT9M001 is not set
+# CONFIG_VIDEO_MT9M111 is not set
+# CONFIG_VIDEO_MT9M114 is not set
+# CONFIG_VIDEO_MT9P031 is not set
+# CONFIG_VIDEO_MT9T112 is not set
+# CONFIG_VIDEO_MT9V011 is not set
+# CONFIG_VIDEO_MT9V032 is not set
+# CONFIG_VIDEO_MT9V111 is not set
+# CONFIG_VIDEO_OG01A1B is not set
+# CONFIG_VIDEO_OG0VE1B is not set
+# CONFIG_VIDEO_OV01A10 is not set
+# CONFIG_VIDEO_OV02A10 is not set
+# CONFIG_VIDEO_OV02E10 is not set
+# CONFIG_VIDEO_OV02C10 is not set
+# CONFIG_VIDEO_OV08D10 is not set
+# CONFIG_VIDEO_OV08X40 is not set
+# CONFIG_VIDEO_OV13858 is not set
+# CONFIG_VIDEO_OV13B10 is not set
+# CONFIG_VIDEO_OV2640 is not set
+# CONFIG_VIDEO_OV2659 is not set
+# CONFIG_VIDEO_OV2680 is not set
+# CONFIG_VIDEO_OV2685 is not set
+# CONFIG_VIDEO_OV2735 is not set
+# CONFIG_VIDEO_OV2740 is not set
+# CONFIG_VIDEO_OV4689 is not set
+# CONFIG_VIDEO_OV5640 is not set
+# CONFIG_VIDEO_OV5645 is not set
+# CONFIG_VIDEO_OV5647 is not set
+# CONFIG_VIDEO_OV5648 is not set
+# CONFIG_VIDEO_OV5670 is not set
+CONFIG_VIDEO_OV5675=m
+# CONFIG_VIDEO_OV5693 is not set
+# CONFIG_VIDEO_OV5695 is not set
+# CONFIG_VIDEO_OV6211 is not set
+# CONFIG_VIDEO_OV64A40 is not set
+# CONFIG_VIDEO_OV7251 is not set
+# CONFIG_VIDEO_OV7640 is not set
+# CONFIG_VIDEO_OV7670 is not set
+# CONFIG_VIDEO_OV772X is not set
+# CONFIG_VIDEO_OV7740 is not set
+# CONFIG_VIDEO_OV8856 is not set
+# CONFIG_VIDEO_OV8858 is not set
+# CONFIG_VIDEO_OV8865 is not set
+# CONFIG_VIDEO_OV9282 is not set
+# CONFIG_VIDEO_OV9640 is not set
+# CONFIG_VIDEO_OV9650 is not set
+# CONFIG_VIDEO_OV9734 is not set
+# CONFIG_VIDEO_RDACM20 is not set
+# CONFIG_VIDEO_RDACM21 is not set
+# CONFIG_VIDEO_RJ54N1 is not set
+# CONFIG_VIDEO_S5C73M3 is not set
+# CONFIG_VIDEO_S5K5BAF is not set
+# CONFIG_VIDEO_S5K6A3 is not set
+# CONFIG_VIDEO_VD55G1 is not set
+# CONFIG_VIDEO_VD56G3 is not set
+# CONFIG_VIDEO_VGXY61 is not set
+# CONFIG_VIDEO_CCS is not set
+# CONFIG_VIDEO_ET8EK8 is not set
+
+#
+# Camera ISPs
+#
+# CONFIG_VIDEO_THP7312 is not set
+# end of Camera ISPs
+
+CONFIG_VIDEO_CAMERA_LENS=y
+# CONFIG_VIDEO_AD5820 is not set
+# CONFIG_VIDEO_AK7375 is not set
+# CONFIG_VIDEO_DW9714 is not set
+# CONFIG_VIDEO_DW9719 is not set
+# CONFIG_VIDEO_DW9768 is not set
+# CONFIG_VIDEO_DW9807_VCM is not set
+
+#
+# Flash devices
+#
+# CONFIG_VIDEO_ADP1653 is not set
+# CONFIG_VIDEO_LM3560 is not set
+# CONFIG_VIDEO_LM3646 is not set
+# end of Flash devices
 
 #
 # audio, video and radio I2C drivers auto-selected by 'Autoselect ancillary drivers'
@@ -4124,8 +4267,80 @@ CONFIG_MEDIA_HIDE_ANCILLARY_SUBDRV=y
 #
 # Media SPI Adapters
 #
+# CONFIG_CXD2880_SPI_DRV is not set
 # CONFIG_VIDEO_GS1662 is not set
 # end of Media SPI Adapters
+
+CONFIG_MEDIA_TUNER=m
+
+#
+# Tuner drivers auto-selected by 'Autoselect ancillary drivers'
+#
+CONFIG_MEDIA_TUNER_MC44S803=m
+CONFIG_MEDIA_TUNER_MT20XX=m
+CONFIG_MEDIA_TUNER_SIMPLE=m
+CONFIG_MEDIA_TUNER_TDA18271=m
+CONFIG_MEDIA_TUNER_TDA827X=m
+CONFIG_MEDIA_TUNER_TDA8290=m
+CONFIG_MEDIA_TUNER_TDA9887=m
+CONFIG_MEDIA_TUNER_TEA5761=m
+CONFIG_MEDIA_TUNER_TEA5767=m
+CONFIG_MEDIA_TUNER_XC2028=m
+CONFIG_MEDIA_TUNER_XC4000=m
+CONFIG_MEDIA_TUNER_XC5000=m
+
+#
+# DVB Frontend drivers auto-selected by 'Autoselect ancillary drivers'
+#
+
+#
+# Multistandard (satellite) frontends
+#
+
+#
+# Multistandard (cable + terrestrial) frontends
+#
+
+#
+# DVB-S (satellite) frontends
+#
+
+#
+# DVB-T (terrestrial) frontends
+#
+
+#
+# DVB-C (cable) frontends
+#
+
+#
+# ATSC (North American/Korean Terrestrial/Cable DTV) frontends
+#
+
+#
+# ISDB-T (terrestrial) frontends
+#
+
+#
+# ISDB-S (satellite) & ISDB-T (terrestrial) frontends
+#
+
+#
+# Digital terrestrial only tuners/PLL
+#
+
+#
+# SEC control devices for DVB-S
+#
+
+#
+# Common Interface (EN50221) controller drivers
+#
+
+#
+# Tools to develop new frontends
+#
+# CONFIG_DVB_DUMMY_FE is not set
 # end of Media ancillary drivers
 
 #
@@ -7237,7 +7452,7 @@ CONFIG_KEYS=y
 # CONFIG_TRUSTED_KEYS is not set
 # CONFIG_ENCRYPTED_KEYS is not set
 CONFIG_KEY_DH_OPERATIONS=y
-# CONFIG_SECURITY_DMESG_RESTRICT is not set
+CONFIG_SECURITY_DMESG_RESTRICT=y
 CONFIG_PROC_MEM_ALWAYS_FORCE=y
 # CONFIG_PROC_MEM_FORCE_PTRACE is not set
 # CONFIG_PROC_MEM_NO_FORCE is not set
@@ -7250,7 +7465,7 @@ CONFIG_SECURITY_PATH=y
 CONFIG_LSM_MMAP_MIN_ADDR=65536
 # CONFIG_STATIC_USERMODEHELPER is not set
 CONFIG_SECURITY_SELINUX=y
-# CONFIG_SECURITY_SELINUX_BOOTPARAM is not set
+CONFIG_SECURITY_SELINUX_BOOTPARAM=y
 CONFIG_SECURITY_SELINUX_DEVELOP=y
 CONFIG_SECURITY_SELINUX_AVC_STATS=y
 CONFIG_SECURITY_SELINUX_SIDTAB_HASH_BITS=9
@@ -7277,10 +7492,10 @@ CONFIG_INTEGRITY=y
 CONFIG_INTEGRITY_AUDIT=y
 # CONFIG_IMA is not set
 # CONFIG_EVM is not set
-# CONFIG_DEFAULT_SECURITY_SELINUX is not set
+CONFIG_DEFAULT_SECURITY_SELINUX=y
 # CONFIG_DEFAULT_SECURITY_APPARMOR is not set
-CONFIG_DEFAULT_SECURITY_DAC=y
-CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,ipe,bpf"
+# CONFIG_DEFAULT_SECURITY_DAC is not set
+CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,ipe,bpf"
 
 #
 # Kernel hardening options
