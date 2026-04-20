@@ -35,7 +35,7 @@
 #### Environments
 * [ ] COSMIC
 * [ ] GNOME Shell on Mobile
-* [ ] Phosh
+* [ ] Phosh (*Please attach the debug information of the Mobile settings app, see [this video](https://peertube.debian.social/w/4GwDjCJNcAmp8cb7dqXz1T) or use `phosh-mobile-settings -d`*)
 * [ ] Plasma Mobile
 * [ ] Sxmo (Wayland/Sway) **Please post the output of `sxmo_version.sh`**
 * [ ] Other: **Please fill out**
