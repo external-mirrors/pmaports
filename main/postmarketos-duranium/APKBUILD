@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=3
-pkgrel=2
+pkgver=4
+pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
 options="!check"  # no tests
@@ -31,12 +31,10 @@ _source644="
 	etc/crypttab
 	usr/lib/modprobe.d/no-firmware.conf
 	usr/lib/repart.d/00-esp.conf
-	usr/lib/repart.d/10-usr-verity-sig.conf
-	usr/lib/repart.d/11-usr-verity.conf
-	usr/lib/repart.d/12-usr.conf
-	usr/lib/repart.d/20-usr-verity-sig.conf
-	usr/lib/repart.d/21-usr-verity.conf
-	usr/lib/repart.d/22-usr.conf
+	usr/lib/repart.d/10-usr-verity.conf
+	usr/lib/repart.d/11-usr.conf
+	usr/lib/repart.d/20-usr-verity.conf
+	usr/lib/repart.d/21-usr.conf
 	usr/lib/repart.d/30-root.conf
 	usr/lib/systemd/confext.conf
 	usr/lib/systemd/initrd-preset/80-duranium.preset
@@ -54,9 +52,8 @@ _source644="
 	usr/lib/systemd/system/unl0kr-agent.path.d/plymouth-handoff.conf
 	usr/lib/systemd/system/unl0kr-agent.service.d/conflicts-console.conf
 	usr/lib/systemd/system/unl0kr-agent.service.d/plymouth-handoff.conf
-	usr/lib/sysupdate.d/10-usr-verity-sig.transfer
-	usr/lib/sysupdate.d/11-usr-verity.transfer
-	usr/lib/sysupdate.d/12-usr.transfer
+	usr/lib/sysupdate.d/10-usr-verity.transfer
+	usr/lib/sysupdate.d/11-usr.transfer
 	usr/lib/sysupdate.d/20-uki.transfer
 	usr/lib/sysupdate.d/50-dev-tools-sysext.transfer
 	usr/lib/sysupdate.d/51-dev-tools-confext.transfer
@@ -184,12 +181,10 @@ sha512sums="
 ac441c8a690b89a92c2d7db37145e54d918bb9838a45cf76d20de82d46848a80477a8035d9cbaa39fb6ea4747c2762789f71736aa11a78e3adcca0c339dc5677  rootfs-etc-crypttab
 ce3f39aa5ed95065306a42bbab6b405bcb90446e206c25509bda64ed2866d80d5168ac225baeb2a50a66e17cbb9b32f26b4a5ec1e042b5f0bf40f6907f4e4d82  rootfs-usr-lib-modprobe.d-no-firmware.conf
 b0f320f2ea81c29fa9030abac998e725e098c74bb2ffb76ee2711da4c88615ad46a0e5359b98198648879551781580a0128b57a2ef1ca6a3e03448b01f533065  rootfs-usr-lib-repart.d-00-esp.conf
-be7f90bd96fcad6ccf2b434a4b9ce9bc620b63558df0eddd088d86bcbeb778ff097b6d7db0a021d4322bb2ff908eb65f41840e10b11a479e15986a0b02331bf0  rootfs-usr-lib-repart.d-10-usr-verity-sig.conf
-8dab35b6c5b61936a8a5f7c6872efe77550f70603a90286c874e9b3c12b25214823c89dd32517b0733110a2f92d0908d0adb6a7bff68f83163d2882e4167b4f6  rootfs-usr-lib-repart.d-11-usr-verity.conf
-a2ebcf35620a8c2dcd06dff50b6d17b02e8b688f98c6f7e1bb9727733df20742669cb3926a003ccdb1091bc8a337fdc39cc774de509f1b155f3bd3b45a86f8ef  rootfs-usr-lib-repart.d-12-usr.conf
-f5688dbd32ae55ea19f5cafff614f2cfc775c1c7078191d4081b254ed25dad58ac5bed0084e5e07aae192591f3b166aae6e5d1ae4eb585f6b1773f03104eee88  rootfs-usr-lib-repart.d-20-usr-verity-sig.conf
-730aa98894ec4586d5a97b2faed5ec30ae6679b9ebf4e6dd7e1d4f039279691040232ba30d0f88b4a2696131618b17753d0d8262b88d4ff6f1f120cbd0d22acd  rootfs-usr-lib-repart.d-21-usr-verity.conf
-d88e87fb22b8efdc2617e8a3d52102032ce2b0dbde0e7d40a8d7679f507acc9cea271faa7004f96611631dfa0351cd5175dc1574f907176c9e4ebc5561b9a6d6  rootfs-usr-lib-repart.d-22-usr.conf
+b2076a208e389605b8c5d3ad7ae2413c70b303a90f94ca7e330cc02b7a2ae6602b78d7b8d95ed22d1326ebcac5549f41c41dd752a259e625e0641b5499800628  rootfs-usr-lib-repart.d-10-usr-verity.conf
+04be14a81ab9315bb432effc7e4767bcfd8f4196d68ae0b117dc1028e21899f82e8461ac5b5afc6c40c24858ffbb6a917ad24eb91c2f4ffb8c1281777999aded  rootfs-usr-lib-repart.d-11-usr.conf
+730aa98894ec4586d5a97b2faed5ec30ae6679b9ebf4e6dd7e1d4f039279691040232ba30d0f88b4a2696131618b17753d0d8262b88d4ff6f1f120cbd0d22acd  rootfs-usr-lib-repart.d-20-usr-verity.conf
+d88e87fb22b8efdc2617e8a3d52102032ce2b0dbde0e7d40a8d7679f507acc9cea271faa7004f96611631dfa0351cd5175dc1574f907176c9e4ebc5561b9a6d6  rootfs-usr-lib-repart.d-21-usr.conf
 84036b008042766e89bc02ecb7d77b52f80973a385a21faa1fbb2348ff0c216c302e29bd52c6cb40e5e547ad58aa955e06a9e94bd2ca0c512903a200f44c9a63  rootfs-usr-lib-repart.d-30-root.conf
 16984590f17c25be2f45444d8035c8c3a9035e3f52219a3e57e5bab93325acf0fdd50e03cd8a99da44c2adf4fd6234da73de63393582bff456bb128501da6211  rootfs-usr-lib-systemd-confext.conf
 5125928c8267306a62c1a7756001dbfb0251ea1a6765cb662c7a2a768a139ce5285f8dfe4ac1ae3ccb4ac34fb8dbe9bce7f98a2ef42e5be1d83be40cee2d87f0  rootfs-usr-lib-systemd-initrd-preset-80-duranium.preset
@@ -207,9 +202,8 @@ ef4bd401dd86ff0a56362b6441f01a1aa9c3612bcb4fe53c024365cf1c99c2614f1221b0ca2caf23
 612e50282c0ceb7676d8e62853e99bd693103fc59098d8ac91173538ff1c3fa8b69d3eebeaa6390df7c8f9cc62fddae1ca2d35d07d97e60b40b660bc62bf049b  rootfs-usr-lib-systemd-system-unl0kr-agent.path.d-plymouth-handoff.conf
 b1aa826b83fbb5d606b5dc37a4db67a7233519e0ac953325395dd7f3b7e303d206f6297e51a749d07ee173ccbc4ccf055e92888e38345783d4f4c7687a6a9870  rootfs-usr-lib-systemd-system-unl0kr-agent.service.d-conflicts-console.conf
 017fe2d6298842b24498000c98e851b441da4edf91cadf2bfc0542a46364f105eda9a5ca772c87e7bd4749e101833fdb43604081b7ab26ebea426559f9de418e  rootfs-usr-lib-systemd-system-unl0kr-agent.service.d-plymouth-handoff.conf
-2e4d532a0d996d8e68007b6036b4564ca3d654dd91cadd80ed904536d0c3ed1e019b4081f7bdb6d128e695cacfe6949bfb20c074b95d10ef25f948f8eb307e24  rootfs-usr-lib-sysupdate.d-10-usr-verity-sig.transfer
-2dbe55c05b8237ad85c4f333a8c02eec26aad14032f159830696ad9b9c6442d624b0190b2e6780e4b8aed590eb12d0c7454d39ab739e55d420300cdba2a78f58  rootfs-usr-lib-sysupdate.d-11-usr-verity.transfer
-14df73dfc786a249b300f8998b1f51301834cf058b65c95701b1350f112d2c3deed3b8db9ba439bd90537cef533f148d187bd73961707dca12ef84735e2d5595  rootfs-usr-lib-sysupdate.d-12-usr.transfer
+32e12f098b1be89980c1b93020d7959dc45bc4371c5ac8f55406f80589b0c6ca1c8744e32a6594c985b56e551e98d8dbf6efb2c701c3ac5c681367ae81ee7560  rootfs-usr-lib-sysupdate.d-10-usr-verity.transfer
+177d975fb333f5703627cf389f32c6168903098734bf66feecf3b9b03a1cbb13239f3807d7a6cea5b26f0ee36c50a422b933732e3b9a6a4cac7def6bed57be59  rootfs-usr-lib-sysupdate.d-11-usr.transfer
 4ffb2be01cb033c1282b6661052250937e1ac457cec3900b075d0dcdf59de7dcb2eb927c39db0e96468a90b03fed0a4e6db0d99f62d714c31a29d4684e79751f  rootfs-usr-lib-sysupdate.d-20-uki.transfer
 4699b75e545ccf3b539f9fb418841106f69879e5bcc9faef6918296d0c89b2fec5e3f85c7742acf4b6b5b6eb91006d38375041b78263913fd41bebab4746dee3  rootfs-usr-lib-sysupdate.d-50-dev-tools-sysext.transfer
 fe0a3a0be13d4b4a8d632859cc54f95d69021f1f100debe5565beb55d909fff8bbf2f0bd561e27c67540356fb7f16bc41eab68830ab6a72fcd6d39e6c01afebb  rootfs-usr-lib-sysupdate.d-51-dev-tools-confext.transfer
