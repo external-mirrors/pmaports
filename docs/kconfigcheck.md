@@ -50,6 +50,25 @@ and main categories, see the
 [device categorization requirements](./device-categorization) for more
 information.
 
+## Version baselines
+
+Different categories in `kconfigcheck.toml` have different kernel version
+baselines. This means that specifying the minimum kernel version for a config
+option can be omitted if it was added in a version prior to the baseline
+version for the category, which greatly simplifies the file since things can be
+grouped more closely together and differences through the version history don't
+need to be accounted for anymore in many cases.
+
+The baseline for the `default` category is Linux 2.6.0. All categories that are
+included in the `community` category and any other ones that are expected to
+only be opted into by close-to-mainline kernels (such as, for example the
+`uefi` category) can assume a baseline of the newest major kernel release (X.Y)
+not tagged in the last 4 years.
+
+For example: Assuming today is the 22nd of April 2026, the newest major kernel
+release tagged more than 4 years ago would be Linux 5.17, which was released on
+the 20th of March, 2022.
+
 ## Changing the requirements
 
 Changes to `kconfigcheck.toml`, like requiring new options, removing
@@ -68,4 +87,3 @@ requests via `@teams/kconfigcheck`. Trivial changes that are not expected to
 break any usecases and don't conflict with our policies can be merged with
 approval of one team member. Any other, nontrivial changes require approval of
 all team members.
-
