@@ -1,9 +1,8 @@
 #!/bin/sh
 # shellcheck shell=busybox
 
-# shellcheck source=../postmarketos-initramfs/init_functions.sh
+# shellcheck disable=SC1091
 . ./init_functions.sh
-# shellcheck source=../devicepkg-utils/source_deviceinfo
 . /usr/share/misc/source_deviceinfo
 
 # Prints a given string a couple of times, over a span of time
