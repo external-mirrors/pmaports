@@ -23,7 +23,12 @@ sh_files="
 	./main/postmarketos-installkernel/installkernel-pmos
 	./main/postmarketos-initramfs/init.sh
 	./main/postmarketos-initramfs/init_functions.sh
-	./main/postmarketos-mkinitfs-hook-netboot/netboot.sh
+	./main/postmarketos-mkinitfs-hook/00-apx.sh
+	./main/postmarketos-mkinitfs-hook/00-kernel-panic.sh
+	./main/postmarketos-mkinitfs-hook/00-maximum-attention.sh
+	./main/postmarketos-mkinitfs-hook/00-netboot.sh
+	./main/postmarketos-mkinitfs-hook/05-ci.sh
+	./main/postmarketos-mkinitfs-hook/10-verbose-initfs.sh
 	./main/postmarketos-ui-os-installer/rootfs-usr-bin-pmos_setup.sh
 	./main/postmarketos-usb-moded/rootfs-usr-lib-systemd-system-generators-umtprd-config-generator
 	./main/ttyescape/*.post-install
