@@ -1,0 +1,128 @@
+From 4a2c2d65877d933082a7936f9432e0545b6f33d4 Mon Sep 17 00:00:00 2001
+From: bluebunny <1812-bluebunny@users.noreply.gitlab.postmarketos.org>
+Date: Wed, 22 Apr 2026 21:45:22 +0000
+Subject: [PATCH 09/12] UPSTREAM: ASoC: codecs: aw88261: backport linux-next
+ changes
+
+The following patches were taken from linux-next without any
+modifications. They will be automatically removed in the next rebase.
+---
+ sound/soc/codecs/aw87390.c  |  3 +--
+ sound/soc/codecs/aw88081.c  |  3 +--
+ sound/soc/codecs/aw88261.c  | 16 ++++++++++------
+ sound/soc/codecs/max98390.c |  6 ++----
+ sound/soc/codecs/max98520.c |  4 ++--
+ 5 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/sound/soc/codecs/aw87390.c b/sound/soc/codecs/aw87390.c
+index 613daccca3af..37ca42a25889 100644
+--- a/sound/soc/codecs/aw87390.c
++++ b/sound/soc/codecs/aw87390.c
+@@ -544,8 +544,7 @@ static int aw87390_i2c_probe(struct i2c_client *i2c)
+ 	const struct snd_soc_component_driver *priv;
+ 	int ret;
+ 
+-	ret = i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C);
+-	if (!ret)
++	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
+ 		return dev_err_probe(&i2c->dev, -ENXIO, "check_functionality failed\n");
+ 
+ 	aw87390 = devm_kzalloc(&i2c->dev, sizeof(*aw87390), GFP_KERNEL);
+diff --git a/sound/soc/codecs/aw88081.c b/sound/soc/codecs/aw88081.c
+index fbd1fd12381a..8c5bb3ea0227 100644
+--- a/sound/soc/codecs/aw88081.c
++++ b/sound/soc/codecs/aw88081.c
+@@ -1253,8 +1253,7 @@ static int aw88081_i2c_probe(struct i2c_client *i2c)
+ 	struct aw88081 *aw88081;
+ 	int ret;
+ 
+-	ret = i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C);
+-	if (!ret)
++	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
+ 		return dev_err_probe(&i2c->dev, -ENXIO, "check_functionality failed");
+ 
+ 	aw88081 = devm_kzalloc(&i2c->dev, sizeof(*aw88081), GFP_KERNEL);
+diff --git a/sound/soc/codecs/aw88261.c b/sound/soc/codecs/aw88261.c
+index 43c03d3cb252..a6805d5405cd 100644
+--- a/sound/soc/codecs/aw88261.c
++++ b/sound/soc/codecs/aw88261.c
+@@ -1094,17 +1094,22 @@ static int aw88261_dev_init(struct aw88261 *aw88261, struct aw_container *aw_cfg
+ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
+ {
+ 	const struct firmware *cont = NULL;
++	const char *fw_name;
+ 	int ret;
+ 
+ 	aw88261->aw_pa->fw_status = AW88261_DEV_FW_FAILED;
+ 
+-	ret = request_firmware(&cont, AW88261_ACF_FILE, aw88261->aw_pa->dev);
++	ret = device_property_read_string(aw88261->aw_pa->dev, "firmware-name", &fw_name);
++	if (ret)
++		fw_name = AW88261_ACF_FILE;
++
++	ret = request_firmware(&cont, fw_name, aw88261->aw_pa->dev);
+ 	if (ret)
+ 		return dev_err_probe(aw88261->aw_pa->dev, ret,
+-					"load [%s] failed!", AW88261_ACF_FILE);
++					"load [%s] failed!", fw_name);
+ 
+ 	dev_info(aw88261->aw_pa->dev, "loaded %s - size: %zu\n",
+-			AW88261_ACF_FILE, cont ? cont->size : 0);
++			fw_name, cont ? cont->size : 0);
+ 
+ 	aw88261->aw_cfg = devm_kzalloc(aw88261->aw_pa->dev, cont->size + sizeof(int), GFP_KERNEL);
+ 	if (!aw88261->aw_cfg) {
+@@ -1117,7 +1122,7 @@ static int aw88261_request_firmware_file(struct aw88261 *aw88261)
+ 
+ 	ret = aw88395_dev_load_acf_check(aw88261->aw_pa, aw88261->aw_cfg);
+ 	if (ret) {
+-		dev_err(aw88261->aw_pa->dev, "load [%s] failed !", AW88261_ACF_FILE);
++		dev_err(aw88261->aw_pa->dev, "load [%s] failed !", fw_name);
+ 		return ret;
+ 	}
+ 
+@@ -1237,8 +1242,7 @@ static int aw88261_i2c_probe(struct i2c_client *i2c)
+ 	struct aw88261 *aw88261;
+ 	int ret;
+ 
+-	ret = i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C);
+-	if (!ret)
++	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C))
+ 		return dev_err_probe(&i2c->dev, -ENXIO, "check_functionality failed");
+ 
+ 	aw88261 = devm_kzalloc(&i2c->dev, sizeof(*aw88261), GFP_KERNEL);
+diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
+index ff58805e97d1..65f095c47191 100644
+--- a/sound/soc/codecs/max98390.c
++++ b/sound/soc/codecs/max98390.c
+@@ -1015,10 +1015,8 @@ static int max98390_i2c_probe(struct i2c_client *i2c)
+ 	struct i2c_adapter *adapter = i2c->adapter;
+ 	struct gpio_desc *reset_gpio;
+ 
+-	ret = i2c_check_functionality(adapter,
+-		I2C_FUNC_SMBUS_BYTE
+-		| I2C_FUNC_SMBUS_BYTE_DATA);
+-	if (!ret) {
++	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE |
++					      I2C_FUNC_SMBUS_BYTE_DATA)) {
+ 		dev_err(&i2c->dev, "I2C check functionality failed\n");
+ 		return -ENXIO;
+ 	}
+diff --git a/sound/soc/codecs/max98520.c b/sound/soc/codecs/max98520.c
+index 2bf8976c1828..5bc3d95ade5a 100644
+--- a/sound/soc/codecs/max98520.c
++++ b/sound/soc/codecs/max98520.c
+@@ -681,8 +681,8 @@ static int max98520_i2c_probe(struct i2c_client *i2c)
+ 	struct max98520_priv *max98520;
+ 	struct i2c_adapter *adapter = to_i2c_adapter(i2c->dev.parent);
+ 
+-	ret = i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE | I2C_FUNC_SMBUS_BYTE_DATA);
+-	if (!ret) {
++	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE |
++					      I2C_FUNC_SMBUS_BYTE_DATA)) {
+ 		dev_err(&i2c->dev, "I2C check functionality failed\n");
+ 		return -ENXIO;
+ 	}
+-- 
+2.52.0
+

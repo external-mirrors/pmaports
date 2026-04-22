@@ -1,7 +1,7 @@
-From f68a0323a86ad9b415586da939be8845b320a30e Mon Sep 17 00:00:00 2001
+From 2004321a59de1889325505efbf3af46762d368af Mon Sep 17 00:00:00 2001
 From: Arseniy Velikanov <me@adomerle.pw>
 Date: Wed, 11 Feb 2026 21:05:40 +0700
-Subject: [PATCH 08/11] drm/panel: Add support for Novatek NT36532 panel
+Subject: [PATCH 06/12] drm/panel: Add support for Novatek NT36532 panel
 
 Add a driver for panels using the Novatek NT36532 Display Driver IC,
 including support for the CSOT panel used in the Xiaomi Pad 6 tablets.
@@ -16,7 +16,7 @@ Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
  create mode 100644 drivers/gpu/drm/panel/panel-novatek-nt36532.c
 
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 7a83804fedca..1448034ee9ce 100644
+index 307152ad7759..97a6ea3829bb 100644
 --- a/drivers/gpu/drm/panel/Kconfig
 +++ b/drivers/gpu/drm/panel/Kconfig
 @@ -533,6 +533,16 @@ config DRM_PANEL_NOVATEK_NT36523
@@ -37,7 +37,7 @@ index 7a83804fedca..1448034ee9ce 100644
  	tristate "Novatek NT36672A DSI panel"
  	depends on OF
 diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index b9562a6fdcb3..479571864cc9 100644
+index aeffaa95666d..e1511dba37a7 100644
 --- a/drivers/gpu/drm/panel/Makefile
 +++ b/drivers/gpu/drm/panel/Makefile
 @@ -52,6 +52,7 @@ obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o

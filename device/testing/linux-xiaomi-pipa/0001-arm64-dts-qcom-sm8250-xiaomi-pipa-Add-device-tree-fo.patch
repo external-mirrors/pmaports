@@ -1,28 +1,28 @@
-From 6d0532d49fd73320eabcb087a0e98d5c7acb3326 Mon Sep 17 00:00:00 2001
+From 79deaf1aaed2158665a87698d32743ae91c14582 Mon Sep 17 00:00:00 2001
 From: bluebunny <1812-bluebunny@users.noreply.gitlab.postmarketos.org>
 Date: Thu, 19 Mar 2026 14:52:20 +0900
-Subject: [PATCH 01/11] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree
+Subject: [PATCH 01/12] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree
  for Xiaomi Pad 6
 
 Co-developed-by: Ryo Kenrie Wongso <developer@damillora.com>
 Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
 ---
  arch/arm64/boot/dts/qcom/Makefile             |    3 +-
- .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1409 +++++++++++++++++
+ .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1407 +++++++++++++++++
  .../boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts |   23 +
  .../dts/qcom/sm8250-xiaomi-pipa-tianma.dts    |   23 +
  .../boot/dts/qcom/sm8250-xiaomi-pipa.dts      |  541 -------
- 5 files changed, 1457 insertions(+), 542 deletions(-)
+ 5 files changed, 1455 insertions(+), 542 deletions(-)
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-tianma.dts
  delete mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa.dts
 
 diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 6f34d5ed331c..1b9fda91c0e5 100644
+index f80b5d9cf1e8..d3ec6c7cb25b 100644
 --- a/arch/arm64/boot/dts/qcom/Makefile
 +++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -293,7 +293,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+@@ -315,7 +315,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-boe.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-csot.dtb
@@ -34,10 +34,10 @@ index 6f34d5ed331c..1b9fda91c0e5 100644
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
 diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
 new file mode 100644
-index 000000000000..65eba9270998
+index 000000000000..8c6672ffdd66
 --- /dev/null
 +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-@@ -0,0 +1,1409 @@
+@@ -0,0 +1,1407 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +/*
 + * Copyright (c) 2023 Luka Panio <lukapanio@gmail.com>
@@ -683,9 +683,8 @@ index 000000000000..65eba9270998
 +	clock-frequency = <400000>;
 +	status = "okay";
 +
-+	aw88261_pr: speaker-amp@36 { // IT IS ACTUALLY TOP RIGHT SPEAKER WHEN TABLET IS IN LANDSCAPE ORIENTATION
++	aw88261_pr: audio-codec@36 {
 +		compatible = "awinic,aw88261";
-+		status = "okay";
 +		reg = <0x36>;
 +		#sound-dai-cells = <0>;
 +		reset-gpios = <&tlmm 144 GPIO_ACTIVE_HIGH>;
@@ -693,13 +692,12 @@ index 000000000000..65eba9270998
 +		awinic,sync-flag;
 +		firmware-name = "awinic/aw88230_2113_pipa.bin";
 +
-+		rx_slot = <1>;
-+
++		dvdd-supply = <&vreg_s4a_1p8>;
++		sound-name-prefix = "Amplifier PR";
 +	};
 +
-+	aw88261_sl: speaker-amp@37 { // IT IS ACTUALLY BOTTOM RIGHT SPEAKER WHEN TABLET IS IN LANDSCAPE ORIENTATION
++	aw88261_sl: audio-codec@37 {
 +		compatible = "awinic,aw88261";
-+		status = "okay";
 +		reg = <0x37>;
 +		#sound-dai-cells = <0>;
 +		reset-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
@@ -707,7 +705,8 @@ index 000000000000..65eba9270998
 +		awinic,sync-flag;
 +		firmware-name = "awinic/aw88230_2113_pipa.bin";
 +
-+		rx_slot = <1>;
++		dvdd-supply = <&vreg_s4a_1p8>;
++		sound-name-prefix = "Amplifier SL";
 +	};
 +};
 +
@@ -715,10 +714,8 @@ index 000000000000..65eba9270998
 +	clock-frequency = <400000>;
 +	status = "okay";
 +
-+	/* Enable AW88261 codecs */
-+	aw88261_pl: speaker-amp@34 { // IT IS ACTUALLY SOME LEFT (IDK IF TOP OR BOTTOM) SPEAKER WHEN TABLET IS IN LANDSCAPE ORIENTATION
++	aw88261_pl: audio-codec@34 {
 +		compatible = "awinic,aw88261";
-+		status = "okay";
 +		reg = <0x34>;
 +		#sound-dai-cells = <0>;
 +		reset-gpios = <&tlmm 6 GPIO_ACTIVE_HIGH>;
@@ -726,12 +723,12 @@ index 000000000000..65eba9270998
 +		awinic,sync-flag;
 +		firmware-name = "awinic/aw88230_2113_pipa.bin";
 +
-+		rx_slot = <0>;
++		dvdd-supply = <&vreg_s4a_1p8>;
++		sound-name-prefix = "Amplifier PL";
 +	};
 +
-+	aw88261_sr: speaker-amp@35 { // IT IS ACTUALLY SOME LEFT (IDK IF TOP OR BOTTOM) SPEAKER WHEN TABLET IS IN LANDSCAPE ORIENTATION
++	aw88261_sr: audio-codec@35 {
 +		compatible = "awinic,aw88261";
-+		status = "okay";
 +		reg = <0x35>;
 +		#sound-dai-cells = <0>;
 +		reset-gpios = <&tlmm 78 GPIO_ACTIVE_HIGH>;
@@ -739,7 +736,8 @@ index 000000000000..65eba9270998
 +		awinic,sync-flag;
 +		firmware-name = "awinic/aw88230_2113_pipa.bin";
 +
-+		rx_slot = <0>;
++		dvdd-supply = <&vreg_s4a_1p8>;
++		sound-name-prefix = "Amplifier SR";
 +	};
 +};
 +
