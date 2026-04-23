@@ -49,6 +49,7 @@ community = [
 # default: all devices must satisfy these
 ["category:default".">=0.0.0"."all"]
 ANDROID_PARANOID_NETWORK = "n"
+BINFMT_ELF = "y"
 BLK_DEV_INITRD = "y"
 CGROUPS = "y" # also required for: containers
 CRYPTO_CBC = "y"
@@ -68,8 +69,6 @@ USE_VFB = "n"
 VT = "y"
 ["category:default".">=4.3.0"."all"]
 DRM_FBDEV_EMULATION = "y"
-["category:default".">=2.6.0"."all"]
-BINFMT_ELF = "y"
 ["category:default".">=3.10.0"."all"]
 # Note: MUST be =y else we're unable to run our initramfs's init script
 BINFMT_SCRIPT = "y"
@@ -120,9 +119,10 @@ SECURITYFS = "y"
 USER_NS = "y"
 UTS_NS = "y"
 
-["category:netmount".">=2.6.0"."all"]
+["category:netmount".">=0.0.0"."all"]
 CACHEFILES = "m"
 CRYPTO_CAMELLIA = "m"
+CRYPTO_CMAC = "m"
 CRYPTO_CTS = "y"
 CRYPTO_HMAC = "y"
 CRYPTO_SHA256 = "y"
@@ -134,16 +134,13 @@ NFS_V3 = "m"
 NFS_V4 = "m"
 NFSD = "m"
 RPCSEC_GSS_KRB5 = "m"
-["category:netmount".">=3.1.0"."all"]
-CRYPTO_CMAC = "m"
-["category:netmount".">=3.10.0 <7.0"."all"]
-CRYPTO_AES_TI = "m"
-["category:netmount".">=3.10.0"."aarch64"]
-CRYPTO_AES_ARM64_CE_BLK = "y"
-["category:netmount".">=4.14.0"."all"]
 RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA1 = "y"
 RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = "y"
 RPCSEC_GSS_KRB5_ENCTYPES_CAMELLIA = "y"
+["category:netmount"."<7.0"."all"]
+CRYPTO_AES_TI = "m"
+["category:netmount".">=0.0.0"."aarch64"]
+CRYPTO_AES_ARM64_CE_BLK = "y"
 
 # waydroid: android compatibility layer
 ["category:waydroid".">=0.0.0"."all"]
@@ -156,6 +153,7 @@ BPF_SYSCALL = "y"
 BRIDGE = "m"
 BRIDGE_VLAN_FILTERING = "y"
 CGROUP_BPF = "y"
+CROSS_MEMORY_ATTACH = "y"
 FUSE_FS = "m"
 IP_NF_MANGLE = "m"
 NETFILTER_XTABLES = "m"
@@ -167,8 +165,6 @@ TMPFS_XATTR = "y"
 TUN = "m"
 VETH = "m"
 VLAN_8021Q = "m"  # prerequisite for bridge
-["category:waydroid".">=3.5"."all"]
-CROSS_MEMORY_ATTACH = "y"
 ["category:waydroid"."<5.18"."all"]
 ASHMEM = "y"
 ["category:waydroid".">=6.9"."all"]
@@ -200,7 +196,7 @@ X509_CERTIFICATE_PARSER = "y"
 RFKILL = "m"
 
 # nftables: firewall, not related to nft scams
-["category:nftables".">=3.13.0"."all"]
+["category:nftables".">=0.0.0"."all"]
 NETFILTER = "y"
 NF_CONNTRACK = "m"
 NF_TABLES = "m"
@@ -223,8 +219,6 @@ IP6_NF_IPTABLES = "m"
 IP6_NF_FILTER = "m"
 IP6_NF_TARGET_REJECT = "m"
 IP6_NF_NAT = "m"
-["category:nftables".">=3.13.0 <5.17"."all"]
-NFT_COUNTER = "y"
 ["category:nftables".">=6.9"."all"]
 IP_NF_IPTABLES_LEGACY = "m"
 IP6_NF_IPTABLES_LEGACY = "m"
@@ -278,50 +272,35 @@ IP_VS_PROTO_UDP = "y"  # Optional section
 IP_VS_RR = "m"  # Optional section
 EXT4_FS_POSIX_ACL = "y"  # Optional section
 EXT4_FS_SECURITY = "y"  # Optional section
-["category:containers".">=3.2"."all"]
 CFS_BANDWIDTH = "y"  # Optional section
-["category:containers".">=3.3"."all"]
 CHECKPOINT_RESTORE = "y"  # Needed for lxc
-["category:containers".">=3.6"."all"]
 MEMCG = "y"
 DM_THIN_PROVISIONING = "m"  # Storage Drivers
 SWAP = "y"
-["category:containers".">=3.6"."x86 x86_64"]
-HUGETLB_PAGE = "y"
-CGROUP_HUGETLB = "y"  # Optional section
-["category:containers".">=3.6 <6.1_rc1"."all"]
-MEMCG_SWAP = "y"
-["category:containers".">=3.7 <5.0"."all"]
-NF_NAT_IPV4 = "y"  # Needed for lxc
-NF_NAT_IPV6 = "y"  # Needed for lxc
-["category:containers".">=3.7"."all"]
 VXLAN = "m"  # Network Drivers
 IP6_NF_TARGET_MASQUERADE = "m"  # Needed for lxc and docker
-["category:containers".">=3.9"."all"]
 BRIDGE_VLAN_FILTERING = "y"  # Network Drivers (also for waydroid)
 MACVLAN = "m"  # Network Drivers
-["category:containers".">=3.13"."all"]
 NFT_COMPAT = "m"
 NFT_CT = "m"  # Docker (optional)
 NFT_NAT = "m"  # Docker (optional)
 NF_TABLES = "m"  # Docker (optional)
-["category:containers".">=3.14"."all"]
 CGROUP_NET_PRIO = "y"  # Optional section
-["category:containers".">=3.17"."all"]
 IP6_NF_NAT = "m" # Needed for docker
-["category:containers".">=3.18"."all"]
 OVERLAY_FS = "m"  # Storage Drivers
 NFT_MASQ = "m"  # Docker (optional)
-["category:containers".">=3.19"."all"]
 IPVLAN = "m"  # Network Drivers
 SECCOMP = "y"  # Optional section
-["category:containers".">=4.4"."all"]
 CGROUP_PIDS = "y"  # Optional section
-["category:containers".">=4.10"."all"]
 CGROUP_BPF = "y" # Needed for docker
 NFT_FIB_IPV4 = "m"  # Docker (optional)
 NFT_FIB_IPV6 = "m"  # Docker, optional
 NFT_FIB = "m"  # Docker (optional)
+["category:containers".">=0.0.0"."x86 x86_64"]
+HUGETLB_PAGE = "y"
+CGROUP_HUGETLB = "y"  # Optional section
+["category:containers"."<6.1_rc1"."all"]
+MEMCG_SWAP = "y"
 ["category:containers".">=6.9"."all"]
 IP6_NF_FILTER = "m" # Needed for docker
 
@@ -349,7 +328,7 @@ BLK_DEV_NBD = "m"
 BLK_DEV_UBLK = "m"
 
 # wireguard: VPN software, also includes options for wg-quick
-["category:wireguard".">=5.6_rc1"."all"]
+["category:wireguard".">=0.0.0"."all"]
 WIREGUARD = "m"
 IP_ADVANCED_ROUTER = "y"
 IP_MULTIPLE_TABLES = "y"
@@ -375,10 +354,8 @@ EXT4_FS = "y"
 F2FS_FS = "y"
 UDF_FS = "m"
 XFS_FS = "m"
-["category:filesystems".">=5.4"."all"]
 EROFS_FS = "m"
 EROFS_FS_ZIP = "y"
-["category:filesystems".">=5.16"."all"]
 EROFS_FS_ZIP_LZMA = "y"
 ["category:filesystems".">=6.6"."all"]
 EROFS_FS_ZIP_DEFLATE = "y"
@@ -448,7 +425,7 @@ EFI_PARAMS_FROM_FDT = "y"
 EFI_ZBOOT = "y"
 # Devices that used to run windows may still want to access
 # the windows partition (e.g. to retrieve firmware on WoA)
-["category:uefi".">=5.15"."aarch64 x86_64"]
+["category:uefi".">=0.0.0"."aarch64 x86_64"]
 NTFS3_FS = "m"
 
 ["category:input".">=0.0.0"."all"]
@@ -657,16 +634,16 @@ CFI_PERMISSIVE = "n"
 ["category:hardening".">=6.1.0 <6.18_rc1"."x86_64"]
 CFI_CLANG = "y"
 CFI_PERMISSIVE = "n"
-["category:hardening".">=5.13.0 <6.18_rc1"."aarch64"]
+["category:hardening"."<6.18_rc1"."aarch64"]
 CFI_CLANG = "y"
 CFI_PERMISSIVE = "n"
-["category:hardening".">=5.13.0 <6.1_rc1"."aarch64"]
+["category:hardening"."<6.1_rc1"."aarch64"]
 LTO_CLANG_THIN = "y" # Required for CFI pre-6.1
 ["category:hardening".">=6.12.0"."x86_64 aarch64 armv7 riscv64"]
 CFI_ICALL_NORMALIZE_INTEGERS = "y" # Required for CFI with Rust
 
 # Shadow Call Stack is currently only implemented on arm64 and riscv
-["category:hardening".">=5.8.0"."aarch64"]
+["category:hardening".">=0.0.0"."aarch64"]
 SHADOW_CALL_STACK = "y"
 ["category:hardening".">=6.7.0"."riscv64"]
 SHADOW_CALL_STACK = "y"
