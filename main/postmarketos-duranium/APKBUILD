@@ -1,16 +1,20 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=5
+pkgver=6
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
-options="!check"  # no tests
+# check: no tests
+# fhs: allow installing into /usr/local
+options="!check !fhs"
 depends="
+	coreutils
 	coldbrew
 	e2fsprogs
 	erofs-utils
 	f0rmz
 	postmarketos-base
+	!postmarketos-base-apk
 	postmarketos-base-systemd
 	shadow
 	shadow-subids
@@ -70,6 +74,7 @@ _source755="
 	usr/libexec/duranium/first-boot
 	usr/libexec/duranium/mount-subpartitions
 	usr/libexec/duranium/usb-gadget-setup
+	usr/local/sbin/apk
 "
 
 # Avoid filename based checksum conflicts by including the whole path:
@@ -141,21 +146,52 @@ initramfs() {
 
 sysext_dev_tools() {
 	description="meta package for Duranium Developer Tools system extension"
+	depends=""
+
+	# android development
 	depends="
+		$depends
 		android-tools
 		android-udev-rules
+	"
 
+	# containers for toolchains, etc
+	depends="
+		$depends
 		devpod
 		distrobox
 		podman
+	"
 
+	# mkosi for building duranium, other distro images
+	depends="
+		$depends
+		apk-tools
+		mkosi
+	"
+	# Block app store plugins that might try to use apk/libapk
+	depends="
+		$depends
+		!discover-backend-apk
+		!gnome-software-plugin-apk2
+	"
+
+	# support for running VMs / platform emulation
+	depends="
+		$depends
 		libvirt-client
 		libvirt-common-drivers
 		libvirt-daemon
 		libvirt-qemu
 		qemu
+		qemu-aarch64
+		qemu-arm
+		qemu-i386
 		qemu-img
+		qemu-loongarch64
 		qemu-modules
+		qemu-ppc64le
+		qemu-riscv64
 		qemu-system-aarch64
 		qemu-system-arm
 		qemu-system-i386
@@ -163,6 +199,7 @@ sysext_dev_tools() {
 		qemu-system-ppc64
 		qemu-system-riscv64
 		qemu-system-x86_64
+		qemu-x86_64
 	"
 
 	case "$CARCH" in
@@ -174,7 +211,9 @@ sysext_dev_tools() {
 		depends="$depends edk2-loongarch64" ;;
 	esac
 
-	mkdir -p "$subpkgdir"
+	# /usr/local/sbin takes precedence over /usr/sbin in PATH, and we want this to
+	# get ahead of the real apk binary
+	amove usr/local/sbin/apk
 }
 
 sha512sums="
@@ -217,5 +256,6 @@ ede57bf8696dce4ee295dc2a1dfe31dec415e7ce994600ce3bf7386ac1ad63797a6c5a88434ca0cc
 6661a981a3c2e549f0f1a12d4777f662eb88aa581608529f6e75a5d448b78fcb709812a4291d5708da840ba72d6cbf48375485d3ecd900d252efd2eb4a9e170c  rootfs-usr-libexec-duranium-first-boot
 bb3ec1693f88a61563876cd069b49351861a31c15b1795702031e5beb4e89cefe302644c1ea9d0bb74746aa97007664c1782857900e2b85dd71182e95efd66ae  rootfs-usr-libexec-duranium-mount-subpartitions
 9912109374399bf6df4d45c05baff5b3c424e05380b81b2be5b55e28e95f07bda71b5a4f7345a40498c1b11df465a9f4410e740d119ab98543ce28b75c53eb0f  rootfs-usr-libexec-duranium-usb-gadget-setup
+a18931c21df72984f4b09b49b192ecb2ee203caff3303a306633cad03ee2dc4750763d8177ea107e445f64b337233138b963f7755da0dbd8ff3a543f0b64793f  rootfs-usr-local-sbin-apk
 ca5b767d4bbc5857c2282124fee3082fafaca8e735ab2077112060e67a37afdb521c28c81fc3b548f114e857aaa702169ee77fab8b7b37c44b5233c83a94afd4  dev-gpt-auto-root-no-timeout.conf
 "
