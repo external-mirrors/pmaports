@@ -1,0 +1,15 @@
+[Unit]
+Description=Merge sysext images into sysroot /usr
+ConditionPathExists=/etc/initrd-release
+ConditionDirectoryNotEmpty=|/sysroot/var/lib/extensions
+RequiresMountsFor=/sysroot/usr
+After=initrd-root-fs.target initramfs-confext.service
+Before=initrd-fs.target
+Requires=initramfs-confext.service
+
+[Service]
+Type=oneshot
+ExecStart=systemd-sysext --root=/sysroot refresh
+
+[Install]
+WantedBy=initrd.target
