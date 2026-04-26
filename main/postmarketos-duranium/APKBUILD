@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=7
+pkgver=8
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
@@ -47,6 +47,7 @@ _source644="
 	usr/lib/systemd/system/getty@.service.d/wait-firstboot.conf
 	usr/lib/systemd/system/initramfs-buffyboard.service
 	usr/lib/systemd/system/initramfs-confext.service
+	usr/lib/systemd/system/initramfs-sysext.service
 	usr/lib/systemd/system/initramfs-telnetd.service
 	usr/lib/systemd/system/initramfs-unudhcpd.service
 	usr/lib/systemd/system/initramfs-usb-gadget.service
@@ -125,6 +126,7 @@ initramfs() {
 	amove usr/lib/systemd/system/initramfs-unudhcpd.service
 	amove usr/lib/systemd/system/initramfs-usb-gadget.service
 	amove usr/lib/systemd/system/initramfs-confext.service
+	amove usr/lib/systemd/system/initramfs-sysext.service
 	amove usr/lib/systemd/system/mount-subpartitions.service
 	amove usr/lib/systemd/system/systemd-cryptsetup@.service.d/factory-reset-ordering.conf
 	amove usr/lib/systemd/system/unl0kr-agent.path.d/plymouth-handoff.conf
@@ -228,12 +230,13 @@ b2076a208e389605b8c5d3ad7ae2413c70b303a90f94ca7e330cc02b7a2ae6602b78d7b8d95ed22d
 d88e87fb22b8efdc2617e8a3d52102032ce2b0dbde0e7d40a8d7679f507acc9cea271faa7004f96611631dfa0351cd5175dc1574f907176c9e4ebc5561b9a6d6  rootfs-usr-lib-repart.d-21-usr.conf
 84036b008042766e89bc02ecb7d77b52f80973a385a21faa1fbb2348ff0c216c302e29bd52c6cb40e5e547ad58aa955e06a9e94bd2ca0c512903a200f44c9a63  rootfs-usr-lib-repart.d-30-root.conf
 16984590f17c25be2f45444d8035c8c3a9035e3f52219a3e57e5bab93325acf0fdd50e03cd8a99da44c2adf4fd6234da73de63393582bff456bb128501da6211  rootfs-usr-lib-systemd-confext.conf
-5125928c8267306a62c1a7756001dbfb0251ea1a6765cb662c7a2a768a139ce5285f8dfe4ac1ae3ccb4ac34fb8dbe9bce7f98a2ef42e5be1d83be40cee2d87f0  rootfs-usr-lib-systemd-initrd-preset-80-duranium.preset
+27b5f2aca7c93b7624f29bc0179ec15cb67de6a4c7cf230b42acdc8ebbe0898c7567ccf56580530c0feac63821cea9ca525cfed27eeeafdbeb10fa9350bb4bd4  rootfs-usr-lib-systemd-initrd-preset-80-duranium.preset
 cd106f732dcbe2251136ad33fb24d08dc96aad2f9a2c9da27ed60e113c61cfac0ca51907388f0112b5b0d7285164f18a0068bfb7d0941a0cac040e7becc48c63  rootfs-usr-lib-systemd-system-preset-80-duranium.preset
 09dd75ce4d6790af5156fadea0b948b13a5f36ab1162c45b4a58a5c6b4061d6871610cc3384252422b28bfd7836b95cd7ca857277113abacc0083ecdd6cfff1f  rootfs-usr-lib-systemd-system-duranium-firstboot.service
 16fc787401e1fbbd1421257781270d2be6cb879ab9cc99412044df25af72c5525567f7b7f1066f022c0b7e03dd33c62f2d871fed9e9121ed309564c207795c38  rootfs-usr-lib-systemd-system-getty@.service.d-wait-firstboot.conf
 786a057e3f1eab37773b5255a5abde060b6bc6f42fd2cdaa82ce678263db6177ca30b49decb795293a4a0ccaf02346684acd0469cc8222898c43768376f2218d  rootfs-usr-lib-systemd-system-initramfs-buffyboard.service
 ef4bd401dd86ff0a56362b6441f01a1aa9c3612bcb4fe53c024365cf1c99c2614f1221b0ca2caf231970f4e48bf320d86667dca7caae39d3c40c27b3741adf9c  rootfs-usr-lib-systemd-system-initramfs-confext.service
+82eddb67cb7812662a811e60170c72552a1c9f1f991d21e6e4a30b9de68a2666034b6b601524eed1f2a305d641f9cde6f2c58380ebd113d16e139c1f6a8e5688  rootfs-usr-lib-systemd-system-initramfs-sysext.service
 4f303c5d7cb7054e8bb6e109aa3f4337098b19a6b5a8c6b0b1e1033889d8b1f85a87a0086b67f6f9c62fc93aeca0c59e50def12fff33b79fb7819657b5b820ec  rootfs-usr-lib-systemd-system-initramfs-telnetd.service
 7620e15cebb92c06a662bea095122793b8928b37c8b73fb060f2c882ac9c40419cc3e9eacafab2d04f8089a6fd32c1aa46f9247c54ee60adca87a796262bc37a  rootfs-usr-lib-systemd-system-initramfs-unudhcpd.service
 9c0eb915c09fc3d8de3a1a486f3e2202be05b11ba924d13349a70d93355ca0c72fe2417504e4b7e0c74aa1bb7f5ae77e3497f09dd67e48c0b8f2432f382f2f38  rootfs-usr-lib-systemd-system-initramfs-usb-gadget.service
