@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=6
+pkgver=7
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
@@ -158,10 +158,12 @@ sysext_dev_tools() {
 	# containers for toolchains, etc
 	depends="
 		$depends
-		devpod
 		distrobox
 		podman
 	"
+	# devpod isn't available for all archs
+	[ "$CARCH" != "loongarch64" ] && depends="$depends devpod"
+
 
 	# mkosi for building duranium, other distro images
 	depends="
