@@ -3,7 +3,7 @@ maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp6
 pkgdesc="The Fairphone (Gen. 6)"
 pkgver=6
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -31,6 +31,7 @@ source="
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
+	sim-wait-time.conf
 	"
 build() {
 	devicepkg_build $startdir $pkgname
@@ -38,10 +39,14 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/sim-wait-time.conf \
+		"$pkgdir"/usr/lib/systemd/system/msm-modem-uim-selection.service.d/sim-wait-time.conf
 }
 
 sha512sums="
 da360c976442b4d804e15ad9978eba45db7514be073040db289a1f3ddc00b8d796c8548b9f499c83cfdc5ae8a6116ed7a02b8c5bfd6d7216bf09372db18307cf  deviceinfo
 a230e30a05453491d41ba4a6a4c504e3dbe7b630402ac2b837aa5d977c2d38c73c93fb198e8aff892a12005de8d2355593fe2fae8e3e9412418efb1d32250022  kernel-cmdline.conf
 178bb66a35b50aee147e3ce995b0aaf052715057025261e28a3d48e7a6449b981ceff1280799a8806529abb5c1882cea867991320594f9a291cc405d15b3e204  modules-initfs
+5b94d596fb02a71f78f888996df102055c8ef50e719d39d7f61151407759c8f7345924918dd227af79a8220bcf44dd1b3bdfbc2d4c206322d0dd57ebb4520207  sim-wait-time.conf
 "
