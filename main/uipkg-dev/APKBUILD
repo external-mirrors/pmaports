@@ -1,0 +1,20 @@
+maintainer="Clayton Craft <clayton@craftyguy.net>"
+pkgname=uipkg-dev
+pkgver=1
+pkgrel=0
+pkgdesc="Provides default UI meta package functions"
+url="https://postmarketos.org"
+arch="noarch"
+license="MIT"
+source="
+	uipkg_package.sh
+"
+
+package() {
+	install -Dm755 "$srcdir"/uipkg_package.sh \
+		"$pkgdir"/usr/bin/uipkg_package
+}
+
+sha512sums="
+99a2519597dc7207becada71f95c7384689cc834fb9ee5697acd459dcf7feb1c407cd6899256996be4e79cae43751cd639388f09ef10f3273ca4b9bb4319930f  uipkg_package.sh
+"
