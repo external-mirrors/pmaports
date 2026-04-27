@@ -2,7 +2,7 @@
 # Co-Maintainer: Pablo Correa Gomez <pabloyoyoista@postmarketos.org>
 maintainer="Aster Boese <asterboese@mailbox.org>"
 pkgname=postmarketos-mkinitfs-hook
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="Meta package for mkinitfs hooks"
 url="https://postmarketos.org"
@@ -41,7 +41,7 @@ package() {
 				"$pkgdir"/usr/share/mkinitfs/hooks/"$hook"
 	done
 	for file in $_files; do
-			install -Dm644 "$srcdir"/"$hook" \
+			install -Dm644 "$srcdir"/"$file" \
 				"$pkgdir"/usr/share/mkinitfs/files/"$file"
 	done
 	install -Dm644 "$srcdir"/30-netboot.modules \
