@@ -13,6 +13,8 @@
 # clock controllers
 ["category:clocks".">=0.0.0"."all"]
 COMMON_CLK = "y"
+PWM = "y"
+PWM_CLK = "m"
 ["category:clocks".">=0.0.0"."aarch64"]
 SC_DISPCC_7180 = "m"
 SC_GPUCC_7180 = "m"
@@ -24,9 +26,13 @@ SM_VIDEOCC_8350 = "m"
 ["category:graphics".">=6.19_rc1"."aarch64 armv7"]
 DRM_PANEL_SAMSUNG_S6E8AA5X01_AMS561RA01 = "m"
 DRM_PANEL_SYNAPTICS_TDDI = "m"
+DRM_PANEL_SAMSUNG_S6E3FC2X01 = "m"
 ["category:graphics".">=0.0.0"."aarch64"]
 DRM_PANEL_SAMSUNG_SOFEF00 = "m"
 DRM_PANEL_VISIONOX_RM69299 = "m"
+DRM_PANEL_EBBG_FT8719 = "m"
+DRM_PANEL_LG_SW43408 = "m"
+DRM_PANEL_SAMSUNG_S6E3HA8 = "m"
 ["category:graphics".">=0.0.0"."aarch64 armv7"]
 EXYNOS_IOMMU = "y"
 NOUVEAU_PLATFORM_DRIVER = "y"
@@ -56,7 +62,6 @@ DWMAC_MOTORCOMM = "y"
 
 # input devices
 ["category:input".">=0.0.0"."all"]
-REGULATOR = "y"
 INPUT_REGULATOR_HAPTIC = "m"
 INPUT_TOUCHSCREEN = "y"
 TOUCHSCREEN_MELFAS_MIP4 = "m"
@@ -67,20 +72,37 @@ IIO_ST_ACCEL_3AXIS = "m"
 IIO_ST_ACCEL_I2C_3AXIS = "m"
 IIO_ST_ACCEL_SPI_3AXIS = "m"
 STK3310 = "m"
+TOUCHSCREEN_NOVATEK_NVT_TS = "m"
+TOUCHSCREEN_S6SY761 = "m"
+["category:input".">=0.0.0"."aarch64"]
+INPUT_MAX77693_HAPTIC = "m"
 
 # localversion
 ["category:localversion".">=0.0.0"."all"]
 LOCALVERSION_AUTO = "n"
 
 # power supplies, fuel gauges, etc.
-["category:power"."<6.19"."aarch64"]
-EC_LENOVO_YOGA_C630 = "m"
+["category:power".">=0.0.0"."all"]
+REGULATOR = "y"
+SPMI = "y"
+MFD_MAX77705 = "m"
+MFD_MAX77693 = "m"
+CHARGER_MAX77705 = "m"
 ["category:power".">=0.0.0"."aarch64"]
 BATTERY_LENOVO_YOGA_C630 = "m"
+CHARGER_QCOM_SMB2 = "m"
+MFD_SL28CPLD = "m"
+MFD_QCOM_RPM = "m"
+QCOM_SPMI_RRADC = "m"
+REGULATOR_S2DOS05 = "m"
+REGULATOR_QCOM_LABIBB = "m"
+["category:power"."<6.19"."aarch64"]
+EC_LENOVO_YOGA_C630 = "m"
 
 # usb drivers, type-c role switching, etc.
 ["category:usb".">=0.0.0"."aarch64"]
 UCSI_LENOVO_YOGA_C630 = "m"
+QCOM_GSBI = "y"
 
 # vhost acceleration
 ["category:vhost".">=0.0.0"."all"]
@@ -133,3 +155,18 @@ CPU_HAS_LBT = "y"
 ["category:storage".">=0.0.0"."all"]
 NVME_CORE = "m"
 BLK_DEV_NVME = "m"
+
+# led and light devices
+["category:led".">=0.0.0"."all"]
+LEDS_MAX77705 = "m"
+
+# remoteproc support
+["category:remoteproc".">=0.0.0"."all"]
+REMOTEPROC = "y"
+REMOTEPROC_CDEV = "y"
+
+# audio devices and codecs
+["category:audio".">=0.0.0"."all"]
+SND_SOC = "m"
+SND_SOC_CS35L36 = "m"
+SND_SOC_TFA989X = "m"
