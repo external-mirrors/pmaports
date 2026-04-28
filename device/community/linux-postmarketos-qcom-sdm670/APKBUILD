@@ -3,7 +3,7 @@
 maintainer="Richard Acayan <mailingradian@gmail.com>"
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
-pkgver=6.19.10
+pkgver=7.0.5
 pkgrel=0
 pkgdesc="Mainline Kernel fork for SDM670/SDM710 devices"
 arch="aarch64"
@@ -35,7 +35,6 @@ _tag="sdm670-v$pkgver"
 # Source
 source="
 	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
-	0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -64,17 +63,16 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
-e88abf25ae6e6da37069a2147b5c06aeffe9083879fe5877e17f8d27da73a05bfa60c80af68a73f2402ab9a009b2f1d13a96602a6ead9b63732e019d975dfee1  linux-sdm670-v6.19.10.tar.gz
-c30da4fb13415b0c30072cfb0c984454aaafbc90124ea399dce65f35baee0acc30f52f381ca44ebbddd028e4ff1b32b2c65eab2af8264309f0b2085bfb1ada5b  0001-ASoC-qcom-qdsp6-q6asm-dai-Keep-stream-marked-running.patch
-d014bb29168811406eded72037b27155398e5b423eccaae1c3d65fe35b67eb4a565fd2c014ee152fc598d948d0be40443a76ba9c481d13591d5774b5788dec10  config-postmarketos-qcom-sdm670.aarch64
+4e2faf5034a7dff20668a8c4dbfbc10175a859cab36178fa903d91f74a486dfb2068f0cd733c15a0b5919b353aa6405d30497b7da1efb67692e3fb974083902e  linux-sdm670-v7.0.5.tar.gz
+e631f6f5c31f9ab626b19ce4257b93c7ea103fd2e4fffe8d605a97fd4d92635318252f3d15ab95e0c2548a308b6a23ec59b0828b5560981a686d712478059b28  config-postmarketos-qcom-sdm670.aarch64
 "
