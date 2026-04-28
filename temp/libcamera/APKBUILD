@@ -1,9 +1,9 @@
 # Forked from Alpine for temporary downstream patches
 maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
-_pkgver=0.7.0
+_pkgver=0.7.1
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=0
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -16,7 +16,7 @@ makedepends="
 	glib-dev
 	gnutls-dev
 	graphviz
-	gst-plugins-bad-dev
+	gst-plugins-base-dev
 	gtest-dev
 	libevent-dev
 	libpisp-dev
@@ -170,10 +170,10 @@ py3() {
 }
 
 sha512sums="
-3d34792d3fd6a75a84150921b66875e4f8c5b8771e1218618fb58bee32d76b9e2b23226ef7ec850cdcd41b5bdd08ab41f61d4d69fca619a488c5ac0f1dcb283b  libcamera-v0.7.0.tar.gz
-e94ba31d69cad9ca9f9d895a253e849ac79b73bafea58987c078f9144049896138f61f3ea63a4c00de44e5a480622aed0bebe1b062d6c52757ce5f62f3a642f3  0001-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
-1850f847a5a8597b78c5bf2cd88e9012531634ac7141925edf52f49fbca8c3b432a1e8d4270971741adbca150ed9928a86f86cdcb6f4ed04f5488ab21002074d  0002-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
-4ba352092bc5ed0b982efe854a7a079c363497b54b5ef5693975bd2c4d1ca0c134fb3278b60d9d77f5a87039ba2b165b5786497b7e1d74343580f2ecdc0a7049  0003-RFC-egl-Implement-DMABuf-import-for-input-buffers.patch
+0e886021a3bbd668184b581248b9d89a8e909360a7f138237a2c03b41b477cb255bd6daf4932fdebf86c3410b4deccc4c5db93264ed0c6c9969076cdbae8a77b  libcamera-v0.7.1.tar.gz
+aa24b1caab3d0e6bca413ff149aafa5233ba8141c2585b1b55c655759dd663612091222135ec5add402e60bf53d58c307f3f3127385efaa11b6cef866e03906e  0001-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
+cd1559a70dabe8711bb2cc1a8c6dca114e9f5b83088000935845ad90e5d109e2b215f0810f709f5bf00dd76be76e937bad4db49a1c6662135ec1704809a9a62b  0002-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
+6bca235e430e7392f68c94742d1bc1cd19cffe12ac03c8890ffa27b756972df67f5a408f4c806149a6b4f52827881a73d14d7f6a00bab9d4692f5eb9b06478a5  0003-RFC-egl-Implement-DMABuf-import-for-input-buffers.patch
 22167a4eceb6d1b40b0b7c45fdf116c71684f5340de7f767535cb8e160ad9d2ae0f00cb3d461f73a344520a48a4641cf46226841d78bee06bfbfd2a91337f754  qcam.desktop
 2ee566653b17d565d2c0de67cbe6ebad25df5aac6051cad78e6bae52016fa2ca0247e964d735ac776b3e0bd447ead9c4fcb26cd7629228cdba3ceb91b46f378f  hi846.yaml
 2ee566653b17d565d2c0de67cbe6ebad25df5aac6051cad78e6bae52016fa2ca0247e964d735ac776b3e0bd447ead9c4fcb26cd7629228cdba3ceb91b46f378f  imx355.yaml

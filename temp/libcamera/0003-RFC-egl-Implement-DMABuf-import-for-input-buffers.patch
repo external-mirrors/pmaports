@@ -1,4 +1,4 @@
-From d8405610c1830f71ffd0ca09a3c18509fc4a8892 Mon Sep 17 00:00:00 2001
+From 08b9cc8401e57b05cd8b73e1dd1d7bf0691a048b Mon Sep 17 00:00:00 2001
 From: Robert Mader <robert.mader@collabora.com>
 Date: Fri, 19 Dec 2025 20:31:16 +0100
 Subject: [PATCH 3/3] RFC: egl: Implement DMABuf import for input buffers
@@ -31,19 +31,19 @@ Signed-off-by: Robert Mader <robert.mader@collabora.com>
  4 files changed, 44 insertions(+), 20 deletions(-)
 
 diff --git a/include/libcamera/internal/egl.h b/include/libcamera/internal/egl.h
-index 8a2d96d7a..32e9cecdd 100644
+index 0ad2320b1..bb97b0c7c 100644
 --- a/include/libcamera/internal/egl.h
 +++ b/include/libcamera/internal/egl.h
-@@ -102,7 +102,7 @@ public:
+@@ -101,7 +101,7 @@ public:
  
  	int initEGLContext();
  
 -	int createInputDMABufTexture2D(eGLImage &eglImage, int fd);
 +	int createInputDMABufTexture2D(eGLImage &eglImage, int fd, GLint format, uint32_t width, uint32_t height);
  	int createOutputDMABufTexture2D(eGLImage &eglImage, int fd);
- 	void destroyDMABufTexture(eGLImage &eglImage);
  	void createTexture2D(eGLImage &eglImage, GLint format, uint32_t width, uint32_t height, void *data);
-@@ -135,7 +135,7 @@ private:
+ 
+@@ -133,7 +133,7 @@ private:
  			  unsigned int shaderDataLen,
  			  Span<const std::string> shaderEnv);
  
@@ -53,7 +53,7 @@ index 8a2d96d7a..32e9cecdd 100644
  	PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES;
  	PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHR;
 diff --git a/src/libcamera/egl.cpp b/src/libcamera/egl.cpp
-index 5b9bbf410..3a90cf54b 100644
+index f65929470..febfd4bba 100644
 --- a/src/libcamera/egl.cpp
 +++ b/src/libcamera/egl.cpp
 @@ -19,6 +19,7 @@
@@ -74,16 +74,14 @@ index 5b9bbf410..3a90cf54b 100644
   * \param[in] output If true, create framebuffer for render target
   *
   * Internal implementation for creating DMA-BUF textures. Creates an EGL
-@@ -110,7 +114,7 @@ void eGL::syncOutput()
+@@ -110,15 +114,15 @@ void eGL::syncOutput()
   *
   * \return 0 on success, or -ENODEV on failure
   */
 -int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
 +int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, uint32_t drm_format, uint32_t width, uint32_t height, bool output)
  {
- 	int ret = 0;
- 
-@@ -118,9 +122,9 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
+ 	ASSERT(tid_ == Thread::currentId());
  
  	// clang-format off
  	EGLint image_attrs[] = {
@@ -96,16 +94,16 @@ index 5b9bbf410..3a90cf54b 100644
  		EGL_DMA_BUF_PLANE0_FD_EXT, fd,
  		EGL_DMA_BUF_PLANE0_OFFSET_EXT, 0,
  		EGL_DMA_BUF_PLANE0_PITCH_EXT, (EGLint)eglImage.stride_,
-@@ -135,7 +139,7 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
- 					    NULL, image_attrs);
+@@ -133,7 +137,7 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
+ 					      NULL, image_attrs);
  
- 	if (eglImage.image_ == EGL_NO_IMAGE_KHR) {
+ 	if (image == EGL_NO_IMAGE_KHR) {
 -		LOG(eGL, Error) << "eglCreateImageKHR fail";
 +		LOG(eGL, Debug) << "eglCreateImageKHR fail";
- 		ret = -ENODEV;
- 		goto done;
+ 		return -ENODEV;
  	}
-@@ -176,6 +180,9 @@ done:
+ 
+@@ -172,6 +176,9 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
   * \brief Create an input DMA-BUF backed texture
   * \param[in,out] eglImage EGL image to associate with the DMA-BUF
   * \param[in] fd DMA-BUF file descriptor
@@ -115,7 +113,7 @@ index 5b9bbf410..3a90cf54b 100644
   *
   * Creates an EGL image from a DMA-BUF file descriptor and binds it to
   * a 2D texture for use as an input texture in shaders. The texture is
-@@ -183,11 +190,25 @@ done:
+@@ -179,11 +186,25 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
   *
   * \return 0 on success, or -ENODEV on failure
   */
@@ -143,7 +141,7 @@ index 5b9bbf410..3a90cf54b 100644
  }
  
  /**
-@@ -206,7 +227,7 @@ int eGL::createOutputDMABufTexture2D(eGLImage &eglImage, int fd)
+@@ -202,7 +223,7 @@ int eGL::createOutputDMABufTexture2D(eGLImage &eglImage, int fd)
  {
  	ASSERT(tid_ == Thread::currentId());
  
@@ -153,15 +151,15 @@ index 5b9bbf410..3a90cf54b 100644
  
  /**
 diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
-index 4d0caa6ef..5e7812a13 100644
+index 8f0c229fd..f4fc2a6f9 100644
 --- a/src/libcamera/software_isp/debayer_egl.cpp
 +++ b/src/libcamera/software_isp/debayer_egl.cpp
-@@ -506,13 +506,22 @@ void DebayerEGL::setShaderVariableValues(DebayerParams &params)
+@@ -495,13 +495,22 @@ void DebayerEGL::setShaderVariableValues(const DebayerParams &params)
  	return;
  }
  
--int DebayerEGL::debayerGPU(MappedFrameBuffer &in, int out_fd, DebayerParams &params)
-+int DebayerEGL::debayerGPU(FrameBuffer *input, int out_fd, DebayerParams &params)
+-int DebayerEGL::debayerGPU(MappedFrameBuffer &in, int out_fd, const DebayerParams &params)
++int DebayerEGL::debayerGPU(FrameBuffer *input, int out_fd, const DebayerParams &params)
  {
  	/* eGL context switch */
  	egl_.makeCurrent();
@@ -181,7 +179,7 @@ index 4d0caa6ef..5e7812a13 100644
  
  	/* Generate the output render framebuffer as render to texture */
  	egl_.createOutputDMABufTexture2D(*eglImageBayerOut_, out_fd);
-@@ -547,13 +556,7 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+@@ -536,13 +545,7 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
  	metadata.sequence = input->metadata().sequence;
  	metadata.timestamp = input->metadata().timestamp;
  
@@ -197,18 +195,18 @@ index 4d0caa6ef..5e7812a13 100644
  		goto error;
  	}
 diff --git a/src/libcamera/software_isp/debayer_egl.h b/src/libcamera/software_isp/debayer_egl.h
-index cfbaf8e9d..19aa7d0ea 100644
+index fcd281f4c..5a1e4dfe3 100644
 --- a/src/libcamera/software_isp/debayer_egl.h
 +++ b/src/libcamera/software_isp/debayer_egl.h
-@@ -74,7 +74,7 @@ private:
+@@ -66,7 +66,7 @@ private:
+ 	int initBayerShaders(PixelFormat inputFormat, PixelFormat outputFormat);
  	int getShaderVariableLocations();
- 	void setShaderVariableValues(DebayerParams &params);
- 	void configureTexture(GLuint &texture);
--	int debayerGPU(MappedFrameBuffer &in, int out_fd, DebayerParams &params);
-+	int debayerGPU(FrameBuffer *input, int out_fd, DebayerParams &params);
+ 	void setShaderVariableValues(const DebayerParams &params);
+-	int debayerGPU(MappedFrameBuffer &in, int out_fd, const DebayerParams &params);
++	int debayerGPU(FrameBuffer *input, int out_fd, const DebayerParams &params);
  
  	/* Shader program identifiers */
  	GLuint vertexShaderId_ = 0;
 -- 
-2.52.0
+2.54.0
 

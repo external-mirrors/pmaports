@@ -1,4 +1,4 @@
-From b7695ae18562170ea2e8955f72844cc287724a06 Mon Sep 17 00:00:00 2001
+From 00e2f3ed19756080d709bd86d46c3c27ec8cea80 Mon Sep 17 00:00:00 2001
 From: Robert Mader <robert.mader@collabora.com>
 Date: Mon, 6 May 2024 21:21:57 +0200
 Subject: [PATCH 2/3] libcamera: simple: Skip hwISP formats if swISP is active
@@ -15,7 +15,7 @@ Signed-off-by: Robert Mader <robert.mader@collabora.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/src/libcamera/pipeline/simple/simple.cpp b/src/libcamera/pipeline/simple/simple.cpp
-index 8a3bc14fa..5dec1bd11 100644
+index 89b86f59c..1daee387e 100644
 --- a/src/libcamera/pipeline/simple/simple.cpp
 +++ b/src/libcamera/pipeline/simple/simple.cpp
 @@ -745,9 +745,7 @@ void SimpleCameraData::tryPipeline(unsigned int code, const Size &size)
@@ -30,5 +30,5 @@ index 8a3bc14fa..5dec1bd11 100644
  		} else {
  			config.outputFormats = { pixelFormat };
 -- 
-2.52.0
+2.54.0
 
