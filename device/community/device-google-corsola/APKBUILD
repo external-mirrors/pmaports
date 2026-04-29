@@ -3,7 +3,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=device-google-corsola
 pkgdesc="Google Corsola Chromebooks"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -39,7 +39,7 @@ nonfree_firmware() {
 		depends="linux-firmware-mediatek alsa-ucm-conf"
 
 	# Symlink for SOF firmware
-	_dir="$subpkgdir/lib/firmware/mediatek/sof-tplg"
+	_dir="$subpkgdir/usr/lib/firmware/mediatek/sof-tplg"
 	mkdir -p "$_dir"
 
 	ln -s sof-mt8186.tplg.zst "$_dir"/sof-mt8186-google-steelix.tplg.zst

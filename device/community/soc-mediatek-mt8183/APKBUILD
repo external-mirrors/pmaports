@@ -3,8 +3,8 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=soc-mediatek-mt8183
 pkgdesc="Common package for Mediatek MT8183 devices"
-pkgver=2
-pkgrel=4
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
@@ -25,9 +25,9 @@ package() {
 firmware() {
 	install_if="$pkgname=$pkgver-r$pkgrel linux-firmware-mediatek"
 
-	mkdir -p "$subpkgdir"/lib/firmware
-	ln -s /lib/firmware/mediatek/mt8183/scp.img \
-		"$subpkgdir"/lib/firmware/scp.img
+	mkdir -p "$subpkgdir"/usr/lib/firmware
+	ln -s /usr/lib/firmware/mediatek/mt8183/scp.img \
+		"$subpkgdir"/usr/lib/firmware/scp.img
 }
 
 x11() {

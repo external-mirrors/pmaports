@@ -1,31 +1,31 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=firmware-oneplus-sdm845
-pkgver=12
+pkgver=13
 pkgrel=0
+_commit="176ca713448c5237a983fb1f158cf3a5c251d775"
 pkgdesc="Firmware for OnePlus 6 / 6T"
 url="https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845"
 arch="aarch64"
 depends="linux-firmware-qcom linux-firmware-ath10k"
 license="proprietary"
-options="!check !strip !archcheck !tracedeps textrels pmb:cross-native"
-
-_version="3e31a0c3e5a061645c09f805387b49fa9d35acbf"
-
-source="$pkgname-$_version.tar.gz::https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845/-/archive/$_version/firmware-oneplus-sdm845-$_version.tar.gz
+subpackages="
+	$pkgname-pmtest
+	$pkgname-sensors:firmware_sensors
+	"
+source="$pkgname-$_commit.tar.gz::https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845/-/archive/$_commit/$pkgname-$_commit.tar.gz
 	firmware.files
 	sensor.files
 	30-oneplus-sdm845-firmware-ci.files
 	0001-oneplus6-set-mount-matrix.patch
-"
-builddir="$srcdir/$pkgname-$_version"
-subpackages="
-	$pkgname-pmtest
-	$pkgname-sensors:firmware_sensors
-"
+	"
+options="!archcheck !check !strip !tracedeps pmb:cross-native textrels"
+builddir="$srcdir/$pkgname-$_commit"
 
 package() {
 	while IFS="" read -r _i || [ -n "$_i" ]; do
-		install -Dm644 "$srcdir/$pkgname-$_version/$_i" "$pkgdir/usr/$_i"
+		local _u="${_i/usr\/lib/\/lib}"
+		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname "$pkgdir"/$_i)
+		install -Dm644 .$_u "$pkgdir/$_i"
 	done < "$srcdir/firmware.files"
 }
 
@@ -42,21 +42,21 @@ firmware_sensors() {
 	install_if="$pkgname-nonfree-firmware"
 	mkdir "$subpkgdir"
 
-	cd "$srcdir/$pkgname-$_version/"
+	cd "$builddir"
 	while IFS="" read -r _i || [ -n "$_i" ]; do
-		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
-		echo $_i
-		install -Dm644 $_i "$pkgdir/$_i"
+		local _u="${_i/usr\/lib/\/lib}"
+		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname "$subpkgdir"/$_i)
+		install -Dm644 .$_u "$subpkgdir/$_i"
 	done < "$srcdir/sensor.files"
 
-	ln -s oneplus6 "$pkgdir"/usr/share/qcom/sdm845/OnePlus/enchilada
-	ln -s oneplus6 "$pkgdir"/usr/share/qcom/sdm845/OnePlus/fajita
+	ln -s oneplus6 "$subpkgdir"/usr/share/qcom/sdm845/OnePlus/enchilada
+	ln -s oneplus6 "$subpkgdir"/usr/share/qcom/sdm845/OnePlus/fajita
 }
 
 sha512sums="
-56604c46ad0f30f1f715af4b83bd2686d96723024063c7ef6baa5c73cd52b375478e3d65b886ff08efc95ce129fc789b8509efcdf9f0d46cf7229f4ec1afa513  firmware-oneplus-sdm845-3e31a0c3e5a061645c09f805387b49fa9d35acbf.tar.gz
-e57d26eadfc59a3769a8cc8519b0fee252ff4ef89ed16b2cf9e9acbcdf2e8678512b2243b565b463ba931fd1461f6dc2c6a64f36e27938e803aadff3f9629557  firmware.files
-09e06851f8cd936aea191e839abca0a37a66444470df446eaaf24cee275a66611400286907565175d4d74627f6232bf2eed88b1d1906ce6416689a5c67e1c980  sensor.files
+68ecc3cec0458e5c7a0c6e2d1b0da72df324b48e1283e6e0ebc3c1713e8b721386e2554edf48fd559a8b8a40b54f3d4046ba2e484342ff4d5c69baf0839a800e  firmware-oneplus-sdm845-176ca713448c5237a983fb1f158cf3a5c251d775.tar.gz
+59fd7fac60878919283548f595030d3c0a575c8ffc76a313e980a1ea4262d2593eb8ff5d32ed0090cabeee2e0c3c6ff87d85dd1cf6802c56e13950197fbc557e  firmware.files
+f3e4e1ca689400492d9860fbe478d781bcf3d0b7d1b018bc23309d4a0458dc693554c198d79a4048436e0a04e1ea9d07b004c63d297a4eb423a7ea355fc21f95  sensor.files
 ed8e0c4437c4f9b1ad34337d57eb3fbcc66dbcd520864642ff704e48b1656e6b2970f61c4f7ea264bd7aefedc07d8b7f7fb12569b0218a6f56ab5daf6946d9e9  30-oneplus-sdm845-firmware-ci.files
 3f5b04afd8ccd08e676cee2d290c08c3b5e0f0c0b85ddf6e94f86730615ea174a2cc57452dc8455f68675fc173bf0fb79c0505819c3e0203ad5a7acb5ebf4b10  0001-oneplus6-set-mount-matrix.patch
 "

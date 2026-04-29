@@ -6,7 +6,7 @@ error_log=/var/log/pinenote/$RC_SVCNAME.log
 
 start() {
         # Check for the file existence
-        if [ -s "/lib/firmware/rockchip/ebc.wbf" ] && [ -s "/lib/firmware/rockchip/custom_wf.bin" ]; then
+        if [ -s "/usr/lib/firmware/rockchip/ebc.wbf" ] && [ -s "/usr/lib/firmware/rockchip/custom_wf.bin" ]; then
                 einfo "No need to init waveform"
                 unset -f start
                 return 0
@@ -15,8 +15,8 @@ start() {
         ebegin "Extracting waveform"
         cd /tmp
         /usr/libexec/pinenote/waveform_extract.sh  2>&1 | tee -a "$error_log"
-        /usr/libexec/pinenote/wbf_to_custom.py /lib/firmware/rockchip/ebc.wbf  2>&1 | tee -a "$error_log"
-        mv custom_wf.bin /lib/firmware/rockchip/.
+        /usr/libexec/pinenote/wbf_to_custom.py /usr/lib/firmware/rockchip/ebc.wbf  2>&1 | tee -a "$error_log"
+        mv custom_wf.bin /usr/lib/firmware/rockchip/.
 
         einfo "Regenerating initramfs"
         /usr/sbin/mkinitfs  2>&1 | tee -a "$error_log"
@@ -29,6 +29,6 @@ start() {
 
 start_pre() {
         checkpath --directory --owner root:root --mode 0775 \
-                /lib/firmware/rockchip \
+                /usr/lib/firmware/rockchip \
                 /var/log/pinenote
 }

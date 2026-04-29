@@ -1,29 +1,27 @@
 maintainer="Joel Selvaraj <foss@joelselvaraj.com>"
 pkgname=firmware-xiaomi-beryllium
-pkgver=10
+pkgver=11
 pkgrel=0
+_commit="d396d32118803235a58aab0d0bc3643256634a05"
 pkgdesc="Firmware for Xiaomi Poco F1"
 url="https://gitlab.com/sdm845-mainline/firmware-xiaomi-beryllium"
 arch="aarch64"
 depends="linux-firmware-qcom linux-firmware-qca linux-firmware-ath10k"
 license="proprietary"
-options="!strip !check !archcheck !tracedeps textrels pmb:cross-native"
-
-_commit="d396d32118803235a58aab0d0bc3643256634a05"
-
-source="$pkgname.tar.gz::https://gitlab.com/sdm845-mainline/firmware-xiaomi-beryllium/-/archive/$_commit/firmware-xiaomi-beryllium-$_commit.tar.gz
+subpackages="$pkgname-sensors:firmware_sensors"
+source="$pkgname-$_commit.tar.gz::https://gitlab.com/sdm845-mainline/firmware-xiaomi-beryllium/-/archive/$_commit/firmware-xiaomi-beryllium-$_commit.tar.gz
 	firmware.files
 	sensor.files
 	mount-matrix.patch
 	"
-
+options="!archcheck !strip !check !tracedeps pmb:cross-native textrels"
 builddir="$srcdir/$pkgname-$_commit"
-subpackages="$pkgname-sensors:firmware_sensors"
 
 package() {
 	while IFS="" read -r _i || [ -n "$_i" ]; do
-		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
-		install -Dm644 "$srcdir/$pkgname-$_commit/$_i" "$pkgdir/usr/$_i"
+		local _u="${_i/usr\/lib/\/lib}"
+		[ ! -d "$(dirname $_i)" ] && mkdir -p "$(dirname "$pkgdir"/$_i)"
+		install -Dm644 ."$_u" "$pkgdir/$_i"
 	done < "$srcdir/firmware.files"
 }
 
@@ -33,15 +31,17 @@ firmware_sensors() {
 	install_if="$pkgname-nonfree-firmware"
 	mkdir "$subpkgdir"
 
+	cd "$builddir"
 	while IFS="" read -r _i || [ -n "$_i" ]; do
-		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
-		install -Dm644 "$srcdir/$pkgname-$_commit/$_i" "$pkgdir/$_i"
+		local _u="${_i/usr\/lib/\/lib}"
+		[ ! -d "$(dirname $_i)" ] && mkdir -p "$(dirname "$pkgdir"/$_i)"
+		install -Dm644 ."$_u" "$subpkgdir/$_i"
 	done < "$srcdir/sensor.files"
 }
 
 sha512sums="
-a8d96aef0d6929800cc32703c973ff903037e9365c35d0421d29a10ccbac63e92bae36ea66790e80151a77b775b456c24d9577617342abac0daf12ad0475f4e0  firmware-xiaomi-beryllium.tar.gz
-2123278ea9e6e6deb014429d9320c8ad855f915a911815beea2fb0f2e6cc6c94c19ba4caa8052ba7d98b7a50be653af3d15d6597586463d3b041998c545f1268  firmware.files
-445600490c81091ec51b0ce50297e960f214d9848242e8dc35689ce40e5a7469e8d495d64b61e1a89d38aa6695cbd012f7f1cdd8c5e94cce0c1c64f2c833dba3  sensor.files
+a8d96aef0d6929800cc32703c973ff903037e9365c35d0421d29a10ccbac63e92bae36ea66790e80151a77b775b456c24d9577617342abac0daf12ad0475f4e0  firmware-xiaomi-beryllium-d396d32118803235a58aab0d0bc3643256634a05.tar.gz
+45b9c287a239d3e20982258b2135d6915199a694b6fa2abd927f0b31537ee9584aa8d81fe815129c97b2e88247ee00cfdba66aa0c72506a65e1507af31a2c034  firmware.files
+f2a2b648fb771dc965a88fdccccec18aeb47ca0603c81842988096312eb9cca494ff7b68b956303be00caf72d3248d3b4fdd0ed457b6c0b1d21c77acebd3e994  sensor.files
 9337e243aee9e56bb9f9e297dfe5084b3a97b87ac36bcaf66f6f4d07cbb39c7b73d024afe07fdadef254c569ba9f2d3067324478c35175592ff8abb2ff19e930  mount-matrix.patch
 "
