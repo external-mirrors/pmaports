@@ -1,4 +1,7 @@
 #!/bin/sh -e
+
+# shellcheck shell=busybox
+
 # Description: check various bad patterns with grep
 # https://postmarketos.org/pmb-ci
 
@@ -168,6 +171,15 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 			exit_code=1
 		fi
 	fi
+
+	# Get latest commit message in MR
+	case "$CI_COMMIT_DESCRIPTION" in
+		*"[ci:skip-grep]"*)
+			echo "WARNING: not checking packages with grep"
+			echo " ([ci:skip-grep])!"
+			exit_code=0
+			;;
+	esac
 fi
 
 exit "$exit_code"
