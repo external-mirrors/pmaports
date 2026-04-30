@@ -1,0 +1,27 @@
+maintainer="Paul Sajna <sajattack@postmarketos.org>"
+pkgname=firmware-lg-judyln
+pkgver=1
+pkgrel=0
+pkgdesc="Firmware for LG G7 ThinQ"
+url="https://gitlab.com/sajattack/firmware-lg-judyln"
+arch="aarch64"
+depends="linux-firmware-ath10k"
+license="proprietary"
+options="!strip !check !archcheck !tracedeps textrels pmb:cross-native"
+
+_commit="acaf7bb99ba2f14318d2fcd08db5f58590b89c75"
+
+source="$pkgname.tar.gz::$url/-/archive/$_commit/$pkgname-$_commit.tar.gz
+	firmware.files
+	"
+
+package() {
+	while IFS="" read -r _i || [ -n "$_i" ]; do
+		install -Dm644 "$srcdir/$pkgname-$_commit/$_i" "$pkgdir/usr/$_i"
+	done < "$srcdir/firmware.files"
+}
+
+sha512sums="
+ba21f2970ca7a4529cf57fbb6e190db8d4bbbc9ac9f4404c499bcd41dc9380c08069436a1a2a60f53116581cfe14e1d810d7e985e1a902f325d16c709a67b2c7  firmware-lg-judyln.tar.gz
+b11bade734dc6ee4694d2d2467ba25c7d3d07347879fe061aeaaadbf6d43bb645dc0afae9b629039162985640bd913c911d923f81321948a46e94bac29b25bfe  firmware.files
+"
