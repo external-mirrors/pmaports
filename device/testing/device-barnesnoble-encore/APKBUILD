@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
-maintainer=""
+maintainer="Scott Clark <sclark100+postmarketos@gmail.com>"
 pkgname=device-barnesnoble-encore
 pkgdesc="Barnes & Noble Nook Color"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -15,11 +15,12 @@ depends="
 "
 _pmb_recommends="linux-firmware-ti-connectivity"
 makedepends="devicepkg-dev u-boot-tools"
-subpackages="$pkgname-x11"
+subpackages="$pkgname-udev $pkgname-x11"
 source="
 	deviceinfo
 	modules-initfs
 	xorg-rotate-monitor.conf
+	90-device-barnesnoble-encore-touchscreen.rules
 "
 
 build() {
@@ -28,6 +29,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/90-device-barnesnoble-encore-touchscreen.rules \
+		-t "$pkgdir"/usr/lib/udev/rules.d/
 }
 
 x11() {
@@ -41,4 +45,5 @@ sha512sums="
 0d3275e13534f5ba42db1cba95fb218e8f40d77f2329a3f7e143f78e550a81e37bedf9acd4b5a6fe028f9af6f2fc1ec4489974da595d7d52b808a4f3d1720766  deviceinfo
 0491da0e90890b7884c8af5e5a8b3541a6aa298e7980c3179e4eb193f2f22767add0811bb7abb00abab7faa74bf35e1243b97e308fb1005c9e26d3aef99da3a2  modules-initfs
 74123128f1f7254a2fa22f9aa719d9922514b6b8deef661291d50c544aa5c82c05b1910dc9e7db9037a3f00ceacec527ba6ab74df53c7815cbf21384f3e445c1  xorg-rotate-monitor.conf
+101661d7fc0857d41fb000d92f7bdc75dc8b950c458578cc342801f9b4fbfb4b2ccb294164257234a6dc0b35d0d84d8fce9da03e61196a62f50010e8e366b5e0  90-device-barnesnoble-encore-touchscreen.rules
 "
