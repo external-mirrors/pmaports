@@ -1,0 +1,31 @@
+# Reference: <https://postmarketos.org/devicepkg>
+maintainer="Diego Stocco <diegostocco.2008@gmail.com>"
+pkgname=device-samsung-m20lte
+pkgdesc="Samsung Galaxy M20"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+depends="
+	android-tools-mkbootimg
+	dtbtool-exynos
+	firmware-samsung-m20lte
+	linux-samsung-m20lte
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+options="!archcheck !check"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+4fb6e7c7a32bd3e595e2261d89e8b7252310ed96ee28f8e942bb303c21af11b8da9db200df930c076e7dc06b22d6844e2919752b752da41b721a3f4ebf6f1354  deviceinfo
+"
