@@ -1,12 +1,12 @@
 maintainer="Affe Null <affenull2345@gmail.com>"
 pkgname=firmware-jolla-c2
 pkgver=1
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for the Jolla C2"
 url="https://git.abscue.de/linux-mainlining/sailfish-os/device-bsp-s19mps"
 arch="aarch64"
 license="proprietary"
-subpackages="$pkgname-boot $pkgname-wcn"
+subpackages="$pkgname-wcn"
 makedepends="python3"
 options="!check !archcheck !strip !spdx !tracedeps pmb:cross-native"
 
@@ -27,16 +27,6 @@ build() {
 package() {
 	# parent package is empty
 	mkdir -p "$pkgdir"
-}
-
-boot() {
-	pkgdesc="Jolla C2 boot-related firmware"
-	cd "$srcdir/prebuilts/"
-
-	_fwdir="$subpkgdir"/boot
-	install -Dm644 boot/fdl1-sign.bin -t "$_fwdir"
-	install -Dm644 boot/lk.bin -t "$_fwdir"
-	install -Dm644 boot/u-boot-spl-16k-ufs-sign.bin -t "$_fwdir"
 }
 
 wcn() {
