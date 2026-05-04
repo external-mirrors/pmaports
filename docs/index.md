@@ -13,6 +13,7 @@ in pmaports and the processes around device categorization.
 .. toctree::
    :hidden:
 
+   releases
    approval-rules
    device-categorization
    deviceinfo-reference
