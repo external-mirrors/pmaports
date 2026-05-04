@@ -433,8 +433,12 @@ EFI_PARAMS_FROM_FDT = "y"
 EFI_ZBOOT = "y"
 # Devices that used to run windows may still want to access
 # the windows partition (e.g. to retrieve firmware on WoA)
-["category:uefi".">=0.0.0"."aarch64 x86_64"]
+["category:uefi"."<7.1_rc1"."aarch64 x86_64"]
 NTFS3_FS = "m"
+# The improved NTFS driver that is faster and more correct
+# than NTFS3 is only available since 7.1-rc1
+["category:uefi".">=7.1_rc1"."aarch64 x86_64"]
+NTFS_FS = "m"
 
 ["category:input".">=0.0.0"."all"]
 BT = "m" # Required by BT_HIDP
