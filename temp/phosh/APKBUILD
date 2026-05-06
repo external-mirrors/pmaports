@@ -1,0 +1,127 @@
+maintainer="Achill Gilgenast <achill@achill.org>"
+pkgname=phosh
+pkgver=0.59.0
+pkgrel=9999
+pkgdesc="Wayland shell for GNOME on mobile devices"
+# armhf: blocked by gnome-shell-schemas
+arch="all !armhf"
+url="https://gitlab.gnome.org/World/Phosh/phosh"
+license="GPL-3.0-only"
+triggers="$pkgname.trigger=/usr/lib/phosh/plugins/prefs"
+depends="
+	$pkgname-schemas
+	adwaita-fonts
+	adwaita-icon-theme
+	bash
+	dbus-x11
+	dbus:org.freedesktop.Secrets
+	desktop-file-utils
+	gnome-control-center
+	gnome-session
+	gnome-settings-daemon
+	gnome-shell-schemas
+	gsettings-desktop-schemas
+	phoc
+	phosh-keyboard
+	polkit-elogind
+	xwayland
+	"
+makedepends="
+	appstream-dev
+	callaudiod-dev
+	dconf-dev
+	elogind-dev
+	evince-dev
+	evolution-data-server-dev
+	feedbackd-dev
+	gcr-dev
+	gettext-dev
+	glib-dev
+	gmobile-dev
+	gnome-bluetooth-dev
+	gnome-desktop-dev
+	gtk+3.0-dev
+	libadwaita-dev
+	libgudev-dev
+	libhandy1-dev
+	libsecret-dev
+	linux-pam-dev
+	meson
+	modemmanager-dev
+	networkmanager-dev
+	pipewire-dev
+	polkit-elogind-dev
+	pulseaudio-dev
+	py3-docutils
+	qrcodegen-dev
+	upower-dev
+	wayland-dev
+	wayland-protocols
+	"
+checkdepends="xvfb-run xmlstarlet"
+# the ordering here is important - libphosh split functions need to run first to move the libphosh-0
+# headers/pkgconfig/lib into the libphosh packages, before the top level -dev package gobbles
+# up the rest.
+subpackages="
+	libphosh:libs
+	libphosh-dev:libphosh_dev
+	$pkgname-dbg
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-lang
+	$pkgname-portalsconf::noarch
+	$pkgname-schemas::noarch
+	$pkgname-systemd
+	"
+source="https://sources.phosh.mobi/releases/phosh/phosh-${pkgver/_/.}.tar.xz
+	oo7.patch
+	"
+builddir="$srcdir/$pkgname-${pkgver/_/.}"
+somask="libphoshsearch.so"
+
+prepare() {
+	default_prepare
+	sed -i 's/\.rc/_rc/' meson.build
+}
+
+build() {
+	# phoc tests need a running Wayland compositor
+	abuild-meson \
+		-Db_lto=true \
+		-Dphoc_tests=disabled \
+		-Dman=true \
+		-Dbindings-lib=true \
+		. output
+	meson compile -C output
+}
+
+check() {
+	xvfb-run -a meson test --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild --skip-subprojects -C output
+}
+
+portalsconf() {
+	install_if="$pkgname=$pkgver-r$pkgrel xdg-desktop-portal>=1.17.1"
+	amove usr/share/xdg-desktop-portal/phosh-portals.conf
+}
+
+libphosh_dev() {
+	amove usr/include/libphosh-*
+	amove usr/lib/libphosh-*.so
+	amove usr/lib/pkgconfig/libphosh-*.pc
+}
+
+schemas() {
+	pkgdesc="$pkgdesc (schemas)"
+	depends=
+
+	amove usr/share/glib-2.0/schemas
+}
+
+sha512sums="
+dbbe0149092f350c7eda01c12a4729c7b36e38ae782ed79adcf30825f8a0bf06efc3b7d40ba1d50e039427fc6ef97dd6663538882cb8e3d1ae426a0e3a9aadac  phosh-0.59.0.tar.xz
+718aafcbb2599336a2edbed6b61d9956f371faa14425e2d09f0c753229707466f1630603cfc998901b6609db8522372f27cf9a21990008e5db08261abea18461  oo7.patch
+"
