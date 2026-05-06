@@ -581,7 +581,7 @@ check_filesystem() {
 	esac
 
 	if [ "$status" = "fail" ]; then
-		splash_set_warning "Filesystem needs manual repair (fsck) ($partition)\nhttps://postmarketos.org/troubleshooting\n\nBoot anyways by pressing Volume-Up or Left-Shift..."
+		splash_set_status warning "Filesystem needs manual repair (fsck) ($partition)\nhttps://postmarketos.org/troubleshooting\n\nBoot anyways by pressing Volume-Up or Left-Shift..."
 		while ! iskey KEY_LEFTSHIFT KEY_VOLUMEUP ; do
 			:
 		done
@@ -642,7 +642,7 @@ extract_initramfs_extra() {
 	initramfs_extra="$1"
 	if [ ! -e "$initramfs_extra" ]; then
 		echo "ERROR: initramfs-extra not found!"
-		splash_set_error "initramfs-extra not found\nhttps://postmarketos.org/troubleshooting"
+		splash_set_status error "initramfs-extra not found\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 	echo "Extract $initramfs_extra"
@@ -671,7 +671,7 @@ wait_partition() {
 		check_keys ""
 	done
 
-	splash_set_error "$description partition not found!\nhttps://postmarketos.org/troubleshooting"
+	splash_set_status error "$description partition not found!\nhttps://postmarketos.org/troubleshooting"
 	fail_halt_boot
 }
 
@@ -728,7 +728,7 @@ mount_root_partition() {
 			;;
 		*)
 			echo "ERROR: Detected unsupported '$type' filesystem ($partition)."
-			splash_set_error "Unsupported '$type' filesystem ($partition)\nhttps://postmarketos.org/troubleshooting"
+			splash_set_status error "Unsupported '$type' filesystem ($partition)\nhttps://postmarketos.org/troubleshooting"
 			fail_halt_boot
 			;;
 	esac
@@ -744,7 +744,7 @@ mount_root_partition() {
 
 	if ! mount -t "$type" -o rw"$rootfsopts" "$partition" /sysroot; then
 		echo "ERROR: unable to mount root partition!"
-		splash_set_error "Unable to mount root partition\nhttps://postmarketos.org/troubleshooting"
+		splash_set_status error "Unable to mount root partition\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 
@@ -757,7 +757,7 @@ mount_root_partition() {
 	fi
 
 	if ! [ -e /sysroot/etc/os-release ]; then
-		splash_set_error "Root partition does not contain a root filesystem\nhttps://postmarketos.org/troubleshooting"
+		splash_set_status error "Root partition does not contain a root filesystem\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
 }
@@ -1268,33 +1268,19 @@ splash_set_message() {
 	fi
 }
 
-# Set an error on the Plymouth splash
+# Update status on the Plymouth splash
 # Uses: (none)
 # Sets: (none)
-# $1: error text to display
+# $1: status to set (either normal, unlocked, warning, error)
+# $2: optional message text to display, may be multiline with \n
 # Returns: 0
-splash_set_error() {
-	info "SPLASH ERROR: $1"
+splash_set_status() {
+	info "SPLASH $1: $2"
 	splash_show
 	if plymouth --ping 2>/dev/null; then
-		plymouth update --status="error"
+		plymouth update --status="$1"
 		# Use printf to convert \n to literal newlines for multiline messages
-		plymouth display-message --text "$(printf '%b' "$1")"
-	fi
-}
-
-# Set a warning on the Plymouth splash
-# Uses: (none)
-# Sets: (none)
-# $1: warning text to display
-# Returns: 0
-splash_set_warning() {
-	info "SPLASH WARNING: $1"
-	splash_show
-	if plymouth --ping 2>/dev/null; then
-		plymouth update --status="warning"
-		# Use printf to convert \n to literal newlines for multiline messages
-		plymouth display-message --text "$(printf '%b' "$1")"
+		[ -n "$2" ] && plymouth display-message --text "$(printf '%b' "$2")"
 	fi
 }
 
