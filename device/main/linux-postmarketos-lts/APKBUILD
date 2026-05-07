@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-lts
-pkgver=6.18.26
+pkgver=6.18.27
 pkgrel=0
 _kver=${pkgver%.*}
 pkgdesc="LTS Kernel"
@@ -54,12 +54,16 @@ replaces="linux-lts"
 # Nathan's fork, he does not have time to upstream them right now but would be
 # happy if someone else did:
 # https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
+#
+# Patch #4 is the fix for the ESP part of dirtyfrag and applied in mainline,
+# pending backport
 source="
 	linux-$_kver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kver.tar.xz
 
 	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
+	0004-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
 
 	config-lts.aarch64
 	config-lts.armv7
@@ -121,16 +125,17 @@ package() {
 }
 
 sha512sums="
-e983f3c6d9ca2fe1ab878d0f7897fe398befd1819239e416e123679427c92f64f708567c2361c82d8b210c0db500088781079dd60b68584fe5fa939ceea91444  patch-6.18.26.patch.xz
+0a2eb365a627c6ea7fd761a3472a5cf21984f885fff30dfe385fc123dffd4758835aa774f01008c2bf92405bd4099382a63c1297acc7802421382ab356de4de8  patch-6.18.27.patch.xz
 88599ffdec96d150c1feb9b261ba93bb0301a9d0e1ad6bef7aeab1f5372cbfc57d8b43c7e902bd8f76921d1dbd8189663c142ea869e51d0e2b483b150ee00fe0  linux-6.18.tar.xz
 1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
-68188a8cc91298e34c0f34366d5d2454ef1ca51660db52becc0fea1036cb5b08b6d8ccfbf5a187782598ace5123ddd9853ac44a5a334ca5514c2caa63acae801  config-lts.aarch64
-e50c19e6becb922d67c8fdef5bf9db7430edb0f9c91299c2d115e0d1d08dd8c974ecfdfc26f5c0044eddb82023281d0a0d7027fc055899cd7763bbfae107195f  config-lts.armv7
-8e6340d230aacda053d32879d3587f2f64d118337cc4403099e25eb5e0c1b89c240f8add959f253b7c7368e711d365186b9af2f3434ace78f2c6f8e6b22ca353  config-lts.loongarch64
-8ee2297847d5e81a6b52954f1ee9dfdcd3890e739f4db856e1544aa895651c25689587bddcc1c2e4938079b22fd593e4b86275c68d1f30822317a87fda48318a  config-lts.ppc64le
-8e556be583e07947f10e595ec185a93261501d387f5fdcb4b740f503d92a41aa05e74ace27b448c4d93b62fc7b1e3f232795f940cd66623f16aaee805fb52dc7  config-lts.riscv64
-6de30c17bf8bb8e426d6bb2073786bebb3bf53db667c8edd1ab85a5a1bb2e405a5dc7a49c0dcc7cb0560ee2571be6f0e06fe69e478c59770dfe5623be2612f81  config-lts.x86
-ad50e74a2ca0eca04529225d23ed80cb4b0abec14e254994b5463d23f5db0373bb97074889515e1e221bd5d4e3b7fd66cdb7412f5c806afbec2efa08bd49c450  config-lts.x86_64
+2adacf5b985fc7f2adec208e38974e7d0960a425f28a33218d1e52f749f2262f12b3fdad16e3f636dce00c71bff94f6a178961e2572bc0499803a786972ddffc  0004-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
+7302afacb1551c883006b5d4bfb2fb8e0f3b82c0e67e1a2dea60417f23fce2943a266e87d10eaf96293434f72c00eb3fe554bc02d6e0a00d6103caa0abf5635d  config-lts.aarch64
+7ce2625c6cdf7f36a6ca2104896eb2361a547e2a949f6ddab2467d9274a9b9fbe02f5d635cc4db8227e0ea6e0c4c0724586bef7c70aa04e03ae930de0b43e4f4  config-lts.armv7
+3cd97af6942fd5856bd49103a90e5f7d5a6c4cb3a0b306a089392430dec58047b1778aafe2a9e64a6f777acf3c0a662c79378948659abd16111957347d36e231  config-lts.loongarch64
+345874c4e3a221ba9a4671689ea3e2c2db9df205a7d9185f0fcec6817bbcbf77012f6a2af86a7dfae5c86d4478c6375213e92b41987d71bc21dae4175590b1ce  config-lts.ppc64le
+fc0e6e65a3a04909191b6f6e00537771365246d49ec38e79f2f1176813a35dc6684296763259fa6bd527d6809c30bf93d8ef5f3a6fa9ebeb554a87245c70c8b9  config-lts.riscv64
+98c4346185513b1f1cc6dd47ab9dcedc097a64166e34a031bb456735e303c68101ba2c9398de903005ca1508cffffeecd07f07b5bfa14fc064c0548c84e45b30  config-lts.x86
+3dc56b1397201ea8e9259b66c21402805178f87ce2aea208a4b1de659a346deb8ca88e045aad5575cae0619aa209aa5315c68835141bf688006c40e0e6f015b5  config-lts.x86_64
 "
