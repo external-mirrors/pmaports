@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-stable
-pkgver=7.0.3
+pkgver=7.0.4
 pkgrel=0
 _kver=${pkgver%.*}
 pkgdesc="Stable Kernel"
@@ -54,12 +54,16 @@ replaces="linux-stable"
 # Nathan's fork, he does not have time to upstream them right now but would be
 # happy if someone else did:
 # https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
+#
+# Patch #4 is the fix for the ESP part of dirtyfrag and applied in mainline,
+# pending backport
 source="
 	linux-$_kver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kver.tar.xz
 
 	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
+	0004-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
 
 	config-stable.aarch64
 	config-stable.armv7
@@ -121,16 +125,17 @@ package() {
 }
 
 sha512sums="
-79fa83dd31cb700f05a563e2b018741b61c6f77bafce9f6f2c1f8f7e29ab71ae88ef82dcfe662ec11cb1195a2472e989febddc4db134c23755804f1421481424  patch-7.0.3.patch.xz
+cbabaa8a17a8ef71b764dc140155575eb2288cc25ced4b36209fd2aaeba256b35234de8507844ac7798a0c1bcd24840bea2db459d8cf0fe9e3467ddd7fe7b168  patch-7.0.4.patch.xz
 8c85b708342f8f09ca25b2234b22e93b62b144a9ef919fbb21827f52fa47498e778c79db1559524dd7fb360f95b2ce174171443c1859656c281be41d2b6c5a0b  linux-7.0.tar.xz
 1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
-2225a074c8666233d1fb786f3190e9e7a750d0b130ed8f8f216f2c7604c711e1f2d5a594d2bc8def0ec5d18aaa6a290db00d77ffaf52214188b9b015231f6eb5  config-stable.aarch64
-d0dc8d3f2b8c3f6c3dc4b37a24b874d6d36967d18ea34cbb49efffa4434a0d98f72ea1e9f8b291315fb05d04c67ad904fcce3755fd9476c427959dedbb4972ca  config-stable.armv7
-f75d5048cbefc0c508889feb9d0d231036cdb9c799371e9b53261d2b1085719da0bc5dcfb6baf2c0e45c8b2634bd9fae5fa91d91eb3bfd6afb879709e70abf8c  config-stable.loongarch64
-887f824e3e9bffc0c9ccb7f678cf8a6ab0fd611634365737fa0c128831eb626924255d49aa1ba4c41d117295348566a36fd9fbeb7a73afb1a9d8841490b47214  config-stable.ppc64le
-adb575555e562ad9a7dba911b15b945a4fe2fe104e42b593390827f56a255f47f7a4a48b1e134223a549553dad190b6e6d6e34117581ff2c30d5d0e4e3973c60  config-stable.riscv64
-b5ccc8ceb255b0b615b7fcfb8330687833255bb3e596a705cc0540448803bf62cc4305b88b1518082631a0ddb6790ae4d241560cd5340e05d04f7a4824b2dc16  config-stable.x86
-b0043544141ecfd51534a07cec332181418e259592994b912e365790015d64432f6f590f496e6d594560fcc0add9e866ba75aa583eb1d0cec9295b444c2d8d76  config-stable.x86_64
+2adacf5b985fc7f2adec208e38974e7d0960a425f28a33218d1e52f749f2262f12b3fdad16e3f636dce00c71bff94f6a178961e2572bc0499803a786972ddffc  0004-xfrm-esp-avoid-in-place-decrypt-on-shared-skb-frags.patch
+bac38afb64b40be4d0588ad8e992c383d9b2a1e515739e8b8153c6c721adac03bbe865d93b2378a5d2fbe21739551ef61a99327e374d28a771c146e05fac8044  config-stable.aarch64
+b9ad950d1ce297fab80a53dd353a0a723f5b971c629120a4fbc8ae08f5b466ae69422208f8ec5e57645af9e6efe13d3b43b13cc010bfc9c05e38bd70ed7af5a4  config-stable.armv7
+7b8cff42f803b69ec36b302992c519540ef97923bcacd4a0b30bef79279ee5b81bc553a060ae0db9527265bee9c09d3d2d5beb3122215f655691cfdd15185e7b  config-stable.loongarch64
+49c365419f64bf6239b689082516e64dae0a3b546c0b7fa92ac7735a496a5809aa80443299379c3b40fabc1bcc80dc4144f92c53548ded24f837c03bb823c06c  config-stable.ppc64le
+60226d778dc10e03a245523b0ee0d9a65393be292dde4219128c067c80f18eaa6570976d34a4cc9fb1056c76afdab60346d517a35f05a6fd93015d54b924371f  config-stable.riscv64
+3822d00da47579a49b476f228882f3326a01b905392d0eb23d092033ffec6e0cdfbff829e5ef898c24b1aaebc04998badca983be86d44907347a64e9ceaefa0c  config-stable.x86
+2f4fa6fd514d23b59c6df845f71e97ac776c040e7ef01f2b66211c2bdc67ce7195c0fc9a07f7cba9a825ba1a9159e10a473fce1e789e849d51a500fb67f5d52f  config-stable.x86_64
 "
