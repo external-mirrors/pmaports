@@ -127,7 +127,7 @@ once a mainline port appears. Kernels and devices in this category might be
 moved to _archived_ if no longer building and either lack a maintainer or the
 maintainer is unresponsive for months.
 
-## Archived
+### Archived
 
 Ports are moved to this category if:
 
