@@ -84,11 +84,9 @@ Requirements:
     [Testing Team](https://wiki.postmarketos.org/wiki/Testing_Team); testing
     one device per SoC is enough for community devices, but of course more is
     better)
-* 2021-11 and later: track record of upgrading the kernel, device kernel or SoC
-  kernel must at least have been upgraded through 3 kernel releases
-* Kernel must be upgraded regularly; the kernel version used by the device may not
-  be older than 6 months. The age of the kernel version is determined by the date
-  the release was
+* Kernel must at least have been upgraded through 3 kernel releases
+* Kernel version used by the device may not be older than 6 months. The age of
+  the kernel version is determined by the date the release was
   [tagged](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/refs/tags)
   upstream by Linus Torvalds or the stable kernel maintainers.
   For e.g. version 6.12.3, the date would be that of the specific patch release,
