@@ -89,7 +89,7 @@ update_linux_next() {
 
 git remote add gitlab https://pmos-ci:"$PMAPORTS_PUSH_TOKEN"@gitlab.postmarketos.org/postmarketOS/pmaports.git
 git fetch gitlab
-git checkout --track gitlab/master
+git checkout --track gitlab/main
 
 for pkg in $PKGS; do
 	case "$pkg" in
