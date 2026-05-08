@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-bootsplash
-pkgver=0.4.0
+pkgver=0.5.0
 pkgrel=0
 pkgdesc="pmOS integration components for boot/shutdown splash screen"
 url="https://postmarketos.org"
@@ -22,6 +22,8 @@ source="
 	postmarketos-bootsplash.files
 "
 replaces="plymouth"
+provides="postmarketos-bootsplash-virtual"
+provider_priority=100
 
 package() {
 	# NOTE: install files to initramfs-extra due to size
