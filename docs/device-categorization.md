@@ -61,7 +61,6 @@ Responsibilities for the device maintainer team:
 
 Requirements:
 
-* Maintained by at least one person
 * Well documented installation instructions on device wiki page
 * Close-to-mainline kernel
 * Kernel must pass `pmbootstrap kconfig check --community`, which includes
