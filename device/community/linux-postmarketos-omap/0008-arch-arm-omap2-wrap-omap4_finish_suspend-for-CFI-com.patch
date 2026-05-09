@@ -1,0 +1,44 @@
+From e9dde2b7b2e4ad2fbcbb435ed1ebd6f9b54a5a72 Mon Sep 17 00:00:00 2001
+From: "Sicelo A. Mhlongo" <absicsz@gmail.com>
+Date: Sat, 9 May 2026 07:39:21 +0200
+Subject: [PATCH] arch: arm: omap2: wrap omap4_finish_suspend for CFI
+ compatibility
+
+omap4_finish_suspend is defined in arm assembly and is thus invisible to CFI,
+causing errors when called directly as .finish_suspend. Wrap it in a function
+which calls the assembly function.
+
+Author: Mithil Bavishi <bavishimithil@gmail.com>
+Signed-off-By: Sicelo A. Mhlongo <absicsz@gmail.com>
+---
+ arch/arm/mach-omap2/omap-mpuss-lowpower.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-omap2/omap-mpuss-lowpower.c b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+index f18ef45e2fe10..457e0994bd261 100644
+--- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
++++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+@@ -123,6 +123,11 @@ static inline void set_cpu_wakeup_addr(unsigned int cpu_id, u32 addr)
+ 		writel_relaxed(addr, pm_info->wkup_sar_addr);
+ }
+ 
++static int omap4_finish_suspend_cfi(unsigned long cpu_state)
++{
++	return omap4_finish_suspend(cpu_state);
++}
++
+ /*
+  * Store the SCU power status value to scratchpad memory
+  */
+@@ -437,7 +442,7 @@ int __init omap4_mpuss_init(void)
+ 	}
+ 
+ 	if (cpu_is_omap44xx()) {
+-		omap_pm_ops.finish_suspend = omap4_finish_suspend;
++		omap_pm_ops.finish_suspend = omap4_finish_suspend_cfi;
+ 		omap_pm_ops.resume = omap4_cpu_resume;
+ 		omap_pm_ops.scu_prepare = scu_pwrst_prepare;
+ 		omap_pm_ops.hotplug_restart = omap4_secondary_startup;
+-- 
+2.53.0
+
