@@ -19,6 +19,8 @@ the continuous integration behaviour for your merge requests.
 * `[ci:skip-dint]`: Do not run the device-linter check. Use this when moving
   or modifying many devices not maintained by you that due to historical reasons
   might not pass the check.
+* `[ci:skip-grep]`: Do not run the grep check. Use this when renaming or moving
+  unmaintained packages.
 * `[skip ci]`: Completely skip the pipeline for the merge request. This is a
   GitLab [feature](https://docs.gitlab.com/ci/pipelines/#skip-a-pipeline). Use
   this only in very extreme situations where CI might be broken, but a change is
