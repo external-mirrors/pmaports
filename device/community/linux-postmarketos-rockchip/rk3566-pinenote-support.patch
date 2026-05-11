@@ -11489,38 +11489,6 @@ index 554c591e1..f0279e86c 100644
  
  		/* Tiled YUV formats */
  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index d2335276c..f245177a0 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1690,6 +1690,15 @@ config REGULATOR_TPS65132
- 	  This driver supports TPS65132 single inductor - dual output
- 	  power supply specifically designed for display panels.
- 
-+config REGULATOR_TPS65185
-+	tristate "TI TPS65185 PMIC for E-Paper Display"
-+	depends on GPIOLIB && I2C && IIO
-+	select IIO_TRIGGERED_EVENT
-+	select REGMAP_I2C
-+	help
-+	  This driver supports the voltage regulators on the TPS65185 PMIC
-+	  specifically designed for e-paper display panels.
-+
- config REGULATOR_TPS65217
- 	tristate "TI TPS65217 Power regulators"
- 	depends on MFD_TPS65217
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 1beba1493..018c559e1 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -192,6 +192,7 @@ obj-$(CONFIG_REGULATOR_TPS65023) += tps65023-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6507X) += tps6507x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65090) += tps65090-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS65185) += tps65185-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65218) += tps65218-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65219) += tps65219-regulator.o
 diff --git a/drivers/regulator/tps65185-regulator.c b/drivers/regulator/tps65185-regulator.c
 new file mode 100644
 index 000000000..a9de615e0
@@ -14626,3 +14594,41 @@ index a417a7f8b..5159f60e6 100755
  	$(Q)dh_md5sums $(DH_OPTIONS)
  	$(Q)dh_builddeb $(DH_OPTIONS) -- $(addprefix -Z,$(KDEB_COMPRESS))
  endef
+diff --git a/drivers/regulator/Kconfig.orig b/drivers/regulator/Kconfig
+index d10b6f9..97ce6d7 100644
+--- a/drivers/regulator/Kconfig.orig
++++ b/drivers/regulator/Kconfig
+@@ -1709,15 +1709,13 @@ config REGULATOR_TPS65132
+ 	  power supply specifically designed for display panels.
+ 
+ config REGULATOR_TPS65185
+-	tristate "TI TPS65185 EPD regulator"
+-	depends on I2C
++	tristate "TI TPS65185 PMIC for E-Paper Display"
++	depends on GPIOLIB && I2C && IIO
++	select IIO_TRIGGERED_EVENT
+ 	select REGMAP_I2C
+ 	help
+-	  This driver supports the TPS65185 voltage regulator chip
+-	  which is used to provide power to Electronic Paper Displays
+-	  so it is found in E-Book readers.
+-	  If HWWON is enabled, it also provides temperature measurement.
+-
++	  This driver supports the voltage regulators on the TPS65185 PMIC
++	  specifically designed for e-paper display panels.
+ 
+ config REGULATOR_TPS65217
+ 	tristate "TI TPS65217 Power regulators"
+diff --git a/drivers/regulator/Makefile.orig b/drivers/regulator/Makefile
+index 35639f3..c1eb8fd 100644
+--- a/drivers/regulator/Makefile.orig
++++ b/drivers/regulator/Makefile
+@@ -194,7 +194,7 @@ obj-$(CONFIG_REGULATOR_TPS65023) += tps65023-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS6507X) += tps6507x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65090) += tps65090-regulator.o
+-obj-$(CONFIG_REGULATOR_TPS65185) += tps65185.o
++obj-$(CONFIG_REGULATOR_TPS65185) += tps65185-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65218) += tps65218-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65219) += tps65219-regulator.o
