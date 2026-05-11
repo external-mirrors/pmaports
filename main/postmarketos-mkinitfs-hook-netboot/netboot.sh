@@ -16,7 +16,7 @@ modprobe nbd
 # Check that we actually have nbd0 available, otherwise show an error screen.
 if [ ! -b /dev/nbd0 ]; then
 	echo "Failed to get /dev/nbd0, stopping."
-	splash_set_error "ERROR: Failed to initialise netboot\\nhttps://postmarketos.org/netboot"
+	splash_set_error "Failed to initialise netboot\\nhttps://postmarketos.org/netboot"
 	fail_halt_boot
 fi
 
