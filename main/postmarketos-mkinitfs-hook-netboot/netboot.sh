@@ -8,7 +8,7 @@ NBD_BLOCK_SIZE=${deviceinfo_rootfs_image_sector_size:-512}
 setup_usb_network
 start_unudhcpd
 
-show_splash "Waiting for netboot...\\nhttps://postmarketos.org/netboot"
+splash_set_message "Waiting for netboot...\\nhttps://postmarketos.org/netboot"
 
 # Attempt to load the kernel module if CONFIG_BLK_DEV_NBD=m
 modprobe nbd
@@ -16,7 +16,7 @@ modprobe nbd
 # Check that we actually have nbd0 available, otherwise show an error screen.
 if [ ! -b /dev/nbd0 ]; then
 	echo "Failed to get /dev/nbd0, stopping."
-	show_splash "ERROR: Failed to initialise netboot\\nhttps://postmarketos.org/netboot"
+	splash_set_error "ERROR: Failed to initialise netboot\\nhttps://postmarketos.org/netboot"
 	fail_halt_boot
 fi
 
@@ -30,6 +30,6 @@ done
 echo "Connected to $client_ip!"
 
 # Show "Loading" splash again when continuing
-show_splash "Loading..."
+splash_set_message "Loading..."
 
 mount_subpartitions
