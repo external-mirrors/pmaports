@@ -1,7 +1,7 @@
 # Kernel config based on: arch/arm/configs/embt2_defconfig
 maintainer="Andreas Kemnade <andreas@kemnade.info>"
 pkgname=linux-epson-embt2ws
-pkgver=6.18.0
+pkgver=7.0.6
 pkgrel=0
 pkgdesc="Epson Moverio BT-200 kernel fork, close to mainline"
 arch="armv7"
@@ -22,11 +22,12 @@ makedepends="
 	perl
 	postmarketos-installkernel
 	xz
+	zstd
 "
 
 # Source
 _repository="linux"
-_commit="464b5a7ccd9fa04dfe5d1be1d518f5eed8d77ea6"
+_commit="d4881fc77ce75cdd87ecec0871d56054ff8d4eec"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/akemnade/$_repository/archive/$_commit.tar.gz
@@ -52,7 +53,7 @@ package() {
 		LLVM=1 \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir/usr" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 
 	install -D "$builddir"/include/config/kernel.release \
@@ -60,6 +61,6 @@ package() {
 }
 
 sha512sums="
-89e430d50f558177e6b39d6636f31a216e4b3bcc95b69b7db359f3af40e0ac623c51532db87c032136ff15f13525b48f28afa2fa24a5df3c12f1c7e9134ba5f1  linux-epson-embt2ws-464b5a7ccd9fa04dfe5d1be1d518f5eed8d77ea6.tar.gz
-2a7689fe9ec9fbf5e8be1ae482633a7d854ccdbd650348e2a64fe30dda6a5bf4ef1049534def7b026345d57d8d29c90699ac4a1d5594796c5d9816677d6ab02c  config-epson-embt2ws.armv7
+a473646916bb3207a642accf699a16ea9b1069904b136507e64b9fb5fedebfde3bac4837566ebecd739da25bde2be7d46a817e912dd09ade7afc2a8c0c05eb1c  linux-epson-embt2ws-d4881fc77ce75cdd87ecec0871d56054ff8d4eec.tar.gz
+caf4eaecb249d6675ff396a6f6228aa66ed0493f709dd8312605c062bc4a9d2ba15349972343d2f147d45659d41d5b75fc64317e843aed44948671732911869e  config-epson-embt2ws.armv7
 "
