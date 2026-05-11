@@ -1154,7 +1154,7 @@ debug_shell() {
 	fi
 
 	# Getty on the display
-	hide_splash
+	splash_hide
 	# Spawn buffyboard if the device might not have a physical keyboard
 	# buffyboard is only available with merged initramfs-extra!
 	if command -v buffyboard 2>/dev/null && \
