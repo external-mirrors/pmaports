@@ -1,0 +1,81 @@
+# Forked from Alpine to build from 'main'
+maintainer="Clayton Craft <clayton@craftyguy.net>"
+pkgname=plymouth
+pkgver=24.004.60_git20260430
+_commit="016708af9748219265229e1ee28dc7fdeafb649f"
+pkgrel=0
+pkgdesc="graphical bootsplash on linux"
+url="https://www.freedesktop.org/wiki/Software/Plymouth"
+arch="all"
+license="GPL-2.0-or-later"
+depends_dev="
+	eudev-dev
+	gtk+3.0-dev
+	pango-dev
+	"
+makedepends="$depends_dev
+	libevdev-dev
+	meson
+	xkeyboard-config-dev
+	"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-lang
+	$pkgname-systemd
+	$pkgname-themes::noarch
+	$pkgname-x11:_render
+	$pkgname-drm:_render
+	"
+source="$pkgname-$_commit.tar.gz::https://gitlab.freedesktop.org/plymouth/plymouth/-/archive/$_commit/plymouth-$_commit.tar.gz
+	libintl.patch
+	plymouth-rpmatch.patch
+	0001-plymouth-disable-execinfo.patch
+	systemd-units.patch
+
+	0003-ply-device-manager-fix-default-XKB-keymap-fallback-o.patch
+	"
+options="!check" # No tests
+
+builddir="$srcdir/$pkgname-$pkgver"
+
+unpack() {
+	default_unpack
+	# generate-version.sh looks at the builddir for version, and pkgconf doesn't seem to like it when it's a sha...
+	mv "$srcdir/$pkgname-$_commit" "$builddir"
+}
+
+build() {
+	abuild-meson \
+		-Dsystemd-integration=false \
+		-Dsystemd-units=true \
+		. output
+	meson compile -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	rm -f "$pkgdir"/usr/lib/plymouth/*.la
+}
+
+themes() {
+	mkdir -p "$subpkgdir"/usr/share/plymouth/
+	mv "$pkgdir"/usr/share/plymouth/themes/ "$subpkgdir"/usr/share/plymouth/
+}
+
+_render() {
+	local _name=${subpkgname#"$pkgname"-}
+	mkdir -p "$subpkgdir"/usr/lib/plymouth/renderers
+	mv "$pkgdir"/usr/lib/plymouth/renderers/$_name.so \
+		"$subpkgdir"/usr/lib/plymouth/renderers
+}
+
+sha512sums="
+85ba14805b0f4706736078ea3d2119690c105da378a31e39fcc073c48f77823365000e01329ff221fee987b1d4e7b74299a320f8c993ca8b51bd072a0462762a  plymouth-016708af9748219265229e1ee28dc7fdeafb649f.tar.gz
+c500bf429d08a43d32e64a442956425309ef485324ce1912a6ceeb2a41ff0a40f4633dd9a887a98d7a1f927fa0abd3dfafd8f1002614e6c810744c3f5b0630e0  libintl.patch
+ec1c32ddf7ee418ef1b5d173040db464193d9bca3fd85d5c3a8d2ee13ba1218947f7c9f39c403d3ccced70be28b2c7328e82dc8f967e9bdeea1651dee4be2dc7  plymouth-rpmatch.patch
+9b8856c593a9859a63019d0745334a5497917c10f68b539374be859289c945614e345ee8eba96edf807c8c61a0e8dba838caffd15aef92fa10ac3043c359179a  0001-plymouth-disable-execinfo.patch
+6de131d99ddc8ea02359deea7033bfeed49b682bcca8e9bfefaf4762c2e42a0cc355c03b10a4fddf2e3772e7c1eb1cfd386d735a5d9cd092b5fb38b51d4427d4  systemd-units.patch
+ead5bab07a8f5a6e0a139dab579473fc720904bf8fad8ad69cdcfe555ec714e7ecbd1b35fdd00e7a21b53d3caffd5f64f4872e5413696dcd444f3599a58ae9c8  0003-ply-device-manager-fix-default-XKB-keymap-fallback-o.patch
+"
