@@ -1,0 +1,11 @@
+[Unit]
+Description=USB Moded MTP Mode
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=usb-moded-mtp-mode up
+ExecStop=usb-moded-mtp-mode down
+
+[Install]
+WantedBy=multi-user.target
