@@ -2,7 +2,7 @@
 maintainer="bluebunny <kalorin.bok084@passinbox.com>"
 pkgname=device-xiaomi-pipa
 pkgdesc="Xiaomi Pad 6"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,19 +10,6 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
-	hexagonrpcd
-	make-dynpart-mappings
-	mkbootimg
-	postmarketos-base
-	soc-qcom
-	soc-qcom-qbootctl
-"
-makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-kernel-csot:kernel_csot
-	$pkgname-kernel-tianma:kernel_tianma
-"
-_pmb_recommends="
 	firmware-xiaomi-pipa-adreno
 	firmware-xiaomi-pipa-adsp
 	firmware-xiaomi-pipa-awinic
@@ -32,14 +19,23 @@ _pmb_recommends="
 	firmware-xiaomi-pipa-nuvolta
 	firmware-xiaomi-pipa-slpi
 	firmware-xiaomi-pipa-venus
+	hexagonrpcd
 	linux-firmware-qca
 	linux-firmware-qcom
+	postmarketos-base
+	soc-qcom
+	soc-qcom-qbootctl
+	systemd-boot
+"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-kernel-csot:kernel_csot
+	$pkgname-kernel-tianma:kernel_tianma
 "
 source="
 	81-libssc-xiaomi-pipa.rules
 	HiFi.conf
 	deviceinfo
-	hexagonrpcd-sdsp.conf
 	modules-initfs
 	pipa.conf
 "
@@ -53,9 +49,6 @@ package() {
 
 	install -Dm644 "$srcdir"/81-libssc-xiaomi-pipa.rules -t \
 		"$pkgdir/usr/lib/udev/rules.d/"
-
-	install -Dm644 "$srcdir"/hexagonrpcd-sdsp.conf -t \
-		"$pkgdir/usr/share/hexagonrpcd/"
 
 	install -Dm644 "$srcdir"/pipa.conf -t \
 		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/pipa/"
@@ -83,8 +76,7 @@ kernel_tianma() {
 sha512sums="
 d0e8f2e378130130ac72703aed957f7638e2dd75acf4aa421e1b4592c6cb6d296b652db0d9c242be4e56326760ce18d28c1e36ae553d0b7a7f91e12ab0353f22  81-libssc-xiaomi-pipa.rules
 1c8cef1f2de5fd7e734796dfffc684255b047bdb07a0965676a4d8d512aee4963ce91aeabf8627ce3aea72aeade776a3529f205badd2ed27ba072cadc38f9918  HiFi.conf
-e3f770914b5bd73af1cf6e4cee8e3a217d180730fc2b219a72729ce84ecb0df5c96fbcb9697fc3b8483b012bed14b238382ac445e6a1ce327568574136dcfe1c  deviceinfo
-7f9d9760791639fdd5606070d6a3bd9a5e2d8fdadff0af380b847c7eaf28131000f4909b99e866eafb77272a4fe20ed0c35d5a4f64bb7d16e2dbf82612aa8b22  hexagonrpcd-sdsp.conf
-514de5c7686457c665e4e8218a196882e7d69b44287474494c3d17d5e60e14a29af5e992d966728bef2d46a771e07f34a892c9e372c651ba340b1b6bbae341f4  modules-initfs
+9ce5336d2815de6dfe8477daa326abf8c79640d3fe519ef1978b18b49e489d70371215d3c0bbfb55068afde4b01b166b0a2a1a8d57b81355e465f542a43e361f  deviceinfo
+a92842d4f9d92af8ca14f4e86c74ea7dec446abd8a2a2b7dccbf6771065d8a7eea7f4a41adbd68647b49f81787a43fdb5b5337df0032ff3fbcb8e88b17f5ebf1  modules-initfs
 007908c49db107dd8289a96049ed4d77a55c7846e21f76fa7f97306df953ccdec7d821cbc7732a3ff7c532285175ebf0d6a4e3f224740ac002b23f3608cbf76d  pipa.conf
 "
