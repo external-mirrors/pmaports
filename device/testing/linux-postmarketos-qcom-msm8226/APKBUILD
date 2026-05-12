@@ -3,7 +3,7 @@ maintainer="Newbyte <newbie13xd@gmail.com>"
 _flavor="postmarketos-qcom-msm8226"
 pkgname=linux-$_flavor
 pkgver=6.16.12
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for APQ8026/MSM8226/MSM8926 devices"
 arch="armv7"
 _carch="arm"
@@ -55,7 +55,7 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
@@ -66,5 +66,5 @@ package() {
 
 sha512sums="
 144aff6be5f6b465fa9e7426cea5ee586ef88a9e4881760c244b317057b555fa03889a646f3f47dbd025ac9a540589ecf5cc540623562c4a9219caf9f1545ec4  linux-v6.16.12-msm8226.tar.gz
-81160870e9a60b14c7f6796789328118485ee61083419d90a06cffeaaf6a10a4e140bf12cf8b0423265e93ca1301312c25881ee5c267328b1b6b6419638b15fc  config-postmarketos-qcom-msm8226.armv7
+9a4d152538fdd443a983c8ed9c0699332a38110d0d9a06a21aa95906e31dde1a31cc595a00a7bcf65455734a5697fb33e593971cfb35af07c22298bef7994af6  config-postmarketos-qcom-msm8226.armv7
 "
