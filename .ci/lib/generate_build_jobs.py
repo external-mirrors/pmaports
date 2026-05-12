@@ -212,7 +212,7 @@ if __name__ == "__main__":
                 Arch.x86_64: "shared",
                 Arch.x86: "shared",
                 Arch.aarch64: "aarch64",
-                Arch.armv7: "qemu",
+                Arch.armv7: "armv7",
                 Arch.armhf: "qemu",
                 Arch.riscv64: "qemu",
                 Arch.ppc64le: "ppc64le",
