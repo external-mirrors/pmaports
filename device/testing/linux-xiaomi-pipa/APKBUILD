@@ -1,7 +1,7 @@
 maintainer="bluebunny <kalorin.bok084@passinbox.com>"
 _flavor="xiaomi-pipa"
 pkgname=linux-$_flavor
-pkgver=7.0.1
+pkgver=7.0.6
 pkgrel=0
 pkgdesc="Stable kernel for Xiaomi Pad 6"
 arch="aarch64"
@@ -16,6 +16,7 @@ options="
 	pmb:kconfigcheck-community
 	pmb:kconfigcheck-immutable
 	pmb:kconfigcheck-rust
+	pmb:kconfigcheck-uefi
 "
 makedepends="
 	bison
@@ -74,23 +75,20 @@ package() {
 	make modules_install zinstall dtbs_install \
 		ARCH="$_carch" \
 		LLVM=1 \
-		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 
-	install -D "$builddir/arch/$_carch/boot/Image.gz" \
-		"$pkgdir/boot/vmlinuz"
-
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
-96b6cc85697265f330ffb857165e835835c7e289f91a638834dab9bdbfd71c536b20f59bf88efe520be69091cd71ebe16caef6da6dc4dc5310c90a6b111f80b2  linux-7.0.1.tar.xz
-a57d7a6f6e76ed3589b867187f9ac26f48a02bb8dbfecc4c5eed247dba254b6abec2d1d27d242c6f0e9c7d3150c3168247d15946fc7b0130e34e91351a87ffdd  config-xiaomi-pipa.aarch64
+770e2b7e5669b20c2c8d98be5333e756062e379246eb9561b5024644eecfd1ef66776e4ad813375e748be1b88493c649892afc38176c1b9bfd3b88c4e8754b29  linux-7.0.6.tar.xz
+392450ca034ebaaff4d5e86d14003ea0f5c3f162e78f908f2abcdbc9041666f16bcd6992df4c4437188a8e7c8346aa290c03c19343086513926f3be84e1f5865  config-xiaomi-pipa.aarch64
 c218e68276c1736e83a32ffdb826255cdf0732b930ee95e3c3a4343d3540808d735fbe9cb68a13d681ce88f55cd89f3c76c89da0a9925e0a43471154e34ecdcc  0001-arm64-dts-qcom-sm8250-xiaomi-pipa-Add-device-tree-fo.patch
 469bd89303e4f08d3b36a9423d7a5f05d159e5e8eefdc872d20253304ad22b669cba6f1609cda0bb9d2b3e0396f0e41995613b95d547dca4bb6c2e9d03e9243c  0002-power-supply-Add-driver-for-Qualcomm-PMIC-fuel-gauge.patch
 0be3f438f15da0ffdde0a4351c12a93e5f56db318306b4be7598d769b86dc4b9da95f663f59763017fbd96b9824ac396895d1bd3926bac15e06a30454fb06d41  0003-Input-Add-nt36523-touchscreen-driver.patch
