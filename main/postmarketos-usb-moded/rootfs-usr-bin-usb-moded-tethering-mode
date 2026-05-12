@@ -19,6 +19,9 @@ down() {
     nmcli connection down "$CONNECTION_NAME"
     nmcli connection delete "$CONNECTION_NAME"
 
+    # NetworkManager leaves IP forwarding ON, set it back to disabled
+    echo 0 > /proc/sys/net/ipv4/ip_forward
+
     # NetworkManager brings the interface up automatically,
     # but doesn't remove it when bringing down.
     ifconfig "$IFACE" down
