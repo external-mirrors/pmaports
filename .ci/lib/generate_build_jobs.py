@@ -211,7 +211,7 @@ if __name__ == "__main__":
             archtag={
                 Arch.x86_64: "shared",
                 Arch.x86: "shared",
-                Arch.aarch64: "arm64",
+                Arch.aarch64: "aarch64",
                 Arch.armv7: "qemu",
                 Arch.armhf: "qemu",
                 Arch.riscv64: "qemu",
