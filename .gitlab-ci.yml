@@ -172,6 +172,18 @@ mr-settings:
     - wget -q "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/check_mr_settings.py"
     - python3 ./check_mr_settings.py
 
+pmbootstrap minimum version:
+  stage: lint
+  rules:
+    - if: *mr_rule
+      changes:
+        - .ci/check-pmbootstrap-min-version.sh
+        - .gitlab-ci.yml
+        - pmaports.cfg
+  script:
+    - .ci/lib/gitlab_prepare_ci.sh
+    - .ci/check-pmbootstrap-min-version.sh
+
 # Calculate build of changed aports using a dynamic downstream pipelines:
 # https://docs.gitlab.com/ci/pipelines/downstream_pipelines/#dynamic-child-pipelines
 # For those to work, we need two jobs:
