@@ -3,8 +3,8 @@
 maintainer="Danila Tikhonov <danila@jiaxyga.com>"
 _flavor="postmarketos-qcom-sm7150"
 pkgname=linux-$_flavor
-pkgver=6.18.0
-pkgrel=1
+pkgver=7.1_rc3
+pkgrel=0
 pkgdesc="Mainline Kernel fork for SM7150 devices"
 arch="aarch64"
 _carch="arm64"
@@ -25,6 +25,7 @@ makedepends="
 	perl
 	postmarketos-installkernel
 	python3
+	zstd
 "
 
 _tag="$pkgver"
@@ -48,14 +49,11 @@ build() {
 }
 
 package() {
-	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
-		"$pkgdir/boot/linux.efi"
-
-	make modules_install dtbs_install \
+	make modules_install zinstall dtbs_install \
 		ARCH="$_carch" \
 		LLVM=1 \
-		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs-tmp
 
@@ -71,6 +69,6 @@ package() {
 
 
 sha512sums="
-ddd996b60a67844fcf9e29bcfc951429eb687b1a643e930ba54f362dfe4fea7ee8a93bf9c30480f3c2559ffe594cfa596e62c007fb22b621285c26694e37cac6  linux-postmarketos-qcom-sm7150-v6.18.0.tar.gz
-1a76bc435cd56b56762e896cb9cfcebc269c2b70e96589726397af7c5c4baca739dab17fa92bd662c49489a4bd867a4171554909842cdc663e9dfdd96605c83a  config-postmarketos-qcom-sm7150.aarch64
+bb837959e337c66ff374d8f3aac6593723c4f4eb69fb18f9ff25c5c096c6656fd71149e105255c0f97c83e0bf547b0b0e94ca23eabde7b5f88308e9ecd784e3d  linux-postmarketos-qcom-sm7150-v7.1_rc3.tar.gz
+8526d7403a28e01a2a7f42411f3e244c6be8fca6aa962930b61ae8aec9d66b4a69e9ad68481bb677be36f5fef8885235689be15674b24f77ac043d715fad20df  config-postmarketos-qcom-sm7150.aarch64
 "
