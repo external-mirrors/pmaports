@@ -21,7 +21,7 @@ depends="
 	"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="automount-media.rules kodi.service"
-options="!check pmb:drm pmb:systemd"
+options="!check pmb:drm pmb:default-systemd pmb:openrc pmb:systemd"
 
 package() {
 	install -Dm644 automount-media.rules \
