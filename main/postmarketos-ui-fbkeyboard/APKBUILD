@@ -17,7 +17,7 @@ depends="
 install="$pkgname-openrc.post-install $pkgname-openrc.pre-deinstall $pkgname-openrc.post-upgrade"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="fbkeyboard.init fbkeyboard.service"
-options="!check" # No tests
+options="!check pmb:default-openrc pmb:support-openrc pmb:support-systemd" # No tests
 
 package() {
 	install -Dm755 "$srcdir"/fbkeyboard.init "$pkgdir"/etc/init.d/fbkeyboard

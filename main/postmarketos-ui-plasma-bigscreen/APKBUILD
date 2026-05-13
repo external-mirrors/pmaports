@@ -32,7 +32,7 @@ source="$pkgname-$_commit_configs.tar.gz::https://invent.kde.org/plasma-bigscree
 	nymphcast.desktop
 	org.jellyfin.JellyfinDesktop.desktop
 	"
-options="!check pmb:systemd" # No tests for a meta package
+options="!check pmb:default-systemd pmb:support-systemd" # No tests for a meta package
 
 [ "$CARCH" != "loongarch64" ] && subpackages="$subpackages $pkgname-extras" # kodi
 
