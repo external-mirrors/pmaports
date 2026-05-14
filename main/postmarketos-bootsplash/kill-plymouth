@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+# This is a *temporary* workaround to OpenRC hanging at times if plugins are
+# used on a musl-based system (such as plymouth-openrc-plugin). This also means
+# plymouth will not be ran on shutdown, but given this service is temporary, it
+# should be fine. It will be replaced with the plymouth-openrc-plugin again when
+# this is fixed upstream, which has better integration.
+#
+# See also:
+#  * https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4536
+#  * https://github.com/OpenRC/openrc/pull/1007
+
+name="Exit plymouthd"
+description="Stop plymouthd before running the graphical UI"
+command="/usr/bin/plymouth"
+command_args="quit"
+
+depend() {
+	before display-manager
+}
