@@ -3,7 +3,7 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Dang Huynh <dang.huynh@mainlining.org>"
 pkgname=linux-pine64-pinetab2
-pkgver=7.0
+pkgver=7.0.6
 _danctnix_kernel_rel=1
 pkgrel=0
 pkgdesc="Pine64 PineTab 2 mainline"
@@ -56,7 +56,7 @@ package() {
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
@@ -66,6 +66,6 @@ package() {
 }
 
 sha512sums="
-373e6bfd54171b4c1930851b5232b43e5e5c826d20ee0708af764c91bfe2825065b61871028ab3cb0dc6209861596110c3e136a45a37fd8f118d6931ac408256  linux-pine64-pinetab2-v7.0-danctnix1.tar.gz
+b5f0578bf9bc18ea70161bb39fcbbfcd5c92a0d4c58b7c92af64c2277ce2242db3a3551929d608944392bd6b4756bf65a796594acdb4847033a6992ea99ad09b  linux-pine64-pinetab2-v7.0.6-danctnix1.tar.gz
 77b54e385f63436a6fa0a595149d626aae7026dbd748ab121bcbaa88a0e7cf156239033867d8f7acd51b42f04c6cfe9de1c20cc7f687491afe836a7b4759763f  config-pine64-pinetab2.aarch64
 "
