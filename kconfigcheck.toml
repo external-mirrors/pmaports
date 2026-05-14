@@ -677,9 +677,20 @@ SHADOW_CALL_STACK = "y"
 ["category:hardening".">=6.7.0"."riscv64"]
 SHADOW_CALL_STACK = "y"
 
-["category:rust".">=6.1.0"."all"]
+# Arches come from https://docs.kernel.org/rust/arch-support.html
+# riscv64 and armv7 do not set SanitizerSet::KCFI, so we cannot use them with
+# our current CFI setup. loongarch64 is an exception because it doesn't have
+# CFI support at all.
+["category:rust".">=6.1.0"."x86_64"]
+RUST = "y"
+["category:rust".">=6.8.0"."loongarch64"]
+RUST = "y"
+["category:rust".">=6.9.0"."aarch64"]
+RUST = "y"
+["category:rust".">=0.0.0"."aarch64 loongarch64 x86_64"]
 DEBUG_INFO_BTF = "n" # Conflicts with LTO when Rust is enabled
 DEBUG_INFO_BTF_MODULES = "n" # Conflicts with LTO when Rust is enabled
+MODVERSIONS = "n"
 
 # SELinux support, separate from hardening to keep it opt-in for now
 ["category:selinux".">=0.0.0"."all"]
