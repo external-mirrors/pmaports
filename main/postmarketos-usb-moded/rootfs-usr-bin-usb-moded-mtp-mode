@@ -8,7 +8,14 @@ TIMEOUT=10s
 
 up() {
 	echo "Starting MTP responder"
-	systemctl start umtprd
+	if [ -d "/run/systemd" ]; then
+		systemctl start umtprd
+	elif [ -f "/etc/rc.conf" ]; then
+		rc-service umtprd start
+	else
+		echo "Unsupported init system"
+		exit 1
+	fi
 
 	# Wait up to 10s for EP fds to appear
 	# usb-signaller and usb-moded need

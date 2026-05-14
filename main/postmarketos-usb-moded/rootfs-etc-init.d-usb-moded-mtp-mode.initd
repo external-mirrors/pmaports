@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+
+description="USB Moded MTP Mode"
+command="usb-moded-mtp-mode"
+command_args="up"
+
+stop() {
+    usb-moded-mtp-mode down
+}
