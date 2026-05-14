@@ -3,9 +3,13 @@
 # Dynamically generate NetworkManager connection because it is only available in the right USB mode.
 #
 # Copyright (c) Dylan Van Assche (2025)
+set -e
 
-IFACE=usb0
-CONNECTION_NAME="USB Tethering Mode"
+CONFIGFS="/sys/kernel/config/usb_gadget"
+IFACE=$(cat "$CONFIGFS"/usb-signaller-tethering/functions/ncm.*/ifname 2>/dev/null)
+IFACE=${IFACE:-"usb0"}
+CONNECTION_NAME=$(cat "$CONFIGFS"/usb-signaller-tethering/configs/*/strings/0x409/configuration 2>/dev/null)
+CONNECTION_NAME=${CONNECTION_NAME:-"USB Tethering Mode"}
 
 up() {
     # Bring interface and NetworkManager connection up
@@ -39,4 +43,3 @@ case $1 in
         exit 0
         ;;
 esac
-

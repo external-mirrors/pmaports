@@ -3,11 +3,15 @@
 # Dynamically generate NetworkManager connection because it is only available in the right USB mode
 #
 # Copyright (c) Dylan Van Assche (2025)
+set -e
 
-IFACE=usb0
+CONFIGFS="/sys/kernel/config/usb_gadget"
+IFACE=$(cat "$CONFIGFS"/usb-signaller-developer/functions/ncm.*/ifname 2>/dev/null)
+IFACE=${IFACE:-"usb0"}
 IP_ADDRESS_SERVER=172.16.42.1
 IP_ADDRESS_CLIENT=172.16.42.2
-CONNECTION_NAME="USB Developer Mode"
+CONNECTION_NAME=$(cat "$CONFIGFS"/usb-signaller-developer/configs/*/strings/0x409/configuration 2>/dev/null)
+CONNECTION_NAME=${CONNECTION_NAME:-"USB Developer Mode"}
 
 up() {
     # Bring interface and NetworkManager connection up
@@ -44,4 +48,3 @@ case $1 in
         exit 0
         ;;
 esac
-
