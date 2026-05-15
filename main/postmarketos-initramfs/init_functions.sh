@@ -362,7 +362,7 @@ mount_subpartitions() {
 		[ -e "$x" ] && android_parts="$android_parts $x"
 	done
 
-	local losetup_args="--show -Pfv --direct-io=on"
+	local losetup_args="--show -Pf --direct-io=on"
 	if [ -n "$deviceinfo_rootfs_image_sector_size" ]; then
 		losetup_args="$losetup_args --sector-size $deviceinfo_rootfs_image_sector_size"
 	fi
@@ -412,7 +412,7 @@ mount_subpartitions() {
 				if [ -n "$PMOS_ROOT" ]; then
 					break
 				fi
-				[ -n "$SUBPARTITION_LOOP" ] && losetup -vd "$SUBPARTITION_LOOP"
+				[ -n "$SUBPARTITION_LOOP" ] && losetup -d "$SUBPARTITION_LOOP"
 				SUBPARTITION_DEV=""
 				SUBPARTITION_LOOP=""
 			fi
