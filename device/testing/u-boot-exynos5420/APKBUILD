@@ -1,6 +1,6 @@
 maintainer="Hendrik Noack <hendrik.noack@protonmail.com>"
 pkgname=u-boot-exynos5420
-pkgver=2026.04
+pkgver=2026.04_p1
 pkgrel=0
 pkgdesc="U-Boot bootloader for Samsung Exynos5420"
 url="https://gitlab.com/exynos5-mainline/u-boot"
@@ -22,7 +22,7 @@ makedepends="
 	gnutls-dev
 	"
 options="!check"
-_tag="v${pkgver//_/-}-galaxy-tab-pro"
+_tag="v${pkgver//_p/-r}-galaxy-tab-pro"
 source="
 	$pkgname-$_tag.tar.bz2::$url/-/archive/$_tag/u-boot-$_tag.tar.bz2
 	update-u-boot
@@ -60,6 +60,6 @@ package() {
 }
 
 sha512sums="
-88a6b5555427ea66a33643c8e9d35da73392c01ad5607187c458d491124f8d3bc4fbd1c64d6c40262b23f436d91599eee6dfad130e160d345c53b63304466c57  u-boot-exynos5420-v2026.04-galaxy-tab-pro.tar.bz2
+7bc10bed7b827b69ede6020f05df3ed073fff0430ad13f644e06ea7479ce605c5cea6716fabc9caf5ba29ecc965826d35dc5fc07d7caf32f1fd0fa12fa01ad9e  u-boot-exynos5420-v2026.04-r1-galaxy-tab-pro.tar.bz2
 085effc688328f96f116e1199d55d4da4f34f08fa1045b4bcc7debc8ba7df28c589d54bc3cac7cd7ed9cb9d6c0f3655b5d101c5c3d8c9d5ff5b9ef2c3cb2514d  update-u-boot
 "
