@@ -3,7 +3,7 @@
 maintainer="Hendra Manudinata <hendra@manoedinata.com>"
 pkgname=linux-samsung-j4lte
 pkgver=3.18.140
-pkgrel=1
+pkgrel=2
 pkgdesc="Samsung Galaxy J4 kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -34,9 +34,10 @@ source="
 	0002-zram-Set-zstd-as-the-default-compressor.patch
 	0003-drivers-usb-u_ether-Force-setting-random-MAC-address.patch
 	0004-staging-samsung-sec_batt-Force-disable-low-power-cha.patch
-	0005-HACK-decon_7570-Swap-red-blue-offset.patch
-	0006-drivers-samsung-scsc-Fix-FW_LOCATION_AUTO-symbol.patch
-	0007-drivers-samsung-scsc-Skip-mount-point-check.patch
+	0005-drivers-samsung-scsc-Fix-FW_LOCATION_AUTO-symbol.patch
+	0006-drivers-samsung-scsc-Skip-mount-point-check.patch
+	0007-fbdev-decon_7570-Initialize-framebuffer-more-late.patch
+	0008-HACK-loop-Force-disable-Direct-I-O-operations.patch
 	linux3.7to4.5-ARM64-remove-Sun-Solaris-style-flag-on-section.patch
 "
 builddir="$srcdir/$_repository-$_commit"
@@ -75,8 +76,9 @@ fafed0c79633b50f9c62febeb1198bc863ddcaf7d3140bf58b87f574a75a16c1b73d563ce849ab84
 f81dc234b7c37e5c33472a22f96299c435d4e2728e24164dc375abbc80912ce5a9045178deb2338f1f484a52296ad558541c01c101f244a62bf6149e75e0406b  0002-zram-Set-zstd-as-the-default-compressor.patch
 f69b9363ffd543f98f7799256bb3cfccc84623b69d8c7ee3ea291b52cecac7d961d4b491db6b5477bdd527ad3e9cbd738d67647fc074adcd2927b5eb6d2478dd  0003-drivers-usb-u_ether-Force-setting-random-MAC-address.patch
 8f17a56957476832df48f90c229302958ec848300ea7dff76c2e9fc9433c301b28239bbc7404cf9c1bac5410dd9984dce39d132bbb29650324b9136777185583  0004-staging-samsung-sec_batt-Force-disable-low-power-cha.patch
-a5d4afc22f514525f362884a618a770cf5301d4b0ae89d7f819d60c27aff9cb04f1ee823ebefe49872ac01e84a429d9619e0df7ec1c7b83793bc0dfb1da62e39  0005-HACK-decon_7570-Swap-red-blue-offset.patch
-e0f5e505e794d4db1ed87a86dadf8321199c8c749a2b1a9b31fc572320b95d9cc004664eea2f3e20163d2993bfe0f50bdcecf027b70ce551d02abb2874985f9a  0006-drivers-samsung-scsc-Fix-FW_LOCATION_AUTO-symbol.patch
-f0da70e3b5cc498e19430936422cf89476d68a5bbe45d593ab3c8bf353a81401a9133df983d3f1f84d0127670ad32b8adcb91e1beb821eb2efddd831f22f79dc  0007-drivers-samsung-scsc-Skip-mount-point-check.patch
+e0f5e505e794d4db1ed87a86dadf8321199c8c749a2b1a9b31fc572320b95d9cc004664eea2f3e20163d2993bfe0f50bdcecf027b70ce551d02abb2874985f9a  0005-drivers-samsung-scsc-Fix-FW_LOCATION_AUTO-symbol.patch
+f0da70e3b5cc498e19430936422cf89476d68a5bbe45d593ab3c8bf353a81401a9133df983d3f1f84d0127670ad32b8adcb91e1beb821eb2efddd831f22f79dc  0006-drivers-samsung-scsc-Skip-mount-point-check.patch
+76700ecaea56f15d4204ff3064e640552eca35d3713fddaaaee204d7bf983ef419c08c7d759ca58430a27bd10d4bda7d1b6a7ec34ba27f503256f4ee6e42649d  0007-fbdev-decon_7570-Initialize-framebuffer-more-late.patch
+ee281f9a6d5bab871d83e02cea6e222c6883e452c7b22ac65b512eca37d007218cad50e297189a4ad46be8d3d5a70f26f62867c75de30387cb4777a0c3a3e5e0  0008-HACK-loop-Force-disable-Direct-I-O-operations.patch
 75545ccd0082a119b9ad95fcef3523c939a5c946f8f3a5c3dde15cee1502f6c1011050a0ad5359426f018bb7ceea1c97a28c7665941bc89f365c8d11065ce0f6  linux3.7to4.5-ARM64-remove-Sun-Solaris-style-flag-on-section.patch
 "
