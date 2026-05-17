@@ -1,9 +1,9 @@
 # Seperate u-boot package for the pine64-pinebookpro because this includes
 # a driver for the display and supports efi loading operating systems
-maintainer="Quade Curry <qc8086@qc8086.com>"
+maintainer="Hugo Osvaldo Barrera <hugo@whynothugo.nl>"
 pkgname=u-boot-pinebookpro
-pkgver=2020.07
-pkgrel=5
+pkgver=2026.04
+pkgrel=0
 pkgdesc="u-boot bootloader for the rk3399"
 url="https://gitlab.denx.de/u-boot/u-boot"
 arch="aarch64"
@@ -11,27 +11,29 @@ license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
 	ISC LGPL-2.0-only LGPL-2.1-only X11"
 makedepends="$depends_dev
 	arm-trusted-firmware
+	bash
 	bc
 	bison
 	dtc
 	flex
+	gnutls-dev
 	openssl-dev
 	python3-dev
+	py3-elftools
+	py3-setuptools
 	swig
 	u-boot-tools
 	"
 options="!check"
 source="
 	ftp://ftp.denx.de/pub/u-boot/u-boot-${pkgver//_/-}.tar.bz2
-	0001-enable-rockchip-rng.patch
-	0002-enable-usb-keyboard.patch
-	0003-display-support.patch
-	0004-rk3399-light-pinebook-power-and-standby-leds.patch
-	0005-support-SPI-flash-boot.patch
-	0006-implement-boot-menu.patch
-	0007-rockchip-boot-order.patch
-	0008-rockchip-boot-order-add-usb.patch
-	0009-rk3399-support-compressed-kernel.patch
+	0001-pinebook-pro-ensure-USB-keyboards-are-available.patch
+	0002-drivers-video-rockchip-rk_edp.c-Change-clock-rate.patch
+	0003-vidconsole-uclass-Implement-ANSI_CURSOR_COLUMN.patch
+	0004-Configure-boot-splash-logo.patch
+	0005-cli-Clear-ctrl-c-before-running-a-command.patch
+	0006-rockchip-move-usb0-after-mmc1-in-default-boot-order.patch
+	0007-pinebook-pro-Fix-vcc_sdio-regulator-max-voltage.patch
 	pine64.bmp
 	"
 builddir="$srcdir"/u-boot-${pkgver//_/-}
@@ -68,14 +70,14 @@ package() {
 }
 
 
-sha512sums="df91264fe8a42e676c3f2aa09d644c6a3035cc8169bf52a8ab95efe7e542cfc758a0ef150949b0d9f03c7dec7d95f8d20a2efe2dbb60c2ef1a61c8063770478d  u-boot-2020.07.tar.bz2
-058408fdf8921bcde5f9ca9ea03fdad6d87dd94f09bd6768792d72af43e64e801dfd8cb3f16e83be14153d9c38b3e3e23fe949778d9347ff72bada996bd82cfe  0001-enable-rockchip-rng.patch
-8e454e486a7c9fe486a1bdbececf8c6b163b90b7b57a3822afb2a30f42ba9552439360d08a6ecc19a2ebe807c6c15961a73e0fe47dce9d2a7f86ce4742cb2510  0002-enable-usb-keyboard.patch
-7292dab0af5b0127663eac7966499fc5af87c544485168b5269cdf16a226cd8a215b76a4745cf19afb751ea6fea680e26b86adfdaab54e3ec7fc8fd8bec85c6b  0003-display-support.patch
-5188c54bb1efe18471b3e0ff8113b0d46d6ecad2be222416c7fb89021e76f2816771793d3efaba561602064a8079cf0da66e25228e132d44a0f6b14658f93ffb  0004-rk3399-light-pinebook-power-and-standby-leds.patch
-ee51dca25a5a00011186c7f750e20ed08061a5a64a67bd81ca6d96cefdb139a15078d48c2c5b6ecb09b4ab5d778e11f3b62ff3daa74ffc7d73963b15e4eee215  0005-support-SPI-flash-boot.patch
-8d989d200639204c8f7fb2620209bd1e096e8c5ea04085f68486b71490deb60e89e2d54704508bfe22c006b0d331dcc0c5cbfac6c0e02328a01b0f0b611d6b58  0006-implement-boot-menu.patch
-3a91ae0f499ca668ac95cc24c3b2794b0884acfcba2a76493cb2329b8e00d84eb1bbfdcdb2475064cc5b0fb0b52df849afc59b6399de44699db9dfda4d0c5f3c  0007-rockchip-boot-order.patch
-b655dfd83c12925d5e90f317c97d8bca9f047df337202627bfe40e0ebaba79d8adc429575a04f5af531bcc2626521b517ea7b9026dbdffb54ba97316d1674cf9  0008-rockchip-boot-order-add-usb.patch
-cc03b87e42ce0ade1d3ddd9eebc76304451c01c4ee2ea2f52aa572ab8a30d84960df4d47f14315d96943467793fccee2052f53ace9fbac059e30c86c749d7ccc  0009-rk3399-support-compressed-kernel.patch
-e317f8527dbb3b8a40a45d20da6c42f8cfd98b968060d6b4f1fa5453736441d36d1048bdc4359af47c2129fa86b6d43b3e263ef282f5c7b2e54f702d8b6bd8b1  pine64.bmp"
+sha512sums="
+c5fca2abc533759985dfcc6d071d154007535787b0bbd569b61bda1fe2f3a31fba08481c8caf18cf5f2bc79609f50dee504977a8b65e8c4cc21f277268232e03  u-boot-2026.04.tar.bz2
+572d24d70d96e84649b71a0a460ac9b9ae26d155d549bda1bc2534a54d102b158319caef24609fdbef6465a63d6c2624a42851bcad5b5cb60373abef62bd1850  0001-pinebook-pro-ensure-USB-keyboards-are-available.patch
+3657612c577076c733637cf1b52ece1722369f3a7b821e6a08b7650e85692f5e69acc8f1d4a20d36b701a5bcc4a5bc306456ac371689fcc69ee4c4626ec78483  0002-drivers-video-rockchip-rk_edp.c-Change-clock-rate.patch
+e1dc0553c3685ea1f52f067907b042f54f8244060f9ba865a81970bceba387fe1581d6ea05f6d1aa1ca81513a8e92580781ecb20f9d02d83c56033809ede4ccc  0003-vidconsole-uclass-Implement-ANSI_CURSOR_COLUMN.patch
+da1b515afbbe2387f6fee1028277cb19f5536598ba3fe7cd940d11476f41f162d3d4c08d9ee0ff5554e16dd9cbb4fc70015b5cc5eed885e75267a9e82bf7209f  0004-Configure-boot-splash-logo.patch
+11be09f9dc0bd2eefb645fcc3d5681ade90e104aa8e7c9de549b20393761074edd0e42828fb5147e186d995e11e1397bc94dd2cc521f307d8d26b6925fe22f1b  0005-cli-Clear-ctrl-c-before-running-a-command.patch
+5fdf9a5b42b271414b1f07a8cd94b537562d4994b5cb21377dddc065754b3977a8a3af646c9db0736eeb9cb7e9be0da7838721c5c1bc58f6de00bc1cbed54604  0006-rockchip-move-usb0-after-mmc1-in-default-boot-order.patch
+3537d81c0a839f2a35e28ef0dc9126e3d175950a0752b363839970c64db4c5aa6afceb8912a2e0a3a09d14fceb94704be2f752a0c002ace51676e736a58ba435  0007-pinebook-pro-Fix-vcc_sdio-regulator-max-voltage.patch
+e317f8527dbb3b8a40a45d20da6c42f8cfd98b968060d6b4f1fa5453736441d36d1048bdc4359af47c2129fa86b6d43b3e263ef282f5c7b2e54f702d8b6bd8b1  pine64.bmp
+"
