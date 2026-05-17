@@ -6,7 +6,7 @@ maintainer="Newbyte <newbyte@postmarketos.org>"
 pkgname=gnome-keyring
 _pkgver=50.0
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="GNOME keyring"
 url="https://gitlab.gnome.org/GNOME/gnome-keyring"
 # armhf: pmb#2618
@@ -42,7 +42,9 @@ subpackages="
 	$pkgname-pam
 	$pkgname-systemd
 	"
-source="https://download.gnome.org/sources/gnome-keyring/${_pkgver%.*}/gnome-keyring-$_pkgver.tar.xz"
+source="https://download.gnome.org/sources/gnome-keyring/${_pkgver%.*}/gnome-keyring-$_pkgver.tar.xz
+	0001-gkd-login-Register-the-login-collection-on-dbus-on-c.patch
+	"
 builddir="$srcdir/gnome-keyring-$_pkgver"
 
 build() {
@@ -74,4 +76,5 @@ pam() {
 
 sha512sums="
 20786486655c2188d8d0eae129d1c14a61d995d55a2339b166aa914287cf5ddd29b67d6a2fbc9d4b3d73705459cd3d17c696369500e4a0f0d12087aac78a8c15  gnome-keyring-50.0.tar.xz
+4edf62b7f81623f1f995292a2db5ae7771c9bc819b483f8dd2acd11a8ee03e2661d7d75926e63eb886adf94876d1b414f4ae822e66106a187e6e3c98b4c23ec2  0001-gkd-login-Register-the-login-collection-on-dbus-on-c.patch
 "
