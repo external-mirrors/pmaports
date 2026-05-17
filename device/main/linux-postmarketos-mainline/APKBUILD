@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-mainline
-pkgver=7.1_rc3
+pkgver=7.1_rc4
 pkgrel=0
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -34,6 +34,7 @@ makedepends="
 	elfutils-dev
 	findutils
 	flex
+	kmod
 	linux-headers
 	lld
 	llvm
@@ -55,12 +56,16 @@ makedepends="
 # Nathan's fork, he does not have time to upstream them right now but would be
 # happy if someone else did:
 # https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
+#
+# Patch #4 fixes 32-bit platform builds and is taken from here:
+# https://lore.kernel.org/all/20260517-hid-core-fix-size_t-specifier-v1-1-bfdd959ec383@kernel.org/
 source="
 	$pkgname-$pkgver.tar.gz::https://git.kernel.org/torvalds/t/linux-${pkgver/_/-}.tar.gz
 
 	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
+	0004-hid-core-fix-size-t-specifier-in-hid-report-raw-event.patch
 
 	config-mainline.aarch64
 	config-mainline.armv7
@@ -117,15 +122,16 @@ package() {
 }
 
 sha512sums="
-d03da193054c560d76ead500fb20e4bfa8ea12b4afd6120d6f9745a51614541d185270e1a9c4bc681f9d429e8cde03c7c32c0687c30c9b20a73286eff52d138a  linux-postmarketos-mainline-7.1_rc3.tar.gz
+2f14db8091a6100a19c63e9d1f0baa0f58864c40b9b259d929fc3ad5ec3aa824048ca7d1313ce81e3a9ba08ea6357e6a4837804ba51711d7bfb212a2665dc113  linux-postmarketos-mainline-7.1_rc4.tar.gz
 1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
-ebb0214028ce844d32b4b6f5bb46b89834ed3acf4c4697459193d7ee792ffae2514e682a614861fded7c65294404756746226bd9fe873d9e932f787f73f893c0  config-mainline.aarch64
-c2b3155f821f9e40ac3f950e84c91c901770ccd92e237035ac8410bada89d06071f5e1749812e506389f642431b61601356716a93da7a158ea0bcf9f89f3966c  config-mainline.armv7
-1526852b42a5bd6e32325d4a67e490acebef202cf6e43295539e53cb5e106eb08d5ce884b3ba678e81830bfc64ddea3aa6a5e11faec9f09b40d759d0946ef3fa  config-mainline.loongarch64
-7f14524a3b46e52d57e0bec01615aab4780cb1f8844b6c9fb6ee568c5393a4a4032d0cdeea022cac0405ca995d2463b446e3acedd15e65568056a156ede91f03  config-mainline.ppc64le
-100d6a66fddffc121830d21ea1bb2e2fada4a93d09f1bbfa9f0e951e030bfd18d33579931f7e16a21aa82e148f813dff7791b78c7e83ec7311848b94167c3116  config-mainline.riscv64
-2e2680c00d617ac621e082d914ea606e08d927000569852773a42ef6d54ccf8a7602895242111c252305af7f4b5c116b56bec90eb4dfd1495fc093e5286d0b30  config-mainline.x86
-02a14f64bbf23107cd5235261a160fbbb015d59698c27a11582ff8a947cfb3710a5ed1c163cd7b74fd8a46dafc2c946e6c84038e938a50ca10825a5af90e1430  config-mainline.x86_64
+eb164ade3497f60ed8b433c7efb42f3a9afc92b93c3d487e81094f00584b6ed47c92fe9168320db9f897143ad8fa3158c5d9d387ee60c8ea9035dbe1c554cf0e  0004-hid-core-fix-size-t-specifier-in-hid-report-raw-event.patch
+7489a7a134d380ba70bebe916fdc64881a709aa5f779d8a1c1f53c0a36a9859183115cd79cdf3d29fe4018f99c0c5a0ba272c53359439a170f51cfd95a7f1883  config-mainline.aarch64
+53d3ed0acdd01b1e56294403be9fd8692c8269fa5c6a8ae83e7da15f1ab24409981bbb35f919ee532f2e4c060b6081f37762699f9e9bad923ab2d9c7057b0963  config-mainline.armv7
+a87d68c8f00b06851f30350ffa9e6bc8a6ce27d4c323f10ad0f2c0f994d4e173f2a5906fbb89ad993537abada584512114e663bf3ba016d1cc86039de24f3caf  config-mainline.loongarch64
+52cf6ea028a99d9f8429aeea9af2c7825e62d3f42225e6ef65b65efe48c257c1d6b38b0f1a681b771e4292be085de36d16ac09a51956bff83573424d12b5131c  config-mainline.ppc64le
+bc7a426ad48744cda94cee8f6967d5f1e540d79db06e15d6631f57b941db88389a36358933935bdaf491327b4e5697c337a059a51a636af970d7e315dad20982  config-mainline.riscv64
+b759f0d6542a222170f1d6aac129bffb9bf2299a6f6ff4cb95fd7cc3316e6975d2fdb5ecede8c72888c241f48902156d0689f04c51d37aa7db861578eedddb0b  config-mainline.x86
+65aaa211a0366dce3cf279df0018751551e6f1b398c2b78d5792d792cfcb66822327494b5b7e855b7311ce17d4e314ac1c8bb33e010262912477ee40b7500d97  config-mainline.x86_64
 "
