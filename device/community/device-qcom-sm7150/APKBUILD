@@ -5,7 +5,7 @@
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=device-qcom-sm7150
 pkgdesc="Generic device package for Qualcomm SM7150 devices"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -26,10 +26,7 @@ depends="
 "
 makedepends="devicepkg-dev"
 
-source="
-	81-libssc-180-degrees.rules
-	deviceinfo
-"
+source="deviceinfo"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -37,12 +34,8 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-
-	install -Dm644 "$srcdir"/81-libssc-180-degrees.rules -t \
-		"$pkgdir"/usr/lib/udev/rules.d
 }
 
 sha512sums="
-2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-180-degrees.rules
 492b22ce3350e8b1452128234062f41a2e6a23e4f5fac2c56fbd43e354a1c6f3792f8bc760e59a2e89c51a83a87f2b4ef77bdf7c422e01d891a32854ec3f2d19  deviceinfo
 "
