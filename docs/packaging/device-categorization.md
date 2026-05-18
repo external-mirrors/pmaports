@@ -1,12 +1,26 @@
 # Device Categorization
 
-Devices that are working quite well get lost in the [big matrix of booting
-devices](https://wiki.postmarketos.org/wiki/Devices). To improve the situation,
-devices postmarketOS runs on have been grouped into the following categories.
+There are a [lot of devices](https://wiki.postmarketos.org/wiki/Devices) that
+can boot postmarketOS. These devices are divided into different categories. The
+categorization serves to provide users with information about what to expect in
+the present and future from a specific device. Therefore, the categories provide
+information about a minimum set of working features, but also about the expected
+level of support and stability that those features will have in the future.
 
 ## Categories
 
+Although there are distinct categories, device support on-paper might not match
+reality. Especially in regards to device features: some devices in lower
+categories might match the requirements of higher categories, but the commitment
+or support from maintainers might be lower than what higher categories require.
+
 ### Main
+
+Main devices should be usable in the most common use-cases for which the device
+is designed. They are also expected to be reliable and have few regressions in
+functionality. One can expect some level of support from the postmarketOS team,
+always respecting the volunteer nature of the project. See
+[state](https://postmarketos.org/state/) to understand what that means.
 
 Requirements:
 * The [postmarketOS team](https://postmarketos.org/team) must endorse the new
@@ -59,6 +73,15 @@ Responsibilities for the device maintainer team:
 
 ### Community
 
+Community devices have a reasonable set of features enabled, although there is
+not a fixed feature set: users should not assume that everything works and are
+expected to look at the device wiki page. Community devices have generally
+received a lot of work and should, in general, remain working quite
+well. However, there is no commitment from the postmarketOS team, and it can
+happen that maintainers are unable to continue working on them, leading to them
+eventually getting demoted. The team will always notify the community about such
+changes through the standard communication channels: Fediverse and blog posts.
+
 Requirements:
 
 * Well documented installation instructions on device wiki page
@@ -91,18 +114,13 @@ Requirements:
   For e.g. version 6.12.3, the date would be that of the specific patch release,
   not that of the initial 6.12 release
 
-Regarding device features (calls working, camera, ...), there is not a fixed
-feature set (so for users, don't assume that everything works, look at the
-device's wiki page for details).
-
-The purpose of community is to increase visibility of devices that:
-
-* A lot of work was put into
-* Are (and stay) working quite well (i.e. they are useful in some way and are
-  tested occasionally to find and fix regressions)
-* Are still being improved or are considered completed at some point
-
 ### Testing
+
+Testing devices cover devices with close-to-mainline kernels and other minimal
+requirements. Devices on this category might have few, or many features enabled,
+and there are no expectations on maintainers regarding user support. In
+consequence, users of testing devices must consider that their devices could be
+archived at any time and without notice.
 
 Requirements:
 
@@ -114,32 +132,34 @@ Requirements:
 
 ### Downstream
 
+Device ports using vendor/downstream kernels. These kernels and devices are only
+advised to be used as a step towards using mainline, at which point they would
+be moved to testing. Depending on downstream ports as an user can be
+problematic, as kernels and devices in this category might be moved to archived
+at any time. This will happen if the port no longer builds, lacks a maintainer,
+or the maintainer is unresponsive. Downstream ports are also often unable to
+support modern userspace components like Docker or systemd.
+
 Requirements:
 
 * Port and dependencies build
 * The device boots
 
-Notes:
-
-Device ports using vendor/downstream kernels. Can be moved to _testing_
-once a mainline port appears. Kernels and devices in this category might be
-moved to _archived_ if no longer building and either lack a maintainer or the
-maintainer is unresponsive for months.
-
 (device-category-archived)=
 ### Archived
 
-Ports are moved to this category if:
+A port might be in archived if the port has been replaced with a better
+alternative (e.g. ports using downstream kernels when a functional mainline port
+exists), the port no longer boots with the current version of postmarketOS,
+or it became unmaintained.
 
-* The port has been replaced with a better alternative (e.g. ports using
-  downstream kernels when a functional mainline port exists).
-* The port no longer boots with the current version of postmarketOS, and the
-  port doesn't have an active maintainer to fix it.
-
-Archived ports aren't listed in `pmbootstrap init` and binary packages are not
-built for them. Still, they can be manually selected and built by entering the
-device codename. A warning is displayed with the reason why they have been
-archived.
+The archived category exists to simplify bringing back old ports (so new
+maintainers don't have to dig through the git history), and for specific
+situations where it is useful for developers to share a non-recommended
+downstream kernel. Therefore, archived ports aren't listed in `pmbootstrap init`
+and binary packages are not built for them. However, they can still be manually
+selected and built by entering the device codename. Although, doing this will display
+a warning with the reason why they have been archived.
 
 This category was formerly called *unmaintained*
 ([!1912](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/1912),
