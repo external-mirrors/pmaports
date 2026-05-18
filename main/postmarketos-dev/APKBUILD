@@ -1,7 +1,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=postmarketos-dev
-pkgver=1
-pkgrel=2
+pkgver=2
+pkgrel=0
 pkgdesc="postmarketOS development tools"
 url="https://postmarketos.org"
 arch="noarch"
@@ -11,14 +11,21 @@ depends="
 	alpine-sdk
 	bash
 	bash-completion
+	bison
 	coreutils
 	findutils
+	flex
 	gawk
+	gnutls-dev
 	htop
-	nano
 	iputils
+	nano
 	openssh-client
+	openssl-dev
 	psutils
+	py3-setuptools
+	python3-dev
+	swig
 "
 install="$pkgname.post-install $pkgname.post-deinstall"
 
