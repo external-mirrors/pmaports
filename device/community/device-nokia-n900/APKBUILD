@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=57
+pkgver=58
 pkgrel=0
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
@@ -79,8 +79,9 @@ source="
 	udev/15-bq27k.rules
 	udev/90-touchscreen-dev.rules
 	upower.conf
-	usr-lib-udev-hwdb.d-99-n900-volume-keys.hwdb
+	usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb
 	usr-share-mkinitfs-hooks-01-omap-disable-idle.sh
+	usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf
 	xkb-keymap
 	xresources
 "
@@ -124,6 +125,8 @@ package() {
 		"$pkgdir"/usr/bin/bq27k-monitor
 	install -Dm755 "$srcdir"/screenlock.sh \
 		"$pkgdir"/usr/bin/screenlock.sh
+	install -Dm644 "$srcdir"/usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf \
+		"$pkgdir"/usr/share/unl0kr/unl0kr.conf.d/00-n900-keyboard.conf
 
 	# Udev & hwdb rules
 	install -D -m644 "$srcdir"/90-touchscreen-dev.rules \
@@ -132,8 +135,8 @@ package() {
 		"$pkgdir"/usr/lib/udev/rules.d/10-nokia-modem.rules
 	install -D -m644 "$srcdir"/15-bq27k.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/15-bq27xxx-battery.rules
-	install -D -m644 "$srcdir"/usr-lib-udev-hwdb.d-99-n900-volume-keys.hwdb \
-		"$pkgdir"/usr/lib/udev/hwdb.d/99-n900-volume-keys.hwdb
+	install -D -m644 "$srcdir"/usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb \
+		"$pkgdir"/usr/lib/udev/hwdb.d/99-n900-hwkb.hwdb
 
 	# Keymap
 	install -D -m644 "$srcdir"/keymaps/rx51_us.bmap.gz \
@@ -260,7 +263,7 @@ wayland() {
 }
 
 sha512sums="
-a37c53a6fcf9559ce439ed4a56659375deb1722af1114d99d3c5a718d29684d3bd5ce49f9d8ff2fc7afcc66c36ab7eca8e987e7931700d406a3e874f5bdf26fc  10-initfs-input.files
+5e0631deeea881346e0f25c7d80d849026bf3e30c53bc33c9f1ee5587d5cd93b6faa3db722cbb24de0b38111c4113051a98b3d73b8b5c520f34830c12d5e0cbe  10-initfs-input.files
 4656d3b3ced0a86e2d6315c89322899f646a689e9cb64609aa8ad5a676b23d93706d8a37f3be6f6b12c6b1e8501b7d26ecafecf27322333850513a6805c61910  10-initfs-keymap.sh
 2e6c324c2a0627fb37ee2feff249d6c828116a9c1a32d572481dddc12648c98b726eb3a475838398742f76a60e3f2249d7707502360473b8bf2e794bf22f57ce  acpi.map
 eef1f3d5fab1148af498607d3bc7c6a866b61d808d2b90a4ea3e360d5fef779070380670431b67bd3d87111bc7d0e877ef9ab656f4de17c3071cfc360a2746e3  acpi_handler.sh
@@ -300,8 +303,9 @@ e440ed7a3070c17e003b86b72dbe6d8194d01b577ca8dd56dd066f216b6dda32bb965c780950f178
 1acc441b9f83dc91fd65fa3f89b8205bfd72a465286bc181b4e7e92dd4b8c0bc5c20a18dab46ff3ee8ae70940efd7d767b3dfb920edb4c74377bd418b838693d  15-bq27k.rules
 c6012aef28b096141b924fced226ec99fb93eb53b69c064a8887d8fecdf8dc08a3ba3db399e18d88374c6ef4c59013a30699c7e4d76e5cb771040582573a0527  90-touchscreen-dev.rules
 1087d9699f6c4325a1d7ba2e6faf7fda87953fc0d3b0ef97de1da05187ba8f942f78806916cfb2ae9456fa2e63b2adf08e1e8118dc834c31a677755bab0fbf9a  upower.conf
-662d00f1ea0874037ccb573eb36ac0ed715f057ae40adb52319c358d06e81a4d8764dd39542374006546f66196d13262b5d7f66b0540c367469f003981dfb53a  usr-lib-udev-hwdb.d-99-n900-volume-keys.hwdb
+432f0281c4675f2c18ac03def81c3fd796697428f72ca0b7618ba28a7de4b8d0ad6234dcce4af1a7369c5e631054a1489b53950720ba6425ff3c0e1ac1a2a110  usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb
 73dc0f29a97994e7efe0a2c8906f75099b2bca1d660f58ae50b44d3f00eec0cee2a89541a80a4de0f276605ef36a576dd757f0cd9a9a4fd47b535b9400a83526  usr-share-mkinitfs-hooks-01-omap-disable-idle.sh
+c6e0aefb630f60a6897cffbee70670296004dcfbade971205a8b03cc0cf0571cec59e9d0151b44f820d6d1f6a16d1ba538122c2b290a3357009c2c4268ca0cb5  usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf
 4de54d007bd354461fe4d6d455fe3f29694c132a3996c79b68070d606b5ca1839f9027202ebb731035f0bf6504b42fbd5ab15c7b47b7f308ce768a84d45024c4  xkb-keymap
 183dfdd545ba05e216209b1abe45e4af4e0ee16b2e73cff0e7ea7b9524ee35a1cf85213a77f32a1a94287aee6546885dbd71c6de1f4f1a1e2961e638ff27cdf6  xresources
 "
