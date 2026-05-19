@@ -2,13 +2,14 @@
 maintainer="Ali Nasrullayev <nesrullayev.ali@gmail.com>"
 pkgname=device-xiaomi-vayu
 pkgdesc="Xiaomi POCO X3 Pro"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	alsa-ucm-conf
 	firmware-qcom-adreno-a640
 	firmware-xiaomi-vayu
 	linux-firmware-qca
@@ -27,6 +28,8 @@ subpackages="
 "
 source="
 	deviceinfo
+	HiFi.conf
+	vayu.conf
 "
 
 build() {
@@ -35,6 +38,12 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install	-Dm644 "$srcdir"/HiFi.conf -t \
+		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/vayu/"
+
+	install	-Dm644 "$srcdir"/vayu.conf -c \
+		"$pkgdir/usr/share/alsa/ucm2/conf.d/sm8150/Xiaomi POCO X3 Pro.conf"
 }
 
 kernel_tianma() {
@@ -51,4 +60,6 @@ kernel_huaxing() {
 
 sha512sums="
 a199525d3edfaad447848a4042da89b8286ecd541d1fb89525598cdd6af3c0136e193a1f23c6411991ff00a31ed0399bd020b21a44605017f2d81f56d6ff2837  deviceinfo
+6965a2e744436a45f1655f1e925aac73236ed06e1a31c4f6f743409b0eb4ec5c38acca9bb742362fe0b3c8d7b3b2eae36914ff533b9a1c25874392ad09b11ac2  HiFi.conf
+2533bc96dca682b2b425ff208f8273a70c039abfb435267cffefce1b42be726f89005efb8cf266ce560185336532692de3d26a8d6c50877fa5ebc7818aba628d  vayu.conf
 "
