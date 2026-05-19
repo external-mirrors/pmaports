@@ -23,6 +23,8 @@ This phase is to get some extra time for building packages. The branch will be r
 
 - [ ] Alpine's main repository must be built and published
 - [ ] Alpine's community repository must be built and published
+      <small>Without this, bpo won't be able to build packages but steps before
+      that can be done already.</small>
 
 #### pmbootstrap: adjust config
 - [ ] Update `pmb/config/__init__.py:apk_tools_min_version`. This should be a
@@ -36,18 +38,21 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] `git checkout -b vYY.MM main`
 - [ ] Create a `=== Branch vYY.MM from main ===` commit
   - Remove channels.cfg (should only be in main)
-  - Change `channel=edge` to `channel=vYY.MM` in pmaports.cfg
-  - Change `supported_arches` to `x86_64,aarch64,armv7` in pmaports.cfg
-  - Disable x86, armhf, riscv64 in .ci/build-jobs.yaml.j2 on the release branch
-    and delete `.ci/build-*` scripts for these arches
+  - Adjust `pmaports.cfg`: Change `channel=edge` to `channel=vYY.MM`
+  - Adjust `pmaports.cfg`: Change `supported_arches` to `x86_64,aarch64,armv7`
+  - Delete `.ci/build-*` scripts for other arches
+    <small>`pmbootstrap ci` reads these</small>
 - [ ] `git push`
-- [ ] '''protect the new release branch in gitlab''', so nobody can force-push to it
+- [ ] Ensure the branch is protected in the
+      [repository settings](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/settings/repository)
 
 #### pmaports: update main branch
 - [ ] `git checkout main`
 - [ ] Add the new branch to
-  [channels.cfg](https://wiki.postmarketos.org/wiki/Channels.cfg_reference),
-  [like this](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/commit/c43571ceaf9b8155519bc9fb760bdeccd96e7e9c)
+  [channels.cfg](https://wiki.postmarketos.org/wiki/Channels.cfg_reference):
+  - [Example](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/commit/c43571ceaf9b8155519bc9fb760bdeccd96e7e9c)
+  - Check if you need to set `branch_aports=master` initially if the stable
+    branch does not exist yet.
 - [ ] `git push`
 
 #### pmaports: update os-release / remove packages / aportgen
@@ -61,13 +66,15 @@ This phase is to get some extra time for building packages. The branch will be r
   - `pmbootstrap config mirrors.pmaports none`
   - `pmbootstrap config mirrors.systemd none`
   - `pmbootstrap checksum postmarketos-base`
-  - `git commit`
+  - `git commit -s` (`Remove packages that we don't have in stable`)
 - [ ] Remove packages:
   - `cross/*-armhf` and other unsupported arches in cross dir (keep `gcc-x86` and `musl-dev-x86`, `systemd-boot-x86`)
-  - `main/postmarketos-ui-asteroid` (no smartwatches are useful on stable branches at the moment)
   - `gcc4*` and `gcc6*` from main and cross dirs
   - `device/downstream`, `device/archived`
-- [ ] Run `pmbootstrap aportgen` for packages in cross
+  - `extra-repos/systemd/postmarketos-repo-nightly`
+- [ ] Run `pmbootstrap aportgen` for packages in cross:
+  - `cd cross; PMB_APK_FORCE_MISSING_REPOSITORIES=1 pmbootstrap aportgen musl-* grub-efi-x86`
+  - `git commit -s` (`cross: regenerate for vYY.MM`)
 - [ ] `git push`
 
 #### bpo: adjust config
@@ -79,17 +86,19 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Roll it out/ask somebody who can do that
 - [ ] Restart bpo, it will start building `x86_64` packages
 
-#### bootstrap of binary packages
-- [ ] Fix failing `x86_64` packages (Remember: patches need to go through edge
-  first, then get backported to the stable branch!)
+#### Bootstrap of binary packages
+- [ ] Fix all failing `x86_64` packages (Remember: patches need to go through
+      edge first, then get backported to the stable branch!)
   - Try to get build fixes merged to edge quickly, ask for reviews in
     #postmarketos-devel, and consider merging trivial fixes right after they
     pass CI.
   - Devices in testing and archived categories that don't build: consider
     trying to fix them, or just delete them from the branch
-- [ ] Wait until all packages for `x86_64` are built and published
-- [ ] Fix up ARM packages too
-- [ ] Wait until all packages for ARM are built and published
+- [ ] Wait until all packages for `x86_64` (main repository, we don't need to
+      wait for the systemd repository before continuing) are built and
+      published
+- [ ] Enable arm repositories in the BPO config
+- [ ] Get all packages to build without errors
 
 #### Wallpaper poll
 - [ ] Team meeting: make a short list of 4 wallpapers from [the
@@ -125,7 +134,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Adjust CI of postmarketos-release-upgrade to test the new release too
   (`git grep` for the previous release to see what needs to be adjusted)
 
-### Update the wallpaper
+#### Update the wallpaper
 - [ ] Set the wallpaper that won in the poll in edge, backport this change to
   the stable release branch
 
@@ -140,14 +149,18 @@ This phase is to get some extra time for building packages. The branch will be r
 
 #### Update BPO config
 - [ ] Update bpo's images config to build images for the new branch for all
-  devices in community and main, except for:
-  - qemu-*
+  devices in community and main
 - [ ] bpo: configure the new branch to be not WIP anymore
 - [ ] Roll-out bpo changes
 
 #### pmb release done?
 - [ ] Ensure that a pmbootstrap release been made with the apk-tools min
   version change
+
+#### aports stable branch set?
+* [ ] Check if a stable branch exists in `aports` for the new release, and that
+      it is being used in `channels.cfg` (might still be set to `master` if it
+      did not exist during the Pre-Branch phase).
 
 ### 3. Test phase
 - [ ] Create an issue in pmaports with a checklist of devices and UIs in main
