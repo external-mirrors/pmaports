@@ -8,14 +8,14 @@ Person in charge of the release (doesn't have to do all the work, but has to
 push it forward):
 <!-- Put your usename here and assign yourself to this issue -->
 
-### Preparation
+### 0. Preparation
 - [ ] Create the gitlab milestone for the release
 - [ ] Add this infrastructure issue to the milestone
 - [ ] Update the
       [timeline](https://docs.postmarketos.org/policies-and-processes/development/releases/current-timeline.html)
       for the next release
 
-### Pre-Build phase
+### 1. Pre-Build phase
 
 This phase is to get some extra time for building packages. The branch will be rebased once in the branch phase.
 
@@ -129,7 +129,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Set the wallpaper that won in the poll in edge, backport this change to
   the stable release branch
 
-### Branch phase
+### 2. Branch phase
 
 #### Rebase on main
 - [ ] `git checkout vYY.MM`
@@ -149,7 +149,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Ensure that a pmbootstrap release been made with the apk-tools min
   version change
 
-### Test phase
+### 3. Test phase
 - [ ] Create an issue in pmaports with a checklist of devices and UIs in main
   and community (see previous issue for reference)
   - Tag the testers of each device and UI
@@ -164,7 +164,7 @@ This phase is to get some extra time for building packages. The branch will be r
   intended for the upcoming release
 - [ ] Add new version to the pmaports gitlab issue template (.gitlab dir)
 
-### Release phase
+### 4. Release phase
 - [ ] Did a reasonable amount of devices get tested? (we may consider dropping
   devices that were not tested)
 - [ ] Make sure all fixes are in

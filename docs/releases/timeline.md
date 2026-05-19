@@ -5,7 +5,7 @@ release cycle starts. Get the current CW with `date +%V`. During the release
 cycle we try to follow this plan closely, but it can happen that we run
 over the planned CWs.
 
-## Pre-Build
+## 1. Pre-Build
 
 CW 21 <small>(2026-05-18 - 2026-05-24)</small>
 
@@ -20,7 +20,7 @@ Team:
 * Create the release branch in pmaports.
 * Start building of binary packages early, so we can get through it for sure.
 
-## Branch
+## 2. Branch
 
 CW 22 <small>(2026-05-25 - 2026-05-31)</small>,
 CW 23 <small>(2026-06-01 - 2026-06-07)</small>
@@ -34,7 +34,7 @@ Team:
 * Rebase the release branch on main once
 * Build binary packages and images (configure BPO for that)
 
-## Test
+## 3. Test
 
 CW 24 <small>(2026-06-08 - 2026-06-14)</small>
 
@@ -45,7 +45,7 @@ Maintainers:
 * Fix stuff that is broken by creating MRs against pmaports main and assigning
   the `backport-to-YY.MM` label
 
-## Release
+## 4. Release
 
 CW 25 <small>(2026-06-15 - 2026-06-21)</small>
 
