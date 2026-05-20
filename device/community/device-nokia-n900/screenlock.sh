@@ -25,7 +25,7 @@ x11_lock() {
 }
 
 sway_unlock() {
-	SWAYSOCK="$(find /run/user/ -name "*sway-ipc*")"
+	SWAYSOCK="$(find /run/user/ -maxdepth 2 -name "*sway-ipc*")"
 	export SWAYSOCK
 	swaymsg output DPI-1 power on
 	# Workaround wlroots bug, https://gitlab.freedesktop.org/wlroots/wlroots/-/work_items/4026
@@ -35,7 +35,7 @@ sway_unlock() {
 }
 
 sway_lock() {
-	SWAYSOCK="$(find /run/user/ -name "*sway-ipc*")"
+	SWAYSOCK="$(find /run/user/ -maxdepth 2 -name "*sway-ipc*")"
 	export SWAYSOCK
 	swaymsg input "0:2005:TSC2005_touchscreen" events disabled
 	swaymsg output DPI-1 power off
@@ -63,7 +63,7 @@ toggle() {
 		touch_state=$(xinput list-props "TSC2005 touchscreen" | grep "Device Enabled" | tr -d "\t" | cut -d ":" -f 2)
 		;;
 	sway)
-		SWAYSOCK="$(find /run/user/ -name "*sway-ipc*")"
+		SWAYSOCK="$(find /run/user/ -maxdepth 2 -name "*sway-ipc*")"
 		export SWAYSOCK
 		touch_state=$(swaymsg -t get_inputs | jq -r '.[] | select (.identifier == "0:2005:TSC2005_touchscreen") | .libinput.send_events')
 		;;
