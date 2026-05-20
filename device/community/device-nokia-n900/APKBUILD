@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=58
+pkgver=59
 pkgrel=0
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
@@ -219,8 +219,8 @@ i3wm() {
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	depends="wl1251-cal-openrc"
-
-	mkdir -p "$subpkgdir"
+	amove usr/lib/modprobe.d/nokia-modem.conf
+	amove usr/lib/modules-load.d/10-nokia-modem.conf
 }
 
 sway() {
@@ -292,9 +292,9 @@ e440ed7a3070c17e003b86b72dbe6d8194d01b577ca8dd56dd066f216b6dda32bb965c780950f178
 157b27feebcfddf800a1ffd8c6e369d2b58e5db25b1a44b4443dada8d9fe74abb91d036b9f0e97769bbafbdc72020b5637313682c6932fe7b0bddb9ebebbad42  modem-load.conf
 695feac7f69a0ec8c5e007cdb651adcc3492f1c6236e7fd183edec2a5e25cb957d3ace630ea5fdb87fd703e35ac368f1d097c2f881ecb52c9cfd433564db2a6c  modem-opts.conf
 862ebc7cd2d7a1b3d41b10701b8418308c89eb0732eb99c42ec1091d48e08db9421727f67a3272b7309549798d59afb1b8d7d2fa48d1447b208fcb2329472d4d  modules.blocklist
-4efca73b4053e00b2a24ef3e79ead3da43b0e6db4f3447721fa9084b1c280e65f1ddaadd390d6073e26b6c635bb14f804fcf3c54d8ebf9df73eff80deff59d80  modules-initfs
+87c18554d307161876cfe6133f7e1b2b34a0dccd6d4eb36c3f549551f1fa3587430f203911fa29023cc5c048054dbcf629f8665e88fdec9ebf48f4790a16fcf9  modules-initfs
 143c21f0b18a016d37cb44178e9daea09f128a90769b48353c03c3f245cb9b1f7e773b9ccee084973fc78ddd7a18c2642e54888a85bda7c7daecddc9a8c62eff  pointercal
-286aceb4b3c1a159c5eb6cbd563027f24941cc30245459b8bf6ca30fd7e7a4e8ea18d67c4cfefd06d9ed02acac6587857d9aab674cd1071359b54acd26036e1f  screenlock.sh
+bc926a11ac6941944c1b9bdd8d8c59c6d9689bc101f6c34881341a2689f68364b4d814e1fda8a83e58f33b6bbdc74917e49f6085a35bef669a3077c8ede1b35b  screenlock.sh
 3ec2e28a59298ad87ece5205be37b6e07c5f0f3bd0a98022f9f6824500444792cb06425bfbb62c9503c3072183f2d571c8504b6f23054062bb082c7a5b125a2b  etc-sway-config.d-n900-status.conf
 1e6939c583372dd4d493e1e2cfb6a4758a17606edd262d322bc01b2d3d76de4370581954f22f6ac976d86e87aab0979b2233e1c75780aeaff0670ea25dba62ca  etc-sway-config.d-nokia-n900.conf
 45da074b597a47825146ae1f3712538210e2ebe1c459f98a8189ccfc7c16ed54d221999b5890785c92aa750c6295dee7e920ef7f97d415d4212f8c0fea29169f  etc-xdg-foot-foot.ini
