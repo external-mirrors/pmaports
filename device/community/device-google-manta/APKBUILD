@@ -4,7 +4,7 @@ maintainer="Alexandre Marquet <tb@a-marquet.fr>"
 pkgname=device-google-manta
 pkgdesc="Google Nexus 10"
 pkgver=16
-pkgrel=0
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -20,10 +20,7 @@ depends="
 	u-boot-manta
 "
 makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-disable-gsd-color:disable_gsd_color
-"
+subpackages="$pkgname-disable-gsd-color:disable_gsd_color"
 source="
 	deviceinfo
 	modules-initfs
@@ -61,16 +58,6 @@ package() {
 	install -Dm644 "$srcdir"/HiFi.conf \
 		-t "$pkgdir"/usr/share/alsa/ucm2/conf.d/Manta_WM1811/
 
-}
-
-nonfree_firmware() {
-	pkgdesc="Firmware for Samsung Manta (Nexus 10)"
-	depends="
-		firmware-samsung-manta
-		linux-firmware-brcm
-		linux-firmware-s5p-mfc
-	"
-	mkdir "$subpkgdir"
 }
 
 disable_gsd_color() {
