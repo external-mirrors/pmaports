@@ -1,0 +1,19 @@
+[Unit]
+Description=Boot Loader Installation
+Documentation=man:bootctl(1)
+ConditionFirstBoot=yes
+ConditionPathExists=!/etc/initrd-release
+DefaultDependencies=no
+After=local-fs.target
+Before=sysinit.target first-boot-complete.target systemd-boot-update.service
+Conflicts=shutdown.target
+Before=shutdown.target
+Wants=first-boot-complete.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=bootctl install --graceful
+
+[Install]
+WantedBy=sysinit.target
