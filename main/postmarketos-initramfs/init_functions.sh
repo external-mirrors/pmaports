@@ -1058,6 +1058,9 @@ debug_shell() {
 
 	if [ -n "$have_udc" ]; then
 		setup_usb_acm_configfs
+	else
+		# USB networking was configured, but DHCP server needs to be started
+		start_unudhcpd
 	fi
 
 	# mount pstore, if possible

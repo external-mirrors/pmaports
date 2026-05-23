@@ -90,6 +90,9 @@ fi
 
 killall udevd syslogd 2>/dev/null
 
+# kill unudhpcd to allow rootfs to take over with service manager
+stop_unudhpcd
+
 # Kill any getty shells that might be running
 for pid in $(pidof sh); do
 	if ! [ "$pid" = "1" ]; then

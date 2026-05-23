@@ -4,6 +4,10 @@ description="USB Moded Tethering Mode"
 command="usb-moded-tethering-mode"
 command_args="up"
 
+depends() {
+    need net
+}
+
 stop() {
     usb-moded-tethering-mode down
 }
