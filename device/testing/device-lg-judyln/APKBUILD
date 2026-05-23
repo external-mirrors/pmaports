@@ -3,7 +3,7 @@
 maintainer="Newbyte <newbie13xd@gmail.com>"
 pkgname=device-lg-judyln
 pkgdesc="LG G7 ThinQ"
-pkgver=11
+pkgver=12
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,11 @@ depends="
 	linux-postmarketos-qcom-sdm845
 	mkbootimg
 	postmarketos-base
+	postmarketos-base-fwupd
 	soc-qcom
+	soc-qcom-pd-mapper
+	soc-qcom-qbootctl
+	systemd-boot
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
@@ -28,7 +32,7 @@ package() {
 }
 
 sha512sums="
-0c82533f37e9a78b8c8c6f023e08046bdbfc2e8af1a85066615bcc27ae1f54be74f68666f995063f923a7b22dbaf662aa9243b880303ca7a1f4ee16074bf5e43  deviceinfo
+495d12ca13ff4e8965e9dec2fdd1621f9e0e19201535521fca4509eb53e0ce590c8ca08d9b6a3b6b5a3fa6ef879410cb2f9e2292c09f1e102c9d314b6b40fedb  deviceinfo
 003e5228a2b2825f24cb8b4842e3c3f72b99225f0aef3cda5bb2de4e4beb5e1c84800ba48c6cf1b84fe042bd039912e67c545c00981b604db0c0f0bcb546f7c5  kernel-cmdline.conf
 09fb39b4698e3fd433e35f94b4c39787a4ff9af258e8a85b5a197fb2676f993da2666ffb4ae98c41f35446d52b3578e1e6ebd06cc7010287ca140bf207c3a8af  modules-initfs
 "
