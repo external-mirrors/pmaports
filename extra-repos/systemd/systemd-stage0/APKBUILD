@@ -3,9 +3,9 @@
 # Co-Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd-stage0
-pkgver=260.1
+pkgver=261_rc2
 _pkgver="${pkgver/_/-}"
-pkgrel=1
+pkgrel=0
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -35,6 +35,7 @@ makedepends_host="
 	libcap
 	libcap-dev
 	libintl
+	libucontext-dev
 	musl-libintl
 	util-linux
 	util-linux-dev
@@ -69,6 +70,7 @@ build() {
 		-Ddebug-shell=/bin/ash \
 		\
 		-Dbootloader=disabled \
+		-Dukify=disabled \
 		-Dutmp=false \
 		-Dldconfig=false \
 		-Duserdb=false \
@@ -105,5 +107,5 @@ package() {
 }
 
 sha512sums="
-9f975dce6861853a817a7ceab18a24449a85d1bda6939b3a5173430c02a4d8a9a2b34ebb8cce1c51db9b0ff9078fcc65da7b0f44e3bdcbbe013b9e04bb6f0ff9  systemd-260.1.tar.gz
+4a46d24b4b4dd386a3077669b74fc4f98be064d19b72089d271724c097eb0c6d07a1cc9322fdcb7d501135e51d2f1dda01eb90bbfbda0aecabc900fefb1b8aa0  systemd-261_rc2.tar.gz
 "
