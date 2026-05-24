@@ -88,10 +88,7 @@ if [ "$IN_CI" != "true" ]; then
 	beebzzr &
 fi
 
-killall udevd syslogd 2>/dev/null
-
-# kill unudhpcd to allow rootfs to take over with service manager
-stop_unudhpcd
+killall udevd syslogd unudhcpd 2>/dev/null
 
 # Kill any getty shells that might be running
 for pid in $(pidof sh); do

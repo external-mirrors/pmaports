@@ -1056,10 +1056,12 @@ debug_shell() {
 	local have_udc
 	have_udc="$(cat $CONFIGFS/g1/UDC)"
 
+	# Use USB ACM gadget if no UDC is available,
+	# if UDC is available use configured USB networking,
+	# but DHCP server needs to be started
 	if [ -n "$have_udc" ]; then
 		setup_usb_acm_configfs
 	else
-		# USB networking was configured, but DHCP server needs to be started
 		start_unudhcpd
 	fi
 
