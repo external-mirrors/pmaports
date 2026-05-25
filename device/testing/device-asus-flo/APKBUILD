@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-asus-flo
-pkgver=7
+pkgver=8
 pkgrel=0
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
@@ -10,13 +10,13 @@ license="MIT"
 depends="postmarketos-base mkbootimg"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-kernel-mainline-old:kernel_mainline_old
 	$pkgname-kernel-next:kernel_next
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-udev
 "
+#	$pkgname-kernel-mainline-old:kernel_mainline_old
 source="deviceinfo kernel-cmdline.conf kernel-cmdline-workaround.conf 90-android-touch-dev.rules wpa_supplicant.conf pointercal"
 
 options="!check !archcheck"
@@ -39,11 +39,12 @@ package() {
 		"$pkgdir"/etc/pointercal
 }
 
-kernel_mainline_old() {
-	pkgdesc="Old 4.11 mainline kernel, GPU works somehow"
-	depends="linux-asus-flo"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
+# Uncomment to use archived/linux-asus-flo, and add an entry to subpackages=
+# kernel_mainline_old() {
+# 	pkgdesc="Old 4.11 mainline kernel, GPU works somehow"
+# 	depends="linux-asus-flo"
+# 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+# }
 
 kernel_next() {
 	pkgdesc="Unstable next kernel (linux-next)"
