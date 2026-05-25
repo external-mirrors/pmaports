@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=61
+pkgver=62
 pkgrel=0
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
@@ -42,8 +42,6 @@ subpackages="
 source="
 	10-initfs-input.files
 	10-initfs-keymap.sh
-	acpi.map
-	acpi_handler.sh
 	backlight-enable.sh
 	bq27k-options.conf
 	bq27k-monitor.sh
@@ -77,9 +75,9 @@ source="
 	ucm2/RX-51.conf
 	udev/10-nokia-modem.rules
 	udev/15-bq27k.rules
-	udev/90-touchscreen-dev.rules
 	upower.conf
 	usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb
+	usr-lib-udev-rules.d-72-n900-input.rules
 	usr-share-mkinitfs-hooks-01-omap-disable-idle.sh
 	usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf
 	xkb-keymap
@@ -123,14 +121,14 @@ package() {
 		"$pkgdir"/usr/share/unl0kr/unl0kr.conf.d/00-n900-keyboard.conf
 
 	# Udev & hwdb rules
-	install -D -m644 "$srcdir"/90-touchscreen-dev.rules \
-		"$pkgdir"/usr/lib/udev/rules.d/90-touchscreen-dev.rules
 	install -D -m644 "$srcdir"/10-nokia-modem.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/10-nokia-modem.rules
 	install -D -m644 "$srcdir"/15-bq27k.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/15-bq27xxx-battery.rules
 	install -D -m644 "$srcdir"/usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb \
 		"$pkgdir"/usr/lib/udev/hwdb.d/99-n900-hwkb.hwdb
+	install -D -m644 "$srcdir"/usr-lib-udev-rules.d-72-n900-input.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/72-n900-input.rules
 
 	# Keymap
 	install -D -m644 "$srcdir"/keymaps/rx51_us.bmap.gz \
@@ -187,11 +185,6 @@ package() {
 x11() {
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 	depends="unclutter-xfixes scrot xautolock xdotool xinput xrdb xset"
-	mkdir "$pkgdir"/etc/acpi
-	install -D -m755 "$srcdir"/acpi_handler.sh \
-		"$pkgdir"/etc/acpi/handler.sh
-	install -D -m644 "$srcdir"/acpi.map \
-		"$pkgdir"/etc/acpi.map
 	install -D -m644 "$srcdir"/40-xkb.conf \
 		"$subpkgdir"/usr/share/X11/xorg.conf.d/40-xkb.conf
 	install -Dm644 "$srcdir"/xresources \
@@ -263,10 +256,8 @@ wayland() {
 }
 
 sha512sums="
-5e0631deeea881346e0f25c7d80d849026bf3e30c53bc33c9f1ee5587d5cd93b6faa3db722cbb24de0b38111c4113051a98b3d73b8b5c520f34830c12d5e0cbe  10-initfs-input.files
+225536c3105169b4cdd68d8edec56fc106f0b468e1feb1aebe772d154c0dba7d3e803877e857c23e521951b45138b64e191c9fd4e9a143313dbf12402f25c229  10-initfs-input.files
 4656d3b3ced0a86e2d6315c89322899f646a689e9cb64609aa8ad5a676b23d93706d8a37f3be6f6b12c6b1e8501b7d26ecafecf27322333850513a6805c61910  10-initfs-keymap.sh
-2aaf9471796f041edaedb6c1fc31d854d170be2673f5eeacb01120270b95182b3ffddf6bfe04f92af3538c0fb4f8b65595772df7ab60129062daed15aba55bb6  acpi.map
-d1d9568add8ba0d9ab152731f5b02fa6e909a23680d6fbdda1cb60e8e17ba39c10ce03f948c984aad1057c6d77f1dc2a53a0380b95122c891a808b5d43040a14  acpi_handler.sh
 3d55e34b95791636e44a5f41754f3d0de039dbba41f7a556d43a95c9e64afcfa930046b4b96b40020b6f196096ffba93514682927e32fa4488686fdd19c6da5a  backlight-enable.sh
 344ec50cee2a4d864debad12810a83070ab8257f9f07dcfa9be3eea1d8b26f3ab4fbe322fe05a384152b40fc5e1481df51d191624c7062186dd70f95a0784ea8  bq27k-options.conf
 c5b8e03ca9f720a794f2593a3e938640cbd91ac44dd761079bbf4614a0d288a9d7b72de8ed2493c062dc9f37be580bea529f454d2335f55b7a9f4d14024b42a9  bq27k-monitor.sh
@@ -291,7 +282,7 @@ e440ed7a3070c17e003b86b72dbe6d8194d01b577ca8dd56dd066f216b6dda32bb965c780950f178
 862ebc7cd2d7a1b3d41b10701b8418308c89eb0732eb99c42ec1091d48e08db9421727f67a3272b7309549798d59afb1b8d7d2fa48d1447b208fcb2329472d4d  modules.blocklist
 87c18554d307161876cfe6133f7e1b2b34a0dccd6d4eb36c3f549551f1fa3587430f203911fa29023cc5c048054dbcf629f8665e88fdec9ebf48f4790a16fcf9  modules-initfs
 143c21f0b18a016d37cb44178e9daea09f128a90769b48353c03c3f245cb9b1f7e773b9ccee084973fc78ddd7a18c2642e54888a85bda7c7daecddc9a8c62eff  pointercal
-bc926a11ac6941944c1b9bdd8d8c59c6d9689bc101f6c34881341a2689f68364b4d814e1fda8a83e58f33b6bbdc74917e49f6085a35bef669a3077c8ede1b35b  screenlock.sh
+6d79a9e58a6f68dd7689e480359ba611fd9ea3f42b3f31575028a3efcea079973099eccf8ab3571221be919b4eeaf1ec48bc38aac13911444d96110551206456  screenlock.sh
 3ec2e28a59298ad87ece5205be37b6e07c5f0f3bd0a98022f9f6824500444792cb06425bfbb62c9503c3072183f2d571c8504b6f23054062bb082c7a5b125a2b  etc-sway-config.d-n900-status.conf
 1e6939c583372dd4d493e1e2cfb6a4758a17606edd262d322bc01b2d3d76de4370581954f22f6ac976d86e87aab0979b2233e1c75780aeaff0670ea25dba62ca  etc-sway-config.d-nokia-n900.conf
 45da074b597a47825146ae1f3712538210e2ebe1c459f98a8189ccfc7c16ed54d221999b5890785c92aa750c6295dee7e920ef7f97d415d4212f8c0fea29169f  etc-xdg-foot-foot.ini
@@ -300,9 +291,9 @@ bc926a11ac6941944c1b9bdd8d8c59c6d9689bc101f6c34881341a2689f68364b4d814e1fda8a83e
 1a4295801cab1bbdca2e86e355d46c9dea6dbc8fd4d89e3ea6efdade33ebb29aee0cf237ce7400ea3c7716d0fe09b404a4c7042b65998cf1ae19bca2caa3d78f  RX-51.conf
 465b9a0d2b46d0981c64b47cb1f656c2456a90b91b1751a2efad10af38a96030dd99108b1fd76ce31bf1ea0f236d55bed38b114d6bd712f09f8968de034c946c  10-nokia-modem.rules
 1acc441b9f83dc91fd65fa3f89b8205bfd72a465286bc181b4e7e92dd4b8c0bc5c20a18dab46ff3ee8ae70940efd7d767b3dfb920edb4c74377bd418b838693d  15-bq27k.rules
-c6012aef28b096141b924fced226ec99fb93eb53b69c064a8887d8fecdf8dc08a3ba3db399e18d88374c6ef4c59013a30699c7e4d76e5cb771040582573a0527  90-touchscreen-dev.rules
 1087d9699f6c4325a1d7ba2e6faf7fda87953fc0d3b0ef97de1da05187ba8f942f78806916cfb2ae9456fa2e63b2adf08e1e8118dc834c31a677755bab0fbf9a  upower.conf
 432f0281c4675f2c18ac03def81c3fd796697428f72ca0b7618ba28a7de4b8d0ad6234dcce4af1a7369c5e631054a1489b53950720ba6425ff3c0e1ac1a2a110  usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb
+25657426abb9d53b14a784fc41e495092229f5e2ef5ca8b1324cd6b414aa61bdcde4f87431cf33b23a67792580bb7eea5a638b1ad5be6f9c956c8fb88f704e99  usr-lib-udev-rules.d-72-n900-input.rules
 73dc0f29a97994e7efe0a2c8906f75099b2bca1d660f58ae50b44d3f00eec0cee2a89541a80a4de0f276605ef36a576dd757f0cd9a9a4fd47b535b9400a83526  usr-share-mkinitfs-hooks-01-omap-disable-idle.sh
 c6e0aefb630f60a6897cffbee70670296004dcfbade971205a8b03cc0cf0571cec59e9d0151b44f820d6d1f6a16d1ba538122c2b290a3357009c2c4268ca0cb5  usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf
 4de54d007bd354461fe4d6d455fe3f29694c132a3996c79b68070d606b5ca1839f9027202ebb731035f0bf6504b42fbd5ab15c7b47b7f308ce768a84d45024c4  xkb-keymap

@@ -2,8 +2,22 @@
 set -e
 
 kbd_backlight() {
-	for i in $(seq 1 6); do
-		brightnessctl --quiet --device="*kb$i" s "$1"
+	# The keyboard backlighting setup is based on 6 LEDs located above the
+	# Ctrl, Q, and E keys on the left and O, comma, and Backspace on the
+	# right. Thus the outermost keys are lit brighter than the innermost
+	# keys when the brightness value is set equally, and this worsens as
+	# the device ages, since the plastic diffuser deteriorates. Thus, set a
+	# higher brightness for the innermost LEDs to get even lighting on all
+	# keys.
+	for i in $(seq 1 3); do
+		pair=$((7 - i ))
+		brightness=$(( i * $1 ))
+		busctl call org.freedesktop.login1 /org/freedesktop/login1/session/auto \
+		    org.freedesktop.login1.Session SetBrightness ssu \
+		    "leds" "lp5523:kb$i" "$brightness"
+		busctl call org.freedesktop.login1 /org/freedesktop/login1/session/auto \
+		    org.freedesktop.login1.Session SetBrightness ssu \
+		    "leds" "lp5523:kb$pair" "$brightness"
 	done
 }
 
