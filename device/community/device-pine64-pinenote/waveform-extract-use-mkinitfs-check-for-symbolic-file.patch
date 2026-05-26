@@ -7,8 +7,9 @@ index dddbc1e..c313280 100644
  [Service]
  Type=oneshot
 -ExecCondition=/usr/bin/test ! -e /usr/lib/firmware/rockchip/ebc.wbf
+-ExecStart=/usr/bin/waveform_extract.sh
 +ExecCondition=/usr/bin/test ! -s /usr/lib/firmware/rockchip/ebc.wbf
- ExecStart=/usr/bin/waveform_extract.sh
++ExecStart=/usr/libexec/pinenote/waveform_extract.sh
  
  [Install]
 diff --git a/systemd/pinenote-hrdl-convert-waveform.service.orig b/systemd/pinenote-hrdl-convert-waveform.service
