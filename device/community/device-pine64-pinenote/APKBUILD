@@ -238,12 +238,13 @@ sway() {
 	install_if="$pkgname=$pkgver-r$pkgrel sway"
 	install="$subpkgname.post-upgrade"
 
-	# dummy subpackage to allow seamless upgrade from 7-r0 to 8-r0,
-	# which renamed `sway` to `sway-hrdl. Executes post-upgrade script
-	# that changes default tinydm session back to vanilla sway, with
-	# instructions to `apk add device-pine64-pinenote-sway-hrdl` to
-	# use the opinionated non-default configuration
-	# TODO: remove in preparation for v26.06 release
+	# since pinenote requires such an opinionated UI, UI configurations ar
+	# packaged from community developpers who are leading these efforts, and since
+	# there is the possibility of multiple UI configurations per UI, aport
+	# is architectured in a way to support multiple configurations. Since only hrdl's
+	# configuration is integrated, automatically depend on its subpackage for now.
+	depends="device-pine64-pinenote-sway-hrdl"
+
 	mkdir -p "$subpkgdir"
 }
 
