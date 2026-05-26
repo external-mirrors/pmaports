@@ -14,8 +14,8 @@ start() {
 
         ebegin "Extracting waveform"
         cd /tmp
-        /usr/libexec/pinenote/waveform_extract.sh  2>&1 | tee -a "$error_log"
-        /usr/libexec/pinenote/wbf_to_custom.py /usr/lib/firmware/rockchip/ebc.wbf  2>&1 | tee -a "$error_log"
+        /usr/lib/pinenote/waveform_extract.sh  2>&1 | tee -a "$error_log"
+        /usr/lib/pinenote/wbf_to_custom.py /usr/lib/firmware/rockchip/ebc.wbf  2>&1 | tee -a "$error_log"
         mv custom_wf.bin /usr/lib/firmware/rockchip/.
 
         einfo "Regenerating initramfs"
