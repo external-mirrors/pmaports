@@ -95,10 +95,14 @@ LEDS_MAX77705 = "m"
 LOCALVERSION_AUTO = "n"
 
 ["category:misc".">=0.0.0"."aarch64"]
+# This is required for running armhf userspace on aarch64
+ARMV8_DEPRECATED = "y"
+CP15_BARRIER_EMULATION = "y"
 SENSORS_SURFACE_FAN = "m"
 SENSORS_SURFACE_TEMP = "m"
 SURFACE_AGGREGATOR = "m"
 SURFACE_AGGREGATOR_REGISTRY = "m"
+SWP_EMULATION = "y"
 
 # useful ppc64le configs, taken from Alpine
 ["category:misc".">=0.0.0"."ppc64le"]
