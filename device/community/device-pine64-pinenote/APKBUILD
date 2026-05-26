@@ -197,6 +197,7 @@ firmware() {
 	pkgdesc="WiFi, Bluetooth and display firmware"
 	depends="linux-firmware-cypress linux-firmware-brcm"
 	replaces="firmware-pine64-pinenote"
+	install="$subpkgname.pre-upgrade $subpkgname.pre-install"
 
 	# waveform firmware is provided locally via /dev/disk/by-label/waveform
 	# extracted using waveform_exctract.sh, then adapted to kernel using wbf_to_custom.py
@@ -208,11 +209,6 @@ firmware() {
 		"$builddir"/bin/read_file.py \
 		"$builddir"/bin/waveform_extract.sh \
 		-t "$subpkgdir"/usr/libexec/pinenote
-
-	# create empty waveform firmware so that initial mkinitfs doesn't fail
-	mkdir -p "$subpkgdir"/usr/lib/firmware/rockchip
-	touch "$subpkgdir"/usr/lib/firmware/rockchip/ebc.wbf
-	touch "$subpkgdir"/usr/lib/firmware/rockchip/custom_wf.bin
 
 	# symbolic link for wifi firmware to where drivers expects it
 	mkdir -p "$subpkgdir"/usr/lib/firmware/brcm
