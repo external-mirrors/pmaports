@@ -1,7 +1,7 @@
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 _flavor="postmarketos-qcom-msm89x7"
 pkgname=linux-postmarketos-qcom-msm89x7
-pkgver=7.0.2
+pkgver=7.0.9
 pkgrel=0
 pkgdesc="Mainline kernel fork for Qualcomm QM215/MSM8917/MSM8937/MSM8940/SDM429/SDM439 devices"
 arch="aarch64"
@@ -50,15 +50,15 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 sha512sums="
-90ae93c8845f427dfe21a036f694b265512f8d5d97ba4f507bea73750fef7be3db0132f25d6e29b5cc7c19b05c00f020bd95e4946134fa94dcc7407d8ebb2f37  linux-postmarketos-qcom-msm89x7-v7.0.2-r0.tar.gz
+268a56a9a842c412929f4098c95a1b1148d18cd87b331ece06bd7eea9efb128f0f61d786229c1d5f92ff39511a3218bcd8316655d6c924b0d3394802b990293c  linux-postmarketos-qcom-msm89x7-v7.0.9-r0.tar.gz
 028fff414d696b392219984967d98ea68b15fc15695c74f0309487e3bdbaddfdf27c2adf1d2b366644fc6180b570654ea3dc714399fbd4efb1254d258a056d07  config-postmarketos-qcom-msm89x7.aarch64
 "
