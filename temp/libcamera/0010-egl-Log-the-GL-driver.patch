@@ -1,0 +1,37 @@
+From 7faa71ddfaca43b76b25a0a34b255999b44bfe40 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Tue, 16 Jun 2026 13:20:21 +0200
+Subject: [PATCH 10/13] egl: Log the GL-driver
+
+To make it easier to differentiate various drivers. Some examples from running on
+a FairPhone5:
+
+INFO eGL egl.cpp:362 EGL: GL_RENDERER: FD643
+INFO eGL egl.cpp:362 EGL: GL_RENDERER: llvmpipe (LLVM 22.1.3, 128 bits)
+INFO eGL egl.cpp:362 EGL: GL_RENDERER: zink Vulkan 1.3(Turnip Adreno (TM) 643 (MESA_TURNIP))
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Tested-by: Jai Luthra <jai.luthra@ideasonboard.com>
+Reviewed-by: Jai Luthra <jai.luthra@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 51dbd82e5e008d65bce96821d88ed2f6ea6c8e67)
+---
+ src/libcamera/egl.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libcamera/egl.cpp b/src/libcamera/egl.cpp
+index 7689d7983..9318a1b43 100644
+--- a/src/libcamera/egl.cpp
++++ b/src/libcamera/egl.cpp
+@@ -360,6 +360,7 @@ int eGL::initEGLContext()
+ 
+ 	makeCurrent();
+ 
++	LOG(eGL, Info) << "EGL: GL_RENDERER: " << glGetString(GL_RENDERER);
+ 	LOG(eGL, Info) << "EGL: GL_VERSION: " << glGetString(GL_VERSION);
+ 
+ 	return 0;
+-- 
+2.54.0
+

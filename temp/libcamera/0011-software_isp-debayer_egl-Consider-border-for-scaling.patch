@@ -1,0 +1,72 @@
+From dd5347b8d391e93a8a3ae3ded7168d5705619f4a Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Mon, 15 Jun 2026 20:11:27 +0200
+Subject: [PATCH 11/13] software_isp: debayer_egl: Consider border for scaling
+
+The debayer algorithm produces a sligtly smaller output resolution
+compared to the input one, using a border at the edges depending on the
+pattern. This wasn't considered when scaling to the final output buffer
+size, resulting in garbage pixels at the right - or in case or 90 degree
+rotated sensors - the bottom of the image.
+
+Use the native (i.e. unscaled) output size instead - the maximum output
+buffer size.
+
+While on it use outputSize_ for better readability and adopt the scaling
+comment slightly.
+
+Fixes: f520b29fe9e6 ("libcamera: software_isp: debayer_egl: Add an eGL Debayer class")
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Milan Zamazal <mzamazal@redhat.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 425dd3955db8d77cb8a4c7a75e2d46a50c896879)
+---
+ src/libcamera/software_isp/debayer_egl.cpp | 10 ++++++----
+ src/libcamera/software_isp/debayer_egl.h   |  1 +
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index 264a9315d..5fd014d1d 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -323,6 +323,7 @@ int DebayerEGL::configure(const StreamConfiguration &inputCfg,
+ 
+ 	outputPixelFormat_ = outputCfg.pixelFormat;
+ 	outputSize_ = outputCfg.size;
++	nativeOutputSize_ = outSizeRange.max;
+ 
+ 	window_.x = ((inputCfg.size.width - outputCfg.size.width) / 2) &
+ 		    ~(inputConfig_.patternSize.width - 1);
+@@ -394,11 +395,12 @@ void DebayerEGL::setShaderVariableValues(const DebayerParams &params)
+ 			   1.0f / (height_ - 1) };
+ 	GLfloat Stride = (GLfloat)width_ / (shaderStridePixels_ / bytesPerPixel_);
+ 	/*
+-	 * Scale input to output size, keeping the aspect ratio and preferring
+-	 * cropping over black bars.
++	 * Scale the output size from the native size the algorithm produces for
++	 * the input size. Keep the aspect ratio and prefer cropping over black
++	 * bars.
+ 	 */
+-	GLfloat scale = std::max((GLfloat)window_.width / width_,
+-				 (GLfloat)window_.height / height_);
++	GLfloat scale = std::max((GLfloat)outputSize_.width / nativeOutputSize_.width,
++				 (GLfloat)outputSize_.height / nativeOutputSize_.height);
+ 	GLfloat trans = -(1.0f - scale);
+ 	GLfloat projMatrix[] = {
+ 		scale, 0, 0, 0,
+diff --git a/src/libcamera/software_isp/debayer_egl.h b/src/libcamera/software_isp/debayer_egl.h
+index c7cb009b6..ef8c49814 100644
+--- a/src/libcamera/software_isp/debayer_egl.h
++++ b/src/libcamera/software_isp/debayer_egl.h
+@@ -103,6 +103,7 @@ private:
+ 	/* Contrast */
+ 	GLint contrastExpUniformDataIn_;
+ 
++	Size nativeOutputSize_;
+ 	Rectangle window_;
+ 	std::unique_ptr<SwStatsCpu> stats_;
+ 	eGL egl_;
+-- 
+2.54.0
+

@@ -1,0 +1,54 @@
+From 4afcb102d3742f3223e35668e86d0845dedddca2 Mon Sep 17 00:00:00 2001
+From: Qi Hou <qi.hou@nxp.com>
+Date: Tue, 2 Jun 2026 10:26:01 +0900
+Subject: [PATCH 08/13] libcamera: software_isp: debayer_egl: Demote
+ unsupported format log to Info
+
+DebayerEGL::getInputConfig() logs at Error level when it encounters an
+unsupported input format. This function is called during format
+enumeration from the simple pipeline handler's tryPipeline(), which
+iterates over all pixel formats reported by the video capture device,
+including non-Bayer formats such as UYVY and YUYV. The caller already
+handles the failure gracefully by checking the return value. Similarly,
+DebayerEGL::getOutputConfig() logs at Error level for unsupported
+output formats, but is called from strideAndFrameSize() which also
+handles failures via the return value.
+
+Demote both log messages from Error to Info for consistency with
+DebayerCpu, which uses Info level in getInputConfig() and
+getOutputConfig() for the same situation.
+
+Signed-off-by: Qi Hou <qi.hou@nxp.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 2985ca6ac024ff89a077f088de49f7a69ab40d37)
+---
+ src/libcamera/software_isp/debayer_egl.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index e0f6dc6da..af21ede45 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -74,7 +74,7 @@ int DebayerEGL::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &conf
+ 		return 0;
+ 	}
+ 
+-	LOG(Debayer, Error)
++	LOG(Debayer, Info)
+ 		<< "Unsupported input format " << inputFormat;
+ 
+ 	return -EINVAL;
+@@ -88,7 +88,7 @@ int DebayerEGL::getOutputConfig(PixelFormat outputFormat, DebayerOutputConfig &c
+ 		return 0;
+ 	}
+ 
+-	LOG(Debayer, Error)
++	LOG(Debayer, Info)
+ 		<< "Unsupported output format " << outputFormat;
+ 
+ 	return -EINVAL;
+-- 
+2.54.0
+

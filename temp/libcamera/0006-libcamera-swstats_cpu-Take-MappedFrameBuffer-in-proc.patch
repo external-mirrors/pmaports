@@ -1,0 +1,83 @@
+From 1e02c409a29c5c32360a4e57e57d995321496a9f Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Wed, 27 May 2026 10:15:33 +0200
+Subject: [PATCH 06/13] libcamera: swstats_cpu: Take MappedFrameBuffer in
+ processFrame()
+
+As the only current user - DebayerEGL::process() - already has the buffer
+mapped. Currently this shouldn't impact performance as the kernel should
+already avoid remapping the dmabuf - i.e. we implicitly benefit from the
+fact that the mentioned function holds its mapping during the runtime of
+processFrame(). In a following commit DebayerEGL::process() will change
+in a way that would make keeping the mapping counter-intuitive. Thus
+this change ensures we'll not accidentally start mapping the buffer
+twice per frame.
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit a34ee2274e0ea66757b012e104520405b915e058)
+---
+ include/libcamera/internal/software_isp/swstats_cpu.h |  2 +-
+ src/libcamera/software_isp/debayer_egl.cpp            |  2 +-
+ src/libcamera/software_isp/swstats_cpu.cpp            | 11 ++---------
+ 3 files changed, 4 insertions(+), 11 deletions(-)
+
+diff --git a/include/libcamera/internal/software_isp/swstats_cpu.h b/include/libcamera/internal/software_isp/swstats_cpu.h
+index 802370bdb..3faa040b8 100644
+--- a/include/libcamera/internal/software_isp/swstats_cpu.h
++++ b/include/libcamera/internal/software_isp/swstats_cpu.h
+@@ -56,7 +56,7 @@ public:
+ 	void setWindow(const Rectangle &window);
+ 	void startFrame(uint32_t frame);
+ 	void finishFrame(uint32_t frame, uint32_t bufferId);
+-	void processFrame(uint32_t frame, uint32_t bufferId, FrameBuffer *input);
++	void processFrame(uint32_t frame, uint32_t bufferId, MappedFrameBuffer &input);
+ 
+ 	void processLine0(uint32_t frame, unsigned int y, const uint8_t *src[], unsigned int statsBufferIndex = 0)
+ 	{
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index 3606ec6eb..067333c03 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -550,7 +550,7 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 	metadata.planes()[0].bytesused = output->planes()[0].length;
+ 
+ 	/* Calculate stats for the whole frame */
+-	stats_->processFrame(frame, 0, input);
++	stats_->processFrame(frame, 0, in);
+ 	dmaSyncers.clear();
+ 
+ 	egl_.syncOutput();
+diff --git a/src/libcamera/software_isp/swstats_cpu.cpp b/src/libcamera/software_isp/swstats_cpu.cpp
+index 5366e019f..60fcebc40 100644
+--- a/src/libcamera/software_isp/swstats_cpu.cpp
++++ b/src/libcamera/software_isp/swstats_cpu.cpp
+@@ -537,7 +537,7 @@ void SwStatsCpu::processBayerFrame2(MappedFrameBuffer &in)
+  *
+  * This may only be called after a successful setWindow() call.
+  */
+-void SwStatsCpu::processFrame(uint32_t frame, uint32_t bufferId, FrameBuffer *input)
++void SwStatsCpu::processFrame(uint32_t frame, uint32_t bufferId, MappedFrameBuffer &input)
+ {
+ 	if (frame % kStatPerNumFrames) {
+ 		finishFrame(frame, bufferId);
+@@ -546,14 +546,7 @@ void SwStatsCpu::processFrame(uint32_t frame, uint32_t bufferId, FrameBuffer *in
+ 
+ 	bench_.startFrame();
+ 	startFrame(frame);
+-
+-	MappedFrameBuffer in(input, MappedFrameBuffer::MapFlag::Read);
+-	if (!in.isValid()) {
+-		LOG(SwStatsCpu, Error) << "mmap-ing buffer(s) failed";
+-		return;
+-	}
+-
+-	(this->*processFrame_)(in);
++	(this->*processFrame_)(input);
+ 	finishFrame(frame, bufferId);
+ 	bench_.finishFrame();
+ }
+-- 
+2.54.0
+

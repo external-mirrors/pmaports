@@ -1,0 +1,48 @@
+From 3f83705c45cfc34d508030194117207306feb850 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Wed, 27 May 2026 10:15:32 +0200
+Subject: [PATCH 05/13] egl: eGLImage: Add flag to remember dmabuf import fails
+
+In preparation of a following commit where we will start trying dmabuf
+import for input buffers.
+Also turn down error log in order to avoid flodding logs going
+forward.
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 7b5f651f5200df67f8f0cb4331d051711913de6a)
+---
+ include/libcamera/internal/egl.h | 1 +
+ src/libcamera/egl.cpp            | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/libcamera/internal/egl.h b/include/libcamera/internal/egl.h
+index bcf09b475..57f90d93f 100644
+--- a/include/libcamera/internal/egl.h
++++ b/include/libcamera/internal/egl.h
+@@ -90,6 +90,7 @@ public:
+ 	GLenum texture_unit_; /**< Texture unit associated with this image eg (GL_TEXTURE0) */
+ 	GLuint texture_; /**< OpenGL texture object ID */
+ 	GLuint fbo_; /**< OpenGL frame buffer object ID */
++	bool dmabuf_import_failed_ = false; /**< Previous image import failed */
+ 
+ private:
+ 	LIBCAMERA_DISABLE_COPY_AND_MOVE(eGLImage)
+diff --git a/src/libcamera/egl.cpp b/src/libcamera/egl.cpp
+index 789ffe2c1..7689d7983 100644
+--- a/src/libcamera/egl.cpp
++++ b/src/libcamera/egl.cpp
+@@ -166,7 +166,8 @@ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
+ 					      NULL, image_attrs);
+ 
+ 	if (image == EGL_NO_IMAGE_KHR) {
+-		LOG(eGL, Error) << "eglCreateImageKHR fail";
++		LOG(eGL, Debug) << "eglCreateImageKHR fail";
++		eglImage.dmabuf_import_failed_ = true;
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.54.0
+

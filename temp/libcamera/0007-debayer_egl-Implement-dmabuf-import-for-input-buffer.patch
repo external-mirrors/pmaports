@@ -1,0 +1,210 @@
+From 7f354e1d4fa942a7f79f1d34c0b8b2bc86a4c1c5 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Wed, 27 May 2026 10:15:34 +0200
+Subject: [PATCH 07/13] debayer_egl: Implement dmabuf import for input buffers
+
+In many cases we can import the GPU-ISP input buffers, dmabufs from v4l2,
+directly into EGL instead of mapping and uploading - i.e. copying - them.
+
+Doing so can have positive effects in multiple areas, including reducing
+memory bandwidth and CPU usage, as well as avoiding expensive dmabuf syncs
+and syscalls.
+
+The main reason direct imports may not work are the more demanding stride
+alignment requirements many GPUs have - often 128 or 256 bytes - compared
+to ISPs - apparently often closer to 32 bytes.
+
+Thus we first try to import buffers directly and - if that fails - fall back
+to the previous upload path. Failing imports should come at low cost as
+drivers know the limitations and can bail out early, without causing
+additional IO or context switches.
+
+In the future we might be able to request buffers with a matching stride
+from v4l2 drivers in many cases, making direct import the norm instead
+of a hit-or-miss. An optional kernel API for that exists, but doesn't
+seem to be implemented by any driver tested so far.
+
+Note that passing around MappedFrameBuffer and DmaSyncer variables ensures
+we don't do unnecessary mappings and dmabuf syncs.
+
+Below are some benchmark results. All where done using postmarketOS edge
+with updates from 21th May 2026 (Mesa 26.1.1). The mentioned pipelines
+where run five times each, with the mean value included here, which should
+be quite representive as the variance was rather small. All devices
+where using the powersave governor.
+
+- FairPhone 5
+
+-- Back camera
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@1/camera@29 -s width=1920,height=1080 --capture=60
+Before: 14027 us/frame
+After: 12122 us/frame
+
+- OnePlus 6
+
+-- Back camera (imx519)
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@0/camera@10 -s width=1920,height=1080 --capture=60
+Before: 30091 us/frame
+After: 19878 us/frame
+
+- Librem 5
+
+-- Back camera
+cam -c /base/soc@0/bus@30800000/i2c@30a50000/camera@2d -s width=1280,height=720 --capture=60
+Before: 69092 us/frame
+After: 41250 us/frame
+
+- PinePhone
+
+-- Front Camera
+cam -c /base/i2c-csi/front-camera@3c -s width=1280,height=720 --capture=60
+Before: 173769 us/frame
+After: 143274 us/frame
+
+-- Back camera
+cam -c /base/i2c-csi/rear-camera@4c -s width=1280,height=720 --capture=60
+Before: 174833 us/frame
+After: 144476 us/frame
+
+There is one case where performance regresses:
+
+- Pixel 3a
+
+-- Back camera
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@1/camera@1a -s width=1920,height=1080 --capture=60
+Before: 14257 us/frame
+After: 15161 us/frame
+
+To my knowledge this is likely caused by bad sampling performance from
+linear buffers. IMO this is a driver issue - if a copy to tiled format
+makes sampling faster, drivers should do so implicitly (like e.g. v3d
+already does).
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 93f0db167a8dfb9bc58cb6bbcf91ef6a23462b16)
+---
+ src/libcamera/software_isp/debayer_egl.cpp | 58 ++++++++++++++++------
+ src/libcamera/software_isp/debayer_egl.h   |  2 +-
+ 2 files changed, 43 insertions(+), 17 deletions(-)
+
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index 067333c03..e0f6dc6da 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -10,6 +10,7 @@
+ #include "debayer_egl.h"
+ 
+ #include <cmath>
++#include <assert.h>
+ #include <stdlib.h>
+ #include <time.h>
+ 
+@@ -495,16 +496,34 @@ void DebayerEGL::setShaderVariableValues(const DebayerParams &params)
+ 	return;
+ }
+ 
+-int DebayerEGL::debayerGPU(MappedFrameBuffer &in, int out_fd, const DebayerParams &params)
++int DebayerEGL::debayerGPU(FrameBuffer *input, FrameBuffer *output, const DebayerParams &params, std::optional<MappedFrameBuffer> *inMapped, std::optional<DmaSyncer> *inDmaSyncer)
+ {
++	bool dmabuf_import_succeeded = false;
++
+ 	/* eGL context switch */
+ 	egl_.makeCurrent();
+ 
+-	/* Create a standard texture input */
+-	egl_.createTexture2D(*eglImageBayerIn_, in.planes()[0].data());
++	/* Try to create texture for input buffer via dmabuf import */
++	if (!eglImageBayerIn_->dmabuf_import_failed_) {
++		if (egl_.createInputDMABufTexture2D(*eglImageBayerIn_, input->planes()[0].fd.get()) == 0)
++			dmabuf_import_succeeded = true;
++		else
++			LOG(Debayer, Info) << "Importing input buffer with DMABuf import failed, falling back to upload";
++	}
++
++	/* Otherwise create texture for input buffer via upload from CPU */
++	if (!dmabuf_import_succeeded) {
++		inDmaSyncer->emplace(input->planes()[0].fd, DmaSyncer::SyncType::Read);
++		inMapped->emplace(input, MappedFrameBuffer::MapFlag::Read);
++		if (!inMapped->value().isValid()) {
++			LOG(Debayer, Error) << "mmap-ing buffer(s) failed";
++			return -ENODEV;
++		}
++		egl_.createTexture2D(*eglImageBayerIn_, inMapped->value().planes()[0].data());
++	}
+ 
+ 	/* Generate the output render framebuffer as render to texture */
+-	egl_.createOutputDMABufTexture2D(*eglImageBayerOut_, out_fd);
++	egl_.createOutputDMABufTexture2D(*eglImageBayerOut_, output->planes()[0].fd.get());
+ 
+ 	setShaderVariableValues(params);
+ 	glViewport(0, 0, width_, height_);
+@@ -526,23 +545,16 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ {
+ 	bench_.startFrame();
+ 
+-	std::vector<DmaSyncer> dmaSyncers;
+-
+-	dmaSyncBegin(dmaSyncers, input, nullptr);
+-
+ 	/* Copy metadata from the input buffer */
+ 	FrameMetadata &metadata = output->_d()->metadata();
+ 	metadata.status = input->metadata().status;
+ 	metadata.sequence = input->metadata().sequence;
+ 	metadata.timestamp = input->metadata().timestamp;
+ 
+-	MappedFrameBuffer in(input, MappedFrameBuffer::MapFlag::Read);
+-	if (!in.isValid()) {
+-		LOG(Debayer, Error) << "mmap-ing buffer(s) failed";
+-		goto error;
+-	}
++	std::optional<MappedFrameBuffer> inMapped;
++	std::optional<DmaSyncer> inDmaSyncer;
+ 
+-	if (debayerGPU(in, output->planes()[0].fd.get(), params)) {
++	if (debayerGPU(input, output, params, &inMapped, &inDmaSyncer)) {
+ 		LOG(Debayer, Error) << "debayerGPU failed";
+ 		goto error;
+ 	}
+@@ -550,8 +562,22 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 	metadata.planes()[0].bytesused = output->planes()[0].length;
+ 
+ 	/* Calculate stats for the whole frame */
+-	stats_->processFrame(frame, 0, in);
+-	dmaSyncers.clear();
++	if (frame % SwStatsCpu::kStatPerNumFrames) {
++		stats_->finishFrame(frame, 0);
++	} else {
++		if (!inMapped) {
++			/*
++			 * The buffer was directly imported into EGL and thus
++			 * not mapped for texture upload. Do it now for the
++			 * CPU-based stats calculation.
++			 */
++			assert(!inDmaSyncer);
++			inDmaSyncer.emplace(input->planes()[0].fd, DmaSyncer::SyncType::Read);
++			inMapped.emplace(input, MappedFrameBuffer::MapFlag::Read);
++		}
++		stats_->processFrame(frame, 0, inMapped.value());
++	}
++	inDmaSyncer.reset();
+ 
+ 	egl_.syncOutput();
+ 	bench_.finishFrame();
+diff --git a/src/libcamera/software_isp/debayer_egl.h b/src/libcamera/software_isp/debayer_egl.h
+index fcd281f4c..f2a127b0d 100644
+--- a/src/libcamera/software_isp/debayer_egl.h
++++ b/src/libcamera/software_isp/debayer_egl.h
+@@ -66,7 +66,7 @@ private:
+ 	int initBayerShaders(PixelFormat inputFormat, PixelFormat outputFormat);
+ 	int getShaderVariableLocations();
+ 	void setShaderVariableValues(const DebayerParams &params);
+-	int debayerGPU(MappedFrameBuffer &in, int out_fd, const DebayerParams &params);
++	int debayerGPU(FrameBuffer *input, FrameBuffer *output, const DebayerParams &params, std::optional<MappedFrameBuffer> *mappedInputBuffer, std::optional<DmaSyncer> *inputBufferDmaSyncer);
+ 
+ 	/* Shader program identifiers */
+ 	GLuint vertexShaderId_ = 0;
+-- 
+2.54.0
+

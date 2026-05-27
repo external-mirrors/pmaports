@@ -1,0 +1,196 @@
+From 6fee511f290fd0e950e8064cba99204dc08ed552 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Wed, 10 Jun 2026 00:53:56 +0200
+Subject: [PATCH 09/13] software_isp: debayer_egl: Request input buffer
+ alignment of 256 bytes
+
+The most common reason dmabuf import with createInputDMABufTexture2D()
+fails is that V4L2 drivers use stride alignments that are not sufficient
+(too small) for GPUs, preventing the later from directly using input
+buffers and forcing us to do relatively expensive uploads (i.e. copies)
+of the buffer contents.
+
+Thus let's request a compatible stride alignment from the V4L2 driver,
+which may or may not respect the value. From the v4l2_pix_format ->
+bytesperline docs:
+> Both applications and drivers can set this field to request padding
+> bytes at the end of each line. Drivers however may ignore the value
+> requested by the application, returning width times bytes per pixel
+> or a larger value required by the hardware. That implies applications
+> can just set this field to zero to get a reasonable default.
+
+The approach works as follows:
+1. Before setting the input format, query into the debayer class for a
+   preferred stride based on the bayer format and width. For DebayerCpu
+   this returns 0, i.e. let the V4L2 driver decide, while for DebayerEGL
+   the "magic" stride alignment of 256 bytes is used, which is known
+   to work with all known/common GPUs and already used for output
+   buffers. Right now there doesn't exist any API to query the correct
+   value - in many cases it is 64 or 128 - however if e.g. a new EGL
+   extension will provide it in the future, we can easily implement it
+   in the new function. Alternatively a config value or env var could be
+   added there if the need arises.
+2. Pass the calculated stride to V4L2VideoDevice::setFormat(), which
+   again sets it as the bytesperline value.
+3. The V4L2 driver will update bytesperline with the value it actually
+   chose to use. Compare the requested and actual strides and log an info
+   message if the driver did not honor the request, hinting users at what
+   could be improved about the kernel driver.
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Tested-by: Milan Zamazal <mzamazal@redhat.com> # rpi4+imx219
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit ff5cb4f17b0b9989dd853b4d4320ddb2c59a9c0e)
+---
+ .../libcamera/internal/software_isp/software_isp.h  |  1 +
+ src/libcamera/pipeline/simple/simple.cpp            | 12 ++++++++++++
+ src/libcamera/software_isp/debayer.cpp              |  8 ++++++++
+ src/libcamera/software_isp/debayer.h                |  1 +
+ src/libcamera/software_isp/debayer_egl.cpp          |  8 ++++++++
+ src/libcamera/software_isp/debayer_egl.h            |  1 +
+ src/libcamera/software_isp/software_isp.cpp         | 13 +++++++++++++
+ 7 files changed, 44 insertions(+)
+
+diff --git a/include/libcamera/internal/software_isp/software_isp.h b/include/libcamera/internal/software_isp/software_isp.h
+index 585e0d6d9..2a6fbe413 100644
+--- a/include/libcamera/internal/software_isp/software_isp.h
++++ b/include/libcamera/internal/software_isp/software_isp.h
+@@ -62,6 +62,7 @@ public:
+ 
+ 	std::tuple<unsigned int, unsigned int>
+ 	strideAndFrameSize(const PixelFormat &outputFormat, const Size &size);
++	uint32_t preferredInputStride(const PixelFormat &inputFormat, const Size &size);
+ 
+ 	int configure(const StreamConfiguration &inputCfg,
+ 		      const std::vector<std::reference_wrapper<const StreamConfiguration>> &outputCfgs,
+diff --git a/src/libcamera/pipeline/simple/simple.cpp b/src/libcamera/pipeline/simple/simple.cpp
+index c6fe12d65..e26f438d9 100644
+--- a/src/libcamera/pipeline/simple/simple.cpp
++++ b/src/libcamera/pipeline/simple/simple.cpp
+@@ -1542,6 +1542,11 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
+ 	captureFormat.fourcc = videoFormat;
+ 	captureFormat.size = pipeConfig->captureSize;
+ 
++	uint32_t requested_bpl = 0;
++	if (data->swIsp_)
++		requested_bpl = data->swIsp_->preferredInputStride(videoFormat.toPixelFormat(), pipeConfig->captureSize);
++	captureFormat.planes[0].bpl = requested_bpl;
++
+ 	ret = video->setFormat(&captureFormat);
+ 	if (ret)
+ 		return ret;
+@@ -1561,6 +1566,13 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
+ 		return -EINVAL;
+ 	}
+ 
++	if (requested_bpl && captureFormat.planes[0].bpl != requested_bpl) {
++		LOG(SimplePipeline, Info)
++			<< "Input buffer stride ignored by the driver. "
++			<< "Requested " << requested_bpl
++			<< ", got " << captureFormat.planes[0].bpl;
++	}
++
+ 	/* Configure the converter if needed. */
+ 	std::vector<std::reference_wrapper<const StreamConfiguration>> outputCfgs;
+ 	data->useConversion_ = config->needConversion();
+diff --git a/src/libcamera/software_isp/debayer.cpp b/src/libcamera/software_isp/debayer.cpp
+index 2d7abfb83..56446f55d 100644
+--- a/src/libcamera/software_isp/debayer.cpp
++++ b/src/libcamera/software_isp/debayer.cpp
+@@ -103,6 +103,14 @@ Debayer::~Debayer()
+  * there is no valid output config
+  */
+ 
++/**
++ * \fn uint32_t Debayer::preferredInputStride(const PixelFormat &inputFormat, const Size &size)
++ * Get the preferred input stride in bytes for the given input format and size
++ * \param[in] inputFormat The input format
++ * \param[in] size The input size (width and height in pixels)
++ * \return The preferred input stride in bytes or 0 if there is no preference
++ */
++
+ /**
+  * \fn void Debayer::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output, DebayerParams params)
+  * \brief Process the bayer data into the requested format
+diff --git a/src/libcamera/software_isp/debayer.h b/src/libcamera/software_isp/debayer.h
+index a2a17ec18..28f1b857b 100644
+--- a/src/libcamera/software_isp/debayer.h
++++ b/src/libcamera/software_isp/debayer.h
+@@ -46,6 +46,7 @@ public:
+ 
+ 	virtual std::tuple<unsigned int, unsigned int>
+ 	strideAndFrameSize(const PixelFormat &outputFormat, const Size &size) = 0;
++	virtual uint32_t preferredInputStride([[maybe_unused]] const PixelFormat &inputFormat, [[maybe_unused]] const Size &size) { return 0; }
+ 
+ 	virtual void process(uint32_t frame, FrameBuffer *input, FrameBuffer *output, const DebayerParams &params) = 0;
+ 	virtual int start() { return 0; }
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index af21ede45..264a9315d 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -17,6 +17,7 @@
+ #include <libcamera/base/utils.h>
+ 
+ #include <libcamera/formats.h>
++#include "libcamera/internal/formats.h"
+ 
+ #include "../glsl_shaders.h"
+ 
+@@ -373,6 +374,12 @@ DebayerEGL::strideAndFrameSize(const PixelFormat &outputFormat, const Size &size
+ 	return std::make_tuple(stride, stride * size.height);
+ }
+ 
++uint32_t DebayerEGL::preferredInputStride(const PixelFormat &inputFormat, const Size &size)
++{
++	const PixelFormatInfo &info = PixelFormatInfo::info(inputFormat);
++	return info.stride(size.width, 0, 256);
++}
++
+ void DebayerEGL::setShaderVariableValues(const DebayerParams &params)
+ {
+ 	/*
+@@ -655,3 +662,4 @@ SizeRange DebayerEGL::sizes(PixelFormat inputFormat, const Size &inputSize)
+ }
+ 
+ } /* namespace libcamera */
++
+diff --git a/src/libcamera/software_isp/debayer_egl.h b/src/libcamera/software_isp/debayer_egl.h
+index f2a127b0d..c7cb009b6 100644
+--- a/src/libcamera/software_isp/debayer_egl.h
++++ b/src/libcamera/software_isp/debayer_egl.h
+@@ -51,6 +51,7 @@ public:
+ 
+ 	std::vector<PixelFormat> formats(PixelFormat input) override;
+ 	std::tuple<unsigned int, unsigned int> strideAndFrameSize(const PixelFormat &outputFormat, const Size &size) override;
++	uint32_t preferredInputStride(const PixelFormat &inputFormat, const Size &size) override;
+ 
+ 	void process(uint32_t frame, FrameBuffer *input, FrameBuffer *output, const DebayerParams &params) override;
+ 	int start() override;
+diff --git a/src/libcamera/software_isp/software_isp.cpp b/src/libcamera/software_isp/software_isp.cpp
+index d227bd8e3..9c4a59f08 100644
+--- a/src/libcamera/software_isp/software_isp.cpp
++++ b/src/libcamera/software_isp/software_isp.cpp
+@@ -253,6 +253,19 @@ SoftwareIsp::strideAndFrameSize(const PixelFormat &outputFormat, const Size &siz
+ 	return debayer_->strideAndFrameSize(outputFormat, size);
+ }
+ 
++/**
++ * Get the preferred input stride in bytes for the given input format and size
++ * \param[in] inputFormat The input format
++ * \param[in] size The input size (width and height in pixels)
++ * \return The preferred input stride in bytes or 0 if there is no preference
++ */
++uint32_t SoftwareIsp::preferredInputStride(const PixelFormat &inputFormat, const Size &size)
++{
++	ASSERT(debayer_);
++
++	return debayer_->preferredInputStride(inputFormat, size);
++}
++
+ /**
+  * \brief Configure the SoftwareIsp object according to the passed in parameters
+  * \param[in] inputCfg The input configuration
+-- 
+2.54.0
+

@@ -1,0 +1,122 @@
+From 7d7f39be4c7583a7f936cd77c7a4f4822f407b06 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Wed, 27 May 2026 10:15:30 +0200
+Subject: [PATCH 03/13] egl: Add GL format parameter to eGLImage constructor
+
+In preparation for the following commits. This requires a minor
+reordering in DebayerEGL::start() as the value for the input texture is
+only known after initBayerShaders().
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 6e23162ddcae7fdeb8f41a054dda2e8c19300d98)
+---
+ include/libcamera/internal/egl.h           |  6 ++++--
+ src/libcamera/egl.cpp                      | 22 +++++++++++++++++++++-
+ src/libcamera/software_isp/debayer_egl.cpp | 10 +++++-----
+ 3 files changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/include/libcamera/internal/egl.h b/include/libcamera/internal/egl.h
+index 0ec8ea6ec..825240dbb 100644
+--- a/include/libcamera/internal/egl.h
++++ b/include/libcamera/internal/egl.h
+@@ -51,14 +51,15 @@ class eGLImage
+ public:
+ 	/**
+ 	 * \brief Construct an eGLImage with explicit stride
++	 * \param[in] format Image GL format
+ 	 * \param[in] width Image width in pixels
+ 	 * \param[in] height Image height in pixels
+ 	 * \param[in] stride Row stride in bytes
+ 	 * \param[in] texture_unit OpenGL texture unit
+ 	 * \param[in] texture_unit_uniform_id Shader uniform ID
+ 	 */
+-	eGLImage(uint32_t width, uint32_t height, uint32_t stride, GLenum texture_unit, uint32_t texture_unit_uniform_id)
+-		: width_(width), height_(height), stride_(stride),
++	eGLImage(GLint format, uint32_t width, uint32_t height, uint32_t stride, GLenum texture_unit, uint32_t texture_unit_uniform_id)
++		: format_(format), width_(width), height_(height), stride_(stride),
+ 		  framesize_(stride * height),
+ 		  texture_unit_uniform_id_(texture_unit_uniform_id),
+ 		  texture_unit_(texture_unit)
+@@ -79,6 +80,7 @@ public:
+ 		glDeleteTextures(1, &texture_);
+ 	}
+ 
++	GLint format_; /**< Image GL format */
+ 	uint32_t width_; /**< Image width in pixels */
+ 	uint32_t height_; /**< Image height in pixels */
+ 	uint32_t stride_; /**< Row stride in bytes */
+diff --git a/src/libcamera/egl.cpp b/src/libcamera/egl.cpp
+index 0ababa361..882bfa656 100644
+--- a/src/libcamera/egl.cpp
++++ b/src/libcamera/egl.cpp
+@@ -21,6 +21,8 @@
+ 
+ #include <libdrm/drm_fourcc.h>
+ 
++#include <GLES3/gl32.h>
++
+ namespace libcamera {
+ 
+ LOG_DEFINE_CATEGORY(eGL)
+@@ -125,13 +127,31 @@ void eGL::flushOutput()
+  */
+ int eGL::createDMABufTexture2D(eGLImage &eglImage, int fd, bool output)
+ {
++	EGLint drm_format;
++
+ 	ASSERT(tid_ == Thread::currentId());
+ 
++	switch (eglImage.format_) {
++	case GL_RED:
++	case GL_LUMINANCE:
++		drm_format = DRM_FORMAT_R8;
++		break;
++	case GL_RG:
++		drm_format = DRM_FORMAT_RG88;
++		break;
++	case GL_RGBA:
++		drm_format = DRM_FORMAT_ARGB8888;
++		break;
++	default:
++		LOG(eGL, Error) << "unhandled GL format";
++		return -ENODEV;
++	}
++
+ 	// clang-format off
+ 	EGLint image_attrs[] = {
+ 		EGL_WIDTH, (EGLint)eglImage.width_,
+ 		EGL_HEIGHT, (EGLint)eglImage.height_,
+-		EGL_LINUX_DRM_FOURCC_EXT, DRM_FORMAT_ARGB8888,
++		EGL_LINUX_DRM_FOURCC_EXT, drm_format,
+ 		EGL_DMA_BUF_PLANE0_FD_EXT, fd,
+ 		EGL_DMA_BUF_PLANE0_OFFSET_EXT, 0,
+ 		EGL_DMA_BUF_PLANE0_PITCH_EXT, (EGLint)eglImage.stride_,
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index dd6b64be2..741d9d6f1 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -578,14 +578,14 @@ int DebayerEGL::start()
+ 
+ 	LOG(Debayer, Debug) << "Available fragment shader texture units " << maxTextureImageUnits;
+ 
++	if (initBayerShaders(inputPixelFormat_, outputPixelFormat_))
++		return -EINVAL;
++
+ 	/* Raw bayer input as texture */
+-	eglImageBayerIn_ = std::make_unique<eGLImage>(width_, height_, inputConfig_.stride, GL_TEXTURE0, 0);
++	eglImageBayerIn_ = std::make_unique<eGLImage>(glFormat_, width_, height_, inputConfig_.stride, GL_TEXTURE0, 0);
+ 
+ 	/* Texture we will render to */
+-	eglImageBayerOut_ = std::make_unique<eGLImage>(outputSize_.width, outputSize_.height, outputConfig_.stride, GL_TEXTURE1, 1);
+-
+-	if (initBayerShaders(inputPixelFormat_, outputPixelFormat_))
+-		return -EINVAL;
++	eglImageBayerOut_ = std::make_unique<eGLImage>(GL_RGBA, outputSize_.width, outputSize_.height, outputConfig_.stride, GL_TEXTURE1, 1);
+ 
+ 	return 0;
+ }
+-- 
+2.54.0
+

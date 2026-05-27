@@ -1,0 +1,44 @@
+From 5a53056f12094b5077453e1393640b979fc40fde Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Tue, 26 May 2026 10:06:38 +0200
+Subject: [PATCH 01/13] debayer_egl: Include stats computation into benchmark
+
+The following commit will allow debayering on the GPU and stats
+computation on the CPU to happen in parallel, requiring this change in
+order to keep the benchmark meaningful.
+
+Do the change first in order to make before/after comparisons simpler.
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 1556025bae58b9e02625587728af349b987a14fa)
+---
+ src/libcamera/software_isp/debayer_egl.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index 8f0c229fd..565aee9f1 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -547,14 +547,14 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 		goto error;
+ 	}
+ 
+-	bench_.finishFrame();
+-
+ 	metadata.planes()[0].bytesused = output->planes()[0].length;
+ 
+ 	/* Calculate stats for the whole frame */
+ 	stats_->processFrame(frame, 0, input);
+ 	dmaSyncers.clear();
+ 
++	bench_.finishFrame();
++
+ 	outputBufferReady.emit(output);
+ 	inputBufferReady.emit(input);
+ 
+-- 
+2.54.0
+

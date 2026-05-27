@@ -1,0 +1,147 @@
+From e2dcad90def08cd7f2ba34018ce72162ddc957d8 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Tue, 26 May 2026 10:06:39 +0200
+Subject: [PATCH 02/13] debayer_egl: Sync output buffers after processing stats
+
+Instead of waiting for the GPU to finish output buffers *before* computing
+stats, do so afterwards. This allows work to happen in parallel on the GPU
+and CPU, improving throughput and reducing latency on various devices as
+shown below.
+
+On order for this to work well we need to flush all GL commands to the
+GPU before doing heavy CPU work - thus add a corresponding function.
+
+Below are some benchmark results. All where done using postmarketOS edge
+with updates from 21th May 2026 (Mesa 26.1.1). The mentioned pipelines
+where run five times each, with the mean value included here, which should
+be quite representive as the variance was rather small. All devices
+where using the powersave governor.
+
+Notes:
+1. We only expect changes for frames where stats get computed, currently
+   every fourth frame (see kStatPerNumFrames) - and the improvements indeed
+   have been observed to increase when computing stats more often.
+2. At least the qcom/freedreno devices have been found to be affected by a
+   performance issue *without* this patch. This issue can be worked
+   around by calling `glFlush()` directly before `glFinish()` - as done
+   in v1 of this series - or by running with `GALLIUM_THREAD=0`. The
+   benchmarks below show the performance gains *with* those workarounds
+   applied in order to not inflate the impact of this patch. See
+   https://gitlab.freedesktop.org/mesa/mesa/-/work_items/15516 for more
+   context.
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@0/camera@1a -s width=1920,height=1080 --capture=60
+Before: 33596 us/frame
+After: 30179 us/frame
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@1/camera@1a -s width=1920,height=1080 --capture=60
+Before: 14922 us/frame
+After: 14304 us/frame
+
+cam -c /base/soc@0/cci@ac4b000/i2c-bus@1/camera@10 -s width=1920,height=1080 --capture=60
+Before: 26106 us/frame
+After: 23312 us/frame
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@1/camera@29 -s width=1920,height=1080 --capture=60
+Before: 15897 us/frame
+After: 14791 us/frame
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@1/camera@10 -s width=1920,height=1080 --capture=60
+Before: 25721 us/frame
+After: 23625 us/frame
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@0/camera@10 -s width=1920,height=1080 --capture=60
+Before: 34124 us/frame
+After: 29471 us/frame
+
+cam -c /base/soc@0/cci@ac4a000/i2c-bus@0/camera@1a -s width=1920,height=1080 --capture=60
+Before: 23707 us/frame
+After: 21890 us/frame
+
+cam -c /base/soc@0/bus@30800000/i2c@30a40000/camera@20 -s width=1280,height=720 --capture=60
+Before: 91649 us/frame
+After: 83233 us/frame
+
+cam -c /base/soc@0/bus@30800000/i2c@30a50000/camera@2d -s width=1280,height=720 --capture=60
+Before: 76956 us/frame
+After: 69569 us/frame
+
+cam -c /base/i2c-csi/front-camera@3c -s width=1280,height=720 --capture=60
+Before: 188500 us/frame
+After: 173764 us/frame
+
+cam -c /base/i2c-csi/rear-camera@4c -s width=1280,height=720 --capture=60
+Before: 190222 us/frame
+After: 177251 us/frame
+
+Signed-off-by: Robert Mader <robert.mader@collabora.com>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+(cherry picked from commit 2bace926b0f4854bc3508a9805d53e47a273e789)
+---
+ include/libcamera/internal/egl.h           |  1 +
+ src/libcamera/egl.cpp                      | 13 +++++++++++++
+ src/libcamera/software_isp/debayer_egl.cpp |  3 ++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/include/libcamera/internal/egl.h b/include/libcamera/internal/egl.h
+index 0ad2320b1..0ec8ea6ec 100644
+--- a/include/libcamera/internal/egl.h
++++ b/include/libcamera/internal/egl.h
+@@ -119,6 +119,7 @@ public:
+ 	void useProgram(GLuint programId);
+ 	void deleteProgram(GLuint programId);
+ 	void syncOutput();
++	void flushOutput();
+ 
+ private:
+ 	LIBCAMERA_DISABLE_COPY_AND_MOVE(eGL)
+diff --git a/src/libcamera/egl.cpp b/src/libcamera/egl.cpp
+index f65929470..0ababa361 100644
+--- a/src/libcamera/egl.cpp
++++ b/src/libcamera/egl.cpp
+@@ -98,6 +98,19 @@ void eGL::syncOutput()
+ 	glFinish();
+ }
+ 
++/**
++ * \brief Flush the rendering pipeline
++ *
++ * Calls glFlush().
++ *
++ */
++void eGL::flushOutput()
++{
++	ASSERT(tid_ == Thread::currentId());
++
++	glFlush();
++}
++
+ /**
+  * \brief Create a DMA-BUF backed 2D texture
+  * \param[in,out] eglImage EGL image to associate with the DMA-BUF
+diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
+index 565aee9f1..dd6b64be2 100644
+--- a/src/libcamera/software_isp/debayer_egl.cpp
++++ b/src/libcamera/software_isp/debayer_egl.cpp
+@@ -516,7 +516,7 @@ int DebayerEGL::debayerGPU(MappedFrameBuffer &in, int out_fd, const DebayerParam
+ 		LOG(eGL, Error) << "Drawing scene fail " << err;
+ 		return -ENODEV;
+ 	} else {
+-		egl_.syncOutput();
++		egl_.flushOutput();
+ 	}
+ 
+ 	return 0;
+@@ -553,6 +553,7 @@ void DebayerEGL::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 	stats_->processFrame(frame, 0, input);
+ 	dmaSyncers.clear();
+ 
++	egl_.syncOutput();
+ 	bench_.finishFrame();
+ 
+ 	outputBufferReady.emit(output);
+-- 
+2.54.0
+
