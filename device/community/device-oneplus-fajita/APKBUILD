@@ -3,7 +3,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
-pkgver=25
+pkgver=26
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -60,9 +60,13 @@ package() {
 		-t "$pkgdir"/usr/lib/systemd/system-preset
 }
 
+# Cannot use default_openrc because q6voiced uses the openrc config path,
+# even on systemd, and the default_openrc function moves that path to the
+# subpackage
 openrc() {
-	default_openrc
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	depends="hexagonrpcd-openrc openrc"
+	mkdir -p "$subpkgdir"
 }
 
 pmtest() {
