@@ -5,7 +5,7 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=7.1_rc1
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
@@ -76,7 +76,7 @@ package() {
 	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm8* "$pkgdir"/boot/dtbs/qcom
 	rm -rf "$pkgdir"/boot/dtbs-tmp
 
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
