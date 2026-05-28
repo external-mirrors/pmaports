@@ -3,3 +3,9 @@
 # ignore the verity hash device...
 
 SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="DM_verity_hash", ENV{ID_FS_USAGE}=="crypto", ENV{UDISKS_IGNORE}="1"
+
+# FIXME: udiskie tries to automount loop device partitions for the /usr
+# partition # (A and B slots), possibly due to udiskie commit 0e0ecb7 or something
+# related to that..
+
+SUBSYSTEM=="block", ENV{ID_BLOCK_SUBSYSTEM}=="loop", ENV{PARTNAME}=="duranium_*_usr", ENV{UDISKS_IGNORE}="1"
