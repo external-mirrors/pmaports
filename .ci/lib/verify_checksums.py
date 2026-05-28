@@ -36,17 +36,28 @@ if __name__ == "__main__":
     # aports later. We might be given a changed aport from e.g. extra-repos/systemd when
     # that repo is not enabled
     buildable_pkgs = set()
+    archived = set()
     for path in pmb.core.pkgrepo.pkgrepo_iter_package_dirs():
+        # Store archived packages for matching later
+        if os.path.split(os.path.split(path)[0])[1] == 'archived':
+            archived.add(os.path.basename(path))
+            continue
         buildable_pkgs.add(os.path.basename(path))
 
     # To store a list of packages from extra-repos/systemd for special handling
     #  later:
     systemd_pkgs = list()
 
-    # Filter out packages are not found in enabled repos
+    # Filter out packages are not found in enabled repos or are in archived
     # (Iterate over copy of packages, because we modify it in this loop)
     for package in packages.copy():
         if package not in buildable_pkgs:
+            # Specifically handle archived since it could include packages
+            # who's sources are dead
+            if package in archived:
+                print(f"{package}: archived, skipping")
+                packages.remove(package)
+                continue
             print(f"{package}: not in current repo, skipping")
             packages.remove(package)
             # FIXME: this should probably be more generic, if other repos are added
