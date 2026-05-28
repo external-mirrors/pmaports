@@ -75,11 +75,8 @@ class Device:
 
     @cached_property
     def package_dependencies(self) -> set[str]:
-        # HACK: Work around a bug in depends_recurse which prevents listing all the dependencies
-        # Bug: https://gitlab.nura.eco/nura/pmbootstrap/-/issues/2623
-        return {"postmarketos-initramfs"}
-        # return pmb.helpers.package.depends_recurse(pkgname=self.pkgname,
-        #                                            arch=self.arch)
+        return pmb.helpers.package.depends_recurse(pkgname=self.pkgname,
+                                                   arch=self.arch)
 
     @cached_property
     def dependencies(self) -> set[str]:
