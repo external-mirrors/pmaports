@@ -74,15 +74,12 @@ class Device:
 
     @cached_property
     def package_dependencies(self) -> set[str]:
-        # HACK: Work around a bug in depends_recurse which prevents listing all the dependencies
-        # Bug: https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/issues/2623
-        return {"postmarketos-initramfs"}
-        # return pmb.helpers.package.depends_recurse(pkgname=self.pkgname,
-        #                                            arch=self.arch)
+        return pmb.helpers.package.depends_recurse(pkgname=self.pkgname,
+                                                   arch=self.arch)
 
     @cached_property
     def dependencies(self) -> set[str]:
-        return self.package_dependencies | self.testing_dependencies
+        return set(self.package_dependencies) | self.testing_dependencies
 
     @cached_property
     def kernel_variants(self) -> list[str]:
