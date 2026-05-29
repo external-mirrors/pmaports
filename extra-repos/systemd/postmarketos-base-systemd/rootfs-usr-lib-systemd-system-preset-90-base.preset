@@ -7,6 +7,9 @@ disable systemd-journald-audit.socket
 # boot, so disable it by default
 disable multipathd.service
 
+# sleep/shutdown inhibit when apk is running
+enable apk-inhibit.path
+
 # for basically all Uis
 ## system services
 enable ModemManager.service
