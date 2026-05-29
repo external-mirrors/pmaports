@@ -13,13 +13,13 @@ arch="armv7"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-nvidia-tegra-armv7
 	linux-postmarketos-grate
 	postmarketos-base
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-x11
 "
 
@@ -29,12 +29,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Firmware files for Tegra devices supported by GRATE project"
-	depends="firmware-nvidia-tegra-armv7"
-	mkdir "$subpkgdir"
 }
 
 x11() {
