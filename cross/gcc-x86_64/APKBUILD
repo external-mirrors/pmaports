@@ -34,7 +34,7 @@ _pkgsnap="${pkgver##*_git}"
 [ "$CHOST" != "$CTARGET" ] && _target="-$CTARGET_ARCH" || _target=""
 
 pkgname=gcc-x86_64
-pkgrel=3
+pkgrel=4
 pkgdesc="Stage2 cross-compiler for x86_64"
 url="https://gcc.gnu.org"
 arch="aarch64"
@@ -630,7 +630,10 @@ libgcc() {
 	pkgdesc="GNU C compiler runtime libraries"
 	depends=
 
-	amove usr/lib/libgcc_s.so.*
+	amove usr/lib/libgcc_s.so*
+	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/crtbeginS.o
+	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/crtendS.o
+	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/libgcc.a
 }
 
 libgomp() {
