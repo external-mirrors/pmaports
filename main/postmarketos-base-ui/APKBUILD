@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=49
+pkgver=50
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -17,7 +17,6 @@ depends="
 	postmarketos-base
 	postmarketos-bootsplash-virtual
 	shadow
-	sleep-inhibitor
 	tzdata
 	util-linux
 	wireless-regdb
@@ -157,10 +156,11 @@ openrc() {
 		dbus-openrc
 		haveged-openrc
 		openrc
+		sleep-inhibitor
 		util-linux-openrc
 	"
 
-	mkdir -p "$subpkgdir"
+	amove etc/sleep-inhibitor.conf
 }
 
 elogind() {
