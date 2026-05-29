@@ -1,0 +1,8 @@
+#!/bin/sh
+
+while true; do
+    inotifywait -q -e open /usr/lib/apk/db/lock
+    systemd-inhibit --what=sleep --who=apk \
+        --why="Package transaction in progress" \
+        flock /usr/lib/apk/db/lock true
+done
