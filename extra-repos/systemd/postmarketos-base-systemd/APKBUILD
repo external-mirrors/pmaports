@@ -43,7 +43,7 @@ depends="
 	"
 provides="postmarketos-base-init"
 provider_priority=100
-replaces="alpine-baselayout postmarketos-baselayout postmarketos-base systemd systemd-logind"
+replaces="alpine-baselayout openssh-server-pam postmarketos-baselayout postmarketos-base systemd systemd-logind"
 replaces_priority=100
 install="
 	$pkgname.post-install
@@ -57,6 +57,7 @@ subpackages="
 	"
 
 _source644="
+	etc/pam.d/sshd
 	etc/profile.d/20locale.sh
 	usr/lib/NetworkManager/conf.d/50-dns.conf
 	usr/lib/systemd/journald.conf.d/10-postmarketos.conf
@@ -125,6 +126,7 @@ _apk() {
 }
 
 sha512sums="
+ff5b22d095d240a7a222afcdea14cbca8ee78472df3553827c5c02753ee97d84b59624a87952afa5690581910f8f4aaebfe035e97be465ee07ca17c6a7c4cdd7  rootfs-etc-pam.d-sshd
 084f6256e712d33e605c4a1d794ed6ed2d3f31c7ddce5baaad7f44ba74f371f969a16e06f25884a71e4e7216496df0ff0afb6d3246e23932681ad64abfb96975  rootfs-etc-profile.d-20locale.sh
 94063e3a3f983b7613d9de6bfc067096f79b12688f45667faf968f9a9bae194c4c8e554311f2ab5614edcc4d4499f6d30aa965a67b7417c26ce4d07edc847178  rootfs-usr-lib-NetworkManager-conf.d-50-dns.conf
 b7c3e70f5e4d88d6df6a8d58f4bb6af3d3051c5130cf13ad86a491fcbf7a69ae33ba31d663946c35ddaed03a16b6eb9d9d4b7cabcb58bfec7a254920ff375178  rootfs-usr-lib-systemd-journald.conf.d-10-postmarketos.conf
