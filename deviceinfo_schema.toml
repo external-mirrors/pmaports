@@ -292,7 +292,12 @@ datatype = "boolean"
 default_value = false
 
 [variable.flash.generate_uboot_fit_images]
-description = "Set `true` to generate U-boot FIT images, one image per *.its file in board's u-boot directory"
+description = "Set `true` to generate U-Boot FIT images, one image per *.its file in board's u-boot directory"
+datatype = "boolean"
+default_value = false
+
+[variable.flash.generate_uboot_env]
+description = "Set `true` to generate a U-Boot environment file. This will generate a /boot/environ.txt file which can be sourced in bootscripts."
 datatype = "boolean"
 default_value = false
 
