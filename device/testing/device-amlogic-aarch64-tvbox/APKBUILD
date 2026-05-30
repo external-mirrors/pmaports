@@ -2,7 +2,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
-pkgver=19
+pkgver=20
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -47,11 +47,6 @@ package() {
 }
 
 aml_boot_prep() {
-	# uEnv.ini: Used to set kernel cmdline, and DTB if booting a legacy uImage
-	mkdir -p "$2"/boot/
-	echo "bootargs=console=tty0 console=ttyAML0,115200n8" > "$2"/boot/uEnv.ini
-	echo "pmos_env_dtb=$1" >> "$2"/boot/uEnv.ini
-
 	# FIT image used to boot Amlogic devices if their vendor U-Boot build supports it
 	mkdir -p "$2"/usr/share/u-boot/amlogic-tvbox
 	sed "s@\\[\\[\\[DEVICETREE\\]\\]\\]@/boot/dtbs/amlogic/$1@" "$srcdir/boot-image.its" > "$2"/usr/share/u-boot/amlogic-tvbox/boot-image.its
@@ -138,7 +133,7 @@ kernel_zte_b860h() {
 
 sha512sums="
 17e803e341c362f54df2116125549ededc41deb89cd6f57974133e18053b30af35fc2b60cdb732b10efadf95234f154bdd7b32410c139f0166adfe9b4ffe02dd  boot-image.its
-6eec3f25b4157de4d0ca86dd8e31ba0411419fb98ff841e486cfc2d841bb0673bd99cdb6a108bf039c26cb7bae30e239d3392c4f704cee782f1ffd2b984de7f2  deviceinfo
+ca25567b16ae71a2e8b76ca6eb15a378d2df10b7ee2b93ac1e05ddbbf5de3062c5b6ba088b2e85389c4253be7cf89d842e12f5928aa9cdde1038c136b7adad6b  deviceinfo
 274a58cae87b2357f1a30c0463b2728d4dbea1a9c7bd3a17a62b22cd947ef8169c39bb21a480ba3d2dfae1fddcec3812d43dfdd7e44e81619124d6551a1611e2  kernel-cmdline.conf
 52948c2884a6f6384e12b7a598f70878526d0d3293c214425170145231144ec7de805c038641741a4a5d75b50e554f6a3fa3769784a674217ed032f9b6a233c8  modules-initfs
 "
