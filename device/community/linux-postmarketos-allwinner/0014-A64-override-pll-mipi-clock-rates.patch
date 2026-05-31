@@ -1,0 +1,39 @@
+From d84f370a8a1e27e45d45f20854cd1892926a2ed3 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Tue, 2 Jun 2026 15:19:30 -0700
+Subject: [PATCH 2/5] A64: override pll-mipi clock rates
+
+Reverts 69f16d9b7898 to fix display on a64-lts and pinetabs
+---
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
+index e76a1c10f390..7afc54e8d383 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
+@@ -6,6 +6,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ 
+ #include "ccu_common.h"
+@@ -993,6 +994,13 @@ static int sun50i_a64_ccu_probe(struct platform_device *pdev)
+ 		writel(val, reg + CCU_MIPI_DSI_CLK);
+ 	}
+ 
++	if (of_machine_is_compatible("pine64,pine64-lts") ||
++    of_machine_is_compatible("pine64,pinetab") ||
++    of_machine_is_compatible("pine64,pinetab-early-adopter")) {
++    pll_mipi_clk.common.min_rate = 0;
++    pll_mipi_clk.common.max_rate = 0;
++	}
++
+ 	ret = devm_sunxi_ccu_probe(&pdev->dev, reg, &sun50i_a64_ccu_desc);
+ 	if (ret)
+ 		return ret;
+-- 
+2.54.0
+

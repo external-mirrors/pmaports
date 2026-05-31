@@ -1,0 +1,31 @@
+From 854859be4c8360438f696f264515a81e4173e73e Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Sun, 31 May 2026 15:13:11 -0700
+Subject: [PATCH 4/5] A64-LTS: fix USB host ports
+
+- enable vbus on both ports
+- disable OTG/musb mode, so at least both ports work in host mode.
+---
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+index 7af1936b71dc..bdc6f9d581a6 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+@@ -70,3 +70,12 @@ &r_pwm {
+ 	pinctrl-0 = <&r_pwm_pin>;
+ 	status = "okay";
+  };
++
++&usbphy {
++    usb0_vbus-supply = <&reg_dcdc1>;
++    usb1_vbus-supply = <&reg_dcdc1>;
++};
++
++&usb_otg {
++	status = "disabled";
++};
+-- 
+2.54.0
+

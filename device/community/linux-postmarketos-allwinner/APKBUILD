@@ -4,7 +4,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=6.18.3_git20260105
-pkgrel=3
+pkgrel=4
 _tag="orange-pi-6.18-20260105-0049"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -47,6 +47,11 @@ source="$pkgname-$_tag.tar.gz::https://github.com/Arnavion/linux/archive/refs/ta
 	0010-eMMC-workaround.patch
 	0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
 	0012-staging-rtl8723cs-fix-CFI-signature-of-rtw_xmit_ent.patch
+	0013-A64-LTS-eMMC-workaround.patch
+	0014-A64-override-pll-mipi-clock-rates.patch
+	0015-A64-LTS-add-7in-panel.patch
+	0016-A64-LTS-fix-USB-host-ports.patch
+	0017-A64-LTS-enable-TS-controller.patch
 	"
 builddir="$srcdir/linux-$_tag"
 
@@ -99,4 +104,9 @@ eaff5d1167e2fa1a46619dc15623d1ac979a76f67b385d43cc026150efeb98dd46ab3e824e1bcf24
 295079325f9bd30d2ccaebcc02f618faf6c6ab671499168a359c7460743f2ca8b8454495e272d74d781bb3c42a41edcdab49a36c34635ffa4e277670d10b2628  0010-eMMC-workaround.patch
 f0fa032dcd25f4b3f5cbbd863d7580f786d34bb6111bfcea8eaa0bdb8e40bba7baa4c32fbbc20ea90bf575f6804c01bc0e6e892ad8547ff7242e07b3128ab929  0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
 28c32c65fd51146b56e381720a5056708b0ff002cebbcab7b0013009c2a05cc0411244c868e1a2d8dfbd9bfd186611a9caf88851768596d74f9c3b1a4ab2fbf2  0012-staging-rtl8723cs-fix-CFI-signature-of-rtw_xmit_ent.patch
+1413c26b864d052e83f9f912cddf1b338980cc1c7ba3555334435cbfda8c9963f06ab01cc7ff7db7b5552b8dc2d3219680986a48139705e9bfa263b0ec7e7ab3  0013-A64-LTS-eMMC-workaround.patch
+7dcf86a3d9d001bdbe72e1f4ad8fe7d67af29af9f1c6070552e1343a6b8a0a270688e0db2dec2bbec18327b8667deba9ff077b082572b6785202ed01989f30c8  0014-A64-override-pll-mipi-clock-rates.patch
+5c33748353dae1a6d034ec22fe22075b80ab5da48f3c595c762e388400970d9991c8d58b0410aa49347f32467138fce9548dd0505bb243d0ef3c68f12b440e08  0015-A64-LTS-add-7in-panel.patch
+6f462a9934dad1277258d92afb86518687811e99982bdbbcb1c95874d7545ce2237a3821d063b2e04bfec74ff8fe7b5ed52f461e24163b292f1803757ba21cd9  0016-A64-LTS-fix-USB-host-ports.patch
+3bdda0c9c09c870f41752acc9a6244ccf1ae00ec0873bd7ffaa06fa8d39fe2c08a405a7f2773e20c795ca89e6358490a3b27a98089fedaa592f68e72e3e86ce9  0017-A64-LTS-enable-TS-controller.patch
 "
