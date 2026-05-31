@@ -2,16 +2,36 @@
 # Enable/disable developer USB mode by delegating network operations to NetworkManager
 # Dynamically generate NetworkManager connection because it is only available in the right USB mode
 #
-# Copyright (c) Dylan Van Assche (2025)
-set -e
-
+# Copyright (c) Dylan Van Assche (2025-2026)
 CONFIGFS="/sys/kernel/config/usb_gadget"
 IFACE=$(cat "$CONFIGFS"/usb-signaller-developer/functions/ncm.*/ifname 2>/dev/null)
 IFACE=${IFACE:-"usb0"}
 IP_ADDRESS_SERVER=172.16.42.1
 IP_ADDRESS_CLIENT=172.16.42.2
 CONNECTION_NAME=$(cat "$CONFIGFS"/usb-signaller-developer/configs/*/strings/0x409/configuration 2>/dev/null)
-CONNECTION_NAME=${CONNECTION_NAME:-"USB Developer Mode"}
+CONNECTION_NAME=${CONNECTION_NAME:-"Developer Mode"}
+
+set -e
+
+_start_unudhcpd() {
+    if [ -d "/run/systemd" ]; then
+        systemctl start unudhcpd@"$1"
+    elif [ -d "/etc/rc.conf" ]; then
+        rc-service unudhcpd."$1" start
+    else
+        echo "Cannot start unudhpcd!"
+    fi
+}
+
+_stop_unudhcpd() {
+    if [ -d "/run/systemd" ]; then
+        systemctl stop unudhcpd@"$1"
+    elif [ -d "/etc/rc.conf" ]; then
+        rc-service unudhcpd."$1" stop
+    else
+        echo "Cannot stop unudhpcd!"
+    fi
+}
 
 up() {
     # Bring interface and NetworkManager connection up
@@ -20,12 +40,12 @@ up() {
     nmcli connection up "$CONNECTION_NAME"
 
     # Start DHCP server
-    unudhcpd -i "$IFACE" -s "$IP_ADDRESS_SERVER" -c "$IP_ADDRESS_CLIENT" &
+    _start_unudhcpd "$IFACE"
 }
 
 down() {
     # Stop DHCP server
-    killall -9 unudhcpd
+    _stop_unudhcpd "$IFACE"
 
     # Bring NetworkManager connection down
     nmcli connection down "$CONNECTION_NAME"

@@ -2,14 +2,14 @@
 # Enable/disable tethering USB mode by delegating network operations to NetworkManager.
 # Dynamically generate NetworkManager connection because it is only available in the right USB mode.
 #
-# Copyright (c) Dylan Van Assche (2025)
-set -e
-
+# Copyright (c) Dylan Van Assche (2025-2026)
 CONFIGFS="/sys/kernel/config/usb_gadget"
 IFACE=$(cat "$CONFIGFS"/usb-signaller-tethering/functions/ncm.*/ifname 2>/dev/null)
 IFACE=${IFACE:-"usb0"}
 CONNECTION_NAME=$(cat "$CONFIGFS"/usb-signaller-tethering/configs/*/strings/0x409/configuration 2>/dev/null)
-CONNECTION_NAME=${CONNECTION_NAME:-"USB Tethering Mode"}
+CONNECTION_NAME=${CONNECTION_NAME:-"Tethering Mode"}
+
+set -e
 
 up() {
     # Bring interface and NetworkManager connection up
