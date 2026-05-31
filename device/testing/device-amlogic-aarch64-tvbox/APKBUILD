@@ -2,7 +2,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
-pkgver=14
+pkgver=15
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -56,35 +56,35 @@ aml_boot_prep() {
 }
 
 kernel_p201() {
-	pkgdesc="Kernel for Amlogic P201-based TV box (S905)"
+	pkgdesc="Kernel for Amlogic P201-based TV box (S905) [ONLY FOR TESTING]"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905-tv"
 	aml_boot_prep "meson-gxbb-p201.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_p212() {
-	pkgdesc="Kernel for Amlogic P212-based TV box (S905X)"
+	pkgdesc="Kernel for Amlogic P212-based TV box (S905X) [ONLY FOR TESTING]"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
 	aml_boot_prep "meson-gxl-s905x-p212.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_p241() {
-	pkgdesc="Kernel for Amlogic P241-based TV box (S805X/S805Y)"
+	pkgdesc="Kernel for Amlogic P241-based TV box (S805X/S805Y) [ONLY FOR TESTING]"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
 	aml_boot_prep "meson-gxl-s805x-p241.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_p281() {
-	pkgdesc="Kernel for Amlogic P281-based TV box (S905W)"
+	pkgdesc="Kernel for Amlogic P281-based TV box (S905W) [ONLY FOR TESTING]"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
 	aml_boot_prep "meson-gxl-s905w-p281.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_sei510() {
-	pkgdesc="Kernel for SEI Robotics SEI510-based TV box (S905X2)"
+	pkgdesc="Kernel for SEI Robotics SEI510-based TV box (S905X2) [ONLY FOR TESTING]"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905x2-tv"
 	aml_boot_prep "meson-g12a-sei510.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
