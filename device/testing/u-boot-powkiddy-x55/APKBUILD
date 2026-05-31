@@ -1,6 +1,6 @@
 maintainer="Vitaliy Ognev <vitaliy.ognev@gmail.com>"
 pkgname=u-boot-powkiddy-x55
-pkgver=v2024.01_rc4
+pkgver=2026.04
 pkgrel=0
 pkgdesc="U-Boot bootloader for the Powkiddy X55 (rk3566)"
 url="https://source.denx.de/u-boot/u-boot.git"
@@ -11,9 +11,11 @@ license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
 options="!check"
 
 makedepends="
+	bash
 	bc
 	bison
 	flex
+	gnutls-dev
 	libfdt
 	make
 	openssl-dev
@@ -23,7 +25,7 @@ makedepends="
 	swig
 "
 
-_uboot="27089f1e4d11fd7e0619097b59258d0428cde2ac"
+_uboot="88dc2788777babfd6322fa655df549a019aa1e69"
 _rkbin="a2a0b89b6c8c612dca5ed9ed8a68db8a07f68bc0"
 
 builddir=$srcdir/u-boot-$_uboot
@@ -31,15 +33,9 @@ builddir=$srcdir/u-boot-$_uboot
 source="
 	uboot-$_uboot.tar.gz::https://github.com/u-boot/u-boot/archive/$_uboot.tar.gz
 	rkbin-$_rkbin.tar.gz::https://github.com/rockchip-linux/rkbin/archive/$_rkbin.tar.gz
-	powkiddy-x55.patch
 "
 
 build() {
-	cd $srcdir/rkbin-$_rkbin
-	./tools/boot_merger RKBOOT/RK3568MINIALL.ini
-
-	cd $builddir
-
 	make powkiddy-x55-rk3566_defconfig
 
 	export ROCKCHIP_TPL=$srcdir/rkbin-$_rkbin/bin/rk35/rk3566_ddr_1056MHz_v1.21.bin
@@ -48,9 +44,7 @@ build() {
 	make spl/u-boot-spl.bin u-boot.dtb u-boot.img tools
 	make CONFIG_MKIMAGE_DTC_PATH="scripts/dtc/dtc"
 
-	tools/mkimage -n rk3568 -T rksd -d \
-		$ROCKCHIP_TPL:$srcdir/rkbin-$_rkbin/rk356x_spl_loader_v1.21.113.bin \
-		-C bzip2 idbloader.img
+	tools/mkimage -n rk3568 -T rksd -d $ROCKCHIP_TPL:spl/u-boot-spl.bin -C bzip2 idbloader.img
 }
 
 package() {
@@ -61,7 +55,6 @@ package() {
 }
 
 sha512sums="
-2727d6bd70b17a9235dd7296dddfc458a9632a62119a61a7ddaf91059844e8fe213dfeafe8126b0c9c1966e6614ead8c9b4710ab3dc636744533fbc7138e3ff5  uboot-27089f1e4d11fd7e0619097b59258d0428cde2ac.tar.gz
+d4470668561ce084b04cdae7930085a3ea2ea4adfcf9b14080db9a6288355507603c95326da7a0afeaa0e93fb29d961cdf7a2adb7f6b7eec17960317b40ee7fd  uboot-88dc2788777babfd6322fa655df549a019aa1e69.tar.gz
 715253b5ef5c7fbcbce8478d4dea5ad3d1b4b738da437b5f0e9b31eed20f9bcb86cab082e4c04c69b42b6ffcc2cbb1a31079b33b968bb76826ff0dd4f83043e1  rkbin-a2a0b89b6c8c612dca5ed9ed8a68db8a07f68bc0.tar.gz
-f9c6850267fc47ee14358df4cd10c46687c6f6223bba6de3aa6c6401c973ced7753ba7e81c7bf8315428a9cef50472aa257a1737ba9271482a2c13f69bcf29c1  powkiddy-x55.patch
 "
