@@ -1,7 +1,7 @@
 maintainer=""
 pkgname=firmware-fxtec-qx1050
-pkgver=1
-pkgrel=4
+pkgver=2
+pkgrel=0
 pkgdesc="Firmware for F(x)tec Pro1x (QX1050)"
 subpackages="
 	$pkgname-adreno
@@ -72,7 +72,6 @@ rproc() {
 	depends="
 		rmtfs
 		tqftpserv
-		pd-mapper
 	"
 	mkdir "$subpkgdir"
 }
@@ -82,7 +81,6 @@ rproc_openrc() {
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		openrc
-		pd-mapper-openrc
 		tqftpserv-openrc
 	"
 	mkdir "$subpkgdir"

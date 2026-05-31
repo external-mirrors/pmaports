@@ -1,8 +1,8 @@
 maintainer=""
 pkgname=soc-qcom-sc8180x
 pkgdesc="Common package for Qualcomm 8cx devices"
-pkgver=1
-pkgrel=4
+pkgver=2
+pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
@@ -21,7 +21,6 @@ nonfree_firmware() {
 	pkgdesc="Modem, WiFi and GPU Firmware"
 	depends="
 		qrtr
-		pd-mapper
 		tqftpserv
 		rmtfs
 	"
@@ -33,7 +32,6 @@ nonfree_firmware_openrc() {
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		openrc
-		pd-mapper-openrc
 		rmtfs-openrc
 		tqftpserv-openrc
 	"

@@ -3,7 +3,7 @@
 maintainer=""
 pkgname=device-realme-x3
 pkgdesc="Realme X3"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -47,7 +47,6 @@ nonfree_firmware() {
 	depends="
 		firmware-realme-x3
 		msm-modem
-		pd-mapper
 		tqftpserv
 		bootmac
 		alsa-utils
@@ -62,7 +61,6 @@ nonfree_firmware_openrc() {
 	install="$subpkgname.post-install"
 	depends="
 		openrc
-		pd-mapper-openrc
 		tqftpserv-openrc
 	"
 
