@@ -8,7 +8,17 @@ url="https://gitlab.com/u-boot/u-boot"
 arch="aarch64"
 license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
 	ISC LGPL-2.0-only LGPL-2.1-only X11"
-makedepends="$depends_dev bc dtc python3-dev swig bison flex openssl-dev arm-trusted-firmware"
+makedepends="
+	bc
+	dtc
+	python3-dev
+	py3-setuptools
+	swig
+	bison
+	flex
+	openssl-dev
+	arm-trusted-firmware
+"
 options="!check"
 source="
 	ftp://ftp.denx.de/pub/u-boot/u-boot-${pkgver//_/-}.tar.bz2
