@@ -5,7 +5,7 @@
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-bigscreen
 pkgver=6.6.80_git20260404
-pkgrel=0
+pkgrel=1
 _commit="05a9daec3d3da914ba0f12494fa3b096ba3c7308"
 pkgdesc="A 10-feet interface made for TVs"
 url="https://plasma-bigscreen.org"
@@ -55,7 +55,8 @@ esac
 _repo_url="https://invent.kde.org/plasma/plasma-bigscreen.git"
 source="https://invent.kde.org/plasma/plasma-bigscreen/-/archive/$_commit/plasma-bigscreen-$_commit.tar.gz"
 
-options="!check"
+# spdx: LicenseRef licenses are not SPDX compliant
+options="!check !spdx"
 builddir="$srcdir/plasma-bigscreen-$_commit"
 
 build() {
