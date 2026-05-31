@@ -4,7 +4,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=linux-postmarketos-exynos4
 pkgver=6.18.9
-pkgrel=2
+pkgrel=3
 pkgdesc="Mainline kernel fork for Samsung Exynos4 devices"
 arch="armv7"
 _carch="arm"
@@ -60,7 +60,7 @@ package() {
 		LLVM=1 \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 
 	install -D "$builddir"/include/config/kernel.release \
