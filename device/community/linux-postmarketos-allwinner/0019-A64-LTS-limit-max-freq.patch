@@ -1,0 +1,35 @@
+From 0d758327116615b7eb65f355d5180841b293e0e0 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Fri, 5 Jun 2026 14:07:41 -0700
+Subject: [PATCH] A64-LTS: limit max freq
+
+This works around an issue where my a64-lts board will unexpectedly
+and abruptly reset if it performs concurrent read-modify-write memory
+operations across 4 cores at these 'fast' speeds. Limiting the frequency
+seems to effectively work around this issue, but this is obviously
+papering over a bigger issue with the memory controller timing or ???
+
+I used stress-ng to show that resets only happened when using --vm 4
+(or greater), and with --vm-method flip. Using a write-only or read-only
+method did not trigger the reset. So it's some combination of the memory
+activity and operating higher frequency supported by the SOC.
+---
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+index a67286eb5c53f..7a55f9dd55ee0 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+@@ -116,3 +116,8 @@ &mmc1 {
+ 	max-frequency = <25000000>;
+ 	status = "okay";
+ };
++
++&cpu0_opp_table {
++    /delete-node/ opp-1152000000;
++    /delete-node/ opp-1104000000;
++};
+-- 
+2.54.0
+

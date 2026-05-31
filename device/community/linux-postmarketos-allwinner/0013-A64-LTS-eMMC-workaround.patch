@@ -1,0 +1,52 @@
+From 5bfd0428bd9d52e651d0daff5387c405e0cbc556 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <craftyguy@postmarketos.org>
+Date: Fri, 29 May 2026 11:27:57 -0700
+Subject: [PATCH] A64-LTS: eMMC workaround
+
+This is far from ideal, but it was required to get the single
+emmc module I have working on one A64 LTS board. Supporting more
+boards/modules seems better than nothing.
+---
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts | 4 ++++
+ drivers/mmc/host/sunxi-mmc.c                            | 6 ++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+index 709fe650a360..7100cf31ad7d 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+@@ -23,3 +23,7 @@ led {
+ &mmc0 {
+ 	broken-cd;		/* card detect is broken on *some* boards */
+ };
++
++&mmc2 {
++	/delete-property/ mmc-hs200-1_8v;
++};
+diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+index 97702ec1d6b3..df5165b22764 100644
+--- a/drivers/mmc/host/sunxi-mmc.c
++++ b/drivers/mmc/host/sunxi-mmc.c
+@@ -1433,7 +1433,7 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
+ 				  MMC_CAP_SDIO_IRQ;
+
+ 	/*
+-	 * Some H5 and H6 devices do not have signal traces precise
++	 * Some H5, H6, and A64 devices do not have signal traces precise
+ 	 * enough to use HS DDR mode for their eMMC chips.
+ 	 *
+ 	 * We still enable HS DDR modes for all the other controller
+@@ -1443,7 +1443,9 @@ static int sunxi_mmc_probe(struct platform_device *pdev)
+ 	    !of_device_is_compatible(pdev->dev.of_node,
+ 				     "allwinner,sun50i-h5-emmc") &&
+ 	    !of_device_is_compatible(pdev->dev.of_node,
+-				     "allwinner,sun50i-h6-emmc"))
++				     "allwinner,sun50i-h6-emmc") &&
++	    !of_device_is_compatible(pdev->dev.of_node,
++				     "allwinner,sun50i-a64-emmc"))
+ 		mmc->caps      |= MMC_CAP_1_8V_DDR | MMC_CAP_3_3V_DDR;
+
+ 	ret = mmc_of_parse(mmc);
+--
+2.54.0
+

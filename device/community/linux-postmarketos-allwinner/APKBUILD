@@ -4,7 +4,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=6.18.3_git20260105
-pkgrel=3
+pkgrel=4
 _tag="orange-pi-6.18-20260105-0049"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -47,6 +47,13 @@ source="$pkgname-$_tag.tar.gz::https://github.com/Arnavion/linux/archive/refs/ta
 	0010-eMMC-workaround.patch
 	0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
 	0012-staging-rtl8723cs-fix-CFI-signature-of-rtw_xmit_ent.patch
+	0013-A64-LTS-eMMC-workaround.patch
+	0014-A64-override-pll-mipi-clock-rates.patch
+	0015-A64-LTS-add-7in-panel.patch
+	0016-A64-LTS-fix-USB-host-ports.patch
+	0017-A64-LTS-enable-TS-controller.patch
+	0018-A64-LTS-enable-sdio-wifi-module.patch
+	0019-A64-LTS-limit-max-freq.patch
 	"
 builddir="$srcdir/linux-$_tag"
 
@@ -99,4 +106,11 @@ eaff5d1167e2fa1a46619dc15623d1ac979a76f67b385d43cc026150efeb98dd46ab3e824e1bcf24
 295079325f9bd30d2ccaebcc02f618faf6c6ab671499168a359c7460743f2ca8b8454495e272d74d781bb3c42a41edcdab49a36c34635ffa4e277670d10b2628  0010-eMMC-workaround.patch
 f0fa032dcd25f4b3f5cbbd863d7580f786d34bb6111bfcea8eaa0bdb8e40bba7baa4c32fbbc20ea90bf575f6804c01bc0e6e892ad8547ff7242e07b3128ab929  0011-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
 28c32c65fd51146b56e381720a5056708b0ff002cebbcab7b0013009c2a05cc0411244c868e1a2d8dfbd9bfd186611a9caf88851768596d74f9c3b1a4ab2fbf2  0012-staging-rtl8723cs-fix-CFI-signature-of-rtw_xmit_ent.patch
+2b99a2149c521139253f08c8fb9c3f9d99104e138fa8000092209092b0e7855409fe18453b2089f6b03e35803ac84a83744ca252a30fe538104264425e4773b0  0013-A64-LTS-eMMC-workaround.patch
+64a7fd0db8f76c604e8652de85a5634230e4df790f6a543a0c5f3e2fde6b426adf0a53c8f5050ff504c740f4f30c4518a7b5a2f80868a0a0743704d9f26b4d2a  0014-A64-override-pll-mipi-clock-rates.patch
+2ebb7fe8bef33ae251077c69d3561205698d6060754a167595b9dc6992e080db3f2fb47beeb296965830917fa937045a80b08874a3ff05695e33da6795f1b166  0015-A64-LTS-add-7in-panel.patch
+86f9e851763779cfae13f9b11cdce0fd2f93a446bfee205a9c85a1cafde84f870946171332483a4024f5e0dbc070854b108f68a0ab4b78ef8cd0929739b649e3  0016-A64-LTS-fix-USB-host-ports.patch
+7c08d6e13ef7edcdb1c1b7fe18591320352e7037ac75cd2c84da641a5c7c3a98d9af5c2e819c8c338bd62133fcb393f126ea724a5149817ff17594fb59014b80  0017-A64-LTS-enable-TS-controller.patch
+6a3ef71a95ac10ac89796f9850810fb81b66bf276dae76247120d4d3fe11e7a0a1bfe9f66aacf284624505c1ceb555a3292f8aa761bc86719bcbe44ffae1f296  0018-A64-LTS-enable-sdio-wifi-module.patch
+14fbcce1b48f6e553987192df6369a977765e6a7416db3a9d9c1fd6e4517eac156340af5db09e99588d2151e9525b4872c41d6e4ce43b6f5b6f60bdc029b57ec  0019-A64-LTS-limit-max-freq.patch
 "

@@ -1,0 +1,44 @@
+From 4db6db1fa7747b75faab087f0e37b1d424cac33c Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Sun, 31 May 2026 15:54:56 -0700
+Subject: [PATCH] A64-LTS: enable TS controller
+
+---
+ .../dts/allwinner/sun50i-a64-pine64-lts.dts   | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+index bdc6f9d581a6..13658082efab 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pine64-lts.dts
+@@ -79,3 +79,27 @@ &usbphy {
+ &usb_otg {
+ 	status = "disabled";
+ };
++
++&reg_ldo_io0 {
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++	regulator-enable-ramp-delay = <3500000>;
++	regulator-name = "vcc-ctp";
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	touchscreen@5d {
++		compatible = "goodix,gt911";
++		reg = <0x5d>;
++		interrupt-parent = <&pio>;
++		interrupts = <7 4 IRQ_TYPE_LEVEL_HIGH>; /* PH4 */
++		irq-gpios   = <&pio 7 4  GPIO_ACTIVE_HIGH>; /* PH4 */
++		reset-gpios = <&pio 7 11 GPIO_ACTIVE_HIGH>; /* PH11 */
++		AVDD28-supply = <&reg_ldo_io0>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++};
+--
+2.54.0
+
