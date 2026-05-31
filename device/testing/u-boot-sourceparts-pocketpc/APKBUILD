@@ -2,7 +2,7 @@
 maintainer=""
 pkgname=u-boot-sourceparts-pocketpc
 pkgver=2021.1
-pkgrel=2
+pkgrel=3
 pkgdesc="U-Boot bootloader for the Sourceparts Pocket P.C."
 url="https://source.denx.de/u-boot"
 arch="aarch64"
@@ -14,6 +14,8 @@ _ref="49694d39d856c9ab537c4f2ff1d0167f4e21d19b"
 source="https://github.com/PopcornComputer/PocketPC-Uboot/archive/$_ref.tar.gz
 	update-u-boot
 	python-3.13-binman-migrate-from-pkg_resources-to-imp.patch
+	libfdt-fix-invalid-version.patch
+	libfdt.i_shipped-use-SWIG_AppendOutput.patch
 	"
 builddir="$srcdir/PocketPC-Uboot-$_ref"
 install="$pkgname.post-upgrade"
@@ -51,4 +53,6 @@ sha512sums="
 39caa823655d38510d563b149265da1bba2e63efcd2ef5999a0a41a6b96775108c3ee86e6d9d6acc0fc11acb8dd66e534ec834c12fd8cd76057ca52c581557fe  49694d39d856c9ab537c4f2ff1d0167f4e21d19b.tar.gz
 d9ebf59e37a2d8435d5a31884fde554f175390d1ce23511da8d38ba368f6b812b45f1399a0fa49821c37ef573dfb4500e895fcc993bb247fae88f63b3bb7804f  update-u-boot
 c0545c6a1d17507f7e4bc337200fa3a4a1a89d62122cc6599ea00f27187b85f3e322d945683a84cdff98d981cf604187ded05d7b93bb5fae5a3fe7f9751077a2  python-3.13-binman-migrate-from-pkg_resources-to-imp.patch
+fa49de52d61e619991b05ed679f13bef6054d8740164b006a252f346993a2b471b266daa4cf320364f3f4bddf3882c39190f1a6916de8b1a92ff09242368f7ba  libfdt-fix-invalid-version.patch
+016ef30dbbb1021dad4f58eeda3f5a5e89ff3a76dbc69e8e4cf6a3fc3983aef998cfe1087abb4b21bb2f859bd5cffe26c1da42d13f1c3d2e3c053c399f38720b  libfdt.i_shipped-use-SWIG_AppendOutput.patch
 "

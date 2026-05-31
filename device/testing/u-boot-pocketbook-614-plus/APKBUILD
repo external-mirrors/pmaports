@@ -2,7 +2,7 @@
 maintainer="Denis Burkov <hitechshell@mail.ru>"
 pkgname=u-boot-pocketbook-614-plus
 pkgver=2024.01
-pkgrel=1
+pkgrel=2
 pkgdesc="U-Boot bootloader for Pocketbook 614 Plus"
 url="https://source.denx.de/u-boot"
 arch="armv7"
@@ -24,6 +24,7 @@ source="
 	0001-ARM-dts-allwinner-sun5i-a13-pocketbook-614-plus-Add-.patch
 	0002-ARM-add-defconfig-for-PocketBook-614-Plus.patch
 	0003-python-3.13-binman-migrate-from-pkg_resources-to-imp.patch
+	0004-libfdt.i_shipped-use-SWIG_AppendOutput.patch
 "
 builddir="$srcdir/u-boot-v$pkgver"
 
@@ -49,4 +50,5 @@ sha512sums="
 b1271dbb462c9cb6ea02baf3f954d0c09e7de1610086e7b95862538911465d0754b96a2e1be7048b5d3f6aeb314da5ef9eb290622cd6099266a8e3ba7e7609ca  0001-ARM-dts-allwinner-sun5i-a13-pocketbook-614-plus-Add-.patch
 3447a3614499a7ffcfdabb70b1c2d33945c1ace258d87ad2ab013ad2c5501fcd030c6f9902246bfc2c91892437fc7e230a663887954c877fe9d404bba943582a  0002-ARM-add-defconfig-for-PocketBook-614-Plus.patch
 c0545c6a1d17507f7e4bc337200fa3a4a1a89d62122cc6599ea00f27187b85f3e322d945683a84cdff98d981cf604187ded05d7b93bb5fae5a3fe7f9751077a2  0003-python-3.13-binman-migrate-from-pkg_resources-to-imp.patch
+016ef30dbbb1021dad4f58eeda3f5a5e89ff3a76dbc69e8e4cf6a3fc3983aef998cfe1087abb4b21bb2f859bd5cffe26c1da42d13f1c3d2e3c053c399f38720b  0004-libfdt.i_shipped-use-SWIG_AppendOutput.patch
 "
