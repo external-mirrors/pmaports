@@ -3,7 +3,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=soc-qcom-sc7180
 pkgdesc="Common package for Qualcomm Snapdragon 7cx devices"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -41,7 +41,6 @@ openrc() {
 woa() {
 	pkgdesc="Modem, WiFi firmware"
 	depends="
-		pd-mapper
 		tqftpserv
 	"
 	mkdir "$subpkgdir"
@@ -49,7 +48,6 @@ woa() {
 
 woa_openrc() {
 	depends="
-		pd-mapper-openrc
 		tqftpserv-openrc
 	"
 	install_if="$pkgname-woa=$pkgver-r$pkgrel openrc"
