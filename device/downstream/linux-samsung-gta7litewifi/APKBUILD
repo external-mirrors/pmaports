@@ -2,7 +2,7 @@
 
 pkgname=linux-samsung-gta7litewifi
 pkgver=4.19.191
-pkgrel=0
+pkgrel=1
 pkgdesc="Samsung Galaxy Tab A7 Lite kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -30,7 +30,7 @@ _repository="kernel_samsung_gta7litewifi"
 _commit="d7b62c296e4b021c1d3d278034038518a5d88d8c"
 _config="config-$_flavor.$arch"
 source="
-	$_repository-$_commit.tar.gz::https://codeberg.org/lowendlibre/kernel_samsung_gta7litewifi/archive/d7b62c296e4b021c1d3d278034038518a5d88d8c.tar.gz
+	$_repository-$_commit.tar.gz::https://codeberg.org/lowendlibre/kernel_samsung_gta7litewifi/archive/$_commit.tar.gz
 	$_config
 	fix_hardcoded_toolchain.patch
 	fix_broken_inline_functions.patch
@@ -79,7 +79,7 @@ package() {
 }
 
 sha512sums="
-f05a92b19cd521f62f0cac1fcd28405f3e85f3f8edb34ec483ef099f467536fc85baa9734a4f050ca966742a0c1ca651809768405315ea452104ce9817d33dd7  kernel_samsung_gta7litewifi-d7b62c296e4b021c1d3d278034038518a5d88d8c.tar.gz
+1e5f148bf70463417ea8c9657b453387750920910e631df806fa4d1deff36d07487cd067e5098ecf45496c44b6669fafab6342072a8e87eadc132792a1a80f97  kernel_samsung_gta7litewifi-d7b62c296e4b021c1d3d278034038518a5d88d8c.tar.gz
 602e848744624b972cd14fd4f968fd71faf9b202590d514fd3be3223cf6d5244ef328988f233dce6c3465195544c05ed73a51ca5c8e11d7a3e715f971627dcae  config-samsung-gta7litewifi.aarch64
 d6982a5b955e470ebf99330c391ef8269c0d0c3b54a63e49701eef6031cab5095968ba256eb908832a896ff29498ca2aa7f73771aea5837295aae3ff0cff4001  fix_hardcoded_toolchain.patch
 3c45e4748b03164b88780f20a86e21a79e81e5486a0d380226382c5ae40a23a36bd6ccfab4ed221b54a30015203e9ab22ea6876b7c6e166cf6b0c4bc6574ea79  fix_broken_inline_functions.patch
