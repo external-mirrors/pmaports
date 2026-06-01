@@ -5,7 +5,7 @@ maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd-stage0
 pkgver=261_rc2
 _pkgver="${pkgver/_/-}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -15,7 +15,7 @@ license="MIT AND GPL-2.0-only AND LGPL-2.1-or-later"
 # This is only for bootstrapping other packages, make sure it does not get
 # pulled into real installations via !postmarketos-base and !tracedeps
 depends="!postmarketos-base"
-depends_libs="!postmarketos-base"
+depends_libs="!postmarketos-base libucontext"
 depends_dev="!postmarketos-base"
 depends_doc="!postmarketos-base"
 options="!tracedeps !check pmb:cross-native2 pmb:strict"
