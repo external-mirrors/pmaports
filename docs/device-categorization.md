@@ -201,8 +201,7 @@ straight to main.
   Consistency changes that require lots of work should be documented as issues
   an expect to be fixed in the future, but should not unnecessarily delay
   merge.
-* Before merging, the MR must have at least *four approvals*, 2 of which should
-  be from Core Contributors.
+* Before merging, the MR must have at least *four approvals* from team members
 
 #### After merge
 
