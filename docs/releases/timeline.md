@@ -22,7 +22,8 @@ Team:
 
 ## Branch
 
-CW 22 <small>(2026-05-25 - 2026-05-31)</small>
+CW 22 <small>(2026-05-25 - 2026-05-31)</small>,
+CW 23 <small>(2026-06-01 - 2026-06-07)</small>
 
 The release branch is in **feature freeze**:
 
@@ -35,7 +36,7 @@ Team:
 
 ## Test
 
-CW 23 <small>(2026-06-01 - 2026-06-07)</small>
+CW 24 <small>(2026-06-08 - 2026-06-14)</small>
 
 Maintainers:
 * Test your devices and UIs (test yourself if you can and/or coordinate with
@@ -46,7 +47,7 @@ Maintainers:
 
 ## Release
 
-CW 24 <small>(2026-06-08 - 2026-06-14)</small>
+CW 25 <small>(2026-06-15 - 2026-06-21)</small>
 
 Team:
 * Write the release blog post.
