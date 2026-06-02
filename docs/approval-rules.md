@@ -26,6 +26,10 @@ with any 2 approvals from team members. The submitting maintainer may choose to
 block the merge request to wait for co-maintainer review beyond the 48-hour
 window if desired.
 
+The following flowchart describes the process:
+
+![Approval rules](./approval-rules.svg)
+
 ## Move device from category
 
 Moving devices from category is a special operation, see
