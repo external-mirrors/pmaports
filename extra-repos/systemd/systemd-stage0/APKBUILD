@@ -6,7 +6,7 @@ pkgname=systemd-stage0
 pkgver=261_rc2
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd!
-pkgrel=1
+pkgrel=2
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -101,6 +101,25 @@ build() {
 		-Dsysvinit-path="" \
 		build .
 	meson compile ${JOBS:+-j ${JOBS}} -C build
+}
+
+dev() {
+	default_dev
+
+	# Since we set !tracedeps, we must explicitly list things we want this
+	# package to provide. We mainly need systemd-stage0 to build dbus, which
+	# we then use to build the "real" systemd. We do not want to re-compile
+	# dbus afterwards, dbus-dev should pull in libsystemd.
+	# If we don't explicitly provide pc:libsystemd here, building dbus
+	# against systemd-stage0 would result in the following abuild log:
+	# "Could not find any provider for pc:libsystemd>=209"
+	# and dbus-dev would not depend on libsystemd.
+	# If systemd-stage0-dev provides pc:libsystemd, this is solved and
+	# dbus-dev correctly depends on pc:libsystemd. And yes, this is only
+	# necessary because of !tracedeps.
+	# See pma#4156 for the bootstrap issue this solves.
+	provides="$provides pc:libsystemd=${pkgver%%[._]*}"
+	provider_priority=1
 }
 
 package() {
