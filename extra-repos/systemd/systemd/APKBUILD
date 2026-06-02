@@ -235,7 +235,6 @@ build() {
 		-Dinitrd=true \
 		-Dhibernate=false \
 		-Dselinux=disabled \
-		-Dsysvinit-path="" \
 		-Dukify=disabled \
 		-Dtpm2=enabled \
 		\
@@ -290,7 +289,6 @@ package() {
 		"
 
 	DESTDIR="$pkgdir" meson install --no-rebuild -C build
-
 
 	# NOTE: Uncomment to print dlopened dependencies and crash the build:
 	# _dump_dlopen_metadata "$pkgdir" | _extract_sonames | _resolve_packages; exit 1
@@ -434,7 +432,7 @@ logind() {
 		$pkgname=$pkgver-r$pkgrel
 		dbus
 		shadow
-	"
+		"
 
 	provides="elogind"
 	provider_priority=100
@@ -462,7 +460,6 @@ logind_zcomp() {
 
 journald() {
 	pkgdesc="systemd Journal"
-	# is a dependency of systemd
 
 	amove usr/bin/journalctl
 	amove usr/lib/systemd/system/sockets.target.wants/systemd-journal*
