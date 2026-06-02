@@ -5,6 +5,13 @@
 # Make sure to upgrade systemd-stage0 at the same time! #
 #########################################################
 
+# This is also used by upstream systemd CI with mkosi.
+# On upstream mkosi build, the following environment variables may be set:
+# $_systemd_upstream              : set to 1,
+# $_meson_extra_configure_options : set to extra meson config options,
+# $_meson_builddir                : set to the path to the meson build directory ($BUILDDIR in mkosi scripts),
+# $_upstream_srcdir               : set to the path to the upstream systemd source directory ($SRCDIR in mkosi scripts),
+
 maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
 pkgver=261_rc3
@@ -18,6 +25,12 @@ arch="all !armhf"
 license="MIT AND GPL-2.0-only AND LGPL-2.1-or-later"
 # crossdirect disabled because of "ERROR: Problem encountered: unable to determine gperf len type"
 options="pmb:strict !pmb:crossdirect"
+
+_bootloader="enabled"
+case "$CARCH" in
+	# ppc64le s390x: no EFI support
+	ppc64le|s390x) _bootloader="disabled" ;;
+esac
 
 triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 /usr/lib/udev/hwdb.d:\
@@ -189,11 +202,37 @@ subpackages="
 	$pkgname-zsh-completion
 	"
 
-source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
+if [ "$_systemd_upstream" = 1 ]; then
+	if [ "$_bootloader" = enabled ]; then
+		makedepends="
+			$makedepends
+			py3-pefile
+			py3-pytest
+			"
+
+		subpackages="
+			$subpackages
+			$pkgname-boot
+			$pkgname-ukify
+			"
+
+		_meson_extra_configure_options="
+			$_meson_extra_configure_options
+			-Dukify=enabled
+			"
+	fi
+else
+	# The source tar ball is of course only necessary when we are _not_ in upstream.
+	source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz"
+fi
+
+source="
+	$source
 	0001-musl-fix-build-on-32-bit-architecture.patch
 	wired.network
 	"
-builddir="$srcdir/$pkgname-$_pkgver"
+builddir=${_upstream_srcdir:-"$srcdir/$pkgname-$_pkgver"}
+_meson_builddir=${_meson_builddir:-build}
 
 _bashcomp="usr/share/bash-completion/completions"
 _zshcomp="usr/share/zsh/site-functions"
@@ -217,12 +256,6 @@ _default_zshcomp() {
 }
 
 build() {
-	local bootloader="enabled"
-	case "$CARCH" in
-		# ppc64le s390x: no EFI support
-		ppc64le|s390x) bootloader="disabled" ;;
-	esac
-
 	# TODO: after usr-merge completion: remove hardcoded "-D*-path" options
 	abuild-meson \
 		-Dlibc=musl \
@@ -252,7 +285,7 @@ build() {
 		-Dsysupdated=enabled \
 		-Dimportd=enabled \
 		\
-		-Dbootloader="$bootloader" \
+		-Dbootloader="$_bootloader" \
 		-Dinitrd=true \
 		-Dhibernate=false \
 		-Dselinux=disabled \
@@ -287,13 +320,14 @@ build() {
 		-Dbpf-framework=enabled \
 		-Dvmlinux-h=provided \
 		-Dvmlinux-h-path="$(find /usr/src -path "/usr/src/linux-headers-*-stable/vmlinux.h" | sort -V | tail -n1)" \
-		build .
-	meson compile ${JOBS:+-j ${JOBS}} -C build
+		$_meson_extra_configure_options \
+		$_meson_builddir .
+	meson compile ${JOBS:+-j ${JOBS}} -C $_meson_builddir
 }
 
 check() {
 	case "$CARCH" in
-	x86_64) meson test -C build ;;
+	x86_64) meson test --print-errorlogs --quiet --no-stdsplit -C $_meson_builddir ;;
 	*)
 		echo "*** NOTE: Skipping tests for archs that might use pmb:crossdirect/qemu-user ***" ;;
 	esac
@@ -309,7 +343,7 @@ package() {
 		!openrc
 		"
 
-	DESTDIR="$pkgdir" meson install --no-rebuild -C build
+	DESTDIR="$pkgdir" meson install --no-rebuild -C $_meson_builddir
 
 	# NOTE: Uncomment to print dlopened dependencies and crash the build:
 	# _dump_dlopen_metadata "$pkgdir" | _extract_sonames | _resolve_packages; exit 1
@@ -320,12 +354,14 @@ package() {
 		echo 'disable *' > "$pkgdir"/usr/lib/systemd/"$type"-preset/99-default.preset
 	done
 
-	# initramfs hardcodes /sbin/init
-	mkdir -p "$pkgdir"/sbin
-	ln -sf "../usr/lib/systemd/systemd" "$pkgdir"/sbin/init
+	if [ "$_systemd_upstream" != 1 ]; then
+		# initramfs hardcodes /sbin/init
+		mkdir -p "$pkgdir"/sbin
+		ln -sf "../usr/lib/systemd/systemd" "$pkgdir"/sbin/init
 
-	# this stuff is packaged in Alpine aports under "systemd-boot"
-	rm -rf "$pkgdir"/usr/lib/systemd/boot
+		# this stuff is packaged in Alpine aports under "systemd-boot"
+		rm -rf "$pkgdir"/usr/lib/systemd/boot
+	fi
 }
 
 udevd() {
@@ -349,11 +385,16 @@ udevd() {
 	amove usr/lib/udev
 
 	# Install symlinks to be more like eudev
-	# FIXME: After usr merge, convert these into relative symlinks to support
-	# installing this package into an arbitrary directory
-	mkdir -p "$subpkgdir"/sbin "$subpkgdir"/bin
-	ln -sf /usr/lib/systemd/systemd-udevd "$subpkgdir"/sbin/udevd
-	ln -sf /usr/lib/systemd/systemd-udevd "$subpkgdir"/bin/udevadm
+	if [ "$_systemd_upstream" = 1 ]; then
+		mkdir -p "$subpkgdir"/usr/sbin
+		ln -sf ../bin/udevadm "$subpkgdir"/usr/sbin/udevd
+	else
+		# FIXME: After usr merge, convert these into relative symlinks to support
+		# installing this package into an arbitrary directory
+		mkdir -p "$subpkgdir"/sbin "$subpkgdir"/bin
+		ln -sf /usr/lib/systemd/systemd-udevd "$subpkgdir"/sbin/udevd
+		ln -sf /usr/lib/systemd/systemd-udevd "$subpkgdir"/bin/udevadm
+	fi
 }
 
 udevd_bcomp() {
@@ -523,6 +564,37 @@ libs() {
 	provides="systemd-stage0-libs=$pkgver-r$pkgrel"
 
 	default_libs
+}
+
+boot() {
+	# Currently, this is only used in the upstream systemd CI with mkosi.
+
+	pkgdesc="systemd's EFI boot manager"
+	provides="efistub"
+	provider_priority=200
+
+	amove usr/lib/systemd/boot/efi
+}
+
+ukify() {
+	# Currently, this is only used in the upstream systemd CI with mkosi.
+
+	pkgdesc="Create unified kernel images (UKIs)"
+	provides="ukify"
+	provider_priority=200
+	depends="
+		binutils
+		py3-cryptography
+		py3-pefile
+		py3-zstandard
+		python3
+		systemd-boot=$pkgver-r$pkgrel
+		"
+
+	amove usr/bin/ukify
+	amove usr/lib/kernel/install.d/60-ukify.install
+	amove usr/lib/systemd/boot/hwids
+	amove usr/lib/systemd/ukify
 }
 
 # Scan for dlopened dependencies
