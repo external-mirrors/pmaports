@@ -27,4 +27,5 @@ in pmaports and the processes around device categorization.
    kernel-cmdline
    kernel-versions
    packaging-guidelines
+   ui-packages
 ```
