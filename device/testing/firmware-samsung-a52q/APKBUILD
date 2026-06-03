@@ -1,7 +1,7 @@
 # Maintainer: Leandro Friedrich <email@leandrofriedrich.de>
 pkgname=firmware-samsung-a52q
 pkgver=20220820
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for Samsung Galaxy A52"
 subpackages="
 	$pkgname-adreno
@@ -17,9 +17,19 @@ url="https://github.com/budderbrot/a52q-firmware"
 arch="aarch64"
 license="proprietary"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
+makedepends="pil-squasher"
 _commit="3ec32aecf7837a34240702955f5d01a336cf0c2c"
 source="https://github.com/budderbrot/a52q-firmware/archive/$_commit/a52q-firmware-$_commit.tar.gz"
 builddir="$srcdir/a52q-firmware-$_commit"
+
+build() {
+	pil-squasher "$builddir"/a615_zap.mbn "$builddir"/a615_zap.mdt
+	pil-squasher "$builddir"/adsp.mbn "$builddir"/adsp.mdt
+	pil-squasher "$builddir"/cdsp.mbn "$builddir"/cdsp.mdt
+	pil-squasher "$builddir"/ipa_fws.mbn "$builddir"/ipa_fws.mdt
+	pil-squasher "$builddir"/modem.mbn "$builddir"/modem.mdt
+	pil-squasher "$builddir"/venus.mbn "$builddir"/venus.mdt
+}
 
 package() {
 	# parent package is empty
@@ -29,39 +39,42 @@ package() {
 adreno() {
 	pkgdesc="Samsung Galaxy A52 adreno firmware"
 
+	install -Dm644 "$builddir"/a615_zap.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/a615_zap.mbn"
+	rm "$builddir"/a615_zap.mbn
 	install -Dm644 "$builddir"/a6* -t \
-		"$subpkgdir/lib/firmware/qcom/"
+		"$subpkgdir/usr/lib/firmware/qcom/"
 }
 
 adsp() {
 	pkgdesc="Samsung Galaxy A52 adsp firmware"
 
+	ls "$builddir"/adsp*
 	install -Dm644 "$builddir"/adsp* -t \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
 
 cdsp() {
 	pkgdesc="Samsung Galaxy A52 cdsp firmware"
 
 	install -Dm644 "$builddir"/cdsp* -t \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
 
 ipa() {
 	pkgdesc="Samsung Galaxy A52 ipa firmware"
 
 	install -Dm644 "$builddir"/ipa_fws.* -t \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
 
 modem() {
 	pkgdesc="Samsung Galaxy A52 modem firmware"
 
 	# cp because of the modem_pr directory
-	mkdir -p "$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+	mkdir -p "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 	cp -r "$builddir"/modem* \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
-	find "$subpkgdir/lib/firmware/qcom/sm7125/a52q/" \
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+	find "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/" \
 		-type f -exec chmod 0644 {} \;
 }
 
@@ -69,27 +82,27 @@ venus() {
 	pkgdesc="Samsung Galaxy A52 venus firmware"
 
 	install -Dm644 "$builddir"/venus.* -t \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
 
 wlan() {
 	pkgdesc="Samsung Galaxy A52 wlan firmware"
 
 	install -Dm644 "$builddir"/board-2.bin -t \
-		"$subpkgdir/lib/firmware/ath10k/WCN3990/hw1.0/"
+		"$subpkgdir/usr/lib/firmware/ath10k/WCN3990/hw1.0/"
 	install -Dm644 "$builddir"/firmware-5.bin -t \
-		"$subpkgdir/lib/firmware/ath10k/WCN3990/hw1.0/"
+		"$subpkgdir/usr/lib/firmware/ath10k/WCN3990/hw1.0/"
 	install -Dm644 "$builddir"/wlanmdsp.mbn -t \
-		"$subpkgdir/lib/firmware/qcom/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
 
 bluetooth() {
 	pkgdesc="Samsung Galaxy A52 bluetooth firmware"
 
 	install -Dm644 "$builddir"/crbtfw21.tlv -t \
-		"$subpkgdir/lib/firmware/qca/"
+		"$subpkgdir/usr/lib/firmware/qca/"
 	install -Dm644 "$builddir"/crnv21.* -t \
-		"$subpkgdir/lib/firmware/qca/sm7125/a52q/"
+		"$subpkgdir/usr/lib/firmware/qca/sm7125/a52q/"
 }
 
 sha512sums="
