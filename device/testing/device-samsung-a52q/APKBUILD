@@ -3,21 +3,30 @@
 pkgname=device-samsung-a52q
 pkgdesc="Samsung Galaxy A52"
 pkgver=1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	alsa-ucm-conf-samsung-sm7125
+	firmware-samsung-a52q-adreno
+	firmware-samsung-a52q-adsp
+	firmware-samsung-a52q-cdsp
+	firmware-samsung-a52q-ipa
+	firmware-samsung-a52q-modem
+	firmware-samsung-a52q-wlan
+	firmware-samsung-a52q-bluetooth
+	firmware-samsung-a52q-venus
 	linux-postmarketos-qcom-sm7125
 	mkbootimg
 	postmarketos-base
+	soc-qcom-pd-mapper
 	soc-qcom-sm7125
-	alsa-ucm-conf-samsung-sm7125
+	soc-qcom-sm7125-nonfree-firmware
 "
 makedepends="devicepkg-dev"
 source="deviceinfo"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -25,21 +34,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Firmware for GPU, Audio, Modem, WiFi, etc."
-	depends="
-		firmware-samsung-a52q-adreno
-		firmware-samsung-a52q-adsp
-		firmware-samsung-a52q-cdsp
-		firmware-samsung-a52q-ipa
-		firmware-samsung-a52q-modem
-		firmware-samsung-a52q-wlan
-		firmware-samsung-a52q-bluetooth
-		firmware-samsung-a52q-venus
-	"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
