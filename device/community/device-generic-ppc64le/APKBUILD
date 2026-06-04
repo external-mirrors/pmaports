@@ -2,17 +2,16 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 # Co-Maintainer: famfo <famfo@famfo.xyz>
 maintainer="Aelin <aelin@postmarketos.org>"
-pkgname=device-qemu-ppc64le
-pkgver=7
-pkgrel=6
-pkgdesc="Simulated device in QEMU (ppc64le)"
+pkgname=device-generic-ppc64le
+pkgver=1
+pkgrel=0
+pkgdesc="Generic ppc64le system"
 url="https://postmarketos.org"
 arch="ppc64le"
 license="MIT"
 depends="
 	grub-ieee1275
 	postmarketos-base
-	postmarketos-qemu-common
 	"
 makedepends="devicepkg-dev"
 subpackages="
@@ -22,8 +21,9 @@ subpackages="
 	"
 
 source="
-	kernel-cmdline.conf
 	deviceinfo
+	kernel-cmdline.conf
+	modules-initfs
 	"
 options="!check !archcheck"
 
@@ -54,6 +54,7 @@ kernel_mainline() {
 }
 
 sha512sums="
+33f6ac29d19cd9a4a8d5e94a863044746d08b5fd92ec89ca6578d2812e091a23afd454e4689bee21b8e000344a456161b642320cdb0246da13f56a5f8f8c89df  deviceinfo
 875267ce79b89ab77b7caa86f34bb942019ec0a5390a0f0a5156faa316367a59545b395a564875d2b2c48b83ebcb67c12b27895905301ac34410389333284ebd  kernel-cmdline.conf
-4e8d60fe172dfd392075ecf533e06ecfa42925355b242b112045915a1b3e51ac0880daa23f7750a4f480bd0fb2b7ebab77b6e28292ec4cba015653383cc1824a  deviceinfo
+366ecd0c0cd37bef12de4cf01c540f4b25f67aef2555f34cf64e4c3618903f96d464444eb32bcf6d403f9ad8cd3a23be17a95b94f8e1c083629f8ee4322c9a4a  modules-initfs
 "
