@@ -111,6 +111,9 @@ pytest-commits:
 
 # APKBUILD linting
 aport-lint:
+  # alpine:latest doesn't have the most recent atools-go, which means we would
+  # miss some linting rules that were added upstream. Use alpine:edge instead.
+  image: alpine:edge
   stage: lint
   rules:
     - if: *mr_rule
