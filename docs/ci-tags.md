@@ -5,6 +5,10 @@ the continuous integration behaviour for your merge requests.
 
 ## Current CI tags
 
+* `[ci:skip-apkbuild-lint]`: Don't run `apkbuild-lint` from
+  [atools-go](https://gitlab.alpinelinux.org/alpine/infra/atools-go). Use this
+  e.g. when making treewide changes where fixing up all APKBUILDs in the same
+  merge request is not useful.
 * `[ci:skip-build]`: Do not build modified packages, only verify their
   checksums. Use this when pushing changes to an MR that should not trigger a
   complete build.

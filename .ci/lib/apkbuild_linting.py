@@ -38,6 +38,10 @@ def get_kconfigcheck_categories() -> list [str]:
 
 
 if __name__ == "__main__":
+    if common.commit_message_has_string("[ci:skip-apkbuild-lint]"):
+        print("WARNING: not linting deviceinfo files ([ci:skip-apkbuild-lint])")
+        exit(0)
+
     kconfigcheck_categories = get_kconfigcheck_categories()
     custom_valid_options += kconfigcheck_categories
     os.environ["CUSTOM_VALID_OPTIONS"] = " ".join(custom_valid_options)
