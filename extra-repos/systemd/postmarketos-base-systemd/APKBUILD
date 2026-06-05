@@ -1,7 +1,7 @@
 # pmbootstrap installs this, if systemd is selected in "pmbootstrap init".
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-systemd
-pkgver=77
+pkgver=78
 pkgrel=0
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
@@ -64,6 +64,7 @@ _source644="
 	usr/lib/systemd/system-preset/90-base.preset
 	usr/lib/systemd/system/-.slice.d/10-oomd-defaults.conf
 	usr/lib/systemd/system/system.slice.d/10-oomd-defaults.conf
+	usr/lib/systemd/system/tmp.mount.d/10-min-memory.conf
 	usr/lib/systemd/system/user@.service.d/10-oomd-defaults.conf
 	usr/lib/systemd/user/app.slice.d/10-oomd-defaults.conf
 	usr/lib/systemd/user-preset/90-base.preset
@@ -120,6 +121,7 @@ e49972d276441e9da284315bab5f70d8d25ccba5e43d7e7ec6607c34a3d4dfa512f7303d5ce41076
 0e9b203870d0f533a9ef1587e42fe7f83ee8e8cc32893e666f79409e0741101d60564cadbc97e127c75f516a21c08b1283d05ac6f102aa7a6a0f4407d6ea07df  rootfs-usr-lib-systemd-system-preset-90-base.preset
 bde7052939d1ddde22fe1df86439d3f1b0cd41810911cee7acf26aac08afe1610360cbbd257b3c1a2e5e7409dff27ade8f3a302a38cd1b99c6cc6eed4cc64a78  rootfs-usr-lib-systemd-system--.slice.d-10-oomd-defaults.conf
 bde7052939d1ddde22fe1df86439d3f1b0cd41810911cee7acf26aac08afe1610360cbbd257b3c1a2e5e7409dff27ade8f3a302a38cd1b99c6cc6eed4cc64a78  rootfs-usr-lib-systemd-system-system.slice.d-10-oomd-defaults.conf
+cedd159b98ce47ee9d03e5f332c4132c7c3eff32135aa7b7993e19c4867d55aff689b418fc549e139c0ea4690f1094e86efcee7a5bc6cd6998ba99821064a917  rootfs-usr-lib-systemd-system-tmp.mount.d-10-min-memory.conf
 c5252710d8e2f95f5c216cce17737bb14e112c7f1e0b73f085ac0bc3da5a718bb831cc62c0c62e7e5e99337fdcc5c4ace76c5c11bb0ae1f242181ce6829e4fd3  rootfs-usr-lib-systemd-system-user@.service.d-10-oomd-defaults.conf
 4217385ab8e0d0e53a6f6eb2ad0ef5c1ae88cab431c9fdca3528f147241edfefe7eec8f2927670dcf79c6f853d2c8a930782fad7e2a28ef6575b55df115f2f83  rootfs-usr-lib-systemd-user-app.slice.d-10-oomd-defaults.conf
 cc59f71e6f5b0089bc893c5d303cbc9a370c6432c507ac5c5e120e866499d817d6e2304c11e17960dddc65bc35575b17b27b25cc2382a5a885fd80b052f3cd1f  rootfs-usr-lib-systemd-user-preset-90-base.preset
