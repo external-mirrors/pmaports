@@ -119,13 +119,6 @@ description = "The size of the ZRAM swap is based on a percentage of the device'
 datatype  = "integer"
 integer_interval = "[0, 100]"
 
-[variable.metadata.tmp_as_tmpfs_size]
-description = """
-The size at which /tmp will be mounted from memory as tmpfs. If set to 0, no mounting will happen.
-
-This value is passed directly to the tmpfs size= param, e.g., 50% and 2g. See `man tmpfs` for more information.
-"""
-
 [variable.metadata.disable_dhcpd]
 description = "Do not set the static ip to the network interface and do not run the DHCP daemon on it. This makes sense for devices with an ethernet port, like the Raspberry Pi"
 datatype = "boolean"
@@ -535,6 +528,15 @@ epitaph = "Replaced by the modules-initfs file in device packages"
 description = "Name of the Mesa driver used by a given device."
 fate = "obsolete"
 epitaph = "This was used by osk-sdl, which has been replaced by unl0kr."
+
+[variable.metadata.tmp_as_tmpfs_size]
+description = """
+The size at which /tmp will be mounted from memory as tmpfs. If set to 0, no mounting will happen.
+
+This value is passed directly to the tmpfs size= param, e.g., 50% and 2g. See `man tmpfs` for more information.
+"""
+fate = "obsolete"
+epitaph = "No devices ever used it, was only ever supported in OpenRC. Edit /etc/conf.d/tmpfs (OpenRC) or override the tmp.mount unit file (systemd) instead."
 
 ## Flash
 
