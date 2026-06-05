@@ -57,7 +57,11 @@ if __name__ == "__main__":
     if len(apkbuilds_filtered) < 1:
         print("No APKBUILDs to lint")
         sys.exit(0)
-    try:
-        subprocess.run(["apkbuild-lint", *apkbuilds_filtered], text=True, check=True)
-    except subprocess.CalledProcessError as exception:
-        sys.exit(exception.returncode)
+    ret = 0
+    for apkbuild in apkbuilds_filtered:
+        try:
+            cmd = ["apkbuild-lint", apkbuild]
+            subprocess.run(cmd, text=True, check=True)
+        except subprocess.CalledProcessError as exception:
+            ret = exception.returncode
+    sys.exit(ret)
