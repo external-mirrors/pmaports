@@ -7,27 +7,20 @@ depend() {
 }
 
 start() {
-	source /usr/share/misc/source_deviceinfo
-
-	if [ "$deviceinfo_tmp_as_tmpfs_size" = "0" ]; then
+	if [ "$tmpfs_size" = "0" ]; then
 		return 0
 	fi
 
-	_tmpfs_size="50%"
-	if [ -n "$deviceinfo_tmp_as_tmpfs_size" ]; then
-		_tmpfs_size="$deviceinfo_tmp_as_tmpfs_size"
-	fi
-
 	_mem_size_mb="$(LC_ALL=C free -m | awk '/^Mem:/{print $2}')"
-	# Mount if asked to, or if more than default memory,
+	# Mount if asked to, or if we have more than 2GB of memory,
 	# but never if already mounted
-	if [ -n "$deviceinfo_tmp_as_tmpfs_size" ] || \
+	if [ -n "$tmpfs_size" ] || \
 	   [ $_mem_size_mb -ge 2048 ] && \
 	   ! mountinfo -q -f tmpfs /tmp ; then
 		ebegin "Mounting /tmp as tmpfs"
 		mkdir -p /tmp || { eend 1 "Failed to create /tmp" ; return 1 ; }
 		# mount params taken from Debian buster
-		mount -t tmpfs -o mode=1777,strictatime,nosuid,nodev,size="$_tmpfs_size",nr_inodes=400k tmpfs /tmp
+		mount -t tmpfs -o mode=1777,strictatime,nosuid,nodev,size="${tmpfs_size:-50%}",nr_inodes=400k tmpfs /tmp
 		eend $?
 	fi
 }
