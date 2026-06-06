@@ -2,8 +2,8 @@
 maintainer=""
 pkgname=device-pine64-pinetab
 pkgdesc="PINE64 PineTab"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -24,7 +24,6 @@ subpackages="
 	$pkgname-kernel-allwinner-dev:kernel_allwinner_dev
 	$pkgname-sway
 	$pkgname-weston
-	$pkgname-phosh
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-plasma-mobile:plasma_mobile
 	$pkgname-udev
@@ -36,7 +35,6 @@ source="
 	deviceinfo
 	gsk-renderer-gl.sh
 	kirigami-lowpower.sh
-	phoc.ini
 	sway.conf
 	uboot-script.cmd
 	ucm/HiFi.conf
@@ -112,12 +110,6 @@ weston() {
 		"$subpkgdir"/etc/xdg/weston/weston.ini
 }
 
-phosh() {
-	install_if="$pkgname postmarketos-ui-phosh"
-	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
-}
-
 package() {
 	devicepkg_package $startdir $pkgname
 
@@ -167,7 +159,6 @@ sha512sums="
 bae3d7d431d1ceb3a2bb9071b90938da3a6a6a470cbb7855cd6e2aa92be0b0de3953ae7b3eee1ce56c98e641edfd6c0ce2560d46d6a0bab7ab3049d648131034  deviceinfo
 3f1422115c9a12f94b6fb7cc4e987f25ea331a9c7cbc34649470bc5557dfc85b79cbc4369e48f12f284ed1e20af6194d8bbb3c5e37227a7d9bc3e6670cd41aa9  gsk-renderer-gl.sh
 6bc22b369b2d9058b702ac7a7862abaefaf8179b43491868bdb008d181b59104f1ded89db1da51a810e1ccdc803a579b924a438674283a65afc3a9c4d2894caf  kirigami-lowpower.sh
-5c683f2cf27b2f982c8581251688834634957143334011861400d3eed27b6590f37055fe61c8af632552435dba581fa990a44c1e5689a3c8fe642fd095b740ce  phoc.ini
 9e71c61bfa72b60e749c4dc04f17eb59d25de822765e81e65c937d6be5236d3951a652b69a1ab973abe6add9f34705be5dbaa98bbfa25daf7504dd50b28524c2  sway.conf
 09950eee0c35f0c05a39025e5e8afe96cd2b78b78bc157fa229e581ab477ae675ed60108334a536241d96ef5a5b3c80807ce6463dad00fc6c1694bcce6029652  uboot-script.cmd
 a2fd8037c9a1af000f31c7005436d791525317f818c553d1e2f472b4df76c71d769ecbf67b369a478bea720a6215eaa9fb6a26ba218ac9410513e2345ebe7b4c  HiFi.conf
