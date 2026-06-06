@@ -29,15 +29,27 @@ Enforcing of this guideline [will
 wait](https://postmarketos.org/devel/2026/03/24/archiving-unmaintained-devices/)
 for v26.06 to be released.
 
-## Meta packages
+## Package versioning (pkgver, pkgrel)
 
-### Package versioning (pkgver, pkgrel)
+Whenever you update a package, the version should also be incremented. A version
+consists of `$pkgver-r$pkgrel`, and either `pkgver` or `pkgrel` should be bumped,
+even if the changes can be considered trivial. This is to instruct the builder to
+rebuild the binary of the package. Likewise, an exception can be made to the rule
+if the changes do not affect the built package, such as editing comments, code
+style fixes, etc.
 
-Packages without upstream sources are a bit special. These are `device-*`
-packages and other packages like `main/postmarketos-base`, where the source
-files are included in the package directory. For these packages, the `pkgver`
-should always be incremented instead of the `pkgrel` (so that `pkgrel` always
-is `0`).
+* **pkgver**: The version of the software being packaged.
+* **pkgrel**: The release number of the package. Starts at `0`.
+
+As a general rule, whenever a change is made to upstream sources, `pkgver` should
+be increased, and `pkgrel` should be set to `0`. When packaging-related files
+(`APKBUILD`, any post-install scripts, patch files to upstream sources, etc.) are
+changed, `pkgrel` should be increased.
+
+Packages without upstream sources are a bit special. These are `device-*` packages
+and other packages like `main/postmarketos-base`, where the source files are
+included in the package directory. For these packages, the `pkgver` should always
+be incremented instead of the `pkgrel`, so that `pkgrel` remains at `0`.
 
 ## Provides, priorities, alternatives, and forking packages
 
