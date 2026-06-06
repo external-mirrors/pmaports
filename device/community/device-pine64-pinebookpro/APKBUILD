@@ -2,7 +2,7 @@
 maintainer="Quade Curry <qc8086@qc8086.com>"
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
-pkgver=20
+pkgver=21
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -30,7 +30,7 @@ source="
 	kernel-cmdline.conf
 	modules-initfs
 	nvme-powersave.initd
-	wlan-powersave-off.start
+	wlan-powersave-off.initd
 	enable-s2idle.conf
 "
 
@@ -44,8 +44,8 @@ package() {
 	install -D -m755 "$srcdir"/nvme-powersave.initd \
 		"$pkgdir"/etc/init.d/nvme-powersave
 
-	install -D -m755 "$srcdir"/wlan-powersave-off.start \
-		"$pkgdir"/etc/local.d/wlan-powersave-off.start
+	install -D -m755 "$srcdir"/wlan-powersave-off.initd \
+		"$pkgdir"/etc/init.d/wlan-powersave-off
 }
 
 elogind() {
@@ -65,10 +65,8 @@ nonfree_firmware() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	default_openrc
 	depends="eudev-hwids openrc"
-
-	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
@@ -76,6 +74,6 @@ sha512sums="
 84df486ec8fb3c5a0c032fe42e210a6fbfa9c5a1a8cdf548fb70bb023815dc625a08ded0fc6e2ea9f6aad28d2b7a3bf40659c3d417bbbce9ee67d8d225210be6  kernel-cmdline.conf
 c162d99b77e6e8a22aa2991d99a330f488af7707e3bbf0c96efd98a4d99a022bf2703fb991a590a5bea79adc7c90d6a455666cb1dfe9144cb467ded53fc38b4c  modules-initfs
 2abfa31fa56028339efc6d2b6cb838f310990d7110ac4dd996bc4cfcf90f0a8770e70f28f77f7b6929d110e494bc33731302f16b9717729f991c2732be0731d5  nvme-powersave.initd
-0fd7580e197e409978c219726af627cabe347404ee826e32892b61f3da1775b0fd81f8ed5e9a0f0bfaad87faa434d7a73ddaebf475ed0ad8fdcef6690cd692d3  wlan-powersave-off.start
+2d40d75d47bf42b37b4f99abba43a2c7dbdbe7e722f7e323be5c5781f5ca938bc4681ba0d303c1e68ce301a93f1c2f38a1b2670dd401ec0c1fe6ce226ccf5f00  wlan-powersave-off.initd
 811af9c79151f41e25916c0f0bb130e82ebfb7d4d5b63413a3fed6700f829c1c017a12e85da230ed2f47a6bd49ed2bf5da19bbc4576ce485a48a2d3808a3a691  enable-s2idle.conf
 "
