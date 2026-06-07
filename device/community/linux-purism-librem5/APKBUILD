@@ -3,13 +3,14 @@
 # Contributor: Clayton Craft <clayton@craftyguy.net>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=linux-purism-librem5
-pkgver=6.6.118
-pkgrel=2
+pkgver=6.6.139
+pkgrel=0
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 _purismrel=1
 _pureosrel=cri1
-# <kernel ver> + <purism kernel release> + <PureOS release>
-_purismver=${pkgver}pureos${_purismrel}_$_pureosrel
+# NOTE: No _pureosrel for 6.6.139!
+#_purismver=${pkgver}pureos${_purismrel}_$_pureosrel
+_purismver=${pkgver}pureos${_purismrel}
 pkgdesc="Purism Librem 5 phone kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -32,6 +33,10 @@ makedepends="
 	perl
 	rsync
 	xz
+	clang
+	lld
+	llvm
+	linux-headers
 	"
 install="$pkgname.post-upgrade"
 
@@ -62,7 +67,7 @@ prepare() {
 	# This can be uncommented to help generate the defconfig using "pmbootstrap
 	# build linux-purism-librem5". The build will fail (exit 1) to let you grab
 	# the config before it starts building the kernel:
-	#    make ARCH="$_carch" CC="${CC:-gcc}" \
+	#    make ARCH="$_carch" LLVM=1 \
 	#       defconfig KBUILD_DEFCONFIG=librem5_defconfig
 	#    exit 1
 	#
@@ -75,7 +80,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" \
 		LOCALVERSION=".$_purismrel"
 }
@@ -85,12 +90,13 @@ package() {
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 
 }
 
 sha512sums="
-f1d75865ff15793e6e70414a356209bd27fdb4c084d773698589f2e376ddcf037f2ac60a131a72ad3986b51b88c0c738deb65169bb30fd472f25cb06327ed1a8  linux-purism-librem5-6.6.118pureos1_cri1.tar.gz
+d51709ee85ac8ebe271fc57ba60e2ab5f90225bd045b813a281553b0f76ae4c227317201fbb509e59af9813ea3e49947e83ac7d82b97cede15212cadd90fc372  linux-purism-librem5-6.6.139pureos1.tar.gz
 323e1d4760857c62efa67362b36b098f7fd2d6f49970236965cfab4bb8ae43ddbafa76f2fcd0deb8faa53e4b87bf202ab3507dc10f2364234af4c10453768337  config-purism-librem5.aarch64
 "
