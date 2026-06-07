@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=60
+pkgver=61
 pkgrel=0
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
@@ -44,12 +44,9 @@ source="
 	10-initfs-keymap.sh
 	acpi.map
 	acpi_handler.sh
-	asound.state.headset
-	asound.state.speakers
 	backlight-enable.sh
 	bq27k-options.conf
 	bq27k-monitor.sh
-	device-nokia-n900.start
 	deviceinfo
 	etc-profile.d-25wlr-pixman.sh
 	i3blocks/i3blocks.conf
@@ -76,6 +73,8 @@ source="
 	sway/etc-sway-config.d-nokia-n900.conf
 	sway/etc-xdg-foot-foot.ini
 	uboot-script.cmd
+	ucm2/HiFi.conf
+	ucm2/RX-51.conf
 	udev/10-nokia-modem.rules
 	udev/15-bq27k.rules
 	udev/90-touchscreen-dev.rules
@@ -110,18 +109,12 @@ package() {
 		"$pkgdir"/usr/share/mkinitfs/hooks/00-$pkgname-backlight.sh
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
-	install -D -m644 "$srcdir"/asound.state.speakers \
-		"$pkgdir"/var/lib/alsa/asound.state.speakers
-	install -D -m644 "$srcdir"/asound.state.headset \
-		"$pkgdir"/var/lib/alsa/asound.state.headset
 	install -Dm644 "$srcdir"/10-initfs-input.files \
 		"$pkgdir"/usr/share/mkinitfs/files/10-initfs-input.files
 	install -Dm644 "$srcdir"/10-initfs-keymap.sh \
 		"$pkgdir"/usr/share/mkinitfs/hooks/10-initfs-keymap.sh
 	install -D -m644 "$srcdir"/usr-share-mkinitfs-hooks-01-omap-disable-idle.sh \
 		"$pkgdir"/usr/share/mkinitfs/hooks/01-omap-disable-idle.sh
-	install -Dm755 "$srcdir"/$pkgname.start \
-		"$pkgdir"/etc/local.d/$pkgname.start
 	install -Dm755 "$srcdir"/bq27k-monitor.sh \
 		"$pkgdir"/usr/bin/bq27k-monitor
 	install -Dm755 "$srcdir"/screenlock.sh \
@@ -179,6 +172,12 @@ package() {
 		"$pkgdir"/usr/lib/modprobe.d/n900-module-blocklist.conf
 	install -D -m644 "$srcdir"/bq27k-options.conf \
 		"$pkgdir"/usr/lib/modprobe.d/bq27xxx-battery.conf
+
+	# UCM
+	install -Dm644 "$srcdir"/HiFi.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/conf.d/RX-51/HiFi.conf
+	install -Dm644 "$srcdir"/RX-51.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/conf.d/RX-51/RX-51.conf
 
 	# UPower
 	install -Dm644 "$srcdir"/upower.conf \
@@ -266,14 +265,11 @@ wayland() {
 sha512sums="
 5e0631deeea881346e0f25c7d80d849026bf3e30c53bc33c9f1ee5587d5cd93b6faa3db722cbb24de0b38111c4113051a98b3d73b8b5c520f34830c12d5e0cbe  10-initfs-input.files
 4656d3b3ced0a86e2d6315c89322899f646a689e9cb64609aa8ad5a676b23d93706d8a37f3be6f6b12c6b1e8501b7d26ecafecf27322333850513a6805c61910  10-initfs-keymap.sh
-2e6c324c2a0627fb37ee2feff249d6c828116a9c1a32d572481dddc12648c98b726eb3a475838398742f76a60e3f2249d7707502360473b8bf2e794bf22f57ce  acpi.map
-eef1f3d5fab1148af498607d3bc7c6a866b61d808d2b90a4ea3e360d5fef779070380670431b67bd3d87111bc7d0e877ef9ab656f4de17c3071cfc360a2746e3  acpi_handler.sh
-5b87071834313a389f83d29f86f6e3ea108d0921f17dc918be7a46de7e74c73a4418044ef600a0fbf72c8fad22b7730dcd5bfe3d6d01d76bf01556f8540f0b32  asound.state.headset
-67acc17a33bc75113300393b4a5bba15319014032407e774d079abf310368e75f4f697dbb4856ba2d2d8ea184b056bb33561f42918de3ee91ab6a77df89a133c  asound.state.speakers
+2aaf9471796f041edaedb6c1fc31d854d170be2673f5eeacb01120270b95182b3ffddf6bfe04f92af3538c0fb4f8b65595772df7ab60129062daed15aba55bb6  acpi.map
+d1d9568add8ba0d9ab152731f5b02fa6e909a23680d6fbdda1cb60e8e17ba39c10ce03f948c984aad1057c6d77f1dc2a53a0380b95122c891a808b5d43040a14  acpi_handler.sh
 3d55e34b95791636e44a5f41754f3d0de039dbba41f7a556d43a95c9e64afcfa930046b4b96b40020b6f196096ffba93514682927e32fa4488686fdd19c6da5a  backlight-enable.sh
 344ec50cee2a4d864debad12810a83070ab8257f9f07dcfa9be3eea1d8b26f3ab4fbe322fe05a384152b40fc5e1481df51d191624c7062186dd70f95a0784ea8  bq27k-options.conf
 c5b8e03ca9f720a794f2593a3e938640cbd91ac44dd761079bbf4614a0d288a9d7b72de8ed2493c062dc9f37be580bea529f454d2335f55b7a9f4d14024b42a9  bq27k-monitor.sh
-e6bbac8de1a198ba716f44ade76606e1e0adcc574156b855ac41be5eb5308389d3277fd89cc34b119fbc33d9801ab9f79a6ff213392596bff40bc17e931c05ef  device-nokia-n900.start
 b1ebed32232ca1890ed6a47372ce45f4ee004fcb76defc6f67048cfa7361d6e02ebd365a6370ba7c26d410e67926a6fada863f07aa18d7098dbdea1a3b057415  deviceinfo
 1c7499eb84948eb5b73d58474b1b71a5f2f63116a2a3e1f9a4238064dcf6c152ccefa108bd4ab1074712a2319111c8fdd4bfcf0dbe4d26b5a319404def1b11d2  etc-profile.d-25wlr-pixman.sh
 a8152e94262629e11abdd8809d187c3b7ed1866a6128fb1f435e17e72120536ac8114262e66df6decb2627743027f2b923ddbe8a94e3e844099b6fad02ec252b  i3blocks.conf
@@ -300,6 +296,8 @@ bc926a11ac6941944c1b9bdd8d8c59c6d9689bc101f6c34881341a2689f68364b4d814e1fda8a83e
 1e6939c583372dd4d493e1e2cfb6a4758a17606edd262d322bc01b2d3d76de4370581954f22f6ac976d86e87aab0979b2233e1c75780aeaff0670ea25dba62ca  etc-sway-config.d-nokia-n900.conf
 45da074b597a47825146ae1f3712538210e2ebe1c459f98a8189ccfc7c16ed54d221999b5890785c92aa750c6295dee7e920ef7f97d415d4212f8c0fea29169f  etc-xdg-foot-foot.ini
 4be9626cd2ad96730671e145aba9473b8bb7e62b7dec109eb87b4c748e5ac8fcb7cb0deeecc2a07f6fc9e9a598dbd438e02ad32d21e13d109ed7fecfb29904cc  uboot-script.cmd
+3586cdbfd9a3210ee3598eec68ddf63299075ca41e325c4b6a9cb0ebc66b3d79ce44d745829cfe263471bfe80820dd7ce2ec5fb8e28c06c3f3a020fbc20dfdc1  HiFi.conf
+1a4295801cab1bbdca2e86e355d46c9dea6dbc8fd4d89e3ea6efdade33ebb29aee0cf237ce7400ea3c7716d0fe09b404a4c7042b65998cf1ae19bca2caa3d78f  RX-51.conf
 465b9a0d2b46d0981c64b47cb1f656c2456a90b91b1751a2efad10af38a96030dd99108b1fd76ce31bf1ea0f236d55bed38b114d6bd712f09f8968de034c946c  10-nokia-modem.rules
 1acc441b9f83dc91fd65fa3f89b8205bfd72a465286bc181b4e7e92dd4b8c0bc5c20a18dab46ff3ee8ae70940efd7d767b3dfb920edb4c74377bd418b838693d  15-bq27k.rules
 c6012aef28b096141b924fced226ec99fb93eb53b69c064a8887d8fecdf8dc08a3ba3db399e18d88374c6ef4c59013a30699c7e4d76e5cb771040582573a0527  90-touchscreen-dev.rules
