@@ -3,7 +3,7 @@
 pmaports is the repository that holds the package build definitions in
 postmarketOS.
 
-When porting a new device or doing maintainance work around the distribution,
+When porting a new device or doing maintenance work around the distribution,
 you will usually be working inside of pmaports.
 
 This documentation section covers the Dos and Don'ts of packaging software

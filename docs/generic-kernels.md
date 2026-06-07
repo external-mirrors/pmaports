@@ -104,7 +104,7 @@ kernel_stable() {
 }
 
 kernel_lts() {
-  pkgdesc="Long-term maintainance kernel (most stability, not all security fixes & new features)"
+  pkgdesc="Long-term maintenance kernel (most stability, not all security fixes & new features)"
   depends="linux-postmarketos-lts"
   devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
