@@ -28,6 +28,7 @@
 -->
 * [ ] edge (`main` branch)
 * [ ] `v25.12`
+* [ ] `v26.06`
 
 * [ ] I confirm that the issue still is present after running `sudo apk upgrade -a`
 
