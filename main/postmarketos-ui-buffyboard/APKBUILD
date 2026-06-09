@@ -16,7 +16,7 @@ depends="
 	"
 subpackages="$pkgname-openrc $pkgname-systemd"
 source="buffyboard.init buffyboard.service"
-options="!check" # No tests
+options="!check pmb:default-openrc pmb:openrc pmb:systemd" # No tests
 
 package() {
 	install -Dm755 "$srcdir"/buffyboard.init "$pkgdir"/etc/init.d/buffyboard

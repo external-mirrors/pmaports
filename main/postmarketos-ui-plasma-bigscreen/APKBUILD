@@ -29,7 +29,7 @@ install="
 source="$pkgname-$_commit_configs.tar.gz::https://invent.kde.org/plasma-bigscreen/bigscreen-image-settings/-/archive/$_commit_configs/bigscreen-image-settings-$_commit_configs.tar.gz
 	nymphcast.desktop
 	"
-options="!check pmb:systemd" # No tests for a meta package
+options="!check pmb:default-systemd pmb:systemd" # No tests for a meta package
 
 package() {
 	install -Dm644 -t "$pkgdir"/etc/xdg/autostart \
