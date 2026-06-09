@@ -4,7 +4,7 @@ maintainer="Richard Acayan <mailingradian@gmail.com>"
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
 pkgver=7.0.10
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline Kernel fork for SDM670/SDM710 devices"
 arch="aarch64"
 _carch="arm64"
@@ -35,6 +35,7 @@ _tag="sdm670-v$pkgver"
 # Source
 source="
 	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	0001-ASoC-codecs-cs35l36-reduce-maximum-volume-to-0dB.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -74,5 +75,6 @@ package() {
 
 sha512sums="
 71476207449337685a947a5ab0c3a6af619e0b1322568723ed387792f8252d329d547a491e8ec6a5cb38ad76e52c4beeb76852cd7d2fbf39fd76f9743e2671de  linux-sdm670-v7.0.10.tar.gz
+3a463e3f02fe55b295d7c41cbdeb0104d62035c56f621d3536adfdd09b6ecbd90b8daabaa15633e40d5a5b4338ede1f6876996177a089718a0000077fe8e84d9  0001-ASoC-codecs-cs35l36-reduce-maximum-volume-to-0dB.patch
 af2360a11f7182c68fb81779f13623af82d4ae5b91be31b6dfad2bec60e7d548b9ba4ba049cf5a075c06e2511d2ede720937c20fd49d9fdc6a4f158fbc4ad519  config-postmarketos-qcom-sdm670.aarch64
 "
