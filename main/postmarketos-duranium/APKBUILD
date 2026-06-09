@@ -167,12 +167,6 @@ sysext_dev_tools() {
 		apk-tools
 		mkosi
 	"
-	# Block app store plugins that might try to use apk/libapk
-	depends="
-		$depends
-		!discover-backend-apk
-		!gnome-software-plugin-apk2
-	"
 
 	# support for running VMs / platform emulation
 	depends="
