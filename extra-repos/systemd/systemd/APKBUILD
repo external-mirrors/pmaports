@@ -78,7 +78,11 @@ makedepends="
 	py3-lxml
 	python3-dev
 	rsync
+	tpm2-tss-dev
+	tpm2-tss-esys
 	tpm2-tss-mu
+	tpm2-tss-rc
+	tpm2-tss-tcti-device
 	tzdata
 	util-linux-dev
 	xz-dev
@@ -114,6 +118,10 @@ depends="
 	lz4-libs
 	p11-kit
 	pcre2
+	tpm2-tss-esys
+	tpm2-tss-mu
+	tpm2-tss-rc
+	tpm2-tss-tcti-device
 	xz-libs
 	zstd-libs
 	"
@@ -229,6 +237,7 @@ build() {
 		-Dselinux=disabled \
 		-Dsysvinit-path="" \
 		-Dukify=disabled \
+		-Dtpm2=enabled \
 		\
 		-Dhomed=disabled \
 		-Duserdb=false \
