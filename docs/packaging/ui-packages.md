@@ -39,6 +39,18 @@ https://wiki.postmarketos.org/wiki/Category:Interface
   - Adding this to the `options` variable will mark the UI as requiring DRM
     support to function, hiding it from devices that do not support DRM on
     `pmbootstrap init`.
+- **pmb:systemd**
+  - Adding this to the `options` variable will allow selecting the UI with
+    systemd during `pmbootstrap init`. Requires a `pmb:default-*` option.
+- **pmb:default-systemd**
+  - Adding this to the `options` variable will declare systemd as the default
+    service manager for the UI.
+- **pmb:openrc**
+  - Adding this to the `options` variable will allow selecting the UI with
+    OpenRC during `pmbootstrap init`. Requires a `pmb:default-*` option.
+- **pmb:default-openrc**
+  - Adding this to the `options` variable will declare OpenRC as the default
+    service manager for the UI.
 - **pkgdesc**
   - The same as a normal APKBUILD's `pkgdesc`, but it is also shown during
     `pmbootstrap init` beside the UI's name.
@@ -47,7 +59,10 @@ https://wiki.postmarketos.org/wiki/Category:Interface
 
 - UIs are not required to support both OpenRC and systemd. While it is
   recommended to support both to allow user choice, it is up to the UI
-  maintainers whether they support a service manager or not.
+  maintainers whether they support a service manager or not. Service managers
+  can be declared using the `pmb:systemd` and `pmb:openrc` options in the
+  `options` variable. These always need to be paired with a `pmb:default-*`
+  variable, even if only one service manager is supported.
 - UIs shall work out-of-the-box on first initialization, meaning that they
   should not require user intervention to start or require external
   configuration.
