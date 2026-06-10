@@ -2,7 +2,7 @@ maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
 pkgver=15
-pkgrel=0
+pkgrel=1
 _commit="42cf0c3dc26d6e0b2a32ef5a00e7ca4ae77034c7"
 _swayconfver="v1.1.0"
 url="https://postmarketos.org"
@@ -51,7 +51,6 @@ subpackages="
 	$pkgname-nonfree-firmware-openrc:firmware_openrc
 	$pkgname-nonfree-firmware-systemd:firmware_systemd
 	$pkgname-openrc
-	$pkgname-sway
 	$pkgname-sway-hrdl
 	$pkgname-systemd
 	$pkgname-xournalpp
@@ -121,8 +120,11 @@ package() {
 		-t "$pkgdir"/usr/lib/modprobe.d
 }
 
+# since pinenote requires such an opinionated UI, hrdl's sway configuration is packaged that offers
+# an optimized configuration for sway that matches the featureset offered by their Arch Linux image
 hrdl() {
 	pkgdesc="Opinionated sway UI by hrdl optimized for the Pinenote"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-sway"
 	install="$subpkgname.post-install $subpkgname.post-deinstall"
 	depends="
 		adwaita-icon-theme
@@ -139,7 +141,6 @@ hrdl() {
 		network-manager-applet
 		nwg-menu
 		papirus-icon-theme
-		postmarketos-ui-sway
 		py3-crcmod
 		py3-dbus-next
 		py3-i3ipc
@@ -232,20 +233,6 @@ firmware() {
 	# symbolic link for wifi firmware to where drivers expects it
 	mkdir -p "$subpkgdir"/usr/lib/firmware/brcm
 	ln -s ../cypress/cyfmac43455-sdio.bin.zst "$subpkgdir"/usr/lib/firmware/brcm/brcmfmac43455-sdio.pine64,pinenote-v1.2.bin.zst
-}
-
-sway() {
-	install_if="$pkgname=$pkgver-r$pkgrel sway"
-	install="$subpkgname.post-upgrade"
-
-	# since pinenote requires such an opinionated UI, UI configurations ar
-	# packaged from community developpers who are leading these efforts, and since
-	# there is the possibility of multiple UI configurations per UI, aport
-	# is architectured in a way to support multiple configurations. Since only hrdl's
-	# configuration is integrated, automatically depend on its subpackage for now.
-	depends="device-pine64-pinenote-sway-hrdl"
-
-	mkdir -p "$subpkgdir"
 }
 
 openrc() {
