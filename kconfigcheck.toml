@@ -119,8 +119,17 @@ NET_NS = "y"
 PID_NS = "y"
 SECURITY = "y"
 SECURITYFS = "y"
+SECURITY_PATH = "y"
 USER_NS = "y"
 UTS_NS = "y"
+DEBUG_INFO_BTF = "y"
+DEBUG_INFO_BTF_MODULES = "y"
+DEBUG_INFO_DWARF5 = "y"
+DEBUG_INFO_REDUCED = "n"
+["category:default".">=5.14.0"."loongarch64 ppc64le x86 x86_64"]
+# ARM and riscv64 lack CFI+dynamic ftrace support, see:
+# https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4411#note_544158
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS = "y"
 
 ["category:netmount".">=0.0.0"."all"]
 CACHEFILES = "m"
