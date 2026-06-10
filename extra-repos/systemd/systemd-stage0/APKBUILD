@@ -16,6 +16,11 @@ license="MIT AND GPL-2.0-only AND LGPL-2.1-or-later"
 # This is only for bootstrapping other packages, make sure it does not get
 # pulled into real installations via !postmarketos-base and !tracedeps
 depends="!postmarketos-base"
+
+# !tracedeps is set to prevent abuild from automatically adding `provides`
+# based on sonames. Without this, apk would consider systemd-stage0
+# a valid provider for packages that depend on systemd. Since we have to use
+# !tracedeps, runtime dependencies must be listed manually in depends_*.
 depends_libs="!postmarketos-base libucontext"
 depends_dev="!postmarketos-base"
 depends_doc="!postmarketos-base"
