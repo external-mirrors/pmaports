@@ -10,7 +10,7 @@ pkgname=systemd
 pkgver=261_rc3
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -32,12 +32,15 @@ triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 /etc/systemd/user
 "
 checkdepends="grep postmarketos-release"
+# clang: used for bpf compilation. this is the default compiler
 makedepends="
 	acl
 	acl-dev
 	audit-dev
 	bash
 	bash-completion
+	bpftool
+	clang
 	cmake
 	coreutils
 	cryptsetup-dev
@@ -48,6 +51,7 @@ makedepends="
 	kmod-dev
 	libapparmor-dev
 	libbz2
+	libbpf-dev
 	libcap-dev
 	libfido2-dev
 	libgcc
@@ -94,6 +98,7 @@ depends="
 	kmod-libs
 	libapparmor
 	libblkid
+	libbpf
 	libcap2
 	libdw
 	libelf
@@ -250,7 +255,7 @@ build() {
 		-Ddns-servers="9.9.9.10#dns10.quad9.net 149.112.112.10#dns10.quad9.net 2620:fe::10#dns10.quad9.net 2620:fe::fe:10#dns10.quad9.net" \
 		-Dntp-servers="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 4.pool.ntp.org" \
 		\
-		-Dbpf-framework=disabled\
+		-Dbpf-framework=enabled \
 		-Dvmlinux-h=provided \
 		-Dvmlinux-h-path="$(find /usr/src -path "/usr/src/linux-headers-*-stable/vmlinux.h" | sort -V | tail -n1)" \
 		build .
