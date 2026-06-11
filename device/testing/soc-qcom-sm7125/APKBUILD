@@ -1,7 +1,7 @@
 maintainer="Nikroks <nikroks@mainlining.org>"
 pkgname=soc-qcom-sm7125
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 pkgdesc="Common package for Qualcomm SM7125 devices"
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -11,7 +11,6 @@ depends="
 	msm-modem-uim-selection
 	bootmac
 "
-replaces="upower"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
@@ -28,7 +27,7 @@ source="
 package() {
 	# Shutdown when battery is critical instead of sleep
 	install -Dm644 "$srcdir"/UPower.conf \
-		"$pkgdir"/etc/UPower/UPower.conf
+		"$pkgdir"/etc/UPower/UPower.conf.d/50-sm7125.conf
 }
 
 nonfree_firmware() {
@@ -60,5 +59,5 @@ ucm() {
 sha512sums="
 18058e4ed1a2416841d63269d262ae1cbe9be828882580d934501fc842340b6e8641c3a79202c7c27ddad81ef3f2efffdf5dbc24e39fd7282700fd1bd5ba1454  30-gpu-firmware.files
 7b383b931932a85812040a8a445a2d45cb6f31fa966073b1709b2d922e8a5fad0c39d0b9501c835bcf016d2e999f9bdb990fe946d4b3c811002105d2ab84b8f5  alsa-ucm-conf-a34eab049098b78ac5f586b11d93060046da3247.tar.gz
-9d455b56558d453d501a1ad869ffa79f9952ed43485a9847d506db6a78bfcd9f9c9d855660ee1d368eb74f4429385ec166addc30d802261c75562e785fe84c52  UPower.conf
+72e8ed55499976574fa09e6c3b79c0e046c786932179cfd30788a80037906a45861f09f6663fa1bc15a4571be97b3a40ee3631988bffd1c9ee9f360358b6486a  UPower.conf
 "

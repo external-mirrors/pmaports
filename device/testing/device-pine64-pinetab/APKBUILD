@@ -2,8 +2,8 @@
 maintainer=""
 pkgname=device-pine64-pinetab
 pkgdesc="PINE64 PineTab"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -155,11 +155,10 @@ plasma_mobile() {
 
 upower() {
 	install_if="$pkgname=$pkgver-r$pkgrel upower"
-	replaces="upower"
 
 	# Shutdown when PMIC reports critical battery level
 	install -Dm644 "$srcdir"/UPower.conf \
-		"$subpkgdir"/etc/UPower/UPower.conf
+		"$subpkgdir"/etc/UPower/UPower.conf.d/50-pinetab.conf
 }
 
 sha512sums="
@@ -174,5 +173,5 @@ a2fd8037c9a1af000f31c7005436d791525317f818c553d1e2f472b4df76c71d769ecbf67b369a47
 7a19bfc3bf08c11bf34943f822fcae9de57dbdae4759281386e77f711c5d9f7a58fd4970166c4db751e9c29585291fe52f58bc622d80b835d6c645eb339a7263  PineTab.conf
 9c472065b19141dd4c7555869b955de2e679b36e597f9fa3bdac18d0e9460986b0e2fffe1e04751301305f1b6474c1375803afb7d6212eeae91b4905d0bf8ff8  pulse-pinetab.conf
 6374ef977eab14b71fa88057ebd52ca03035e387e5f41504598a990f24b2e92bccd2db476c545dc541000e08fccdecb6f1cd63e25b5835df706269e0384dacc7  weston.ini
-ed0e03f7e1c0348c06be9a7922414469245604ce813bbf0c8910ef211cb993bbb0d0d4615c9c961d50712415f85d6b73e0cf02780ac784666aac56e4889341e4  UPower.conf
+46458e2981dbfad6d671d24aacf78aff127d7b8d5c3f35915f442bc36a5009f5fccede09a7ec53612ff2a6784d8961bcf99c5c8dc9ff5f9178bcc46b4373a0c3  UPower.conf
 "

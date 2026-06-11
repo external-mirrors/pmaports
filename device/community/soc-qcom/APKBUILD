@@ -2,7 +2,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=soc-qcom
 pkgdesc="Common package for Qualcomm devices"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -17,7 +17,6 @@ depends="
 replaces="
 	soc-qcom-sdm845
 	soc-qcom-sdm845-nonfree-firmware
-	upower
 "
 subpackages="
 	$pkgname-gstreamer-openrc:gstreamer_openrc
@@ -54,7 +53,7 @@ package() {
 
 	# Shutdown when battery is critical instead of sleep
 	install -Dm644 "$srcdir"/UPower.conf \
-		"$pkgdir"/etc/UPower/UPower.conf
+		"$pkgdir"/etc/UPower/UPower.conf.d/50-soc-qcom.conf
 
 	install -Dm644 "$srcdir"/51-qcom.conf \
 		-t "$pkgdir"/usr/share/wireplumber/wireplumber.conf.d
@@ -189,7 +188,7 @@ pulseaudio_systemd() {
 
 sha512sums="
 28c14f47eaedec577d152001c51753537c98f267ac4a0acf78a304efebe5f6a1b4dc6d501497da9a0a925806a1d9c80b25e001cf9b1eb21efa22cd6a41ff753b  51-qcom.conf
-9d455b56558d453d501a1ad869ffa79f9952ed43485a9847d506db6a78bfcd9f9c9d855660ee1d368eb74f4429385ec166addc30d802261c75562e785fe84c52  UPower.conf
+72e8ed55499976574fa09e6c3b79c0e046c786932179cfd30788a80037906a45861f09f6663fa1bc15a4571be97b3a40ee3631988bffd1c9ee9f360358b6486a  UPower.conf
 6fb4c0bd8b7ed534d855a6732ccff783960e3cfa0e0cc7effcbb93afa00798dec15361a37a3200081bc114c8d266b7a0851cc4e819ad36eabdb47a50c72620d9  call_audio_idle_suspend_workaround.confd
 5a58475b6e2ee1d655f3f23d8dc19e1cb2f32f1dfff3b9a9337d9c5baad1ec24bfaec0fb9cc03f00e5a291bee27c6b8bffbc65157e2bee5d65ef6d1adcb0910b  call_audio_idle_suspend_workaround.initd
 6f08583574782c01d826ee6b67dd0ceca7b700559efa49042c4b9f182fcd7a4f390c8b011d8ede1820f0ac151eaee24e31a8bac127e2aaf9a6fd605eb17fbea9  call-audio-idle-suspend-workaround.service
