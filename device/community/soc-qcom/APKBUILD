@@ -3,14 +3,13 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=soc-qcom
 pkgdesc="Common package for Qualcomm devices"
 pkgver=9
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
 options="!check !archcheck !tracedeps"
 depends="
 	bootmac
-	msm-modem
 	swclock-offset
 	tqftpserv
 "
@@ -78,9 +77,10 @@ gstreamer_systemd() {
 modem() {
 	pkgdesc="Modem services and configuration"
 	depends="
-		q6voiced
-		msm-modem-uim-selection
 		81voltd
+		msm-modem
+		msm-modem-uim-selection
+		q6voiced
 	"
 
 	mkdir -p "$subpkgdir"
