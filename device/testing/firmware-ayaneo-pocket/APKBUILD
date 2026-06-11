@@ -1,6 +1,6 @@
 maintainer="Neil Armstrong <neil.armstrong@linaro.org>"
 pkgname=firmware-ayaneo-pocket
-pkgver=20251207
+pkgver=20260612
 pkgrel=0
 pkgdesc="Firmware for Ayaneo Pocket"
 subpackages="
@@ -12,13 +12,13 @@ subpackages="
 	$pkgname-s2-tplg:s2_tplg
 	$pkgname-renesas-usb:renesas_usb
 	"
-url="https://github.com/sunflower2333/linux-firmware-ayaneo"
+url="https://github.com/superna9999/linux-firmware-ayaneo"
 arch="aarch64"
 license="proprietary"
 makedepends="zstd"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
-_commit="17fd5306f1dd33356f0bf85e2781f5c31e98ba0e"
-source="https://github.com/sunflower2333/linux-firmware-ayaneo/archive/$_commit/linux-firmware-ayaneo-$_commit.tar.gz"
+_commit="7b0d4a031ee9a20f48a7749af0ea61c781bd9af4"
+source="https://github.com/superna9999/linux-firmware-ayaneo/archive/$_commit/linux-firmware-ayaneo-$_commit.tar.gz"
 builddir="$srcdir/linux-firmware-ayaneo-$_commit"
 
 package() {
@@ -51,8 +51,8 @@ s2_adsp() {
 s2_tplg() {
 	pkgdesc="Ayaneo Pocket S2 Audio Topology"
 
-	install -Dm644 "$builddir"/qcom/sm8650/SM8650-APS2-tplg.bin.zst -t \
-		"$subpkgdir/lib/firmware/qcom/sm8650/"
+	install -Dm644 "$builddir"/qcom/ayaneo-ps2/SM8650-APS2-tplg.bin.zst -t \
+		"$subpkgdir/lib/firmware/qcom/ayaneo-ps2/"
 }
 
 s2_cdsp() {
@@ -77,5 +77,5 @@ s2_ath12k() {
 }
 
 sha512sums="
-0fa6040320ea2493dd31b66b75c247b44030755f7f74df740537b237d77c73f81c4bb01cbd7c9749bcbb8e3a9c37e827b14e64b6ab9da97b3d5b806124657ac2  linux-firmware-ayaneo-17fd5306f1dd33356f0bf85e2781f5c31e98ba0e.tar.gz
+041bb687a951ec0745c3201e6b19ebfb30dd9fe34882fd6c2d3f2c713de890784fc433805502c3ec15980860e640ce86aed75a13c55d451d230d43d8229b002b  linux-firmware-ayaneo-7b0d4a031ee9a20f48a7749af0ea61c781bd9af4.tar.gz
 "
