@@ -1,7 +1,7 @@
 maintainer=""
 pkgname=linux-htc-flounder
 pkgver=6.19.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Google Nexus 9 kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -49,6 +49,9 @@ build() {
 package() {
 	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
 		"$pkgdir/boot/vmlinuz"
+
+	install -Dm644 "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
