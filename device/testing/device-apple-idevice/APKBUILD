@@ -3,7 +3,7 @@
 maintainer="Aster Boese <asterboese@mailbox.org>"
 pkgname=device-apple-idevice
 pkgdesc="Apple Generic Apple iDevice"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,11 +18,11 @@ makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-4k:kernel_4k
 	$pkgname-kernel-16k:kernel_16k
-"
+	"
 source="
 	deviceinfo
 	modules-initfs
-"
+	"
 
 build() {
 	devicepkg_build $startdir $pkgname
