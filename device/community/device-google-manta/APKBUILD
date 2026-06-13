@@ -3,7 +3,7 @@
 maintainer="Alexandre Marquet <tb@a-marquet.fr>"
 pkgname=device-google-manta
 pkgdesc="Google Nexus 10"
-pkgver=19
+pkgver=20
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,7 +14,6 @@ depends="
 	firmware-google-manta
 	linux-firmware-brcm
 	linux-firmware-s5p-mfc
-	linux-postmarketos-exynos5>=6.18.33
 	postmarketos-base
 	systemd-boot
 	u-boot-manta
@@ -22,7 +21,10 @@ depends="
 makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-openrc
-	"
+	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-kernel-exynos5:kernel_exynos5
+"
 source="
 	deviceinfo
 	modules-initfs
@@ -57,6 +59,24 @@ package() {
 	install -Dm644 "$srcdir"/HiFi.conf \
 		-t "$pkgdir"/usr/share/alsa/ucm2/conf.d/Manta_WM1811/
 
+}
+
+kernel_stable() {
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
+	depends="linux-postmarketos-mainline"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_exynos5() {
+	pkgdesc="Exynos5 kernel fork (best device support, mostly feature complete)"
+	depends="linux-postmarketos-exynos5>=6.18.33"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 openrc() {
