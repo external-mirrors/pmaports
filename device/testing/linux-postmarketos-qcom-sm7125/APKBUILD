@@ -5,7 +5,7 @@ pkgname=linux-$_flavor
 _pkgver=6.10.0
 pkgver=9999$_pkgver
 _commit=cf8cf25f8dfe6e8897e2bb37c2c0288565c39c1e
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SM7125 devices"
 arch="aarch64"
 _carch="arm64"
@@ -14,6 +14,7 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-nftables
+	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bison
@@ -60,5 +61,5 @@ package() {
 
 sha512sums="
 f1062502f7a0bb75323a74a5e8a29d38171f4d07e19f6068e7235f89406d4ff9b3173a0f7df7aee9cedba43ea051e9aa861728aae148f11f2060bd1a4ad2da8f  linux-cf8cf25f8dfe6e8897e2bb37c2c0288565c39c1e.tar.gz
-9f71ea3436515ae042ade6f2929612a1211589462bf811d77ab6cc392a36c41a1986b52577caefb28ba50ae31bb0b28b06521df4acd36ab4fe155d591c04e791  config-postmarketos-qcom-sm7125.aarch64
+9078ddfdd88cfaf9cf17a3ab1bfc756e2b75aff288a6881eb98c453db53d28a62153da00794f0cce94abb0b5bc2dc943e3dc1e4c4c18afba8a05c726e2021b26  config-postmarketos-qcom-sm7125.aarch64
 "
