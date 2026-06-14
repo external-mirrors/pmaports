@@ -8,7 +8,7 @@ maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=gnome-session
 _pkgver=50.1
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="GNOME session manager"
 url="https://gitlab.gnome.org/GNOME/gnome-session"
 # armhf: pmb#2618
@@ -38,6 +38,7 @@ makedepends="
 options="!check" #no tests
 subpackages="$pkgname-lang $pkgname-doc $pkgname-systemd gnome-shell-session:_shell:noarch"
 source="https://download.gnome.org/sources/gnome-session/${_pkgver%%.*}/gnome-session-$_pkgver.tar.xz
+	oo7.patch
 	"
 builddir="$srcdir/gnome-session-$_pkgver"
 
@@ -76,4 +77,5 @@ _shell() {
 
 sha512sums="
 8f2d2cc3eb39dc52fdef42696d633808605b311adedaa197813f90eff60517ee1cfd53754e62987115ed8325775ed62ed77796cfd1f457263d1d98d209468abe  gnome-session-50.1.tar.xz
+56ea243bc4a19aec5b971752f7e45b37e6e748ed2e2cdafcacf2aa72782dd2d3401962cbb227a5029c45062d675a7fae7b09eaac4b8ec3b786539740dc916938  oo7.patch
 "
