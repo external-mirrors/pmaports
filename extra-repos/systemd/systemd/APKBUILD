@@ -33,6 +33,7 @@ triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 "
 checkdepends="grep postmarketos-release"
 # clang: used for bpf compilation. this is the default compiler
+# grep: test-kernel-install requires 'grep -G', which is not supported by BusyBox grep.
 makedepends="
 	acl
 	acl-dev
@@ -48,6 +49,7 @@ makedepends="
 	elfutils
 	glib-dev
 	gperf
+	grep
 	kmod-dev
 	libapparmor-dev
 	libbz2
