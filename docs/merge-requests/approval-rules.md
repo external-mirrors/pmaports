@@ -1,4 +1,4 @@
-# pmaports Approval Rules
+# Approval Rules
 
 pmaports follows the general
 [code review and merge](https://docs.postmarketos.org/policies-and-processes/development/code-review-and-merge.html)

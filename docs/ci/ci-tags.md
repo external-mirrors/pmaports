@@ -1,4 +1,4 @@
-# CI tags
+# CI Tags
 
 You can add various tags in the commit message of your last commit  to modify
 the continuous integration behaviour for your merge requests.

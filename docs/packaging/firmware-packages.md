@@ -1,4 +1,4 @@
-# Firmware
+# Firmware Packages
 
 Firmware (non-free binary blobs, often cryptographically signed by the OEM)
 is nowadays unfortunately required for a lot of essential functionality,
