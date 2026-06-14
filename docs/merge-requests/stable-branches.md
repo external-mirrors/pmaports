@@ -1,31 +1,52 @@
-# Backporting from edge
+# Stable Branches
+
+This article describes how to make merge requests towards a [stable
+release](../releases) branch.
+
+## Relevant Changes
+
+* Fixes backported from `main`.
+
+* Features backported from `main` if the maintainer of the package considers
+  them stable enough and important enough for backporting. In general we should
+  try to keep these minimal, for users the assumption is that stable branches
+  don't change much between releases and are therefore much more reliable than
+  edge.
+
+* For packages that have a higher version in `main`: if upstream releases a
+  [patch-release](https://semver.org), an upgrade MR can directly be sent to
+  the stable branch without the usual main-first-then-backport approach
+  described below.
 
 ## Workflow
 
 * Merge request authors or other contributors may add a `backport-to-vYY.MM`
-  label to pmaports MRs that shall be backported.
+  label to pmaports MRs to `main` that shall be backported.
 
-* After the MR is merged, postmarketOS team members can then backport the
-  patches to the given stable branch. If you are not a team member and need
-  somebody to do the backport, you can ask in
-  [postmarketos-devel](https://wiki.postmarketos.org/wiki/Matrix_and_IRC).
+* After the MR is merged to `main`, somebody following up (could be the person
+  who merged the MR to be fastest, or the original MR author, or the person
+  responsibly for the release, or another community member) creates a MR to
+  the release branch.
 
-* Use <code>git cherry-pick -x ffffffff</code> (insert commit to cherry pick
-  accordingly) for every patch. The <code>-x</code> will add a <code>(cherry
-  picked from commit ffffffff)</code> line to the commit message.
+* Use `git cherry-pick -x ffffffff` (insert commit to cherry pick accordingly)
+  for every patch. The `-x` will add a `(cherry picked from commit ffffffff)`
+  line to the commit message.
 
-* If you really know what you are doing and the change is trivial or the stable
-  branch is not released yet, then you can directly push the backported patch
-  to the stable branch. Otherwise you *must* make a merge request against the
-  stable branch with the backport. We don't want stable branches to break!
+* Put `backport of <link to the original MR>` into the description of the MR
+  towards the stable branch.
 
-* Add a comment to the original merge request where the backport can be found
-  (with a link to the merge request or backported commit hash).
-
-## What to look out for
+### Best Practices
 
 * Cherry picked commits shall not be squashed, then it's hard to understand
   which commits were already picked and which were not.
 
 * Avoid cherry-picking multiple patches that touch the same pmaports in the
   wrong order.
+
+### Initial Release Branch Bringup
+
+Before the binary repository is built once for the release branch, it is fine
+to directly push cherry-picked patches from main to the release branch without
+going through a merge request. The reason is that CI doesn't work yet anyway,
+and we want to have build fixes applied to the release branch quickly to be
+able to finish the initial build of the binary repository.
