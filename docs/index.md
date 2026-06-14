@@ -14,7 +14,7 @@ in pmaports and the processes around device categorization.
    :hidden:
 
    releases
-   approval-rules
+   merge-requests
    device-categorization
    deviceinfo-reference
    ci

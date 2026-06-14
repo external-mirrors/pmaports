@@ -69,5 +69,4 @@ appear, but you will get a more a more tried and tested, solid experience.
    :hidden:
 
    releases/timeline
-   releases/backporting
 ```

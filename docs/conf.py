@@ -29,8 +29,10 @@ html_title = "postmarketOS Packaging"
 
 # Redirects for moved pages
 redirects = {
+    "approval-rules": "merge-requests/approval-rules.html",
     "ci-tags": "ci/ci-tags.html",
     "hardware-ci": "ci/hardware-ci.html",
+    "releases/backporting": "merge-requests/stable-branches.html",
 }
 
 def run_dint_doc(app):

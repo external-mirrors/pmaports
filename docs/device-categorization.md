@@ -224,7 +224,7 @@ requested time pass and the device still does not meet the criteria, a merge
 request to move them to the now appropriate category should be opened.
 
 Merge requests moving a device to a lower category are subject to the standard
-[pmaports approval rules](./approval-rules).
+[pmaports approval rules](./merge-requests/approval-rules).
 
 ## See also
 

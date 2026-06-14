@@ -33,12 +33,12 @@ The following flowchart describes the process:
 ## Move device from category
 
 Moving devices from category is a special operation, see
-[device categorization](./device-categorization).
+[device categorization](../device-categorization).
 
 ## Changing kconfigcheck requirements
 
 Changes to `kconfigcheck.toml` are a special operation, see
-[kconfigcheck](./kconfigcheck).
+[kconfigcheck](../kconfigcheck).
 
 ## Testing requirements
 
