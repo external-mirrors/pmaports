@@ -9,7 +9,7 @@ additional guidelines for which kernel version to package for a device.
 
 Devices with a close-to-mainline kernel usually reside in `testing` and can be
 moved to `community` or `main` later if they meet the necessary
-[requirements](./device-categorization.md). Devices using a downstream (i.e.
+[requirements](../device-categorization.md). Devices using a downstream (i.e.
 vendor-provided) kernel are packaged in the `downstream` or `archived`
 categories.
 

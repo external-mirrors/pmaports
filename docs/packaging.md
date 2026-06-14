@@ -315,3 +315,16 @@ only in some specific circumstances? In those situations we have to:
     versioned provider to disambiguate (e.g:
     `provides="audio-conf=$pkgver-r$pkgrel"`), or to force the forked packages
     to provide a lower version than the other package.
+
+```{eval-rst}
+.. toctree::
+   :hidden:
+
+   packaging/device-categorization
+
+   packaging/device-packages
+   packaging/kernel-packages
+
+   packaging/firmware-packages
+   packaging/ui-packages
+```
