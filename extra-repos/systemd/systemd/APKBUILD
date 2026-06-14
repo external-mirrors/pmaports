@@ -95,6 +95,12 @@ makedepends="
 	dbus-dev
 	polkit-dev
 	"
+
+# xen-dev: available only on aarch64, armv7, and x86_64.
+case "$CARCH" in
+	aarch64|armv7|x86_64) makedepends="$makedepends xen-dev" ;;
+esac
+
 # NOTE: these are dlopened and have to be listed explicitly since abuild cannot detect these dependencies
 # See:
 #  - https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/3992
