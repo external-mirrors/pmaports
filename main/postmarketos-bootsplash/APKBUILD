@@ -1,7 +1,7 @@
 # Co-Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-bootsplash
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="pmOS integration components for boot/shutdown splash screen"
 url="https://postmarketos.org"
@@ -15,24 +15,20 @@ depends="
 	postmarketos-plymouth-themes
 	xkeyboard-config
 "
+depends_openrc="plymouth-openrc-plugin"
 options="!check" # no testsuite
 subpackages="$pkgname-openrc"
 source="
 	20-plymouth.conf
 	60-seat-id-path.rules
-	kill-plymouth
 	plymouthd.conf
 	postmarketos-bootsplash.files
 "
 replaces="plymouth"
-install="postmarketos-bootsplash-openrc.post-install postmarketos-bootsplash-openrc.post-upgrade"
 provides="postmarketos-bootsplash-virtual"
 provider_priority=100
 
 package() {
-	# Temporary workaround for OpenRC, see pmaports#4536
-	install -Dm755 "$srcdir/kill-plymouth" -t "$pkgdir"/etc/init.d/
-
 	# NOTE: install files to initramfs-extra due to size
 	install -Dm644 "$srcdir"/postmarketos-bootsplash.files \
 		"$pkgdir"/usr/share/mkinitfs/files-extra/30-postmarketos-bootsplash.files
@@ -57,7 +53,6 @@ openrc() {
 sha512sums="
 1b46f7b4891c27e0f08852b8149ca49f8965911295b40324c76bd279b887c2c9b5384dfeace469dfc11606b8f05f0115cffd1046d50e3c5febac235a9b383d63  20-plymouth.conf
 94a75f556c048296ee80fe61f7f9a68e408102eab00d12916cdc2f9ad860e2d449e0d86ef014caea43361621ed2cbb9d61cb21a8f573b4e93fc9f6052459e4c6  60-seat-id-path.rules
-5d11ab555600606f5f27146aa982075d622068bb82b34144459c174da9e22c19b3adcd076d780885cd97313f1e3aee87052769e32d8b1332e4516abd0c9dda0d  kill-plymouth
 50a94758b46c9a2ef05845779237ef47db106741b5a31c9a6db2cc36ed9a8afd7e736d2628f050a15724b8ebaaef8e8d57145ad02c247ecee83191ee14a107ae  plymouthd.conf
 7333c5f5d77a573bd9c8014f4509d9aae544a467b5bd462ac449f25a8b465a4425149e1f977d81ba3603805c4eeac07c5947da3258a4537f421fd64a959f50b0  postmarketos-bootsplash.files
 "
