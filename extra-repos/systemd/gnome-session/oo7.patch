@@ -1,0 +1,23 @@
+From a9d4b4d72562973d415cb943a41b4746d19bba78 Mon Sep 17 00:00:00 2001
+From: Achill Gilgenast <achill@achill.org>
+Date: Wed, 6 May 2026 11:20:25 +0200
+Subject: [PATCH] data: Use oo7-portal as secret portal
+
+Once https://gitlab.gnome.org/GNOME/gnome-build-meta/-/work_items/1253 is
+approved, x-d-p should prefer oo7-portal instead of gnome-keyring.
+---
+ data/gnome-portals.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/gnome-portals.conf b/data/gnome-portals.conf
+index 7e1094cf..0fd839d7 100644
+--- a/data/gnome-portals.conf
++++ b/data/gnome-portals.conf
+@@ -1,3 +1,3 @@
+ [preferred]
+ default=gnome;gtk;
+-org.freedesktop.impl.portal.Secret=gnome-keyring;
++org.freedesktop.impl.portal.Secret=oo7-portal;gnome-keyring;
+-- 
+GitLab
+
