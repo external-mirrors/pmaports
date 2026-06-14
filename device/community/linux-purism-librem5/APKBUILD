@@ -78,8 +78,6 @@ build() {
 }
 
 package() {
-	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
-
 	make dtbs_install install modules_install \
 		ARCH="$_carch" \
 		LLVM=1 \
