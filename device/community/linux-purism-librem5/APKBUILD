@@ -20,26 +20,21 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-librem5
 	"
 makedepends="
-	bash
 	bison
 	clang
-	devicepkg-dev
 	findutils
 	flex
-	installkernel
 	linux-headers
 	lld
 	llvm
 	openssl-dev
 	perl
-	rsync
-	xz
+	postmarketos-installkernel
+	python3
 	zstd
 	"
 install="$pkgname.post-upgrade"
 
-# Source
-_repository="linux"
 # kconfig generated with: ARCH=arm64 make defconfig KBUILD_DEFCONFIG=librem5_defconfig
 _config="config-$_flavor.$arch"
 
@@ -47,13 +42,13 @@ _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/linux/-/archive/pureos/$_purismver/linux-pureos-$_purismver.tar.gz
 	$_config
+	treewide-remove-unnecessary-linux-version.h-inclusion.patch
 "
-builddir="$srcdir/$_repository-pureos-$_purismver"
+builddir="$srcdir/linux-pureos-$_purismver"
 
 prepare() {
 	default_prepare
-	REPLACE_GCCH=0 \
-	        . downstreamkernel_prepare
+	cp "$srcdir/config-$_flavor.$arch" .config
 
 	####### Rebase config
 	# The kernel config needs to be periodically rebased to enable new
@@ -79,22 +74,30 @@ prepare() {
 build() {
 	unset LDFLAGS
 	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" \
-		LOCALVERSION=".$_purismrel"
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
 
-	make modules_install dtbs_install \
+	make dtbs_install install modules_install \
 		ARCH="$_carch" \
 		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
-		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
+
 
 }
 
 sha512sums="
 d51709ee85ac8ebe271fc57ba60e2ab5f90225bd045b813a281553b0f76ae4c227317201fbb509e59af9813ea3e49947e83ac7d82b97cede15212cadd90fc372  linux-purism-librem5-6.6.139pureos1.tar.gz
 92837e9d725d2f6e6aebfc10e79007dc671cbc57ddb10c9af91b0b666131275f0897e355c77705f2b57c4c87472f4f8264d32060765582878fde04891c49f997  config-purism-librem5.aarch64
+76c1e07b5479fe7be0d1e4a74a8f4a2cd8fc25fbeb3a4efcaf8300e27817a320c0c1340ea6c00ad1c3dd86cc2cb192280de8a91360bad80665115701ba11632d  treewide-remove-unnecessary-linux-version.h-inclusion.patch
 "
