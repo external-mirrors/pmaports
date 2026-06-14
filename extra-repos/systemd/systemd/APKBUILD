@@ -96,6 +96,12 @@ makedepends="
 	polkit-dev
 	"
 
+# valgrind-dev: not available on armhf and loongarch64.
+case "$CARCH" in
+	armhf|loongarch64) ;;
+	*) makedepends="$makedepends valgrind-dev" ;;
+esac
+
 # xen-dev: available only on aarch64, armv7, and x86_64.
 case "$CARCH" in
 	aarch64|armv7|x86_64) makedepends="$makedepends xen-dev" ;;
