@@ -14,9 +14,9 @@ release](../releases) branch.
   edge.
 
 * For packages that have a higher version in `main`: if upstream releases a
-  [patch-release](https://semver.org), an upgrade MR can directly be sent to
-  the stable branch without the usual main-first-then-backport approach
-  described below.
+  patch-release for an older version that we are using in our stable branch, an
+  upgrade MR can directly be sent to the stable branch without the usual
+  main-first-then-backport approach described below.
 
 ## Workflow
 
@@ -41,7 +41,8 @@ release](../releases) branch.
   which commits were already picked and which were not.
 
 * Avoid cherry-picking multiple patches that touch the same pmaports in the
-  wrong order.
+  wrong order. If there's a conflict, consider additionally cherry-picking a
+  dependent patch beforehand if it's non-intrusive.
 
 ### Initial Release Branch Bringup
 

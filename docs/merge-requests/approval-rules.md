@@ -50,14 +50,7 @@ cases, before merging, in addition to the regular approvals, it is required to:
   device-specific MRs that the team can't test, instead require confirmation of
   device maintainer that it works.
 
-## Backporting
+## Stable branches
 
-Backporting features from edge to stable is done at request of the MR author or
-package maintainer. All patches for stable branches must go through edge first
-and get backported from there to get additional testing before they potentially
-breaks something in stable, and should be tested in the MR too. The only
-exception are patches for failures that only happen on stable.
-
-While backporting patches to stable, label the MR with the corresponding
-`backport-to-v*` label, and cherry-pick the commits with the `-x` option, to
-make sure that the original commit is mentioned.
+[MRs to stable branches](./stable-branches) follow the same approval rules as
+to the `main` branch.
