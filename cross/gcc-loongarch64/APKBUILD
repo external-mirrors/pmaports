@@ -34,7 +34,7 @@ _pkgsnap="${pkgver##*_git}"
 [ "$CHOST" != "$CTARGET" ] && _target="-$CTARGET_ARCH" || _target=""
 
 pkgname=gcc-loongarch64
-pkgrel=5
+pkgrel=6
 pkgdesc="Stage2 cross-compiler for loongarch64"
 url="https://gcc.gnu.org"
 arch="aarch64 x86_64"
@@ -180,7 +180,10 @@ esac
 
 # libatomic is a dependency for openvswitch
 $_libatomic && subpackages="$subpackages libatomic::$CTARGET_ARCH"
-$_libgcc && subpackages="$subpackages libgcc::$CTARGET_ARCH libgcc-static:libgccstatic:$CTARGET_ARCH"
+if $_libgcc; then
+	depends="$depends libgcc-static$_target"
+	subpackages="$subpackages libgcc::$CTARGET_ARCH libgcc-static$_target:libgccstatic:$CTARGET_ARCH"
+fi
 $_libquadmath && subpackages="$subpackages libquadmath::$CTARGET_ARCH"
 if $_libgomp; then
 	depends="$depends libgomp=$_gccrel"
@@ -633,12 +636,17 @@ libgcc() {
 	depends=
 
 	amove usr/lib/libgcc_s.so.*
+	# Symlink for Clang to find the library. Gets overwritten by the real
+	# library if gcc is installed.
+	ln -s /usr/lib/libgcc_s.so.1 \
+		"$subpkgdir"/usr/lib/libgcc_s.so
 }
 
 libgccstatic() {
 	pkgdesc="GNU C compiler runtime libraries"
 	depends=
 
+	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/crtbegin.o
 	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/crtbeginS.o
 	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/crtendS.o
 	amove usr/lib/gcc/"$CTARGET"/"$pkgver"/libgcc.a
