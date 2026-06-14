@@ -156,6 +156,7 @@ subpackages="
 	$pkgname-dbg
 	$pkgname-dev
 	$pkgname-doc
+	$pkgname-tests
 	$pkgname-x11
 
 	$pkgname-udevd
@@ -245,6 +246,7 @@ build() {
 		-Dpamlibdir=/usr/lib/security \
 		-Dpamconfdir=/usr/lib/pam.d \
 		-Dinstall-sysconfdir=false \
+		-Dinstall-tests=true \
 		\
 		-Dsysupdate=enabled \
 		-Dsysupdated=enabled \
@@ -495,6 +497,12 @@ journald_bcomp() {
 
 journald_zcomp() {
 	_default_zshcomp _journalctl
+}
+
+tests() {
+	depends="$pkgname=$pkgver-r$pkgrel"
+
+	amove usr/lib/systemd/tests
 }
 
 x11() {
