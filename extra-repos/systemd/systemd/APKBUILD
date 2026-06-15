@@ -190,6 +190,7 @@ subpackages="
 	"
 
 source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
+	0001-musl-fix-build-on-32-bit-architecture.patch
 	wired.network
 	"
 builddir="$srcdir/$pkgname-$_pkgver"
@@ -219,8 +220,7 @@ build() {
 	local bootloader="enabled"
 	case "$CARCH" in
 		# ppc64le s390x: no EFI support
-		# armv7 x86: build broken for 32-bit
-		armv7|ppc64le|s390x|x86) bootloader="disabled" ;;
+		ppc64le|s390x) bootloader="disabled" ;;
 	esac
 
 	# TODO: after usr-merge completion: remove hardcoded "-D*-path" options
@@ -568,5 +568,6 @@ _resolve_packages() {
 
 sha512sums="
 facbcb7831fb84a38eaee5804d9aa03382486006cdb559010d6d353ad9a3986b516522cde1f0e0808fb49365859f790dd1caed24875a1c9e339e892d09d2cf30  systemd-261_rc3.tar.gz
+a060c2d4eca986fdb7940a5330f91fbeee5ca27ea809cb2005a2b4ea301a441c74157644638c7b17de200751cb0d94fbe6034568d3f7977969ebe510e58853f1  0001-musl-fix-build-on-32-bit-architecture.patch
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
 "
