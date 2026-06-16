@@ -3,7 +3,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=postmarketos-base-ui-gnome
 pkgver=11
-pkgrel=1
+pkgrel=2
 pkgdesc="Meta package for shared configuration for GNOME-based UIs"
 url="https://postmarketos.org"
 arch="noarch"
@@ -38,6 +38,8 @@ options="!check"
 subpackages="
 	$pkgname-duranium
 	$pkgname-openrc
+	gnome-app-provider-gnome-software:gnome_software
+	gnome-app-provider-bazaar:bazaar
 	"
 
 _pmb_recommends="
@@ -52,8 +54,6 @@ _pmb_recommends="
 	gnome-console
 	gnome-contacts
 	gnome-maps
-	gnome-software
-	gnome-software-plugin-apk
 	gnome-text-editor
 	gnome-user-share
 	gnome-weather
@@ -72,6 +72,8 @@ _pmb_recommends="
 "
 
 package() {
+	depends="$depends gnome-app-provider"
+
 	install -Dm644 -t "$pkgdir"/usr/share/glib-2.0/schemas \
 		"$srcdir"/*.override
 }
@@ -96,10 +98,28 @@ openrc() {
 duranium() {
 	pkgdesc="$pkgdesc (Duranium)"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
-	depends="gnome-software-plugin-sysupdate"
+	depends="gnome-app-provider-bazaar"
 
 	install -Dm644 "$srcdir"/50-duranium.conf \
 		-t "$subpkgdir"/usr/lib/kernel-cmdline.d
+}
+
+gnome_software() {
+	pkgdesc="Provider that installs GNOME Software"
+	provides="gnome-app-provider"
+	provider_priority=100
+	depends="gnome-software gnome-software-plugin-apk"
+
+	mkdir -p "$subpkgdir"
+}
+
+bazaar() {
+	pkgdesc="Provider that installs Bazaar"
+	provides="gnome-app-provider"
+	provider_priority=90
+	depends="bazaar"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
