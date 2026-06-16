@@ -54,6 +54,7 @@ replaces="
 	cosmic-applets
 	cosmic-bg
 "
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 
 package() {
 	install -Dm644 wallpaper.conf \
@@ -66,10 +67,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="
-		$subpkgname.post-install
-		$subpkgname.post-upgrade
-		"
 	depends="
 		bluez-openrc
 		cosmic-greeter-openrc
