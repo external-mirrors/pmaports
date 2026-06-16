@@ -221,13 +221,10 @@ if [ "$_systemd_upstream" = 1 ]; then
 			-Dukify=enabled
 			"
 	fi
-else
-	# The source tar ball is of course only necessary when we are _not_ in upstream.
-	source="$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz"
 fi
 
 source="
-	$source
+	$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
 	"
 builddir=${_upstream_srcdir:-"$srcdir/$pkgname-$_pkgver"}
