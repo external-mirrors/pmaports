@@ -3,7 +3,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=postmarketos-base-ui-gnome
 pkgver=11
-pkgrel=2
+pkgrel=3
 pkgdesc="Meta package for shared configuration for GNOME-based UIs"
 url="https://postmarketos.org"
 arch="noarch"
@@ -33,6 +33,8 @@ source="
 	00_postmarketos-base-ui-gnome.gschema.override
 	10_postmarketos-green-accent.gschema.override
 	50-duranium.conf
+	duranium-gnome-software-stub.sh
+	duranium-gnome-software-stub.desktop
 	"
 options="!check"
 subpackages="
@@ -99,10 +101,16 @@ openrc() {
 duranium() {
 	pkgdesc="$pkgdesc (Duranium)"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-duranium"
-	depends="gnome-app-provider-bazaar"
+	# Bash and zenity for the gnome-software stub
+	depends="gnome-app-provider-bazaar bash zenity"
 
 	install -Dm644 "$srcdir"/50-duranium.conf \
 		-t "$subpkgdir"/usr/lib/kernel-cmdline.d
+
+	install -Dm755 "$srcdir"/duranium-gnome-software-stub.sh \
+		"$subpkgdir"/usr/bin/gnome-software
+	install -Dm644 "$srcdir"/duranium-gnome-software-stub.desktop \
+		"$subpkgdir"/usr/share/applications/org.gnome.Software.desktop
 }
 
 gnome_software() {
@@ -127,4 +135,6 @@ sha512sums="
 39b5bb5e669756e2a308ab61b7901e76a9eff9e37c82d50bd9ff77800e72c19b580256f617a2ad0949c1746ab4e163e5ce009c134ab77f8a32f758b1b963862e  00_postmarketos-base-ui-gnome.gschema.override
 c255b0914043f09ef5cc56d50c26e9c8885af128abc3ed5494606bd304eefdeb761ed3bc2d5f86f7c3bfb16f7fc21ca1a6d954c8d21e73e7a5e7612a84a78b7c  10_postmarketos-green-accent.gschema.override
 d48775a344d221309fc4f6ab96ec9cd5e871290f940deb967369b8c65dcef570cc44f7c4e7980153390f9da2518fdcc4c0e0687e9e32a984f712bdb62ab65e3d  50-duranium.conf
+aeb9d58b4c944879dea6852c2d03a53d8fb83351b3181a7249681c4aa5508f9f7874459ae33c041320f14e16d9c05fe41803c5b718749bb233e30f5fc908fbab  duranium-gnome-software-stub.sh
+9c7a7f89bcc042e7f8aaab4b2572c371c4b729666d939280ce7db705d1ea300ebfa9fea9074af0c915a3e88d338969b3b133eca50f63b2f64a29cd1d8cf07ea9  duranium-gnome-software-stub.desktop
 "
