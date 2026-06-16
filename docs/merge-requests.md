@@ -7,5 +7,6 @@ The subpages of this page describe processes for merge requests in pmaports.
    :hidden:
 
    merge-requests/approval-rules
+   merge-requests/commitstyle
    merge-requests/stable-branches
 ```

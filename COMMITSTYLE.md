@@ -1,4 +1,4 @@
-# Policy for commits in pmaports
+# Commit Style
 
 This document defines policy for organising and titling commits for
 inclusion in pmaports.
@@ -16,9 +16,9 @@ target device.
 
 ## General policy
 
-We follow Alpine's aports commit style with some minor exceptions
-and additions. Alpine's commit style can be found here:
-https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/COMMITSTYLE.md
+We follow
+[Alpine's aports commit style](https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/COMMITSTYLE.md)
+with some minor exceptions and additions.
 
 ## Exceptions
 
