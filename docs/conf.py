@@ -13,6 +13,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
+    "sphinx_reredirects",
     "sphinxcontrib.autoprogram",
     "sphinxcontrib.jquery",
 ]
@@ -26,6 +27,11 @@ html_theme_options = {
 # Set the explicit title of the HTML output
 html_title = "postmarketOS Packaging"
 
+# Redirects for moved pages
+redirects = {
+    "ci-tags": "ci/ci-tags.html",
+    "hardware-ci": "ci/hardware-ci.html",
+}
 
 def run_dint_doc(app):
     docs_dir = Path(__file__).parent

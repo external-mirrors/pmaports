@@ -17,11 +17,10 @@ in pmaports and the processes around device categorization.
    approval-rules
    device-categorization
    deviceinfo-reference
-   ci-tags
+   ci
    firmware
    generic-device-packages
    generic-kernels
-   hardware-ci
    kconfig-fragments
    kconfigcheck
    kernel-cmdline

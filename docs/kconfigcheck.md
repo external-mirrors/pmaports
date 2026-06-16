@@ -79,7 +79,7 @@ package maintainers, who must make sure their kernel complies with the changed
 requirements in the next update to their kernel packages. When making unrelated
 changes to a kernel package that does not meet the current requirements, one
 can use the `[ci:skip-kconfigcheck]` CI tag to bypass the checks if
-[the situation allows for it](./ci-tags).
+[the situation allows for it](ci/ci-tags).
 
 Merge requests that change the `kconfigcheck.toml` require approval from
 members of the kconfigcheck team in GitLab. The team can be pinged on merge
