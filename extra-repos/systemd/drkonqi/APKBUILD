@@ -34,7 +34,6 @@ makedepends="
 	kuserfeedback-dev
 	kwallet-dev
 	kwidgetsaddons-dev
-	py3-chai
 	qt6-qtbase-dev
 	samurai
 	syntax-highlighting-dev
@@ -45,7 +44,10 @@ case "$pkgver" in
 	*.90*) _rel=unstable;;
 	*) _rel=stable;;
 esac
-subpackages="$pkgname-lang"
+subpackages="
+	$pkgname-lang
+	$pkgname-systemd
+	"
 _repo_url="https://invent.kde.org/plasma/drkonqi.git"
 source="https://download.kde.org/stable/plasma/$pkgver/drkonqi-$pkgver.tar.xz"
 
