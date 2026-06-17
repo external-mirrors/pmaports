@@ -2,7 +2,7 @@
 maintainer="Yassine Oudjana (Tooniis) <y.oudjana@protonmail.com>"
 pkgname=device-xiaomi-scorpio
 pkgdesc="Xiaomi Mi Note 2"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -66,9 +66,11 @@ nonfree_firmware_openrc() {
 }
 
 phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 

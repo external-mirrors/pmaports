@@ -3,7 +3,7 @@
 maintainer="Molly Sophia <mollysophia379@gmail.com>"
 pkgname=device-xiaomi-polaris
 pkgdesc="Xiaomi Mi Mix 2S"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -47,9 +47,11 @@ nonfree_firmware() {
 }
 
 phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 sha512sums="

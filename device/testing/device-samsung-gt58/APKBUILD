@@ -2,7 +2,7 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-samsung-gt58
 pkgdesc="Samsung Galaxy Tab A 8.0 (2015)"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -41,9 +41,11 @@ nonfree_firmware() {
 }
 
 phosh() {
-	install_if="$pkgname postmarketos-ui-phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 sha512sums="

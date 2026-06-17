@@ -2,7 +2,7 @@
 maintainer="Alec Su (AlecJY) <ae40515@yahoo.com.tw>"
 pkgname=device-xiaomi-natrium
 pkgdesc="Xiaomi Mi 5s Plus"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -22,7 +22,6 @@ subpackages="
 	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
 	$pkgname-phosh
 	"
-
 source="
 	deviceinfo
 	modules-initfs
@@ -63,9 +62,11 @@ nonfree_firmware_openrc() {
 }
 
 phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 

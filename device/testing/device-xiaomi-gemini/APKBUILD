@@ -2,7 +2,7 @@
 maintainer="Raffaele Tranquillini (cunidev) <raffaele.tranquillini@gmail.com>"
 pkgname=device-xiaomi-gemini
 pkgdesc="Xiaomi Mi 5"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -48,9 +48,11 @@ nonfree_firmware() {
 }
 
 phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 

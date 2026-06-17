@@ -2,8 +2,8 @@
 maintainer="Linus Walleij <linusw@kernel.org>"
 pkgname=device-samsung-codina-tmo
 pkgdesc="Samsung Galaxy Exhibit (SGH-T599)"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -42,9 +42,11 @@ kwin() {
 }
 
 phosh() {
-	install_if="$pkgname postmarketos-ui-phosh"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-			"$subpkgdir"/etc/phosh/phoc.ini
+			"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 sha512sums="

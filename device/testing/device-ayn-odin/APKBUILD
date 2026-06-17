@@ -2,8 +2,8 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=device-ayn-odin
 pkgdesc="AYN Odin"
-pkgver=6
-pkgrel=1
+pkgver=7
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -71,14 +71,18 @@ openrc() {
 
 _phosh() {
 	install_if="$pkgname-kernel-odin=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini.odin \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 _phosh_m2() {
 	install_if="$pkgname-kernel-odin-m2=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini.odin-m2 \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 sha512sums="

@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp2
 pkgdesc="Fairphone 2"
-pkgver=13
+pkgver=14
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -41,8 +41,10 @@ package() {
 
 phosh() {
 	install_if="$pkgname postmarketos-ui-phosh"
+	replaces="phosh"
+
 	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
+		"$subpkgdir"/usr/share/phosh/phoc.ini
 }
 
 sha512sums="
