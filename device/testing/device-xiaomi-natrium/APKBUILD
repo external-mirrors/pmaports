@@ -2,26 +2,30 @@
 maintainer="Alec Su (AlecJY) <ae40515@yahoo.com.tw>"
 pkgname=device-xiaomi-natrium
 pkgdesc="Xiaomi Mi 5s Plus"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	firmware-xiaomi-natrium
+	linux-firmware-ath10k
+	linux-firmware-qca
 	linux-postmarketos-qcom-msm8996
 	mesa-egl
 	mkbootimg
 	postmarketos-base
 	soc-qcom-msm8996
+	soc-qcom-msm8996-nonfree-firmware
 	soc-qcom-msm8996-ucm
 "
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
+	$pkgname-openrc
 	$pkgname-phosh
 	"
+install="$pkgname-openrc.post-install"
 source="
 	deviceinfo
 	modules-initfs
@@ -39,24 +43,13 @@ package() {
 
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
+
+	install -Dm644 "$srcdir/30-gpu-firmware.files" \
+		-t "$pkgdir/usr/share/mkinitfs/files"
 }
 
-nonfree_firmware() {
-	pkgdesc="GPU/Modem/Venus/ADSP/SLPI/WiFi/Bluetooth Firmware"
-	depends="
-		firmware-xiaomi-natrium
-		linux-firmware-ath10k
-		linux-firmware-qca
-		soc-qcom-msm8996-nonfree-firmware
-		"
-
-	install -Dm644 "$srcdir/30-gpu-firmware.files" -t \
-		"$subpkgdir/usr/share/mkinitfs/files"
-}
-
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
+openrc() {
+	default_openrc
 
 	mkdir -p "$subpkgdir"
 }
