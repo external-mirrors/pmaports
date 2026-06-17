@@ -2,7 +2,7 @@
 maintainer="Yassine Oudjana (Tooniis) <y.oudjana@protonmail.com>"
 pkgname=device-xiaomi-scorpio
 pkgdesc="Xiaomi Mi Note 2"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,22 +10,25 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	bootmac
+	firmware-xiaomi-scorpio
+	linux-firmware-ath10k
+	linux-firmware-qca
 	linux-postmarketos-qcom-msm8996
-	mesa-egl
 	megapixels
+	mesa-egl
 	mkbootimg
 	postmarketos-base
 	postprocessd
 	soc-qcom-msm8996
+	soc-qcom-msm8996-nonfree-firmware
 	soc-qcom-msm8996-ucm
 	"
 makedepends="devicepkg-dev"
 subpackages="
+	$pkgname-openrc
 	$pkgname-phosh
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
 	"
-
+install="$pkgname-openrc.post-install"
 source="
 	30-gpu-firmware.files
 	deviceinfo
@@ -43,25 +46,14 @@ package() {
 
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
+
+	install -Dm644 "$srcdir/30-gpu-firmware.files" \
+		-t "$pkgdir/usr/share/mkinitfs/files"
 }
 
-nonfree_firmware() {
-	pkgdesc="GPU/Modem/Venus/ADSP/SLPI/WiFi/Bluetooth Firmware"
-	depends="
-		firmware-xiaomi-scorpio
-		linux-firmware-ath10k
-		linux-firmware-qca
-		soc-qcom-msm8996-nonfree-firmware
-		"
-	mkdir "$subpkgdir"
+openrc() {
+	default_openrc
 
-	install -Dm644 "$srcdir/30-gpu-firmware.files" -t \
-		"$subpkgdir/usr/share/mkinitfs/files"
-}
-
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
 	mkdir "$subpkgdir"
 }
 
