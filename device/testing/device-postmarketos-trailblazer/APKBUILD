@@ -3,7 +3,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-postmarketos-trailblazer
 pkgdesc="postmarketOS Trailblazer generic ARM64"
-pkgver=20
+pkgver=21
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -45,7 +45,7 @@ subpackages="
 source="
 	deviceinfo
 	kernel-cmdline.conf
-	modules-initfs
+	50-all-modules.files
 "
 
 build() {
@@ -54,6 +54,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir/50-all-modules.files" \
+		-t "$pkgdir/usr/share/mkinitfs/files"
 }
 
 kernel_next() {
@@ -96,6 +99,6 @@ kernel_postmarketos_amlogic() {
 
 sha512sums="
 36812279ace456345d289a038d718dd08baa5e414a1429c7de5eec50ec9fa74d396e4d6bed5c38808c044d30dec46b21bc4dfe46861c6f338527e8cbd3029856  deviceinfo
-81492d13da96e7718ca546a6e879c54fc105e4b1dc4316b6e91f8c51cfbc816bbb0673222579afb5ce5a38fad91d8be7639aa938e0e8f77ff29a8d5d301d4949  kernel-cmdline.conf
-e26948d1f5005b16fefcaa51985010a5e55adef9ba3ed9d1f3d046c4b8928afbdd317123d0ca2fb0904e5431536c0d995144f66ad9025c7937ff0aae0537dfef  modules-initfs
+2ea48ca7ea2cb9bbd311d9f001dd5e765568a2d4d488e17255322bb6f3fffb5d025dac3a72f7eeede4c373c388299680caf074a1b89cf6b94d37e57e7b98f93e  kernel-cmdline.conf
+cb2a392247dc9455b45aded431f3d49a83a49dbbd6b37273c4d28234bf7caf980fe3d4944b414be21f103b59e18baf8aa119fdcf9fa5ddbf2414ba0be91018a7  50-all-modules.files
 "
