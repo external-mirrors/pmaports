@@ -35,6 +35,12 @@ release](../releases) branch.
 * Put `backport of <link to the original MR>` into the description of the MR
   towards the stable branch.
 
+* For patches that are not related to security, maintainers can choose to delay
+  backporting to give them more time in edge. This can be done either by adding
+  a visible note in the original MR description that a backport shall wait and
+  how long, or by adding a blocking comment in the backport MR that it shall
+  not be merged before a specific date.
+
 ### Best Practices
 
 * Cherry picked commits shall not be squashed, then it's hard to understand
