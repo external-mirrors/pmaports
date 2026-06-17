@@ -1,5 +1,16 @@
 # Packaging Guidelines
 
+This document explains the general logic behind APKBUILDs and the niche
+or confusing parts of writing them.
+
+## General Policy
+
+The APKBUILDs in pmaports follow
+[Alpine Linux's coding style guide](https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/CODINGSTYLE.md)
+with a few small style and policy differences to make up for the differences
+in the types of packages between aports and pmaports. These can be found below
+and in the other sections.
+
 ## Maintainership
 
 Every package is expected to have a maintainer. The only exception is packages
