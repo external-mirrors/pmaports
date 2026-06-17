@@ -24,7 +24,7 @@ def test_aports_ui():
 
             apkbuild = pmb.parse.apkbuild(path)
             # Skip if arch isn't enabled
-            if not pmb.helpers.package.check_arch(apkbuild["pkgname"], arch, False):
+            if not pmb.helpers.pmaports.check_arches(apkbuild["arch"], arch):
                 continue
 
             for package in apkbuild["_pmb_recommends"]:
