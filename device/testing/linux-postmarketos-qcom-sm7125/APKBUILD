@@ -3,7 +3,7 @@ maintainer="Nikroks <nikroks@mainlining.org>"
 _flavor="postmarketos-qcom-sm7125"
 pkgname=linux-$_flavor
 pkgver=6.14.7
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SM7125 devices"
 arch="aarch64"
 _carch="arm64"
@@ -47,7 +47,7 @@ package() {
 	make zinstall modules_install dtbs_install \
 		ARCH="$_carch" \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
