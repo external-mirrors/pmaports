@@ -21,7 +21,7 @@ start_test "Ensure all boolean variables can be set"
 # shellcheck disable=SC3001
 parse_cmdline < <(echo \
 pmos.bootchart2 pmos.debug-shell pmos.force-partition-resize \
-splash pmos.stowaway rd.info \
+splash pmos.stowaway rd.info cryptkey=/keyfile \
 )
 
 assert_equal "bootchart2" "y"
@@ -29,6 +29,7 @@ assert_equal "debug_shell" "y"
 assert_equal "force_partition_resize" "y"
 assert_equal "nosplash" "n"
 assert_equal "log_info" "y"
+assert_equal "cryptkey" "/keyfile"
 end_test
 
 ### Test 2 ###

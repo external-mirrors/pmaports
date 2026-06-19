@@ -98,6 +98,9 @@ resize_root_partition() {
 unlock_root_partition() {
 	command -v cryptsetup >/dev/null || return
 	if cryptsetup isLuks "$PMOS_ROOT"; then
+		if [ -f "$cryptkey" ]; then
+			cryptsetup luksOpen "$PMOS_ROOT" root --key-file="$cryptkey"
+		fi
 		splash_hide
 		tried=0
 		until cryptsetup status root | grep -qwi active; do
