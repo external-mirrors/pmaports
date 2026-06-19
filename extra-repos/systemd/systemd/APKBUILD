@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=261_rc4
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=0
+pkgrel=1
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -160,7 +160,7 @@ depends="
 
 # provides=openrc and openrc-settingsd to prevent those packages
 # getting pulled in, as there are some conflicts (dbus)
-provides="busctl eudev openrc-settingsd=$pkgver-r$pkgrel systemd-stage0=$pkgver-r$pkgrel"
+provides="busctl openrc-settingsd=$pkgver-r$pkgrel systemd-stage0=$pkgver-r$pkgrel"
 provider_priority=100
 
 install="$pkgname.pre-install"
@@ -369,7 +369,7 @@ udevd() {
 	depends="kmod-libs"
 
 	# NOTE: should only be udev, but packages hardcode eudev
-	provides="eudev udev eudev-libs"
+	provides="eudev=$pkgver-r$pkgrel udev=$pkgver-r$pkgrel eudev-libs=$pkgver-r$pkgrel"
 	provider_priority=100
 
 	amove usr/bin/udevadm
@@ -550,7 +550,7 @@ x11() {
 }
 
 dev() {
-	provides="eudev-dev udev-dev systemd-stage0-dev=$pkgver-r$pkgrel"
+	provides="eudev-dev=$pkgver-r$pkgrel udev-dev=$pkgver-r$pkgrel systemd-stage0-dev=$pkgver-r$pkgrel"
 	provider_priority=100
 
 	default_dev
