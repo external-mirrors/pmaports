@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=11
+pkgver=12
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
@@ -67,6 +67,7 @@ _source644="
 	usr/lib/sysusers.d/10-pmos-user.conf
 	usr/lib/tmpfiles.d/duranium.conf
 	usr/lib/udev/rules.d/90-udisks-ignore-verity-hack.rules
+	usr/lib/udev/rules.d/98-mark-subpartitions-workaround.rules
 	usr/share/duranium/f0rmz-firstboot.conf
 "
 
@@ -129,6 +130,7 @@ initramfs() {
 	amove usr/lib/systemd/system/unl0kr-agent.path.d/plymouth-handoff.conf
 	amove usr/lib/systemd/system/unl0kr-agent.service.d/conflicts-console.conf
 	amove usr/lib/systemd/system/unl0kr-agent.service.d/plymouth-handoff.conf
+	amove usr/lib/udev/rules.d/98-mark-subpartitions-workaround.rules
 
 	amove usr/libexec/duranium/usb-gadget-setup
 
@@ -256,6 +258,7 @@ e7626be41123e8be466a0377fb84c857cd9cd0725094498c6148208c1862d17499b7a4e3e7279689
 fa1c3dd727fd20d16d18695d58dd10ec335d64ece00152346c84ae750ed5ade8faf5ba11747135d79972dd1a3f4f1ab496ae9425ebcf7232a4203ca9396fa7e0  rootfs-usr-lib-sysusers.d-10-pmos-user.conf
 fc4bf2b78e25b3f04add2ef7fbcfe70f24f8a865526ea817252a6bc4585755d40873909c4a1eb37acc86f93424f7de0bc2add29265eb2e5df69764ae0018fd76  rootfs-usr-lib-tmpfiles.d-duranium.conf
 a51fa1cf454169183ff086c70a777eb3d23f2f70c8e75ec27f96d06fd964c354621736901b8a53e42dcf3e5e891ced8c0ea06b793d910fbdff8c5c3bea8dc7b9  rootfs-usr-lib-udev-rules.d-90-udisks-ignore-verity-hack.rules
+f34f2835f61c24f9477bb97410c40825843c9b0dac7664b2cd3d3d8316e3838b48517c4991718c10cc32905680eb98c5b17169b62264c773c60f4a6442953230  rootfs-usr-lib-udev-rules.d-98-mark-subpartitions-workaround.rules
 7f2b98edc7b485129ea862c5c852422e8996ffe0a2bdae3160b6c94667b4e345a1792164e3143d58cb1a51c3c6981381ad7610d709aba210bb61a0c883455476  rootfs-usr-share-duranium-f0rmz-firstboot.conf
 619368ffc9dd1fd9c0f662c0bb8f407a6514c8b12611511d715f705874e3be24201b5046e631c476bd70d661ca45576df8fb10aa86cf11a7de9a79289b7a7806  rootfs-usr-bin-duranium-set-channel
 765797421f9123cdcf85e1496d01884cce1c8c304d15369b7eee32a8fc5abcd860dc5856c0d493f1cd3c6ad2a0ccdc4d6ba7d2ae356f0fc824dc16cdb84ebf37  rootfs-etc-profile.d-99-local-bin.sh
