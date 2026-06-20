@@ -8,12 +8,12 @@ set -e
 
 up() {
 	echo "Starting MTP responder"
-	if [ -d "/run/systemd" ]; then
+	if command -v systemctl; then
 		systemctl start umtprd
-	elif [ -f "/etc/rc.conf" ]; then
+	elif command -v rc-service; then
 		rc-service umtprd start
 	else
-		echo "Unsupported init system"
+		echo "Unknown service manager!"
 		exit 1
 	fi
 
@@ -26,7 +26,14 @@ up() {
 
 down() {
 	echo "Stopping MTP responder"
-	systemctl stop umtprd
+	if command -v systemctl; then
+		systemctl stop umtprd
+	elif command -v rc-service; then
+		rc-service umtprd stop
+	else
+		echo "Unknown service manager!"
+		exit 1
+	fi
 }
 
 case $1 in
