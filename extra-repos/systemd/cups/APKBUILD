@@ -3,7 +3,7 @@ maintainer=""
 pkgname=cups
 _pkgver=2.4.19
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=2
 pkgdesc="The CUPS Printing System"
 url="https://github.com/OpenPrinting/cups/"
 # armhf: pmb#2618
@@ -36,6 +36,8 @@ subpackages="
 	"
 source="$pkgname-$_pkgver.tar.gz::https://github.com/OpenPrinting/cups/archive/v$_pkgver.tar.gz
 	$pkgname.logrotate
+	0001-Install-sysusers.d-config-for-user-groups.patch
+	0002-Regenerate-configure.patch
 	cups-no-export-ssllibs.patch
 	cups-nostrip.patch
 	default-config-no-gssapi.patch
@@ -117,7 +119,7 @@ libs() {
 	depends=""
 	replaces="libcups"
 
-	amove 'usr/lib/*.so*'
+	amove usr/lib/*.so*
 	install -d "$pkgdir"/etc/cups
 }
 
@@ -158,6 +160,8 @@ systemd() {
 sha512sums="
 e6b084e334d23a4689fc194d6463f30fa391665f1e9d5f89735e91a5b59e5056e03a5c0a8097d0e126133fe8d548ff47ca655be92d84b38ff627823511d54edc  cups-2.4.19.tar.gz
 bc2e9985b248bdf552306dcaad6ac86ada0053da97a742e57e7d65f0c2373a88edd622b326a39bb536c7aaabc449255d5597001297c9430d237379547c95caf3  cups.logrotate
+4b86ca34d1aa2b31513b0a356422de6af8cd6082f3bcc2b7e18fc9e8fe138335ab0bf4ab395e9a816b28f70c91c477e4c720c5186ad22896e2ccb1da39aa85d8  0001-Install-sysusers.d-config-for-user-groups.patch
+429d5edc60639521171a56c7dabee44c8d3afe3688575142574fbaa67fada8fc280ae74c80abd5e5abf5aa77770c58e68cb39de918022efb6edee9117759e91e  0002-Regenerate-configure.patch
 148eb01f0861e1cd0861a174a5c5262c49b079b27b972b4e90656b9b9357ec710e861604c30e897818f550e9c1cdcefcd8c8bc955ba4a333902a74cdd8dfb5a6  cups-no-export-ssllibs.patch
 ca93cd1490e1f17d1ce3a8a5bcf7b9d46a3efaf0cb16c53fc2da779b4ac2eec46fa2a43d1e14d320d410e27618b34744c705a12ca7e7e91fcaee4196a28ac0f6  cups-nostrip.patch
 c492f5e20a1bb73cf6bed86d0343659e839df4003aa1409bf608dd3ff05694d1e06ba26fd3786385d2c96dd668485dcef6cfee7f908416a2b125a8e30e82e670  default-config-no-gssapi.patch
