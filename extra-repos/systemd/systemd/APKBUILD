@@ -322,11 +322,11 @@ build() {
 }
 
 check() {
-	case "$CARCH" in
-	x86_64) meson test --print-errorlogs --quiet --no-stdsplit -C $_meson_builddir ;;
-	*)
-		echo "*** NOTE: Skipping tests for archs that might use pmb:crossdirect/qemu-user ***" ;;
-	esac
+	if [ "$PMB_CROSS" = "unnecessary" ]; then
+		meson test --print-errorlogs --quiet --no-stdsplit -C $_meson_builddir
+	else
+		echo "*** NOTE: Skipping tests, not building natively ***"
+	fi
 }
 
 package() {
