@@ -51,7 +51,7 @@ Users and system administrators can override kernel command line configuration b
 
 To add parameters, create a config file:
 ```
-doas $EDITOR /etc/kernel-cmdline.d/custom.conf
+sudo $EDITOR /etc/kernel-cmdline.d/custom.conf
 ```
 
 To remove a parameter that was set by distro or device config, prefix it with `-`:
