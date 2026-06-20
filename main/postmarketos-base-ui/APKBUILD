@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=52
+pkgver=53
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -32,6 +32,7 @@ subpackages="
 	$pkgname-bluez-obexd:obexd
 	$pkgname-elogind
 	$pkgname-flatpak
+	$pkgname-iio-sensor-proxy-systemd:iio_sensor_proxy_systemd
 	$pkgname-networkmanager
 	$pkgname-modemmanager
 	$pkgname-modemmanager-systemd:modemmanager_systemd
@@ -325,6 +326,13 @@ modemmanager_openrc() {
 	"
 
 	amove etc/conf.d/modemmanager
+}
+
+iio_sensor_proxy_systemd() {
+	depends=
+	install_if="$pkgname=$pkgver-r$pkgrel iio-sensor-proxy systemd"
+
+	amove usr/lib/systemd/system/iio-sensor-proxy.service.d/shutdown.conf
 }
 
 sha512sums="
