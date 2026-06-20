@@ -3,7 +3,7 @@
 pkgname=device-samsung-a52q
 pkgdesc="Samsung Galaxy A52"
 pkgver=1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -14,12 +14,12 @@ depends="
 	firmware-samsung-a52q-adsp
 	firmware-samsung-a52q-cdsp
 	firmware-samsung-a52q-ipa
-	firmware-samsung-a52q-modem
 	firmware-samsung-a52q-wlan
 	firmware-samsung-a52q-bluetooth
 	firmware-samsung-a52q-venus
 	linux-postmarketos-qcom-sm7125
 	mkbootimg
+	pil-squasher
 	postmarketos-base
 	soc-qcom-pd-mapper
 	soc-qcom-sm7125
@@ -34,6 +34,8 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm755 extract-firmware.sh -t $pkgdir/usr/bin
 }
 
 sha512sums="

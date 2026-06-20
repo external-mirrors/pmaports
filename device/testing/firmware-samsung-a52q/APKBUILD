@@ -1,14 +1,13 @@
 # Maintainer: Leandro Friedrich <email@leandrofriedrich.de>
 pkgname=firmware-samsung-a52q
 pkgver=20220820
-pkgrel=2
+pkgrel=3
 pkgdesc="Firmware for Samsung Galaxy A52"
 subpackages="
 	$pkgname-adreno
 	$pkgname-adsp
 	$pkgname-cdsp
 	$pkgname-ipa
-	$pkgname-modem
 	$pkgname-venus
 	$pkgname-wlan
 	$pkgname-bluetooth
@@ -33,7 +32,7 @@ package() {
 adreno() {
 	pkgdesc="Samsung Galaxy A52 adreno firmware"
 
-	install -Dm644 "$builddir2"/a615_zap.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/a615_zap.mbn"
+	#install -Dm644 "$builddir2"/a615_zap.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/a615_zap.mbn"
 	#rm "$builddir2"/a615_zap.mbn
 	install -Dm644 "$builddir"/a6* -t \
 		"$subpkgdir/usr/lib/firmware/qcom/"
@@ -42,7 +41,7 @@ adreno() {
 adsp() {
 	pkgdesc="Samsung Galaxy A52 adsp firmware"
 
-	install -Dm644 "$builddir2"/adsp.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/adsp.mbn"
+	#install -Dm644 "$builddir2"/adsp.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/adsp.mbn"
 	install -Dm644 "$builddir"/adsp* -t \
 		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
@@ -50,7 +49,7 @@ adsp() {
 cdsp() {
 	pkgdesc="Samsung Galaxy A52 cdsp firmware"
 
-	install -Dm644 "$builddir2"/cdsp.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/cdsp.mbn"
+	#install -Dm644 "$builddir2"/cdsp.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/cdsp.mbn"
 	install -Dm644 "$builddir"/cdsp* -t \
 		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
@@ -58,7 +57,7 @@ cdsp() {
 ipa() {
 	pkgdesc="Samsung Galaxy A52 ipa firmware"
 
-	install -Dm644 "$builddir2"/ipa_fws.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/ipa_fws.mbn"
+	#install -Dm644 "$builddir2"/ipa_fws.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/ipa_fws.mbn"
 	install -Dm644 "$builddir"/ipa_fws.* -t \
 		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
@@ -67,9 +66,9 @@ modem() {
 	pkgdesc="Samsung Galaxy A52 modem firmware"
 
 	# cp because of the modem_pr directory
-	install -Dm644 "$builddir2"/modem.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/modem.mbn"
-	cp -r "$builddir"/modem* \
-		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+	#install -Dm644 "$builddir2"/modem.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/modem.mbn"
+	#cp -r "$builddir"/modem* \
+		#"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 	find "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/" \
 		-type f -exec chmod 0644 {} \;
 }
@@ -77,7 +76,7 @@ modem() {
 venus() {
 	pkgdesc="Samsung Galaxy A52 venus firmware"
 
-	install -Dm644 "$builddir2"/venus.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/venus.mbn"
+	#install -Dm644 "$builddir2"/venus.mbn "$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/venus.mbn"
 	install -Dm644 "$builddir"/venus.* -t \
 		"$subpkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
 }
