@@ -14,53 +14,53 @@ CONNECTION_NAME=${CONNECTION_NAME:-"Developer Mode"}
 set -e
 
 _start_unudhcpd() {
-    if pidof systemd; then
-        systemctl start unudhcpd@"$1"
-    else
-        rc-service unudhcpd."$1" start
-    fi
+	if pidof systemd; then
+		systemctl start unudhcpd@"$1"
+	else
+		rc-service unudhcpd."$1" start
+	fi
 }
 
 _stop_unudhcpd() {
-    if pidof systemd; then
-        systemctl stop unudhcpd@"$1"
-    else
-        rc-service unudhcpd."$1" stop
-    fi
+	if pidof systemd; then
+		systemctl stop unudhcpd@"$1"
+	else
+		rc-service unudhcpd."$1" stop
+	fi
 }
 
 up() {
-    # Bring interface and NetworkManager connection up
-    nmcli connection add con-name "$CONNECTION_NAME" type ethernet \
-        ifname "$IFACE" ipv4.method manual ipv4.addresses "$IP_ADDRESS_SERVER"/16
-    nmcli connection up "$CONNECTION_NAME"
+	# Bring interface and NetworkManager connection up
+	nmcli connection add con-name "$CONNECTION_NAME" type ethernet \
+		ifname "$IFACE" ipv4.method manual ipv4.addresses "$IP_ADDRESS_SERVER"/16
+	nmcli connection up "$CONNECTION_NAME"
 
-    # Start DHCP server
-    _start_unudhcpd "$IFACE"
+	# Start DHCP server
+	_start_unudhcpd "$IFACE"
 }
 
 down() {
-    # Stop DHCP server
-    _stop_unudhcpd "$IFACE"
+	# Stop DHCP server
+	_stop_unudhcpd "$IFACE"
 
-    # Bring NetworkManager connection down
-    nmcli connection down "$CONNECTION_NAME"
-    nmcli connection delete "$CONNECTION_NAME"
+	# Bring NetworkManager connection down
+	nmcli connection down "$CONNECTION_NAME"
+	nmcli connection delete "$CONNECTION_NAME"
 
-    # NetworkManager brings the interface up automatically,
-    # but doesn't remove it when bringing down.
-    ifconfig "$IFACE" down
+	# NetworkManager brings the interface up automatically,
+	# but doesn't remove it when bringing down.
+	ifconfig "$IFACE" down
 }
 
 case $1 in
-    up)
-        up
-        ;;
-    down)
-        down
-        ;;
-    *)
-        echo "need an argument (up|down)"
-        exit 0
-        ;;
+	up)
+		up
+		;;
+	down)
+		down
+		;;
+	*)
+		echo "need an argument (up|down)"
+		exit 0
+		;;
 esac
