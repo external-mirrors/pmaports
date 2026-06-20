@@ -8,13 +8,10 @@ set -e
 
 up() {
 	echo "Starting MTP responder"
-	if [ -d "/run/systemd" ]; then
+	if pidof systemd; then
 		systemctl start umtprd
-	elif [ -f "/etc/rc.conf" ]; then
-		rc-service umtprd start
 	else
-		echo "Unsupported init system"
-		exit 1
+		rc-service umtprd start
 	fi
 
 	# Wait up to 10s for EP fds to appear
@@ -26,7 +23,11 @@ up() {
 
 down() {
 	echo "Stopping MTP responder"
-	systemctl stop umtprd
+	if pidof systemd; then
+		systemctl stop umtprd
+	else
+		rc-service umtprd stop
+	fi
 }
 
 case $1 in

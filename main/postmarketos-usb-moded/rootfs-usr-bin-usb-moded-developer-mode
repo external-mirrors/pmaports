@@ -14,22 +14,18 @@ CONNECTION_NAME=${CONNECTION_NAME:-"Developer Mode"}
 set -e
 
 _start_unudhcpd() {
-    if [ -d "/run/systemd" ]; then
+    if pidof systemd; then
         systemctl start unudhcpd@"$1"
-    elif [ -d "/etc/rc.conf" ]; then
-        rc-service unudhcpd."$1" start
     else
-        echo "Cannot start unudhpcd!"
+        rc-service unudhcpd."$1" start
     fi
 }
 
 _stop_unudhcpd() {
-    if [ -d "/run/systemd" ]; then
+    if pidof systemd; then
         systemctl stop unudhcpd@"$1"
-    elif [ -d "/etc/rc.conf" ]; then
-        rc-service unudhcpd."$1" stop
     else
-        echo "Cannot stop unudhpcd!"
+        rc-service unudhcpd."$1" stop
     fi
 }
 
