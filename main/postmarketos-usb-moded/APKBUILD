@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-usb-moded
-pkgver=10
+pkgver=11
 pkgrel=0
 pkgdesc="Meta package for configuring usb modes on postmarketOS"
 url="https://postmarketos.org"
@@ -11,9 +11,16 @@ depends="
 	usb-signaller
 	usb-moded-notify
 "
+depends_openrc="
+	umtprd-openrc
+	usb-signaller-openrc
+	usb-moded-notify-openrc
+"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="
 	$pkgname-default-profile-charging:charging_default
 	$pkgname-default-profile-developer:developer_default
+	$pkgname-openrc
 	$pkgname-systemd
 "
 _pmb_select="$pkgname-default-profile"
@@ -76,6 +83,7 @@ developer_default() {
 		default_mode="developer_mode"
 	EOF
 }
+
 sha512sums="
 912f0700c87883b55f631cfc3d76e172ff1c21aa57b0c18d1e7b9671ecd6254b1e7565816e3967c68caab196076bf7c8b848375c89185aa4466f4ca7f65231be  rootfs-etc-umtprd-umtprd.conf
 ca4b82b0cccbbb498b8898c4e360142136c46687e97bce85553dc1793bf8ae2e0f509c2a1acdf96b08dc7c6b69f098b56181f9033ad669cabbf5a159ad8efbaa  rootfs-usr-lib-systemd-system-generators-umtprd-config-generator
