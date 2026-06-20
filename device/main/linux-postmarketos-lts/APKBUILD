@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-lts
-pkgver=6.18.35
+pkgver=6.18.36
 pkgrel=0
 _kver=${pkgver%.*}
 pkgdesc="LTS Kernel"
@@ -25,6 +25,7 @@ options="
 	pmb:kconfigcheck-virt
 "
 makedepends="
+	bash
 	bison
 	clang
 	clang-libclang
@@ -55,12 +56,17 @@ replaces="linux-lts"
 # Nathan's fork, he does not have time to upstream them right now but would be
 # happy if someone else did:
 # https://lore.kernel.org/linuxppc-dev/aXs8sgAcci9FKKpx@luna/
+#
+# Patch #4 is a backport that makes ftrace work when built with Clang, which is
+# required for passing kconfigcheck.
 source="
 	linux-$_kver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kver.tar.xz
 
 	0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 	0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 	0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
+
+	0004-powerpc64-ftrace-fixes-clang-build-issues.patch
 
 	config-lts.aarch64
 	config-lts.armv7
@@ -122,16 +128,17 @@ package() {
 }
 
 sha512sums="
-e6ee5f39ac4205da637f1bce67eb96b59726a15ef3579ae3850ef73ecfbf6d24d4f622b3e74b04fd119f87cd8864152eba74a14fc753f716fec91f5e91015e96  patch-6.18.35.patch.xz
+525ddfabea97a6a2b9d86175573c3a7d180d4944a732905bcfeb5d8af26426519784c53740a8927e3af11f1740d85a754e879809aa9cb61f98d1cb1cf2f6285a  patch-6.18.36.patch.xz
 88599ffdec96d150c1feb9b261ba93bb0301a9d0e1ad6bef7aeab1f5372cbfc57d8b43c7e902bd8f76921d1dbd8189663c142ea869e51d0e2b483b150ee00fe0  linux-6.18.tar.xz
 1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
-1f30be9aa6134ea9ebbcbd2d17932c2870a26b44b0ce4104d7b9de787addbe69b41782386fabccc828183cf260632608f750cede89ea91b5d091fc20dffc80b5  config-lts.aarch64
-80e170f9a017a099fa9c5fc41b908c8b6d44387e4aef0776acd5ffecac73e6f5c42e32e472b844be927f9f866c65356bff700148729a352f4ecdced9ba01d2d8  config-lts.armv7
-ccf03bf4fbb1d370ca37ad50c7ab94c076d215f5a2182b16aeafca5f7e8b78584094f4e84f694e3e287c0a06317b602b0a9901636801366695cf38fde0b3f3c8  config-lts.loongarch64
-8e4a1cae0700d6f5b9ea56df09924d4ca043e4775b0f4c0ce16cdc8f4e470c778e4096a0ade678452f59de1e79d5e758cdc5fb268e3bf955fea58c5adfb4cfac  config-lts.ppc64le
-17a854e0afeac8891b47744ddb474330007648d1249f5726c08da1b30649886a483c8a9515744da62e30951b21a4d8a269153393d9be20fc06c88c63acfc7cb6  config-lts.riscv64
-5a94a20a295a365b5b4367639b63171691bc8b3aa383697da6a87e58d21e72293afdf1e86c4bccbf65e1c019384832d029bf36df5ddf9d15c74c3f5d9ada8a11  config-lts.x86
-76c2d9584614ff274fa5c6f4cce031de810a14e10596ab0e541814b89f08ecc898425bee20bb127c5a8655ebf69b206b8676b8bdc4bb86b4414d1f2baa93efad  config-lts.x86_64
+166f9151618780afb269822d2b0c7580830fc47b20aa1ea08006a119a5234277fba5dbc2d0be469f3285bf8debd2dcfd078c2f92b206d1491620d94432c7b11b  0004-powerpc64-ftrace-fixes-clang-build-issues.patch
+c5bcbb3d023b6276f2186b2cfa703a3226c410fbce74e31a40bee9ddc7946098eaa9991472a26a055ce2fe036018e4ed99c450b917c13fd08ce1338785e90c87  config-lts.aarch64
+1ea5e475c5a902825239fe65ca88a7c9130b9af6823f4f29371a4f71b514eb0f92e08ec2cc72ca3feb7d71d85c758a8a559c8b6e4673103c4a5e1f6ee5b741cd  config-lts.armv7
+834643dbce02bd404d351d049d895dfa44b6fd9b028ac92e32866de0a052a20a20e94591a68273e939b8fbc62e01e8bdbaa38360b5bc4dfef2646984b354aad5  config-lts.loongarch64
+2003c872fa2213464fe6e36f43bfd9908eab6e5e69d78ca0be522438ed14c45a1ec367f13f5b54d4983f95bbafa914ef8eba0518c107248e2dcb3e4733de6ea7  config-lts.ppc64le
+10421658d8b3ccdc6ae38439932e0ff61ce207c0b0e4996b4a9e77ac2115b3b4186bfbf722ec1933d889de2b64f84dac1f4ac34a68525d5d0ba9ac8d394a2510  config-lts.riscv64
+1fde92b5188cc4a6ae3cfd707c4d8e45132fb488bb6e5414bd2cad80e016b540a6af4c10cb27fc47e98bc65892ab0bb4bef58b537332b5b47204665e0f59c7a1  config-lts.x86
+f9c29b21ec1037b8b471e637a02e82223066f224fd6acb099bbe3fa07f1242fdb60eb1613cc6642d1ad54a7dedccb432624ae3c7fefb484bede2ac919cfba4d1  config-lts.x86_64
 "
