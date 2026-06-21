@@ -19,7 +19,8 @@ appear, but you will get a more a more tried and tested, solid experience.
 |:---------:|:------------------:|:-----------:|:---------------------------------:|:----------------:|:--------------:|:----------:|
 |  edge     | -                  | -           | Edge                              | main             | master         | -          |
 |  v25.12   | [2025-12-23][2512] | 2026-07-31  | The One Where The Saga Continues  | v25.12           | 3.23-stable    | [#31][m31] |
-|  v26.06   | 2026-06-xx         | 2027-01-31  | *(upcoming)*                      | v26.06           | 3.24-stable    | [#33][m33] |
+|  v26.06   | [2026-06-21][2606] | 2027-01-31  | Alpen Avocado                     | v26.06           | 3.24-stable    | [#33][m33] |
+|  v26.12   | 2026-12-xx         | 2027-07-31  | *(upcoming)*                      | v26.12           | 3.25-stable    | [#35][m35] |
 
 ## End of Life
 
@@ -37,6 +38,7 @@ appear, but you will get a more a more tried and tested, solid experience.
 | v21.03   | [2021-03-31][2103] | Beta 2                                                    | v21.03           | 3.13-stable    | [#8][m8]    |
 | v20.05   | [2020-05-31][2005] | Beta 1                                                    | v20.05           | 3.12-stable    | [#2][m2]    |
 
+[2606]: https://postmarketos.org/blog/2026/06/21/v26.06-release/
 [2512]: https://postmarketos.org/blog/2025/12/23/v25.12-release/
 [2506]: https://postmarketos.org/blog/2025/06/22/v25.06-release/
 [2412]: https://postmarketos.org/blog/2024/12/23/v24.12-release/
@@ -50,6 +52,7 @@ appear, but you will get a more a more tried and tested, solid experience.
 [2103]: https://postmarketos.org/blog/2021/03/31/v21.03-release/
 [2005]: https://postmarketos.org/blog/2020/05/31/three-years/#stable-release-channel
 
+[m35]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/35
 [m33]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/33
 [m31]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/31
 [m29]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/29
