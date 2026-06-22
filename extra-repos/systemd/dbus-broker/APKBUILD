@@ -23,11 +23,11 @@ build() {
 }
 
 check() {
-	# Some tests timeout when run under qemu, so only run tests if we're on x86_64
-	# since we know this is a "native" arch in gitlab CI and bpo
-	case "$CARCH" in
-	x86_64) meson test --print-errorlogs -C build;;
-	esac
+	if [ "$PMB_CROSS" = "unnecessary" ]; then
+		meson test --print-errorlogs -C build
+	else
+		echo "*** NOTE: Skipping tests, not building natively ***"
+	fi
 }
 
 package() {
