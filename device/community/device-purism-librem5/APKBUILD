@@ -2,8 +2,8 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
-pkgver=12
-pkgrel=1
+pkgver=13
+pkgrel=0
 _confver=69
 _purismrel=2
 # <librem5-base ver>.<purism release>
@@ -57,18 +57,21 @@ source="
 	udev/70-brcm-bluetooth.rules
 	udev/70-wifi-pm.rules
 "
+# $pkgname-openrc is out of order to allow collecting the remaining openrc
+# files using the default function
 subpackages="
 	$pkgname-gnome
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-pulseaudio
-	$pkgname-openrc
 	$pkgname-smartcard
 	$pkgname-smartcard-openrc:smartcard_openrc
+	$pkgname-openrc
 	$pkgname-systemd
 	$pkgname-tinydm
 	$pkgname-usbguard
 	$pkgname-x11
 "
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 # TODO: remove "replaces" when upstream ucm has proper L5 support...
 replaces="alsa-ucm-conf"
 
@@ -102,14 +105,6 @@ tinydm() {
 	install_if="$pkgname tinydm"
 	install -Dm755 "$srcdir"/70-librem5-xwayland-accel.sh \
 		"$subpkgdir"/usr/share/tinydm/env-wayland.d/70-librem5-xwayland-accel.sh
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="openrc"
-
-	mkdir -p "$subpkgdir"
 }
 
 smartcard() {

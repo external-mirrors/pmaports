@@ -1,7 +1,7 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=msm-cros-efs-loader
 pkgver=1.2.1
-pkgrel=0
+pkgrel=1
 pkgdesc="EFS loader for Qualcomm-based Chrome OS devices"
 url="https://gitlab.postmarketos.org/postmarketOS/msm-cros-efs-loader"
 arch="aarch64"
@@ -12,21 +12,29 @@ source="$pkgname-$pkgver.tar.gz::$url/-/archive/$_tag/msm-cros-efs-loader-$_tag.
 	rmtfs.confd
 "
 options="!check !archcheck"
-subpackages="$pkgname-rmtfs $pkgname-openrc $pkgname-systemd"
+subpackages="
+	$pkgname-rmtfs-openrc:rmtfs_openrc
+	$pkgname-openrc
+	$pkgname-systemd
+	"
 builddir="$srcdir/$pkgname-$_tag"
 
 package() {
 	install -Dm755 "$pkgname.sh" "$pkgdir/usr/sbin/$pkgname"
 	install -Dm755 "$srcdir/$pkgname.initd" "$pkgdir/etc/init.d/$pkgname"
 	install -Dm644 "$srcdir/$pkgname-v$pkgver/10-$pkgname.conf" "$pkgdir"/usr/lib/systemd/system/rmtfs.service.d/10-$pkgname.conf
+	install -Dm644 "$srcdir"/rmtfs.confd "$pkgdir"/etc/conf.d/rmtfs
 }
 
-rmtfs() {
-	pkgdesc="RMTFS config for Chrome OS devices"
+# Must come before the openrc subpackage function to install the config
+# in this subpackage
+rmtfs_openrc() {
+	pkgdesc="RMTFS config for Chrome OS devices (OpenRC init scripts)"
 	install_if="$pkgname=$pkgver-r$pkgrel rmtfs-openrc"
-	replaces="rmtfs-openrc"
+	provides="$pkgname-rmtfs=$pkgver-r$pkgrel"
+	replaces="$pkgname-rmtfs rmtfs-openrc"
 
-	install -Dm644 "$srcdir"/rmtfs.confd "$subpkgdir"/etc/conf.d/rmtfs
+	amove etc/conf.d/rmtfs
 }
 
 openrc() {

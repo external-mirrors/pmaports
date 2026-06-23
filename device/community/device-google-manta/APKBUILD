@@ -3,7 +3,7 @@
 maintainer="Alexandre Marquet <tb@a-marquet.fr>"
 pkgname=device-google-manta
 pkgdesc="Google Nexus 10"
-pkgver=16
+pkgver=17
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -20,7 +20,10 @@ depends="
 	u-boot-manta
 "
 makedepends="devicepkg-dev"
-subpackages="$pkgname-disable-gsd-color:disable_gsd_color"
+subpackages="
+	$pkgname-disable-gsd-color:disable_gsd_color
+	$pkgname-openrc
+	"
 source="
 	deviceinfo
 	modules-initfs
@@ -28,10 +31,7 @@ source="
 	ucm/HiFi.conf
 	ucm/Manta_WM1811.conf
 "
-replaces="
-	device-samsung-manta
-	openrc
-" # replaces openrc for hwclock configuration
+replaces="device-samsung-manta"
 provides="device-samsung-manta=$pkgver-r$pkgrel"
 
 build() {
@@ -66,6 +66,12 @@ disable_gsd_color() {
 
 	mkdir -p "$subpkgdir"/usr/share/systemd/user/
 	ln -s /dev/null "$subpkgdir"/usr/share/systemd/user/org.gnome.SettingsDaemon.Color.service
+}
+
+openrc() {
+	default_openrc
+	# replaces openrc for hwclock configuration
+	replaces="openrc"
 }
 
 sha512sums="
