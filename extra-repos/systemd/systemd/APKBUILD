@@ -16,7 +16,7 @@ pkgname=systemd
 pkgver=261.1
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -370,7 +370,6 @@ udevd() {
 
 	# NOTE: should only be udev, but packages hardcode eudev
 	provides="eudev=$pkgver-r$pkgrel udev=$pkgver-r$pkgrel eudev-libs=$pkgver-r$pkgrel"
-	provider_priority=100
 
 	amove usr/bin/udevadm
 	amove usr/lib/libudev*
@@ -551,7 +550,6 @@ x11() {
 
 dev() {
 	provides="eudev-dev=$pkgver-r$pkgrel udev-dev=$pkgver-r$pkgrel systemd-stage0-dev=$pkgver-r$pkgrel"
-	provider_priority=100
 
 	default_dev
 }
