@@ -1,8 +1,8 @@
 # Kernel config based on: arch/arm64/configs/sdm660_defconfig
-maintainer="Alexey Minnekhanov <alexeymin@minlexx.ru>"
+maintainer="Alexey Minnekhanov <alexeymin@postmarketos.org>"
 _flavor="postmarketos-qcom-sdm660"
 pkgname=linux-$_flavor
-pkgver=6.19.10
+pkgver=7.0.14
 pkgrel=0
 pkgdesc="Close to mainline linux kernel for Qualcomm Snapdragon 660 SoC"
 arch="aarch64"
@@ -15,11 +15,15 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	diffutils
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -58,7 +62,7 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs-tmp"
 
@@ -77,12 +81,14 @@ package() {
 	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm660* "$pkgdir"/boot/dtbs/qcom
 	rm -r "$pkgdir"/boot/dtbs-tmp
 
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	# "build" is symlink that will be invalid in rootfs (points to /home/pmos...)
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 }
+
 sha512sums="
-abf0ec97c2530ad3543a64019cefde3396c3361d7550513bf17948c6f4bf2621d88bb1947a519e8bddc97f1c6fdc7d12989cc8292a41805acac9f8f16f7a14df  linux-v6.19.10-sdm660.tar.gz
-489b4cc74e49164971e7467e2884a724d9e1be51edd0054c7e4c4d233bd5fd31e011e0b3e79d855d94f6980886675ab195130d6aa4c62592b9e981aca217884e  config-postmarketos-qcom-sdm660.aarch64
+83f7e717b8adc9049e828a27629e7347be2fa0aef6c8404608059410cebaafa0c2659317b615634fbd5d83f9a245bcf1a64e5d2cd0d8e3ec8aeaa3dcf0e51298  linux-v7.0.14-sdm660.tar.gz
+f9ab2eaafe23d350b92c511909b86ec3cbfcd07c5947a723231754148b4b1ce16587fe6fddea2d3e6746c522cb1a004d1571f02b50d803081e08bcaf84d2f615  config-postmarketos-qcom-sdm660.aarch64
 "
