@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/deviceinfo>
+# Please use double quotes only. You can source this file in shell
+# scripts.
+
+deviceinfo_format_version="0"
+deviceinfo_name="Amlogic AArch64 board"
+deviceinfo_manufacturer="Amlogic"
+deviceinfo_codename="amlogic-aarch64"
+deviceinfo_arch="aarch64"
+deviceinfo_year="2015"
+
+# We include all amlogic DTBs, as the correct one will be automatically picked
+# on boot. So, no need to manually specify DTBs here.
+# deviceinfo_dtb=""
+
+# Explicitely stay on MBR partitioning, as it is required for embedding U-Boot
+# on eMMC/SD (due to Amlogic header shenanigans). DO NOT REMOVE!
+deviceinfo_partition_type="msdos"
+
+# Device related
+deviceinfo_chassis="embedded"
+deviceinfo_external_storage="true"
+deviceinfo_drm="true"
+
+# Bootloader related
+deviceinfo_boot_filesystem="fat32"
+deviceinfo_sd_embed_firmware_step_size="512"
+deviceinfo_sd_embed_firmware="u-boot/*/u-boot.bin.sd-stripped.bin:1"
+deviceinfo_boot_part_start="4096"
+# deviceinfo_generate_extlinux_config="true"

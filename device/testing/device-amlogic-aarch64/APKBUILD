@@ -1,0 +1,97 @@
+# Reference: <https://postmarketos.org/devicepkg>
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=device-amlogic-aarch64
+pkgdesc="Amlogic AArch64 board"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-amlogic
+	postmarketos-base
+	soc-amlogic-aarch64
+	systemd-boot
+	"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-boot-none:none
+	$pkgname-boot-bananapi-bpi-cm4-cm4io:bananapi_bpi_cm4_cm4io
+	$pkgname-boot-librecomputer-lepotato:librecomputer_lepotato
+	$pkgname-boot-odroid-c4:odroid_c4
+	$pkgname-boot-odroid-n2plus:odroid_n2plus
+	$pkgname-boot-radxa-zero:radxa_zero
+	"
+source="
+	deviceinfo
+	kernel-cmdline.conf
+	modules-initfs
+	"
+_pmb_select="$pkgname-boot"
+_pmb_default="$pkgname-boot-none"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+# Bootloader subpackages that just depend on u-boot-amlogic
+# A bit hacky (could be simplified with just a for loop and `eval` but
+# then pmbootstrap does not like it...)
+# Eventually we will deprecate this and just install Tauchgang (https://tauchgang.dev/).
+none() {
+	pkgdesc="Do not install U-Boot (ONLY for devices with U-Boot in e.g. SPI flash)"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+bananapi_bpi_cm4_cm4io() {
+	pkgdesc="Install U-Boot bootloader for bananapi-bpi-cm4-cm4io"
+	depends="u-boot-amlogic-bananapi-bpi-cm4-cm4io"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+librecomputer_lepotato() {
+	pkgdesc="Install U-Boot bootloader for librecomputer-lepotato"
+	depends="u-boot-amlogic-librecomputer-lepotato"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+odroid_n2plus() {
+	pkgdesc="Install U-Boot bootloader for odroid-n2plus"
+	depends="u-boot-amlogic-odroid-n2plus"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+odroid_c4() {
+	pkgdesc="Install U-Boot bootloader for odroid-c4"
+	depends="u-boot-amlogic-odroid-c4"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+radxa_zero() {
+	pkgdesc="Install U-Boot bootloader for radxa-zero"
+	depends="u-boot-amlogic-radxa-zero"
+	provides="device-amlogic-aarch64-boot"
+
+	mkdir -p "$subpkgdir"
+}
+
+sha512sums="
+198aaf71503e00482880b27ea45c8c8c718259ca896e2d1f75f2b9547d95b460b88ae576cfacc568541b14c545319331401bf825d5a9eb55fcb12c3342cc68ec  deviceinfo
+eb8f9fd9e4b58c7c2cd810ae6449e836d0fa095f6eaa2da661481df6eb40d452998613b3d032f0477f0ac32559689db48eb3da189495c16bd016b8eac3b67b16  kernel-cmdline.conf
+52948c2884a6f6384e12b7a598f70878526d0d3293c214425170145231144ec7de805c038641741a4a5d75b50e554f6a3fa3769784a674217ed032f9b6a233c8  modules-initfs
+"
