@@ -36,10 +36,6 @@ Packages can also have Co-Maintainers, which are identified by a comment like:
 Maintainers and Co-Maintainers will be pinged whenever changes to their packages
 are made.
 
-Enforcing of this guideline [will
-wait](https://postmarketos.org/devel/2026/03/24/archiving-unmaintained-devices/)
-for v26.06 to be released.
-
 ## Package versioning (pkgver, pkgrel)
 
 Whenever you update a package, the version should also be incremented. A version
