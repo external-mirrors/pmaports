@@ -4,7 +4,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=linux-postmarketos-amlogic
 pkgver=6.18.28
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline kernel for Amlogic devices"
 arch="aarch64"
 _carch="arm64"
@@ -20,14 +20,18 @@ makedepends="
 	bison
 	clang
 	devicepkg-dev
+	elfutils-dev
 	findutils
 	flex
 	gzip
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
+	python3
 	zstd
 "
 _defconfig="defconfig"
@@ -88,10 +92,10 @@ package() {
 
 sha512sums="
 5acc1a97ae0bca7aeb7fcac04fd3b7bafea5ff976dfe5d42c7015e084d9ee3104c3945880846dfb185a1010d0bad8c7a229b23febdef44306d19fb494a03b1a6  linux-postmarketos-amlogic-6.18.28.tar.xz
-40576cd59d1f2f1e7ff3494803fd9eaeade433093f636bfe95f488d9cfc5d790c03444cdc4e5910b8ff241c7df406a345485fd7ac9f1ac94f3f87ab76837c68e  config-postmarketos-amlogic.aarch64
-fe81024107a0f2dc5cc86592b0f837cbbdccae13d314fe492d27f39de64e65ab7421002930d9ce534caed4445f05c0536709116a5cf7ef0270fb2be0068190f9  amlogic.config
+64f3e77c2cef581bdbbc19dc5029f626c75f706dacfdfe9a3655fb39260751cfae6c2bbe74124075ada207cef103986447cf4c0af70afcd52d8d6d8937814cb8  config-postmarketos-amlogic.aarch64
+3eda7524a4c2cf8bd5fd2105c1971f729a3423a0c5ca2e041c9707b5e12fb0e2fc421ac99a3adf19a2555bacb12354851811eb6817a8c1ef1ae735f8043ec234  amlogic.config
 94f07500f17c89d8446082227a157c4bc6a0e79cca87ac9d3112d9ef50f804eac66a3849a94c8e56ba11df1aabfd2d58d7beeae0f516a2b3584219fb5d8b0474  misc.config
-f1dc7f39c06383f18266e73dd06b4efb30e6c490edd09d80f7fd7da363fe6323450c406da98ff51a0219044f49e6363b63e5094b72848ba435d6bd16ff2338b7  pmos.config
+ba0dbc8fd2355818381d0c719831a9fdd933d875e1bd9b42148666a113dcefbf741521843d25c12c5e4f3277dead1409bfcb9b2da9a5a2c5876c6612f8a9dbc4  pmos.config
 4538994c7d3bbb0c4740e8ce108b6838618be239a549e407ca239f3ceca8eed29b5a9ca75d162567dbc06b13ac7caacc61ebf55b247ce6fe122fecc7e5b275d5  0001-add-x96-mini-support.patch
 222e7c12dbeb931f325b7d4a306c2f1e835992b5503ba3ab387a0b006e0fb2226291d93f32aec8ac7b2f6cf15704f20ef3285bb9bafe7374b11a034639d786ef  0002-add-initial-support-for-zte-b860hv5.patch
 f1a3f10c67f491758bbaa2922b3acc84e2abee432ae22a39cb4081c9cea71792c5c740c57df93740e4b9756755e0e32583d23a93485933aeddb01c1d85eb4ccc  0007-meson-g12b-bananapi-cm4-mnt-reform2.dts-fix-audio-an.patch
