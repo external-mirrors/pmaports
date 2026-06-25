@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=50
+pkgver=51
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -41,6 +41,7 @@ subpackages="
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
 	$pkgname-tinydm
+	$pkgname-tinydm-openrc:tinydm_openrc
 	$pkgname-wayland
 	$pkgname-wifi-iwd:iwd
 	$pkgname-wifi-iwd-openrc:iwd_openrc
@@ -181,11 +182,17 @@ openrc_settingsd() {
 }
 
 tinydm() {
+	install_if="$pkgname=$pkgver-r$pkgrel tinydm"
+	provides="postmarketos-base-tinydm=$pkgver-r$pkgrel"
+
+	amove usr/share/tinydm/env-wayland.d/50-sdl-wayland.sh
+}
+
+tinydm_openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel tinydm-openrc"
 	replaces="tinydm-openrc"
-	provides="postmarketos-base-tinydm=$pkgver-r$pkgrel"
+
 	amove etc/conf.d/tinydm
-	amove usr/share/tinydm/env-wayland.d/50-sdl-wayland.sh
 }
 
 obexd() {
