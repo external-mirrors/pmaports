@@ -209,8 +209,8 @@ if __name__ == "__main__":
             devices_under_test=devices_under_test,
             packages_modified=packages_modified,
             archtag={
-                Arch.x86_64: "shared",
-                Arch.x86: "shared",
+                Arch.x86_64: "x86_64",
+                Arch.x86: "x86",
                 Arch.aarch64: "aarch64",
                 Arch.armv7: "armv7",
                 Arch.riscv64: "qemu",
