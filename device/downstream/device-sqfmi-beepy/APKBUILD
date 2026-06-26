@@ -2,7 +2,7 @@
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=device-sqfmi-beepy
 pkgdesc="SQFMI Beepy"
-pkgver=5
+pkgver=6
 pkgrel=0
 
 _kbdmodname=beepy-kbd
@@ -19,7 +19,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-install="$pkgname.post-install $pkgname.post-upgrade"
+install="$pkgname.post-install $pkgname.post-upgrade $pkgname-openrc.post-install $pkgname-modules.post-install"
 depends="
 	postmarketos-base
 	raspberrypi-bootloader
@@ -36,7 +36,7 @@ source="
 	$pkgname-$_kbdcommit.tar.gz::https://github.com/ardangelo/beepberry-keyboard-driver/archive/$_kbdcommit.tar.gz
 	$pkgname-$_overlaycommit.tar.gz::https://github.com/ardangelo/beepy-symbol-overlay/archive/$_overlaycommit.tar.gz
 	$pkgname-$_dispcommit.tar.gz::https://github.com/ardangelo/sharp-drm-driver/archive/$_dispcommit.tar.gz
-	keyboard-driver-compiler-warnings.patch
+	keyboard-driver.patch
 	symbol-overlay.patch
 "
 subpackages="$pkgname-overlay $pkgname-modules $pkgname-openrc"
@@ -123,7 +123,6 @@ package() {
 modules() {
 	install_if="$pkgname=$pkgver-r$pkgrel"
 	depends="linux-rpi-dev akms build-base"
-	install="$subpkgname.post-install"
 
 	amove boot/overlays
 	amove usr/src
@@ -136,7 +135,6 @@ overlay() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
 	mkdir -p "$subpkgdir"
 }
 
@@ -148,6 +146,6 @@ sha512sums="
 d3060bcbca3e90aa26c8a8d6772d8b07116e0cc4f0ae97d44d896434510493367966f23bb86d82f9719723b3bc7ee6b7a9e4b93b5185822b32ffaf4ee0411813  device-sqfmi-beepy-e65472734decd59450e2448d1218c4f69babcea8.tar.gz
 442703affd913e0bdbbfe5d5eedd49a8b743832702a6fb8e96d49530dd172a7bcdbc36d908b93c61cb455824c85be8ffaa2c67506ae72827e874129f0ba6f912  device-sqfmi-beepy-910b9f59c2bbe5e7f33725370ceff0a4c18777af.tar.gz
 ab3b5ee73040c03fa2e5481b893a8ff9be808cd1b27f538ed45df18dada09aa14ead8fbf3fa18863ef9f44d8703fff182a2e5e3107511d728864bba8f31ae292  device-sqfmi-beepy-b8e7a86e962541b5d741c8fcc18152305279f118.tar.gz
-8aa27fbd0ec58bf9a77fa105568e31c58355f4f1a33d9e932950b08fe9dd134beaaf3a7350357a3b471d96c2ceee17460c514f81083832dd97486586772873b5  keyboard-driver-compiler-warnings.patch
+68a38d0e9e0716b995fc3761766ae40195986b0b621fb9e22a07ed3016e56058570cea12d1ae88aaf8dc69dacd428b4465541e315cba1cd2c9d31fb50df292d1  keyboard-driver.patch
 fc3c720c5c8af33f2bfd8a745340547c29effc458df761cacfa9e6bed7e09f5f5ecea98e5a6c25d630cefc2a4b3e31016d42839c640759cd715bcb81d9560f38  symbol-overlay.patch
 "
