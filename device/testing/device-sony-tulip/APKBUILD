@@ -2,7 +2,7 @@
 maintainer="TuxMan <tuxkun09@gmail.com>"
 pkgname=device-sony-tulip
 pkgdesc="Sony Xperia M4 Aqua"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -16,6 +16,7 @@ depends="
 	soc-qcom-msm8916
 	"
 makedepends="devicepkg-dev"
+subpackages="$pkgname-udev"
 source="deviceinfo kernel-cmdline.conf"
 
 build() {
