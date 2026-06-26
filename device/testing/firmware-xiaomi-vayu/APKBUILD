@@ -1,6 +1,6 @@
 maintainer="Ali Nasrullayev <nesrullayev.ali@gmail.com>"
 pkgname=firmware-xiaomi-vayu
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="Firmware for Xiaomi POCO X3 Pro"
 url="https://gitlab.com/alinasrullayev/firmware-xiaomi-vayu"
@@ -26,16 +26,16 @@ package() {
 		"$pkgdir/usr/lib/firmware/ath10k/WCN3990/hw1.0/"
 
 	install -Dm644 "$builddir"/lib/firmware/qcom/sm8150/xiaomi/vayu/adsp* -t \
-		"$pkgdir/usr/lib/firmware/qcom/sm8150/xiaomi/vayu/"
+		"$pkgdir/usr/lib/firmware/qcom/sm8150/Xiaomi/vayu/"
 
 	install -Dm644 "$builddir"/lib/firmware/qcom/sm8150/xiaomi/vayu/a640_zap.mbn -t \
-		"$pkgdir/usr/lib/firmware/qcom/sm8150/xiaomi/vayu/"
+		"$pkgdir/usr/lib/firmware/qcom/sm8150/Xiaomi/vayu/"
 
 	install -Dm644 "$builddir"/lib/firmware/qcom/sm8150/xiaomi/vayu/cdsp* -t \
-		"$pkgdir/usr/lib/firmware/qcom/sm8150/xiaomi/vayu/"
+		"$pkgdir/usr/lib/firmware/qcom/sm8150/Xiaomi/vayu/"
 
 	install -Dm644 "$builddir"/lib/firmware/qcom/sm8150/xiaomi/vayu/modem* -t \
-		"$pkgdir/usr/lib/firmware/qcom/sm8150/xiaomi/vayu/"
+		"$pkgdir/usr/lib/firmware/qcom/sm8150/Xiaomi/vayu/"
 
 	install -Dm644 "$builddir"/lib/firmware/novatek/j20s_novatek_ts* -t \
 		"$pkgdir/usr/lib/firmware/novatek/"
@@ -44,7 +44,7 @@ package() {
 		"$pkgdir/usr/share/mkinitfs/files/30-touchscreen-firmware.files"
 
 	install -Dm644 "$builddir"/lib/firmware/qcom/sm8150/xiaomi/vayu/wlanmdsp.mbn -t \
-		"$pkgdir/usr/lib/firmware/qcom/sm8150/xiaomi/vayu/"
+		"$pkgdir/usr/lib/firmware/qcom/sm8150/Xiaomi/vayu/"
 }
 
 sha512sums="
