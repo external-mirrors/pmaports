@@ -180,6 +180,18 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 		fi
 	fi
 
+	# Disallow non-free firmware subpackages
+	CHANGED_APKBUILDS=$(git show --pretty="" --name-only --diff-filter=AMR "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep APKBUILD || true)
+
+	if [ -n "$CHANGED_APKBUILDS" ]; then
+		if [ -n "$(grep -r 'pkgname-nonfree-firmware' $CHANGED_APKBUILDS || true)" ]; then
+			echo "ERROR: Please remove the nonfree-firmware subpackage(s) and move the firmware to depends in the following APKBUILDs."
+			echo "See https://docs.postmarketos.org/pmaports/main/packaging/firmware-packages.html"
+			grep --color=always -l 'pkgname-nonfree-firmware' $CHANGED_APKBUILDS
+			exit_code=1
+		fi
+	fi
+
 	# Get latest commit message in MR
 	case "$CI_COMMIT_DESCRIPTION" in
 		*"[ci:skip-grep]"*)
