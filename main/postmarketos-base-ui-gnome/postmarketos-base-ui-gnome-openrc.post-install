@@ -3,6 +3,9 @@
 rc-update add apk-polkit-server default
 rc-update add bluetooth default
 rc-update add elogind default
+if command -v cupsd; then
+	rc-update add cupsd default
+fi
 rc-update add iio-sensor-proxy default
 rc-update add modemmanager default
 rc-update add networkmanager default
