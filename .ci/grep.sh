@@ -59,19 +59,10 @@ if grep -qr 'deviceinfo_modules_initfs' -- *; then
 fi
 
 POSTMARKETOS_WALLPAPER_PATH='/usr/share/wallpapers/postmarketos.jpg'
-# The excluded devices are "grandfathered in". New devices should not be added here.
 # See https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2529
-if grep -qr $POSTMARKETOS_WALLPAPER_PATH \
-	--exclude-dir='device-pine64-pinetab' \
-	--exclude-dir='device-oneplus-kebab' \
-	--exclude-dir='device-xiaomi-willow' \
-	-- device; then
+if grep -qr $POSTMARKETOS_WALLPAPER_PATH --exclude-dir='archived' -- device; then
 	echo "ERROR: Please don't include configuration files that set the default wallpaper in device-specific packages!"
-	grep --color=always -r $POSTMARKETOS_WALLPAPER_PATH \
-		--exclude-dir='device-pine64-pinetab' \
-		--exclude-dir='device-oneplus-kebab' \
-		--exclude-dir='device-xiaomi-willow' \
-		-- device
+	grep --color=always -r $POSTMARKETOS_WALLPAPER_PATH --exclude-dir='archived' -- device
 	exit_code=1
 fi
 
