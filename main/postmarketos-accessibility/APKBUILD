@@ -1,0 +1,98 @@
+# Co-Maintainer: Aelin <aelin@postmarketos.org>
+# Co-Maintainer: Aster Boese <asterboese@mailbox.org>
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=postmarketos-accessibility
+pkgver=1
+pkgrel=0
+pkgdesc="Meta package for installing assistive tooling and configuration"
+url="https://postmarketos.org/"
+arch="noarch"
+license="GPL-3.0-or-later"
+subpackages="
+	$pkgname-visual-gui:visual_gui
+	$pkgname-visual-tty:visual_tty
+	$pkgname-visual-tty-espeakup:espeakup
+	$pkgname-visual-tty-espeakup-openrc:espeakup_openrc
+	$pkgname-visual-tty-fenrir:fenrir
+	$pkgname-visual-tty-fenrir-openrc:fenrir_openrc
+	"
+install="
+	$pkgname-visual-tty-espeakup-openrc.post-install
+	$pkgname-visual-tty-fenrir-openrc.post-install
+	"
+options="!check" # no tests
+
+package() {
+	depends="
+		$pkgname-visual-gui
+		$pkgname-visual-tty
+		"
+
+	mkdir -p "$pkgdir"
+}
+
+visual_gui() {
+	pkgdesc="Meta package for visual accessibility on graphical environments"
+	depends="
+		espeak-ng
+		orca
+		speech-dispatcher
+		py3-speech-dispatcher
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+visual_tty() {
+	pkgdesc="Meta package for visual accessibility on tty/console environments"
+	depends="
+		brltty
+		espeak-ng
+
+		$pkgname-visual-tty-reader
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+espeakup() {
+	pkgdesc="Use espeakup as screen reader on tty/console (requires kernel speakup support)"
+	depends="espeakup"
+	provides="$pkgname-visual-tty-reader"
+	provider_priority=100
+
+	mkdir -p "$subpkgdir"
+}
+
+espeakup_openrc() {
+	install_if="$pkgname-visual-tty-espeakup=$pkgver-r$pkgrel openrc"
+	depends="
+		espeakup-openrc
+		openrc
+		"
+
+	mkdir -p "$subpkgdir"
+}
+
+fenrir() {
+	pkgdesc="Use fenrir as screen reader on tty/console"
+	depends="
+		fenrir
+		speech-dispatcher
+		py3-speech-dispatcher
+		"
+	provides="$pkgname-visual-tty-reader"
+	provider_priority=90
+
+	mkdir -p "$subpkgdir"
+}
+
+fenrir_openrc() {
+	install_if="$pkgname-visual-tty-fenrir=$pkgver-r$pkgrel openrc"
+	depends="
+		fenrir-openrc
+		openrc
+		"
+
+	mkdir -p "$subpkgdir"
+}
