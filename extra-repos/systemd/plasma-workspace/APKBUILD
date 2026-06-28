@@ -3,7 +3,7 @@ maintainer="team/kde <bribbers@disroot.org>"
 pkgname=plasma-workspace
 _pkgver=6.7.1
 pkgver=9999$_pkgver
-pkgrel=1
+pkgrel=2
 pkgdesc="KDE Plasma Workspace"
 # armhf blocked by qt6-qtdeclarative
 # riscv64: slow Alpine builders
@@ -118,7 +118,9 @@ subpackages="
 	$pkgname-x11
 	"
 _repo_url="https://invent.kde.org/plasma/plasma-workspace.git"
-source="https://download.kde.org/$_rel/plasma/$_pkgver/plasma-workspace-$_pkgver.tar.xz"
+source="https://download.kde.org/$_rel/plasma/$_pkgver/plasma-workspace-$_pkgver.tar.xz
+	org.kde.timezone.rules
+	"
 builddir="$srcdir/$pkgname-$_pkgver"
 
 replaces="xdg-desktop-portal-kde<=6.1.5-r0"
@@ -198,6 +200,8 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+
+	install -Dm644 "$srcdir"/org.kde.timezone.rules "$pkgdir"/usr/share/polkit-1/rules.d/org.kde.timezone.rules
 }
 
 x11() {
@@ -210,4 +214,5 @@ x11() {
 
 sha512sums="
 82594e395ab870cbd552ba2ee4c4627b4d3021fe9bd256387f7d0cf29cd30681609a526cfc41b664fd03ac29e373f50aafd8751753befd87b055c02026f0eb91  plasma-workspace-6.7.1.tar.xz
+672bde528ca9a3c07fa80b0a26d29becc3c158389e3c8d273c829264cc7f8f5ba502e71715c2eacd76c77e90f461dd0238bb7e31876070eb8b7df767d6f3aa53  org.kde.timezone.rules
 "
