@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=261
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=0
+pkgrel=1
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -54,6 +54,7 @@ makedepends="
 	bash
 	bash-completion
 	bpftool
+	bzip2-dev
 	clang
 	cmake
 	coreutils
@@ -66,7 +67,6 @@ makedepends="
 	kmod-dev
 	libapparmor-dev
 	libarchive-dev
-	libbz2
 	libbpf-dev
 	libcap-dev
 	libfido2-dev
@@ -133,6 +133,7 @@ depends="
 	libarchive
 	libblkid
 	libbpf
+	libbz2
 	libcap2
 	libdw
 	libelf
