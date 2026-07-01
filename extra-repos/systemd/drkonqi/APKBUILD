@@ -1,6 +1,6 @@
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=drkonqi
-pkgver=6.7.1
+pkgver=6.7.2
 pkgrel=0
 pkgdesc="The KDE crash handler"
 # armhf blocked by qt6-qtdeclarative -> ki18n
@@ -63,7 +63,7 @@ build() {
 
 check() {
 	# connectiontest requires a network connection
-	ctest --test-dir build --output-on-failure -E "(connection|preamble)test"
+	ctest --test-dir build -E "(connection|preamble)test"
 }
 
 package() {
@@ -71,5 +71,5 @@ package() {
 }
 
 sha512sums="
-956b87533e1983aa15162b9db738efd795392f97ad99dbf5c7456853d8fa4ee79fc60f171b296aad05b591c12c49768ae3f306bebcb0f0ac4aa158e0bd166002  drkonqi-6.7.1.tar.xz
+cc93a41ec53fce77c3fbca8263e269b872f6aa8a0cd157a1aa3bf6a3e10cb530796281cb7c167efd03b1544ae8870dd8e6f3c4381eb9179bdc30df58a61f86fc  drkonqi-6.7.2.tar.xz
 "
