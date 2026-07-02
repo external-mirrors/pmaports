@@ -2,7 +2,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
-pkgver=16
+pkgver=17
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -23,6 +23,7 @@ source="
 	modules-initfs
 "
 subpackages="
+	$pkgname-kernel-fiberhome-hg680p:kernel_fiberhome_hg680p
 	$pkgname-kernel-p201:kernel_p201
 	$pkgname-kernel-p212:kernel_p212
 	$pkgname-kernel-p241:kernel_p241
@@ -54,6 +55,13 @@ aml_boot_prep() {
 	mkdir -p "$2"/usr/share/u-boot/amlogic-tvbox
 	sed "s@\\[\\[\\[DEVICETREE\\]\\]\\]@/boot/dtbs/amlogic/$1@" "$srcdir/boot-image.its" > "$2"/usr/share/u-boot/amlogic-tvbox/boot-image.its
 	chmod 644 "$2"/usr/share/u-boot/amlogic-tvbox/boot-image.its # Perms fixup
+}
+
+kernel_fiberhome_hg680p() {
+	pkgdesc="Kernel for FiberHome HG680-P (S905X)"
+	depends="linux-firmware-rtlwifi linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
+	aml_boot_prep "meson-gxl-s905x-fiberhome-hg680p.dtb" "$subpkgdir"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_p201() {
@@ -122,7 +130,7 @@ kernel_zte_b860h() {
 
 sha512sums="
 17e803e341c362f54df2116125549ededc41deb89cd6f57974133e18053b30af35fc2b60cdb732b10efadf95234f154bdd7b32410c139f0166adfe9b4ffe02dd  boot-image.its
-8608f681b41ae4b4242acf4c4b231ed7c9045b15f1bbea5c81fef8284d27f2b408c3c533b70ca1cf49da9595745b1b750a68afa2cf4d437a94b29ace4442b32f  deviceinfo
+0146100efa5eed46326d0d78b3834b78e6a057c3f47d8f6c66a4ccc7fd69b4c00ed269cd7f7894f9072d34fbe95c8a9613015260f8066262e7ee29596aa786c1  deviceinfo
 9b9c3d26f5dea76d58b7966d1a9ed7e19941d67d8b2fc4d8577aa11900b26a0f9230e158f3f3a99250624bd269da86c1ed1a1095530af0155eae008fd6c9646d  kernel-cmdline.conf
 52948c2884a6f6384e12b7a598f70878526d0d3293c214425170145231144ec7de805c038641741a4a5d75b50e554f6a3fa3769784a674217ed032f9b6a233c8  modules-initfs
 "
