@@ -379,14 +379,14 @@ NF_CONNTRACK_MARK = "y"
 
 # filesystems
 ["category:filesystems".">=0.0.0"."all"]
-# Note: These are builtin, not modules, because it reduces the overall
+# Note: EXT4 is builtin, not a module, because it reduces the overall
 # vmlinuz+initramfs size for devices with small boot partitions.
 # See: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/7136#note_505237
-BTRFS_FS = "y"
+BTRFS_FS = "m"
 BTRFS_FS_POSIX_ACL = "y"
 EXFAT_FS = "m"
 EXT4_FS = "y"
-F2FS_FS = "y"
+F2FS_FS = "m"
 UDF_FS = "m"
 XFS_FS = "m"
 EROFS_FS = "m"
