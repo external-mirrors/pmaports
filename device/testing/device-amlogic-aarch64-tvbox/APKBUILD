@@ -2,7 +2,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
-pkgver=15
+pkgver=16
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,6 +10,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	dtc
+	linux-firmware-meson
 	postmarketos-base
 	soc-amlogic-aarch64
 	u-boot-tools
@@ -107,7 +108,7 @@ kernel_videostrong_kii_pro() {
 
 kernel_xiaomi_aquaman() {
 	pkgdesc="Kernel for Xiaomi Mi TV Stick (S805Y)"
-	depends="linux-postmarketos-amlogic soc-amlogic-aarch64-boot linux-firmware-meson linux-firmware-brcm linux-firmware-rtl_bt"
+	depends="linux-postmarketos-amlogic soc-amlogic-aarch64-boot linux-firmware-brcm linux-firmware-rtl_bt"
 	aml_boot_prep "meson-gxl-s805y-xiaomi-aquaman.dtb" "$subpkgdir"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
