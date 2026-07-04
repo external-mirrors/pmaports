@@ -36,6 +36,18 @@ Packages can also have Co-Maintainers, which are identified by a comment like:
 Maintainers and Co-Maintainers will be pinged whenever changes to their packages
 are made.
 
+Packages shall not have contributors comments, which are commonly used in
+Alpine with:
+
+```sh
+# Contributor: Jean Doe <jean@example.org>
+```
+
+For devices specifically: if it is useful to list someone who has worked on a
+device who would be available for contact for questions about the device,
+consider adding them under a "Maintainers" section of the
+[device's wiki page](https://wiki.postmarketos.org/wiki/Device_specific_package).
+
 ## Package versioning (pkgver, pkgrel)
 
 Whenever you update a package, the version should also be incremented. A version
