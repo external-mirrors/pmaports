@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=51
+pkgver=52
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -48,6 +48,17 @@ subpackages="
 	$pkgname-wifi-wpa_supplicant-openrc:wpa_supplicant_openrc
 	$pkgname-wifi-wpa_supplicant:wpa_supplicant
 	$pkgname-x11
+	"
+install="
+	$pkgname-elogind.post-install
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	$pkgname-openrc-settingsd.post-install
+	$pkgname-openrc-settingsd.post-upgrade
+	$pkgname-wifi-iwd-openrc.post-install
+	$pkgname-wifi-iwd-openrc.post-upgrade
+	$pkgname-wifi-wpa_supplicant-openrc.post-install
+	$pkgname-wifi-wpa_supplicant-openrc.post-upgrade
 	"
 replaces="
 	chrony-common
@@ -149,7 +160,6 @@ bluez_openrc() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		chrony-openrc
 		dbus-openrc
@@ -163,7 +173,6 @@ openrc() {
 
 elogind() {
 	install_if="$pkgname=$pkgver-r$pkgrel elogind"
-	install="$subpkgname.post-install"
 	depends="!systemd-logind sleep-inhibitor-openrc openrc"
 	replaces="elogind"
 	provides="postmarketos-base-elogind=$pkgver-r$pkgrel"
@@ -173,7 +182,6 @@ elogind() {
 
 openrc_settingsd() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc-settingsd-openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	replaces="openrc-settingsd-openrc"
 	depends="openrc"
 
@@ -238,7 +246,6 @@ wpa_supplicant() {
 
 wpa_supplicant_openrc() {
 	install_if="$pkgname-wifi-wpa_supplicant=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 
 	depends="wpa_supplicant-openrc openrc"
 	replaces="wpa_supplicant-openrc"
@@ -261,8 +268,6 @@ iwd() {
 
 iwd_openrc() {
 	install_if="$pkgname-wifi-iwd=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-
 	depends="iwd-openrc openrc"
 
 	mkdir -p "$subpkgdir"
