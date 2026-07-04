@@ -127,6 +127,14 @@ if grep -qr '/etc/phoc.ini' --exclude-dir='archived' -- *; then
 	exit_code=1
 fi
 
+# Disallow contributor comments
+if grep -qr '# Contributor:' --exclude-dir='docs' -- *; then
+	echo 'ERROR: Please remove the contributor comment(s).'
+	echo "See https://docs.postmarketos.org/pmaports/main/packaging.html"
+	grep --color=always -r '# Contributor:' --exclude-dir='docs' -- *
+	exit_code=1
+fi
+
 if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 	# Find all added, modified or renamed kernel APKBUILDs in main, community or testing
 	MODIFIED_MAINLINE_KERNEL_PACKAGES=$(git show --pretty="" --name-only --diff-filter=AMR "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep "device/\(main\|community\|testing\)/linux-.*/APKBUILD" || true)
