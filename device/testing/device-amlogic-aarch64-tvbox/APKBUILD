@@ -2,7 +2,7 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=device-amlogic-aarch64-tvbox
 pkgdesc="Amlogic AArch64 TV box"
-pkgver=17
+pkgver=18
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -32,6 +32,7 @@ subpackages="
 	$pkgname-kernel-ugoos-am3:kernel_ugoos_am3
 	$pkgname-kernel-videostrong-kii-pro:kernel_videostrong_kii_pro
 	$pkgname-kernel-xiaomi-aquaman:kernel_xiaomi_aquaman
+	$pkgname-kernel-xiaomi-once:kernel_xiaomi_once
 	$pkgname-kernel-zte-b860h:kernel_zte_b860h
 "
 provides="device-amlogic-tvbox=$pkgver-r$pkgrel"
@@ -121,6 +122,13 @@ kernel_xiaomi_aquaman() {
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
+kernel_xiaomi_once() {
+	pkgdesc="Kernel for Xiaomi Mi Box 3 (S905X)"
+	depends="linux-firmware-brcm linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
+	aml_boot_prep "meson-gxl-s905x-xiaomi-once.dtb" "$subpkgdir"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
 kernel_zte_b860h() {
 	pkgdesc="Kernel for ZTE B860H V1/V2 (S905X)"
 	depends="linux-postmarketos-amlogic u-boot-amlogic-s905x-tv"
@@ -130,7 +138,7 @@ kernel_zte_b860h() {
 
 sha512sums="
 17e803e341c362f54df2116125549ededc41deb89cd6f57974133e18053b30af35fc2b60cdb732b10efadf95234f154bdd7b32410c139f0166adfe9b4ffe02dd  boot-image.its
-0146100efa5eed46326d0d78b3834b78e6a057c3f47d8f6c66a4ccc7fd69b4c00ed269cd7f7894f9072d34fbe95c8a9613015260f8066262e7ee29596aa786c1  deviceinfo
+6eec3f25b4157de4d0ca86dd8e31ba0411419fb98ff841e486cfc2d841bb0673bd99cdb6a108bf039c26cb7bae30e239d3392c4f704cee782f1ffd2b984de7f2  deviceinfo
 9b9c3d26f5dea76d58b7966d1a9ed7e19941d67d8b2fc4d8577aa11900b26a0f9230e158f3f3a99250624bd269da86c1ed1a1095530af0155eae008fd6c9646d  kernel-cmdline.conf
 52948c2884a6f6384e12b7a598f70878526d0d3293c214425170145231144ec7de805c038641741a4a5d75b50e554f6a3fa3769784a674217ed032f9b6a233c8  modules-initfs
 "
