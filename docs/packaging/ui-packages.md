@@ -20,49 +20,13 @@ have the individual UIs depend upon it.
 After adding a UI, add it to:
 https://wiki.postmarketos.org/wiki/Category:Interface
 
-## Unique APKBUILD variables and quirks
-
-- **_pmb_groups**
-  - Groups to which the default user should be added to during the
-    installation.
-- **_pmb_recommends**
-  - Packages to install together with the UI, which can be uninstalled by the
-     user.
-- **_pmb_select**
-  - Let `pmbootstrap init` display a prompt for each package in the given list
-    of packages to choose which provider to use for each package.
-- **_pmb_default**
-  - Define the package to display as default during a `pmbootstrap init`
-    `_pmb_select` prompt. Without this, the package with the highest priority
-    will list as default .
-- **pmb:drm**
-  - Adding this to the `options` variable will mark the UI as requiring DRM
-    support to function, hiding it from devices that do not support DRM on
-    `pmbootstrap init`.
-- **pmb:default-systemd**
-  - Adding this to the `options` variable will declare systemd as the default
-    service manager for the UI.
-- **pmb:support-systemd**
-  - Adding this to the `options` variable will allow selecting the UI with
-    systemd during `pmbootstrap init`. Requires a `pmb:default-*` option.
-- **pmb:default-openrc**
-  - Adding this to the `options` variable will declare OpenRC as the default
-    service manager for the UI.
-- **pmb:support-openrc**
-  - Adding this to the `options` variable will allow selecting the UI with
-    OpenRC during `pmbootstrap init`. Requires a `pmb:default-*` option.
-- **pkgdesc**
-  - The same as a normal APKBUILD's `pkgdesc`, but it is also shown during
-    `pmbootstrap init` beside the UI's name.
-
 ## Requirements for UI packages
 
 - UIs are not required to support both OpenRC and systemd. While it is
   recommended to support both to allow user choice, it is up to the UI
-  maintainers whether they support a service manager or not. Service managers
-  can be declared using the `pmb:support-systemd` and `pmb:support-openrc`
-  options in the `options` variable. These always need to be paired with a
-  `pmb:default-*` variable, even if only one service manager is supported.
+  maintainers whether they support a service manager or not. Declaring which
+  service managers are supported and which is the default is done via
+  [APKBUILD options](ui-packages-apkbuild-options).
 - UIs shall work out-of-the-box on first initialization, meaning that they
   should not require user intervention to start or require external
   configuration.
@@ -79,13 +43,21 @@ https://wiki.postmarketos.org/wiki/Category:Interface
 
 - Only depend upon the minimal amount of packages needed to have a functional
   desktop as recommended by the upstream. For packages that are not core to
-  the functionality of the desktop, these should be put into `_pmb_recommends`
-  to allow the user to uninstall them if need-be.
+  the functionality of the desktop, these should be put into
+  [`_pmb_recommends`](pmb-recommends) to allow the user to uninstall them if
+  need-be.
 - Create an `$pkgname-extras` subpackage to store the packages (usually apps)
   that are nice to have, but are not needed for a full experience of the
   desktop. Apps that could go here are multimedia apps, ebook readers, etc.
-  Remember to put these packages in `_pmb_recommends` in the subpackage to
-  allow the user to uninstall them.
+  Remember to put these packages in [`_pmb_recommends`](pmb-recommends) in the
+  subpackage to allow the user to uninstall them.
 - If a UI supports the ability to set a wallpaper, it is expected that the
   default wallpaper of postmarketOS is set by default. This is not a strict
   rule, as this is sometimes not possible due to technical constraints.
+
+```{eval-rst}
+.. toctree::
+   :hidden:
+
+   ui-packages/apkbuild-metadata
+```
