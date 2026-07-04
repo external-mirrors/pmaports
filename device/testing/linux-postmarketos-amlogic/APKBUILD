@@ -42,7 +42,7 @@ _config="
 	pmos.config
 "
 source="
-	$pkgname-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
+	$pkgname-$pkgver.tar.gz::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-$pkgver.tar.gz
 	$_config
 	0001-add-x96-mini-support.patch
 	0002-add-initial-support-for-zte-b860hv5.patch
@@ -91,7 +91,7 @@ package() {
 }
 
 sha512sums="
-a8b618dadad2d84ff569c038dfb068943e251bb63e2694820fcac501dcc81791393e7cf1694ffb0aa5326ae8bc67e95840b489594e9a1de892752a0fb910371c  linux-postmarketos-amlogic-7.1.1.tar.xz
+d31b8dc75b6cd04bbef5b794ce5f47f388fe05b3fcdfa5977b78fdbdc0bc55f6369f249db29245b410f0f8b6247631617899b960dab2551fada7fecdc3d0905b  linux-postmarketos-amlogic-7.1.1.tar.gz
 e81e1a684f33f79ced2d89cd98bb56bb812eafea904b05c62ff96c973e5b0d81bf0e603d47c2247986c3e711c6709d5af67a3cedee1bde0babd7868d317ecb23  config-postmarketos-amlogic.aarch64
 3eda7524a4c2cf8bd5fd2105c1971f729a3423a0c5ca2e041c9707b5e12fb0e2fc421ac99a3adf19a2555bacb12354851811eb6817a8c1ef1ae735f8043ec234  amlogic.config
 76da48361759146957123f64a99b07893e83f976595246e707f9ab2a833fcd0d1e899d45c42e21315c77e266a6a265c6f0e029802f348ed862147fdff7763b2f  misc.config
