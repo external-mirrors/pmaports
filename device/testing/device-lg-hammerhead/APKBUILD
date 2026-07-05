@@ -1,16 +1,24 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-lg-hammerhead
-pkgver=16
+pkgver=17
 pkgrel=0
 pkgdesc="Google Nexus 5"
 url="https://postmarketos.org"
 arch="armv7"
 license="MIT"
 depends="
+	firmware-lg-hammerhead
+	firmware-lg-hammerhead-adsp
+	firmware-lg-hammerhead-bluetooth
+	firmware-lg-hammerhead-modem
+	firmware-qcom-adreno-a330
+	linux-firmware-brcm
+	linux-firmware-cypress
 	linux-postmarketos-qcom-msm8974
 	lk2nd-msm8974-lg-hammerhead
 	mkbootimg
+	msm-modem
 	postmarketos-base
 	soc-qcom-msm8974
 	unl0kr-fbforcerefresh
@@ -19,7 +27,7 @@ makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-phosh
 	$pkgname-x11
-	$pkgname-nonfree-firmware:nonfree_firmware"
+"
 source="
 	bt-module-deps.conf
 	deviceinfo
@@ -36,6 +44,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/bt-module-deps.conf \
+		-t "$pkgdir"/usr/lib/modprobe.d/
 }
 
 x11() {
@@ -55,24 +66,6 @@ phosh() {
 
 	install -Dm644 "$srcdir"/phoc.ini \
 		"$subpkgdir"/usr/share/phosh/phoc.ini
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi, GPU, Modem and ADSP firmware"
-	depends="
-		firmware-qcom-adreno-a330
-		firmware-lg-hammerhead
-		firmware-lg-hammerhead-adsp
-		firmware-lg-hammerhead-modem
-		firmware-lg-hammerhead-bluetooth
-		linux-firmware-brcm
-		linux-firmware-cypress
-		msm-modem
-	"
-	mkdir "$subpkgdir"
-	# This config makes sense only if non-free firmware is installed
-	install -Dm644 "$srcdir"/bt-module-deps.conf \
-		"$subpkgdir"/usr/lib/modprobe.d/bt-module-deps.conf
 }
 
 sha512sums="
