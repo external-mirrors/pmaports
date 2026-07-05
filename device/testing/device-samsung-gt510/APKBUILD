@@ -2,14 +2,22 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-samsung-gt510
 pkgdesc="Samsung Galaxy Tab A 9.7 (2015)"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
-	 soc-qcom-msm8916 soc-qcom-msm8916-rproc"
+depends="
+	firmware-qcom-adreno-a300
+	firmware-samsung-gt510-wcnss-nv
+	linux-postmarketos-qcom-msm8916
+	mkbootimg
+	msm-firmware-loader
+	postmarketos-base
+	soc-qcom-msm8916
+	soc-qcom-msm8916-rproc
+	"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
@@ -18,10 +26,7 @@ source="
 	pointercal
 	phoc.ini
 "
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-phosh
-"
+subpackages="$pkgname-phosh"
 
 # Backwards compatibility for old kernel variant subpackages
 replaces="$pkgname-kernel-mainline $pkgname-kernel-mainline-modem-lte"
@@ -36,12 +41,6 @@ package() {
 
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
-}
-
-nonfree_firmware() {
-	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
-	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-samsung-gt510-wcnss-nv"
-	mkdir "$subpkgdir"
 }
 
 phosh() {
