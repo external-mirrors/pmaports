@@ -2,18 +2,22 @@
 maintainer="Lauren Kelly <lauren.kelly@msn.com>"
 pkgname=device-alcatel-pop7lte
 pkgdesc="Alcatel OneTouch Pop 7S"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-alcatel-pop7lte mkbootimg msm-fb-refresher mdss-fb-init-hack"
-makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
+depends="
+	firmware-alcatel-pop7lte-adsp
+	firmware-alcatel-pop7lte-wcnss
+	linux-alcatel-pop7lte
+	mdss-fb-init-hack
+	mkbootimg
+	msm-fb-refresher
+	postmarketos-base
 "
-
+makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -26,12 +30,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Audio/WiFi/BT firmware"
-	depends="firmware-alcatel-pop7lte-adsp firmware-alcatel-pop7lte-wcnss"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
