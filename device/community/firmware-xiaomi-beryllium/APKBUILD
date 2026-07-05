@@ -1,6 +1,6 @@
 maintainer="Joel Selvaraj <foss@joelselvaraj.com>"
 pkgname=firmware-xiaomi-beryllium
-pkgver=11
+pkgver=12
 pkgrel=0
 _commit="d396d32118803235a58aab0d0bc3643256634a05"
 pkgdesc="Firmware for Xiaomi Poco F1"
@@ -27,8 +27,7 @@ package() {
 
 firmware_sensors() {
 	pkgdesc="Files to be included to add sensor support"
-	depends="$pkgname"
-	install_if="$pkgname-nonfree-firmware"
+	depends="$pkgname=$pkgver-r$pkgrel"
 	mkdir "$subpkgdir"
 
 	cd "$builddir"
