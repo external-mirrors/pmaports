@@ -2,15 +2,20 @@
 maintainer="hexaheximal <hexaheximal@proton.me>"
 pkgname=device-odroid-n2plus
 pkgdesc="ODROID N2+"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base u-boot-amlogic-odroid-n2plus soc-amlogic-aarch64 linux-postmarketos-amlogic"
+depends="
+	linux-firmware-meson
+	linux-postmarketos-amlogic
+	postmarketos-base
+	soc-amlogic-aarch64
+	u-boot-amlogic-odroid-n2plus
+	"
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
@@ -19,12 +24,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="ODROID N2+ firmware"
-	depends="linux-firmware-meson"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

@@ -3,7 +3,7 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=device-google-nyan-big
 pkgdesc="Acer Chromebook 13 CB5-311 / Acer Chromebook C810"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,6 +12,8 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	linux-firmware-mrvl
+	linux-firmware-nvidia
 	postmarketos-base
 	postmarketos-cros-common
 "
@@ -20,7 +22,6 @@ subpackages="
 	$pkgname-kernel-nyan-big-fhd:kernel_nyan_big_fhd
 	$pkgname-mpv-wayland:mpv_wayland
 	$pkgname-mpv-xorg:mpv_xorg
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-sway
 "
 makedepends="devicepkg-dev"
@@ -45,6 +46,10 @@ package() {
 	# Block nouveau as it is in very bad condition
 	install -Dm644 "$srcdir"/gpu.conf \
 		"$pkgdir"/usr/lib/modprobe.d/gpu.conf
+
+	# Firmware needed to boot from USB
+	install -Dm644 "$srcdir"/30-xusb-firmware.files \
+		-t "$pkgdir"/usr/share/mkinitfs/files/
 }
 
 kernel_nyan_big() {
@@ -86,16 +91,6 @@ mpv_xorg() {
 	install_if="$pkgname=$pkgver-r$pkgrel mpv xorg-server"
 	install -Dm644 "$srcdir"/mpv.conf.xorg \
 		"$subpkgdir"/etc/mpv/mpv.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT, USB and GPU firmware"
-	depends="linux-firmware-mrvl linux-firmware-nvidia"
-	mkdir "$subpkgdir"
-
-	# Firmware needed to boot from USB
-	install -Dm644 "$srcdir"/30-xusb-firmware.files \
-		"$subpkgdir"/usr/share/mkinitfs/files/30-xusb-firmware.files
 }
 
 sway() {

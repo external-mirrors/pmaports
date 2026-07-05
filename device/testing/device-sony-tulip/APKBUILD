@@ -2,14 +2,16 @@
 maintainer="TuxMan <tuxkun09@gmail.com>"
 pkgname=device-sony-tulip
 pkgdesc="Sony Xperia M4 Aqua"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
-	device-qcom-msm8916-nonfree-firmware
+	firmware-qcom-adreno-a300
+	firmware-qcom-adreno-a420
+	firmware-qcom-db410c-wcnss-nv
 	linux-postmarketos-qcom-msm8916
 	mkbootimg
 	postmarketos-base
@@ -25,6 +27,14 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	# HACK: For devices that don't have a nv file in persist we
+	# temporarily link the db410c file to the expected location.
+	# It will be overriden if the file is in persist or when user
+	# installs the device-specific firmware packages.
+	mkdir -p "$pkgdir"/usr/lib/firmware/wlan/prima/
+	ln -s /usr/lib/firmware/qcom/apq8016/WCNSS_qcom_wlan_nv_sbc.bin \
+		"$pkgdir"/usr/lib/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 

@@ -2,13 +2,17 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-qcom-msm8916
 pkgdesc="Generic device package for various Qualcomm MSM8916/MSM8939-based devices"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	firmware-qcom-adreno-a300
+	firmware-qcom-adreno-a420
+	firmware-qcom-db410c-wcnss-nv
+	msm-firmware-loader
 	postmarketos-base
 	soc-qcom-msm8916
 "
@@ -19,7 +23,6 @@ source="
 	modules-initfs
 "
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-extlinux:kernel_extlinux
 	$pkgname-kernel-efi:kernel_efi
 "
@@ -30,20 +33,14 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT/Modem/Video firmware"
-	depends="msm-firmware-loader firmware-qcom-adreno-a300 firmware-qcom-adreno-a420 firmware-qcom-db410c-wcnss-nv"
-	mkdir "$subpkgdir"
 
 	# HACK: For devices that don't have a nv file in persist we
 	# temporarily link the db410c file to the expected location.
 	# It will be overriden if the file is in persist or when user
 	# installs the device-specific firmware packages.
-	mkdir -p "$subpkgdir"/lib/firmware/wlan/prima/
-	ln -s /lib/firmware/qcom/apq8016/WCNSS_qcom_wlan_nv_sbc.bin \
-		"$subpkgdir"/lib/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+	mkdir -p "$pkgdir"/usr/lib/firmware/wlan/prima/
+	ln -s /usr/lib/firmware/qcom/apq8016/WCNSS_qcom_wlan_nv_sbc.bin \
+		"$pkgdir"/usr/lib/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 kernel_extlinux() {

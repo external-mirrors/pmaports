@@ -2,20 +2,21 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=device-xunlong-orangepi5-plus
 pkgdesc="Xunlong Orange Pi 5 Plus"
-pkgver=7
-pkgrel=1
+pkgver=8
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	linux-firmware-arm
+	linux-firmware-rtl_nic
 	postmarketos-base
 	systemd-boot
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
 	$pkgname-kernel-mainline:kernel_mainline
@@ -27,12 +28,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="GPU/NIC firmware"
-	depends="linux-firmware-arm linux-firmware-rtl_nic"
-	mkdir "$subpkgdir"
 }
 
 kernel_stable() {

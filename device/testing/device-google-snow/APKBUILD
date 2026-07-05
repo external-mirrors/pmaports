@@ -2,8 +2,8 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=device-google-snow
 pkgdesc="Samsung Chromebook"
-pkgver=11
-pkgrel=1
+pkgver=12
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -11,6 +11,8 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	linux-firmware-mrvl
+	linux-firmware-s5p-mfc
 	linux-postmarketos-exynos5
 	postmarketos-base
 	postmarketos-cros-common
@@ -24,10 +26,7 @@ source="
 	ucm/Snow-I2S-MAX98090.conf
 	sway/foot/foot.ini
 "
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-sway
-"
+subpackages="$pkgname-sway"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -41,12 +40,6 @@ package() {
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/Snow-I2S-MAX980/Snow-I2S-MAX98090.conf
 	install -Dm644 "$srcdir"/HiFi.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/Snow-I2S-MAX980/HiFi.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT and MFC firmware"
-	depends="linux-firmware-mrvl linux-firmware-s5p-mfc"
-	mkdir "$subpkgdir"
 }
 
 sway() {

@@ -2,7 +2,7 @@
 maintainer="Jianhua Lu <lujianhua000@gmail.com>"
 pkgname=device-xiaomi-elish
 pkgdesc="Xiaomi Mi Pad 5 Pro"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,7 +10,18 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-xiaomi-elish-adreno
+	firmware-xiaomi-elish-adsp
+	firmware-xiaomi-elish-cdsp
+	firmware-xiaomi-elish-cirrus
+	firmware-xiaomi-elish-hexagonfs
+	firmware-xiaomi-elish-initramfs
+	firmware-xiaomi-elish-slpi
+	firmware-xiaomi-elish-touchscreen
+	firmware-xiaomi-elish-venus
 	hexagonrpcd>=0.3.2-r3
+	linux-firmware-ath11k
+	linux-firmware-qca
 	make-dynpart-mappings
 	mkbootimg
 	postmarketos-base
@@ -32,7 +43,6 @@ source="
 subpackages="
 	$pkgname-kernel-boe:kernel_boe
 	$pkgname-kernel-csot:kernel_csot
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-openrc
 "
 
@@ -71,24 +81,6 @@ kernel_csot() {
 	pkgdesc="CSOT Panel. To know which panel your device use and the status of the port, Visit the Mi Pad 5 Pro wiki page: https://wiki.postmarketos.org/wiki/Xiaomi_Mi_Pad_5_Pro_(xiaomi-elish)"
 	depends="linux-postmarketos-qcom-sm8250"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Firmware for GPU, WiFi, etc."
-	depends="
-		firmware-xiaomi-elish-adreno
-		firmware-xiaomi-elish-adsp
-		firmware-xiaomi-elish-cdsp
-		firmware-xiaomi-elish-cirrus
-		firmware-xiaomi-elish-hexagonfs
-		firmware-xiaomi-elish-initramfs
-		firmware-xiaomi-elish-slpi
-		firmware-xiaomi-elish-touchscreen
-		firmware-xiaomi-elish-venus
-		linux-firmware-ath11k
-		linux-firmware-qca
-		"
-	mkdir "$subpkgdir"
 }
 
 openrc() {

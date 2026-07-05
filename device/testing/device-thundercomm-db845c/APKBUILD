@@ -2,29 +2,27 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-thundercomm-db845c
 pkgdesc="Thundercomm Dragonboard 845c"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	alsa-ucm-conf-sdm845
+	fwupd>=1.8.6
+	linux-firmware-qcom
 	linux-postmarketos-qcom-sdm845
 	mkbootimg
 	postmarketos-base
-	alsa-ucm-conf-sdm845
 	soc-qcom
 	soc-qcom-qbootctl
-	fwupd>=1.8.6
 "
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
-"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 "
 
 build() {
@@ -33,12 +31,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Modem, GPU and WiFi Firmware"
-	depends="linux-firmware-qcom"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

@@ -2,13 +2,14 @@
 maintainer="Mattijs Korpershoek <mattijs.korpershoek@gmail.com>"
 pkgname=device-khadas-vim3
 pkgdesc="Khadas VIM3 Amlogic A311D"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	linux-firmware-meson
 	linux-postmarketos-amlogic
 	postmarketos-base
 	soc-amlogic-aarch64
@@ -19,7 +20,6 @@ source="
 	kernel-cmdline.conf
 	modules-initfs
 	"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,12 +27,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="vdec firmware"
-	depends="linux-firmware-meson"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

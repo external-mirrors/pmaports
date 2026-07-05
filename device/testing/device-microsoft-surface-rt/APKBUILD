@@ -2,7 +2,7 @@
 maintainer="Jethrob <jeybee@hotmail.com>"
 pkgname=device-microsoft-surface-rt
 pkgdesc="Microsoft Surface RT"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,14 +11,12 @@ arch="armv7"
 options="!check !archcheck pmb:strict"
 depends="
 	alsa-ucm-conf
+	linux-firmware-mrvl
 	linux-postmarketos-grate
 	postmarketos-base
 "
 makedepends="devicepkg-dev grub grub-efi"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-x11
-"
+subpackages="$pkgname-x11"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
 
 build() {
@@ -45,12 +43,6 @@ package() {
 
 	install -D bootarm.efi \
 		"$pkgdir"/boot/EFI/Boot/bootarm.efi
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi firmware"
-	depends="linux-firmware-mrvl"
-	mkdir "$subpkgdir"
 }
 
 x11() {

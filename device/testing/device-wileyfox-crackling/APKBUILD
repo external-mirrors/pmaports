@@ -2,14 +2,19 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-wileyfox-crackling
 pkgdesc="Wileyfox Swift"
-pkgver=11
+pkgver=12
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916
-	 soc-qcom-msm8916 soc-qcom-msm8916-rproc"
+depends="postmarketos-base
+	mkbootimg
+	linux-postmarketos-qcom-msm8916
+	soc-qcom-msm8916 soc-qcom-msm8916-rproc
+	firmware-qcom-adreno-a300 msm-firmware-loader
+	firmware-wileyfox-crackling-wcnss-nv firmware-wileyfox-crackling-venus
+	"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
@@ -17,10 +22,6 @@ source="
 	modules-initfs
 	10-crackling-proximity.rules
 	"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-"
-
 # Backwards compatibility for old kernel variant subpackages
 replaces="$pkgname-kernel-mainline $pkgname-kernel-mainline-modem"
 for pkg in $replaces; do provides="$provides $pkg=$pkgver-r$pkgrel"; done
@@ -34,13 +35,6 @@ package() {
 
 	install -D -m644 "$srcdir"/10-crackling-proximity.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/10-crackling-proximity.rules
-}
-
-nonfree_firmware() {
-	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
-	depends="firmware-qcom-adreno-a300 msm-firmware-loader
-		 firmware-wileyfox-crackling-wcnss-nv firmware-wileyfox-crackling-venus"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

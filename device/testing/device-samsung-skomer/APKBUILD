@@ -2,18 +2,20 @@
 maintainer="Linus Walleij <linusw@kernel.org>"
 pkgname=device-samsung-skomer
 pkgdesc="Samsung Galaxy Xcover 2"
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg linux-postmarketos-stericsson"
-makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-kwin
+depends="
+	firmware-samsung-u8500
+	linux-postmarketos-stericsson
+	mkbootimg
+	postmarketos-base
 "
+makedepends="devicepkg-dev"
+subpackages="$pkgname-kwin"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -26,12 +28,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-	depends="firmware-samsung-u8500"
-	mkdir "$subpkgdir"
 }
 
 kwin() {

@@ -2,24 +2,24 @@
 maintainer="Raymond Hackley <wonderfulShrineMaidenOfParadise@postmarketos.org>"
 pkgname=device-samsung-e7
 pkgdesc="Samsung Galaxy E7"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
 depends="
-	postmarketos-base
-	mkbootimg
+	firmware-qcom-adreno-a300
+	firmware-samsung-e7-wcnss-nv
 	linux-postmarketos-qcom-msm8916
+	mkbootimg
+	msm-firmware-loader
+	postmarketos-base
 	soc-qcom-msm8916
 	soc-qcom-msm8916-rproc
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,12 +27,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
-	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-samsung-e7-wcnss-nv"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

@@ -3,13 +3,14 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=device-librecomputer-solitude
 pkgdesc="Libre Computer AML-S905D3-CC"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	linux-firmware-meson
 	linux-postmarketos-amlogic
 	postmarketos-base
 	soc-amlogic-s905
@@ -19,8 +20,7 @@ source="
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
-	"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,12 +28,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="vdec firmware"
-	depends="linux-firmware-meson"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

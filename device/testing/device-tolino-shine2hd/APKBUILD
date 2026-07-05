@@ -2,7 +2,7 @@
 maintainer="Andreas Kemnade <andreas@kemnade.info>"
 pkgname=device-tolino-shine2hd
 pkgdesc="Tolino Shine 2 HD"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,13 +10,13 @@ arch="armv7"
 options="!check !archcheck"
 depends="
 	kobo-epdc-extractor
+	linux-firmware-brcm
 	linux-postmarketos-imx-ereader
 	perl
 	postmarketos-base
 	u-boot-tolino-shine2hd
 "
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 source="
 	deviceinfo
@@ -30,12 +30,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi firmware"
-	depends="linux-firmware-brcm"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

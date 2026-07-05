@@ -4,7 +4,7 @@
 maintainer="Yang Xiwen <forbidden405@outlook.com>"
 pkgname=device-zhihe-generic
 pkgdesc="A generic device package for various MSM8916-based dongles(namely zhihe)"
-pkgver=7
+pkgver=8
 pkgrel=0
 url="https://postmarketos.org"
 license="GPL"
@@ -12,7 +12,9 @@ arch="aarch64"
 options="!check !archcheck"
 provides="device-generic-zhihe=$pkgver-r$pkgrel"
 depends="
+	firmware-qcom-msm8916-venus
 	mkbootimg
+	msm-firmware-loader
 	postmarketos-base
 	soc-qcom-msm8916
 	soc-qcom-msm8916-rproc
@@ -20,7 +22,6 @@ depends="
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-ufi001c:kernel_ufi001c
 	$pkgname-kernel-uf896:kernel_uf896
 	$pkgname-kernel-uz801:kernel_uz801
@@ -32,13 +33,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT/Modem/Video firmware"
-	depends="msm-firmware-loader
-		 firmware-qcom-msm8916-venus"
-	mkdir "$subpkgdir"
 }
 
 kernel_ufi001c() {

@@ -2,7 +2,7 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=device-samsung-m3
 pkgdesc="Samsung Galaxy S III LTE"
-pkgver=13
+pkgver=14
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,6 +10,9 @@ arch="armv7"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-samsung-midas-bluetooth
+	firmware-samsung-midas-wifi
+	linux-firmware-s5p-mfc
 	linux-postmarketos-exynos4
 	mkbootimg
 	postmarketos-base
@@ -17,7 +20,6 @@ depends="
 	"
 makedepends="devicepkg-dev"
 install="$pkgname.post-install"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	deviceinfo
 	ucm/Midas.conf
@@ -39,16 +41,6 @@ package() {
 		-t "$_midas_audio_dir"
 	install -Dm644 "$srcdir"/HiFi.conf \
 		-t "$_midas_audio_dir"
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi, Bluetooth, MFC firmware"
-	depends="
-		firmware-samsung-midas-bluetooth
-		firmware-samsung-midas-wifi
-		linux-firmware-s5p-mfc
-		"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

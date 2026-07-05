@@ -2,7 +2,7 @@
 maintainer="knuxify <knuxify@gmail.com>"
 pkgname=device-samsung-lt01
 pkgdesc="Samsung Galaxy Tab 3 8.0"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,13 +10,14 @@ arch="armv7"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-samsung-lt01-bluetooth
+	firmware-samsung-lt01-wifi
+	linux-firmware-s5p-mfc
 	mkbootimg
 	postmarketos-base
 	"
-_pmb_recommends="$pkgname-nonfree-firmware"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-wifi:kernel_wifi
 	$pkgname-kernel-3g:kernel_3g
 	$pkgname-kernel-lte:kernel_lte
@@ -41,16 +42,6 @@ package() {
 		-t "$_tab3_audio_dir"
 	install -Dm644 "$srcdir"/HiFi.conf \
 		-t "$_tab3_audio_dir"
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi, Bluetooth, MFC firmware"
-	depends="
-		firmware-samsung-lt01-bluetooth
-		firmware-samsung-lt01-wifi
-		linux-firmware-s5p-mfc
-		"
-	mkdir "$subpkgdir"
 }
 
 kernel_wifi() {

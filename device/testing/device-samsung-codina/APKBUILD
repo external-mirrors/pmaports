@@ -2,17 +2,19 @@
 maintainer="Linus Walleij <linusw@kernel.org>"
 pkgname=device-samsung-codina
 pkgdesc="Samsung Galaxy Ace 2"
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="mkbootimg postmarketos-base linux-postmarketos-stericsson"
-makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
+depends="
+	firmware-samsung-u8500
+	linux-postmarketos-stericsson
+	mkbootimg
+	postmarketos-base
 "
+makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -25,13 +27,6 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 }
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-	depends="firmware-samsung-u8500"
-	mkdir "$subpkgdir"
-}
-
 
 sha512sums="
 3bf2ac6837879a006bf1379696d0804fe6d8c02e4ec67d5576a3902fb448dc73d9cd343f5d3ba270fe0bca9e2e901361a89fc8e1a3b7543dfa46fa6224823ce6  deviceinfo

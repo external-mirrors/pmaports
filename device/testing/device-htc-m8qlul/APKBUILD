@@ -2,18 +2,23 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=device-htc-m8qlul
 pkgdesc="HTC One M8s"
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg soc-qcom-msm8939 linux-postmarketos-qcom-msm8939"
+depends="
+	firmware-htc-m8qlul-venus
+	firmware-htc-m8qlul-wcnss
+	linux-firmware-qcom
+	linux-postmarketos-qcom-msm8939
+	mkbootimg
+	postmarketos-base
+	soc-qcom-msm8939
+	"
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,12 +26,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="GPU/WiFi/BT/Video(/Modem) firmware"
-	depends="linux-firmware-qcom firmware-htc-m8qlul-venus firmware-htc-m8qlul-wcnss"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

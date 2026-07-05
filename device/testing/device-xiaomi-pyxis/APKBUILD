@@ -2,7 +2,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=device-xiaomi-pyxis
 pkgdesc="Xiaomi Mi 9 Lite"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -46,7 +46,7 @@ build() {
 }
 
 package() {
-	replaces="$pkgname-nonfree-firmware"
+	replaces="device-xiaomi-pyxis-nonfree-firmware"
 	devicepkg_package $startdir $pkgname
 
 	# Sensors depend on ADSP firmware and the sensors registry served over FastRPC.
