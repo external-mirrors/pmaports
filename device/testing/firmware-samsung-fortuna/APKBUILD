@@ -1,48 +1,37 @@
 maintainer="Raymond Hackley <wonderfulShrineMaidenOfParadise@postmarketos.org>"
 pkgname=firmware-samsung-fortuna
-pkgver=2
-pkgrel=4
+pkgver=3
+pkgrel=0
 _name="Samsung Galaxy Grand Prime"
 pkgdesc="Firmware for $_name"
 url="https://postmarketos.org"
-arch="aarch64"
+arch="aarch64 armv7"
 license="proprietary"
+subpackages="
+	firmware-samsung-fortuna3g-wcnss-nv:wcnss_nv_fortuna3g
+	firmware-samsung-fortunaltezt-wcnss-nv:wcnss_nv_fortunaltezt
+	firmware-samsung-gprimeltecan-wcnss-nv:wcnss_nv_gprimeltecan
+	firmware-samsung-grandprimelte-wcnss-nv:wcnss_nv_grandprimelte
+"
+source="
+	firmware-samsung-fortuna3g-WCNSS_qcom_wlan_nv.bin.base64::https://pastebin.com/raw/Y8DvfvRf
+	firmware-samsung-fortunaltezt-WCNSS_qcom_wlan_nv.bin.base64::https://pastebin.com/raw/s25mBaen
+	firmware-samsung-gprimeltecan-WCNSS_qcom_wlan_nv.bin.base64::https://pastebin.com/raw/BxjvzZhd
+	firmware-samsung-grandprimelte-WCNSS_qcom_wlan_nv.bin.base64::https://pastebin.com/raw/6rPpqqEE
+"
 options="!check !strip !archcheck !tracedeps pmb:cross-native"
 builddir="$srcdir"
-
-_subpkgname="${pkgname%-fortuna}"
-_variants="
-	fortuna3g
-	gprimeltecan
-	grandprimelte
-"
-
-for _variant in $_variants; do
-	subpackages="$subpackages $_subpkgname-$_variant-wcnss-nv:wcnss_nv_$_variant"
-done
-
-# armv7 only variant(s)
-_variants_armv7="fortunaltezt"
-
-for _variant in $_variants_armv7; do
-	subpackages="$subpackages $_subpkgname-$_variant-wcnss-nv:wcnss_nv_$_variant:armv7"
-done
-
-_wcnss_nv_bin="WCNSS_qcom_wlan_nv.bin"
-source="
-	$_subpkgname-fortuna3g-$_wcnss_nv_bin.base64::https://pastebin.com/raw/Y8DvfvRf
-	$_subpkgname-fortunaltezt-$_wcnss_nv_bin.base64::https://pastebin.com/raw/s25mBaen
-	$_subpkgname-gprimeltecan-$_wcnss_nv_bin.base64::https://pastebin.com/raw/BxjvzZhd
-	$_subpkgname-grandprimelte-$_wcnss_nv_bin.base64::https://pastebin.com/raw/6rPpqqEE
-"
-
-_fwdir="/lib/firmware/postmarketos"
+_fwdir="/usr/lib/firmware/postmarketos"
 
 build() {
-	for _variant in $_variants $_variants_armv7; do
-		base64 -d $_subpkgname-$_variant-$_wcnss_nv_bin.base64 \
-			> $_variant-$_wcnss_nv_bin
-	done
+	base64 -d firmware-samsung-fortuna3g-WCNSS_qcom_wlan_nv.bin.base64 \
+		> fortuna3g-WCNSS_qcom_wlan_nv.bin
+	base64 -d firmware-samsung-fortunaltezt-WCNSS_qcom_wlan_nv.bin.base64 \
+		> fortunaltezt-WCNSS_qcom_wlan_nv.bin
+	base64 -d firmware-samsung-gprimeltecan-WCNSS_qcom_wlan_nv.bin.base64 \
+		> gprimeltecan-WCNSS_qcom_wlan_nv.bin
+	base64 -d firmware-samsung-grandprimelte-WCNSS_qcom_wlan_nv.bin.base64 \
+		> grandprimelte-WCNSS_qcom_wlan_nv.bin
 }
 
 package() {
@@ -52,26 +41,26 @@ package() {
 
 wcnss_nv_fortuna3g() {
 	pkgdesc="$_name (SM-G530H) WiFi/BT firmware configuration"
-	install -Dm644 "$srcdir"/fortuna3g-$_wcnss_nv_bin \
-		"$subpkgdir/$_fwdir"/wlan/prima/$_wcnss_nv_bin
+	install -Dm644 "$srcdir"/fortuna3g-WCNSS_qcom_wlan_nv.bin \
+		"$subpkgdir/$_fwdir"/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 wcnss_nv_fortunaltezt() {
 	pkgdesc="$_name (SM-G530Y) WiFi/BT firmware configuration"
-	install -Dm644 "$srcdir"/fortunaltezt-$_wcnss_nv_bin \
-		"$subpkgdir/$_fwdir"/wlan/prima/$_wcnss_nv_bin
+	install -Dm644 "$srcdir"/fortunaltezt-WCNSS_qcom_wlan_nv.bin \
+		"$subpkgdir/$_fwdir"/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 wcnss_nv_gprimeltecan() {
 	pkgdesc="$_name (SM-G530W) WiFi/BT firmware configuration"
-	install -Dm644 "$srcdir"/gprimeltecan-$_wcnss_nv_bin \
-		"$subpkgdir/$_fwdir"/wlan/prima/$_wcnss_nv_bin
+	install -Dm644 "$srcdir"/gprimeltecan-WCNSS_qcom_wlan_nv.bin \
+		"$subpkgdir/$_fwdir"/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 wcnss_nv_grandprimelte() {
 	pkgdesc="$_name (SM-G530FZ) WiFi/BT firmware configuration"
-	install -Dm644 "$srcdir"/grandprimelte-$_wcnss_nv_bin \
-		"$subpkgdir/$_fwdir"/wlan/prima/$_wcnss_nv_bin
+	install -Dm644 "$srcdir"/grandprimelte-WCNSS_qcom_wlan_nv.bin \
+		"$subpkgdir/$_fwdir"/wlan/prima/WCNSS_qcom_wlan_nv.bin
 }
 
 sha512sums="
