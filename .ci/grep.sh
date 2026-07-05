@@ -119,6 +119,14 @@ if grep -qr '/etc/local.d' --exclude-dir='archived' -- *; then
 	exit_code=1
 fi
 
+# Disallow installation of files to /etc/phoc.ini
+if grep -qr '/etc/phoc.ini' --exclude-dir='archived' -- *; then
+	echo "ERROR: Please replace '/etc/phoc.ini' with '/usr/share/phosh/phoc.ini'"
+	echo "and add 'replaces=phosh' in the following files:"
+	grep --color=always -r '/etc/phoc.ini' --exclude-dir='archived' -- *
+	exit_code=1
+fi
+
 if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 	# Find all added, modified or renamed kernel APKBUILDs in main, community or testing
 	MODIFIED_MAINLINE_KERNEL_PACKAGES=$(git show --pretty="" --name-only --diff-filter=AMR "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep "device/\(main\|community\|testing\)/linux-.*/APKBUILD" || true)
