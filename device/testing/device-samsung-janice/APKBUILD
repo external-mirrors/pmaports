@@ -2,18 +2,20 @@
 maintainer="Linus Walleij <linusw@kernel.org>"
 pkgname=device-samsung-janice
 pkgdesc="Samsung Galaxy S Advance"
-pkgver=4
-pkgrel=2
+pkgver=5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg linux-postmarketos-stericsson"
-makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-udev
+depends="
+	firmware-samsung-janice
+	linux-postmarketos-stericsson
+	mkbootimg
+	postmarketos-base
 "
+makedepends="devicepkg-dev"
+subpackages="$pkgname-udev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -25,12 +27,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi firmware"
-	depends="firmware-samsung-janice"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
