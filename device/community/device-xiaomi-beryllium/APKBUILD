@@ -2,26 +2,30 @@
 maintainer="Joel Selvaraj <foss@joelselvaraj.com>"
 pkgname=device-xiaomi-beryllium
 pkgdesc="Xiaomi Poco F1"
-pkgver=20
+pkgver=21
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
-	postmarketos-base
-	mkbootimg
 	alsa-ucm-conf-sdm845
+	firmware-xiaomi-beryllium
+	firmware-xiaomi-beryllium-sensors
+	hexagonrpcd
+	hexagonrpcd>=0.3.2-r3
+	mkbootimg
+	postmarketos-base
 	soc-qcom
+	soc-qcom-modem
 "
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
 	$pkgname-kernel-tianma:kernel_tianma
 	$pkgname-kernel-ebbg:kernel_ebbg
+	$pkgname-openrc
 "
-
+replaces="device-xiaomi-beryllium-nonfree-firmware"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -44,24 +48,10 @@ package() {
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
 
-nonfree_firmware() {
-	pkgdesc="GPU, venus, modem and sensor firmware"
-	depends="
-		firmware-xiaomi-beryllium
-		firmware-xiaomi-beryllium-sensors
-		hexagonrpcd>=0.3.2-r3
-		soc-qcom-modem
-		hexagonrpcd
-	"
-
-	amove etc/conf.d/q6voiced
-	amove usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
-}
-
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="hexagonrpcd-openrc openrc"
+	depends="hexagonrpcd-openrc"
 
 	mkdir -p "$subpkgdir"
 }

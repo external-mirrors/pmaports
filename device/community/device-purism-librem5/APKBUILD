@@ -2,7 +2,7 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
-pkgver=14
+pkgver=15
 pkgrel=0
 _confver=77
 _purismrel=2
@@ -20,6 +20,8 @@ depends="
 	bluez
 	bluez-deprecated
 	bm818-tools
+	firmware-brcm43752
+	firmware-siliconlabs-rs9116
 	gnss-share
 	i2c-tools
 	iw
@@ -28,8 +30,8 @@ depends="
 	millipixels
 	postmarketos-base
 	postmarketos-base-ui-audio-backend-pulseaudio
-	pulseaudio<9990
 	postprocessd
+	pulseaudio<9990
 	u-boot-librem5
 	u-boot-tools
 	wys
@@ -60,7 +62,6 @@ source="
 # $pkgname-openrc is out of order to allow collecting the remaining openrc
 # files using the default function
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-pulseaudio
 	$pkgname-smartcard
 	$pkgname-smartcard-openrc:smartcard_openrc
@@ -189,12 +190,6 @@ package() {
 		"$pkgdir"/usr/lib/systemd/system
 
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi and Bluetooth firmware"
-	depends="firmware-siliconlabs-rs9116 firmware-brcm43752"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

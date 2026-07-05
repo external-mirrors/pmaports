@@ -3,7 +3,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=device-google-trogdor
 pkgdesc="Google Trogdor Chromebooks"
-pkgver=12
+pkgver=13
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,14 +12,18 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	firmware-google-trogdor
+	linux-firmware-ath10k
+	linux-firmware-qca
+	linux-firmware-qcom
 	linux-postmarketos-qcom-sc7180
+	msm-cros-efs-loader
 	postmarketos-base
 	postmarketos-cros-common
 	soc-qcom-sc7180
 "
 
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -35,18 +39,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 	install -Dm644 "$srcdir"/99-google-trogdor-accel.rules\
 			"$pkgdir"/usr/lib/udev/rules.d/99-google-trogdor-accel.rules
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT, Modem, GPU, Venus firmware"
-	depends="
-		linux-firmware-qcom
-		linux-firmware-qca
-		linux-firmware-ath10k
-		firmware-google-trogdor
-		msm-cros-efs-loader
-	"
-	mkdir "$subpkgdir"
 }
 
 openrc() {

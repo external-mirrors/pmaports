@@ -2,7 +2,7 @@
 maintainer="Hugo Osvaldo Barrera <hugo@whynothugo.nl>"
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
-pkgver=22
+pkgver=23
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,12 +10,14 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf>=1.2.7
+	iw
+	linux-firmware-brcm
+	linux-firmware-rockchip
 	linux-postmarketos-rockchip>=5.14
 	nvme-cli
 	postmarketos-base>=25-r1
 	soc-rockchip-rk3399
 	u-boot-pinebookpro
-	iw
 	"
 makedepends="devicepkg-dev"
 install="
@@ -24,7 +26,11 @@ install="
 	$pkgname-openrc.post-install
 	$pkgname-openrc.post-upgrade
 	"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware $pkgname-elogind $pkgname-openrc"
+subpackages="
+	$pkgname-elogind
+	$pkgname-openrc
+	"
+replaces="device-pine64-pinebookpro-nonfree-firmware"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -46,22 +52,18 @@ package() {
 
 	install -D -m755 "$srcdir"/wlan-powersave-off.initd \
 		"$pkgdir"/etc/init.d/wlan-powersave-off
+
+	# Workaround for kernel load brcm43455 firmware bug
+	# details: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/4285
+	mkdir -p "$pkgdir"/usr/lib/firmware/brcm
+	ln -s brcmfmac43455-sdio.AW-CM256SM.txt.zst \
+		"$pkgdir"/usr/lib/firmware/brcm/brcmfmac43456-sdio.pine64,pinebook-pro.txt.zst
 }
 
 elogind() {
 	install_if="$pkgname=$pkgver-r$pkgrel elogind"
 	install -D -m644 "$srcdir"/enable-s2idle.conf \
 		"$subpkgdir"/usr/lib/elogind/sleep.conf.d/enable-s2idle.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi, Bluetooth and video-out firmware"
-	depends="linux-firmware-brcm linux-firmware-rockchip"
-	mkdir "$subpkgdir"
-	# Workaround for kernel load brcm43455 firmware bug
-	# details: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/4285
-	mkdir -p "$subpkgdir"/usr/lib/firmware/brcm
-	ln -s brcmfmac43455-sdio.AW-CM256SM.txt.zst "$subpkgdir"/usr/lib/firmware/brcm/brcmfmac43456-sdio.pine64,pinebook-pro.txt.zst
 }
 
 openrc() {

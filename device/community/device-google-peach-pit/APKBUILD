@@ -2,8 +2,8 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=device-google-peach-pit
 pkgdesc="Samsung Chromebook 2 (11.6 inch)"
-pkgver=10
-pkgrel=1
+pkgver=11
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -11,6 +11,8 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	linux-firmware-mrvl
+	linux-firmware-s5p-mfc
 	linux-postmarketos-exynos5
 	postmarketos-base
 	postmarketos-cros-common
@@ -26,7 +28,6 @@ source="
 "
 subpackages="
 	$pkgname-i3wm
-	$pkgname-nonfree-firmware:nonfree_firmware
 "
 
 build() {
@@ -49,12 +50,6 @@ i3wm() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-i3wm"
 	install -Dm644 "$srcdir"/90-tap-to-click.conf \
 		"$subpkgdir"/usr/share/X11/xorg.conf.d/90-tap-to-click.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT and MFC firmware"
-	depends="linux-firmware-mrvl linux-firmware-s5p-mfc"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

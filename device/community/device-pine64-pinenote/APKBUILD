@@ -1,8 +1,8 @@
 maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
-pkgver=15
-pkgrel=3
+pkgver=16
+pkgrel=0
 _commit="42cf0c3dc26d6e0b2a32ef5a00e7ca4ae77034c7"
 _swayconfver="v1.1.0"
 url="https://postmarketos.org"
@@ -11,6 +11,8 @@ arch="aarch64"
 options="!check !archcheck"
 # py3-numpy used by rockchip_ebc management libraries
 depends="
+	linux-firmware-brcm
+	linux-firmware-cypress
 	linux-pine64-pinenote
 	postmarketos-base
 	py3-numpy
@@ -47,9 +49,6 @@ source="
 	tinydm-ebc-workaround-openrc.initd
 "
 subpackages="
-	$pkgname-nonfree-firmware
-	$pkgname-nonfree-firmware-openrc:firmware_openrc
-	$pkgname-nonfree-firmware-systemd:firmware_systemd
 	$pkgname-openrc
 	$pkgname-sway-hrdl
 	$pkgname-systemd
@@ -57,12 +56,15 @@ subpackages="
 	$pkgname-x11
 "
 install="
-	$pkgname-sway-hrdl.post-install
-	$pkgname-sway-hrdl.post-deinstall
-	$pkgname-nonfree-firmware.post-upgrade
-	$pkgname-nonfree-firmware.pre-install
-	$pkgname-nonfree-firmware-openrc.post-install
 	$pkgname-openrc.post-install
+	$pkgname.post-upgrade
+	$pkgname.pre-install
+	$pkgname-sway-hrdl.post-deinstall
+	$pkgname-sway-hrdl.post-install
+"
+replaces="
+	device-pine64-pinenote-nonfree-firmware
+	firmware-pine64-pinenote
 "
 builddir="$srcdir"/pinenote-dist-$_commit
 _swayconfdir="$srcdir"/pinenote-config-sway-$_swayconfver
@@ -106,6 +108,21 @@ package() {
 			./udev/rules.d/83-backlight.rules \
 			./udev/rules.d/84-rockchip-ebc-power.rules \
 			-t "$pkgdir"/usr/lib/udev/rules.d
+
+		# waveform firmware is provided locally via /dev/disk/by-label/waveform
+		# extracted using waveform_exctract.sh, then adapted to kernel using wbf_to_custom.py
+		# initd or systemd service execute these on first boot
+		install -Dm644 "$srcdir"/30-eink-waveform.files \
+			"$pkgdir"/usr/share/mkinitfs/files/30-eink-waveform.files
+		install -Dm755 \
+			"$builddir"/bin/wbf_to_custom.py \
+			"$builddir"/bin/read_file.py \
+			"$builddir"/bin/waveform_extract.sh \
+			-t "$pkgdir"/usr/lib/pinenote
+
+		# symbolic link for wifi firmware to where drivers expects it
+		mkdir -p "$pkgdir"/usr/lib/firmware/brcm
+		ln -s ../cypress/cyfmac43455-sdio.bin.zst "$pkgdir"/usr/lib/firmware/brcm/brcmfmac43455-sdio.pine64,pinenote-v1.2.bin.zst
 	)
 
 	# bins
@@ -222,49 +239,13 @@ xournalpp() {
 		-t "$subpkgdir"/etc/skel/.config/xournalpp
 }
 
-firmware() {
-	pkgdesc="WiFi, Bluetooth and display firmware"
-	depends="linux-firmware-cypress linux-firmware-brcm"
-	replaces="firmware-pine64-pinenote"
-
-	# waveform firmware is provided locally via /dev/disk/by-label/waveform
-	# extracted using waveform_exctract.sh, then adapted to kernel using wbf_to_custom.py
-	# initd or systemd service execute these on first boot
-	install -Dm644 "$srcdir"/30-eink-waveform.files \
-		"$subpkgdir"/usr/share/mkinitfs/files/30-eink-waveform.files
-	install -Dm755 \
-		"$builddir"/bin/wbf_to_custom.py \
-		"$builddir"/bin/read_file.py \
-		"$builddir"/bin/waveform_extract.sh \
-		-t "$subpkgdir"/usr/lib/pinenote
-
-	# symbolic link for wifi firmware to where drivers expects it
-	mkdir -p "$subpkgdir"/usr/lib/firmware/brcm
-	ln -s ../cypress/cyfmac43455-sdio.bin.zst "$subpkgdir"/usr/lib/firmware/brcm/brcmfmac43455-sdio.pine64,pinenote-v1.2.bin.zst
-}
-
 openrc() {
+	replaces="device-pine64-pinenote-nonfree-firmware-openrc"
 	# rockchip_ebc sometimes fails to load the initial waveform.
 	# This forces a reload before starting tinydm
 	install -Dm755 "$srcdir"/tinydm-ebc-workaround-openrc.initd \
 		"$subpkgdir"/etc/init.d/tinydm-ebc
 
-	# source `install_if`, `pkgdesc` and `depends`
-	default_openrc
-}
-
-systemd() {
-	# rockchip_ebc sometimes fails to load the initial waveform.
-	# This forces a reload before starting tinydm
-	install -Dm644 \
-		"$srcdir"/tinydm-ebc-workaround-systemd.conf \
-		"$subpkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
-
-	# source `install_if`, `pkgdesc` and `depends`
-	default_systemd
-}
-
-firmware_openrc() {
 	install -Dm755 "$srcdir"/pinenote-init-waveform.initd \
 		"$subpkgdir"/etc/init.d/pinenote-init-waveform
 
@@ -272,7 +253,14 @@ firmware_openrc() {
 	default_openrc
 }
 
-firmware_systemd() {
+systemd() {
+	replaces="device-pine64-pinenote-nonfree-firmware-systemd"
+	# rockchip_ebc sometimes fails to load the initial waveform.
+	# This forces a reload before starting tinydm
+	install -Dm644 \
+		"$srcdir"/tinydm-ebc-workaround-systemd.conf \
+		"$subpkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
+
 	install -Dm644 \
 		"$builddir"/systemd/pinenote-hrdl-extract-waveform.service \
 		"$builddir"/systemd/pinenote-hrdl-convert-waveform.service \

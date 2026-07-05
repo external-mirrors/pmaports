@@ -3,7 +3,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=device-google-corsola
 pkgdesc="Google Corsola Chromebooks"
-pkgver=11
+pkgver=12
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,19 +12,20 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	linux-firmware-mediatek
 	linux-postmarketos-mediatek-mt81
 	postmarketos-base
 	postmarketos-cros-common
 	soc-mediatek-mt8183
 "
 makedepends="devicepkg-dev"
+replaces="device-google-corsola-nonfree-firmware"
 _ucm_commit="b728563a07ebcd05545c60989412ae023b1dd06d"
 source="deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
 	alsa-ucm-conf-$_ucm_commit.tar.gz::https://github.com/alsa-project/alsa-ucm-conf/archive/$_ucm_commit.tar.gz
 "
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -32,19 +33,13 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
 
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-		depends="linux-firmware-mediatek alsa-ucm-conf"
-
+	mkdir -p "$pkgdir"/usr/lib/firmware/mediatek/sof-tplg
 	# Symlink for SOF firmware
-	_dir="$subpkgdir/usr/lib/firmware/mediatek/sof-tplg"
-	mkdir -p "$_dir"
+	ln -s sof-mt8186.tplg.zst \
+		"$pkgdir"/usr/lib/firmware/mediatek/sof-tplg/sof-mt8186-google-steelix.tplg.zst
 
-	ln -s sof-mt8186.tplg.zst "$_dir"/sof-mt8186-google-steelix.tplg.zst
-
-	# Alsa UCM configs
+	local _ucm_files
 	_ucm_files="
 		ucm2/MediaTek/mt8186-sof/init.conf
 		ucm2/MediaTek/mt8186-sof/mt6366-rt1019-rt5682s/HiFi.conf
@@ -54,8 +49,8 @@ nonfree_firmware() {
 	"
 	for file in $_ucm_files
 	do
-		install -Dm644 "$srcdir/alsa-ucm-conf-$_ucm_commit/$file" \
-			"$subpkgdir/usr/share/alsa/$file"
+		install -Dm644 "$srcdir"/alsa-ucm-conf-"$_ucm_commit"/"$file" \
+			"$pkgdir"/usr/share/alsa/"$file"
 	done
 }
 

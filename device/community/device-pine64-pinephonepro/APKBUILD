@@ -2,8 +2,8 @@
 maintainer="Jan Jasper de Kroon <jajadekroon@gmail.com>"
 pkgname=device-pine64-pinephonepro
 pkgdesc="PINE64 PinePhone Pro"
-pkgver=8
-pkgrel=1
+pkgver=9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -12,9 +12,11 @@ options="!check !archcheck pmb:strict"
 depends="
 	alsa-ucm-conf>=1.2.6.2
 	eg25-manager>=0.4.2
+	fwupd>=1.8.6
+	linux-firmware-brcm
+	linux-firmware-rockchip
 	linux-pine64-pinephonepro
 	postmarketos-base>=25-r1
-	fwupd>=1.8.6
 	soc-rockchip-rk3399
 	"
 makedepends="
@@ -24,7 +26,6 @@ makedepends="
 	"
 install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-gnome
 	$pkgname-openrc
 	$pkgname-sway
@@ -103,15 +104,6 @@ package() {
 
 	# Keyboard config
 	install -Dm755 "$srcdir"/ppkb.sh "$pkgdir"/etc/profile.d/ppkb.sh
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi, Bluetooth and video-out firmware"
-	depends="
-		linux-firmware-brcm
-		linux-firmware-rockchip
-		"
-	mkdir "$subpkgdir"
 }
 
 gnome() {

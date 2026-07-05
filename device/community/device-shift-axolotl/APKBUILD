@@ -4,7 +4,7 @@
 maintainer="Alexander Martinz <amartinz@shiftphones.com>"
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=23
+pkgver=24
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,12 +12,15 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf-sdm845
+	firmware-shift-sdm845>=20230815-r2
 	fwupd>=1.8.6
+	hexagonrpcd>=0.3.2-r3
 	linux-postmarketos-qcom-sdm845
 	make-dynpart-mappings
 	mkbootimg
 	postmarketos-base
 	soc-qcom
+	soc-qcom-modem
 	soc-qcom-qbootctl
 	systemd-boot
 	unl0kr-fbforcerefresh
@@ -32,10 +35,10 @@ source="
 	81-libssc-shift-axolotl.rules
 "
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
+	$pkgname-openrc
 	$pkgname-pmtest
 "
+replaces="device-shift-axolotl-nonfree-firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -43,28 +46,20 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
 
-nonfree_firmware() {
-	pkgdesc="Modem, GPU and WiFi Firmware, also needed for osk-sdl"
-	depends="
-		firmware-shift-sdm845>=20230815-r2
-		hexagonrpcd>=0.3.2-r3
-		hexagonrpcd
-		soc-qcom-modem
-	"
-
-	install -Dm644 "$srcdir"/81-libssc-shift-axolotl.rules -t "$subpkgdir"/usr/lib/udev/rules.d/
+	install -Dm644 "$srcdir"/81-libssc-shift-axolotl.rules \
+		-t "$pkgdir"/usr/lib/udev/rules.d/
 	install -Dm644 "$srcdir"/q6voiced.conf \
-		"$subpkgdir"/etc/conf.d/q6voiced
+		"$pkgdir"/etc/conf.d/q6voiced
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
-		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
 
-nonfree_firmware_openrc() {
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
+openrc() {
+	default_openrc
+	replaces="device-shift-axolotl-nonfree-firmware-openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="hexagonrpcd-openrc openrc"
+	depends="hexagonrpcd-openrc"
 
 	mkdir -p "$subpkgdir"
 }

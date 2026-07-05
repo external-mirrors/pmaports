@@ -3,7 +3,7 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=device-google-kukui
 pkgdesc="Google Kukui Chromebooks"
-pkgver=13
+pkgver=14
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,6 +12,9 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf-cros
 	depthcharge-tools
+	linux-firmware-ath10k
+	linux-firmware-mediatek
+	linux-firmware-qca
 	linux-postmarketos-mediatek-mt81
 	postmarketos-base
 	postmarketos-cros-common
@@ -19,7 +22,6 @@ depends="
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 # provides and replaces to switch old installations to this package
 provides="
@@ -65,12 +67,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-	depends="linux-firmware-ath10k linux-firmware-qca linux-firmware-mediatek"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

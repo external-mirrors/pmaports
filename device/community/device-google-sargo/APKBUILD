@@ -2,8 +2,8 @@
 maintainer="Richard Acayan <mailingradian@gmail.com>"
 pkgname=device-google-sargo
 pkgdesc="Google Pixel 3a"
-pkgver=18
-pkgrel=1
+pkgver=19
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,6 +27,7 @@ depends="
 	unl0kr-fbforcerefresh
 "
 makedepends="devicepkg-dev"
+replaces="device-google-sargo-nonfree-firmware"
 install="$pkgname-openrc.post-install"
 source="
 	81-libssc-google-sargo.rules
@@ -50,7 +51,6 @@ build() {
 }
 
 package() {
-	replaces="$pkgname-nonfree-firmware"
 	devicepkg_package $startdir $pkgname
 
 	# Sensors depend on ADSP firmware and the sensors registry served over FastRPC.

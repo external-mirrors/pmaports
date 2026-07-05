@@ -3,7 +3,7 @@
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-google-veyron
 pkgdesc="Google Veyron Chromebooks"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,11 +12,12 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf>=1.2.7.1-r0
 	depthcharge-tools
+	firmware-google-veyron-brcm
+	linux-firmware-mrvl
 	linux-google-veyron
 	postmarketos-base
 	postmarketos-cros-common
 "
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
 
@@ -45,13 +46,6 @@ replaces="
 package() {
 	devicepkg_package $startdir $pkgname
 }
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-	depends="linux-firmware-mrvl firmware-google-veyron-brcm"
-	mkdir "$subpkgdir"
-}
-
 
 sha512sums="
 aa1e5318136f26709eb978639cfe3be264c36a757e0240eeb7c450f5596fb7b1fbb3c52f73ecd3dc67d6a48d9165c1e02e4d494a3e7ec93960b45027fc24eae5  deviceinfo

@@ -2,7 +2,7 @@
 maintainer="Anjandev Momi <anjan@momi.ca>"
 pkgname=device-google-bonito
 pkgdesc="Google Pixel 3a XL"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -48,7 +48,7 @@ build() {
 }
 
 package() {
-	replaces="$pkgname-nonfree-firmware"
+	replaces="device-google-bonito-nonfree-firmware"
 	devicepkg_package $startdir $pkgname
 
 	# Sensors depend on ADSP firmware and the sensors registry served over FastRPC.

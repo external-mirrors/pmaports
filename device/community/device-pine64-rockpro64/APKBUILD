@@ -1,16 +1,23 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=device-pine64-rockpro64
-pkgver=5
+pkgver=6
 pkgrel=0
 pkgdesc="PINE64 ROCKPro64"
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base>=25-r1 linux-postmarketos-rockchip soc-rockchip-rk3399 u-boot-rockchip"
+depends="
+	firmware-pine64-rockpro64
+	linux-firmware-brcm
+	linux-firmware-rockchip
+	linux-postmarketos-rockchip
+	postmarketos-base>=25-r1
+	soc-rockchip-rk3399
+	u-boot-rockchip
+	"
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="deviceinfo kernel-cmdline.conf"
 
 build() {
@@ -19,12 +26,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Wi-Fi, Bluetooth and video-out firmware"
-	depends="firmware-pine64-rockpro64 linux-firmware-brcm linux-firmware-rockchip"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

@@ -3,7 +3,7 @@
 maintainer="WeirdTreeThing <bradyn127@protonmail.com>"
 pkgname=device-google-asurada
 pkgdesc="Google Asurada Chromebooks"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,6 +12,9 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf
 	depthcharge-tools
+	linux-firmware-mediatek
+	linux-firmware-rtl_bt
+	linux-firmware-rtw88
 	linux-postmarketos-mediatek-mt81
 	postmarketos-base
 	postmarketos-cros-common
@@ -19,7 +22,6 @@ depends="
 "
 makedepends="devicepkg-dev"
 source="deviceinfo kernel-cmdline.conf modules-initfs"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -27,12 +29,6 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/BT firmware"
-	depends="linux-firmware-mediatek linux-firmware-rtw88 linux-firmware-rtl_bt"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

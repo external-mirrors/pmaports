@@ -2,7 +2,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-enchilada
 pkgdesc="OnePlus 6"
-pkgver=27
+pkgver=28
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -40,13 +40,13 @@ subpackages="
 	$pkgname-openrc
 	$pkgname-systemd
 "
+replaces="device-oneplus-enchilada-nonfree-firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
 }
 
 package() {
-	replaces="$pkgname-nonfree-firmware"
 	devicepkg_package $startdir $pkgname
 
 	install -Dm644 "$srcdir"/q6voiced.conf \
