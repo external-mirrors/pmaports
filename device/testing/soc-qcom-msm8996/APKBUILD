@@ -1,16 +1,13 @@
 maintainer="Yassine Oudjana (Tooniis) <y.oudjana@protonmail.com>"
 pkgname=soc-qcom-msm8996
 pkgdesc="Common package for Qualcomm MSM8996 devices"
-pkgver=2
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
 options="!check !archcheck !tracedeps"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-ucm
-	"
+subpackages="$pkgname-ucm"
 
 _ucm_commit="9f2fd084eccbb01c5bffa6dbc50dcd2b116371d8"
 source="
@@ -19,12 +16,6 @@ source="
 
 package() {
 	mkdir -p "$pkgdir"
-}
-
-nonfree_firmware() {
-	pkgdesc="Non-free firmware for GPU and modem"
-	depends="linux-firmware-qcom msm-modem"
-	mkdir "$subpkgdir"
 }
 
 ucm() {
