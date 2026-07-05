@@ -45,8 +45,7 @@ pmtest() {
 
 firmware_sensors() {
 	pkgdesc="Firmware files of the sensor registry"
-	depends="$pkgname"
-	install_if="$pkgname-nonfree-firmware"
+	depends="$pkgname=$pkgver-r$pkgrel"
 	mkdir "$subpkgdir"
 
 	cd "$builddir"
