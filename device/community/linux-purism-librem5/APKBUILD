@@ -3,7 +3,7 @@
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=linux-purism-librem5
 pkgver=6.12.94
-pkgrel=0
+pkgrel=1
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 _purismrel=1
 _purismver=${pkgver}pureos$_purismrel
@@ -35,7 +35,6 @@ makedepends="
 	python3
 	zstd
 	"
-install="$pkgname.post-upgrade"
 
 # kconfig generated with: ARCH=arm64 make defconfig KBUILD_DEFCONFIG=librem5_defconfig
 _config="config-$_flavor.$arch"
@@ -91,8 +90,6 @@ package() {
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
-
-
 }
 
 sha512sums="
