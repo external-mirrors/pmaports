@@ -1,19 +1,22 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-asus-flo
-pkgver=9
+pkgver=10
 pkgrel=0
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
 arch="armv7"
 license="MIT"
-depends="postmarketos-base mkbootimg"
+depends="
+	firmware-asus-flo
+	mkbootimg
+	postmarketos-base
+"
 makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-next:kernel_next
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-udev
 "
 #	$pkgname-kernel-mainline-old:kernel_mainline_old
@@ -63,12 +66,6 @@ kernel_lts() {
 	pkgdesc="Long term support (LTS) kernel from Alpine Linux (linux-lts)"
 	depends="linux-lts"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi firmware"
-	depends="firmware-asus-flo"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
