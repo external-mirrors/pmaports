@@ -1,6 +1,6 @@
 maintainer="Nikroks <nikroks@mainlining.org>"
 pkgname=firmware-xiaomi-miatoll
-pkgver=3
+pkgver=4
 pkgrel=0
 pkgdesc="Firmware for miatoll"
 url="https://github.com/sm7125-mainline/firmware-xiaomi-miatoll"
@@ -32,8 +32,7 @@ package() {
 
 firmware_sensors() {
 	pkgdesc="Files to be included to add sensor support"
-	depends="$pkgname"
-	install_if="$pkgname-nonfree-firmware"
+	depends="$pkgname=$pkgver-r$pkgrel"
 	mkdir "$subpkgdir"
 
 	while IFS="" read -r _i || [ -n "$_i" ]; do
