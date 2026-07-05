@@ -3,24 +3,24 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=soc-qcom-sc7180
 pkgdesc="Common package for Qualcomm Snapdragon 7cx devices"
-pkgver=2
-pkgrel=5
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
+depends="rmtfs"
 options="!check !archcheck !tracedeps"
 install="
-	$pkgname-nonfree-firmware-openrc.post-install
-	$pkgname-nonfree-firmware-openrc.post-upgrade
-	$pkgname-nonfree-firmware-woa-openrc.post-install
-	$pkgname-nonfree-firmware-woa-openrc.post-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	$pkgname-woa-openrc.post-install
+	$pkgname-woa-openrc.post-upgrade
 	"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-nonfree-firmware-openrc:nonfree_firmware_openrc
-	$pkgname-nonfree-firmware-woa:nonfree_firmware_woa
-	$pkgname-nonfree-firmware-woa-openrc:nonfree_firmware_woa_openrc
+	$pkgname-openrc
 	$pkgname-vulkan
+	$pkgname-woa-openrc:woa_openrc
+	$pkgname-woa:woa
 "
 source="00-sc7180-nonstrict-iommu.sh"
 
@@ -31,36 +31,29 @@ package() {
 		-t "$pkgdir"/usr/share/mkinitfs/hooks
 }
 
-nonfree_firmware() {
-	pkgdesc="Modem, WiFi firmware"
-	depends="rmtfs"
-	mkdir "$subpkgdir"
-}
-
-nonfree_firmware_openrc() {
-	depends="openrc rmtfs-openrc"
-	install_if="$pkgname-nonfree-firmware=$pkgver-r$pkgrel openrc"
+openrc() {
+	depends="rmtfs-openrc"
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 
 	mkdir "$subpkgdir"
 }
 
-nonfree_firmware_woa() {
+woa() {
 	pkgdesc="Modem, WiFi firmware"
 	depends="
-		$pkgname-nonfree-firmware
 		pd-mapper
 		tqftpserv
 	"
 	mkdir "$subpkgdir"
 }
 
-nonfree_firmware_woa_openrc() {
+woa_openrc() {
 	depends="
-		openrc
 		pd-mapper-openrc
 		tqftpserv-openrc
 	"
-	install_if="$pkgname-nonfree-firmware-woa=$pkgver-r$pkgrel openrc"
+	install_if="$pkgname-woa=$pkgver-r$pkgrel openrc"
+
 	mkdir "$subpkgdir"
 }
 
