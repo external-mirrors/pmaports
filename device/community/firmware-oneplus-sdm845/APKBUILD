@@ -38,8 +38,7 @@ pmtest() {
 
 firmware_sensors() {
 	pkgdesc="Files to be included to add sensor support"
-	depends="$pkgname"
-	install_if="$pkgname-nonfree-firmware"
+	depends="$pkgname=$pkgver-r$pkgver"
 	mkdir "$subpkgdir"
 
 	cd "$builddir"
