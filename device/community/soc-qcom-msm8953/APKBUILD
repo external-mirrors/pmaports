@@ -2,7 +2,7 @@
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 pkgname=soc-qcom-msm8953
 pkgdesc="Common package for Qualcomm MSM8953 devices"
-pkgver=19
+pkgver=20
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -50,7 +50,8 @@ modem() {
 		tqftpserv
 	"
 
-	install -Dm644 "$srcdir"/q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$subpkgdir"/usr/share/q6voiced/
 }
 
 modem_openrc() {

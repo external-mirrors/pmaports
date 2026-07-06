@@ -1,8 +1,8 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=soc-qcom-msm8916
 pkgdesc="Common package for Qualcomm MSM8916 devices"
-pkgver=25
-pkgrel=2
+pkgver=26
+pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64 armv7"
@@ -50,7 +50,8 @@ rproc() {
 	depends="msm-modem msm-modem-uim-selection q6voiced"
 	replaces="$pkgname-modem $pkgname-rproc_none $pkgname-rproc_no_modem $pkgname-rproc_all"
 
-	install -Dm644 "$srcdir"/q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$subpkgdir"/usr/share/q6voiced/
 }
 
 rproc_openrc() {

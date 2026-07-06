@@ -4,7 +4,7 @@
 maintainer="Alexander Martinz <amartinz@shiftphones.com>"
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=24
+pkgver=25
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -50,7 +50,7 @@ package() {
 	install -Dm644 "$srcdir"/81-libssc-shift-axolotl.rules \
 		-t "$pkgdir"/usr/lib/udev/rules.d/
 	install -Dm644 "$srcdir"/q6voiced.conf \
-		"$pkgdir"/etc/conf.d/q6voiced
+		-t "$pkgdir"/usr/share/q6voiced/
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }

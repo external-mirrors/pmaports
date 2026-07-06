@@ -2,7 +2,7 @@
 maintainer="Richard Acayan <mailingradian@gmail.com>"
 pkgname=device-google-sargo
 pkgdesc="Google Pixel 3a"
-pkgver=19
+pkgver=20
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -61,7 +61,8 @@ package() {
 
 	# The q6voiced configuration can only be used if the ADSP is brought up
 	# via non-free firmware.
-	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$pkgdir"/usr/share/q6voiced/
 
 	install -Dm755 "$srcdir"/reload-rmi-touch.sh \
 		"$pkgdir"/usr/lib/$pkgname/reload-rmi-touch

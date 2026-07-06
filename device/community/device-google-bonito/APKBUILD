@@ -2,7 +2,7 @@
 maintainer="Anjandev Momi <anjan@momi.ca>"
 pkgname=device-google-bonito
 pkgdesc="Google Pixel 3a XL"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -59,7 +59,8 @@ package() {
 
 	# The q6voiced configuration can only be used if the ADSP is brought up
 	# via non-free firmware.
-	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$pkgdir"/usr/share/q6voiced/
 }
 
 kernel_sdc() {

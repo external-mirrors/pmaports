@@ -3,7 +3,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
-pkgver=27
+pkgver=28
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -52,19 +52,18 @@ package() {
 
 	install -Dm644 "$srcdir"/81-libssc-oneplus-fajita.rules \
 		-t "$pkgdir"/usr/lib/udev/rules.d/
-	install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$pkgdir"/usr/share/q6voiced/
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 	install -Dm644 "$srcdir"/80-device-oneplus-fajita.preset \
 		-t "$pkgdir"/usr/lib/systemd/system-preset
 }
 
-# Cannot use default_openrc because q6voiced uses the openrc config path,
-# even on systemd, and the default_openrc function moves that path to the
-# subpackage
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	default_openrc
 	depends="hexagonrpcd-openrc openrc"
+
 	mkdir -p "$subpkgdir"
 }
 

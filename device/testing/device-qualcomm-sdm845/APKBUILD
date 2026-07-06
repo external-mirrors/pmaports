@@ -3,7 +3,7 @@
 maintainer="Casey Connolly <casey.connolly@linaro.org>"
 pkgname=device-qualcomm-sdm845
 pkgdesc="Generic device package for Qualcomm SDM845 devices"
-pkgver=8
+pkgver=9
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -38,7 +38,8 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 
-	install -Dm644 q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+	install -Dm644 "$srcdir"/q6voiced.conf \
+		-t "$pkgdir"/usr/share/q6voiced/
 }
 
 sha512sums="

@@ -2,7 +2,7 @@
 maintainer="Joel Selvaraj <foss@joelselvaraj.com>"
 pkgname=device-xiaomi-beryllium
 pkgdesc="Xiaomi Poco F1"
-pkgver=21
+pkgver=22
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -43,7 +43,7 @@ package() {
 	devicepkg_package $startdir $pkgname
 
 	install -Dm644 "$srcdir"/q6voiced.conf \
-		"$pkgdir"/etc/conf.d/q6voiced
+		-t "$pkgdir"/usr/share/q6voiced/
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
 		"$pkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
 }
