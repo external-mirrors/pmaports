@@ -3,7 +3,7 @@ pkgname=linux-pine64-pinephonepro
 pkgver=7.0
 _pkgver=7.0
 _tagdate=20251104-2007
-pkgrel=2
+pkgrel=3
 pkgdesc="Mainline kernel for the pinephone pro"
 arch="aarch64"
 _flavor="${pkgname#linux-}"
@@ -18,6 +18,7 @@ makedepends="
 	bash
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
 	gmp-dev
@@ -28,8 +29,10 @@ makedepends="
 	mpc1-dev
 	mpfr-dev
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
+	python3
 	rsync
 	xz
 	zstd
@@ -46,13 +49,43 @@ esac
 #    git merge megi/fusb302-7.0 megi/imx258-7.0 megi/rk818-7.0 megi/rt5640-7.0 megi/rk3399-typec-7.0 megi/typec-extcon-7.0 megi/tcpm-7.0 megi/arasan-7.0 megi/ppp-7.0
 #    git cherry-pick ebc624f4    # `arm64: dts: rockchip: rk3399-s: Add DMC table `
 #    git rebase v7.0
+#    git am --ignore-whitespace <<'PATCH'
+#    From: Dummy <dummy@gmail.com>
+#    Subject: [PATCH] arm64: dts: rk3399-pinephone-pro: Keep modem regulators always-on
+#
+#    The vcc_4g and vcc_4g_5v regulators power the EG25 modem. Mark them
+#    always-on so the modem is powered at boot when using eg25-manager.
+#    ---
+#     arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 2 ++
+#     1 file changed, 2 insertions(+)
+#
+#    diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+#    --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+#    +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+#    @@ -429,6 +429,7 @@
+#            regulator-min-microvolt = <5000000>;
+#            regulator-max-microvolt = <5000000>;
+#            vin-supply = <&vcc5v0_sys>;
+#    +       regulator-always-on;
+#        };
+#
+#        vcc_4g: regulator-vcc-4g {
+#    @@ -441,6 +442,7 @@
+#            regulator-min-microvolt = <3800000>;
+#            regulator-max-microvolt = <3800000>;
+#            vin-supply = <&vcc_sys>;
+#    +       regulator-always-on;
+#        };
+#
+#        vcc1v8_codec: regulator-vcc1v8-codec {
+#    PATCH
 #
 # This reduces the massive amount of patches that megi has, down to the ones that the pinephone pro needs and also bubbles them up to be on top of whatever tag we want.
 
 # Source
 _config="config-$_flavor.$CARCH"
 source="
-	https://codeberg.org/LogicalErzor/linux/archive/ppp-megi-7.0-stripped.tar.gz
+	https://codeberg.org/LogicalErzor/linux/archive/ppp-megi-7.0-stripped-modem-fix.tar.gz
 	config-$_flavor.aarch64
 	"
 builddir="$srcdir/linux"
@@ -86,6 +119,6 @@ package() {
 
 
 sha512sums="
-60b6b72b01b4c842569655e35a826dd1249e8584b670e102ac26eea8a76bd5b8b29cc87240e30b765273d459cc2114ad6f904750245ef3d2e5f5619ea2fa340c  ppp-megi-7.0-stripped.tar.gz
-19661756049d5db085b453a3539c268ed3a6956e69cd19856f41385aa7491c19f0c11582f6168a64edfbe250746bab3f7ffa0b8f2891f9736c53136b7f272c15  config-pine64-pinephonepro.aarch64
+8a2e76553f0635d5891ae5e11219506da73893d78ce1cccf3421c0bbaf87c6caf48d927f5be7c8e2a8119e05cb9035e7b3c15bea786ff2eaeafd693b9219a428  ppp-megi-7.0-stripped-modem-fix.tar.gz
+510a18c5ef416be1eab1c93d9b62b4c3530fb666e8166d5ab3fd94998773f9d405aac4deec3be03390195ad0f1a1c5efadf19b19356332f49a6c426e95106733  config-pine64-pinephonepro.aarch64
 "
