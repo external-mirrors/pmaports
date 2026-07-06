@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=261.1
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=6
+pkgrel=7
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -374,8 +374,9 @@ udevd() {
 	# dlopened and must be explicitly listed
 	depends="kmod-libs"
 
-	# NOTE: should only be udev, but packages hardcode eudev
-	provides="eudev=$pkgver-r$pkgrel udev=$pkgver-r$pkgrel eudev-libs=$pkgver-r$pkgrel"
+	# eudev-libs: pulled in by eudev-dev makedepend and added by abuild from the
+	# .so file
+	provides="udev=$pkgver-r$pkgrel eudev-libs=$pkgver-r$pkgrel"
 
 	amove usr/bin/udevadm
 	amove usr/lib/libudev*
