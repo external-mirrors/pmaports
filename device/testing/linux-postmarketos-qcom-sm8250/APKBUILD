@@ -4,7 +4,7 @@
 maintainer="Jianhua Lu <lujianhua000@gmail.com>"
 _flavor="postmarketos-qcom-sm8250"
 pkgname=linux-$_flavor
-pkgver=7.1.0
+pkgver=7.2.0
 pkgrel=0
 pkgdesc="Mainline kernel fork for SM8250"
 arch="aarch64"
@@ -15,6 +15,7 @@ options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-nftables
 	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
 "
 makedepends="
 	bash
@@ -56,7 +57,21 @@ build() {
 package() {
 	mkdir -p "$pkgdir"/boot
 
-	make zinstall modules_install dtbs_install \
+	if [ -e "$builddir/arch/$_carch/boot/vmlinuz.efi" ]; then
+		# ZBOOT EFI decompressor for EFI booting
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+			"$pkgdir/boot/linux.efi"
+
+		# Old GZIP'd kernel image for boot.img compatibility
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
+			"$pkgdir/boot/vmlinuz"
+	else
+		echo "WARNING: CONFIG_ZBOOT not enabled!"
+		install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+			"$pkgdir/boot/vmlinuz"
+	fi
+
+	make modules_install dtbs_install \
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
@@ -70,6 +85,6 @@ package() {
 }
 
 sha512sums="
-7b1d8e4649f8c3e877c256ad5268b150274b3096f26f9c7f453166bab2f2c98a2138d1a6d8256d4e99549ed8510e77252ec053fe89497ff46ae1b68da945f6b6  linux-postmarketos-qcom-sm8250-sm8250-7.1.0.tar.gz
-bc304f311b8bfb640b2391977f2fd972616380cbbf7143d76ae343f63aa921ea4c1d15eacf2d65b176a7ffe2630bc057874b9872299dfae8d24d71b5cbe519f3  config-postmarketos-qcom-sm8250.aarch64
+26d48ebd04c43e993bd00f9c055d40daf87b4919332c974e3c0db236135b522415e3dcf4b512e4028cc42da63fe4639991c3870bcb977967846db590a0b950b7  linux-postmarketos-qcom-sm8250-sm8250-7.2.0.tar.gz
+915ffb4ebd78297bcd723649d18b195b0aa7ad012ddcb1cc8a8002513a9380750f5735f2b43e25b754327c02fad309a0582b04edb6b473fe6090401884a5d8f2  config-postmarketos-qcom-sm8250.aarch64
 "
