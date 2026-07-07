@@ -46,6 +46,12 @@ BACKLIGHT_PWM = "y"
 BACKLIGHT_CLASS_DEVICE = "y"
 BACKLIGHT_GPIO = "y"
 DRM_AMDGPU = "m"
+# Linux 7.2+ has an issue where the AMDGPU driver results in too large stack
+# frames on x86_64. In order to be able to compile the kernel, we raise the
+# limit.
+# See https://github.com/ClangBuiltLinux/linux/issues/2161
+["category:graphics".">=7.2_rc1"."x86_64"]
+FRAME_WARN = 4096
 ["category:graphics".">=0.0.0"."aarch64 armv7"]
 EXYNOS_IOMMU = "y"
 NOUVEAU_PLATFORM_DRIVER = "y"
