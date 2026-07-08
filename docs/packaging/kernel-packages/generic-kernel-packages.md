@@ -1,8 +1,8 @@
 # Generic Kernels
 
 postmarketOS includes a couple of generic kernel packages in the `main` device
-category: `linux-postmarketos-mainline`, `linux-postmarketos-stable` and
-`linux-postmarketos-lts`.
+category: `linux-postmarketos-mainline`, `linux-postmarketos-stable`,
+`linux-postmarketos-lts` and `linux-next`.
 
 These are kernels intended to work on a wide variety of devices and are the
 postmarketOS equivalents to Alpine kernels such as `linux-stable` or
@@ -115,3 +115,7 @@ kernel_mainline() {
   devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 ```
+
+The `linux-next` kernel doesn't have to be part of device packages, and is only
+intended to be enabled by device packages that want to enable it, but none of
+them have to.
