@@ -20,10 +20,9 @@ To convert an existing kernel package to use fragments:
 
 ### APKBUILD Changes
 
-Add custom `.config` fragment files to `sources=` and define which defconfig to use:
+Add custom `.config` fragment files to `sources=`:
 
 ```bash
-_defconfig="defconfig"
 sources="
     $pkgname.config
     misc.config
@@ -31,6 +30,12 @@ sources="
 ```
 
 Verify that `pmb:kconfigcheck-*` categories in the `options=` variable are correct, as these determine which `kconfigcheck.toml` sections are included.
+
+If `pmbootstrap kconfig generate` fails, this may be because the default
+`defconfig` config fragment may not be the proper config for the kernel.
+Consider adding a `_defconfig="<name of custom defconfig>"` above
+`sources=` with the name of whatever config the kernel package's source
+provides.
 
 ### Creating Custom Fragments
 
