@@ -3,7 +3,7 @@ maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 _flavor="postmarketos-qcom-msm8953"
 pkgname=linux-$_flavor
 pkgver=7.0.9
-pkgrel=0
+pkgrel=1
 pkgdesc="Close to mainline linux kernel for Qualcomm Snapdragon MSM8953"
 arch="aarch64"
 _carch="arm64"
@@ -16,11 +16,14 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -62,5 +65,5 @@ package() {
 }
 sha512sums="
 660bb93c2d19efe27a0c19a795801cbbf092f19589b96a857e320345b406a887498a0ab6b0e435b3ef5c244f5c193f82c8a61876853f3a6c1cf0932632d00c5f  linux-postmarketos-qcom-msm8953-v7.0.9-r0.tar.gz
-39da852df98ec01f7278f699f1ae49baf0a90e8acd8e9077e4902d804ccfb17d1782a5fc91e61580f4761313039b323d8b540811464718064026e192701a451e  config-postmarketos-qcom-msm8953.aarch64
+c3aeeaaa7255e50096a8cd31e0261d53b5db29ed92d0fc1756eb5ab49aff6fc56a6190aaa805d378552752bc771e6473a28f26b9c59c39dee471f9d5921f8f1b  config-postmarketos-qcom-msm8953.aarch64
 "
