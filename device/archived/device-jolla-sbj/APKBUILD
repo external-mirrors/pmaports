@@ -3,7 +3,7 @@
 maintainer=""
 pkgname=device-jolla-sbj
 pkgdesc="Jolla phone"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -32,7 +32,6 @@ source="deviceinfo
 	led-charging-sbj.sh
 	led-discharging-sbj.sh
 	pointercal
-	asound.state
 	ucm/msm8930-sitar.conf
 	ucm/HiFi.conf
 	buttons.conf
@@ -55,8 +54,6 @@ package() {
 
 	install -D -m644 "$srcdir"/pointercal \
 		"$pkgdir"/etc/pointercal
-	install -D -m644 "$srcdir"/asound.state \
-		"$pkgdir"/var/lib/alsa/asound.state
 
 	# Install triggerhappy evdev rules for sbj
 	install -Dm755 "$srcdir"/buttons.conf "$pkgdir"/etc/triggerhappy/triggers.d/buttons.conf
@@ -96,7 +93,6 @@ a8cfde9dd3bc96d990038443e8d10a551f13536f017992ae23545d2f1e09b0f729e5cfd1f94f52a2
 e6241b7cebe2f970fb6d24ecd18edc55e92e73307594e6dda985fc9b0a2f5039313bb835b7969faf1d6aba9aed2cf97d4d7f24744e5d7528d3b7402b0dd72693  led-charging-sbj.sh
 df54971314fde8e917e675b7813f208bc0e92748d177e9e07faf27c9e8d66e816de47da9a6760be0327842a9196ff563debc09a3a478485c814d7cbee3217095  led-discharging-sbj.sh
 8ebcd34d14924419f79768c7662f6f48a39bbee638ec1fd0c54d3c0490065c365e9cd670d93c97420ff954a5acb39e24949b9f926ab1f43580808b0283393018  pointercal
-4515ba1e449502e321f70de6bb69a771ccbe5d3f87777e9d91da80b9e0fb43f7198055555102e534043b0154dc8c30e942f09f3e753d0a8a5c91c6444f7d3497  asound.state
 abbf130efc767c7062ac875e3a7c1a912c3f677abdc36ef4ed4c0a8d52a3b279680ecf1124ed5bf8f14321fee30b52b19d1ad4acebefb19880991a1e136735e2  msm8930-sitar.conf
 0130ef966d66b284ad422a1d8333f7b308b9359c310db432047658906590713fea9103f422eab25c64d0d35684b4981879d08a6e64d44885c77284459683f8bd  HiFi.conf
 635565cb2caf4c17456590bf4db8903a8f8a0eeef7a643eceb3eea923908b19a0b2a0156cd62c0cd9ea4509e05e8bf08b9e0900ab1b622310f19947850dfc63d  buttons.conf
