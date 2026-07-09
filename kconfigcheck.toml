@@ -714,11 +714,11 @@ SECURITY_SELINUX_BOOTPARAM = "y"
 
 # Enforce kernel lockdown, separate from hardening to keep it opt-in for now
 ["category:lockdown".">=0.0.0"."all"]
-# NOTE: Enforcing confidentiality like this removes the ability to disable
+# NOTE: Enforcing integrity like this removes the ability to disable
 # lockdown on the cmdline. This makes it harder for attackers to disable
 # lockdown, but also makes it harder for users as well, since only a
 # rebuild of the kernel can disable it.
-LOCK_DOWN_KERNEL_FORCE_CONFIDENTIALITY = "y" 
+LOCK_DOWN_KERNEL_FORCE_INTEGRITY = "y" 
 
 # Wine / Proton support
 ["category:wine".">=6.14.0"."all"]
