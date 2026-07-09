@@ -18,11 +18,14 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	xz
@@ -72,10 +75,10 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
@@ -83,5 +86,5 @@ package() {
 
 sha512sums="
 c3e7bdd4e8cbd33282f29f0b4c11a707748f4785b9b301fcd93a1424a0989661c4499d1c8ffe15fa224175ea551a97bdddf3db7c1d7ad9b3e3a94dec0372cf37  linux-6.18.38.tar.xz
-9d018fc1cb1284251d06039e059e381410ded05ef532200faee54d8d37c8bfa1e69dc23c8d9c0119f59e484e350a496881e170dac47f44b7cbc39a106ff528a7  config-postmarketos-qcom-sc7180.aarch64
+f1384adf66493a160c609ee65c89e3e7453bdc9c03a2d988f5b1af38886949acc3ae99b27f09d8ee1bcae80a90a463247ecfbaa99e4aee8b24edced9e5e7fe1c  config-postmarketos-qcom-sc7180.aarch64
 "
