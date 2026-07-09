@@ -5,25 +5,32 @@ maintainer="Casey Connolly <kcxt@postmarketos.org>"
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=7.1_rc1
-pkgrel=2
+pkgrel=3
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
 url="https://gitlab.com/sdm845-mainline/linux"
 license="GPL-2.0-only"
-options="!check !tracedeps
+options="
+	!check
+	!strip
+	!tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-community"
+	pmb:kconfigcheck-community
+"
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
-	installkernel
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
+	postmarketos-installkernel
 	python3
 	zstd
 "
@@ -34,6 +41,8 @@ _tag="sdm845-7.1-rc1-r0"
 source="
 	linux-$_tag.tar.gz::https://gitlab.com/sdm845-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
 	config-postmarketos-qcom-sdm845.aarch64
+	libbpf-Fix-UAF-in-strset__add_str.patch
+	enable-dynamic-ftrace.patch
 "
 builddir="$srcdir/linux-$_tag"
 
@@ -83,5 +92,7 @@ package() {
 
 sha512sums="
 94da173aaf74dd33ef8ff9015e92759481cd0da5bd8a1e52c8664fd372d48a1155655001ad2e9d26557733c71ae8bc448e4ebdf1372b8f32159907a35f0306a9  linux-sdm845-7.1-rc1-r0.tar.gz
-1a06ce39a35dc9dbcae82410f71cfbc8f705411bfdd23560eabb61a44ab6ddeee7d54422e6351f0d918cce77d101b9f2d952d65dd25e29aa388b848492714ec0  config-postmarketos-qcom-sdm845.aarch64
+d330554e6e9827c15200b4e9196fbe06a117ba01cc1e8683dc8e9d2403898a4412925e92fa8c47638c184f19d968093f5c3804eca2b5fab41af0e95c495daa6e  config-postmarketos-qcom-sdm845.aarch64
+e2555390d48cbbdc32a7d3f0c27599ff88f2fe3e786d1d0086caaa5b092cc3edcb6e95e2fb07034edb3793f6dc954da0662c723202eb7e2c4956c99b50919b12  libbpf-Fix-UAF-in-strset__add_str.patch
+e8b595f3e076896dc38f249c8908d58e2e6a858eaa77fe1e680f27db0e76d3d74c0b5dfebb7a4c57d546fee0b0f6eb81a38b20dfd72f985c9d02f28d79a5eceb  enable-dynamic-ftrace.patch
 "
