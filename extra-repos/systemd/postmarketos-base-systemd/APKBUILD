@@ -49,6 +49,7 @@ install="
 	$pkgname.post-install
 	$pkgname.post-upgrade
 	$pkgname.pre-upgrade
+	$pkgname-resolved.post-install
 	"
 subpackages="
 	$pkgname-resolved
@@ -104,7 +105,6 @@ package() {
 
 resolved() {
 	install_if="$pkgname=$pkgver-r$pkgrel systemd-resolved"
-	install="$subpkgname.post-install"
 
 	amove usr/lib/systemd/resolved.conf.d/disable-dnsovertls.conf
 	amove usr/lib/systemd/resolved.conf.d/disable-mdns.conf
