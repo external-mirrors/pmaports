@@ -21,12 +21,11 @@ makedepends="
 	devicepkg-dev
 	findutils
 	flex
+	lld
+	llvm
 	openssl-dev
 	perl
 "
-
-export CC="clang"
-export HOSTCC="clang"
 
 # Source
 _repository="android_kernel_samsung_exynos9820"
@@ -49,14 +48,15 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+	# This kernel uses the integrated assembler by default,
+	# LLVM_IAS=1 is redundant
+	make O="$_outdir" ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
 package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
 }
-
 
 sha512sums="
 8ac222f644a534204fd5ea5e657991214bfc069042b48620b956ce0c249af6639b9a18c20892481c8514d2cdd3c3bd967062a4d16ba53504fd76d1227a365d44  linux-samsung-beyond2lte-downstream-7d08ec364a0659edcf90a8dae4453b21e4542311.tar.gz
