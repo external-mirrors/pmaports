@@ -8,11 +8,11 @@ Co-developed-by: Ryo Kenrie Wongso <developer@damillora.com>
 Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
 ---
  arch/arm64/boot/dts/qcom/Makefile             |    3 +-
- .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1407 +++++++++++++++++
+ .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1425 +++++++++++++++++
  .../boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts |   23 +
  .../dts/qcom/sm8250-xiaomi-pipa-tianma.dts    |   23 +
  .../boot/dts/qcom/sm8250-xiaomi-pipa.dts      |  541 -------
- 5 files changed, 1455 insertions(+), 542 deletions(-)
+ 5 files changed, 1473 insertions(+), 542 deletions(-)
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-tianma.dts
@@ -37,15 +37,14 @@ new file mode 100644
 index 000000000000..8c6672ffdd66
 --- /dev/null
 +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-@@ -0,0 +1,1407 @@
+@@ -0,0 +1,1425 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +/*
 + * Copyright (c) 2023 Luka Panio <lukapanio@gmail.com>
 + */
 +
-+/dts-v1/;
-+
 +#include <dt-bindings/arm/qcom,ids.h>
++#include <dt-bindings/input/input.h>
 +#include <dt-bindings/leds/common.h>
 +#include <dt-bindings/media/video-interfaces.h>
 +#include <dt-bindings/phy/phy.h>
@@ -162,7 +161,8 @@ index 000000000000..8c6672ffdd66
 +	gpio_keys: gpio-keys {
 +		compatible = "gpio-keys";
 +
-+		pinctrl-0 = <&hall_sensor_default>, <&vol_up_n>;
++		pinctrl-0 = <&hall_sensor_default>, <&hall_sensor_fold_default>,
++			    <&vol_up_n>;
 +		pinctrl-names = "default";
 +
 +		event-hall-sensor {
@@ -170,6 +170,16 @@ index 000000000000..8c6672ffdd66
 +			gpios = <&tlmm 110 GPIO_ACTIVE_LOW>;
 +			linux,input-type = <EV_SW>;
 +			linux,code = <SW_LID>;
++			debounce-interval = <15>;
++			linux,can-disable;
++			wakeup-source;
++		};
++
++		event-hall-sensor-fold {
++			label = "Hall Effect Sensor Fold";
++			gpios = <&tlmm 121 GPIO_ACTIVE_LOW>;
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_TABLET_MODE>;
 +			debounce-interval = <15>;
 +			linux,can-disable;
 +			wakeup-source;
@@ -1290,6 +1300,14 @@ index 000000000000..8c6672ffdd66
 +		bias-pull-up;
 +	};
 +
++	hall_sensor_fold_default: hall_sensor_fold_default-state {
++		pins = "gpio121";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-up;
++		input-enable;
++	};
++
 +	mclk0_active: mclk0_active-state {
 +		pins = "gpio94";
 +		function = "cam_mclk";
@@ -2052,4 +2070,3 @@ index 078ba13f8762..000000000000
 -};
 -- 
 2.52.0
-

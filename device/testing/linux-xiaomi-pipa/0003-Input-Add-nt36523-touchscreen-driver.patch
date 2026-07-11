@@ -78,7 +78,7 @@ new file mode 100644
 index 000000000000..83eddb597544
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.c
-@@ -0,0 +1,1933 @@
+@@ -0,0 +1,1934 @@
 +/*
 + * Copyright (C) 2010 - 2018 Novatek, Inc.
 + * Copyright (C) 2021 XiaoMi, Inc.
@@ -102,10 +102,10 @@ index 000000000000..83eddb597544
 +#include <linux/interrupt.h>
 +#include <linux/irq.h>
 +#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
 +#include <linux/proc_fs.h>
 +#include <linux/input/mt.h>
 +#include <linux/debugfs.h>
-+#include <linux/of_gpio.h>
 +#include <linux/of_irq.h>
 +
 +#include "nt36xxx.h"
@@ -730,10 +730,20 @@ index 000000000000..83eddb597544
 +	int32_t ret = 0;
 +
 +#if NVT_TOUCH_SUPPORT_HW_RST
-+	ts->reset_gpio = of_get_named_gpio_flags(np, "novatek,reset-gpio", 0, &ts->reset_flags);
++	ts->reset_gpiod = devm_gpiod_get(dev, "novatek,reset", GPIOD_ASIS);
++	if (IS_ERR(ts->reset_gpiod))
++		return dev_err_probe(dev, PTR_ERR(ts->reset_gpiod),
++				     "failed to get reset GPIO\n");
++
++	ts->reset_gpio = desc_to_gpio(ts->reset_gpiod);
 +	NVT_LOG("novatek,reset-gpio=%d\n", ts->reset_gpio);
 +#endif
-+	ts->irq_gpio = of_get_named_gpio(np, "novatek,irq-gpio", 0);
++	ts->irq_gpiod = devm_gpiod_get(dev, "novatek,irq", GPIOD_ASIS);
++	if (IS_ERR(ts->irq_gpiod))
++		return dev_err_probe(dev, PTR_ERR(ts->irq_gpiod),
++				     "failed to get irq GPIO\n");
++
++	ts->irq_gpio = desc_to_gpio(ts->irq_gpiod);
 +	NVT_LOG("novatek,irq-gpio=%d\n", ts->irq_gpio);
 +
 +	ts->pen_support = of_property_read_bool(np, "novatek,pen-support");
@@ -817,21 +827,21 @@ index 000000000000..83eddb597544
 +	int32_t ret = 0;
 +
 +#if NVT_TOUCH_SUPPORT_HW_RST
-+	/* request RST-pin (Output/High) */
-+	if (gpio_is_valid(ts->reset_gpio)) {
-+		ret = gpio_request_one(ts->reset_gpio, GPIOF_OUT_INIT_LOW, "NVT-tp-rst");
++	/* configure RST-pin (Output/Low) */
++	if (ts->reset_gpiod) {
++		ret = gpiod_direction_output(ts->reset_gpiod, 0);
 +		if (ret) {
-+			NVT_ERR("Failed to request NVT-tp-rst GPIO\n");
++			NVT_ERR("Failed to configure NVT-tp-rst GPIO\n");
 +			goto err_request_reset_gpio;
 +		}
 +	}
 +#endif
 +
-+	/* request INT-pin (Input) */
-+	if (gpio_is_valid(ts->irq_gpio)) {
-+		ret = gpio_request_one(ts->irq_gpio, GPIOF_IN, "NVT-int");
++	/* configure INT-pin (Input) */
++	if (ts->irq_gpiod) {
++		ret = gpiod_direction_input(ts->irq_gpiod);
 +		if (ret) {
-+			NVT_ERR("Failed to request NVT-int GPIO\n");
++			NVT_ERR("Failed to configure NVT-int GPIO\n");
 +			goto err_request_irq_gpio;
 +		}
 +	}
@@ -839,10 +849,7 @@ index 000000000000..83eddb597544
 +	return ret;
 +
 +err_request_irq_gpio:
-+#if NVT_TOUCH_SUPPORT_HW_RST
-+	gpio_free(ts->reset_gpio);
 +err_request_reset_gpio:
-+#endif
 +	return ret;
 +}
 +
@@ -855,12 +862,6 @@ index 000000000000..83eddb597544
 +*******************************************************/
 +static void nvt_gpio_deconfig(struct nvt_ts_data *ts)
 +{
-+	if (gpio_is_valid(ts->irq_gpio))
-+		gpio_free(ts->irq_gpio);
-+#if NVT_TOUCH_SUPPORT_HW_RST
-+	if (gpio_is_valid(ts->reset_gpio))
-+		gpio_free(ts->reset_gpio);
-+#endif
 +}
 +
 +static uint8_t nvt_fw_recovery(uint8_t *point_data)
@@ -2017,7 +2018,7 @@ new file mode 100644
 index 000000000000..beb5fc07dd6c
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.h
-@@ -0,0 +1,264 @@
+@@ -0,0 +1,266 @@
 +/*
 + * Copyright (C) 2010 - 2018 Novatek, Inc.
 + * Copyright (C) 2021 XiaoMi, Inc.
@@ -2180,8 +2181,10 @@ index 000000000000..beb5fc07dd6c
 +	uint32_t int_trigger_type;
 +	int32_t irq_gpio;
 +	uint32_t irq_flags;
++	struct gpio_desc *irq_gpiod;
 +	int32_t reset_gpio;
 +	uint32_t reset_flags;
++	struct gpio_desc *reset_gpiod;
 +	struct mutex lock;
 +	const struct nvt_ts_mem_map *mmap;
 +	uint8_t carrier_system;
@@ -3854,4 +3857,3 @@ index 000000000000..b4b6fce51a60
 +};
 -- 
 2.52.0
-

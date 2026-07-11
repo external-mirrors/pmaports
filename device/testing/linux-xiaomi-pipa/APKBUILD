@@ -1,8 +1,8 @@
 maintainer="bluebunny <bluebunny@postmarketos.org>"
 _flavor="xiaomi-pipa"
 pkgname=linux-$_flavor
-pkgver=7.0.6
-pkgrel=1
+pkgver=7.1.3
+pkgrel=0
 pkgdesc="Stable kernel for Xiaomi Pad 6"
 arch="aarch64"
 _carch="arm64"
@@ -53,10 +53,11 @@ source="
 	0006-drm-panel-Add-support-for-Novatek-NT36532-panel.patch
 	0007-drivers-media-i2c-ov13b10-add-device-tree-support-an.patch
 	0008-ASoC-qcom-sm8250-add-tertiary-tdm-support.patch
-	0009-UPSTREAM-ASoC-codecs-aw88261-backport-linux-next-cha.patch
 	0010-HACK-ASoC-codecs-aw88261-add-xiaomi-pipa-hacks.patch
 	0011-FROMLIST-ASoC-qcom-qdsp6-q6afe-fix-clk-vote-response.patch
 	0012-HACK-ASoC-qcom-qdsp6-q6afe-pretend-the-AFE-vote-didn.patch
+	0013-Input-keyboard-add-Xiaomi-Nanosic-803-keyboard.patch
+	0014-UPSTREAM-libbpf-Fix-UAF-in-strset__add_str.patch
 "
 builddir="$srcdir/linux-$pkgver"
 
@@ -87,18 +88,19 @@ package() {
 }
 
 sha512sums="
-770e2b7e5669b20c2c8d98be5333e756062e379246eb9561b5024644eecfd1ef66776e4ad813375e748be1b88493c649892afc38176c1b9bfd3b88c4e8754b29  linux-7.0.6.tar.xz
-392450ca034ebaaff4d5e86d14003ea0f5c3f162e78f908f2abcdbc9041666f16bcd6992df4c4437188a8e7c8346aa290c03c19343086513926f3be84e1f5865  config-xiaomi-pipa.aarch64
-c218e68276c1736e83a32ffdb826255cdf0732b930ee95e3c3a4343d3540808d735fbe9cb68a13d681ce88f55cd89f3c76c89da0a9925e0a43471154e34ecdcc  0001-arm64-dts-qcom-sm8250-xiaomi-pipa-Add-device-tree-fo.patch
-469bd89303e4f08d3b36a9423d7a5f05d159e5e8eefdc872d20253304ad22b669cba6f1609cda0bb9d2b3e0396f0e41995613b95d547dca4bb6c2e9d03e9243c  0002-power-supply-Add-driver-for-Qualcomm-PMIC-fuel-gauge.patch
-0be3f438f15da0ffdde0a4351c12a93e5f56db318306b4be7598d769b86dc4b9da95f663f59763017fbd96b9824ac396895d1bd3926bac15e06a30454fb06d41  0003-Input-Add-nt36523-touchscreen-driver.patch
+1c5e7e16c73f4942dcdc1783987e65351259d1f2d4ff39c91182529e2f9e689b62b3df3ec89b61514c473eb13ecb004a3825716b9c583fc41e25fc01fe569b30  linux-7.1.3.tar.xz
+5af779b8111d2c9aa703385ded71233f80eb06eab658c00705d51696270c28d53d2f1ca3de721faa7f3370ebf26ced308dfb8322b7c5c59579f9c5503e2a3e23  config-xiaomi-pipa.aarch64
+cdc7d83d87fe632a3589fdfd117a045f2da0873c1d78ed117b38649b83adee518f099f3dcf7908b1729d75535ba25a1685dc37fd1a5d14c64bbe0d41dd87a2d3  0001-arm64-dts-qcom-sm8250-xiaomi-pipa-Add-device-tree-fo.patch
+e20fa947eada70ff7a83ad76ecb0402e3a6d4b3d471066065dbe580bd45851a59006c53daf85009e59686a888b24d7f8b27595e7bb49c6f564e29ea70640893e  0002-power-supply-Add-driver-for-Qualcomm-PMIC-fuel-gauge.patch
+522af2aede3ef917035bfca7c9c24f43407118540c6bbe93bce73bce41066fe83e9f83e848264182188a5f47da2a1b94a84040f192e5af390054fced89a7e1d8  0003-Input-Add-nt36523-touchscreen-driver.patch
 6db0ea6e585e50054457b0d959efe691c7fcb6d68dc7144b456f7f04f140bd02a422008bfe40680d3d7b799d7192b007d94df97c7288644f2ffd321221d1a881  0004-drm-msm-dsi-change-sync-mode-to-sync-on-DSI0-rather-.patch
 9ac34413200b8bcb4e8d72441fff9161d0966081e817700127dc607ffcea215a689f4a482663d422b06b4e3e40aa0e11a607efad3310a31a3e81299390e83dc3  0005-drm-msm-dsi-support-DSC-configurations-with-slice_pe.patch
 cb6265f0dbb4f35753c6cda74a78bebea6aa18294175498556d2cb089ac6c5da26563bd47a50ea531a643cf967dc5bcefe341a951f7af9e2d74f5b832430b242  0006-drm-panel-Add-support-for-Novatek-NT36532-panel.patch
 d0344457908fd9626b1d5036eb096ed89c5acf2a8faed23bcbfe0af80148ce8991508dec128094e957dbc7d1d2b2701e8883912fc90b9c1fdfce398388a36008  0007-drivers-media-i2c-ov13b10-add-device-tree-support-an.patch
 c829c3b074391276d37fd738614385763b0814bde9fbc0c292eca5d2b6bf6b45e2ebfe4bf6bfad79b2e8ae532600fbeacdcb0e8777151cd5aed96a7c5f5f33c4  0008-ASoC-qcom-sm8250-add-tertiary-tdm-support.patch
-a5a53dc932e0317f9ffaf51794ed8ca5b8864c9de99b1540959d53c5d64a60c6dd08d94eb00ad7fd9c1967f6c43a8e153286260641489d6127ea99cd0044e263  0009-UPSTREAM-ASoC-codecs-aw88261-backport-linux-next-cha.patch
 f98be67fa1826cc7f29a5ab07ff6457701701a13fd563bdae1b3eac47c32e74a08be18faeae7a57d326901f4c10d98f96fc87b2db094235efdefbcd74fc58692  0010-HACK-ASoC-codecs-aw88261-add-xiaomi-pipa-hacks.patch
 5968f28d1f67a89e58c37e532ceaf400b2fbf368f495a95b12550e15e272dab5939c1bc5e3fab2d0d358792a1e8a90303970bda625ffe3026002f65b7c35dea6  0011-FROMLIST-ASoC-qcom-qdsp6-q6afe-fix-clk-vote-response.patch
 c6683c513af7a98269a7a686c6ba24ff9387c4e50968bf0de64c1f4eaa9a01b65e17318a2b9cae52085b3e4afabf47aacc4f6fa5bb1a5d12d92cff1eab7bdd65  0012-HACK-ASoC-qcom-qdsp6-q6afe-pretend-the-AFE-vote-didn.patch
+f763ecb3c565d2f5c330ad25e8193e89c1de207db8f460b71c17bb7f68e98bec3f4a22e78ac422329db33f139f0fddd0aef6ffa4f8659248c150df951c4a2f19  0013-Input-keyboard-add-Xiaomi-Nanosic-803-keyboard.patch
+b4fa58b77ea1cf16e594efaaee800ee8790cad4fbe3662bd22d5be71d8cb6fd4fe95f8c9184c0c53c42a46aa3e2999e1053f8e8b532ac1e9c7b9b0fcb674dba9  0014-UPSTREAM-libbpf-Fix-UAF-in-strset__add_str.patch
 "
