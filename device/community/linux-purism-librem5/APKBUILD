@@ -2,11 +2,12 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=linux-purism-librem5
-pkgver=6.6.139
+pkgver=6.12.94
 pkgrel=0
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 _purismrel=1
 _purismver=${pkgver}pureos$_purismrel
+_commit=db350fb91e60d12fde6bc7b1ece03836b215e444
 pkgdesc="Purism Librem 5 phone kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -21,12 +22,14 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
 	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -39,11 +42,10 @@ _config="config-$_flavor.$arch"
 
 
 source="
-	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/linux/-/archive/pureos/$_purismver/linux-pureos-$_purismver.tar.gz
+	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/linux/-/archive/pureos/$_purismver/linux-pureos$_purismver.tar.gz
 	$_config
-	treewide-remove-unnecessary-linux-version.h-inclusion.patch
 "
-builddir="$srcdir/linux-pureos-$_purismver"
+builddir="$srcdir/linux-pureos-$_purismver-$_commit"
 
 prepare() {
 	default_prepare
@@ -94,7 +96,6 @@ package() {
 }
 
 sha512sums="
-d51709ee85ac8ebe271fc57ba60e2ab5f90225bd045b813a281553b0f76ae4c227317201fbb509e59af9813ea3e49947e83ac7d82b97cede15212cadd90fc372  linux-purism-librem5-6.6.139pureos1.tar.gz
-92837e9d725d2f6e6aebfc10e79007dc671cbc57ddb10c9af91b0b666131275f0897e355c77705f2b57c4c87472f4f8264d32060765582878fde04891c49f997  config-purism-librem5.aarch64
-76c1e07b5479fe7be0d1e4a74a8f4a2cd8fc25fbeb3a4efcaf8300e27817a320c0c1340ea6c00ad1c3dd86cc2cb192280de8a91360bad80665115701ba11632d  treewide-remove-unnecessary-linux-version.h-inclusion.patch
+94050892d45a94c9e518d380e16523ada1b4af6c321cfccd42255297b06ad891eb6b3fe30235b59cd7f45401b7d7d50a11eb93d130c2f4bba38af3bd85c92d7e  linux-purism-librem5-6.12.94pureos1.tar.gz
+29d63830ef8ff73f5d76615622580a019f48e8a3f4a8a404721020ae4ff3efd8b230f61b6e9ce124134164dfe28b93a85052f2b841466d244013d0d1e02e8a24  config-purism-librem5.aarch64
 "
