@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=56
+pkgver=57
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -91,6 +91,7 @@ _source644="
 	etc/skel/.profile
 	etc/sleep-inhibitor.conf
 	etc/X11/Xwrapper.config
+	usr/lib/NetworkManager/conf.d/50-carrier-routing.conf
 	usr/lib/NetworkManager/conf.d/50-connectivity.conf
 	usr/lib/NetworkManager/conf.d/50-hostname-mode.conf
 	usr/lib/NetworkManager/conf.d/50-iwd.conf
@@ -226,7 +227,9 @@ networkmanager() {
 		networkmanager-cli
 		networkmanager-tui
 		networkmanager-wifi
-		networkmanager-wwan"
+		networkmanager-wwan
+		routewrangler"
+	amove usr/lib/NetworkManager/conf.d/50-carrier-routing.conf
 	amove usr/lib/NetworkManager/conf.d/50-hostname-mode.conf
 	amove usr/lib/NetworkManager/conf.d/50-random-mac.conf
 }
@@ -351,6 +354,7 @@ e9f6167d8e0af6d2b60dd4b95b7a58af3cb4856ea1650dc9f17d7562c603a578ea51597cd7b82401
 90b30cbea660ef6cd4c0461b6935de0cd63a84a1a40edb24348a83044c97935b974bd8bafda9cd558e92d3eb69e22c5ccf55483b80f839e24f0eb57ae2df6fe3  rootfs-etc-skel-.profile
 041e50a7f78f7f03153175027439fc203f3dc81ed9970c579a16728d36e006e77f49b0321ee4bb7bb127fa6e4c31de3e7029f80ea75c4afc83bae7d24906372d  rootfs-etc-sleep-inhibitor.conf
 cac604e25c46e695dd30bd5a10cfd2d69595fcc3bc290096ac94b76b10834d591ea6576afb79c46b5da492a1dbf8660cf87b6110cd39937e15237bc74fa7a5c6  rootfs-etc-X11-Xwrapper.config
+1d5fc7900f581067f66faf1e3534d93d0e8f0be5f26c5f40ff5b0f59b384a5e2e7e1829fe05ad1efea4768b9794a930ddacb8b5a1271c14eb0fd4e4858382c78  rootfs-usr-lib-NetworkManager-conf.d-50-carrier-routing.conf
 53a61899e0e2188e6fc6ee33c151e73078b7f6cb37d98fc820e17c75b4d2d9c0fdd6d782da896f656811f3a7c45c17216cf3fffb406bbdf639903389903f96d9  rootfs-usr-lib-NetworkManager-conf.d-50-connectivity.conf
 3c9ae7415f4891bee8595166ed6a42cb577a837f741c6b5409d193558626348b41516888a01d0c4895282c5f4e9a1ff838c19712888750b2ef68429bb4b42ee3  rootfs-usr-lib-NetworkManager-conf.d-50-hostname-mode.conf
 439615745d5be0d1ab6801cfbf960a31b12da30bf5df64ba2914ff32dae9e650595d7f96e66f5dff6308f092de1f746277ea7f4e701888a22571f7c119b7bf0d  rootfs-usr-lib-NetworkManager-conf.d-50-iwd.conf
