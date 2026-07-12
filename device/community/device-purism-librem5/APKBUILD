@@ -2,9 +2,9 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
-pkgver=13
+pkgver=14
 pkgrel=0
-_confver=69
+_confver=77
 _purismrel=2
 # <librem5-base ver>.<purism release>
 _purismver=${_confver}pureos$_purismrel
@@ -60,7 +60,6 @@ source="
 # $pkgname-openrc is out of order to allow collecting the remaining openrc
 # files using the default function
 subpackages="
-	$pkgname-gnome
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-pulseaudio
 	$pkgname-smartcard
@@ -81,12 +80,6 @@ builddir="$srcdir/librem5-base-pureos-$_purismver"
 build() {
 	mkimage -A arm64 -C none -O linux -T script -d "$srcdir/uboot-script.cmd" "$srcdir/boot.scr"
 	devicepkg_build $startdir $pkgname
-}
-
-gnome() {
-	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-base-ui-gnome"
-	install -D -m644 "$builddir"/default/org.freedesktop.ModemManager1.pkla \
-		"$subpkgdir"/var/lib/polkit-1/localauthority/10-vendor.d/org.freedesktop.ModemManager1.pkla
 }
 
 pulseaudio() {
@@ -205,7 +198,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-f7add67e644664620a06c4905cfa8834c321ee2795632a301c7ffe0b8add5ea0dda6db2765559cef92aef22ea2595b4cab0af52d89c2dc65e01148e4a74be94e  librem5-base-pureos-69pureos2.tar.gz
+ab1db95e614070eee712914b8b7f1133f4993d6ed0a9d4b88f1d87e87c024c726b6260e570211656f02712565e23ae92ad2c4708c4d0d7bd1eb30dc1443fa33c  librem5-base-pureos-77pureos2.tar.gz
 2e72d9a084ecd6c96cafbbd8fda461ae8b2ebd14ffda601d9f36d73f08f04088213de17da078293ddd958d4c76d33148c7af6e252eb0709f6934855a55578509  00-mesa.sh
 18e6bc6c214fa8c0ec74e8d6ada8df0ed5981d4c8589116e158b2432a6249fbc94899e5906b5584603c9ceab17e488ffc678b319e547fa57e798680b0fe84ee8  deviceinfo
 138ed85e6509e4611bf21a0061c312e6c2ce60f722ee9e4565d19c5f025301d4df3fa321343524219a54b20c5288dc6ed1b058ac66f4d608af22eb5bc83e84c6  modules-initfs
