@@ -344,6 +344,8 @@ only in some specific circumstances? In those situations we have to:
    packaging/device-packages
    packaging/kernel-packages
 
+   packaging/filesystem-hierarchy
+
    packaging/firmware-packages
    packaging/ui-packages
 ```
