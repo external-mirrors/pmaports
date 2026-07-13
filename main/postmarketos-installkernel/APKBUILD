@@ -2,7 +2,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=postmarketos-installkernel
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="postmarketOS script for installing mainline kernels"
 url="https://gitlab.postmarketos.org/postmarketOS/pmaports/-/tree/main/main/postmarketos-installkernel"
@@ -15,7 +15,7 @@ provides="installkernel=9999$pkgver-r$pkgver"
 
 package() {
 	install -Dm755 "$srcdir"/installkernel-pmos \
-		"$pkgdir"/usr/bin/installkernel
+		"$pkgdir"/usr/sbin/installkernel
 }
 
 sha512sums="
