@@ -1,7 +1,7 @@
 maintainer="leap123 <leap123@canaglie.org>"
 pkgname=linux-postmarketos-rockchip-rk322x
 pkgver=6.16.5
-pkgrel=0
+pkgrel=1
 pkgdesc="Rockchip RK322X kernel package"
 arch="armv7"
 _carch="arm"
@@ -10,16 +10,20 @@ url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native"
 makedepends="
-	bash
 	bc
 	bison
-	devicepkg-dev
+	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
+	lld
+	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
-	xz
+	python3
 	zstd
 "
 
@@ -70,7 +74,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" \
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
@@ -78,19 +82,20 @@ package() {
 	mkdir -p "$pkgdir"/boot
 	make zinstall modules_install dtbs_install \
 		ARCH="$_carch" \
-		INSTALL_MOD_PATH="$pkgdir" \
+		LLVM=1 \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
 
 sha512sums="
 0c08a9ac9ab69b2e7ac7c3d19807b746f706df39f5d29883d7dbf2f3d7f32f8d80611ea4168d43f3617bf203aa50e5f965b28cdb9d29d674e6a28753e948da16  linux-6.16.5.tar.xz
-7cf8b70ad3cfbf912a3327f372b8baf7d47b88d441bce16b6d95a3ccd1e82b441cf82cc7bd21f56a756833733cd44796898ee3f807e3748b04cfa67804fb67ab  config-postmarketos-rockchip-rk322x.armv7
+cf6b1302a19d1f821777efc22b4527dc2b43f0fd71b446ce52b55cc37e63cf5051c6fadec1984d62724a7d34459b4a7e50e1ddbd27e787ecc26924c0a010ec8a  config-postmarketos-rockchip-rk322x.armv7
 f5cc313109d24fac0abc3d082721af90382236754bbc00eb35a856af2422b47737d915282d6f83688df714dea10b0894d984d7e566ae0ce54badf92da254f27c  0002-rockchip-from-list.patch
 755fa2f33f8f04fcf30fb0afaeff19cdbcf97988788dc4885425c3632b4653449c442f46ad5da3fa00e5110a0e02cbf150e22c180dc708156d9f1e05fded0a46  1000-rockchip-fixes.patch
 430c063a55e327335d4a8af9a02bd2af168397cb3c6fda3ab554cd4d3caf812f36931331699789769e1e7bdd2635173fb2f6e8b0719dce81ba802bff0b7c3946  1000-drm-rockchip.patch
