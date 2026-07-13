@@ -22,6 +22,10 @@ SND_SOC_TFA989X = "m"
 ["category:audio".">=0.0.0"."aarch64"]
 SND_SOC_WCD938X_SDW = "m"
 
+["category:bluetooth".">=0.0.0"."all"]
+BT_HCIBTUSB = "m"
+BT_RFCOMM = "m"
+
 # clock controllers
 ["category:clocks".">=0.0.0"."all"]
 COMMON_CLK = "y"
@@ -36,7 +40,18 @@ SC_VIDEOCC_7180 = "m"
 SM_VIDEOCC_8250 = "m"
 SM_VIDEOCC_8350 = "m"
 
+# cryptography codecs and interfaces
+["category:crypto".">=0.0.0"."x86 x86_64"]
+CRYPTO_AES_NI_INTEL = "m"
+CRYPTO_DEV_CCP = "y"
+CRYPTO_DEV_CCP_DD = "m"
+["category:crypto"."<7.1.0"."x86_64"]
+CRYPTO_GHASH_CLMUL_NI_INTEL = "m"
+
 # ethernet controllers, etc.
+["category:ethernet".">=0.0.0"."all"]
+BT_BNEP = "m"
+IGB = "m"
 ["category:ethernet".">=7.0_rc1"."loongarch64"]
 DWMAC_MOTORCOMM = "y"
 
@@ -97,6 +112,8 @@ TOUCHSCREEN_MELFAS_MIP4 = "m"
 TOUCHSCREEN_NOVATEK_NVT_TS = "m"
 TOUCHSCREEN_S6SY761 = "m"
 TOUCHSCREEN_ZINITIX = "m"
+["category:input".">=0.0.0"."ppc64le x86 x86_64"]
+INPUT_PCSPKR = "m"
 ["category:input".">=0.0.0"."aarch64"]
 INPUT_MAX77693_HAPTIC = "m"
 SURFACE_HID = "m"
@@ -159,6 +176,7 @@ MAC80211 = "m"
 CHARGER_MAX77705 = "m"
 MFD_MAX77693 = "m"
 MFD_MAX77705 = "m"
+POWERCAP = "y"
 REGULATOR = "y"
 SPMI = "y"
 ["category:power".">=0.0.0"."aarch64"]
@@ -174,11 +192,19 @@ REGULATOR_QCOM_LABIBB = "m"
 REGULATOR_S2DOS05 = "m"
 ["category:power"."<6.19"."aarch64"]
 EC_LENOVO_YOGA_C630 = "m"
+["category:power".">=0.0.0"."x86 x86_64"]
+I2C_PIIX4 = "m"
+INTEL_RAPL = "m"
 
 # remoteproc support
 ["category:remoteproc".">=0.0.0"."all"]
 REMOTEPROC = "y"
 REMOTEPROC_CDEV = "y"
+
+# sensor hardware
+["category:sensors".">=0.0.0"."x86 x86_64"]
+GIGABYTE_WMI = "m"
+SENSORS_K10TEMP = "m"
 
 # storage devices
 ["category:storage".">=0.0.0"."all"]
@@ -188,6 +214,9 @@ NVME_CORE = "m"
 VMD = "y"
 
 # Trusted Platform Modules
+["category:tpm".">=0.0.0"."all"]
+TCG_TIS = "m"
+TCG_TPM = "y"
 ["category:tpm".">=0.0.0"."aarch64 armv7"]
 TCG_TIS_I2C = "m"
 
@@ -250,3 +279,6 @@ VIRTIO_PCI = "y"
 VSOCKETS = "m"
 ["category:virtio".">=0.0.0"."aarch64 x86 x86_64"]
 VIRTIO_IOMMU = "m"
+
+["category:watchdog".">=0.0.0"."x86 x86_64"]
+SP5100_TCO = "m"
