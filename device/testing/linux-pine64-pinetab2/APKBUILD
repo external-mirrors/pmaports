@@ -4,8 +4,8 @@
 maintainer="Dang Huynh <dang.huynh@mainlining.org>"
 pkgname=linux-pine64-pinetab2
 pkgver=7.0.12
+pkgrel=1
 _danctnix_kernel_rel=1
-pkgrel=0
 pkgdesc="Pine64 PineTab 2 mainline"
 arch="aarch64"
 _carch="arm64"
@@ -16,15 +16,19 @@ options="!strip !check !tracedeps
 	pmb:cross-native"
 depends="kmod"
 makedepends="
-	bash
 	bison
+	clang
+	elfutils-dev
 	findutils
 	flex
 	linux-headers
+	lld
+	llvm
+	pahole
 	postmarketos-installkernel
 	openssl-dev
 	perl
-	xz
+	python3
 	zstd
 "
 
@@ -35,6 +39,11 @@ source="
 	linux-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	$_tags.patch.zst::https://codeberg.org/DanctNIX/linux-pinetab2/releases/download/$_tags/$_tags.patch.zst
 	$_config
+	libbpf-Fix-UAF-in-strset__add_str.patch
+	0001-staging-bes2600-Make-bes2600_irq_handler-match-sbus_.patch
+	0002-staging-bes2600-Fix-function-signatures-not-matching.patch
+	0003-staging-bes2600-Always-initialise-ret.patch
+	0004-staging-bes2600-Fix-always-true-statement.patch
 "
 builddir="$srcdir/linux-$pkgver"
 _outdir="out"
@@ -51,28 +60,31 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
-	install -Dm644 "$builddir/arch/$_carch/boot/Image" \
-		"$pkgdir/boot/vmlinuz"
-
-	make modules_install dtbs_install \
+	make dtbs_install modules_install zinstall \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
 
 sha512sums="
 5c1df7992b8b78ba28b441a5efdb3fd8d07c2a0ce1421e42a409001dea4b8bdf1aa2bda26645439603c3a903a00d7dfa14324ad2f59f8131174c83d1a5da2f45  linux-7.0.12.tar.xz
 b24aadf37f85285edca551d1fd8625755e6db121a760143e468a48c7eb45ffbc3aeff9aea1666afc74a6e7f8ed75944a848c1f9b1ae37d2ad2b3c4412b5b0873  v7.0.12-danctnix1.patch.zst
-77b54e385f63436a6fa0a595149d626aae7026dbd748ab121bcbaa88a0e7cf156239033867d8f7acd51b42f04c6cfe9de1c20cc7f687491afe836a7b4759763f  config-pine64-pinetab2.aarch64
+efdf24b66e9bb9a7818070e14c5c3444d748f24f823ea2fdb58faec9628490f9f228d3168c87f8b6e6ba3494bf655821847c143aba8b1149e20b7aa4dcdddb99  config-pine64-pinetab2.aarch64
+e2555390d48cbbdc32a7d3f0c27599ff88f2fe3e786d1d0086caaa5b092cc3edcb6e95e2fb07034edb3793f6dc954da0662c723202eb7e2c4956c99b50919b12  libbpf-Fix-UAF-in-strset__add_str.patch
+d4cfebc1485bc8c55f3553695a1fe042e979de22a6d792b637cdc446a6b1443926ed43de981bf5e3daca044a54aa47c4b0aa42c1d83809eed7dddb7afe102e86  0001-staging-bes2600-Make-bes2600_irq_handler-match-sbus_.patch
+163233f901e3b57c93ab25c5e2f7e874a797ff3fe40fa835e550407f05007edb05f9ae8b703000cceca930e16a93b6786268e8798596283c8568f543c6f9d007  0002-staging-bes2600-Fix-function-signatures-not-matching.patch
+b46f2f726f129d239142381ed6724a9a0484a3243835c024d8276ff8c745614bc728ee370d1bd6e9d0d8049f1356e1f0c7c51fc9a86dc67469798999d20b192c  0003-staging-bes2600-Always-initialise-ret.patch
+fa65e014a316dedd2a4b8e1c54048b96e271cfcb239831bcf6b85d246ea100b3d1aa9d157345e572a3f53d353ec992ba25b6ee81ebfb36779f76ad2715b4be0d  0004-staging-bes2600-Fix-always-true-statement.patch
 "

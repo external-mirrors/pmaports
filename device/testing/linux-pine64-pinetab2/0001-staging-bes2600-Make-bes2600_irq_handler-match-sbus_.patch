@@ -1,0 +1,64 @@
+From 66cb851961f5374b8402d7ee229a1549b4d0e487 Mon Sep 17 00:00:00 2001
+From: Stefan Hansson <newbyte@postmarketos.org>
+Date: Wed, 15 Jul 2026 18:35:57 +0200
+Subject: [PATCH 1/4] staging: bes2600: Make bes2600_irq_handler match
+ sbus_irq_handler
+
+Otherwise it fails as such with LLVM:
+
+drivers/staging/bes2600/main.c:718:10: error: cast from 'void (*)(struct bes2600_common *)' to 'sbus_irq_handler' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+  718 |                 (sbus_irq_handler)bes2600_irq_handler, hw_priv);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Stefan Hansson <newbyte@postmarketos.org>
+---
+ drivers/staging/bes2600/bh.c   | 4 +++-
+ drivers/staging/bes2600/bh.h   | 2 +-
+ drivers/staging/bes2600/sbus.h | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/bes2600/bh.c b/drivers/staging/bes2600/bh.c
+index 175ab5e39291..ef6b2875e411 100644
+--- a/drivers/staging/bes2600/bh.c
++++ b/drivers/staging/bes2600/bh.c
+@@ -113,8 +113,10 @@ void bes2600_unregister_bh(struct bes2600_common *hw_priv)
+ 	bes_devel("[BH] unregistered.\n");
+ }
+ 
+-void bes2600_irq_handler(struct bes2600_common *hw_priv)
++void bes2600_irq_handler(void *priv)
+ {
++	struct bes2600_common *hw_priv = priv;
++
+ 	bes_devel("[BH] irq.\n");
+ 	if(!hw_priv) {
+ 		bes_warn("%s hw private data is null\n", __func__);
+diff --git a/drivers/staging/bes2600/bh.h b/drivers/staging/bes2600/bh.h
+index 7be82dc58975..58de02f41bb2 100644
+--- a/drivers/staging/bes2600/bh.h
++++ b/drivers/staging/bes2600/bh.h
+@@ -26,7 +26,7 @@
+ 
+ int bes2600_register_bh(struct bes2600_common *hw_priv);
+ void bes2600_unregister_bh(struct bes2600_common *hw_priv);
+-void bes2600_irq_handler(struct bes2600_common *hw_priv);
++void bes2600_irq_handler(void *hw_priv);
+ void bes2600_bh_wakeup(struct bes2600_common *hw_priv);
+ int bes2600_bh_suspend(struct bes2600_common *hw_priv);
+ int bes2600_bh_resume(struct bes2600_common *hw_priv);
+diff --git a/drivers/staging/bes2600/sbus.h b/drivers/staging/bes2600/sbus.h
+index 1f2c0cda73de..50479d93a4aa 100644
+--- a/drivers/staging/bes2600/sbus.h
++++ b/drivers/staging/bes2600/sbus.h
+@@ -77,7 +77,7 @@ struct sbus_ops {
+ 	int (*reboot)(struct sbus_priv *self);
+ };
+ 
+-void bes2600_irq_handler(struct bes2600_common *priv);
++void bes2600_irq_handler(void *priv);
+ 
+ /* This MUST be wrapped with hwbus_ops->lock/unlock! */
+ int __bes2600_irq_enable(int enable);
+-- 
+2.52.0
+

@@ -1,0 +1,29 @@
+From d52ea8f0526630eddb99541c5c742f4279b65198 Mon Sep 17 00:00:00 2001
+From: Stefan Hansson <newbyte@postmarketos.org>
+Date: Wed, 15 Jul 2026 18:42:33 +0200
+Subject: [PATCH 3/4] staging: bes2600: Always initialise ret
+
+Otherwise LLVM rightly complains that it may be used while
+uninitialised.
+
+Signed-off-by: Stefan Hansson <newbyte@postmarketos.org>
+---
+ drivers/staging/bes2600/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/bes2600/main.c b/drivers/staging/bes2600/main.c
+index 7cbb3a9f7a15..8c4dae9274fe 100644
+--- a/drivers/staging/bes2600/main.c
++++ b/drivers/staging/bes2600/main.c
+@@ -837,7 +837,7 @@ int bes2600_wifi_start(struct bes2600_common *hw_priv)
+ 
+ int bes2600_wifi_stop(struct bes2600_common *hw_priv)
+ {
+-	int ret;
++	int ret = 0;
+ 	unsigned long status = 0;
+ 
+ 	status = wait_event_timeout(hw_priv->bh_evt_wq, (!hw_priv->hw_bufs_used), 3 * HZ);
+-- 
+2.52.0
+
