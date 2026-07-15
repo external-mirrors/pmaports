@@ -1,4 +1,3 @@
-
 maintainer="Nikroks <nikroks@mainlining.org>"
 _flavor="postmarketos-qcom-sm7125"
 pkgname=linux-$_flavor
@@ -9,24 +8,33 @@ arch="aarch64"
 _carch="arm64"
 url="https://github.com/sm7125-mainline/linux"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps
+options="
+	!check
+	!strip
+	!tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-nftables
 	"
 makedepends="
 	bison
+	clang
+	elfutils-dev
 	findutils
 	flex
-	postmarketos-installkernel
+	linux-headers
+	lld
+	llvm
 	openssl-dev
+	pahole
 	perl
+	postmarketos-installkernel
 	python3
 	"
 
 _tag="sm7125-$pkgver"
 
 source="
-	linux-$_tag.tar.gz::$url/archive/$_tag/linux-$_tag.tar.gz
+	linux-$_tag.tar.gz::https://github.com/sm7125-mainline/linux/archive/$_tag/linux-$_tag.tar.gz
 	config-$_flavor.$arch
 "
 builddir="$srcdir/linux-$_tag"
@@ -38,26 +46,26 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
 	mkdir -p "$pkgdir"/boot
-	make zinstall modules_install dtbs_install \
+	make dtbs_install modules_install zinstall \
 		ARCH="$_carch" \
+		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
-
 
 sha512sums="
 11c619335ee39c73f7a67d890f3fa1e4b80836e0223bb406f82dec1c81e154384b6093af48ce280e51d4927b14cf0f8f2736cb49ea56fd751981ac6b3c693d37  linux-sm7125-6.14.7.tar.gz
-efde0578e85dff8f09704c9dde7c35b8482c4429ade475eb0774a10062d7424de61920b42143daea76c8df732d8830bde168d98c9cf9652ec70dfb0bb63ec932  config-postmarketos-qcom-sm7125.aarch64
+b9b4882769cd35d0db7ebdbe5cf4ed436343fdb3a2903b3d40c31429e3542f19e5e2fe308b9bf46e606c2d2331f3e37eca2f9b56f1f9f2823459fb6b3eac3d00  config-postmarketos-qcom-sm7125.aarch64
 "
