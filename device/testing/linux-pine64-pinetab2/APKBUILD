@@ -40,11 +40,11 @@ builddir="$srcdir/linux-$pkgver"
 _outdir="out"
 
 prepare() {
-	default_prepare
-
 	# Decrunch the patch file and apply it to the tree
 	zstd -d "$(readlink $srcdir/$_tags.patch.zst)" -o "$srcdir/$_tags.patch"
 	patch -p1 -i "$srcdir/$_tags.patch"
+
+	default_prepare
 
 	cp "$srcdir/config-$_flavor.$CARCH" .config
 }
