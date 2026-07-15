@@ -1,7 +1,7 @@
 maintainer="faveoled <faveoled@yandex.com>"
 pkgname=linux-postmarketos-rockchip-rk3188
 pkgver=6.16.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Rockchip RK3188 kernel package"
 arch="armv7"
 _carch="arm"
@@ -10,16 +10,20 @@ url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native"
 makedepends="
-	bash
 	bc
 	bison
-	devicepkg-dev
+	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
+	lld
+	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
-	xz
+	python3
 	zstd
 "
 
@@ -44,26 +48,27 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" \
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
 	mkdir -p "$pkgdir"/boot
-	make zinstall modules_install dtbs_install \
+	make dtbs_install modules_install zinstall \
 		ARCH="$_carch" \
-		INSTALL_MOD_PATH="$pkgdir" \
+		LLVM=1 \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
 
 sha512sums="
 55a00f89ad6db6db2e26ff5dc5cfc96bbf6654e5bd5d17d2a3b944a47640367e54139716d230923187bebc6cb7756edc9511a620fb8abc6f32c50a658a734784  linux-6.16.tar.xz
 e7a71cf0e8f48a1e7819677610f5d0db9d6c97cf7374e4d62e2a55fb811984d9f741e11e6f27af16d5babeda6776cb34f02e7645dbf764ed244c17e5c1f8f2bd  0001-Starway-Andromeda-S8-DTS.patch
-0ca0317d9427b6182e7874535a77584941cffa7bb10e4e5bf5c7328eb47a3847cb9ba82b633eb7dc78efbf9593e8a407a66cd0e0bf1edec6d81674b95496229c  config-postmarketos-rockchip-rk3188.armv7
+6b1bb9b611529332ede9d3c7e991c9cdd53df39592457e7bcbd921bb79b56e5d48bb453d93518aee624a22ac2820bc4128fd03d3531d8cf7a22265679da2ccea  config-postmarketos-rockchip-rk3188.armv7
 "
