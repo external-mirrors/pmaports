@@ -6,9 +6,11 @@ deviceinfo_name="Google Nexus 7 2013"
 deviceinfo_manufacturer="Asus"
 deviceinfo_codename="asus-flo"
 deviceinfo_year="2013"
+deviceinfo_arch="armv7"
+
 deviceinfo_chassis="tablet"
 deviceinfo_flash_method="fastboot"
-deviceinfo_arch="armv7"
+deviceinfo_dtb="qcom-apq8064-asus-nexus7-flo"
 deviceinfo_drm="true"
 
 # Splash screen
@@ -16,11 +18,17 @@ deviceinfo_dev_touchscreen="/dev/input/event1"
 deviceinfo_screen_width="1200"
 deviceinfo_screen_height="1920"
 
-# Fastboot related
-deviceinfo_generate_bootimg="true"
+# lk2nd related
+deviceinfo_partition_type="msdos"
+deviceinfo_generate_extlinux_config="true"
+deviceinfo_boot_filesystem="ext2"
+
+# Netbooting related
+deviceinfo_append_dtb="true"
 deviceinfo_flash_offset_base="0x80200000"
 deviceinfo_flash_offset_kernel="0x00008000"
-deviceinfo_flash_offset_ramdisk="0x02000000"
+deviceinfo_flash_offset_ramdisk="0x04000000"
 deviceinfo_flash_offset_second="0x00f00000"
 deviceinfo_flash_offset_tags="0x00000100"
 deviceinfo_flash_pagesize="2048"
+deviceinfo_generate_bootimg="true"
