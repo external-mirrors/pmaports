@@ -8,7 +8,7 @@ cross-gcc-tests:
     - su pmos -c "pmbootstrap build gcc-aarch64"
     - su pmos -c "pmbootstrap build --arch=aarch64 hello-world --force"
     - su pmos -c "pmbootstrap build --arch=aarch64 iskey --force"
-    - su pmos -c "pmbootstrap build --arch=aarch64 pbsplash --force"
+    - su pmos -c "pmbootstrap build --arch=aarch64 mkbootimg-osm0sis --force"
     - su pmos -c "pmbootstrap build --arch=aarch64 gcc-x86_64"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
