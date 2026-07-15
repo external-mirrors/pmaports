@@ -112,23 +112,27 @@ PSI_DEFAULT_DISABLED = "n"
 UDMABUF = "y"
 ["category:default".">=5.14.0"."all"]
 # systemd (kernel version is "recommended baseline")
+IPC_NS = "y"
+NET_NS = "y"
+PID_NS = "y"
+USER_NS = "y"
+UTS_NS = "y"
+# DEBUG_INFO_DWARF5 conflicts with DEBUG_INFO_BTF on kernel versions lower
+# than 5.18.0. Just disable BTF entirely for such old kernels to not deal
+# with debugging DWARF4.
+["category:default".">=5.18.0"."all"]
 BPF = "y"
 BPF_JIT = "y"
 BPF_LSM = "y"
-IPC_NS = "y"
-KPROBES = "y"
-KPROBE_EVENTS = "y"
-NET_NS = "y"
-PID_NS = "y"
-SECURITY = "y"
-SECURITYFS = "y"
-SECURITY_PATH = "y"
-USER_NS = "y"
-UTS_NS = "y"
 DEBUG_INFO_BTF = "y"
 DEBUG_INFO_BTF_MODULES = "y"
 DEBUG_INFO_DWARF5 = "y"
 DEBUG_INFO_REDUCED = "n"
+KPROBE_EVENTS = "y"
+KPROBES = "y"
+SECURITY = "y"
+SECURITYFS = "y"
+SECURITY_PATH = "y"
 ["category:default".">=5.14.0"."loongarch64 ppc64le x86 x86_64"]
 # ARM and riscv64 lack CFI+dynamic ftrace support, see:
 # https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4411#note_544158
