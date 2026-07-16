@@ -2,13 +2,14 @@
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-asus-flo
 pkgver=12
-pkgrel=0
+pkgrel=1
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
 arch="armv7"
 license="MIT"
 depends="
 	firmware-asus-flo
+	firmware-qcom-adreno-a300
 	lk2nd-msm8960
 	mkbootimg
 	postmarketos-base
@@ -23,6 +24,7 @@ subpackages="
 "
 #	$pkgname-kernel-mainline-old:kernel_mainline_old
 source="
+	30-gpu-a300-firmware.files
 	90-android-touch-dev.rules
 	deviceinfo
 	kernel-cmdline-workaround.conf
@@ -45,6 +47,8 @@ package() {
 	# Must sort before 00-base.conf
 	install -D -m644 "$srcdir/kernel-cmdline-workaround.conf" \
 		"$pkgdir/usr/lib/kernel-cmdline.d/00-aaa-$pkgname-workaround.conf"
+	install -Dm644 "$srcdir"/30-gpu-a300-firmware.files \
+		-t "$pkgdir"/usr/share/mkinitfs/files/
 	install -D -m644 "$srcdir"/90-android-touch-dev.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/90-android-touch-dev.rules
 	install -D -m644 "$srcdir"/pointercal \
@@ -84,6 +88,7 @@ kernel_lts() {
 }
 
 sha512sums="
+abdf455858f019143c7babcbb80a9898b1640512277afcddac73ce6b22a967f368d109eb5b9ddebb4540f312983ca48143ae70f802acc9580382127b025f9d2a  30-gpu-a300-firmware.files
 5ac89b627f52d2f1103c3329bd905cdbb906cae5bb332d52e6805d7971fbcc0faabe1fd9d2beb7c6de4e4487c05047eaa17852dbf9e114ee3c5d4b0d57d73859  90-android-touch-dev.rules
 70d0fb5192772c597968e1609ccf86b0d5290fb27b40a5f6dbaa6481b26b3846fb682c4302748dc821f12c9e55d98d3a0dc170db703265dc0faae53f34179d35  deviceinfo
 ebc11da9dbafca1b7052ff58d1782e9e48508e3f338656e817f42e6da40cbed198ee9ec3093909012733b82ca26b0f9b07e3f1aea63500a90855823aa31ee465  kernel-cmdline-workaround.conf
