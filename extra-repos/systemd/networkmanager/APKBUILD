@@ -2,9 +2,9 @@
 # integrates with logind for sleepmonitor and sessionmonitor.
 maintainer=""
 pkgname=networkmanager
-_pkgver=1.52.2
+_pkgver=1.56.1
 pkgver=9999$_pkgver
-pkgrel=2
+pkgrel=1
 pkgdesc="Network Management daemon"
 url="https://wiki.gnome.org/Projects/NetworkManager"
 # armhf: pmb#2618
@@ -60,6 +60,7 @@ subpackages="
 	$pkgname-dbg
 	libnm
 	$pkgname-dev
+	$pkgname-doc
 	$pkgname-lang
 	$pkgname-systemd
 	$pkgname-adsl
@@ -78,6 +79,7 @@ source="$pkgname-$_pkgver.tar.gz::https://github.com/NetworkManager/NetworkManag
 	$pkgname.conf
 	$pkgname.rules
 	0001-hack-wifi-Disable-WPA-PSK-SHA256-for-brcmfmac-in-AP-.patch
+	2469.patch
 	"
 builddir="$srcdir/NetworkManager-$_pkgver"
 
@@ -239,8 +241,9 @@ _default_plugin() {
 }
 
 sha512sums="
-5683a4a4aaf2410dde2c93c38bbea45cdf1f82a4fe49c3582e9a4b2d62718b38fa4934ca92ad95611d52bdf2034f105ca11841fea375f392954e402a4381eb77  networkmanager-1.52.2.tar.gz
+4c1e3c2d701a2d1239be72f4923479d542ed5c8467661cd900595a56501468d22ef129c06005e5937cd5d2b0927c46996653f87a4ac4aa1ccc57caf617425711  networkmanager-1.56.1.tar.gz
 0f79016bf717dea43830962f524deae8d1cedc274376e40bd912ebe63208c5b1c3b7a5aa14379da19020c587dbd5588df2f0066ca1540070a226983a43e4159b  networkmanager.conf
 9820ed2ead0af689644842de57657bb10330a1eaff0e85b21ae9913f55e399e47d8b41b0a12956f30de80272b4424c6e55f33acbc88e156879003a260bf576f6  networkmanager.rules
 d1d23a2409f325814b2e361b886217efc0140af152723dfc5d049b1b6880ccc104d5c117d52fed6d0d87f46a1d477376592ba58531d383d9590cdf6af0b2b5f9  0001-hack-wifi-Disable-WPA-PSK-SHA256-for-brcmfmac-in-AP-.patch
+cea8057ffec270eb25a37f00c142c76f69da062a8ab5fb40691ed14f85056c0d0b4a45adf900ddac25b518cb7e2a60c5c990c5860d9a8743d02713eee6facf28  2469.patch
 "
