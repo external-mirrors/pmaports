@@ -64,6 +64,11 @@ VIDEO_OV8856 = "m"
 This would result in `CONFIG_VIDEO_OV8856=m` being set for all generic kernels
 newer than 6.12-rc1 and enable it on all architectures.
 
+If a lot of unrelated configs are being changed, make sure to split the
+changes into separate GitLab MRs according to what they are for. For
+example: don't combine enabling a WiFi driver for a device with also
+enabling generic cryptography configs.
+
 You can submit your change in a GitLab MR for the generic kernel maintainers to
 review. Please do **not** regenerate the kernel configurations; your change
 will be included as part of the next kernel upgrade. Rebuilds of the kernel
