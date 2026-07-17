@@ -912,3 +912,19 @@ diff -Naur a/drivers/input/keyboard/nanosic_803.c b/drivers/input/keyboard/nanos
 +MODULE_AUTHOR("Luka Panio <lukapanio@gmail.com>");
 +MODULE_DESCRIPTION("Driver for nanosic 803 keyboard controller");
 +MODULE_LICENSE("GPL v2");
+--- a/drivers/input/keyboard/nanosic_803.c
++++ b/drivers/input/keyboard/nanosic_803.c
+@@ -342,2 +342,11 @@
+-	for (int i = 0; i < KEY_MAX; i++)
+-		set_bit(i, keyboard_input_dev->keybit);
++	/* Only advertise the keycodes this driver can actually emit.
++	 * Setting every KEY_ and BTN_ bit makes udev's input_id builtin tag the
++	 * device as ID_INPUT_MOUSE and ID_INPUT_POINTINGSTICK in addition to
++	 * ID_INPUT_KEYBOARD, which confuses userspace, e.g. unl0kr in the
++	 * initramfs classifies the keyboard as a mouse and discards all
++	 * printable key presses. */
++	for (int i = 0; i < ARRAY_SIZE(hid_to_linux_keycode); i++)
++		if (hid_to_linux_keycode[i])
++			set_bit(hid_to_linux_keycode[i], keyboard_input_dev->keybit);
++	for (int i = 0; i < ARRAY_SIZE(hid_modifier_to_linux_keycode); i++)
++		set_bit(hid_modifier_to_linux_keycode[i], keyboard_input_dev->keybit);
