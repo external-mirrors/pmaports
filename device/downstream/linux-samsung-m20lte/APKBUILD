@@ -4,7 +4,7 @@
 maintainer="Diego Stocco <diegostocco.2008@gmail.com>"
 pkgname=linux-samsung-m20lte
 pkgver=4.4.177
-pkgrel=1
+pkgrel=2
 _commit="339a04eabab9310ad9f6039831f6834d7f9d3c2b"
 pkgdesc="Samsung Galaxy M20 kernel fork"
 arch="aarch64"
@@ -20,6 +20,7 @@ makedepends="
 	dtbtool-exynos
 	findutils
 	flex
+	gcc6
 	openssl-dev
 	perl
 "
@@ -39,6 +40,13 @@ options="!check !strip !tracedeps pmb:cross-native"
 builddir="$srcdir/android_kernel_samsung_universal7904-$_commit"
 _outdir="out"
 
+# Compiler: GCC 6 (not tested with LLVM)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
 prepare() {
 	default_prepare
 	. downstreamkernel_prepare
@@ -46,7 +54,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+	make O="$_outdir" ARCH="$_carch" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 
 	# deviceinfo_bootimg_qcdt
@@ -75,7 +83,7 @@ package() {
 
 sha512sums="
 663f7cff6dee546104a34f38ba27f89211ef40514e4ebdf63d4bc60a523f31d831e349060b70cc407498a33044ced3d0e806b8325c07f7b5a3b829d610bef490  linux-samsung-m20lte-339a04eabab9310ad9f6039831f6834d7f9d3c2b.tar.gz
-93c5aa1ad25a32a11aaba114ad16dc4a31595b8466594c3c76ae362db590a8b0c0f5d0a160b242fe5275052e9e9b26fa1367959441065e7127c325a5dc19367a  config-samsung-m20lte.aarch64
+9e845c05b97670855eea16b85241948b1c94625cb38af32e2001f72acac6c68cb97ddc845449cf8d22886c2a93ad26d749089df317bbad17cb49ec24ebdb0e31  config-samsung-m20lte.aarch64
 4bff19e4711dc5363520ae2d5f165e82d9588d51858a3f1ea48f77fde5a1674ee23bbed8a270a11ec48c0877d27cc28a393ba58ba87f8f2c97fd6abe8495efc3  cross-compile.patch
 182be3c596b9cc267ac108d7cf03fc8c328ccc6b36770800e4dcedea8d1bb65e3f5eacf590c2948f58b1418cc60a1670ba77dde8c259e428d158c31b6e1dbaf5  fix-check-lxdialog.patch
 2038a0e7b3a076e83e4a8fa2e5d35650c52f947985ca58310aaf94211756eef1635bb3c8e047a77ecc0a69de55f49be37081bfd570e49031b2397a9d6de87285  fix-scsc-kconfig.patch
