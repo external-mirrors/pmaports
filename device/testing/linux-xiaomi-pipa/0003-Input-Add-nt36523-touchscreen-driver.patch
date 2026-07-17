@@ -78,7 +78,7 @@ new file mode 100644
 index 000000000000..83eddb597544
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.c
-@@ -0,0 +1,1934 @@
+@@ -0,0 +1,1977 @@
 +/*
 + * Copyright (C) 2010 - 2018 Novatek, Inc.
 + * Copyright (C) 2021 XiaoMi, Inc.
@@ -106,9 +106,13 @@ index 000000000000..83eddb597544
 +#include <linux/proc_fs.h>
 +#include <linux/input/mt.h>
 +#include <linux/debugfs.h>
++#include <linux/notifier.h>
 +#include <linux/of_irq.h>
 +
 +#include "nt36xxx.h"
++
++extern int pen_charge_state_notifier_register_client(struct notifier_block *nb);
++extern int pen_charge_state_notifier_unregister_client(struct notifier_block *nb);
 +
 +#if NVT_TOUCH_ESD_PROTECT
 +#include <linux/jiffies.h>
@@ -1216,6 +1220,30 @@ index 000000000000..83eddb597544
 +	}
 +}
 +
++static void nvt_pen_charge_state_change_work(struct work_struct *work)
++{
++	struct nvt_ts_data *ts = container_of(work, struct nvt_ts_data,
++					     pen_charge_state_change_work);
++
++	mutex_lock(&ts->lock);
++	disable_pen_input_device(false);
++	mutex_unlock(&ts->lock);
++}
++
++static int nvt_pen_charge_state_notifier_call(struct notifier_block *nb,
++					      unsigned long val, void *v)
++{
++	struct nvt_ts_data *ts = container_of(nb, struct nvt_ts_data,
++					     pen_charge_state_notifier);
++
++	ts->pen_is_charge = !!val;
++	NVT_LOG("pen charge state changed: %s\n",
++		ts->pen_is_charge ? "charging" : "not charging");
++	schedule_work(&ts->pen_charge_state_change_work);
++
++	return NOTIFY_OK;
++}
++
 +int32_t disable_pen_input_device(bool disable) {
 +	uint8_t buf[8] = {0};
 +	int32_t ret = 0;
@@ -1577,6 +1605,13 @@ index 000000000000..83eddb597544
 +	}
 +	INIT_WORK(&ts->resume_work, nvt_resume_work);
 +	INIT_WORK(&ts->suspend_work, nvt_suspend_work);
++	INIT_WORK(&ts->pen_charge_state_change_work, nvt_pen_charge_state_change_work);
++	ts->pen_charge_state_notifier.notifier_call = nvt_pen_charge_state_notifier_call;
++	ret = pen_charge_state_notifier_register_client(&ts->pen_charge_state_notifier);
++	if (ret) {
++		NVT_ERR("register pen charge notifier failed. ret=%d\n", ret);
++		goto err_register_pen_charge_notifier_failed;
++	}
 +
 +	bTouchIsAwake = 1;
 +	NVT_LOG("end\n");
@@ -1585,6 +1620,11 @@ index 000000000000..83eddb597544
 +
 +	return 0;
 +
++err_register_pen_charge_notifier_failed:
++	if (ts->event_wq) {
++		destroy_workqueue(ts->event_wq);
++		ts->event_wq = NULL;
++	}
 +err_alloc_work_thread_failed:
 +
 +#if NVT_TOUCH_ESD_PROTECT
@@ -1662,6 +1702,9 @@ index 000000000000..83eddb597544
 +static void nvt_ts_remove(struct spi_device *client)
 +{
 +	NVT_LOG("Removing driver...\n");
++
++	pen_charge_state_notifier_unregister_client(&ts->pen_charge_state_notifier);
++	cancel_work_sync(&ts->pen_charge_state_change_work);
 +
 +#if NVT_TOUCH_ESD_PROTECT
 +	if (nvt_esd_check_wq) {
@@ -2018,7 +2061,7 @@ new file mode 100644
 index 000000000000..beb5fc07dd6c
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.h
-@@ -0,0 +1,266 @@
+@@ -0,0 +1,267 @@
 +/*
 + * Copyright (C) 2010 - 2018 Novatek, Inc.
 + * Copyright (C) 2021 XiaoMi, Inc.
@@ -2043,6 +2086,7 @@ index 000000000000..beb5fc07dd6c
 +#include <drm/drm_panel.h>
 +#include <linux/delay.h>
 +#include <linux/input.h>
++#include <linux/notifier.h>
 +#include <linux/of.h>
 +#include <linux/spi/spi.h>
 +#include <linux/uaccess.h>

@@ -58,7 +58,7 @@ power: supply: qcom_pm8150b_charger: adds charging control to pm8150b_charger
  drivers/power/supply/Kconfig                |   17 +
  drivers/power/supply/Makefile               |    2 +
  drivers/power/supply/power_supply_sysfs.c   |    1 +
- drivers/power/supply/qcom_fg.c              | 1365 +++++++++++++++++++
+ drivers/power/supply/qcom_fg.c              | 1371 +++++++++++++++++++
  drivers/power/supply/qcom_pm8150b_charger.c |  964 +++++++++++++
  include/linux/power_supply.h                |    1 +
  7 files changed, 2390 insertions(+)
@@ -192,7 +192,7 @@ new file mode 100644
 index 000000000000..921ef52fcc60
 --- /dev/null
 +++ b/drivers/power/supply/qcom_fg.c
-@@ -0,0 +1,1365 @@
+@@ -0,0 +1,1371 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (c) 2020, The Linux Foundation. All rights reserved. */
 +
@@ -913,6 +913,12 @@ index 000000000000..921ef52fcc60
 +	temp = (s16)(readval[1] << 8 | readval[0]);
 +	*val = div_s64((s64)temp * 488281, 1000);
 +
++	/*
++	 * The power supply API expects charging batteries to report a
++	 * positive current, which is inverted from what the PMIC reports.
++	 */
++	*val = -*val;
++
 +	return 0;
 +}
 +
@@ -1100,9 +1106,9 @@ index 000000000000..921ef52fcc60
 +				val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
 +				break;
 +			}
-+			if (temp < 0)
++			if (temp > 0)
 +				val->intval = POWER_SUPPLY_STATUS_CHARGING;
-+			else if (temp > 0)
++			else if (temp < 0)
 +				val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
 +			else
 +				val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
