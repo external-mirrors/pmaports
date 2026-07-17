@@ -1,7 +1,7 @@
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=device-sqfmi-beepy
 pkgdesc="SQFMI Beepy"
-pkgver=6
+pkgver=7
 pkgrel=0
 
 _kbdmodname=beepy-kbd
@@ -63,7 +63,7 @@ prepare() {
 	built_modules=$_dispmodname.ko
 
 	build() {
-		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
+		KERNELRELEASE=\$(find /usr/lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
 	}
 	EOF
 
@@ -74,7 +74,7 @@ prepare() {
 	built_modules=$_kbdmodname.ko
 
 	build() {
-		KERNELRELEASE=\$(find /lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
+		KERNELRELEASE=\$(find /usr/lib/modules -type d -iname '*-rpi' -mindepth 1 -maxdepth 1 -exec basename {} \;|sort|tail -n1) make
 	}
 	EOF
 }
@@ -116,7 +116,7 @@ package() {
 	cp -r $_dispdir/src $_dispdir/sharp-drm.dts "$dispdestdir"
 
 	# install symbol-overlay
-	install -Dm755 $_overlaydir/symbol-overlay "$pkgdir"/sbin/symbol-overlay
+	install -Dm755 $_overlaydir/symbol-overlay "$pkgdir"/usr/sbin/symbol-overlay
 }
 
 modules() {
@@ -129,7 +129,7 @@ modules() {
 
 overlay() {
 	install_if="$pkgname=$pkgver-r$pkgrel"
-	amove sbin/symbol-overlay
+	amove usr/sbin/symbol-overlay
 }
 
 openrc() {
