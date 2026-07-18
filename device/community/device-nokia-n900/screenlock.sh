@@ -23,18 +23,18 @@ kbd_backlight() {
 
 x11_unlock() {
 	export DISPLAY=:0
-	xautolock -enable
-	xset dpms force on
 	xset dpms 0 0 0
+	xset dpms force on
 	xinput enable "TSC2005 touchscreen"
+	xautolock -enable
 }
 
 x11_lock() {
 	export DISPLAY=:0
-	xinput disable "TSC2005 touchscreen"
-	xset dpms 0 0 3
-	xset dpms force off
 	xautolock -disable
+	xinput disable "TSC2005 touchscreen"
+	xset dpms force off
+	xset dpms 0 0 3
 	kbd_backlight 0
 }
 
