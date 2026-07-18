@@ -3,8 +3,7 @@
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=linux-purism-librem5
 pkgver=6.12.94
-pkgrel=1
-# NOTE: Don't forget to rebase the config! See prepare() for instructions.
+pkgrel=2
 _purismrel=1
 _purismver=${pkgver}pureos$_purismrel
 _commit=db350fb91e60d12fde6bc7b1ece03836b215e444
@@ -17,7 +16,6 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
-	pmb:kconfigcheck-librem5
 	"
 makedepends="
 	bison
@@ -36,7 +34,7 @@ makedepends="
 	zstd
 	"
 
-# kconfig generated with: ARCH=arm64 make defconfig KBUILD_DEFCONFIG=librem5_defconfig
+_defconfig="librem5_defconfig"
 _config="config-$_flavor.$arch"
 
 
@@ -49,26 +47,6 @@ builddir="$srcdir/linux-pureos-$_purismver-$_commit"
 prepare() {
 	default_prepare
 	cp "$srcdir/config-$_flavor.$arch" .config
-
-	####### Rebase config
-	# The kernel config needs to be periodically rebased to enable new
-	# modules/features that Purism has enabled in their defconfig. This is done
-	# by: 1) generate .config using librem5_defconfig, 2) diff that .config
-	# with the config in this package, 3) carefully going over the diff and
-	# selecting new things enabled in their config.
-	#
-	# This can be uncommented to help generate the defconfig using "pmbootstrap
-	# build linux-purism-librem5". The build will fail (exit 1) to let you grab
-	# the config before it starts building the kernel:
-	#    make ARCH="$_carch" LLVM=1 \
-	#       defconfig KBUILD_DEFCONFIG=librem5_defconfig
-	#    exit 1
-	#
-	# After that run the following
-	#    cp <chroot_native/home/pmos/build/src/linux-pureos-6.6.83pureos2_cri1/.config> \
-	#       device/community/linux-purism-librem5/config-purism-librem5.aarch64
-	#    pmbootstrap kconfig edit linux-purism-librem5
-	#    pmbootstrap kconfig check linux-purism-librem5
 }
 
 build() {
@@ -94,5 +72,5 @@ package() {
 
 sha512sums="
 94050892d45a94c9e518d380e16523ada1b4af6c321cfccd42255297b06ad891eb6b3fe30235b59cd7f45401b7d7d50a11eb93d130c2f4bba38af3bd85c92d7e  linux-purism-librem5-6.12.94pureos1.tar.gz
-29d63830ef8ff73f5d76615622580a019f48e8a3f4a8a404721020ae4ff3efd8b230f61b6e9ce124134164dfe28b93a85052f2b841466d244013d0d1e02e8a24  config-purism-librem5.aarch64
+1b0003a702872899a3a588806caa70eb3e1030a1d7daa3134c669ba0657e6c8c211c22f25f08d7f56eed4c2419782050b3ee4dbf9db6549d9c4b6b5b81ca2942  config-purism-librem5.aarch64
 "
