@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Eric Anderson <ejona86@gmail.com>"
 pkgname=device-asus-flo
-pkgver=11
+pkgver=12
 pkgrel=0
 pkgdesc="Google Nexus 7 2013 (flo)"
 url="https://postmarketos.org"
@@ -15,6 +15,7 @@ depends="
 	"
 makedepends="devicepkg-dev"
 subpackages="
+	$pkgname-kernel-apq8064:kernel_apq8064
 	$pkgname-kernel-next:kernel_next
 	$pkgname-kernel-stable:kernel_stable
 	$pkgname-kernel-lts:kernel_lts
@@ -56,6 +57,12 @@ package() {
 # 	depends="linux-asus-flo"
 # 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 # }
+
+kernel_apq8064() {
+	pkgdesc="Mainline Kernel fork for APQ8064 devices (linux-postmarketos-qcom-apq8064)"
+	depends="linux-postmarketos-qcom-apq8064"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
 
 kernel_next() {
 	pkgdesc="Unstable next kernel (linux-next)"
