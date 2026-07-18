@@ -1,7 +1,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Aelin <aelin@postmarketos.org>"
 pkgname=linux-postmarketos-lts
-pkgver=6.18.38
+pkgver=6.18.39
 pkgrel=0
 _kver=${pkgver%.*}
 pkgdesc="LTS Kernel"
@@ -19,6 +19,7 @@ options="
 	pmb:generic-kernel
 	pmb:kconfigcheck-community
 	pmb:kconfigcheck-immutable
+	pmb:kconfigcheck-lockdown
 	pmb:kconfigcheck-rust
 	pmb:kconfigcheck-selinux
 	pmb:kconfigcheck-uefi
@@ -101,7 +102,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
@@ -123,21 +124,21 @@ package() {
 	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
 }
 
 sha512sums="
-0ea26f5c06f1c5ceba6e2c468129e0195eb314c56abeedc7064bef0596f3ca96da4e220312a8a8b20cde210aceec304f47fb8927c54238dbdb5d387aefb0a9d8  patch-6.18.38.patch.xz
+f6bf71379410109de3af0be6f985b4a7b603e602f40759b921b8edc98b904cdf8b7b265ccb41426e0bc3cb31993d9a1ab459d8b52cc0406af6db5e66a3f8dee3  patch-6.18.39.patch.xz
 88599ffdec96d150c1feb9b261ba93bb0301a9d0e1ad6bef7aeab1f5372cbfc57d8b43c7e902bd8f76921d1dbd8189663c142ea869e51d0e2b483b150ee00fe0  linux-6.18.tar.xz
 1f11df2480e9f691573283597160b4c806e492cdca4825f3acb3afb70bde43abfab487bcde1f5553b431a702a0039479d041b0ce7859970e706b5a51d2ad8fb0  0001-WIP-arch-powerpc-boot-Support-LLVM-1-in-wrapper-scri.patch
 26521a9c9ea769534095dc4e306babadc8bcbaf03d7faa523c377e41ba0f742ecd0490fa27791d895f729c3ae8845297dca59b4db2475e7f078e689c447430bc  0002-WIP-arch-powerpc-boot-Use-z-notext-for-pseries-image.patch
 302c20c85559fc9b3b2420ed25be1bfbb76c87f2a470e4141c32e9542cf1f5c6b3b5a7847231a3eaa0f6bc0e5942d0c1599e807175dcf5e63469704c3d6adde3  0003-WIP-arch-powerpc-boot-Add-z-norelro.patch
 166f9151618780afb269822d2b0c7580830fc47b20aa1ea08006a119a5234277fba5dbc2d0be469f3285bf8debd2dcfd078c2f92b206d1491620d94432c7b11b  0004-powerpc64-ftrace-fixes-clang-build-issues.patch
-78ae9bc73f8cb7088ba14c7f068bc34ad4e58d09ac10b7ab81947014417516d0bf80993e7c79671046606564336e09cdad3afc394c5c724e507a8a572bff283d  config-lts.aarch64
-9d880ce99f0517940e9f343da72d17605c3fff4ae5cab2f8cd8949c3458c529b8d2a7a6159ee8c5e04450a53a4d0c454a22a97863389942da7ea7953b9cdea39  config-lts.armv7
-807de497b259fdb555dae56f1727f30d333c15c89c8adce1d5cd01cde2bd06a8423d10f9937c4cad13fad4cea9ccbf61716109d08680e80c090d48ae9178e25c  config-lts.loongarch64
-e534389df5bb52ed08cddd4343a4b53ad8eb9ac5244783f63d6e82a69289a83abc5ce1a4b27a0c2fdddcd28314d37f6b72f353c020df1e64413fd4b4effc2374  config-lts.ppc64le
-ddc183fc9ed7b5b3460998e92872565fee6f942ef7b74ded608fd96a6a7fcb4d98157a7fcd91f8d440b4c8c5acf369a5b1f5d677afb31988b924df04bb7635d0  config-lts.riscv64
-b6634a7da30033f8d2d22aca1ce624d14d84b8438a246a3d809a8e8df8d245ae093ee2cf1149725db1a05b51b8c8741d5a66197d5fa7250cd490ba828e04a0e4  config-lts.x86
-b376f9466336d5cf7773ff5d9746cb5633e00c7380f1e84b0a4632e426371c44b62c96957ed72b8f3d7986bc9e0075707178bdeb20cfa85b4042afb82bcba9ef  config-lts.x86_64
+375e1c299b8be5203b68910bbbaa095fe07d2119c452600dc18cc199dd82e752590986090274a9c8b082e0a63e43049987ecbcb1efe766552743a5d22f4c3817  config-lts.aarch64
+22042f64b314980d9768711ff1f1a235850478cdb41b5b8d61b7a5e07e4d96c67c9b765e21f9a8504ceea9495d106bb2bd40506dac65ef7b58d0cf0489aa7157  config-lts.armv7
+252c71035256846afc8635afac68c120f0aba8decaa5bf92246f7e7c46bda92a0dfa25c26c36783d31c32ae1a4e2607a107e302f05a35b6b20394daa4c217442  config-lts.loongarch64
+257d09abc031a1bdeaac998d1fa6229dcd386ffdff8f87a57c166adafb6caff81bceb691cc9389d4a16ca30d813979725919c469fddc7715faefdd262ff2b82b  config-lts.ppc64le
+0e0343b6fa62b02d9682a9931a73f2bc27acb860ab3e041c463a84ed05e3ae27911cf57d2145807924e98eac222751eb61bad983a873aca7873c02410d7e7d5c  config-lts.riscv64
+f77e5020d8a0c4305fe1d5b0ae92dd676da1914e79102b89fbe9904d4de844381b73061aab96e66af15c7150bcc8bfda929b8ca8775a7d87d4e30ea2323b08c8  config-lts.x86
+1dd8e23c60f95b6693a86c08127cb4c1a61773ce0e6d4349ada87f5b26a18e1cd21263c01f8ea0817ccc7a6a8e01c9084accb1b6c69009c149f51184a4533470  config-lts.x86_64
 "
