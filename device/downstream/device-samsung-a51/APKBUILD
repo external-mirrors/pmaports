@@ -2,19 +2,20 @@
 maintainer="Hendra Manudinata <hendra@manoedinata.com>"
 pkgname=device-samsung-a51
 pkgdesc="Samsung Galaxy A51"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	firmware-samsung-a51
 	linux-samsung-a51
+	make-dynpart-mappings
 	mkbootimg
+	msm-fb-refresher
 	postmarketos-base
 	postmarketos-base-downstream
-	make-dynpart-mappings
-	msm-fb-refresher
 "
 makedepends="devicepkg-dev"
 source="
@@ -22,7 +23,6 @@ source="
 	kernel-cmdline.conf
 	NetworkManager-conf.d-swlan0-p2p0-unmanaged.conf
 "
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -33,12 +33,6 @@ package() {
 
 	# Disable swlan0 (additionally x0wlan0) & p2p0 management
 	install -Dm644 NetworkManager-conf.d-swlan0-p2p0-unmanaged.conf "$pkgdir"/usr/lib/NetworkManager/conf.d/swlan0-p2p0-unmanaged.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="Non-free firmware for Samsung Galaxy A51 (a51)"
-	depends="firmware-samsung-a51"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="

@@ -1,17 +1,21 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="winbo-yml-exe <winbo.yml@proton.me>"
 pkgname=device-raspberry-pi5
-pkgver=8
+pkgver=9
 pkgrel=0
 pkgdesc="Raspberry Pi 5"
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base raspberrypi-bootloader linux-rpi"
+depends="
+	linux-firmware-brcm
+	linux-rpi
+	postmarketos-base
+	raspberrypi-bootloader
+	"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-openrc
 	$pkgname-plasma-bigscreen:plasma_bigscreen
 	$pkgname-udev
@@ -35,12 +39,6 @@ package() {
 	install -Dm644 "$srcdir"/95-vchiq-permissions.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/95-vchiq-permissions.rules
 	install -Dm755 "$srcdir"/enforce-platform.sh -t "$pkgdir"/etc/profile.d/
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi/Bluetooth firmware"
-	depends="linux-firmware-brcm"
-	mkdir "$subpkgdir"
 }
 
 openrc() {
