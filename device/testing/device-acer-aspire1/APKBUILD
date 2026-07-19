@@ -2,7 +2,7 @@
 maintainer="Nikita Travkin <nikita@trvn.ru>"
 pkgname=device-acer-aspire1
 pkgdesc="Acer Aspire 1"
-pkgver=10
+pkgver=11
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -10,6 +10,10 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-acer-aspire1
+	firmware-qcom-adreno-a630
+	linux-firmware-ath10k
+	linux-firmware-qca
 	linux-postmarketos-qcom-sc7180
 	postmarketos-base
 	soc-qcom-sc7180
@@ -17,10 +21,7 @@ depends="
 	systemd-boot
 "
 makedepends="devicepkg-dev"
-subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-ucm
-"
+subpackages="$pkgname-ucm"
 source="
 	deviceinfo
 	kernel-cmdline.conf
@@ -56,17 +57,6 @@ ucm() {
 	mkdir -p "$subpkgdir"/usr/share/alsa/ucm2/conf.d/SC7180/
 	ln -s /usr/share/alsa/ucm2/Qualcomm/sc7180/sc7180.conf \
 		"$subpkgdir"/usr/share/alsa/ucm2/conf.d/SC7180/SC7180.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="Modem, WiFi, Bluetooth and GPU Firmware"
-	depends="
-		firmware-acer-aspire1
-		firmware-qcom-adreno-a630
-		linux-firmware-ath10k
-		linux-firmware-qca
-	"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
