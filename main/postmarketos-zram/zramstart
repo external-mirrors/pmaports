@@ -77,7 +77,7 @@ fi
 modprobe -q zram num_devices=1
 dev="$(zramctl -f -a "$algo" -s "${size}"M)"
 mkswap "$dev" >/dev/null
-swapon "$dev" >/dev/null
+swapon "$dev" -p 300 >/dev/null
 
 # ZRAM-optimized sysctl settings
 sysctl -w \
