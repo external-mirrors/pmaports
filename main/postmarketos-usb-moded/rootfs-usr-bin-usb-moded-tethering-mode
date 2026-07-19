@@ -12,34 +12,34 @@ CONNECTION_NAME=${CONNECTION_NAME:-"Tethering Mode"}
 set -e
 
 up() {
-    # Bring interface and NetworkManager connection up
-    nmcli connection add con-name "$CONNECTION_NAME" type ethernet \
-        ifname "$IFACE" ipv4.method shared
-    nmcli connection up "$CONNECTION_NAME"
+	# Bring interface and NetworkManager connection up
+	nmcli connection add con-name "$CONNECTION_NAME" type ethernet \
+		ifname "$IFACE" ipv4.method shared
+	nmcli connection up "$CONNECTION_NAME"
 }
 
 down() {
-    # Bring NetworkManager connection down
-    nmcli connection down "$CONNECTION_NAME"
-    nmcli connection delete "$CONNECTION_NAME"
+	# Bring NetworkManager connection down
+	nmcli connection down "$CONNECTION_NAME"
+	nmcli connection delete "$CONNECTION_NAME"
 
-    # NetworkManager leaves IP forwarding ON, set it back to disabled
-    echo 0 > /proc/sys/net/ipv4/ip_forward
+	# NetworkManager leaves IP forwarding ON, set it back to disabled
+	echo 0 > /proc/sys/net/ipv4/ip_forward
 
-    # NetworkManager brings the interface up automatically,
-    # but doesn't remove it when bringing down.
-    ifconfig "$IFACE" down
+	# NetworkManager brings the interface up automatically,
+	# but doesn't remove it when bringing down.
+	ifconfig "$IFACE" down
 }
 
 case $1 in
-    up)
-        up
-        ;;
-    down)
-        down
-        ;;
-    *)
-        echo "need an argument (up|down)"
-        exit 0
-        ;;
+	up)
+		up
+		;;
+	down)
+		down
+		;;
+	*)
+		echo "need an argument (up|down)"
+		exit 0
+		;;
 esac
