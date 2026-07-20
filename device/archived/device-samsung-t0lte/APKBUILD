@@ -11,13 +11,15 @@ arch="armv7"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
+	firmware-samsung-midas-bluetooth
+	firmware-samsung-midas-wifi
+	linux-firmware-s5p-mfc
 	mkbootimg
 	postmarketos-base
 	soc-samsung-exynos4412-cameraflash
 "
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-kernel-s6evr02:kernel_s6evr02
 	$pkgname-kernel-ea8061:kernel_ea8061
 "
@@ -40,16 +42,6 @@ package() {
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/Midas/Midas.conf
 	install -Dm644 "$srcdir"/HiFi.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/Midas/HiFi.conf
-}
-
-nonfree_firmware() {
-	pkgdesc="WiFi, Bluetooth, MFC firmware"
-	depends="
-		firmware-samsung-midas-bluetooth
-		firmware-samsung-midas-wifi
-		linux-firmware-s5p-mfc
-		"
-	mkdir "$subpkgdir"
 }
 
 kernel_s6evr02() {
