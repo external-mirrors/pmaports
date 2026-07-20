@@ -5,7 +5,7 @@ pkgname=systemd-stage0
 pkgver=261.1
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd!
-pkgrel=4
+pkgrel=5
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -55,9 +55,8 @@ source="systemd-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/
 builddir="$srcdir/systemd-$_pkgver"
 
 build() {
-	# NOTE: tests=true to work around https://github.com/systemd/systemd/issues/39984
 	abuild-meson \
-		-Dtests=true \
+		-Dtests=false \
 		-Ddbuspolicydir=/usr/share/dbus-1/system.d \
 		-Ddbussessionservicedir=/usr/share/dbus-1/services \
 		-Ddbussystemservicedir=/usr/share/dbus-1/system-services \
@@ -84,8 +83,8 @@ build() {
 		-Dnss-mymachines=disabled \
 		-Dnss-resolve=disabled \
 		-Dnss-systemd=false \
-		-Dsysext=true \
-		-Dsysusers=true \
+		-Dsysext=false \
+		-Dsysusers=false \
 		-Dselinux=disabled \
 		-Dinstall-sysconfdir=false \
 		\
@@ -103,6 +102,39 @@ build() {
 		\
 		-Didn=false \
 		-Dsysvinit-path="" \
+		\
+		-Dbacklight=false \
+		-Dbinfmt=false \
+		-Dcoredump=false \
+		-Dfirstboot=false \
+		-Dhibernate=false \
+		-Dhostnamed=false \
+		-Dhwdb=false \
+		-Dinitrd=false \
+		-Dkernel-install=false \
+		-Dlocaled=false \
+		-Dlogind=false \
+		-Dmachined=false \
+		-Dmountfsd=false \
+		-Dnetworkd=false \
+		-Dnspawn=disabled \
+		-Dnsresourced=false \
+		-Doomd=false \
+		-Dportabled=false \
+		-Dpstore=false \
+		-Dquotacheck=false \
+		-Drandomseed=false \
+		-Drepart=false \
+		-Dresolve=false \
+		-Drfkill=false \
+		-Dsysinstall=false \
+		-Dstoragetm=false \
+		-Dtimedated=false \
+		-Dtimesyncd=false \
+		-Dtmpfiles=false \
+		-Dvconsole=false \
+		-Dxdg-autostart=false \
+		-Dtpm=false \
 		build .
 	meson compile ${JOBS:+-j ${JOBS}} -C build
 }
