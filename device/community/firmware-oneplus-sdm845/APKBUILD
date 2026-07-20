@@ -1,6 +1,6 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=firmware-oneplus-sdm845
-pkgver=16
+pkgver=17
 pkgrel=0
 _commit="3e31a0c3e5a061645c09f805387b49fa9d35acbf"
 pkgdesc="Firmware for OnePlus 6 / 6T"
@@ -38,7 +38,7 @@ pmtest() {
 
 firmware_sensors() {
 	pkgdesc="Files to be included to add sensor support"
-	depends="$pkgname=$pkgver-r$pkgver"
+	depends="$pkgname=$pkgver-r$pkgrel"
 	mkdir "$subpkgdir"
 
 	cd "$builddir"
