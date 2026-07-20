@@ -2,7 +2,7 @@
 # Co-Maintainer: Jan Jasper de Kroon <jajadekroon@gmail.com>
 maintainer="Arnav Singh <me@arnavion.dev>"
 pkgname=device-pine64-pinephone
-pkgver=14
+pkgver=15
 pkgrel=0
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
@@ -155,7 +155,7 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	depends="eg25-manager-openrc openrc"
+	depends="eg25-manager-openrc openrc shutdown-clear-rtc-wakealarm"
 	mkdir "$subpkgdir"
 }
 
