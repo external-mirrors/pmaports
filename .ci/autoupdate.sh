@@ -84,7 +84,7 @@ update_linux_next() {
 	done
 
 	# Commit
-	git add device/testing/linux-next/APKBUILD
+	git add device/testing/linux-next/
 	git commit -S -m "linux-next: upgrade to $latest"
 }
 
