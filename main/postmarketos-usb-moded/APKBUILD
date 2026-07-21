@@ -58,10 +58,10 @@ charging_default() {
 	provides="$pkgname-default-profile=$pkgver-r$pkgrel"
 	provider_priority=90
 
-	mkdir -p "$subpkgdir"/etc/usb-moded
-	cat <<-EOF > "$subpkgdir"/etc/usb-moded/usbmode.ini
-		[usbmode]
-		mode = charging_only
+	mkdir -p "$subpkgdir"/usr/lib/usb-signaller
+	cat <<-EOF > "$subpkgdir"/usr/lib/usb-signaller/usb-signaller.toml
+		[main]
+		default_mode = charging_only
 	EOF
 }
 
@@ -71,10 +71,10 @@ developer_default() {
 	# We want this mode to be the default if not specified with e.g. pmb_select
 	provider_priority=100
 
-	mkdir -p "$subpkgdir"/etc/usb-moded
-	cat <<-EOF > "$subpkgdir"/etc/usb-moded/usbmode.ini
-		[usbmode]
-		mode = developer_mode
+	mkdir -p "$subpkgdir"/usr/lib/usb-signaller
+	cat <<-EOF > "$subpkgdir"/usr/lib/usb-signaller/usb-signaller.toml
+		[main]
+		default_mode = developer_mode
 	EOF
 }
 sha512sums="
