@@ -6,6 +6,7 @@ from pathlib import Path
 
 import common
 import pmb.parse
+from pmb.core.arch import Arch
 
 
 def test_aports_ui():
@@ -13,8 +14,9 @@ def test_aports_ui():
     Raise an error if package in _pmb_recommends is not found
     """
     pmaports_cfg = pmb.config.pmaports.read_config()
-    for arch in pmaports_cfg["supported_arches"].split(","):
+    for arch_string in pmaports_cfg["supported_arches"].split(","):
         for path in common.get_changed_files():
+            arch = Arch(arch_string)
             path = Path(path)
 
             if path.name != "APKBUILD":
@@ -24,7 +26,7 @@ def test_aports_ui():
 
             apkbuild = pmb.parse.apkbuild(path)
             # Skip if arch isn't enabled
-            if not pmb.helpers.pmaports.check_arches(apkbuild["arch"], arch):
+            if arch not in Arch.from_arch_field(apkbuild["arch"]):
                 continue
 
             for package in apkbuild["_pmb_recommends"]:

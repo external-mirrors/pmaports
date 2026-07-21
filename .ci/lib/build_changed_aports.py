@@ -13,10 +13,11 @@ import pmb.core
 import pmb.parse
 import pmb.parse._apkbuild
 import pmb.helpers.pmaports
+from pmb.core.arch import Arch
 from pmb.core.context import get_context
 
 
-def build_strict(packages, arch):
+def build_strict(packages, arch: Arch):
     common.run_pmbootstrap(["build_init"])
     # We set the timeout to 1 hour because linking the Linux kernel with
     # ThinLTO on our aarch64 runners takes slightly over 30 minutes
@@ -24,7 +25,7 @@ def build_strict(packages, arch):
                             "--timeout", "3600",
                             "build",
                             "--strict", "--force",
-                            "--arch", arch, ] + list(packages))
+                            "--arch", str(arch), ] + list(packages))
 
 
 if __name__ == "__main__":
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("usage: build_changed_aports.py ARCH")
         sys.exit(1)
-    arch = sys.argv[1]
+    arch = Arch(sys.argv[1])
 
     # Get and print modified packages
     packages = common.get_changed_packages(skip_archived=True)
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         apkbuild_path = pmb.helpers.pmaports.find(package)
         apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(apkbuild_path, "APKBUILD"))
 
-        if not pmb.helpers.pmaports.check_arches(apkbuild["arch"], arch):
+        if arch not in Arch.from_arch_field(apkbuild["arch"]):
             print(f"{package}: not enabled for {arch}, skipping")
             packages.remove(package)
 
@@ -93,7 +94,7 @@ if __name__ == "__main__":
         for package in systemd_pkgs.copy():
             apkbuild_path = pmb.helpers.pmaports.find(package, True, True, with_extra_repos="enabled")
             apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(apkbuild_path, "APKBUILD"))
-            if not pmb.helpers.pmaports.check_arches(apkbuild["arch"], arch):
+            if arch not in Arch.from_arch_field(apkbuild["arch"]):
                 print(f"(extra-repos/systemd) {package}: not enabled for {arch}, skipping")
                 systemd_pkgs.remove(package)
 
