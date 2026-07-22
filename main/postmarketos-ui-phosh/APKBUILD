@@ -3,7 +3,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=postmarketos-ui-phosh
-pkgver=32
+pkgver=33
 pkgrel=0
 pkgdesc="(Wayland) Mobile UI using GNOME components and apps"
 url="https://phosh.mobi"
@@ -30,6 +30,7 @@ depends="
 	xdg-desktop-portal-phosh
 	xdg-desktop-portal-wlr
 	"
+depends_systemd="libcap-utils"
 _pmb_recommends="
 	phosh-mobile-settings
 	phosh-tour
@@ -48,6 +49,7 @@ source="
 	udiskie.desktop
 	greetd.confd
 	greetd-phrog.conf
+	systemd-udiskie.conf
 	"
 options="!check pmb:drm pmb:default-systemd pmb:support-openrc pmb:support-systemd"
 
@@ -58,6 +60,10 @@ package() {
 		"$pkgdir"/usr/share/applications/mimeapps.list
 	install -Dm644 "$srcdir"/udiskie.desktop \
 		"$pkgdir"/etc/xdg/autostart/udiskie.desktop
+	install -Dm644 "$srcdir"/greetd-phrog.conf \
+		"$pkgdir"/usr/lib/systemd/system/greetd.service.d/override.conf
+	install -Dm644 "$srcdir"/systemd-udiskie.conf \
+		"$pkgdir"/usr/lib/systemd/user/udiskie.service.d/phosh-override.conf
 }
 
 default_osk() {
@@ -74,14 +80,7 @@ openrc() {
 
 	install -Dm644 "$srcdir"/greetd.confd \
 		"$subpkgdir"/etc/conf.d/greetd
-}
-
-systemd() {
-	install_if="$pkgname=$pkgver-r$pkgrel systemd"
-	depends="libcap-utils"
-
-	install -Dm644 "$srcdir"/greetd-phrog.conf \
-		"$subpkgdir"/usr/lib/systemd/system/greetd.service.d/override.conf
+	amove etc/xdg/autostart/udiskie.desktop
 }
 
 duranium() {
@@ -98,4 +97,5 @@ a741e8db9e4232334b924326c48be4e4c8f7a2382a7608926918a7491c518b2dda551e55a00d4d5f
 53f5c565b4ca8a12f12b63ec84a0194ef530703565d123203d41582a35a54d66afaf3a676df158ae0effe327dcfc1c6496a082ce9dbe803b2547417c3c3fad6e  udiskie.desktop
 38724b931f4c94a7b716e6ed908babc81c42d7f540bf715eecccd17b82d558886f5816168171ca1c29fbe8bee9bc46ad31e55def44001047f8ac26b796a79eee  greetd.confd
 62e75d0cfc1ae8ea63fff43e5f08276c8cde00d7c39f46be17ac547827bdb3a5c09569b020daa54b8acb4dce05220cbb05a0c9ba915ded401ce47f39afcdd4f0  greetd-phrog.conf
+b92cca32d83a80f59622d4ca5436cd969e94f353c931d94841dabae4921d5cdcbf9994a3d7187c574ef0e46acbb6e29462c0a26b18a470ec86b43cd325a7419e  systemd-udiskie.conf
 "
