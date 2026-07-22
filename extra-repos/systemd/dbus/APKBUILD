@@ -14,10 +14,8 @@ pkggroups="messagebus"
 provider_priority=1
 install="$pkgname.pre-install"
 triggers="$pkgname.trigger=/usr/share/dbus-1/system.d"
-# pmb:strict: force zap after building this package so we don't still have
-#             systemd-stage0 installed
 # !check: tests don't pass in pmbootstrap
-options="!check pmb:strict"
+options="!check"
 depends="
 	dbus-libs
 	libexpat

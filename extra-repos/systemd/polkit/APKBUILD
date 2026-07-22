@@ -8,11 +8,9 @@ pkgdesc="Application development toolkit for controlling system-wide privileges"
 url="https://github.com/polkit-org/polkit"
 arch="all"
 license="GPL-2.0-or-later"
-# pmb:strict: force zap after building this package so we don't still have
-#             systemd-stage0 installed
 # !check: needs a functioning dbus daemon
 # !pmb:crossdirect: otherwise we see lto1: fatal error: compiler does not support ZSTD LTO compression
-options="suid pmb:strict !check !pmb:crossdirect"
+options="suid !check !pmb:crossdirect"
 makedepends="
 	dbus-dev
 	duktape-dev
