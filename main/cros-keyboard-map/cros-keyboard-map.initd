@@ -13,10 +13,6 @@ if [ "$inverted_functional_row" = "true" ]; then
 	command_args="$command_args --inverted"
 fi
 
-start_pre() {
-	[ -d "$DIRECTORY" ] || mkdir "$DIRECTORY"
-}
-
 start() {
 	ebegin "Starting cros-keyboard-map"
 	# This script must be executed before keyd, block keyd before it's done
