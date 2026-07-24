@@ -4,7 +4,7 @@ maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=fwupd
 _pkgver=2.1.6
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware update daemon"
 url="https://fwupd.org/"
 arch="all"
@@ -69,6 +69,8 @@ subpackages="
 	$pkgname-tests
 	"
 source="https://github.com/fwupd/fwupd/releases/download/$_pkgver/fwupd-$_pkgver.tar.xz"
+# armv7 doesn't build with crossdirect
+options="!pmb:crossdirect"
 builddir="$srcdir/$pkgname-$_pkgver"
 
 # libsmbios is a library for DELL devices which are x86/x86_64-only
