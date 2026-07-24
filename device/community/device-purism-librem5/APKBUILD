@@ -3,7 +3,7 @@
 # Contributor: Clayton Craft <clayton@craftyguy.net>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
-pkgver=14
+pkgver=16
 pkgrel=0
 _confver=77
 _purismrel=2
@@ -53,6 +53,7 @@ source="
 	0001-udev-cameras-use-correct-path-for-modprobe-on-Alpine.patch
 	l5-brcm-bt-enable.initd
 	l5-brcm-bt-enable.service
+	l5-btsleep.sh
 	l5-lockdown-support.initd
 	l5-ship-mode.initd
 	udev/70-brcm-bluetooth.rules
@@ -165,6 +166,9 @@ package() {
 	install -Dm644 "$srcdir"/l5-brcm-bt-enable.service -t \
 		"$pkgdir"/usr/lib/systemd/system
 
+	install -Dm744 "$srcdir"/l5-btsleep.sh \
+		"$pkgdir"/usr/lib/systemd/system-sleep/l5-btsleep.sh
+
 	# install audio config files from Purism
 	install -Dm644 "$builddir"/default/audio/ucm2/conf.d/simple-card/Librem\ 5.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/NXP/iMX8/Librem_5/Librem\ 5.conf
@@ -219,6 +223,7 @@ fad386071fc45f9880a94cc8004fabd5d98b3e6a12606c98d8e72e0208f22ab54f03b921f5967a95
 b45749fcddfd65a302b502bcabfa5828d1b63e45d844fd50e44009a756b919db20fe9526102947c0f0dfcdffe4a037e5050fe1b24fb915933ce0837f49759378  0001-udev-cameras-use-correct-path-for-modprobe-on-Alpine.patch
 177ec87ec1f110d7c4253a20375c6771c6cfac41057b02bd673caea5399a799a59c5e087037fccf7a104447e6890499a2194aa34bab14df203fa95168ced75d7  l5-brcm-bt-enable.initd
 58edf35607606b7ef9079bfe015b8867c32ff3c0d3c87e11246e9077311017645d1a2d58917eab2990d25a26b85191fb3b9843195387643e4bafe3f3567cd0d2  l5-brcm-bt-enable.service
+32b6866226a97624a65deedc2a90a76b8da353bfeda060c606d8da20584d5a18e4b5ebe56415cb28d5645bda7c3c96689b0eddb5c11b999a1ac3385b27fd71ad  l5-btsleep.sh
 f4b314d553655f7975445ac0a33099923e20dabb082c07e2cf6a78e4118c143d777dd4ad2c09cbc388600bdefe8deb3073fbd15b238772ddf09c66ac46415590  l5-lockdown-support.initd
 c723764d507ccd4b04aa5ce79b1d1ebc131873cdc37a943cb0f92b8a08a3c69eb9e0d31fcd4589fd8c40a9676bae9897e4f12ec2ebe4db8214ac85669ef35a53  l5-ship-mode.initd
 b7f5ecd0fefe8a122ed20e7ac21a23a65e007f62a7343c7178712955ed580f5473ca923cedb9f86cd10ecb13a76ab50c91a2f7b8b2fd456ee8420aeca75f3fec  70-brcm-bluetooth.rules
