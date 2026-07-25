@@ -3,7 +3,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
 pkgdesc="OnePlus 6T"
-pkgver=29
+pkgver=30
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -23,6 +23,7 @@ depends="
 	systemd-boot
 	unl0kr-fbforcerefresh
 "
+depends_openrc="hexagonrpcd-openrc"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
@@ -62,8 +63,6 @@ package() {
 
 openrc() {
 	default_openrc
-	depends="hexagonrpcd-openrc openrc"
-
 	mkdir -p "$subpkgdir"
 }
 
