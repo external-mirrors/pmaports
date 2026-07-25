@@ -1,0 +1,30 @@
+From 3e56a1d0de12219b746d8959a84259c65d070d0b Mon Sep 17 00:00:00 2001
+From: Ondrej Jirman <megi@xff.cz>
+Date: Tue, 9 Sep 2025 08:31:21 +0200
+Subject: [PATCH 82/84] arm64: dts: rockchip: rk3399-pinephone-pro: Assign
+ power supplies to audio codec
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+(cherry picked from commit 4400cddfa923adb0183b157603581172137f6790)
+---
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+index ece5473efcd6..489e005bf872 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+@@ -1077,6 +1077,10 @@ rt5640: rt5640@1c {
+ 		clock-names = "mclk";
+ 		assigned-clocks = <&cru SCLK_I2S0_8CH>;
+ 		assigned-clock-rates = <11289599>;
++		avdd-supply = <&vcca3v0_codec>;
++		cpvdd-supply = <&vcca3v0_codec>;
++		spkvdd-supply = <&vcc5v0_sys>;
++		dbvdd-supply = <&vcca1v8_codec>;
+ 		realtek,dmic1-data-pin = <1>;
+ 		realtek,in3-differential;
+ 		realtek,lout-differential;
+-- 
+2.55.0
+

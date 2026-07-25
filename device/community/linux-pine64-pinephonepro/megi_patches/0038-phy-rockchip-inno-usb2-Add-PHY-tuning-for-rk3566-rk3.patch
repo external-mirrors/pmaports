@@ -1,0 +1,99 @@
+From 60b2f6a212c936c221b23c6051d89c23a8799d01 Mon Sep 17 00:00:00 2001
+From: Ondrej Jirman <megi@xff.cz>
+Date: Sun, 19 Jul 2026 16:21:40 +0200
+Subject: [PATCH 38/84] phy: rockchip-inno-usb2: Add PHY tuning for
+ rk3566/rk3568
+
+Add a phy_tuning callback for the rk3566/rk3568 USB2 PHY and map its
+analog register block so the tuning can reach it.
+
+The tuning enables HS transmitter pre-emphasis on the otg and host
+ports, raises the otg port HS eye height to 437.5mV and sets the
+bvalid/id detection filter times. Without it the otg port's HS
+transmitter runs at reset defaults that are out of spec, so while host
+mode works, peripheral mode fails to enumerate on the connected host.
+This is visible on the PineTab2 v2.0 bottom USB-C port.
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+(cherry picked from commit 47213f62f6eda5aca1f18251f9d4e3edd2f2712a)
+---
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 35 ++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+index ffc0a7112b6e..d9d14cc8cf79 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+@@ -31,6 +31,9 @@
+ #define SCHEDULE_DELAY		(60 * HZ)
+ #define OTG_SCHEDULE_DELAY	(2 * HZ)
+ 
++/* Filter time of 10ms based on the usb2 phy grf pclk of 100MHz. */
++#define FILTER_COUNTER		0xf4240
++
+ struct rockchip_usb2phy;
+ 
+ enum rockchip_usb2phy_port_id {
+@@ -1408,7 +1411,8 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (of_device_is_compatible(np, "rockchip,rv1106-usb2phy")) {
++	if (of_device_is_compatible(np, "rockchip,rv1106-usb2phy") ||
++	    of_device_is_compatible(np, "rockchip,rk3568-usb2phy")) {
+ 		rphy->phy_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 		if (IS_ERR(rphy->phy_base))
+ 			return dev_err_probe(dev, PTR_ERR(rphy->phy_base),
+@@ -1623,6 +1627,33 @@ static int rk3506_usb2phy_tuning(struct rockchip_usb2phy *rphy)
+ 	return ret;
+ }
+ 
++static int rk3568_usb2phy_tuning(struct rockchip_usb2phy *rphy)
++{
++	int ret = 0;
++
++	/* Turn off differential receiver by default to save power */
++	phy_clear_bits(rphy->phy_base + 0x30, BIT(2));
++
++	/* Enable otg port pre-emphasis during non-chirp phase */
++	phy_update_bits(rphy->phy_base, GENMASK(2, 0), 0x04);
++
++	/* Enable host port pre-emphasis during non-chirp phase */
++	phy_update_bits(rphy->phy_base + 0x0400, GENMASK(2, 0), 0x04);
++
++	if (rphy->phy_cfg->reg == 0xfe8a0000) {
++		/* Set otg port HS eye height to 437.5mv (default is 400mv) */
++		phy_update_bits(rphy->phy_base + 0x30, GENMASK(6, 4), (0x06 << 4));
++
++		/* Set the bvalid filter time to 10ms */
++		ret |= regmap_write(rphy->grf, 0x0048, FILTER_COUNTER);
++
++		/* Set the id filter time to 10ms */
++		ret |= regmap_write(rphy->grf, 0x004c, FILTER_COUNTER);
++	}
++
++	return ret;
++}
++
+ static int rk3576_usb2phy_tuning(struct rockchip_usb2phy *rphy)
+ {
+ 	int ret;
+@@ -2177,6 +2208,7 @@ static const struct rockchip_usb2phy_cfg rk3568_phy_cfgs[] = {
+ 	{
+ 		.reg = 0xfe8a0000,
+ 		.num_ports	= 2,
++		.phy_tuning	= rk3568_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0008, 4, 4, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_OTG] = {
+@@ -2220,6 +2252,7 @@ static const struct rockchip_usb2phy_cfg rk3568_phy_cfgs[] = {
+ 	{
+ 		.reg = 0xfe8b0000,
+ 		.num_ports	= 2,
++		.phy_tuning	= rk3568_usb2phy_tuning,
+ 		.clkout_ctl	= { 0x0008, 4, 4, 1, 0 },
+ 		.port_cfgs	= {
+ 			[USB2PHY_PORT_OTG] = {
+-- 
+2.55.0
+

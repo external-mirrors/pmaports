@@ -1,10 +1,8 @@
 maintainer="Rudraksha Gupta <guptarud@gmail.com>"
 pkgname=linux-pine64-pinephonepro
-pkgver=7.0
-_pkgver=7.0
-_tagdate=20251104-2007
-pkgrel=3
-pkgdesc="Mainline kernel for the pinephone pro"
+pkgver=7.1
+pkgrel=0
+pkgdesc="Mainline kernel for the Pinephone Pro"
 arch="aarch64"
 _flavor="${pkgname#linux-}"
 url="https://kernel.org"
@@ -45,10 +43,16 @@ esac
 
 # Currently, the megi kernel is the most up-to-date pinephone pro kernel. As postmarketOS doesn't want to use the Megi kernel directly, we can strip the Megi kernel down to it's essentials by doing the following:
 #
-#    git reset --hard v7.0
-#    git merge megi/fusb302-7.0 megi/imx258-7.0 megi/rk818-7.0 megi/rt5640-7.0 megi/rk3399-typec-7.0 megi/typec-extcon-7.0 megi/tcpm-7.0 megi/arasan-7.0 megi/ppp-7.0
-#    git cherry-pick ebc624f4    # `arm64: dts: rockchip: rk3399-s: Add DMC table `
-#    git rebase v7.0
+#    git clone https://codeberg.org/megi/linux.git --branch orange-pi-7.1
+#    git switch -c ppp-7.1
+#    git reset --hard 8cd9520d35a6c38db6567e97dd93b1f11f185dc6 # v7.1
+#
+# cherry pick and make sure to fix/skip conflicts...
+#
+#     git cherry-pick $(git log --reverse --format='%H%x09%s' HEAD..orange-pi-7.1 | awk -F'\t' '{n=split($2,a,":"); s=a[n-1]; gsub(/^ +| +$/,"",s); if(s ~/^(arasan|cdn-dp|displayport|dwc3|fusb302|gigadevice|imx258|phy-rockchip-inno-usb2|rk3399|rk3399-pinephone-pro|rk3399-s|rk818|rk818-battery|rk818-charger|rockchip|rockchip-inno-usb2|rt5640|supply|tcpm|typec-extcon|rk8xx|rk818_battery|rockchip-typec)$/) print $1}')
+#
+# keep modem always on...
+#
 #    git am --ignore-whitespace <<'PATCH'
 #    From: Dummy <dummy@gmail.com>
 #    Subject: [PATCH] arm64: dts: rk3399-pinephone-pro: Keep modem regulators always-on
@@ -85,10 +89,96 @@ esac
 # Source
 _config="config-$_flavor.$CARCH"
 source="
-	https://codeberg.org/LogicalErzor/linux/archive/ppp-megi-7.0-stripped-modem-fix.tar.gz
+	ppp-v7.1.tar.gz::https://github.com/torvalds/linux/archive/refs/tags/v7.1.tar.gz
 	config-$_flavor.aarch64
+	megi_patches/0001-ASoC-codecs-rt5640-Fix-output-mixer-input-channel-li.patch
+	megi_patches/0002-ASoC-codecs-rt5640-Fix-hpout-restore-when-lout-is-en.patch
+	megi_patches/0003-ASoC-codecs-rt5640-Add-input-mixer-input-volume-cont.patch
+	megi_patches/0004-ASoC-codecs-rt5640-Allow-to-control-single-ended-dif.patch
+	megi_patches/0005-ASoC-codecs-rt5640-Keep-the-codec-enabled-when-idle.patch
+	megi_patches/0006-ASoC-codecs-rt5640-Add-support-for-power-supplies.patch
+	megi_patches/0007-media-imx258-Add-i2c-supply.patch
+	megi_patches/0008-media-imx258-Add-reset-gpio.patch
+	megi_patches/0009-media-imx258-Drop-interface-speed-to-1224-mbps.patch
+	megi_patches/0010-DEBUG-media-imx258-Add-debug-register-access.patch
+	megi_patches/0011-ASoC-rockchip-Fix-doubling-of-playback-speed-after-s.patch
+	megi_patches/0012-Revert-usb-dwc3-Abort-suspend-on-soft-disconnect-fai.patch
+	megi_patches/0013-thermal-rockchip-Add-support-for-RV1106-SoC.patch
+	megi_patches/0014-soc-rockchip-Add-support-for-power-monitoring-driver.patch
+	megi_patches/0015-rtc-rockchip-Add-support-for-RTC-present-in-RV1106-S.patch
+	megi_patches/0016-thermal-rockchip-Add-support-for-RK3506.patch
+	megi_patches/0017-mtd-spi-nor-gigadevice-Add-support-for-gd25lq128e.patch
+	megi_patches/0018-clk-rk3399-Export-SCLK_CIF_OUT_SRC-to-device-tree.patch
+	megi_patches/0019-clk-rockchip-rk3399-Don-t-allow-to-reparent-dclk_vop.patch
+	megi_patches/0020-power-supply-Add-support-for-USB_BC_ENABLED-and-USB_.patch
+	megi_patches/0021-mfd-rk8xx-Enable-rk808-clkout2-function.patch
+	megi_patches/0022-power-supply-rk818_battery-Add-battery-charger-drive.patch
+	megi_patches/0023-power-supply-rk818_battery-Add-code-docs-for-the-HW-.patch
+	megi_patches/0024-Revert-usb-typec-tcpm-unregister-existing-source-cap.patch
+	megi_patches/0025-usb-typec-altmodes-displayport-Respect-DP_CAP_RECEPT.patch
+	megi_patches/0026-usb-typec-tcpm-Unregister-altmodes-before-registerin.patch
+	megi_patches/0027-usb-typec-tcpm-Fix-PD-devices-capabilities-registrat.patch
+	megi_patches/0028-usb-typec-fusb302-Slightly-increase-wait-time-for-BC.patch
+	megi_patches/0029-usb-typec-fusb302-Set-the-current-before-enabling-pu.patch
+	megi_patches/0030-usb-typec-fusb302-Retry-reading-of-CC-pins-status-if.patch
+	megi_patches/0031-usb-typec-fusb302-Update-VBUS-state-even-if-VBUS-int.patch
+	megi_patches/0032-usb-typec-fusb302-Add-OF-extcon-support.patch
+	megi_patches/0033-usb-typec-fusb302-Fix-register-definitions.patch
+	megi_patches/0034-usb-typec-fusb302-Clear-interrupts-before-we-start-t.patch
+	megi_patches/0035-usb-typec-fusb302-Turn-off-VBUS-and-VCONN-on-shutdow.patch
+	megi_patches/0036-phy-rockchip-inno-usb2-Add-support-for-RV1106-RV1103.patch
+	megi_patches/0037-phy-rockchip-inno-usb2-Add-support-for-RK3506.patch
+	megi_patches/0038-phy-rockchip-inno-usb2-Add-PHY-tuning-for-rk3566-rk3.patch
+	megi_patches/0039-drm-rockchip-cdn-dp-Disable-CDN-DP-on-disconnect.patch
+	megi_patches/0040-phy-rockchip-inno-usb2-Decrease-delay-between-port-i.patch
+	megi_patches/0041-phy-rockchip-inno-usb2-More-robust-charger-detection.patch
+	megi_patches/0042-usb-dwc3-Track-the-power-state-of-usb3_generic_phy.patch
+	megi_patches/0043-usb-dwc3-Always-disable-SUSPHY-when-entering-a-role.patch
+	megi_patches/0044-usb-dwc3-Track-cable-connection-state-separately-fro.patch
+	megi_patches/0045-usb-dwc3-Power-cycle-USB3-PHY-on-role-connection-cha.patch
+	megi_patches/0046-usb-dwc3-Register-the-role-even-when-no-cable-is-con.patch
+	megi_patches/0047-phy-rockchip-inno-usb2-Set-up-charger-detection-mode.patch
+	megi_patches/0048-usb-dwc3-Do-not-re-register-the-gadget-on-cable-even.patch
+	megi_patches/0049-phy-rockchip-typec-Support-a-Type-C-orientation-swit.patch
+	megi_patches/0050-phy-rockchip-typec-Support-a-Type-C-mode-mux.patch
+	megi_patches/0051-phy-rockchip-typec-Publish-the-DP-lane-count.patch
+	megi_patches/0052-drm-rockchip-cdn-dp-Support-ports-driven-by-a-Type-C.patch
+	megi_patches/0053-phy-rockchip-inno-usb2-Learn-the-host-role-from-phy_.patch
+	megi_patches/0054-usb-dwc3-Tell-the-UDC-core-when-there-is-no-cable.patch
+	megi_patches/0055-phy-rockchip-inno-usb2-Do-not-run-charger-detection-.patch
+	megi_patches/0056-usb-dwc3-Set-the-PHY-mode-before-starting-the-host.patch
+	megi_patches/0057-usb-dwc3-Do-not-connect-the-gadget-while-no-cable-is.patch
+	megi_patches/0058-phy-rockchip-inno-usb2-Power-the-PHY-up-before-the-h.patch
+	megi_patches/0059-usb-dwc3-Require-MPS-aligned-OUT-buffers.patch
+	megi_patches/0060-usb-typec-displayport-Update-the-mux-before-signalli.patch
+	megi_patches/0061-arm64-dts-rockchip-rk3399-Disable-debug-nodes.patch
+	megi_patches/0062-arm64-dts-rockchip-rk3399-Add-reboot-mode-driver.patch
+	megi_patches/0063-arm64-dts-rockchip-rk3399-Power-cycle-the-USB3-PHY-o.patch
+	megi_patches/0064-arm64-dts-rockchip-rk3399-Add-dmc_opp_table.patch
+	megi_patches/0065-arm64-dts-rockchip-rk3399-s-Add-DMC-table.patch
+	megi_patches/0066-arm64-dts-rockchip-rk3399-Number-the-CDN-DP-ports.patch
+	megi_patches/0067-arm64-dts-rockchip-rk3399-pinephone-pro-Add-Type-C-p.patch
+	megi_patches/0068-arm64-dts-rockchip-rk3399-pinephone-pro-Add-internal.patch
+	megi_patches/0069-arm64-dts-rockchip-rk3399-pinephone-pro-Add-battery-.patch
+	megi_patches/0070-arm64-dts-rockchip-rk3399-pinephone-pro-Add-sound-su.patch
+	megi_patches/0071-arm64-dts-rockchip-rk3399-pinephone-pro-Add-modem-su.patch
+	megi_patches/0072-arm64-dts-rockchip-rk3399-pinephone-pro-Change-modem.patch
+	megi_patches/0073-arm64-dts-rockchip-rk3399-pinephone-pro-Add-light-pr.patch
+	megi_patches/0074-arm64-dts-rockchip-rk3399-pinephone-pro-Add-I2C-supp.patch
+	megi_patches/0075-arm64-dts-rockchip-rk3399-pinephone-pro-Add-magnetom.patch
+	megi_patches/0076-arm64-dts-rockchip-rk3399-pinephone-pro-Add-mount-ma.patch
+	megi_patches/0077-arm64-dts-rockchip-rk3399-pinephone-pro-Enable-POGO-.patch
+	megi_patches/0078-arm64-dts-rockchip-rk3399-pinephone-pro-Add-pinephon.patch
+	megi_patches/0079-arm64-dts-rockchip-rk3399-pinephone-pro-Switch-LED-b.patch
+	megi_patches/0080-arm64-dts-rockchip-rk3399-pinephone-pro-Pre-configur.patch
+	megi_patches/0081-arm64-dts-rockchip-rk3399-pinephone-pro-Improve-SPI-.patch
+	megi_patches/0082-arm64-dts-rockchip-rk3399-pinephone-pro-Assign-power.patch
+	megi_patches/0083-arm64-dts-rockchip-rk3399-pinephone-pro-Add-camera-f.patch
+	megi_patches/0084-arm64-dts-rockchip-rk3399-pinephone-pro-Disable-inte.patch
+	0001-arm64-dts-rk3399-pinephone-pro-Keep-modem-regulators.patch
+	BTF-seg-fault.patch
 	"
-builddir="$srcdir/linux"
+builddir="$srcdir/linux-$pkgver"
 
 prepare() {
 	default_prepare
@@ -111,7 +201,7 @@ package() {
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs-$_flavor
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
@@ -119,6 +209,92 @@ package() {
 
 
 sha512sums="
-8a2e76553f0635d5891ae5e11219506da73893d78ce1cccf3421c0bbaf87c6caf48d927f5be7c8e2a8119e05cb9035e7b3c15bea786ff2eaeafd693b9219a428  ppp-megi-7.0-stripped-modem-fix.tar.gz
-510a18c5ef416be1eab1c93d9b62b4c3530fb666e8166d5ab3fd94998773f9d405aac4deec3be03390195ad0f1a1c5efadf19b19356332f49a6c426e95106733  config-pine64-pinephonepro.aarch64
+10c0cfd70a7a5731963cb4c7538396f6ed637d7db532a1c04b00628af47f4b81ffb3d92200e64ba1ce04047e4b2e39e6845c4067762e85ad9df13f2740c10397  ppp-v7.1.tar.gz
+f489be70242738c722dd588b9cadc94dbab329a76fed396473318f94abcc9d724ed54cd06f5d101e9b95e5a9098e46a5c8c95ddeb6d30f3b87f822b83080ac43  config-pine64-pinephonepro.aarch64
+cafe0f07dab850059475c8f84df0b859d65bedda455517a5996f75d4e5f28c7fe66ac5a2b2e4ee6b46ed173819b899cc37ac08d1106bf635beab018ad636ee1e  0001-ASoC-codecs-rt5640-Fix-output-mixer-input-channel-li.patch
+5db306c6728666c3e64ca28a3cc330d7452c87c9119aa8cd57a4549cee7aee1c1137dedece8c50bb58d1040bd861d7722c6341112b24699919fb5a3bd816afdb  0002-ASoC-codecs-rt5640-Fix-hpout-restore-when-lout-is-en.patch
+a734d758f0e84fbd7dd3c8e7daa24ca8778af2d25e8d1df3c7e27978f616428fa57e507dede65f59dab6ce23597380b69d83fde35b549b3c0d8b55a38f58a57b  0003-ASoC-codecs-rt5640-Add-input-mixer-input-volume-cont.patch
+b7b94b6b2f144932009fa94ad0e5505b5749cea446221ef94e51490117b9a747080a876d7a004a0b0829fba1e3ecbb714f867a3725e40cf51fb90ff49a7c0da9  0004-ASoC-codecs-rt5640-Allow-to-control-single-ended-dif.patch
+5c8e63d2e3fe0b4805f74ad0da75159495dd82592e701160d07c4729f00e9c9de7d23dee6250fb62fbbba05c3a0ca42f6495e2f1e51fd1d330f62394003ac222  0005-ASoC-codecs-rt5640-Keep-the-codec-enabled-when-idle.patch
+89c5ecda11e85c795aaf5e718b7c636ed149ca17ca71068cc329abd598edb568584db3b559f9cc4074c8eef4e4e9f749181726e416747ca9b853e6bdd30b4dd1  0006-ASoC-codecs-rt5640-Add-support-for-power-supplies.patch
+0a865555b611922507021b262d5ba6f7991ddc0354a440543aa18c2ddc9c47a6807905fd0fcd23e33dfa1f93a337f016114230c472c9ee5f4d56fa45866e828f  0007-media-imx258-Add-i2c-supply.patch
+a9feac6a2eaf059699584dab91665a3bcf4afce09dba8c69739c77a1fc3639d01de1dc8fd68d3593afeeac8413a1c1e37d6bf59f272e9f8e504fa67b26d07f76  0008-media-imx258-Add-reset-gpio.patch
+50983f8bf418b0b602aa4fedaba273316d13eebff0c4a03f8f680851797a1f28fcf2da0ca98d1fa61cb0e3eb30a36a23b936262f426bfa38a4f43ad64116e307  0009-media-imx258-Drop-interface-speed-to-1224-mbps.patch
+a7c6cde4aa77e5df3e464f7eef00859d1ea71f4874f1d447cb78dbc722691380f60aabfef39ce1e740448593a5017b50cb38d01b68ea7c279c808f5043acfce6  0010-DEBUG-media-imx258-Add-debug-register-access.patch
+001b8f0c086b24acc5b53f0ce13a10d754903314b21f8fc22c45b5bd6ea719c09c2c2b51a839710e1d2fcff70f7dceeac7ac44a24fd42acb8c99cb1bb3c2023c  0011-ASoC-rockchip-Fix-doubling-of-playback-speed-after-s.patch
+f0b43b03a918c66f96d6d2987762eefdd4c5a11f4252a0b977532a17a0d7a24498b10511a059dcb07f7e572cb3864599a31c1fc3ca7505727cf1e08b64a9d614  0012-Revert-usb-dwc3-Abort-suspend-on-soft-disconnect-fai.patch
+1bf5e2cef1ecf4d470b6ef0159fce095eee239f4c296c6bbbc14edf510fb9a20b0048ac537876c91e2cc4c0318572c2eaa727ac5ddacf3dbddea2bf0202043e0  0013-thermal-rockchip-Add-support-for-RV1106-SoC.patch
+7b0e3cb86ebe501fcf82433c2cc046720f311cdeb423d3191fb472f54501e99eafecaf5da338698453e0feb6c00ed29257ecf1a5765290911d47d77467875f43  0014-soc-rockchip-Add-support-for-power-monitoring-driver.patch
+67c5119ae325a9e328e5d9e92690f575d2cfd5c46304c65a4c7966330800fadd7a314fe57ba76c29970ed9afbfebbdf676e95b1a7f3a8b4328ba2dba87d7f2e3  0015-rtc-rockchip-Add-support-for-RTC-present-in-RV1106-S.patch
+a9a8aa2da2f503d86681e4b61606db6bfac4622030f05ea081f4d75b05edfcf4794a3a7575de4c1c9a5025aa3f25be6fa348418f97d06c0bed88843fc2aca9c5  0016-thermal-rockchip-Add-support-for-RK3506.patch
+96a56ce7aa57c8e1e04892dcf12c043143f6e0dc0affddeb4c565865358d8b51d84fb2e25ef58c9a07a684a8e43058f64dc206c1371b3b07d0e115444885469f  0017-mtd-spi-nor-gigadevice-Add-support-for-gd25lq128e.patch
+c7dfed2e10fc2902647134ce09351c2567d04be3d190ecacd09f08130587311553d12831d1b0652b41eb949f0172308efaa65cda0ea0b53aeff92c007b805619  0018-clk-rk3399-Export-SCLK_CIF_OUT_SRC-to-device-tree.patch
+1639b72d3552817018fb2811388d30c0c5f958ef0e14dd395962db0394bc8cdd8369d70ca494668cbad0a36e61df60cf508686ac06794639038dbc0d15382477  0019-clk-rockchip-rk3399-Don-t-allow-to-reparent-dclk_vop.patch
+247a291979eafbccdfe85c99a569235f7fff860f037e2d47fd76312bb20277c0f0fa3e523be969f977657b602a88b846f2ddc058c243b64828bcca0315fe7386  0020-power-supply-Add-support-for-USB_BC_ENABLED-and-USB_.patch
+888dbcd2af60be116391e9464b0915a2468fcb2661803f2df54e9df9b1d38c718eabaf704c0d9c6cbf96f73b115ed14bac0d2bbbb87617cf10181b357a2c719e  0021-mfd-rk8xx-Enable-rk808-clkout2-function.patch
+73e2cadbfacb5c8e9547ca410efb6c11a9c87dc8239fd7096f2373d56a7697f19114c08811b8a01b1de5e199cbd20f9a78cc5c4e0db6830b79842a8eede9d079  0022-power-supply-rk818_battery-Add-battery-charger-drive.patch
+6d7027d970a389213ef8a233c564df25e854f8635db2dbf4c14f7d29de51ad6d3d9ee61523513be71b382c2ee1d730bd32160b1809ed0dcbfec2c7b24c6547ad  0023-power-supply-rk818_battery-Add-code-docs-for-the-HW-.patch
+b443aaa45d2bcb98b2b6c43577722fb718198f06baf126e2c1ea2d636a8874787a972c45d0bf83bdceb783920280a7cfeeb7e8d18b2b2634f685e974cc362e97  0024-Revert-usb-typec-tcpm-unregister-existing-source-cap.patch
+db34fb8ee7c4ba3baba480ccbe7df866fe7f5277a80739f7eeeadde80c1a4fa103df4f5995ba9660de725ece6aabeaefc302db39d50b6fa8c7fe3fdb212c6e26  0025-usb-typec-altmodes-displayport-Respect-DP_CAP_RECEPT.patch
+98229ad878e1158c887c63c1cfe72b7ca7084bf6b42f092005ba1e327307c20e7c77246cb9258ad2f0813722a91e6023f45553230bff7d248c1923c1452a94c4  0026-usb-typec-tcpm-Unregister-altmodes-before-registerin.patch
+89edc9f8935f6905e37e18a554787cf5262624f4c5b9e4dfaa984022bdfb1e0293e95bf731f27ca7640f352167676924b720d9a6a09bded813c07fd152878f63  0027-usb-typec-tcpm-Fix-PD-devices-capabilities-registrat.patch
+196080cfeee98682195153f0918edbd08b302e5bad5afc9860747b0b6b90159a133813e0b6940ffabf9a88be36088a680f647cd5b611083c9139ea123989783f  0028-usb-typec-fusb302-Slightly-increase-wait-time-for-BC.patch
+dc4d378cd114949ad51f47a8da7deb9cda63a75432f6f386086d41fa0ebe126657da270af89df84495c1777be7e5041274a780877b2ce6ca387e35aaaca7a46d  0029-usb-typec-fusb302-Set-the-current-before-enabling-pu.patch
+67049fa20660f5924cf06001ac9e55363f337e4cda084f79b828a9863627893c5a3f4d5cc809d613f60d792540eee579097b652bf49dfee8c9840892485beaad  0030-usb-typec-fusb302-Retry-reading-of-CC-pins-status-if.patch
+3bf2d0ac9c737eb761461ab5eb5597c05ef8b368a69b9b0c48ae2b68e58da2d432cd9060fea80c2541b7f453c6fc93657ef94aa073a893b48a7407632d46820d  0031-usb-typec-fusb302-Update-VBUS-state-even-if-VBUS-int.patch
+d9b11a9acbbb64668332e202c786457f370c7f9d2bdedf6144b434d992d067ada00ab027067da0a597277c726ccb7ae68d49580848a95ea88775f0a6837586f7  0032-usb-typec-fusb302-Add-OF-extcon-support.patch
+4946338c55952347050ac2c3cb814ce778b8c9933a1974ed093daf82e8234b0a2d8ccb808c9beb29451d41c80a6cc03917a9d1a2a72a374a47374d20d3ca460f  0033-usb-typec-fusb302-Fix-register-definitions.patch
+f72b87321bb0ff45e58e729587d6edf97604f1cbf3b5c82e9b26289096f752b0725e800a22525ab662f378eca2637463e3ceb7e213b86f6f5293705dd509d119  0034-usb-typec-fusb302-Clear-interrupts-before-we-start-t.patch
+4ae24e87a3b514a8fbb41cf47d5d00292bc399ed8fd1299ef4dc4990c31143c5c6d3fbc6c6480089c492b3988f743a86b30420c91a1d551968a3758ea9538b03  0035-usb-typec-fusb302-Turn-off-VBUS-and-VCONN-on-shutdow.patch
+065427abc79c435762e25a40cc13b35a14feeca318f767d0384970cf57e7c785c796923bd891746edd0497079941313b0b7839c7988f63e243c8166a0c8f3579  0036-phy-rockchip-inno-usb2-Add-support-for-RV1106-RV1103.patch
+9115fe459431dac6558d60f9e6ebab1fef726413c8a3bdb88b21e402f2b1ccd0c485ce65aa9feaca948b2ef88bff6ea38973c761bac0f7dccb7b019938c37ae5  0037-phy-rockchip-inno-usb2-Add-support-for-RK3506.patch
+2abd784fd1a6abe3ca5da3919f7a9b7617379d06340cc9549dbf3dee2dcf095fb5aa3735d08e93f4363247667ba14d9f6c96e414afa965b65e12fd00af08bd48  0038-phy-rockchip-inno-usb2-Add-PHY-tuning-for-rk3566-rk3.patch
+60656a8bdf90e92661d5d2b69aad78489955e5a82edbee67b385a3285bbb59d59c615e47ad83f993ed3c5b4ee6f39958e5199492d41cf652e333473d27136855  0039-drm-rockchip-cdn-dp-Disable-CDN-DP-on-disconnect.patch
+a941594dd09c6468c6b89ba56f8ba127aedc15228904667f521cfbf9d25dafac8dc8e8ecddea3c86af2a1305d2fb40035f85bf3b559a5574bad3e0362649f290  0040-phy-rockchip-inno-usb2-Decrease-delay-between-port-i.patch
+b0093aec9b85ef54400585c23b9a1cc2b31598c847cb998ae03f277eaa81a0cdf8c979ac7b8d581b4dff7bd70c601d812eb6ef7bff543fbc00f5ba9436cea748  0041-phy-rockchip-inno-usb2-More-robust-charger-detection.patch
+32e6b984e14996387c232ac0ac708d7eaf75d1fc6de3ec5df53a110368be270177cd02253523c66163f6d0c227b0b6a18d171411d76c2757bbe4dd13facb8920  0042-usb-dwc3-Track-the-power-state-of-usb3_generic_phy.patch
+7b4ce3f693b3d1731693c79fdf114de0c67b5a74406b3b46b1bd133babb6e5a20c3e2466feb33239dfc9dd08f9db68fc018c8a80a1115dfd2fd8812b7da017fa  0043-usb-dwc3-Always-disable-SUSPHY-when-entering-a-role.patch
+302dad47110479739cb5348c938ad9c9c3b41d0ce46c45ee49211cf71578ca2342edaea664b52d3855fd5a7e8ae7fd850d80bd080a43423c349254e47ff79b11  0044-usb-dwc3-Track-cable-connection-state-separately-fro.patch
+e08557f8efe8f730d358f247771d32d3001ea3337db950f3a785b632be8098044933276f2b1a5b376270b88bb21345c056ccb818b74e59b93fb291d062edc85c  0045-usb-dwc3-Power-cycle-USB3-PHY-on-role-connection-cha.patch
+107bdb8b4d289306b8f4be1f7088a44a239e8e66cc286d9108f14281d7bb64a5defb54909ec9a356b7bf60aa83152e5c9ac9c5aa8f872a69cf201a5b9c8cff69  0046-usb-dwc3-Register-the-role-even-when-no-cable-is-con.patch
+46a8452081223bdf5864c86f50e070a796b7d495b77ad861804e862d2659df29f9c17130bc9ff438b5c9a8cb8df4c3c55191eecb339c5691ad6d9c341c1d6293  0047-phy-rockchip-inno-usb2-Set-up-charger-detection-mode.patch
+ec262e3094fe7edac553d8b29662182ca9b617bba266c1e959b04fea1c358dc26be123cb0e5e286e08aac5210f8ba26172230bc9508b8685a293d0349276dc6a  0048-usb-dwc3-Do-not-re-register-the-gadget-on-cable-even.patch
+3561f087e06bb61eb1f3c10250120bf747e879aa7aebe039f148d20a8960c9b545f90a882960bc91a4eda593092dcf36de34e81074ed2ccbadb37a9cc2c04731  0049-phy-rockchip-typec-Support-a-Type-C-orientation-swit.patch
+cf24ee439036f001d66a6c9c8662f8cafcb0e3b068269782de00b8a1fb14a58b39b66a17078bc0d9c22c8e76093633aeae553c3c05aec803e08b96a40134a3f6  0050-phy-rockchip-typec-Support-a-Type-C-mode-mux.patch
+5d659877cb2fd5f099eac102ef2f6da7975215bfbf52b8790999cb11a8be06f37c7c87d26e6fa1c38d6c803e6988913bfb91b41948585fca1d3513d2471d0c77  0051-phy-rockchip-typec-Publish-the-DP-lane-count.patch
+76d1b5efc343564f7dde1dbcb8f46a564879395aa12b3b6aa21aaf1ea018ee14c5c2a0dea6cb13d5609a716b623bf008aa11e29021363a57dc33fdf762f6fd43  0052-drm-rockchip-cdn-dp-Support-ports-driven-by-a-Type-C.patch
+b6f71b575b69b5a44892bfd51253fff8e422d701d95e1b4cf318b1263ed3227a7e861f181458f37af933e26d3756e985646e2b9f9cec654ce0ac419f822d8a04  0053-phy-rockchip-inno-usb2-Learn-the-host-role-from-phy_.patch
+cfedc21450d5ac15411f0703179f312dcf1a7d179d8983a269b69e06b2c07d1292abbb9a741caf7e18d091bac47d87bd0be5382a1b0077136ee67e4fa8e25b0e  0054-usb-dwc3-Tell-the-UDC-core-when-there-is-no-cable.patch
+c79dc3ff0ad97514df04bb295f1a33d022c3200b02c21162a2cd9c1da453c935be3d49486904741968dfffda18ff7c273b783eac3ccab875ca99964c07b4eacc  0055-phy-rockchip-inno-usb2-Do-not-run-charger-detection-.patch
+56f43f4f6448506d7ddce07b5cb0bcfa8a82fd799da17c7be0c9cec0d7194035455b9850a9637ad1226f80fa01b6a6834c33e3bc50da855e5121160eda806a44  0056-usb-dwc3-Set-the-PHY-mode-before-starting-the-host.patch
+86a7b1e9f59e1532c985d3a4a1edd196e4ab47b3047627306e9e7fe122bf3f7fa6a2049f9467d30a221c3d65277600e91d71e9fa295c388117b379456adc2970  0057-usb-dwc3-Do-not-connect-the-gadget-while-no-cable-is.patch
+9e5ad8a5f08e6419f6bd25162fe4e542b2cc33890ef761e35fac4fb324f10d5df96fe0f5be3458ee636dd57f05f90ced31d01c084a3580beed7c1c71573f7b23  0058-phy-rockchip-inno-usb2-Power-the-PHY-up-before-the-h.patch
+2c6d05ddb458189aedb70f8ba6036fadc942f1b2634003c2f2325625a8a1a4afa933c927d893b4fdac406b593cbeb321320be6f835ca7cb0268448738f850ffc  0059-usb-dwc3-Require-MPS-aligned-OUT-buffers.patch
+d40ca07d6379fedd78858097c4e57fea2a52a24254be0a534874c641d1e9ed5e1ee96755420fd45bea1ec538b0340f326712230d5fb1377a07521c8c6c93debf  0060-usb-typec-displayport-Update-the-mux-before-signalli.patch
+36a5a4ca60c45161e7913edde968d87884d6c552d6f0bc119a9b6ff3c0d0d3e750410df4cd891c0233f56c3a5b80ef7a7aadb34ec4936dce1f399301fa993001  0061-arm64-dts-rockchip-rk3399-Disable-debug-nodes.patch
+15998054b6521020e4895c2024ce2ad9db3650220ee0d3eb693fa44c72086520eefa592c824b015d514b593ca7ded1d3c5b6e1f7146b1133598cae13b4994c62  0062-arm64-dts-rockchip-rk3399-Add-reboot-mode-driver.patch
+60904d0dd44dd3740991dcdfb752d7d78470a9814414d407e7ca2de0d4061716deb1c70e08ae1937684e05f5ef6ba4fe57fbcdea69374053906ee3753d11fc63  0063-arm64-dts-rockchip-rk3399-Power-cycle-the-USB3-PHY-o.patch
+dff55b92a62499fe5c46d68debeac92213038058b8fd19652b4ae7cc5980205bdb560e568cba4c8109ae298fceeb79c7815f0f405501c8fbccdb759d828bd5f5  0064-arm64-dts-rockchip-rk3399-Add-dmc_opp_table.patch
+9f8b94efc2d5c0a6602122731e70a29f8439d2b4861211da189cdb845f707530bd7c73956ad85c94aeb94ec8b62918f8f6b17687b84470087580b3a15c4a5a55  0065-arm64-dts-rockchip-rk3399-s-Add-DMC-table.patch
+9ea12b3c4ccc408cb07116da003186ac2060cece7c4847f55489c6fd0cae6035a2555eebf0bbbb54d674d44fc5db0e1bbe1a2ded48dc5ec2a6a3df4c2e2ca185  0066-arm64-dts-rockchip-rk3399-Number-the-CDN-DP-ports.patch
+1ecce40405e69b9fec96d1535622ca71ccb5fc76753b459c9e321c7903178623ddc31f5527ca1949b071d47ce1f73dbce74dea8059bc1b683d253f83d9130c80  0067-arm64-dts-rockchip-rk3399-pinephone-pro-Add-Type-C-p.patch
+2f1dcbe2f0538cdc4c01aa2992afc1f26d1599e1505780b286c1e645a81be5ed1f44288bf5024c2e3178e2f438f38b7220c76f1fce842548cdcec37728d18b9f  0068-arm64-dts-rockchip-rk3399-pinephone-pro-Add-internal.patch
+479cfb8e65ccd95d656ff0fe212aa31cfdd7f3e298d612da27063dcff7e62324210b627e7ab210a273142d3f15384b5f2cadfb1983f3864145355421f99f0957  0069-arm64-dts-rockchip-rk3399-pinephone-pro-Add-battery-.patch
+bdf826beedcfe769acd7475f7a30c3adc8225fa103dd1e37c5a31d750fea3044b077f4903986c0ee3d3102e79948f4375bed7a674498e4c21b34b3ba44e54ba1  0070-arm64-dts-rockchip-rk3399-pinephone-pro-Add-sound-su.patch
+443688c9b00de95b9bd23fbc08741ef488c849211151f7f8bae136149e0f0aa562d2353875120333e2e7f3e187abfd0bebdc1b2b006d725d33d638e0e20496f6  0071-arm64-dts-rockchip-rk3399-pinephone-pro-Add-modem-su.patch
+eb66518e6876badf3ef3bc766328ff621031194dc067ecea5a0ed629702c08cd5f964d3c25c2a1aae9fc5b13615f212c7150ea0c2afe33b0427a1554a6bd4029  0072-arm64-dts-rockchip-rk3399-pinephone-pro-Change-modem.patch
+70f83b6210e991b546c70c594e8d6f28ebc557c301acf1ef9f0d1df625dd709f3744ae1738865626ae7ca5b6ce9682bfbc052766bb6989d67b261abd6606ce85  0073-arm64-dts-rockchip-rk3399-pinephone-pro-Add-light-pr.patch
+077deb29bf5182a0f1689bc7e6da41f553cc7a2c8a2ef96a2b111f9d5e9e2ba8f26d3228af20f79d15f45c0a69aa8f60733a422fad1895700a299a8aad7d1e51  0074-arm64-dts-rockchip-rk3399-pinephone-pro-Add-I2C-supp.patch
+fbb3e8fa505f8a97d512834dd75b849cad5aed4d357dbbe2904d9b435bb8f19c3863ef7417c4ef4afeefc224bd4ad6eab74f4bc00ac66b69aaccb001c29fba71  0075-arm64-dts-rockchip-rk3399-pinephone-pro-Add-magnetom.patch
+2d79639df7928f464217e71e4219a40fa082e36bb410b3d1fa12bb1ab6246199c4976fba84fa32e621939c0c37b08929d2be7380756aec40b8bcaff91298e81d  0076-arm64-dts-rockchip-rk3399-pinephone-pro-Add-mount-ma.patch
+e1e1fc09232f21c69b8a2613d3da6063d669f8f97a340954702e7227214f1a6c4adc866420618cd365753767a0da93e52ac40c3575e5beac9dc778c93895b622  0077-arm64-dts-rockchip-rk3399-pinephone-pro-Enable-POGO-.patch
+ac1e93b71deb4cf8a070c3380061b46e1e1cea094346d02d5f8ed326d3f0e5316ca4ebdae7677ceea3d4456a580542f0075d29df50d1a37d8817392e59e5d380  0078-arm64-dts-rockchip-rk3399-pinephone-pro-Add-pinephon.patch
+8a160ffa6e95afbf58608f030c3ca3a7d7de298f7a20ce8e298eba54576a7f99ffff6389e36a4dc5d8bb1110e112c72e0718e4d8e88fe4049019119ba0c1a8fa  0079-arm64-dts-rockchip-rk3399-pinephone-pro-Switch-LED-b.patch
+5308f80bd8fdaa3d76f26bd278f2d027689b5e75a8d0e6a00e13b6c056bdd1b30875105e2afbe4daa47f282ab3312df3747e74368601f745b394f2f5874d018a  0080-arm64-dts-rockchip-rk3399-pinephone-pro-Pre-configur.patch
+9f61f0602d232c583ec1e447037e8f69eb89fae674e8e1cf65a187d224bc3eeb5da7ce209045c2a48508d9202b355a3ad001ed9ed365b0afdf5cf7e6b98822d3  0081-arm64-dts-rockchip-rk3399-pinephone-pro-Improve-SPI-.patch
+04c6e3f63e897d044945cf05f7a15c3d99ec0889f3518691738e84ffa115532b70215695e9e7c1b6b6c3483b872ed676cefd9cebdcf18f0e83db3d5207045813  0082-arm64-dts-rockchip-rk3399-pinephone-pro-Assign-power.patch
+2baa9dc87a0f7d9f60e0f0429c83943dab6edc25e963fe70d5bf322e713217ce8285691ebbc7b6f73fd3d48a0fd36c8053f819af904753898b27cf12e8e1df54  0083-arm64-dts-rockchip-rk3399-pinephone-pro-Add-camera-f.patch
+e820d9169b6854832d1a29d0c1925732155afe08e72aa865a6804ee67359137cdcbd967acee41913ef36ff1acae02346c4a5f8b07337ab4f9d56ae45b75b56f3  0084-arm64-dts-rockchip-rk3399-pinephone-pro-Disable-inte.patch
+79ac34ea9e3f4e74809c5f30bc90c511a3bf02ed9c00475db2adb0b009c5609b00f14dedccafb0f9f2dea136332df8416b78920807df100faa2ce937484871d3  0001-arm64-dts-rk3399-pinephone-pro-Keep-modem-regulators.patch
+e2555390d48cbbdc32a7d3f0c27599ff88f2fe3e786d1d0086caaa5b092cc3edcb6e95e2fb07034edb3793f6dc954da0662c723202eb7e2c4956c99b50919b12  BTF-seg-fault.patch
 "

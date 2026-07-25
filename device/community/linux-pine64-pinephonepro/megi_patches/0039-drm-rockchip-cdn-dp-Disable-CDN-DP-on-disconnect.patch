@@ -1,0 +1,28 @@
+From 6eb3bfc132cc355363c40a8f7d17ad9469c03307 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>
+Date: Sat, 20 Nov 2021 14:35:52 +0100
+Subject: [PATCH 39/84] drm/rockchip: cdn-dp: Disable CDN DP on disconnect
+
+Why not?
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+(cherry picked from commit bf7cc5c78bcfcf8017573bbd21d69f955e47276e)
+---
+ drivers/gpu/drm/rockchip/cdn-dp-core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+index 177e30445ee8..13b83fe8feed 100644
+--- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
++++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
+@@ -898,6 +898,7 @@ static void cdn_dp_pd_event_work(struct work_struct *work)
+ 		DRM_DEV_INFO(dp->dev, "Not connected; disabling cdn\n");
+ 		dp->connected = false;
+ 
++		cdn_dp_disable(dp);
+ 	/* Connected but not enabled, enable the block */
+ 	} else if (!dp->active) {
+ 		DRM_DEV_INFO(dp->dev, "Connected, not enabled; enabling cdn\n");
+-- 
+2.55.0
+

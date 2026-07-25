@@ -1,0 +1,42 @@
+From 415988faed2eca45c77ae549d9a5ee67df31bf7c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>
+Date: Sat, 20 Nov 2021 14:35:10 +0100
+Subject: [PATCH 34/84] usb: typec: fusb302: Clear interrupts before we start
+ toggling
+
+This is recommended by the datasheet.
+
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+(cherry picked from commit 58df0404dd80e7fff7fe3e7c2e4dc1f61614153c)
+---
+ drivers/usb/typec/tcpm/fusb302.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index 756582f551be..fe5ac6ec954a 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -511,6 +511,7 @@ static int fusb302_set_toggling(struct fusb302_chip *chip,
+ 				enum toggling_mode mode)
+ {
+ 	int ret = 0;
++	u8 reg;
+ 
+ 	/* first disable toggling */
+ 	ret = fusb302_i2c_clear_bits(chip, FUSB_REG_CONTROL2,
+@@ -569,6 +570,12 @@ static int fusb302_set_toggling(struct fusb302_chip *chip,
+ 	} else {
+ 		/* Datasheet says vconn MUST be off when toggling */
+ 		WARN(chip->vconn_on, "Vconn is on during toggle start");
++
++		/* clear interrupts */
++                ret = fusb302_i2c_read(chip, FUSB_REG_INTERRUPT, &reg);
++		if (ret < 0)
++			return ret;
++
+ 		/* unmask TOGDONE interrupt */
+ 		ret = fusb302_i2c_clear_bits(chip, FUSB_REG_MASKA,
+ 					     FUSB_REG_MASKA_TOGDONE);
+-- 
+2.55.0
+
