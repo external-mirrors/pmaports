@@ -2,13 +2,12 @@
 # Co-Maintainer: Aster Boese <asterboese@mailbox.org>
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-oneplus-fajita
-pkgdesc="OnePlus 6T"
 pkgver=30
 pkgrel=0
+pkgdesc="OnePlus 6T"
 url="https://postmarketos.org"
-license="MIT"
 arch="aarch64"
-options="!check !archcheck"
+license="MIT"
 depends="
 	alsa-ucm-conf-sdm845
 	firmware-oneplus-sdm845>=9
@@ -22,18 +21,9 @@ depends="
 	soc-qcom-qbootctl
 	systemd-boot
 	unl0kr-fbforcerefresh
-"
+	"
 depends_openrc="hexagonrpcd-openrc"
 makedepends="devicepkg-dev"
-source="
-	deviceinfo
-	kernel-cmdline.conf
-	hexagonrpcd.confd
-	modules-initfs
-	q6voiced.conf
-	80-device-oneplus-fajita.preset
-	81-libssc-oneplus-fajita.rules
-"
 install="
 	$pkgname-openrc.post-install
 	$pkgname-openrc.post-upgrade
@@ -42,7 +32,17 @@ subpackages="
 	$pkgname-openrc
 	$pkgname-pmtest
 	$pkgname-systemd
-"
+	"
+source="
+	80-device-oneplus-fajita.preset
+	81-libssc-oneplus-fajita.rules
+	deviceinfo
+	hexagonrpcd.confd
+	kernel-cmdline.conf
+	modules-initfs
+	q6voiced.conf
+	"
+options="!archcheck !check"
 
 build() {
 	devicepkg_build $startdir $pkgname
