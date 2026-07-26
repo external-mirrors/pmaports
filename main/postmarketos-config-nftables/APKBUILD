@@ -1,13 +1,14 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-config-nftables
 pkgver=1
-pkgrel=3
+pkgrel=4
 pkgdesc="nftables firewall configuration for postmarketOS"
 url="https://gitlab.com/postmarketos"
 arch="noarch"
 license="MIT"
 depends="openssh-nftrules"
-# No subpackage for ausweisapp2, it's also on flathub, and
+# No subpackage for ausweisapp2 and localsend
+# They are also on flathub, and
 # install_if won't work
 subpackages="
 	$pkgname-openusb
@@ -28,6 +29,7 @@ source="
 	rules/01_wwan.nft
 	rules/10_dhcp.nft
 	rules/50_ausweisapp2.nft
+	rules/50_localsend.nft
 	rules/50_mdns.nft
 	rules/50_rdpserver.nft
 	rules/50_upnp_client.nft
@@ -152,6 +154,7 @@ sha512sums="
 d13d9dca1fcae5c363b59c3f5d1210a33a15b763b0c4b9f722e1cdd03317838e1b503134a17359bb0b6d657d46c2fc6a5fbe6614487f28cbe58f8947fe1edb92  01_wwan.nft
 ae6a8ac03d4643004f5ce9279083bc12a215ceb2ee66993a26ab5620bb1aab347541eb1729b38cc7ec9d232de07e0176bc59475669741dfa2588c9e1ec4a4958  10_dhcp.nft
 a3f3fc76a636b1bed9de251f93cef46139b06e1c13113a6b6100ef08e79d249cb89a1b61d9b6bfbec73bdefdeb47360a6bb048488b4bccc2dccfc26d0635b579  50_ausweisapp2.nft
+31792b874373c12e133b184b39cb04394ca1746ea825746310c8ab9cb28c503f55b0e139cea2d4115db8cdeb9a2155a97abb410e79a9a967d48678d7882e9f3c  50_localsend.nft
 597bf66783379691962f4b87a29e6219d5f87ef17d49b261c7b1eebe54561deafce4be77de3b39252c10b7b4452ac5b55870dd30605d7d0f074d27b06d1dfa6d  50_mdns.nft
 54f7e043b22097fd31d925b1fb34c57f1b4b01331efa34ec0552a8259c217a29e317335df4ce6b4c2abcf2f6565c582c4304be5ac08ba8fd2a988c0af89412f3  50_rdpserver.nft
 5779bbcc55e411ec4da58e4e7eaaa6918cdcea5b8818cd72ab93be2d1108f020861457dbd8079a60b0912f84d05eb7b42274cc9a0577f66e8322f3596b89b411  50_upnp_client.nft
