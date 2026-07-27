@@ -14,6 +14,7 @@ depends="
 	msm-modem-uim-selection
 	tqftpserv
 "
+install="$pkgname-openrc.post-install"
 subpackages="
 	$pkgname-openrc
 	$pkgname-ucm
@@ -36,11 +37,8 @@ package() {
 }
 
 openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
-	depends="
-		tqftpserv-openrc
-	"
+	default_openrc
+	depends="tqftpserv-openrc"
 
 	mkdir -p "$subpkgdir"
 }
