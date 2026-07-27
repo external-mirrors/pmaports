@@ -100,17 +100,70 @@ check_and_apply_presets() {
 	local old_ifs=$IFS
 	IFS=$'\n'
 	for entry in $entries; do
-		if policy_changed "$preset_path" "$entry"; then
-			echo "unit policy has changed for $entry"
-			if echo "$entry" | grep -q '*'; then
-				echo "  wildcards are not supported yet, skipping"
-			else
-				if  [ -f "/usr/lib/systemd/$type/$entry" ]; then
-					systemctl --no-reload preset $extra_args "$entry"
-				else
-					echo "  no unit file found, skipping"
+		if ! policy_changed "$preset_path" "$entry"; then
+			continue
+		fi
+
+		echo "unit policy has changed for $entry"
+
+		if echo "$entry" | grep -qF '*'; then
+			echo "  wildcards are not supported yet, skipping"
+			continue
+		fi
+		# Handle template units with instance arguments, e.g. "unudhcpd@.service usb0"
+		# See systemd.preset(5) "Enable multiple template instances"
+		case "$entry" in
+			*@.*)
+				# Only act if there are instances listed after the template name
+				instances="${entry#* }"
+				if [ "$instances" = "$entry" ]; then
+					# handle templates listed without instances in the preset just like any other
+					# unit, this assumes they have a DefaultInstance= set
+					break
 				fi
-			fi
+
+				template="${entry%% *}"
+				if [ ! -f "/usr/lib/systemd/$type/$template" ]; then
+					echo "  no unit file found, skipping"
+					continue
+				fi
+				# e.g. "unudhcpd@" and "service"
+				base="${template%.*}"
+				suffix="${template##*.}"
+
+				# extract instance lists from new and old preset files for diffing
+				new_instances=""
+				if [ -f "$preset_path" ]; then
+					new_instances="$(grep " $template " "$preset_path" | sed "s/.* $template //")"
+				fi
+				old_instances=""
+				if [ -f "$preset_path.old" ]; then
+					old_instances="$(grep " $template " "$preset_path.old" | sed "s/.* $template //")"
+				fi
+
+				# only preset instances that were added or removed should be preset
+				# note: IFS is changed to split on words, so we can pick up multiple instances
+				# that might be listed after the template
+				local saved_ifs="$IFS"
+				IFS=' '
+				for inst in $new_instances $old_instances; do
+					if echo " $new_instances " | grep -qF " $inst " && \
+					   echo " $old_instances " | grep -qF " $inst "; then
+						continue
+					fi
+					systemctl --no-reload preset $extra_args "${base}${inst}.${suffix}"
+				done
+				IFS="$saved_ifs"
+
+				# done processing this line
+				continue
+				;;
+		esac
+
+		if [ -f "/usr/lib/systemd/$type/$entry" ]; then
+			systemctl --no-reload preset $extra_args "$entry"
+		else
+			echo "  no unit file found, skipping"
 		fi
 	done
 	IFS="$old_ifs"
