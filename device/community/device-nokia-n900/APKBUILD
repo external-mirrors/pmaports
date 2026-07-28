@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=64
+pkgver=65
 pkgrel=0
 pkgdesc="Nokia N900"
 url="https://postmarketos.org"
@@ -35,7 +35,7 @@ subpackages="
 	$pkgname-openrc
 	$pkgname-sway
 	$pkgname-udev
-	$pkgname-wayland
+	$pkgname-wlroots
 	$pkgname-x11
 	$pkgname-xkeyboard-config:xkeyboard_config
 "
@@ -101,36 +101,46 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	# boot/initialization
+
+	### initramfs/fde
 	install -D -m644 "$srcdir"/boot.scr \
 		"$pkgdir"/boot/boot.scr
-	install -D -m644 "$srcdir"/backlight-enable.sh \
-		"$pkgdir"/usr/share/mkinitfs/hooks/00-$pkgname-backlight.sh
-	install -D -m644 "$srcdir"/pointercal \
-		"$pkgdir"/etc/pointercal
-	install -Dm644 "$srcdir"/10-initfs-input.files \
-		"$pkgdir"/usr/share/mkinitfs/files/10-initfs-input.files
-	install -Dm644 "$srcdir"/10-initfs-keymap.sh \
-		"$pkgdir"/usr/share/mkinitfs/hooks/10-initfs-keymap.sh
-	install -D -m644 "$srcdir"/usr-share-mkinitfs-hooks-01-omap-disable-idle.sh \
-		"$pkgdir"/usr/share/mkinitfs/hooks/01-omap-disable-idle.sh
-	install -Dm755 "$srcdir"/bq27k-monitor.sh \
-		"$pkgdir"/usr/bin/bq27k-monitor
-	install -Dm755 "$srcdir"/screenlock.sh \
-		"$pkgdir"/usr/bin/screenlock.sh
-	install -Dm644 "$srcdir"/usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf \
-		"$pkgdir"/usr/share/unl0kr/unl0kr.conf.d/00-n900-keyboard.conf
-
-	# Udev & hwdb rules
-	install -D -m644 "$srcdir"/10-nokia-modem.rules \
-		"$pkgdir"/usr/lib/udev/rules.d/10-nokia-modem.rules
-	install -D -m644 "$srcdir"/15-bq27k.rules \
-		"$pkgdir"/usr/lib/udev/rules.d/15-bq27xxx-battery.rules
 	install -D -m644 "$srcdir"/usr-lib-udev-hwdb.d-99-n900-hwkb.hwdb \
 		"$pkgdir"/usr/lib/udev/hwdb.d/99-n900-hwkb.hwdb
 	install -D -m644 "$srcdir"/usr-lib-udev-rules.d-72-n900-input.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/72-n900-input.rules
+	install -Dm644 "$srcdir"/10-initfs-input.files \
+		"$pkgdir"/usr/share/mkinitfs/files/10-initfs-input.files
+	install -D -m644 "$srcdir"/backlight-enable.sh \
+		"$pkgdir"/usr/share/mkinitfs/hooks/00-$pkgname-backlight.sh
+	install -D -m644 "$srcdir"/usr-share-mkinitfs-hooks-01-omap-disable-idle.sh \
+		"$pkgdir"/usr/share/mkinitfs/hooks/01-omap-disable-idle.sh
+	install -Dm644 "$srcdir"/10-initfs-keymap.sh \
+		"$pkgdir"/usr/share/mkinitfs/hooks/10-initfs-keymap.sh
+	install -Dm644 "$srcdir"/usr-share-unl0kr-unl0kr.conf.d-00-n900-keyboard.conf \
+		"$pkgdir"/usr/share/unl0kr/unl0kr.conf.d/00-n900-keyboard.conf
 
-	# Keymap
+	### modem
+	install -D -m644 "$srcdir"/modem-opts.conf \
+		"$pkgdir"/usr/lib/modprobe.d/nokia-modem.conf
+	install -D -m644 "$srcdir"/modem-load.conf \
+		"$pkgdir"/usr/lib/modules-load.d/10-nokia-modem.conf
+	install -D -m644 "$srcdir"/10-nokia-modem.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/10-nokia-modem.rules
+
+	### other udev rules and scripts
+	install -Dm755 "$srcdir"/bq27k-monitor.sh \
+		"$pkgdir"/usr/bin/bq27k-monitor
+	install -D -m644 "$srcdir"/bq27k-options.conf \
+		"$pkgdir"/usr/lib/modprobe.d/bq27xxx-battery.conf
+	install -D -m644 "$srcdir"/modules.blocklist \
+		"$pkgdir"/usr/lib/modprobe.d/n900-module-blocklist.conf
+	install -D -m644 "$srcdir"/15-bq27k.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/15-bq27xxx-battery.rules
+
+	### console keymap
 	install -D -m644 "$srcdir"/keymaps/rx51_us.bmap.gz \
 		"$pkgdir"/usr/share/bkeymaps/us/rx51_us.bmap.gz
 	install -D -m644 "$srcdir"/keymaps/rx51_ch.bmap.gz \
@@ -161,58 +171,97 @@ package() {
 	install -D -m644 "$srcdir"/keymaps/rx51_ptes.map.gz \
 		"$pkgdir"/usr/share/keymaps/es/rx51_es.map.gz
 
-	# Kernel module management
-	install -D -m644 "$srcdir"/modem-load.conf \
-		"$pkgdir"/usr/lib/modules-load.d/10-nokia-modem.conf
-	install -D -m644 "$srcdir"/modem-opts.conf \
-		"$pkgdir"/usr/lib/modprobe.d/nokia-modem.conf
-	install -D -m644 "$srcdir"/modules.blocklist \
-		"$pkgdir"/usr/lib/modprobe.d/n900-module-blocklist.conf
-	install -D -m644 "$srcdir"/bq27k-options.conf \
-		"$pkgdir"/usr/lib/modprobe.d/bq27xxx-battery.conf
+	# user/session
 
-	# UCM
+	### misc
+	install -D -m644 "$srcdir"/pointercal \
+		"$pkgdir"/etc/pointercal
+	install -Dm755 "$srcdir"/screenlock.sh \
+		"$pkgdir"/usr/bin/screenlock.sh
+
+	### ucm2
 	install -Dm644 "$srcdir"/HiFi.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/RX-51/HiFi.conf
 	install -Dm644 "$srcdir"/RX-51.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/conf.d/RX-51/RX-51.conf
 
-	# UPower
+	### UPower
 	install -Dm644 "$srcdir"/upower.conf \
 		"$pkgdir"/etc/UPower/UPower.conf.d/99-n900-fg.conf
+
+	### wlroots 0.20 (previous versions are getting removed in Alpine)
+	install -D -m644 "$srcdir"/etc-profile.d-25wlr-pixman.sh \
+		"$pkgdir"/etc/profile.d/25wlr-pixman.sh
+
+	### X11
+	install -D -m644 "$srcdir"/40-xkb.conf \
+		"$pkgdir"/usr/share/X11/xorg.conf.d/40-xkb.conf
+	install -Dm644 "$srcdir"/xresources \
+		"$pkgdir"/usr/share/X11/Xresources-mobile
+
+	### xkeyboard-config
+	install -D -m644 "$srcdir"/xkb-keymap \
+		"$pkgdir"/usr/share/xkeyboard-config-2/symbols/nokia_vndr/nokiarx51
+
+	# UI-specific
+
+	### i3wm
+	install -D -m644 "$srcdir"/i3wm.conf \
+		"$pkgdir"/etc/xdg/i3/config
+	install -D -m755 "$srcdir"/config-checker \
+		"$pkgdir"/usr/bin/i3-config-checker
+	install -D -m755 "$srcdir"/pwr-key-handler.sh \
+		"$pkgdir"/usr/bin/pwr-key-handler
+
+	### sway
+	install -D -m644 "$srcdir"/etc-sway-config.d-n900-status.conf \
+		"$pkgdir"/etc/sway/config.d/01-status-bar.conf
+	install -D -m644 "$srcdir"/etc-sway-config.d-nokia-n900.conf \
+		"$pkgdir"/etc/sway/config.d/nokia-n900.conf
+
+	# application-specific
+
+	### foot
+	install -D -m 644 "$srcdir"/etc-xdg-foot-foot.ini \
+		"$pkgdir"/etc/xdg/foot/foot.ini
+
+	### i3blocks
+	install -D -m755 "$srcdir"/battery-bq27200 \
+		"$pkgdir"/usr/share/i3blocks/battery-bq27200
+	install -D -m755 "$srcdir"/calendar \
+		"$pkgdir"/usr/share/i3blocks/calendar
+	install -D -m644 "$srcdir"/i3blocks.conf \
+		"$pkgdir"/etc/xdg/i3blocks/config
+	install -D -m755 "$srcdir"/ofono \
+		"$pkgdir"/usr/share/i3blocks/ofono
+	install -D -m755 "$srcdir"/wifi \
+		"$pkgdir"/usr/share/i3blocks/wifi
 }
 
 x11() {
 	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
 	depends="unclutter-xfixes scrot xautolock xdotool xinput xrdb xset"
-	install -D -m644 "$srcdir"/40-xkb.conf \
-		"$subpkgdir"/usr/share/X11/xorg.conf.d/40-xkb.conf
-	install -Dm644 "$srcdir"/xresources \
-		"$subpkgdir"/usr/share/X11/Xresources-mobile
+	amove usr/share/X11/xorg.conf.d/40-xkb.conf
+	amove usr/share/X11/Xresources-mobile
 }
 
 xkeyboard_config() {
 	install_if="$pkgname=$pkgver-r$pkgrel xkeyboard-config"
 	replaces="xkeyboard-config"
-	install -D -m644 "$srcdir"/xkb-keymap \
-		"$subpkgdir"/usr/share/xkeyboard-config-2/symbols/nokia_vndr/nokiarx51
+	amove usr/share/xkeyboard-config-2/symbols/nokia_vndr/nokiarx51
 }
 
 i3wm() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-i3wm"
 	depends="brightnessctl i3blocks rxvt-unicode sxmo-dmenu"
-	install -D -m644 "$srcdir"/i3wm.conf \
-		"$subpkgdir"/etc/xdg/i3/config
-	install -D -m755 "$srcdir"/config-checker \
-		"$subpkgdir"/usr/bin/i3-config-checker
-	install -D -m755 "$srcdir"/pwr-key-handler.sh \
-		"$subpkgdir"/usr/bin/pwr-key-handler
+	amove etc/xdg/i3/config
+	amove usr/bin/i3-config-checker
+	amove usr/bin/pwr-key-handler
 }
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	depends="wl1251-cal-openrc"
-	amove usr/lib/modprobe.d/nokia-modem.conf
 	amove usr/lib/modules-load.d/10-nokia-modem.conf
 }
 
@@ -220,39 +269,28 @@ sway() {
 	depends="brightnessctl foot i3blocks jq"
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-sway"
 	replaces="postmarketos-ui-sway"
-	install -D -m644 "$srcdir"/etc-sway-config.d-nokia-n900.conf \
-		"$subpkgdir"/etc/sway/config.d/nokia-n900.conf
-	install -D -m644 "$srcdir"/etc-sway-config.d-n900-status.conf \
-		"$subpkgdir"/etc/sway/config.d/01-status-bar.conf
+	amove etc/sway/config.d/01-status-bar.conf
+	amove etc/sway/config.d/nokia-n900.conf
 }
 
 foot() {
 	install_if="$pkgname=$pkgver-r$pkgrel foot"
 	replaces="foot"
-	install -D -m 644 "$srcdir"/etc-xdg-foot-foot.ini \
-		"$subpkgdir"/etc/xdg/foot/foot.ini
+	amove etc/xdg/foot/foot.ini
 }
 
 i3blocks() {
 	install_if="$pkgname=$pkgver-r$pkgrel i3blocks"
-	install -D -m644 "$srcdir"/i3blocks.conf \
-		"$subpkgdir"/etc/xdg/i3blocks/config
-	install -D -m755 "$srcdir"/battery-bq27200 \
-		"$subpkgdir"/usr/share/i3blocks/battery-bq27200
-	install -D -m755 "$srcdir"/ofono \
-		"$subpkgdir"/usr/share/i3blocks/ofono
-	install -D -m755 "$srcdir"/calendar \
-		"$subpkgdir"/usr/share/i3blocks/calendar
-	install -D -m755 "$srcdir"/wifi \
-		"$subpkgdir"/usr/share/i3blocks/wifi
+	amove etc/xdg/i3blocks/config
+	amove usr/share/i3blocks/battery-bq27200
+	amove usr/share/i3blocks/calendar
+	amove usr/share/i3blocks/ofono
+	amove usr/share/i3blocks/wifi
 }
 
-wayland() {
-	# This is only useful on wlroots, but it has too many verions in Alpine
-	# at the moment to come up with a sane install_if
-	install_if="$pkgname=$pkgver-r$pkgrel wayland-libs-server"
-	install -D -m644 "$srcdir"/etc-profile.d-25wlr-pixman.sh \
-		"$subpkgdir"/etc/profile.d/25wlr-pixman.sh
+wlroots() {
+	install_if="$pkgname=$pkgver-r$pkgrel wlroots"
+	amove etc/profile.d/25wlr-pixman.sh
 }
 
 sha512sums="
