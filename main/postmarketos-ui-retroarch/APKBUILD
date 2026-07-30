@@ -14,6 +14,7 @@ depends="
 	polkit-elogind
 	retroarch
 	"
+depends_openrc="elogind-openrc"
 install="postmarketos-ui-retroarch-openrc.post-install postmarketos-ui-retroarch-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="
@@ -25,13 +26,6 @@ options="!check pmb:drm"
 package() {
 	install -Dm755 retroarch.initd "$pkgdir/etc/init.d/retroarch"
 	install -Dm755 postmarketos-ui-retroarch.sh "$pkgdir/usr/bin/postmarketos-ui-retroarch"
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	depends="elogind-openrc"
-
-	default_openrc
 }
 
 sha512sums="
