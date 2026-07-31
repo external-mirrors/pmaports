@@ -3,7 +3,7 @@
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=linux-purism-librem5
 pkgver=6.12.94
-pkgrel=2
+pkgrel=3
 _purismrel=1
 _purismver=${pkgver}pureos$_purismrel
 _commit=db350fb91e60d12fde6bc7b1ece03836b215e444
@@ -41,6 +41,7 @@ _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/linux/-/archive/pureos/$_purismver/linux-pureos$_purismver.tar.gz
 	$_config
+	0001-net-wireless-redpine-Fix-types-to-appease-CFI.patch
 "
 builddir="$srcdir/linux-pureos-$_purismver-$_commit"
 
@@ -73,4 +74,5 @@ package() {
 sha512sums="
 94050892d45a94c9e518d380e16523ada1b4af6c321cfccd42255297b06ad891eb6b3fe30235b59cd7f45401b7d7d50a11eb93d130c2f4bba38af3bd85c92d7e  linux-purism-librem5-6.12.94pureos1.tar.gz
 1b0003a702872899a3a588806caa70eb3e1030a1d7daa3134c669ba0657e6c8c211c22f25f08d7f56eed4c2419782050b3ee4dbf9db6549d9c4b6b5b81ca2942  config-purism-librem5.aarch64
+1ab917836a210f8389e299508033a12d4b7534ff30e727bdd0decf246d0d066a5cd4783cba98b4387107eeffcc64657a1c63a417c7fb3190ace46b537405daf8  0001-net-wireless-redpine-Fix-types-to-appease-CFI.patch
 "

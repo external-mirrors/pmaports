@@ -1,0 +1,181 @@
+From a09226f8305d312f44eeee42103ae6a0e2171e9f Mon Sep 17 00:00:00 2001
+From: Stefan Hansson <newbyte@postmarketos.org>
+Date: Fri, 31 Jul 2026 20:40:12 +0200
+Subject: [PATCH] net: wireless: redpine: Fix types to appease CFI
+
+Avoids errors like:
+
+    CFI failure at kthread+0x124/0x1cc (target: rsi_coex_scheduler_thread+0x0/0x1b4 [redpine_91x]; expected type: 0x89fb613d)
+
+Signed-off-by: Stefan Hansson <newbyte@postmarketos.org>
+---
+ drivers/net/wireless/redpine/rsi_91x_coex.c     |  6 ++++--
+ drivers/net/wireless/redpine/rsi_91x_main.c     | 12 +++++++++---
+ drivers/net/wireless/redpine/rsi_91x_sdio_ops.c |  7 +++++--
+ drivers/net/wireless/redpine/rsi_91x_usb_ops.c  |  5 +++--
+ drivers/net/wireless/redpine/rsi_common.h       |  2 +-
+ drivers/net/wireless/redpine/rsi_sdio.h         |  2 +-
+ drivers/net/wireless/redpine/rsi_usb.h          |  2 +-
+ 7 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/wireless/redpine/rsi_91x_coex.c b/drivers/net/wireless/redpine/rsi_91x_coex.c
+index b5c8d6969fb8..76155c8781a3 100644
+--- a/drivers/net/wireless/redpine/rsi_91x_coex.c
++++ b/drivers/net/wireless/redpine/rsi_91x_coex.c
+@@ -87,13 +87,15 @@ static void rsi_coex_sched_tx_pkts(struct rsi_coex_ctrl_block *coex_cb)
+ /**
+  * rsi_coex_scheduler_thread() - This function is a kernel thread to schedule
+  *			       the coex packets to device
+- * @common: Pointer to the driver private structure.
++ * @data: Pointer to the driver private structure.
+  *
+  * Return: None.
+  */
+-static void rsi_coex_scheduler_thread(struct rsi_common *common)
++static int rsi_coex_scheduler_thread(void *data)
+ {
++	struct rsi_common *common = data;
+ 	int status = 0;
++
+ 	struct rsi_coex_ctrl_block *coex_cb =
+ 		(struct rsi_coex_ctrl_block *)common->coex_cb;
+ 	u32 timeout = EVENT_WAIT_FOREVER;
+diff --git a/drivers/net/wireless/redpine/rsi_91x_main.c b/drivers/net/wireless/redpine/rsi_91x_main.c
+index d9f2e9e3ed4d..786379f97f4d 100644
+--- a/drivers/net/wireless/redpine/rsi_91x_main.c
++++ b/drivers/net/wireless/redpine/rsi_91x_main.c
+@@ -600,13 +600,14 @@ EXPORT_SYMBOL_GPL(redpine_read_pkt);
+ /**
+  * rsi_tx_scheduler_thread() - This function is a kernel thread to send the
+  *			       packets to the device.
+- * @common: Pointer to the driver private structure.
++ * @data: Pointer to the driver private structure.
+  *
+  * Return: None.
+  */
+-static void rsi_tx_scheduler_thread(struct rsi_common *common)
++static int rsi_tx_scheduler_thread(void *data)
+ {
+ 	int status = 0;
++	struct rsi_common *common = data;
+ 	struct rsi_hw *adapter = common->priv;
+ 	u32 timeout = EVENT_WAIT_FOREVER;
+ 
+@@ -630,11 +631,14 @@ static void rsi_tx_scheduler_thread(struct rsi_common *common)
+ 		}
+ 	} while (atomic_read(&common->tx_thread.thread_done) == 0);
+ 	kthread_complete_and_exit(&common->tx_thread.completion, 0);
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_SDIO_INTR_POLL
+-void rsi_sdio_intr_poll_scheduler_thread(struct rsi_common *common)
++int rsi_sdio_intr_poll_scheduler_thread(void *data)
+ {
++        struct rsi_common *common = data;
+         struct rsi_hw *adapter = common->priv;
+         int status = 0;
+ 
+@@ -646,6 +650,8 @@ void rsi_sdio_intr_poll_scheduler_thread(struct rsi_common *common)
+ 
+         } while (atomic_read(&common->sdio_intr_poll_thread.thread_done) == 0);
+         kthread_complete_and_exit(&common->sdio_intr_poll_thread.completion, 0);
++
++        return 0;
+ }
+ 
+ void init_sdio_intr_status_poll_thread(struct rsi_common *common)
+diff --git a/drivers/net/wireless/redpine/rsi_91x_sdio_ops.c b/drivers/net/wireless/redpine/rsi_91x_sdio_ops.c
+index 843b71904ed7..8c86387e31a1 100644
+--- a/drivers/net/wireless/redpine/rsi_91x_sdio_ops.c
++++ b/drivers/net/wireless/redpine/rsi_91x_sdio_ops.c
+@@ -74,8 +74,9 @@ int rsi_sdio_master_access_msword(struct rsi_hw *adapter,
+ 	return status;
+ }
+ 
+-void rsi_sdio_rx_thread(struct rsi_common *common)
++int rsi_sdio_rx_thread(void *data)
+ {
++	struct rsi_common *common = data;
+ 	struct rsi_hw *adapter = common->priv;
+ 	struct rsi_91x_sdiodev *sdev = adapter->rsi_dev;
+ 	struct sk_buff *skb;
+@@ -99,7 +100,7 @@ void rsi_sdio_rx_thread(struct rsi_common *common)
+ 			if (status) {
+ 				redpine_dbg(ERR_ZONE, "Failed to read the packet\n");
+ 				dev_kfree_skb(skb);
+-				return;
++				return 1;
+ 			}
+ 			dev_kfree_skb(skb);
+ 			if (sdev->rx_q.num_rx_pkts > 0)
+@@ -119,6 +120,8 @@ void rsi_sdio_rx_thread(struct rsi_common *common)
+ 	skb_queue_purge(&sdev->rx_q.head);
+ 	atomic_inc(&sdev->rx_thread.thread_done);
+ 	kthread_complete_and_exit(&sdev->rx_thread.completion, 0);
++
++	return 0;
+ }
+ 
+ /**
+diff --git a/drivers/net/wireless/redpine/rsi_91x_usb_ops.c b/drivers/net/wireless/redpine/rsi_91x_usb_ops.c
+index 186399b8d777..94cd8a5c07b8 100644
+--- a/drivers/net/wireless/redpine/rsi_91x_usb_ops.c
++++ b/drivers/net/wireless/redpine/rsi_91x_usb_ops.c
+@@ -34,12 +34,13 @@
+ /**
+  * rsi_usb_rx_thread() - This is a kernel thread to receive the packets from
+  *			 the USB device.
+- * @common: Pointer to the driver private structure.
++ * @data: Pointer to the driver private structure.
+  *
+  * Return: None.
+  */
+-void rsi_usb_rx_thread(struct rsi_common *common)
++int rsi_usb_rx_thread(void *data)
+ {
++	struct rsi_common *common = data;
+ 	struct rsi_hw *adapter = common->priv;
+ 	struct rsi_91x_usbdev *dev = (struct rsi_91x_usbdev *)adapter->rsi_dev;
+ 	struct sk_buff *skb;
+diff --git a/drivers/net/wireless/redpine/rsi_common.h b/drivers/net/wireless/redpine/rsi_common.h
+index 1ddfcfe14833..2b25740a1377 100644
+--- a/drivers/net/wireless/redpine/rsi_common.h
++++ b/drivers/net/wireless/redpine/rsi_common.h
+@@ -73,7 +73,7 @@ static inline void rsi_reset_event(struct rsi_event *event)
+ 
+ static inline int rsi_create_kthread(struct rsi_common *common,
+ 				     struct rsi_thread *thread,
+-				     void *func_ptr,
++				     int (*func_ptr)(void *data),
+ 				     u8 *name)
+ {
+ 	init_completion(&thread->completion);
+diff --git a/drivers/net/wireless/redpine/rsi_sdio.h b/drivers/net/wireless/redpine/rsi_sdio.h
+index bc22f75184fb..de0a2059dcc9 100644
+--- a/drivers/net/wireless/redpine/rsi_sdio.h
++++ b/drivers/net/wireless/redpine/rsi_sdio.h
+@@ -185,5 +185,5 @@ void rsi_sdio_ack_intr(struct rsi_hw *adapter, u8 int_bit);
+ int rsi_sdio_determine_event_timeout(struct rsi_hw *adapter);
+ int rsi_sdio_check_buffer_status(struct rsi_hw *adapter, u8 q_num);
+ int rsi_read_intr_status_reg(struct rsi_hw *adapter);
+-void rsi_sdio_rx_thread(struct rsi_common *common);
++int rsi_sdio_rx_thread(void *data);
+ #endif
+diff --git a/drivers/net/wireless/redpine/rsi_usb.h b/drivers/net/wireless/redpine/rsi_usb.h
+index 5554bf27b3e4..569eba66eaa2 100644
+--- a/drivers/net/wireless/redpine/rsi_usb.h
++++ b/drivers/net/wireless/redpine/rsi_usb.h
+@@ -114,7 +114,7 @@ int rsi_usb_read_register_multiple(struct rsi_hw *adapter, u32 addr,
+ 				   u8 *data, u16 count);
+ int rsi_usb_write_register_multiple(struct rsi_hw *adapter, u32 addr,
+ 				    u8 *data, u16 count);
+-void rsi_usb_rx_thread(struct rsi_common *common);
++int rsi_usb_rx_thread(void *data);
+ 
+ int rsi_usb_host_intf_write_pkt(struct rsi_hw *adapter, u8 *pkt, u32 len);
+ int rsi_usb_master_reg_read(struct rsi_hw *adapter, u32 reg,
+-- 
+2.52.0
+
