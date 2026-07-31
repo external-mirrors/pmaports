@@ -4,7 +4,7 @@ maintainer="User0 <user0thenyancat@proton.me>"
 _flavor="postmarketos-qcom-msm8227"
 pkgname=linux-$_flavor
 pkgver=6.19.0_rc1
-pkgrel=0
+pkgrel=1
 pkgdesc="Close-to-mainline kernel fork for Qualcomm MSM8930 and MSM8227 devices"
 arch="armv7"
 _carch="arm"
@@ -14,15 +14,18 @@ options="!strip !check !tracedeps pmb:cross-native"
 makedepends="
 	bison
 	clang
-	devicepkg-dev
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
+	zstd
 "
 
 # Source
@@ -52,10 +55,10 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
@@ -63,5 +66,5 @@ package() {
 
 sha512sums="
 ae86b83424c7aa7195ff951435fae20b5eb8598a27782a63e5cbd5234e97798bb94ecca72896fed3c1e5efb863a309fbcd1ab08b7449207f80c934b70bdba405  linux-postmarketos-qcom-msm8227-661c321a9c4bdf9ae41fc084e1f1bdb5bf338622.tar.gz
-ba2a15a0b4089a9f3ceb3806e1dbdd25e2e8efdb87d15cba88427bd8c89f43c0448b360c6adbdd3f46a2b44b64774597179bb8f7a0fb37948ad3275522145186  config-postmarketos-qcom-msm8227.armv7
+5c50853571eed22557d6c94fe18fd7430ca1ae074cc74dd0fbcdab7890f507113bfa78c39d0c1006fcb52f7deb8afc21f7be20249e466a3b5b86184d023e2976  config-postmarketos-qcom-msm8227.armv7
 "
