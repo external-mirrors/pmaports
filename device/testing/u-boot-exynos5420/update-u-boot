@@ -10,6 +10,7 @@ skip_delay=
 get_board() {
 	if [ -z "$board" ] && [ -e /sys/firmware/devicetree/base/compatible ]; then
 		case "$(cat /sys/firmware/devicetree/base/compatible 2>/dev/null)" in
+		samsung,chagall-wifi*) board="chagall-wifi";;
 		samsung,n1awifi*) board="n1awifi";;
 		samsung,n2awifi*) board="n2awifi";;
 		samsung,v1a-wifi*) board="v1a-wifi";;
@@ -30,7 +31,7 @@ usage: $0 [-n,--dry-run] [-i,--imagedir <imagedir>] [-b|--board <board-type>] [-
 
 options:
 
- -b,--board <board>       Specify the board type: n1awifi, n2awifi, v1awifi
+ -b,--board <board>       Specify the board type: chagallwifi, n1awifi, n2awifi, v1awifi
                           (current default: ${board:-none})
 
  -p, --partition <partition> Specify partition to flash u-boot to
@@ -70,6 +71,7 @@ while [ $# -gt 0 ]; do
 	case "$opt" in
 	-b|--board)
 		case "$1" in
+		chagallwifi) board="chagall-wifi" ;;
 		n1awifi) board="n1awifi" ;;
 		n2awifi) board="n2awifi" ;;
 		v1awifi) board="v1a-wifi" ;;
@@ -115,10 +117,10 @@ esac
 
 if [ -z "$dryrun" ]; then
 	if [ -z "$skip_delay" ]; then
-		echo "Updating $board u-boot in $device in 3 seconds..."
+		echo "Updating $board u-boot in $partition in 3 seconds..."
 		sleep 3
 	else
-		echo "Updating $board u-boot in $device"
+		echo "Updating $board u-boot in $partition"
 	fi
 fi
 
