@@ -2,7 +2,7 @@ maintainer="Vitaliy Ognev <vitaliy.ognev@gmail.com>"
 _flavor="powkiddy-x55"
 pkgname=linux-$_flavor
 pkgver=6.19
-pkgrel=0
+pkgrel=1
 pkgdesc="The linux-powkiddy-x55 kernel and modules"
 arch="aarch64"
 _carch="arm64"
@@ -15,12 +15,14 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
 	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	python3
 	xz
@@ -49,7 +51,7 @@ prepare() {
 build() {
 	unset LDFLAGS
 	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 }
 
 package() {
@@ -62,10 +64,10 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir/usr" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
@@ -74,5 +76,5 @@ package() {
 sha512sums="
 01b29c7f4e5bc0c9802794c2cd027fece825f90417be229a71e60eefce530010d5d301749c54ae744e9d4a483518e769e2bb7e6e9209687681ad7fff11c3ed86  linux-6.19.tar.xz
 b38ed4cfe0f20b440426c4ba55eb727cfa64f01370f22d7aca486df4f44aceec1c1d0790c29b8984b151bee0d3ef671253d220dc0c7bec9fef6a4ce1b6cf6169  rtw88_wifi_fix.patch
-cc1424ec74f752b9b9317e17d930ca289da61223b9ff588e0420abe7676d646d678f2ac0d0b2b0c9f40ed493d310f111215489eae0dae19ef4bd8868f47a086a  config-powkiddy-x55.aarch64
+6aebbb1f70d4185f681f2df47fb4ffd16c401f81036119e603b6b383b39b76627fb4386e3565b137403804966330d16690f4b36c6eb366523af95a97d02fb55e  config-powkiddy-x55.aarch64
 "
