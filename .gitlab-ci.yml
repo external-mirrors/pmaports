@@ -154,6 +154,20 @@ kernel-kconfig:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/kconfig.sh
 
+# validate generic kernel kconfig
+generate-all-kconfigs:
+  stage: lint
+  rules:
+    - if: *mr_rule
+      changes:
+      - kconfig-generic.toml
+  script:
+    - .ci/check-generic-kconfig.sh
+  artifacts:
+    when: always
+    paths:
+      - kconfig-*.log
+
 # Verify checksums
 verify-checksums:
   stage: lint
