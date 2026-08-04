@@ -1,7 +1,7 @@
 # pmbootstrap installs this, if systemd is selected in "pmbootstrap init".
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-systemd
-pkgver=87
+pkgver=88
 pkgrel=0
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
@@ -53,6 +53,7 @@ install="
 	"
 subpackages="
 	$pkgname-resolved
+	$pkgname-unudhcpd
 	postmarketos-base-apk-systemd:_apk
 	"
 
@@ -70,6 +71,7 @@ _source644="
 	usr/lib/systemd/system/apk-inhibit.service
 	usr/lib/systemd/system/system.slice.d/10-oomd-defaults.conf
 	usr/lib/systemd/system/tmp.mount.d/10-min-memory.conf
+	usr/lib/systemd/system/unudhcpd@usb0.service.d/udc-only.conf
 	usr/lib/systemd/system/user@.service.d/10-oomd-defaults.conf
 	usr/lib/systemd/user-preset/90-base.preset
 	usr/lib/systemd/user/app.slice.d/10-oomd-defaults.conf
@@ -125,6 +127,12 @@ _apk() {
 	amove usr/lib/systemd/system/apk-inhibit.service
 }
 
+unudhcpd() {
+	install_if="$pkgname=$pkgver-r$pkgrel unudhcpd"
+
+	amove  usr/lib/systemd/system/unudhcpd@usb0.service.d/udc-only.conf
+}
+
 sha512sums="
 ff5b22d095d240a7a222afcdea14cbca8ee78472df3553827c5c02753ee97d84b59624a87952afa5690581910f8f4aaebfe035e97be465ee07ca17c6a7c4cdd7  rootfs-etc-pam.d-sshd
 084f6256e712d33e605c4a1d794ed6ed2d3f31c7ddce5baaad7f44ba74f371f969a16e06f25884a71e4e7216496df0ff0afb6d3246e23932681ad64abfb96975  rootfs-etc-profile.d-20locale.sh
@@ -139,6 +147,7 @@ e81ffc21ef12fe41555bf065836b01bdaeb4e332e8fbb083fb3f1743f920f1d2a1a4fe848d759ec4
 5af6294b8936dee1e2e8429c7eecd28c0e641adffb55d45b05624845971d0ed99ce31b4a1f3c80bc8aa1c59dc2b60ab9e32f78f03c21650c61957c567547f464  rootfs-usr-lib-systemd-system-apk-inhibit.service
 bde7052939d1ddde22fe1df86439d3f1b0cd41810911cee7acf26aac08afe1610360cbbd257b3c1a2e5e7409dff27ade8f3a302a38cd1b99c6cc6eed4cc64a78  rootfs-usr-lib-systemd-system-system.slice.d-10-oomd-defaults.conf
 cedd159b98ce47ee9d03e5f332c4132c7c3eff32135aa7b7993e19c4867d55aff689b418fc549e139c0ea4690f1094e86efcee7a5bc6cd6998ba99821064a917  rootfs-usr-lib-systemd-system-tmp.mount.d-10-min-memory.conf
+9f589ac903f9d1bec228cc6ae45ecba974fbb45a08ce81b68566a98296402822382b166543e62966a1630b482a645063990d905def42d7956e79cd462395fe9b  rootfs-usr-lib-systemd-system-unudhcpd@usb0.service.d-udc-only.conf
 c5252710d8e2f95f5c216cce17737bb14e112c7f1e0b73f085ac0bc3da5a718bb831cc62c0c62e7e5e99337fdcc5c4ace76c5c11bb0ae1f242181ce6829e4fd3  rootfs-usr-lib-systemd-system-user@.service.d-10-oomd-defaults.conf
 c6b22809e77d3134285233988d805c9cdbc3e3c90af320e920aaf4dcfd83582c2a85278f2edf07e70574fdc6cf6ebce58bfc470060ab504061ed8aa389209537  rootfs-usr-lib-systemd-user-preset-90-base.preset
 4217385ab8e0d0e53a6f6eb2ad0ef5c1ae88cab431c9fdca3528f147241edfefe7eec8f2927670dcf79c6f853d2c8a930782fad7e2a28ef6575b55df115f2f83  rootfs-usr-lib-systemd-user-app.slice.d-10-oomd-defaults.conf
