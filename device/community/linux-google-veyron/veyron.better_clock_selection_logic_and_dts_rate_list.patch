@@ -26,18 +26,19 @@ CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Decrease slop
 
 Signed-off-by: Urja Rannikko <urjaman@gmail.com>
 Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+[rebased for Linux 6.18]
 
 ---
- drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c | 271 +++++++++++++-------
- 1 file changed, 174 insertions(+), 97 deletions(-)
+ drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c | 116 ++++++++++++++++++++++++----
+ 1 file changed, 102 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
-index c14f88893868..cb7a302497a5 100644
+index 727cdf768161..9934ee731524 100644
 --- a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
 +++ b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
 @@ -80,8 +80,13 @@ struct rockchip_hdmi {
- 	struct regulator *avdd_0v9;
- 	struct regulator *avdd_1v8;
+ 	struct clk *grf_clk;
+ 	struct dw_hdmi *hdmi;
  	struct phy *phy;
 +	u32* rates;
 +	u32 rates_cnt;
@@ -49,7 +50,7 @@ index c14f88893868..cb7a302497a5 100644
  static struct rockchip_hdmi *to_rockchip_hdmi(struct drm_encoder *encoder)
  {
  	struct rockchip_encoder *rkencoder = to_rockchip_encoder(encoder);
-@@ -89,127 +94,133 @@ static struct rockchip_hdmi *to_rockchip_hdmi(struct drm_encoder *encoder)
+@@ -89,6 +94,23 @@ static struct rockchip_hdmi *to_rockchip_hdmi(struct drm_encoder *encoder)
  	return container_of(rkencoder, struct rockchip_hdmi, encoder);
  }
  
@@ -72,190 +73,22 @@ index c14f88893868..cb7a302497a5 100644
 +
  static const struct dw_hdmi_mpll_config rockchip_mpll_cfg[] = {
  	{
--		27000000, {
--			{ 0x00b3, 0x0000},
--			{ 0x2153, 0x0000},
--			{ 0x40f3, 0x0000}
-+		30666000, {
-+			{ 0x00b3, 0x0000 },
-+			{ 0x2153, 0x0000 },
-+			{ 0x40f3, 0x0000 },
- 		},
--	}, {
--		36000000, {
--			{ 0x00b3, 0x0000},
--			{ 0x2153, 0x0000},
--			{ 0x40f3, 0x0000}
-+	},  {
-+		36800000, {
-+			{ 0x00b3, 0x0000 },
-+			{ 0x2153, 0x0000 },
-+			{ 0x40a2, 0x0001 },
- 		},
--	}, {
--		40000000, {
--			{ 0x00b3, 0x0000},
--			{ 0x2153, 0x0000},
--			{ 0x40f3, 0x0000}
-+	},  {
-+		46000000, {
-+			{ 0x00b3, 0x0000 },
-+			{ 0x2142, 0x0001 },
-+			{ 0x40a2, 0x0001 },
- 		},
--	}, {
--		54000000, {
--			{ 0x0072, 0x0001},
--			{ 0x2142, 0x0001},
--			{ 0x40a2, 0x0001},
-+	},  {
-+		61333000, {
-+			{ 0x0072, 0x0001 },
-+			{ 0x2142, 0x0001 },
-+			{ 0x40a2, 0x0001 },
- 		},
--	}, {
--		65000000, {
--			{ 0x0072, 0x0001},
--			{ 0x2142, 0x0001},
--			{ 0x40a2, 0x0001},
-+	},  {
-+		73600000, {
-+			{ 0x0072, 0x0001 },
-+			{ 0x2142, 0x0001 },
-+			{ 0x4061, 0x0002 },
- 		},
--	}, {
--		66000000, {
--			{ 0x013e, 0x0003},
--			{ 0x217e, 0x0002},
--			{ 0x4061, 0x0002}
-+	},  {
-+		92000000, {
-+			{ 0x0072, 0x0001 },
-+			{ 0x2145, 0x0002 },
-+			{ 0x4061, 0x0002 },
- 		},
--	}, {
--		74250000, {
--			{ 0x0072, 0x0001},
--			{ 0x2145, 0x0002},
--			{ 0x4061, 0x0002}
-+	},  {
-+		122666000, {
-+			{ 0x0051, 0x0002 },
-+			{ 0x2145, 0x0002 },
-+			{ 0x4061, 0x0002 },
- 		},
--	}, {
--		83500000, {
--			{ 0x0072, 0x0001},
-+	},  {
-+		147200000, {
-+			{ 0x0051, 0x0002 },
-+			{ 0x2145, 0x0002 },
-+			{ 0x4064, 0x0003 },
- 		},
--	}, {
--		108000000, {
--			{ 0x0051, 0x0002},
--			{ 0x2145, 0x0002},
--			{ 0x4061, 0x0002}
-+	},  {
-+		184000000, {
-+			{ 0x0051, 0x0002 },
-+			{ 0x214c, 0x0003 },
-+			{ 0x4064, 0x0003 },
- 		},
--	}, {
--		106500000, {
--			{ 0x0051, 0x0002},
--			{ 0x2145, 0x0002},
--			{ 0x4061, 0x0002}
-+	},  {
-+		226666000, {
-+			{ 0x0040, 0x0003 },
-+			{ 0x214c, 0x0003 },
-+			{ 0x4064, 0x0003 },
- 		},
--	}, {
--		146250000, {
--			{ 0x0051, 0x0002},
--			{ 0x2145, 0x0002},
--			{ 0x4061, 0x0002}
-+	},  {
-+		272000000, {
-+			{ 0x0040, 0x0003 },
-+			{ 0x214c, 0x0003 },
-+			{ 0x5a64, 0x0003 },
- 		},
--	}, {
--		148500000, {
--			{ 0x0051, 0x0003},
--			{ 0x214c, 0x0003},
--			{ 0x4064, 0x0003}
--		},
--	}, {
-+	},  {
- 		340000000, {
- 			{ 0x0040, 0x0003 },
- 			{ 0x3b4c, 0x0003 },
- 			{ 0x5a64, 0x0003 },
- 		},
--	}, {
-+	},  {
-+		600000000, {
-+			{ 0x1a40, 0x0003 },
-+			{ 0x3b4c, 0x0003 },
-+			{ 0x5a64, 0x0003 },
-+		},
-+	},  {
- 		~0UL, {
--			{ 0x00a0, 0x000a },
--			{ 0x2001, 0x000f },
--			{ 0x4002, 0x000f },
-+			{ 0x0000, 0x0000 },
-+			{ 0x0000, 0x0000 },
-+			{ 0x0000, 0x0000 },
- 		},
- 	}
- };
- 
- static const struct dw_hdmi_curr_ctrl rockchip_cur_ctr[] = {
--	/*      pixelclk    bpp8    bpp10   bpp12 */
-+	/*      pixelclk      bpp8    bpp10   bpp12 */
- 	{
--		40000000,  { 0x0018, 0x0018, 0x0018 },
--	}, {
--		65000000,  { 0x0028, 0x0028, 0x0028 },
--	}, {
--		66000000,  { 0x0038, 0x0038, 0x0038 },
--	}, {
--		74250000,  { 0x0028, 0x0038, 0x0038 },
--	}, {
--		83500000,  { 0x0028, 0x0038, 0x0038 },
--	}, {
--		146250000, { 0x0038, 0x0038, 0x0038 },
--	}, {
--		148500000, { 0x0000, 0x0038, 0x0038 },
--	}, {
- 		600000000, { 0x0000, 0x0000, 0x0000 },
- 	}, {
--		~0UL,      { 0x0000, 0x0000, 0x0000},
-+		~0UL,       { 0x0000, 0x0000, 0x0000},
- 	}
+ 		30666000, {
+@@ -187,18 +209,19 @@ static const struct dw_hdmi_curr_ctrl rockchip_cur_ctr[] = {
  };
  
  static const struct dw_hdmi_phy_config rockchip_phy_config[] = {
 -	/*pixelclk   symbol   term   vlev*/
 -	{ 74250000,  0x8009, 0x0004, 0x0272},
--	{ 148500000, 0x802b, 0x0004, 0x028d},
+-	{ 165000000, 0x802b, 0x0004, 0x0209},
 -	{ 297000000, 0x8039, 0x0005, 0x028d},
+-	{ 594000000, 0x8039, 0x0000, 0x019d},
 -	{ ~0UL,	     0x0000, 0x0000, 0x0000}
 +	/*pixelclk		    symbol  term    vlev*/
 +	{ CLK_PLUS_SLOP(74250000),  0x8009, 0x0004, 0x0272},
 +	{ CLK_PLUS_SLOP(165000000), 0x802b, 0x0004, 0x0209},
 +	{ CLK_PLUS_SLOP(297000000), 0x8039, 0x0005, 0x028d},
++	{ CLK_PLUS_SLOP(594000000), 0x8039, 0x0000, 0x019d},
 +	{ ~0UL,                     0x0000, 0x0000, 0x0000}
  };
  
@@ -267,7 +100,7 @@ index c14f88893868..cb7a302497a5 100644
  
  	hdmi->regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
  	if (IS_ERR(hdmi->regmap)) {
-@@ -237,43 +256,55 @@ static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
+@@ -227,6 +250,26 @@ static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
  
  	ret = devm_regulator_get_enable(hdmi->dev, "avdd-1v8");
  
@@ -294,19 +127,12 @@ index c14f88893868..cb7a302497a5 100644
  	return ret;
  }
  
- static enum drm_mode_status
--dw_hdmi_rockchip_mode_valid(struct dw_hdmi *dw_hdmi, void *data,
--			    const struct drm_display_info *info,
-+dw_hdmi_rockchip_encoder_mode_valid(struct drm_encoder *encoder,
- 			    const struct drm_display_mode *mode)
+@@ -237,17 +280,20 @@ dw_hdmi_rockchip_mode_valid(struct dw_hdmi *dw_hdmi, void *data,
  {
--	struct rockchip_hdmi *hdmi = data;
-+	struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
--	const struct dw_hdmi_mpll_config *mpll_cfg = rockchip_mpll_cfg;
+ 	struct rockchip_hdmi *hdmi = data;
  	int pclk = mode->clock * 1000;
--	bool exact_match = hdmi->plat_data->phy_force_vendor;
 +	int num_rates = hdmi->rates_cnt;
- 	int i;
++	int i;
  
  	if (hdmi->chip_data->max_tmds_clock &&
  	    mode->clock > hdmi->chip_data->max_tmds_clock)
@@ -315,7 +141,7 @@ index c14f88893868..cb7a302497a5 100644
 -	if (hdmi->ref_clk) {
 -		int rpclk = clk_round_rate(hdmi->ref_clk, pclk);
 -
--		if (abs(rpclk - pclk) > pclk / 1000)
+-		if (rpclk < 0 || abs(rpclk - pclk) > pclk / 1000)
 -			return MODE_NOCLOCK;
 -	}
 +	/*
@@ -326,27 +152,26 @@ index c14f88893868..cb7a302497a5 100644
 +	if (mode->clock > INT_MAX / 1000)
 +		return MODE_BAD;
  
--	for (i = 0; mpll_cfg[i].mpixelclock != (~0UL); i++) {
--		/*
--		 * For vendor specific phys force an exact match of the pixelclock
--		 * to preserve the original behaviour of the driver.
--		 */
--		if (exact_match && pclk == mpll_cfg[i].mpixelclock)
--			return MODE_OK;
--		/*
--		 * The Synopsys phy can work with pixelclocks up to the value given
--		 * in the corresponding mpll_cfg entry.
--		 */
--		if (!exact_match && pclk <= mpll_cfg[i].mpixelclock)
+ 	if (hdmi->hdmiphy_clk) {
+ 		int rpclk = clk_round_rate(hdmi->hdmiphy_clk, pclk);
+@@ -256,7 +302,15 @@ dw_hdmi_rockchip_mode_valid(struct dw_hdmi *dw_hdmi, void *data,
+ 			return MODE_NOCLOCK;
+ 	}
+ 
+-	return MODE_OK;
 +	for (i = 0; i < num_rates; i++) {
 +		int slop = CLK_SLOP(pclk);
 +
 +		if ((pclk >= hdmi->rates[i] - slop) &&
 +		    (pclk <= hdmi->rates[i] + slop))
- 			return MODE_OK;
- 	}
++			return MODE_OK;
++	}
++
++	return MODE_NOCLOCK;
+ }
  
-@@ -269,7 +316,39 @@ dw_hdmi_rockchip_encoder_mode_fixup(struct drm_encoder *encoder,
+ static void dw_hdmi_rockchip_encoder_disable(struct drm_encoder *encoder)
+@@ -268,7 +322,39 @@ dw_hdmi_rockchip_encoder_mode_fixup(struct drm_encoder *encoder,
  				    const struct drm_display_mode *mode,
  				    struct drm_display_mode *adj_mode)
  {
@@ -387,70 +212,19 @@ index c14f88893868..cb7a302497a5 100644
  }
  
  static void dw_hdmi_rockchip_encoder_mode_set(struct drm_encoder *encoder,
-@@ -325,6 +404,7 @@ dw_hdmi_rockchip_encoder_atomic_check(struct drm_encoder *encoder,
- }
- 
- static const struct drm_encoder_helper_funcs dw_hdmi_rockchip_encoder_helper_funcs = {
-+	.mode_valid = dw_hdmi_rockchip_encoder_mode_valid,
- 	.mode_fixup = dw_hdmi_rockchip_encoder_mode_fixup,
- 	.mode_set   = dw_hdmi_rockchip_encoder_mode_set,
- 	.enable     = dw_hdmi_rockchip_encoder_enable,
-@@ -425,7 +505,6 @@ static struct rockchip_hdmi_chip_data rk3228_chip_data = {
- };
- 
- static const struct dw_hdmi_plat_data rk3228_hdmi_drv_data = {
--	.mode_valid = dw_hdmi_rockchip_mode_valid,
- 	.phy_data = &rk3228_chip_data,
- 	.phy_ops = &rk3228_hdmi_phy_ops,
- 	.phy_name = "inno_dw_hdmi_phy2",
-@@ -442,7 +521,6 @@ static struct rockchip_hdmi_chip_data rk3288_chip_data = {
- };
- 
- static const struct dw_hdmi_plat_data rk3288_hdmi_drv_data = {
--	.mode_valid = dw_hdmi_rockchip_mode_valid,
- 	.mpll_cfg   = rockchip_mpll_cfg,
- 	.cur_ctr    = rockchip_cur_ctr,
- 	.phy_config = rockchip_phy_config,
-@@ -462,7 +540,6 @@ static struct rockchip_hdmi_chip_data rk3328_chip_data = {
- };
- 
- static const struct dw_hdmi_plat_data rk3328_hdmi_drv_data = {
--	.mode_valid = dw_hdmi_rockchip_mode_valid,
- 	.phy_data = &rk3328_chip_data,
- 	.phy_ops = &rk3328_hdmi_phy_ops,
- 	.phy_name = "inno_dw_hdmi_phy2",
-@@ -480,7 +557,6 @@ static struct rockchip_hdmi_chip_data rk3399_chip_data = {
- };
- 
- static const struct dw_hdmi_plat_data rk3399_hdmi_drv_data = {
--	.mode_valid = dw_hdmi_rockchip_mode_valid,
- 	.mpll_cfg   = rockchip_mpll_cfg,
- 	.cur_ctr    = rockchip_cur_ctr,
- 	.phy_config = rockchip_phy_config,
-@@ -493,7 +569,6 @@ static struct rockchip_hdmi_chip_data rk3568_chip_data = {
- };
- 
- static const struct dw_hdmi_plat_data rk3568_hdmi_drv_data = {
--	.mode_valid = dw_hdmi_rockchip_mode_valid,
- 	.mpll_cfg   = rockchip_mpll_cfg,
- 	.cur_ctr    = rockchip_cur_ctr,
- 	.phy_config = rockchip_phy_config,
-@@ -623,6 +698,7 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
+@@ -606,6 +692,7 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
  	return 0;
  
  err_bind:
 +	devm_kfree(hdmi->dev, hdmi->rates);
  	drm_encoder_cleanup(encoder);
- 	clk_disable_unprepare(hdmi->ref_clk);
- err_clk:
-@@ -638,6 +714,7 @@ static void dw_hdmi_rockchip_unbind(struct device *dev, struct device *master,
+ 
+ 	return ret;
+@@ -616,6 +703,7 @@ static void dw_hdmi_rockchip_unbind(struct device *dev, struct device *master,
  {
  	struct rockchip_hdmi *hdmi = dev_get_drvdata(dev);
  
 +	devm_kfree(hdmi->dev, hdmi->rates);
  	dw_hdmi_unbind(hdmi->hdmi);
- 	clk_disable_unprepare(hdmi->ref_clk);
- 
--- 
-2.36.1
-
+ 	drm_encoder_cleanup(&hdmi->encoder.encoder);
+ }
