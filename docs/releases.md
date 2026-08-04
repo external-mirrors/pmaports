@@ -18,7 +18,6 @@ appear, but you will get a more a more tried and tested, solid experience.
 |  Release  | Announcement       | EOL         |               Title               | Branch pmaports  | Branch aports  | Milestone  |
 |:---------:|:------------------:|:-----------:|:---------------------------------:|:----------------:|:--------------:|:----------:|
 |  edge     | -                  | -           | Edge                              | main             | master         | -          |
-|  v25.12   | [2025-12-23][2512] | 2026-07-31  | The One Where The Saga Continues  | v25.12           | 3.23-stable    | [#31][m31] |
 |  v26.06   | [2026-06-21][2606] | 2027-01-31  | Alpen Avocado                     | v26.06           | 3.24-stable    | [#33][m33] |
 |  v26.12   | 2026-12-xx         | 2027-07-31  | *(upcoming)*                      | v26.12           | 3.25-stable    | [#35][m35] |
 
@@ -26,6 +25,7 @@ appear, but you will get a more a more tried and tested, solid experience.
 
 | Release  |    Announcement    |                           Title                           | Branch pmaports  | Branch aports  |  Milestone  |
 |:--------:|:------------------:|:---------------------------------------------------------:|:----------------:|:--------------:|:-----------:|
+| v25.12   | [2025-12-23][2512] | The One Where The Saga Continues                          | v25.12           | 3.23-stable    | [#31][m31]  |
 | v25.06   | [2025-06-22][2506] | the one with systemd                                      | v25.06           | 3.22-stable    | [#29][m29]  |
 | v24.12   | [2024-12-23][2412] | The One With Androids & Cameras, But It's Mainline Linux  | v24.12           | 3.21-stable    | [#21][m21]  |
 | v24.06   | [2024-06-16][2406] | The One With Over 250 Devices                             | v24.06           | 3.20-stable    | [#19][m19]  |
