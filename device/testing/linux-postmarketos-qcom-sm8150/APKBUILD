@@ -16,11 +16,14 @@ options="!strip !check !tracedeps
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
@@ -33,6 +36,7 @@ source="
 	linux-$_tag.tar.gz::$url/-/archive/$_tag/linux-$_tag.tar.gz
 	config-$_flavor.$arch
 	0001-enable-ufs.patch
+	0002-libbpf-Fix-UAF-in-strset__add_str.patch
 "
 builddir="$srcdir/linux-$_tag"
 
@@ -66,7 +70,7 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir/usr" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs-tmp
 
@@ -82,6 +86,7 @@ package() {
 
 sha512sums="
 c1bdb11a9ad8be826ec5781e239c60ad92d6bb3a2d6b0adff8ef1f1e334bc6889ab91683257691ba3155f976011cd37969be379d509c9f928f4f85753e95635e  linux-v7.0.0-sm8150.tar.gz
-7b9453ace6fdda1c05bb3ca0e7560bc19750c5a87a7320f1ec5557e7e1c4ecc603d810c94d25cc4b3c38593324860b27055095897ef0a284b842a087c9adee94  config-postmarketos-qcom-sm8150.aarch64
+e20e2311f84c8ad58cb256b3cba8179092b17c47c3d91dbfba3794ab51c6ed89416279d3423f724d18caafc77dab1e1475f6967881ff94acbdedcf7ffe9122a3  config-postmarketos-qcom-sm8150.aarch64
 316decafef4528b3d8fa9ce1f2c1588048ae0a99adf088d61372d84ff95ae7bf58e5cc0d03d73201f1735f3d523468d98113ac575714930229434a46385a5c3d  0001-enable-ufs.patch
+a75ad54e77870170a1e33bd8ec68bfa64542791f1c9383da6335f0e7f5da14f10e9fe267d58a3ade8e04d7eb3d82e5ca2354b52b2fa0d363c9bb6d5bec860ba8  0002-libbpf-Fix-UAF-in-strset__add_str.patch
 "
