@@ -112,32 +112,35 @@ acceptable for the generic kernels.
 For a consistent packaging setup, we recommend following this template when
 using the generic kernels in a device package:
 
+<!-- editorconfig-checker-disable -->
+<!-- It will complain about tabs. See pma#4784 -->
 ```shell
 subpackages="
-  $pkgname-kernel-stable:kernel_stable
-  $pkgname-kernel-lts:kernel_lts
-  $pkgname-kernel-mainline:kernel_mainline
-  "
+	$pkgname-kernel-stable:kernel_stable
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-mainline:kernel_mainline
+	"
 ...
 
 kernel_stable() {
-  pkgdesc="Stable kernel (recommended, best balance between stability and features)"
-  depends="linux-postmarketos-stable"
-  devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	pkgdesc="Stable kernel (recommended, best balance between stability and features)"
+	depends="linux-postmarketos-stable"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_lts() {
-  pkgdesc="Long-term maintenance kernel (most stability, not all security fixes & new features)"
-  depends="linux-postmarketos-lts"
-  devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	pkgdesc="Long-term maintenance kernel (most stability, not all security fixes & new features)"
+	depends="linux-postmarketos-lts"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_mainline() {
-  pkgdesc="Upstream development kernel (regular breakage, latest features)"
-  depends="linux-postmarketos-mainline"
-  devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	pkgdesc="Upstream development kernel (regular breakage, latest features)"
+	depends="linux-postmarketos-mainline"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 ```
+<!-- editorconfig-checker-enable -->
 
 The `linux-next` kernel doesn't have to be part of device packages, and is only
 intended to be enabled by device packages that want to enable it, but none of
