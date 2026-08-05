@@ -115,6 +115,8 @@ UDMABUF = "y"
 BPF = "y"
 BPF_JIT = "y"
 BPF_LSM = "y"
+# Dependency of KPROBE_EVENTS
+FTRACE = "y"
 IPC_NS = "y"
 KPROBES = "y"
 KPROBE_EVENTS = "y"
@@ -200,6 +202,8 @@ FUSE_FS = "m"
 IP_NF_MANGLE = "m"
 NETFILTER_XTABLES = "m"
 NETFILTER_XT_MATCH_COMMENT = "m"
+# Dependency of SQUASHFS
+MISC_FILESYSTEMS = "y"
 SQUASHFS = "m"
 SQUASHFS_XATTR = "y"
 SQUASHFS_XZ = "y"
@@ -646,7 +650,6 @@ KVM_INTEL = "m"
 VIRTUALIZATION = "y"
 
 ["category:debug".">=0.0.0"."all"]
-FTRACE = "y" # Required by DEBUG_FTRACE
 FUNCTION_TRACER = "y" # Required by DEBUG_FTRACE
 DYNAMIC_DEBUG = "y"  # Enable debug dynamically
 DYNAMIC_FTRACE = "y"  # Enable function tracing dynamically
