@@ -1,7 +1,7 @@
 maintainer="Antony Kurniawan S. <postmarketos@smankusors.com>"
 pkgname=firmware-asus-zenfone3
 pkgver=2
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for Asus Zenfone 3 ZE520KL/ZE552KL"
 url="https://gitlab.com/Smankusors/firmware-asus-zenfone3"
 arch="aarch64"
@@ -12,7 +12,7 @@ builddir="$srcdir/$pkgname-$_commit/"
 source="
 	$url/-/archive/$_commit/$pkgname-$_commit.tar.gz
 "
-_fwdir="/lib/firmware"
+_fwdir="/usr/lib/firmware"
 
 package() {
 	install -Dm644 a506_zap.b02 -t "$pkgdir/$_fwdir/qcom/msm8953/asus/ze520kl"
