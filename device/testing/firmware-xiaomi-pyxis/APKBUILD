@@ -1,7 +1,7 @@
 maintainer="Alicja Michalska <ellyqw@mainlining.org>"
 pkgname=firmware-xiaomi-pyxis
 pkgver=2026.02
-pkgrel=0
+pkgrel=1
 pkgdesc="Proprietary firmware blobs from stock firmware"
 url="https://github.com/ellyq/firmware-mainline-pyxis"
 arch="aarch64"
@@ -27,44 +27,44 @@ build() {
 }
 
 package() {
-	mkdir -p "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/
+	mkdir -p "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/
 	install -Dm644 "$builddir"/dsp_fw/a615_zap.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/a615_zap.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/a615_zap.mbn.zst
 	install -Dm644 "$builddir"/dsp_fw/adsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/adsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/adsp.mbn.zst
 	install -Dm644 "$builddir"/calib_data/adspr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/adspr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/adspr.jsn
 	install -Dm644 "$builddir"/calib_data/adspua.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/adspua.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/adspua.jsn
 	install -Dm644 "$builddir"/dsp_fw/cdsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/cdsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/cdsp.mbn.zst
 	install -Dm644 "$builddir"/calib_data/cdspr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/cdspr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/cdspr.jsn
 	install -Dm644 "$builddir"/dsp_fw/ipa_fws.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/ipa_fws.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/ipa_fws.mbn.zst
 	install -Dm644 "$builddir"/dsp_fw/mba.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/mba.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/mba.mbn.zst
 	install -Dm644 "$builddir"/dsp_fw/modem.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/modem.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/modem.mbn.zst
 	install -Dm644 "$builddir"/calib_data/modemuw.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/modemuw.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/modemuw.jsn
 	install -Dm644 "$builddir"/calib_data/modemr.jsn \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/modemr.jsn
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/modemr.jsn
 	install -Dm644 "$builddir"/dsp_fw/qdsp6m.qdb \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/qdsp6m.qdb
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/qdsp6m.qdb
 	install -Dm644 "$builddir"/dsp_fw/wlanmdsp.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/wlanmdsp.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/wlanmdsp.mbn.zst
 	install -Dm644 "$builddir"/dsp_fw/venus.mbn.zst \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/venus.mbn.zst
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/venus.mbn.zst
 
 	# WiFi currently crashes upon successful init and powers-off the phone.
 	# Comment-out until we figure out why.
-	#mkdir -p "$pkgdir"/lib/firmware/ath10k/WCN3990/hw1.0/
+	#mkdir -p "$pkgdir"/usr/lib/firmware/ath10k/WCN3990/hw1.0/
 	#install -Dm644 "$builddir"/calib_data/board-2.bin \
-	#	       "$pkgdir"/lib/firmware/ath10k/WCN3990/hw1.0/board-2.bin
+	#	       "$pkgdir"/usr/lib/firmware/ath10k/WCN3990/hw1.0/board-2.bin
 
 	install -Dm644 "$builddir"/remoteproc/acdb/Forte/Forte_Global_cal.acdb \
-		       "$pkgdir"/lib/firmware/qcom/sdm710/pyxis/Global_cal.acdb
+		       "$pkgdir"/usr/lib/firmware/qcom/sdm710/pyxis/Global_cal.acdb
 
 	mkdir -p "$pkgdir"/usr/share/qcom/sdm710/Xiaomi/pyxis/
 	cp -r "$builddir"/remoteproc/acdb \
