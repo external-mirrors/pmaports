@@ -1,7 +1,7 @@
 maintainer="Jan Paszkowski <janmpaszkowski@proton.me>"
 pkgname=firmware-sony-pdx215
 pkgver=2
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for Sony Xperia 1 III"
 url="https://gitlab.com/janmpaszkowski/sony-pdx215-firmware"
 _repository="sony-pdx215-firmware"
@@ -18,11 +18,11 @@ package() {
 	while IFS="" read -r _i || [ -n "$_i" ]; do
 		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
 		echo $_i
-		install -Dm644 $_i "$pkgdir/$_i"
+		install -Dm644 "${_i/usr\//}" "$pkgdir/$_i"
 	done < "$srcdir/firmware.files"
 }
 
 sha512sums="
 4028c7e0468df6d6072a6b88e00e0b24f5975b0c42fc37996d137780e24684278597d142f7a50167d8a8835569f3ec3745e81cf2b6cf8abff706efdf2202d189  firmware-sony-pdx215-2a9eabd337b60ef1209cbb238f20784f676a4c7f.tar.gz
-c7d146eb363b77367816f61e18ff5a7ee21c0c19a8d0232040226a0b5ec6dabd4057331a786b6ff084670c5badb8a00cedd1c37230024fe082cc03e4db05ccb2  firmware.files
+af0634584d3deebabb8ac982f2cdf5a09cd8c9ab930157ccf6acecadf9b9f1cdf6eb7581a1714edd620b91678f7f8606dbfa074485dd32594bbd4f4f9c51c1fd  firmware.files
 "
