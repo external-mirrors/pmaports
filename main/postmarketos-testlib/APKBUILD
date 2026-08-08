@@ -1,0 +1,20 @@
+maintainer="Clayton Craft <clayton@craftyguy.net>"
+pkgname=postmarketos-testlib
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="Helper scripts for shell testing"
+url="https://postmarketos.org"
+arch="noarch"
+license="MIT"
+depends="busybox-binsh"
+source="testlib.sh"
+options="!check"  # no tests
+
+package() {
+	install -Dm755 "$srcdir/testlib.sh" \
+		"$pkgdir/usr/bin/postmarketos-testlib"
+}
+
+sha512sums="
+6f468d4b2075dc25b3a48f941ae45fe358700cb3b8495aeb5bbebf7437c678290cb790e9832436eee74d78bf0bfcfba1962a339d2fa564ee4a07ac879718bf86  testlib.sh
+"
