@@ -2,13 +2,12 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-systemd
 pkgver=91
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
 # armhf: pmb#2618
 arch="noarch !armhf"
 license="GPL-3.0-or-later"
-options="!check"
 triggers="$pkgname.trigger=/usr/lib/systemd/system:/usr/lib/systemd/user"
 
 # systemd <-> util-linux is an expected cycial dependency
@@ -42,6 +41,7 @@ depends="
 	treescan
 	tzdata
 	"
+checkdepends="postmarketos-testlib"
 provides="postmarketos-base-init"
 provider_priority=100
 replaces="alpine-baselayout openssh-server-pam postmarketos-baselayout postmarketos-base systemd systemd-logind"
@@ -93,7 +93,16 @@ flatpath() {
 		echo "rootfs-$i" | sed s./.-.g
 	done
 }
-source="$(flatpath $_source644 $_source755)"
+source="
+	$(flatpath $_source644 $_source755)
+	tests/01-remove-unit-symlinks-testlib.sh
+	tests/02-parse-diff-output-testlib.sh
+	tests/03-trigger-systemd-presets-testlib.sh
+	"
+
+check() {
+	postmarketos-testlib "$srcdir"
+}
 
 package() {
 	local i
@@ -162,4 +171,7 @@ c6b22809e77d3134285233988d805c9cdbc3e3c90af320e920aaf4dcfd83582c2a85278f2edf07e7
 605df1f004783d2e0ec5dd99a688bca27502c8c24bc05fb4dc26589b2070b0fbd1cf9bd56e6861d7cda2f8ac8147e7eb040acfd886185c01c8cf9de8b1ce2dcd  rootfs-usr-bin-setup-timezone
 237f5478bed05128bba6b44f1545e904447b53779d37bf0bedb1c1bc68c53394ba767ef52d3ff4980d593f02daea0b05454a316a0348821de924308109deced6  rootfs-usr-libexec-apk-inhibit
 d96898efb28508b172f148c0a468a7dddd363dde94efea7c2274b9f746544b4e8bf7905ce3f8134a97c1eb33210ad97380f3da452082f346f1f3f0f665f79d47  rootfs-usr-libexec-systemd-apk-trigger
+216cb545e37b3b056741e1d3aefd1298d7e11457010b38f9ad3317cbd7915aad0e64bca5e34aaa202a2827f63582e1a8b568f7609e7a726d45374e0bcaff4b11  01-remove-unit-symlinks-testlib.sh
+4249c8ca49c51110d1b8353ab1247646345be6477da34730a35049700065007012487e19d4419d2266620aa953f68de3b716c949983bfbaff44faebdb02d2c62  02-parse-diff-output-testlib.sh
+255ac50ad6170638f8f02213c74aaef1b7e2dc1876e65f1e817ad6dcda8c741d6e5e5599fe7130d89f1341f7c1cfcdd8f5026e90ef6b5bfe53626a6ab140dfc9  03-trigger-systemd-presets-testlib.sh
 "
