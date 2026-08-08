@@ -161,6 +161,7 @@ generate-all-kconfigs:
     - if: *mr_rule
       changes:
       - kconfig-generic.toml
+      - kconfigcheck.toml
   script:
     - .ci/check-generic-kconfig.sh
   artifacts:
