@@ -17,6 +17,10 @@ the continuous integration behaviour for your merge requests.
   might not pass the check.
 * `[ci:skip-grep]`: Do not run the grep check. Use this when renaming or moving
   unmaintained packages.
+* `[ci:skip-hw-ci]`: Do not run any jobs associated with hardware CI. This is
+  useful if there is something urgent that needs merging and there is some
+  regression in the jobs that do the preparation for the runs on the actual
+  hardware.
 * `[ci:skip-kconfigcheck]`: Do not check the kernel config for packages
   changed in the commit. Use this when moving kernel packages between
   categories or performing bulk changes across a lot of kernel packages, but
