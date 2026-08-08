@@ -53,6 +53,11 @@ done
 
 # Prepare kernel config ('yes ""' for kernels lacking olddefconfig)
 mkdir -p "$builddir/$_outdir"
+# modern kernel APKBUILDS may not have _config
+# shellcheck disable=SC2154
+if ! [ -z "$_config" ]; then
+	_config="config-${pkgname#linux-}.$arch"
+fi
 # shellcheck disable=SC2154
 cp "$srcdir/$_config" "$builddir"/"$_outdir"/.config
 # shellcheck disable=SC2086,SC2154
