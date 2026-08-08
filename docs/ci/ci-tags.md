@@ -12,19 +12,19 @@ the continuous integration behaviour for your merge requests.
 * `[ci:skip-build]`: Do not build modified packages, only verify their
   checksums. Use this when pushing changes to an MR that should not trigger a
   complete build.
-* `[ci:skip-vercheck]`: Do not verify if the version of a changed package has
-  been increased. Use this, when making a cosmetic change in an APKBUILD that
-  should not cause the package to get rebuilt, or when changing the enabled
-  architectures.
-* `[ci:skip-kconfigcheck]`: Do not check the kernel config for packages
-  changed in the commit. Use this when moving kernel packages between
-  categories or performing bulk changes across a lot of kernel packages, but
-  never when upgrading the kernel.
 * `[ci:skip-dint]`: Do not run the device-linter check. Use this when moving
   or modifying many devices not maintained by you that due to historical reasons
   might not pass the check.
 * `[ci:skip-grep]`: Do not run the grep check. Use this when renaming or moving
   unmaintained packages.
+* `[ci:skip-kconfigcheck]`: Do not check the kernel config for packages
+  changed in the commit. Use this when moving kernel packages between
+  categories or performing bulk changes across a lot of kernel packages, but
+  never when upgrading the kernel.
+* `[ci:skip-vercheck]`: Do not verify if the version of a changed package has
+  been increased. Use this, when making a cosmetic change in an APKBUILD that
+  should not cause the package to get rebuilt, or when changing the enabled
+  architectures.
 * `[skip ci]`: Completely skip the pipeline for the merge request. This is a
   GitLab [feature](https://docs.gitlab.com/ci/pipelines/#skip-a-pipeline). Use
   this only in very extreme situations where CI might be broken, but a change is
