@@ -2,13 +2,12 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-systemd
 pkgver=90
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
 # armhf: pmb#2618
 arch="noarch !armhf"
 license="GPL-3.0-or-later"
-options="!check"
 triggers="$pkgname.trigger=/usr/lib/systemd/system:/usr/lib/systemd/user"
 
 # systemd <-> util-linux is an expected cycial dependency
@@ -41,6 +40,7 @@ depends="
 	treescan
 	tzdata
 	"
+checkdepends="postmarketos-shell-testlib"
 provides="postmarketos-base-init"
 provider_priority=100
 replaces="alpine-baselayout openssh-server-pam postmarketos-baselayout postmarketos-base systemd systemd-logind"
@@ -92,6 +92,12 @@ flatpath() {
 	done
 }
 source="$(flatpath $_source644 $_source755)"
+source="
+	$source
+	tests/01-remove-unit-symlinks.sh
+	tests/02-parse-diff-output.sh
+	tests/03-trigger-systemd-presets.sh
+	"
 
 package() {
 	local i
@@ -131,6 +137,12 @@ unudhcpd() {
 	install_if="$pkgname=$pkgver-r$pkgrel unudhcpd"
 
 	amove  usr/lib/systemd/system/unudhcpd@usb0.service.d/udc-only.conf
+}
+
+check() {
+	postmarketos-testlib "$srcdir" 01-remove-unit-symlinks.sh
+	postmarketos-testlib "$srcdir" 02-parse-diff-output.sh
+	postmarketos-testlib "$srcdir" 03-trigger-systemd-presets.sh
 }
 
 sha512sums="
