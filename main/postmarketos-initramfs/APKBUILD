@@ -2,12 +2,12 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=postmarketos-initramfs
 pkgver=3.12.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Base files for the postmarketOS initramfs / initramfs-extra"
 url="https://postmarketos.org"
-options="!check"  # no tests
 provides="postmarketos-ramdisk=$pkgver-r$pkgrel"
 provider_priority=10
+checkdepends="postmarketos-shell-testlib"
 depends="
 	beebzzr
 	blkid
@@ -50,6 +50,8 @@ source="
 	init_2nd.sh
 	init_functions_2nd.sh
 	mdev.conf
+	tests/01-parse-cmdline.sh
+	tests/02-find-partition.sh
 	"
 arch="noarch"
 license="GPL-2.0-or-later"
@@ -105,6 +107,11 @@ package() {
 	mkdir -p "$pkgdir"/etc/mkinitfs/hooks-extra
 }
 
+check() {
+	postmarketos-testlib "$srcdir" 01-parse-cmdline.sh
+	postmarketos-testlib "$srcdir" 02-find-partition.sh
+}
+
 sha512sums="
 22cdd663c8d153781284511140b7c994cd60f0231a2819dafa67f5a11e2963ac6e392e8f7a9e3b75e7fe5d6d7b0b5e262e1ff1a695637354a124560a5ec3ed8d  00-default.modules
 ace852ba267b3408998970df6042603c8bec1d033066d1c30ed65f1be955fee8644b57882898f10228ec43b912f8f03718b34ddd741b431e5a5c2e76f060a494  00-default-extra.modules
@@ -116,4 +123,6 @@ bd72e8b6345a46ec13516c64d78d4fa1a9a18a8db9ab04aac605f9708629453dc65b6fbccd96b58e
 7aa82d5e2907470d667612643d98371dff27b2650051f8c568ab43d1b97677362c3e6fbd442474086d681ea7c0cfbcaf269d3eef2d2dc3ff4ebf17c786b82148  init_2nd.sh
 4eca94327274511011967cde1f663b00b1a8182f7dddc3ba19d5c1f0ac094087a154a250c140ca70ac75a2e7c5bb70b03e94fa5eca63a5393efc4a23d025e1c3  init_functions_2nd.sh
 675e7d5bee39b2df7d322117f8dcaccc274d61beaf4d50ead19bbf2109446d64b1c0aa0c5b4f9846eb6c1c403418f28f6364eff4537ba41120fbfcbc484b7da7  mdev.conf
+671cf3a009427ddd74f0563c5e32f3edd35aa18b217df089d2a228d6b509697cb36d63650c1b4e079019c0f473da308ace6cd5417261d8dcc7863173b984bf88  01-parse-cmdline.sh
+a60b8affe7431d477f7480ca094721930f65a31f920c7eb937384ad708f98a4a4ab2ad68688bf92ff741d3083ce4f14c238ee2e1beae5cefc30b5fd9bfd6aa66  02-find-partition.sh
 "
