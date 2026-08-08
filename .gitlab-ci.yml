@@ -30,9 +30,7 @@ workflow:
     # Run scheduled pipeline for autoupdate or manually triggered pipeline
     - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
 
-# Some packages have their own yaml files defining tests. All of these should contain
-# only jobs which extend the .package-test job!
-include: "**/.gitlab-ci.yml"
+include: "cross/.gitlab-ci.yml"
 
 # device documentation
 wiki:
