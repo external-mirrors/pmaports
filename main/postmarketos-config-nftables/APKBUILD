@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-config-nftables
 pkgver=1
-pkgrel=4
+pkgrel=5
 pkgdesc="nftables firewall configuration for postmarketOS"
 url="https://gitlab.com/postmarketos"
 arch="noarch"
@@ -14,6 +14,7 @@ subpackages="
 	$pkgname-openusb
 	$pkgname-log
 	$pkgname-chromecast
+	$pkgname-caddy
 	$pkgname-docker
 	$pkgname-mdns
 	$pkgname-moshserver
@@ -35,6 +36,7 @@ source="
 	rules/50_upnp_client.nft
 	rules/50_vlc_chromecast.nft
 	rules/50_vncserver.nft
+	rules/51_caddy.nft
 	rules/51_docker.nft
 	rules/51_hotspot.nft
 	rules/51_usb_inet.nft
@@ -68,6 +70,14 @@ log() {
 
 	amove etc/nftables.d/00_log_all.nft
 	amove etc/nftables.d/99_drop_log.nft
+}
+
+caddy() {
+	depends="$pkgname"
+	description="Enables networking for Caddy"
+	install_if="$pkgname=$pkgver-r$pkgrel caddy"
+
+	amove etc/nftables.d/51_caddy.nft
 }
 
 chromecast() {
@@ -160,6 +170,7 @@ a3f3fc76a636b1bed9de251f93cef46139b06e1c13113a6b6100ef08e79d249cb89a1b61d9b6bfbe
 5779bbcc55e411ec4da58e4e7eaaa6918cdcea5b8818cd72ab93be2d1108f020861457dbd8079a60b0912f84d05eb7b42274cc9a0577f66e8322f3596b89b411  50_upnp_client.nft
 9207bef8d2df8d728521aef19f3c6ccb5c645a0295617b54722a6867c86b29c13502a01747eb3c91602f416f60bdc2bfa18dfb4906e17494923996596b6b1444  50_vlc_chromecast.nft
 c688e768c709ad17685641a6ba543f84e8466080356712073e06108fc1707109f590be45b8a0aca8d0d95171c5afe69887f71b78fe56444912dd0582a461f477  50_vncserver.nft
+3cb229bed975cca7552e74727ee9eae0a5dde3d38e488b4bf35cf6fb93c41834c721248bdab5775d95e6c0f4c846155e645a9f9c4e17c04d7cb0db8f5843bead  51_caddy.nft
 76ac156ee80f895ab4f574f70f4ee9f960dfd23a3381bbbf7c744bea919b98f69e91e2eaa10425dfeaf5dbe77b745ec1dd82cb94953835873baffd9e5d89e166  51_docker.nft
 1ce70bb71c9008b6c727a2c26d11467be3b5a0cb9815a8bb0790150c7958457b22b110e35ba974973b9579d44bd14219985d85597c954b5fa8cf77bf206c959b  51_hotspot.nft
 ea7d8a652808ba6ae92de6dfc9f7d57415e411a04db3a41d1480f254b3a3a574558dbee2e7259e5d527527a11ca3aace7bb9edc7e023b0f4f67afceefeeb9e88  51_usb_inet.nft
