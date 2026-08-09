@@ -2,13 +2,12 @@
 maintainer="Rudraksha Gupta <guptarud@gmail.com>"
 pkgname=device-pine64-pinephonepro
 pkgdesc="PINE64 PinePhone Pro"
-pkgver=9
-pkgrel=1
+pkgver=10
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
-# pmb:strict is required for grub
-options="!check !archcheck pmb:strict"
+options="!check !archcheck"
 depends="
 	alsa-ucm-conf>=1.2.6.2
 	eg25-manager>=0.4.2
@@ -18,11 +17,11 @@ depends="
 	linux-pine64-pinephonepro
 	postmarketos-base>=25-r1
 	soc-rockchip-rk3399
+	systemd-boot
+	u-boot-rockchip
 	"
 makedepends="
 	devicepkg-dev
-	grub
-	grub-efi
 	"
 install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 subpackages="
@@ -50,39 +49,10 @@ builddir="$srcdir/build"
 build() {
 	mkdir "$builddir"
 	devicepkg_build $startdir $pkgname
-
-	grub-mkimage \
-		--prefix="/grub" \
-		--output="$builddir/bootaa64.efi" \
-		--format="arm64-efi" \
-		--compression="xz" \
-		\
-		all_video \
-		cat \
-		configfile \
-		disk \
-		echo \
-		efi_gop \
-		fat \
-		gzio \
-		help \
-		iso9660 \
-		linux \
-		ls \
-		normal \
-		part_gpt \
-		part_msdos \
-		search \
-		search_label \
-		test \
-		true
 }
 
 package() {
 	devicepkg_package $startdir $pkgname
-
-	# Grub / bootloader
-	install -Dm644 -t "$pkgdir"/boot/EFI/Boot bootaa64.efi
 
 	# Alsa usecase manager config
 	install -Dm644 -t "$pkgdir"/usr/share/alsa/ucm2/PinePhonePro \
@@ -134,7 +104,7 @@ x11() {
 sha512sums="
 2d68ffe143f633a86670f30e45dbad1cc313f219f22b7cd3319ab44bb7209c20cb29f2ff2c60c92390154af9c9a6815c4186be555364cf31552005eba024c0e7  51_keyboard.gschema.override
 98e9dcfb36dd5843ff441b148e3bffb70757c59601c5f01f55a584e8f017c7ca73f2275c1bff46e4236dd8174df36a43d10abf9b8dadee988b962036846dc6ed  90-modem-eg25.rules
-9ad6ca0bc493e98b9e80a5776f7cf13a8d684e1039911fe9f972ad5f9aa0c6b60dd2a5cfdd0a61e131b26221ccb0190cd40e08a7a03495aa68775bdd07218f3d  deviceinfo
+86a365e937e0e9bd420d49463a1140534b07c5ecb375ec9676169ca50c26ccb89116661feea2bd2638bc12d8a057d4c5fb93b939f35ab9d640bc01fec6d514b2  deviceinfo
 7a17cdb8305dec26f8d78a6c229e9373c2a9d0d63e51d853772b4d78f31c417f217966a75c970121e45045b141b04afa3d7ba4a4f9898a75020512e8e4048d0f  kernel-cmdline.conf
 0555be124ef4add4d70b54f550e63b4ff15f099541dbe37c4f61bf64d38bfb8bb8c6b765a0cc6bf361419711b7d1124fd0cbbe8ff459f5e85e6f850d7d2cd88e  modules-initfs
 43f67e94491791685cdbb4874bb3034b1d297bdf3d23e7405c45ba8c58de72b4fb6a9943b79f46ef7b8f4dbc4d9db254ebec8eb3453d720a5a8fad277c6a9d88  ppkb.sh
