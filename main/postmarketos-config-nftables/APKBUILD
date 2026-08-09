@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-config-nftables
 pkgver=1
-pkgrel=4
+pkgrel=5
 pkgdesc="nftables firewall configuration for postmarketOS"
 url="https://gitlab.com/postmarketos"
 arch="noarch"
@@ -19,6 +19,7 @@ subpackages="
 	$pkgname-moshserver
 	$pkgname-networkmanager
 	$pkgname-rdpserver
+	$pkgname-prosody
 	$pkgname-upnp-client:upnp_client
 	$pkgname-vlc-chromecast:vlc_chromecast
 	$pkgname-vncserver
@@ -37,6 +38,7 @@ source="
 	rules/50_vncserver.nft
 	rules/51_docker.nft
 	rules/51_hotspot.nft
+	rules/51_prosody.nft
 	rules/51_usb_inet.nft
 	rules/51_wifi_display.nft
 	rules/60_usb.nft
@@ -102,6 +104,13 @@ moshserver() {
 	amove etc/nftables.d/50_mosh.nft
 }
 
+prosody() {
+	depends="$pkgname"
+	description="Enables networking for prosody"
+
+	amove etc/nftables.d/51_prosody.nft
+}
+
 upnp_client() {
 	depends="$pkgname"
 	description="Enables networking for SSDP/UPnP client"
@@ -162,6 +171,7 @@ a3f3fc76a636b1bed9de251f93cef46139b06e1c13113a6b6100ef08e79d249cb89a1b61d9b6bfbe
 c688e768c709ad17685641a6ba543f84e8466080356712073e06108fc1707109f590be45b8a0aca8d0d95171c5afe69887f71b78fe56444912dd0582a461f477  50_vncserver.nft
 76ac156ee80f895ab4f574f70f4ee9f960dfd23a3381bbbf7c744bea919b98f69e91e2eaa10425dfeaf5dbe77b745ec1dd82cb94953835873baffd9e5d89e166  51_docker.nft
 1ce70bb71c9008b6c727a2c26d11467be3b5a0cb9815a8bb0790150c7958457b22b110e35ba974973b9579d44bd14219985d85597c954b5fa8cf77bf206c959b  51_hotspot.nft
+9c76e45f286b2ca20b164b3fa5b37df282dc582141662bbc4db7e31459643bfdd3be3a596e9e255d4c99131556f0af1e5bdc1100d5e4db3154f8687218da7f20  51_prosody.nft
 ea7d8a652808ba6ae92de6dfc9f7d57415e411a04db3a41d1480f254b3a3a574558dbee2e7259e5d527527a11ca3aace7bb9edc7e023b0f4f67afceefeeb9e88  51_usb_inet.nft
 c243534219eca3ea31504eef9ea88f8c2e00f2340e9dec3d381459a84a09a7390c8327eac43ae38155f6d7a059327cb26be63451a1ba280664fc1da81b27f7be  51_wifi_display.nft
 0e86974602622c03f0b34acd048e3a31157c0226ab4b5ec093a19696af3fc9637ed84cecf0d190941e4bd3afeb0c76a37245fa850abef46778cd1235ad8106df  60_usb.nft

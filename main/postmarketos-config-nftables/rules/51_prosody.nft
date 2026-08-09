@@ -1,0 +1,7 @@
+#!/usr/sbin/nft -f
+table inet filter {
+	chain input {
+		tcp dport 5222 accept comment "xmpp client connections"
+		tcp dport 5269 accept comment "xmpp server to server connections"
+	}
+}
