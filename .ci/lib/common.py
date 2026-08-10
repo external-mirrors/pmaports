@@ -131,7 +131,7 @@ def get_changed_files(removed=False):
     return ret
 
 
-def get_changed_packages(skip_archived: bool = False):
+def get_changed_packages(skip_archived: bool = False, keep_dir: bool = False) -> set[str]:
     ret = set()
     for file in get_changed_files(removed=True):
         dirname, filename = os.path.split(file)
@@ -170,7 +170,10 @@ def get_changed_packages(skip_archived: bool = False):
         elif not os.path.exists(file):
             continue  # APKBUILD was deleted
 
-        ret.add(os.path.basename(dirname))
+        if keep_dir:
+            ret.add(dirname)
+        else:
+            ret.add(os.path.basename(dirname))
 
     return ret
 

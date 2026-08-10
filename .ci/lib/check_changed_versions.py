@@ -2,7 +2,7 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import glob
+import os.path
 import pathlib
 import tempfile
 import sys
@@ -25,10 +25,7 @@ def get_package_contents(package, revision, check=True):
         stderr = subprocess.DEVNULL
 
     # Run something like "git show upstream/main:main/hello-world/APKBUILD"
-    pmaports_dir = common.get_pmaports_dir()
-    pattern = pmaports_dir + "/**/" + package + "/APKBUILD"
-    path = glob.glob(pattern, recursive=True)[0][len(pmaports_dir + "/"):]
-    apkbuild_content = common.run_git(["show", revision + ":" + path], check,
+    apkbuild_content = common.run_git(["show", revision + ":" + package], check,
                                       stderr)
     if not apkbuild_content:
         return None
@@ -118,8 +115,8 @@ def check_versions(packages):
     # Without this, .ci/commits.sh complains about the following:
     # ERROR: Modified package(s) don't have an increased version or a new
     #        package has a nonzero pkgrel!
-    if "linux-next" in packages:
-        packages.remove("linux-next")
+    if "device/testing/linux-next" in packages:
+        packages.remove("device/testing/linux-next")
 
     for package in packages:
         # Get versions, skip new packages
@@ -135,13 +132,14 @@ def check_versions(packages):
 
         # Check pkgver follows expected format for device packages
         pkgver = head.rpartition('-r')[0]
-        if package.startswith('device-') and not pkgver.isdigit():
+        is_device_pkg = os.path.basename(package).startswith('device-')
+        if is_device_pkg and not pkgver.isdigit():
             print(f" - {package}: invalid pkgver \"{pkgver}\""
                   "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
             error = True
 
         # Additional checks for device packages
-        if package.startswith('device-'):
+        if is_device_pkg:
             head_parsed = get_package_contents(package, "HEAD", False)
             upstream_parsed = get_package_contents(package, commit, False)
 
