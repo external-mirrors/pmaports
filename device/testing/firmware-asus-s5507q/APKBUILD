@@ -1,6 +1,6 @@
 maintainer="binarycraft007 <keep.it.sns@gmail.com>"
 pkgname=firmware-asus-s5507q
-pkgver=4
+pkgver=5
 pkgrel=0
 _commit="2f3f3b5cc679f88a6f672490778e19016e51a70b"
 pkgdesc="Firmware files for ASUS Vivobook S 15"
@@ -39,10 +39,12 @@ package() {
 }
 
 common() {
+	depends="$pkgname=$pkgver-r$pkgrel"
 	amove usr/share/mkinitfs/files/common.files
 }
 
 dpu() {
+	depends="$pkgname=$pkgver-r$pkgrel"
 	amove usr/share/mkinitfs/files/dpu.files
 }
 
