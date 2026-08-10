@@ -244,7 +244,7 @@ run_tests() {
 
 	# FIXME: yeah this isn't quite the best way to iterate the files
 	# shellcheck disable=SC2010
-	for name in $(ls "$1" | grep "\.sh$"); do
+	for name in $(ls "$1" | grep "\-testlib\.sh$"); do
 		test="$1/$name"
 		mkdir "$test_results_base/$name"
 		echo 0 > "$test_results_base/$name/passedn"
