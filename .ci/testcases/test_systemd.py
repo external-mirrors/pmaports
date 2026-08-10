@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2025 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
