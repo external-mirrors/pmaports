@@ -23,9 +23,11 @@ expected_directories = [
 # This test makes sure all of them are in one of the expected locations.
 def test_directories():
     apkbuilds = set(glob.iglob("**/APKBUILD", recursive=True))
-    expected = set(f for d in expected_directories for f in glob.iglob(d + "/*/APKBUILD"))
-    assert apkbuilds == expected, "Found APKBUILD in unexpected directory. " \
+    expected = {f for d in expected_directories for f in glob.iglob(d + "/*/APKBUILD")}
+    assert apkbuilds == expected, (
+        "Found APKBUILD in unexpected directory. "
         "Note that we moved firmware/* to device/{main,community,testing}/*."
+    )
 
 
 # Ensure no file in pmaports are executable.
@@ -38,11 +40,13 @@ def test_executable_files():
         permissions = os.stat(file).st_mode
         executable_bits = stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
         if permissions & executable_bits != 0:
-            raise RuntimeError(f"\"{file}\" is executable. Files in pmaports" +
-                               " should not be executables. post-* files" +
-                               " don't need to be executable and executables" +
-                               " should be installed using `install -D" +
-                               "m0755` or a variation thereof.")
+            raise RuntimeError(
+                f'"{file}" is executable. Files in pmaports'
+                + " should not be executables. post-* files"
+                + " don't need to be executable and executables"
+                + " should be installed using `install -D"
+                + "m0755` or a variation thereof."
+            )
 
 
 # Make sure files belong to a package (below a directory with APKBUILD)
@@ -54,24 +58,26 @@ def test_files_belong_to_package():
         # Skip "hidden" directories (.ci/, device/.shared-patches/)
         dirs[:] = [d for d in dirs if not d.startswith(".")]
         # Ignore files in root directory (README.md)
-        if dirpath == '.':
+        if dirpath == ".":
             continue
         # Ignore files under docs/
-        if dirpath.startswith('./docs'):
+        if dirpath.startswith("./docs"):
             continue
 
         # Switched to another directory?
         if package_dir and not dirpath.startswith(package_dir + os.sep):
             package_dir = None
 
-        if 'APKBUILD' in files:
-            assert not package_dir, f"Nested packages: {package_dir} and {dirpath} " \
-                "both contain an APKBUILD"
+        if "APKBUILD" in files:
+            assert not package_dir, (
+                f"Nested packages: {package_dir} and {dirpath} both contain an APKBUILD"
+            )
             package_dir = dirpath
 
         # Skip specific ".gitlab-ci.yml" files outside of usual structure
         if dirpath in ["./cross"]:
             files[:] = [f for f in files if f != ".gitlab-ci.yml"]
 
-        assert not files or package_dir, "Found files that do not belong to any package: " \
-            f"{dirpath}/{files}"
+        assert not files or package_dir, (
+            f"Found files that do not belong to any package: {dirpath}/{files}"
+        )

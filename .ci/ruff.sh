@@ -11,4 +11,4 @@ fi
 set -x
 
 # shellcheck disable=SC2046
-ruff check $(find .ci -name '*.py')
+ruff check --ignore LOG015 $(find .ci -name '*.py')

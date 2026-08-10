@@ -21,29 +21,48 @@ def test_aports_kernel():
             continue  # This package isn't a linux kernel!
 
         if "pmb:cross-native" not in apkbuild["options"]:
-            raise RuntimeError(f"{aport_name}: \"pmb:cross-native\" missing in"
-                               " options= line")
+            raise RuntimeError(
+                f'{aport_name}: "pmb:cross-native" missing in options= line'
+            )
 
         # cross-compilers should not be in makedepends
-        for ccc in ["gcc-armv7", "gcc-armhf", "gcc-aarch64",
-                    "gcc4-armv7", "gcc4-armhf", "gcc4-aarch64",
-                    "gcc6-armv7", "gcc6-armhf", "gcc6-aarch64"]:
+        for ccc in [
+            "gcc-armv7",
+            "gcc-armhf",
+            "gcc-aarch64",
+            "gcc4-armv7",
+            "gcc4-armhf",
+            "gcc4-aarch64",
+            "gcc6-armv7",
+            "gcc6-armhf",
+            "gcc6-aarch64",
+        ]:
             if ccc in apkbuild["makedepends"]:
-                raise RuntimeError(f"{aport_name}: Cross-compiler ({ccc}) should"
-                                   " not be explicitly specified in makedepends!"
-                                   " pmbootstrap installs cross-compiler"
-                                   " automatically.")
+                raise RuntimeError(
+                    f"{aport_name}: Cross-compiler ({ccc}) should"
+                    " not be explicitly specified in makedepends!"
+                    " pmbootstrap installs cross-compiler"
+                    " automatically."
+                )
 
         # check some options only for main and community devices
         _, relpath = pkgrepo_relative_path(path)
         for part in ["main", "community"]:
-            if part in relpath.parts:
-                if "pmb:kconfigcheck-community" not in apkbuild["options"]:
-                    raise RuntimeError(f"{aport_name}: \"pmb:kconfigcheck-community\" missing in"
-                                       " options= line, required for all community/main devices.")
+            if (
+                part in relpath.parts
+                and "pmb:kconfigcheck-community" not in apkbuild["options"]
+            ):
+                raise RuntimeError(
+                    f'{aport_name}: "pmb:kconfigcheck-community" missing in'
+                    " options= line, required for all community/main devices."
+                )
 
         # check for postmarketos-installkernel in makedepends when installing kernel with make
-        if bool(re.search("make z?install", path.read_text(encoding="utf-8"))):
-            if "postmarketos-installkernel" not in apkbuild["makedepends"]:
-                raise RuntimeError(f"{aport_name}: \"postmarketos-installkernel\" missing in"
-                                   " makedepends, required when using make install/zinstall.")
+        if (
+            bool(re.search("make z?install", path.read_text(encoding="utf-8")))
+            and "postmarketos-installkernel" not in apkbuild["makedepends"]
+        ):
+            raise RuntimeError(
+                f'{aport_name}: "postmarketos-installkernel" missing in'
+                " makedepends, required when using make install/zinstall."
+            )

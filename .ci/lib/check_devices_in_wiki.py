@@ -22,7 +22,7 @@ def get_devices() -> list[str]:
         # devices that have a working mainline kernel. Those are usually
         # unmaintained and therefore might not appear in the wiki. However,
         # the main device should be documented (remove the -downstream suffix).
-        device = device.removesuffix('-downstream')
+        device = device.removesuffix("-downstream")
 
         ret.append(device)
     return sorted(ret)
@@ -30,10 +30,10 @@ def get_devices() -> list[str]:
 
 def get_wiki_devices_html(path: Path | None) -> dict[str, str]:
     """:param path: to a local file with the saved content of the devices wiki
-                    page or None to download a fresh copy
-       :returns: HTML of the page, split into booting and not booting:
-                 {"booting": "<!DOCTYPE HTML>\n<html..."
-                  "not_booting": "Not booting</span></h2>\n<p>These..."}"""
+                 page or None to download a fresh copy
+    :returns: HTML of the page, split into booting and not booting:
+              {"booting": "<!DOCTYPE HTML>\n<html..."
+               "not_booting": "Not booting</span></h2>\n<p>These..."}"""
     content = ""
     if path:
         # Read file
@@ -46,7 +46,7 @@ def get_wiki_devices_html(path: Path | None) -> dict[str, str]:
             content = f.read().decode("utf-8")
 
     # Split into booting and not booting
-    split = content.split("<span class=\"mw-headline\" id=\"Non-booting_devices\">")
+    split = content.split('<span class="mw-headline" id="Non-booting_devices">')
 
     if len(split) != 2:
         print("*** Failed to parse wiki page")
@@ -65,16 +65,18 @@ def get_wiki_renamed_devices_html() -> str:
 
 def check_device(device: str, html: dict[str, str], is_booting: bool) -> bool:
     """:param is_booting: require the device to be in the booting section, not
-                          just anywhere in the page (i.e. in the not booting
-                          table).
-       :returns: True when the device is in the appropriate section."""
+                       just anywhere in the page (i.e. in the not booting
+                       table).
+    :returns: True when the device is in the appropriate section."""
     if device in html["booting"]:
         return True
     if device in html["not_booting"]:
         if is_booting:
-            print(device + ": still in 'not booting' section (if this is a"
-                  " merge request, your device should be in the booting"
-                  " section already)")
+            print(
+                device + ": still in 'not booting' section (if this is a"
+                " merge request, your device should be in the booting"
+                " section already)"
+            )
             return False
         return True
     if device in html["renamed"]:
@@ -88,17 +90,27 @@ def check_device(device: str, html: dict[str, str], is_booting: bool) -> bool:
 def main() -> int:
     # Parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--booting", help="devices must be in the upper table,"
-                        " being in the 'not booting' table below is not"
-                        " enough (all devices in pmaports main and stable"
-                        " branches and should be in the upper table)",
-                        action="store_true")
-    parser.add_argument("--path", help="instead of downloading the devices"
-                        " page from the wiki, use a local HTML file",
-                        type=Path, default=None)
-    parser.add_argument("--all", help="check all devices (default: check only"
-                        " devices changed from branch point)",
-                        action="store_true")
+    parser.add_argument(
+        "--booting",
+        help="devices must be in the upper table,"
+        " being in the 'not booting' table below is not"
+        " enough (all devices in pmaports main and stable"
+        " branches and should be in the upper table)",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--path",
+        help="instead of downloading the devices"
+        " page from the wiki, use a local HTML file",
+        type=Path,
+        default=None,
+    )
+    parser.add_argument(
+        "--all",
+        help="check all devices (default: check only"
+        " devices changed from branch point)",
+        action="store_true",
+    )
     args = parser.parse_args()
 
     html = get_wiki_devices_html(args.path)

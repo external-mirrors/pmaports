@@ -38,7 +38,7 @@ class Device:
         fragment_path = self.full_path / "gitlab-ci.yml.j2"
         try:
             fragment_tmpl = fragment_path.read_text()
-        except Exception:
+        except FileNotFoundError:
             return None
 
         return Template(fragment_tmpl).render(device=self)
@@ -47,8 +47,10 @@ class Device:
     def pmaports_path(self) -> Path:
         # Find the root of pmaports
         pmaports_root = self.full_path.parent
-        while (not (pmaports_root / "pmaports.cfg").exists() and
-               pmaports_root != pmaports_root.root):
+        while (
+            not (pmaports_root / "pmaports.cfg").exists()
+            and pmaports_root != pmaports_root.root
+        ):
             pmaports_root = pmaports_root.parent
         assert pmaports_root != pmaports_root.root
 
@@ -60,11 +62,11 @@ class Device:
 
     @property
     def pkgname(self) -> str:
-        return self.apkbuild['pkgname']
+        return self.apkbuild["pkgname"]
 
     @property
     def arch(self) -> Arch:
-        return Arch(self.apkbuild['arch'][0])
+        return Arch(self.apkbuild["arch"][0])
 
     @property
     def testing_dependencies(self) -> set[str]:
@@ -88,7 +90,7 @@ class Device:
         kernels = []
 
         subpackage_prefix = f"device-{self.codename}-kernel-"
-        for subpkgname in self.apkbuild.get('subpackages', []):
+        for subpkgname in self.apkbuild.get("subpackages", []):
             if not subpkgname.startswith(subpackage_prefix):
                 continue
             kernel_name = subpkgname.removeprefix(subpackage_prefix)
@@ -129,7 +131,7 @@ class Device:
                         continue
 
                     supported_devices[dev.pmaports_path] = dev
-                except Exception:
+                except FileNotFoundError:
                     traceback.print_exc()
         return supported_devices
 
@@ -138,17 +140,23 @@ class ArchTagSet(set):
     def update(self, iterable):
         supported_arches = Arch.supported_binary()
         # This ignores things like !armv7, that could be a follow-up optimization
-        if 'noarch' in iterable or 'all' in iterable:
+        if "noarch" in iterable or "all" in iterable:
             iterable = [arch for arch in supported_arches]
-        super().update([Arch(arch) for arch in iterable if Arch(arch) in supported_arches])
+        super().update(
+            [Arch(arch) for arch in iterable if Arch(arch) in supported_arches]
+        )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--template", default=".ci/build-jobs.yaml.j2", help="Jinja2 input template")
-    parser.add_argument("--output", default=".ci/build-jobs.yaml", help="output pipeline")
+    parser.add_argument(
+        "--template", default=".ci/build-jobs.yaml.j2", help="Jinja2 input template"
+    )
+    parser.add_argument(
+        "--output", default=".ci/build-jobs.yaml", help="output pipeline"
+    )
     args = parser.parse_args()
 
     # pmb logging has to be initialized for later pmb commands to work, setting
@@ -179,13 +187,13 @@ if __name__ == "__main__":
         if path.name != "APKBUILD":
             continue
         apkbuild = pmb.parse.apkbuild(path)
-        packages_modified.add(apkbuild['pkgname'])
+        packages_modified.add(apkbuild["pkgname"])
         archs.update(apkbuild["arch"])
 
         # Add all the devices found in CI that depend on the package that got
         # modified
         for device in supported_devices.values():
-            if apkbuild['pkgname'] in device.dependencies:
+            if apkbuild["pkgname"] in device.dependencies:
                 devices_under_test.add(device)
 
     if common.commit_message_has_string("[ci:skip-build]"):

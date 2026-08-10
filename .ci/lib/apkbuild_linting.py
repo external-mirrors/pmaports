@@ -21,7 +21,7 @@ custom_valid_options = [
 ]
 
 
-def get_kconfigcheck_categories() -> list [str]:
+def get_kconfigcheck_categories() -> list[str]:
     with open("kconfigcheck.toml", "rb") as kconfigcheck_config:
         kconfigcheck_data = tomllib.load(kconfigcheck_config)
 
@@ -34,27 +34,33 @@ def get_kconfigcheck_categories() -> list [str]:
         else:
             kconfigcheck_categories.append(category_name)
 
-    return [item.replace("category:", "pmb:kconfigcheck-") for item in kconfigcheck_categories]
+    return [
+        item.replace("category:", "pmb:kconfigcheck-")
+        for item in kconfigcheck_categories
+    ]
 
 
 if __name__ == "__main__":
     if common.commit_message_has_string("[ci:skip-apkbuild-lint]"):
         print("WARNING: not linting deviceinfo files ([ci:skip-apkbuild-lint])")
-        exit(0)
+        sys.exit(0)
 
     kconfigcheck_categories = get_kconfigcheck_categories()
     custom_valid_options += kconfigcheck_categories
     os.environ["CUSTOM_VALID_OPTIONS"] = " ".join(custom_valid_options)
 
-    apkbuilds = {file for file in common.get_changed_files()
-                 if os.path.basename(file) == "APKBUILD"}
+    apkbuilds = {
+        file
+        for file in common.get_changed_files()
+        if os.path.basename(file) == "APKBUILD"
+    }
     if len(apkbuilds) < 1:
         print("No APKBUILDs to lint")
         sys.exit(0)
 
     apkbuilds_filtered = []
     for apkbuild in apkbuilds:
-        if apkbuild.startswith("temp/") or apkbuild.startswith("cross/"):
+        if apkbuild.startswith(("temp/", "cross/")):
             print(f"NOTE: Skipping linting of {apkbuild}")
             continue
         apkbuilds_filtered.append(apkbuild)

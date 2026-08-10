@@ -1,9 +1,9 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-""" Make sure that components of frameworks (Qt, KDE, ...) have the same
-    version in all packages. We scan all packages, categorize them by URL
-    and then compare the versions of all packages in each category. """
+"""Make sure that components of frameworks (Qt, KDE, ...) have the same
+version in all packages. We scan all packages, categorize them by URL
+and then compare the versions of all packages in each category."""
 
 import logging
 
@@ -41,8 +41,7 @@ def get_categorized_packages():
             category = "plasma"
         elif "https://community.kde.org/Frameworks" in url:
             category = "kde"
-        elif url in ["http://qt-project.org/",
-                     "https://www.qt.io/developers/"]:
+        elif url in ["http://qt-project.org/", "https://www.qt.io/developers/"]:
             category = "qt"
 
         # Remove hotfix number (i.e. 5.16.90.1 becomes 5.16.90)
@@ -69,7 +68,6 @@ def check_categories(categories):
     for category, packages in categories.items():
         reference = None
         for pkgname, pkgver in packages.items():
-
             # Use the first package as reference and print a summary
             if not reference:
                 logging.info("---")
@@ -87,8 +85,9 @@ def check_categories(categories):
 
                 # Print the reference and skip checking it against itself
                 reference = {"pkgname": pkgname, "pkgver": pkgver}
-                logging.info("Reference pkgver: " + pkgver + " (from '" +
-                             pkgname + "')")
+                logging.info(
+                    "Reference pkgver: " + pkgver + " (from '" + pkgname + "')"
+                )
                 continue
 
             # Check version against reference
@@ -98,8 +97,7 @@ def check_categories(categories):
 
         # Each category must at least have one package
         if not reference:
-            logging.info("ERROR: could not find any packages in category: " +
-                         category)
+            logging.info("ERROR: could not find any packages in category: " + category)
             ret = False
     return ret
 

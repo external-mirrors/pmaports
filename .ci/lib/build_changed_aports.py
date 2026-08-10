@@ -21,11 +21,20 @@ def build_strict(packages, arch: Arch):
     common.run_pmbootstrap(["build_init"])
     # We set the timeout to 1 hour because linking the Linux kernel with
     # ThinLTO on our aarch64 runners takes slightly over 30 minutes
-    common.run_pmbootstrap(["--details-to-stdout", "--no-ccache",
-                            "--timeout", "3600",
-                            "build",
-                            "--strict", "--force",
-                            "--arch", str(arch), ] + list(packages))
+    common.run_pmbootstrap(
+        [
+            "--details-to-stdout",
+            "--no-ccache",
+            "--timeout",
+            "3600",
+            "build",
+            "--strict",
+            "--force",
+            "--arch",
+            str(arch),
+        ]
+        + list(packages)
+    )
 
 
 if __name__ == "__main__":
@@ -51,7 +60,7 @@ if __name__ == "__main__":
         buildable_pkgs.add(os.path.basename(path))
 
     # To store a list of packages from extra-repos/systemd for special handling later:
-    systemd_pkgs = list()
+    systemd_pkgs = []
 
     # Filter out packages that either:
     #  1. can't be built for given arch
@@ -92,10 +101,16 @@ if __name__ == "__main__":
         # filter out packages that can't be built for arch
         # (Iterate over copy of `systemd_pkgs`, because we modify it in this loop)
         for package in systemd_pkgs.copy():
-            apkbuild_path = pmb.helpers.pmaports.find(package, True, True, with_extra_repos="enabled")
-            apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(apkbuild_path, "APKBUILD"))
+            apkbuild_path = pmb.helpers.pmaports.find(
+                package, True, True, with_extra_repos="enabled"
+            )
+            apkbuild = pmb.parse._apkbuild.apkbuild(
+                pathlib.Path(apkbuild_path, "APKBUILD")
+            )
             if arch not in Arch.from_arch_field(apkbuild["arch"]):
-                print(f"(extra-repos/systemd) {package}: not enabled for {arch}, skipping")
+                print(
+                    f"(extra-repos/systemd) {package}: not enabled for {arch}, skipping"
+                )
                 systemd_pkgs.remove(package)
 
         # No packages: skip build

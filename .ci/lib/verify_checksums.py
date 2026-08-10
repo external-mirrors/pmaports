@@ -19,8 +19,9 @@ def verify_checksums(packages):
 
     print("verifying checksums: " + ", ".join(packages))
     common.run_pmbootstrap(["build_init"])
-    common.run_pmbootstrap(["--details-to-stdout", "checksum", "--verify"] +
-                           list(packages))
+    common.run_pmbootstrap(
+        ["--details-to-stdout", "checksum", "--verify"] + list(packages)
+    )
 
 
 if __name__ == "__main__":
@@ -39,14 +40,14 @@ if __name__ == "__main__":
     archived = set()
     for path in pmb.core.pkgrepo.pkgrepo_iter_package_dirs():
         # Store archived packages for matching later
-        if os.path.split(os.path.split(path)[0])[1] == 'archived':
+        if os.path.split(os.path.split(path)[0])[1] == "archived":
             archived.add(os.path.basename(path))
             continue
         buildable_pkgs.add(os.path.basename(path))
 
     # To store a list of packages from extra-repos/systemd for special handling
     #  later:
-    systemd_pkgs = list()
+    systemd_pkgs = []
 
     # Filter out packages are not found in enabled repos or are in archived
     # (Iterate over copy of packages, because we modify it in this loop)
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     if len(packages) == 0:
         print("no packages to check for the current repo")
     else:
-       verify_checksums(packages)
+        verify_checksums(packages)
 
     # FIXME: this should probably be more generic, if other repos are added later?
     if systemd_pkgs:

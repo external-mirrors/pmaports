@@ -26,8 +26,7 @@ def get_package_contents(package, revision, check=True):
         stderr = subprocess.DEVNULL
 
     # Run something like "git show upstream/main:main/hello-world/APKBUILD"
-    apkbuild_content = common.run_git(["show", revision + ":" + package], check,
-                                      stderr)
+    apkbuild_content = common.run_git(["show", revision + ":" + package], check, stderr)
     if not apkbuild_content:
         return None
 
@@ -36,15 +35,14 @@ def get_package_contents(package, revision, check=True):
     with tempfile.TemporaryDirectory() as tempdir:
         with open(tempdir + "/APKBUILD", "w", encoding="utf-8") as handle:
             handle.write(apkbuild_content)
-        parsed = pmb.parse.apkbuild(pathlib.Path(tempdir, "APKBUILD"),
-                                    False, False)
+        parsed = pmb.parse.apkbuild(pathlib.Path(tempdir, "APKBUILD"), False, False)
 
     return parsed
 
 
 def get_package_version(package, revision, check=True):
-    """ returns version in the format "{pkgver}-r{pkgrel}", or None if no
-        matching package is found """
+    """returns version in the format "{pkgver}-r{pkgrel}", or None if no
+    matching package is found"""
     parsed = get_package_contents(package, revision, check)
     if parsed is None:
         return None
@@ -52,7 +50,7 @@ def get_package_version(package, revision, check=True):
 
 
 def version_compare_operator(result):
-    """ :param result: return value from pmb.parse.version.compare() """
+    """:param result: return value from pmb.parse.version.compare()"""
     if result == -1:
         return "<"
     elif result == 0:
@@ -88,7 +86,7 @@ def exit_with_error_message():
     print("   latest commit message, then force push.")
     print()
     print("Thank you and sorry for the inconvenience.")
-    exit(1)
+    sys.exit(1)
 
 
 def check_versions(packages):
@@ -101,14 +99,21 @@ def check_versions(packages):
     # desired here, since we already know what packages changed, and really
     # want to check if the version was increased towards *current* upstream
     # branch HEAD.
-    common.run_git(["remote", "add", "upstream",
-             "https://gitlab.postmarketos.org/postmarketOS/pmaports.git"], False)
+    common.run_git(
+        [
+            "remote",
+            "add",
+            "upstream",
+            "https://gitlab.postmarketos.org/postmarketOS/pmaports.git",
+        ],
+        False,
+    )
     common.run_git(["fetch", "-q", "upstream"])
     commit = f"upstream/{common.get_upstream_branch()}"
-    if common.run_git(["rev-parse", "HEAD"]) == common.run_git(["rev-parse",
-                                                                commit]):
-        print(f"NOTE: {commit} is on same commit as HEAD, comparing"
-              " HEAD against HEAD~1.")
+    if common.run_git(["rev-parse", "HEAD"]) == common.run_git(["rev-parse", commit]):
+        print(
+            f"NOTE: {commit} is on same commit as HEAD, comparing HEAD against HEAD~1."
+        )
         commit = "HEAD~1"
 
     # Exclude linux-next from pkgrel checks, as it is updated automatically.
@@ -124,28 +129,35 @@ def check_versions(packages):
         head = get_package_version(package, "HEAD")
         upstream = get_package_version(package, commit, False)
         if not upstream:
-            if head.rpartition('r')[2] != "0":
+            if head.rpartition("r")[2] != "0":
                 print(f"- {package}: {head} (HEAD) (new package) [ERROR]")
                 error = True
             else:
                 print(f"- {package}: {head} (HEAD) (new package)")
             continue
 
-        is_device_pkg = os.path.basename(package).startswith('device-')
+        is_device_pkg = os.path.basename(package).startswith("device-")
         if is_device_pkg:
             # Check pkgver follows expected format for device packages
-            pkgver = head.rpartition('-r')[0]
+            pkgver = head.rpartition("-r")[0]
             if not pkgver.isdigit():
-                print(f" - {package}: invalid pkgver \"{pkgver}\""
-                      "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
+                print(
+                    f' - {package}: invalid pkgver "{pkgver}"'
+                    "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
+                )
                 error = True
 
             # Check that pkgrel was reset to 0 when pkgver was changed
             head_parsed = get_package_contents(package, "HEAD", False)
             upstream_parsed = get_package_contents(package, commit, False)
-            if head_parsed["pkgver"] != upstream_parsed["pkgver"] and head_parsed["pkgrel"] != "0":
-                print(f" - {package}: pkgrel should be 0 when pkgver changes."
-                      "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
+            if (
+                head_parsed["pkgver"] != upstream_parsed["pkgver"]
+                and head_parsed["pkgrel"] != "0"
+            ):
+                print(
+                    f" - {package}: pkgrel should be 0 when pkgver changes."
+                    "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
+                )
                 error = True
 
         # Compare head and upstream versions
@@ -169,15 +181,16 @@ if __name__ == "__main__":
     packages = common.get_changed_packages()
     if len(packages) == 0:
         print("no aports changed in this branch")
-        exit(0)
+        sys.exit(0)
 
     print(f"Changed packages: {packages}")
 
     # Potentially skip this check
     if common.commit_message_has_string("[ci:skip-vercheck]"):
-        print("WARNING: not checking for changed package versions"
-              " ([ci:skip-vercheck])!")
-        exit(0)
+        print(
+            "WARNING: not checking for changed package versions ([ci:skip-vercheck])!"
+        )
+        sys.exit(0)
 
     # Initialize args (so we can use pmbootstrap's APKBUILD parsing)
     sys.argv = ["pmbootstrap.py", "chroot"]
@@ -186,7 +199,6 @@ if __name__ == "__main__":
 
     # pmb.helpers.logging.init(args)
     pmb.helpers.logging.init(context.log, args.verbose, context.details_to_stdout)
-
 
     # Verify package versions
     print("checking changed package versions...")

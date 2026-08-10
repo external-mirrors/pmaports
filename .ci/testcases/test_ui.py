@@ -31,8 +31,10 @@ def test_aports_ui():
             for package in apkbuild["_pmb_recommends"]:
                 depend = pmb.helpers.package.get(package, arch, must_exist=False)
                 if depend is None:
-                    raise RuntimeError(f"{path}: package '{package}' from"
-                                       f" _pmb_recommends not found for arch '{arch}'")
+                    raise RuntimeError(
+                        f"{path}: package '{package}' from"
+                        f" _pmb_recommends not found for arch '{arch}'"
+                    )
 
             # Check packages from "_pmb_recommends" of -extras subpackage if one exists
             if f"{apkbuild['pkgname']}-extras" in apkbuild["subpackages"]:
@@ -40,5 +42,7 @@ def test_aports_ui():
                 for package in apkbuild["_pmb_recommends"]:
                     depend = pmb.helpers.package.get(package, arch, must_exist=False)
                     if depend is None:
-                        raise RuntimeError(f"{path}: package '{package}' from _pmb_recommends "
-                                           f"of -extras subpackage is not found for arch '{arch}'")
+                        raise RuntimeError(
+                            f"{path}: package '{package}' from _pmb_recommends "
+                            f"of -extras subpackage is not found for arch '{arch}'"
+                        )

@@ -44,7 +44,9 @@ def apkbuild_check_provides(path, apkbuild, version, pkgname, subpkgname=None):
         if not provide.endswith(f"={version}"):
             # Valid version strings, per the APKBUILD reference, are fine. This regex
             # attempts to detect those.
-            pattern = r'^\d+(\.\d+)*[a-z]?(_(?:alpha|beta|pre|rc|cvs|svn|git|hg|p)\d*)*-r\d+$'
+            pattern = (
+                r"^\d+(\.\d+)*[a-z]?(_(?:alpha|beta|pre|rc|cvs|svn|git|hg|p)\d*)*-r\d+$"
+            )
             [provide_no_ver, provide_ver] = provide.split("=", 1)
             if not re.match(pattern, provide_ver):
                 error = f"error in , provide_ver{path}:\n"
@@ -62,7 +64,9 @@ def apkbuild_check_provides(path, apkbuild, version, pkgname, subpkgname=None):
                 error += " version on purpose, you also need to set a"
                 error += " provider_priority (pma#1766).\n"
                 error += "Reference:"
-                error += " https://wiki.alpinelinux.org/wiki/APKBUILD_Reference#provides"
+                error += (
+                    " https://wiki.alpinelinux.org/wiki/APKBUILD_Reference#provides"
+                )
                 error += f"\nVERSION: {provide_no_ver}"
                 ret += [error]
     return ret
@@ -82,8 +86,9 @@ def test_provides():
             if not subpkg_data:
                 # default packaging function like -doc
                 continue
-            errors += apkbuild_check_provides(path_rel, subpkg_data, version,
-                                              pkgname, subpkg)
+            errors += apkbuild_check_provides(
+                path_rel, subpkg_data, version, pkgname, subpkg
+            )
 
     if errors:
         for error in errors:

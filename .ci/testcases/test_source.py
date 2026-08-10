@@ -45,9 +45,11 @@ def parse_source_from_checksums(apkbuild_path):
             try:
                 checksum, filename = line.rstrip().split("  ", 2)
             except ValueError:
-                raise ValueError("Failed to parse checksums. Try to delete the"
-                                 " checksums and generate them again with"
-                                 f" 'pmbootstrap checksum': {apkbuild_path}")
+                raise ValueError(
+                    "Failed to parse checksums. Try to delete the"
+                    " checksums and generate them again with"
+                    f" 'pmbootstrap checksum': {apkbuild_path}"
+                )
 
             # Cut off 'sha512sums="' if the first checksum is in that line
             checksum = checksum.removeprefix(start)
@@ -96,15 +98,21 @@ def test_aports_unreferenced_files():
             if rel_file_path in ["APKBUILD", "gitlab-ci.yml.j2"] or os.path.isdir(file):
                 continue
             # Skip kernel fragments in linux-* packages
-            if os.path.basename(rel_file_path).endswith(".config") and apkbuild["pkgname"].startswith("linux-"):
+            if os.path.basename(rel_file_path).endswith(".config") and apkbuild[
+                "pkgname"
+            ].startswith("linux-"):
                 continue
 
-            if os.path.basename(rel_file_path) not in sources_chk \
-                    and rel_file_path not in apkbuild["install"] \
-                    and rel_file_path not in subpackage_installs \
-                    and rel_file_path not in trigger_sources \
-                    and not rel_file_path.startswith("tests/"):
-                raise RuntimeError(f"{apkbuild_path}: found unreferenced file: {rel_file_path}")
+            if (
+                os.path.basename(rel_file_path) not in sources_chk
+                and rel_file_path not in apkbuild["install"]
+                and rel_file_path not in subpackage_installs
+                and rel_file_path not in trigger_sources
+                and not rel_file_path.startswith("tests/")
+            ):
+                raise RuntimeError(
+                    f"{apkbuild_path}: found unreferenced file: {rel_file_path}"
+                )
 
 
 def test_distfiles_conflict():
@@ -131,8 +139,10 @@ def test_distfiles_conflict():
 
             # First time seeing this file
             if filename not in source_all:
-                source_all[filename] = {"checksum": checksum,
-                                        "apkbuild_rel": apkbuild_rel}
+                source_all[filename] = {
+                    "checksum": checksum,
+                    "apkbuild_rel": apkbuild_rel,
+                }
                 continue
 
             # Saw this file already with same checksum
@@ -141,15 +151,19 @@ def test_distfiles_conflict():
 
             # Saw this file already with different checksum
             logging.error("")
-            logging.error(f"ERROR: the source file '{filename}' has different"
-                          " checksums in the following files:")
+            logging.error(
+                f"ERROR: the source file '{filename}' has different"
+                " checksums in the following files:"
+            )
             logging.error(f"- {source_all[filename]['apkbuild_rel']}:")
             logging.error(f"  {source_all[filename]['checksum']}")
             logging.error(f"- {apkbuild_rel}:")
             logging.error(f"  {checksum}")
             logging.error("")
-            logging.error("Fix this by setting a different target filename in"
-                          " the package you modified:")
+            logging.error(
+                "Fix this by setting a different target filename in"
+                " the package you modified:"
+            )
             logging.error("https://wiki.alpinelinux.org/wiki/APKBUILD_Reference#source")
             logging.error("")
             raise RuntimeError(f"Conflict with source file '{filename}'")

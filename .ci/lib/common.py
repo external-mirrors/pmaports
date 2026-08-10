@@ -16,7 +16,7 @@ def get_pmaports_dir():
 
 
 def run_git(parameters, check=True, stderr=None):
-    """ Run git in the pmaports dir and return the output """
+    """Run git in the pmaports dir and return the output"""
     cmd = ["git", "-C", get_pmaports_dir()] + parameters
     try:
         return subprocess.check_output(cmd, stderr=stderr).decode()
@@ -34,23 +34,25 @@ def commit_message_has_string(needle):
 
 def all_committed_by_merge_bot():
     base_commit = get_base_commit()
-    commit_emails = run_git(["log", "--pretty=format:%ce", f"{base_commit}..HEAD"]).splitlines()
+    commit_emails = run_git(
+        ["log", "--pretty=format:%ce", f"{base_commit}..HEAD"]
+    ).splitlines()
     bot_email = os.getenv("PMOS_MERGE_BOT_EMAIL", "merge-bot@postmarketos.org")
     return all(bot_email == ce for ce in commit_emails)
 
 
 def run_pmbootstrap(parameters):
-    """ Run pmbootstrap with the pmaports dir as --aports """
+    """Run pmbootstrap with the pmaports dir as --aports"""
     cmd = ["pmbootstrap", "--aports", get_pmaports_dir()] + parameters
     subprocess.run(cmd, text=True, check=True)
 
 
 @cache
 def get_upstream_branch():
-    """ Use pmaports.cfg from current branch (e.g. "v20.05_fix-ci") and
-        channels.cfg from main to retrieve the upstream branch.
+    """Use pmaports.cfg from current branch (e.g. "v20.05_fix-ci") and
+    channels.cfg from main to retrieve the upstream branch.
 
-        :returns: branch name, e.g. "v20.05" """
+    :returns: branch name, e.g. "v20.05" """
 
     # Prefer gitlab CI target branch name if it's set (i.e. running in gitlab CI)
     if target_branch := os.environ.get("CI_MERGE_REQUEST_TARGET_BRANCH_NAME"):
@@ -68,10 +70,11 @@ def get_upstream_branch():
     channels_cfg_str = run_git(["show", "upstream/main:channels.cfg"])
     channels_cfg = configparser.ConfigParser()
     channels_cfg.read_string(channels_cfg_str)
-    assert channel in channels_cfg, \
-        f"Channel '{channel}' from pmaports.cfg in your branch is unknown." \
-        " This appears to be an old branch, consider recreating your change" \
+    assert channel in channels_cfg, (
+        f"Channel '{channel}' from pmaports.cfg in your branch is unknown."
+        " This appears to be an old branch, consider recreating your change"
         " on top of master."
+    )
 
     return channels_cfg[channel]["branch_pmaports"]
 
@@ -86,8 +89,15 @@ def get_base_commit() -> str:
         return commit
 
     # Add a remote pointing to postmarketOS/pmaports
-    run_git(["remote", "add", "upstream",
-             "https://gitlab.postmarketos.org/postmarketOS/pmaports.git"], False)
+    run_git(
+        [
+            "remote",
+            "add",
+            "upstream",
+            "https://gitlab.postmarketos.org/postmarketOS/pmaports.git",
+        ],
+        False,
+    )
     run_git(["fetch", "-q", "upstream"])
 
     branch_upstream = f"upstream/{get_upstream_branch()}"
@@ -109,10 +119,10 @@ def get_base_commit() -> str:
 
 
 def get_changed_files(removed=False):
-    """ Get all changed files and print them, as well as the branch and the
-        commit that was used for the diff.
-        :param removed: also return removed files (default: True)
-        :returns: set of changed files
+    """Get all changed files and print them, as well as the branch and the
+    commit that was used for the diff.
+    :param removed: also return removed files (default: True)
+    :returns: set of changed files
     """
     commit = get_base_commit()
 
@@ -131,7 +141,9 @@ def get_changed_files(removed=False):
     return ret
 
 
-def get_changed_packages(skip_archived: bool = False, keep_dir: bool = False) -> set[str]:
+def get_changed_packages(
+    skip_archived: bool = False, keep_dir: bool = False
+) -> set[str]:
     ret = set()
     for file in get_changed_files(removed=True):
         dirname, filename = os.path.split(file)
@@ -141,11 +153,12 @@ def get_changed_packages(skip_archived: bool = False, keep_dir: bool = False) ->
         # * path with a dot (e.g. .ci/, device/.shared-patches/)
         # * documentation
         if (
-                not dirname
-                or file.startswith(".")
-                or "/." in file
-                or skip_archived and dirname.startswith("device/archived")
-                or dirname == "docs"
+            not dirname
+            or file.startswith(".")
+            or "/." in file
+            or skip_archived
+            and dirname.startswith("device/archived")
+            or dirname == "docs"
         ):
             continue
 
@@ -184,6 +197,7 @@ def get_changed_kernels(skip_archived: bool = False):
         if pkgname.startswith("linux-"):
             ret += [pkgname]
     return ret
+
 
 def get_changed_devices(skip_archived: bool = False):
     ret = []

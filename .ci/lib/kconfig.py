@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import subprocess
+import sys
 
 # Same dir
 import common
@@ -12,10 +13,11 @@ def check_kconfig(pkgnames):
     last_failed = None
     for i in range(len(pkgnames)):
         pkgname = pkgnames[i]
-        print(f"  ({i+1}/{len(pkgnames)}) {pkgname}")
+        print(f"  ({i + 1}/{len(pkgnames)}) {pkgname}")
 
-        p = subprocess.run(["pmbootstrap", "kconfig", "check", "--keep-going", pkgname],
-                           check=False)
+        p = subprocess.run(
+            ["pmbootstrap", "kconfig", "check", "--keep-going", pkgname], check=False
+        )
 
         if p.returncode:
             last_failed = pkgname
@@ -32,8 +34,10 @@ def show_error(last_failed):
     print()
     print("---")
     print()
-    print("Please adjust your kernel config. This is required for getting your"
-          " patch merged.")
+    print(
+        "Please adjust your kernel config. This is required for getting your"
+        " patch merged."
+    )
     print()
     print("Edit your kernel config:")
     print(f"  pmbootstrap kconfig edit {last_failed}")
@@ -76,21 +80,21 @@ if __name__ == "__main__":
         print("kconfigcheck.toml changed -> checking all kernels")
         if not check_kconfig_all():
             show_error_all()
-            exit(1)
-        exit(0)
+            sys.exit(1)
+        sys.exit(0)
 
     pkgnames = common.get_changed_kernels(skip_archived=True)
     print(f"Changed kernels: {pkgnames}")
 
     if len(pkgnames) == 0:
         print("No kernels changed in this branch")
-        exit(0)
+        sys.exit(0)
     elif common.commit_message_has_string("[ci:skip-kconfigcheck]"):
         print("WARNING: not checking kernel configs ([ci:skip-kconfigcheck])")
-        exit(0)
+        sys.exit(0)
 
     last_failed = check_kconfig(pkgnames)
 
     if last_failed:
         show_error(last_failed)
-        exit(1)
+        sys.exit(1)
