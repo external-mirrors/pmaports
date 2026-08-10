@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
 import os
+from pathlib import Path
 
 import pmb.parse
 from pmb.core.context import get_context
-from pathlib import Path
 
 
 def test_systemd_stage0_version():

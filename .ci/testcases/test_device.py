@@ -5,8 +5,8 @@
 
 import pmb.parse
 import pmb.parse._apkbuild
-from pmb.core.pkgrepo import pkgrepo_default_path, pkgrepo_iglob
 from pmb.core.arch import Arch
+from pmb.core.pkgrepo import pkgrepo_default_path, pkgrepo_iglob
 
 # Don't complain if these nicknames are the only maintainers of an APKBUILD,
 # because they are actually a group of people

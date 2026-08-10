@@ -2,13 +2,15 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
 from pathlib import Path
+
+import pmb.config
 import pmb.parse
+import pytest
 from pmb.helpers.args import init as init_args
 from pmb.types import PmbArgs
-import pmb.config
-import pytest
-import os
+
 
 @pytest.fixture(scope="session", autouse=True)
 def args(request):

@@ -3,23 +3,22 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import argparse
+import sys
+import traceback
 from functools import cached_property
 from pathlib import Path
 from typing import Self
-import sys
-import traceback
-
-from jinja2 import Template
-import pmb.parse
-from pmb.parse.deviceinfo import Deviceinfo
-from pmb.types import Apkbuild
-import pmb.helpers.devices
-import pmb.helpers.logging
-import pmb.helpers.package
-from pmb.core.arch import Arch
 
 # Same dir
 import common
+import pmb.helpers.devices
+import pmb.helpers.logging
+import pmb.helpers.package
+import pmb.parse
+from jinja2 import Template
+from pmb.core.arch import Arch
+from pmb.parse.deviceinfo import Deviceinfo
+from pmb.types import Apkbuild
 
 
 class Device:

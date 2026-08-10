@@ -2,13 +2,14 @@
 # Copyright 2023 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pathlib import Path
 import argparse
 import sys
 import urllib.request
+from pathlib import Path
 
 # Same dir
 import common
+
 
 def get_devices() -> list[str]:
     """:returns: list of all devices"""
@@ -21,8 +22,7 @@ def get_devices() -> list[str]:
         # devices that have a working mainline kernel. Those are usually
         # unmaintained and therefore might not appear in the wiki. However,
         # the main device should be documented (remove the -downstream suffix).
-        if device.endswith('-downstream'):
-            device = device[:-len('-downstream')]
+        device = device.removesuffix('-downstream')
 
         ret.append(device)
     return sorted(ret)
@@ -120,21 +120,21 @@ def main() -> int:
     if error:
         print("*** Wiki check failed!")
         print("Thank you for porting postmarketOS to a new device! \\o/")
-        print("")
+        print()
         print("Now it's time to add some documentation:")
         print("1) Create a device specific wiki page as described here:")
         print("   https://wiki.postmarketos.org/wiki/Help:Device_Page")
         print("2) Set 'booting = yes' in the infobox of your device page.")
         print("3) Run these tests again with an empty commit in your MR:")
         print("   $ git commit --allow-empty -m 'run tests again'")
-        print("")
+        print()
         print("Please take the time to do these steps. It will make your")
         print("precious porting efforts visible for others, and allow them")
         print("not only to use what you have created, but also to build upon")
         print("it more easily. Many times one person did a port with basic")
         print("functionality, and then someone else jumped in and")
         print("contributed major new features.")
-        print("")
+        print()
         print("NOTE: if you renamed a device in pmaports, rename it in the")
         print("wiki as well and make sure to add it here:")
         print("https://postmarketos.org/renamed")

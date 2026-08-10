@@ -42,7 +42,7 @@ def all_committed_by_merge_bot():
 def run_pmbootstrap(parameters):
     """ Run pmbootstrap with the pmaports dir as --aports """
     cmd = ["pmbootstrap", "--aports", get_pmaports_dir()] + parameters
-    subprocess.run(cmd, universal_newlines=True, check=True)
+    subprocess.run(cmd, text=True, check=True)
 
 
 @cache

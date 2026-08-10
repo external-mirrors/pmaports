@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import common
 import os
-import sys
 import subprocess
-import tomllib
+import sys
 
+import common
+import tomllib
 
 custom_valid_options = [
     "!pmb:crossdirect",
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     print("Running apkbuild-lint...")
-    print("")
+    print()
 
     ret = 0
     for apkbuild in apkbuilds_filtered:
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         except subprocess.CalledProcessError as exception:
             ret = exception.returncode
 
-    print("")
+    print()
     if ret == 0:
         print("Success")
 

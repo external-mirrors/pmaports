@@ -7,10 +7,10 @@ import glob
 import logging
 import os
 
+import pmb.helpers.repo
 import pmb.parse
 import pmb.parse._apkbuild
 import pmb.parse.apkindex
-import pmb.helpers.repo
 from pmb.core.pkgrepo import pkgrepo_iter_package_dirs, pkgrepo_relative_path
 
 
@@ -30,7 +30,7 @@ def parse_source_from_checksums(apkbuild_path):
     ret = {}
 
     with open(apkbuild_path, encoding="utf-8") as handle:
-        for line in handle.readlines():
+        for line in handle:
             # Find start
             if not in_block:
                 if line.startswith(start):
@@ -51,12 +51,10 @@ def parse_source_from_checksums(apkbuild_path):
                                  f" 'pmbootstrap checksum': {apkbuild_path}")
 
             # Cut off 'sha512sums="' if the first checksum is in that line
-            if checksum.startswith(start):
-                checksum = checksum[len(start):]
+            checksum = checksum.removeprefix(start)
 
             # Find end
-            if filename.endswith('"'):
-                filename = filename[:-1]
+            filename = filename.removesuffix('"')
 
             ret[filename] = checksum
     return ret

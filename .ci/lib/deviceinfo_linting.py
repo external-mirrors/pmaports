@@ -2,11 +2,12 @@
 # Copyright 2025 Stefan Hansson
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import common
 import glob
 import os.path
 import subprocess
 import sys
+
+import common
 
 if __name__ == "__main__":
     if common.commit_message_has_string("[ci:skip-dint]"):

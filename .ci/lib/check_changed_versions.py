@@ -4,18 +4,19 @@
 
 import os.path
 import pathlib
-import tempfile
-import sys
 import subprocess
+import sys
+import tempfile
 
 # Same dir
 import common
+import pmb.helpers.logging
 
 # pmbootstrap
 import pmb.parse
 import pmb.parse.version
-import pmb.helpers.logging
 from pmb.core.context import get_context
+
 
 def get_package_contents(package, revision, check=True):
     # Redirect stderr to /dev/null, so git doesn't complain about files not

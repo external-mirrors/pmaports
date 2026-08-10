@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
-import sys
 import os
 import pathlib
+import sys
 
 # Same dir
 import common
 
 # pmbootstrap
 import pmb.core
+import pmb.helpers.pmaports
 import pmb.parse
 import pmb.parse._apkbuild
-import pmb.helpers.pmaports
 from pmb.core.arch import Arch
 from pmb.core.context import get_context
 
