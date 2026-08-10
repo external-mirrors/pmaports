@@ -130,20 +130,18 @@ def check_versions(packages):
                 print(f"- {package}: {head} (HEAD) (new package)")
             continue
 
-        # Check pkgver follows expected format for device packages
-        pkgver = head.rpartition('-r')[0]
         is_device_pkg = os.path.basename(package).startswith('device-')
-        if is_device_pkg and not pkgver.isdigit():
-            print(f" - {package}: invalid pkgver \"{pkgver}\""
-                  "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
-            error = True
-
-        # Additional checks for device packages
         if is_device_pkg:
-            head_parsed = get_package_contents(package, "HEAD", False)
-            upstream_parsed = get_package_contents(package, commit, False)
+            # Check pkgver follows expected format for device packages
+            pkgver = head.rpartition('-r')[0]
+            if not pkgver.isdigit():
+                print(f" - {package}: invalid pkgver \"{pkgver}\""
+                      "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
+                error = True
 
             # Check that pkgrel was reset to 0 when pkgver was changed
+            head_parsed = get_package_contents(package, "HEAD", False)
+            upstream_parsed = get_package_contents(package, commit, False)
             if head_parsed["pkgver"] != upstream_parsed["pkgver"] and head_parsed["pkgrel"] != "0":
                 print(f" - {package}: pkgrel should be 0 when pkgver changes."
                       "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel")
