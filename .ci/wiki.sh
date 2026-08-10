@@ -9,7 +9,6 @@ if [ "$(id -u)" = 0 ]; then
 	apk -q add \
 		git \
 		python3
-	exec su "${TESTUSER:-build}" -c "sh -e $0"
 fi
 
 set -x
