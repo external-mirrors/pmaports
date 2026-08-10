@@ -30,8 +30,6 @@ workflow:
     # Run scheduled pipeline for autoupdate or manually triggered pipeline
     - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
 
-include: "cross/.gitlab-ci.yml"
-
 # device documentation
 wiki:
   stage: lint
@@ -288,10 +286,24 @@ auto-update:
       - log_testsuite_pmaports.txt
       - pmbootstrap.cfg
 
-# Template for package test jobs defined per-package
-.package-test:
+cross-gcc-tests:
   stage: test
+  tags: [qemu]
+  before_script:
+    - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/install_pmbootstrap.sh"
+    - sh ./install_pmbootstrap.sh
+  script:
+    - su pmos -c "pmbootstrap build gcc-aarch64"
+    - su pmos -c "pmbootstrap build --arch=aarch64 hello-world --force"
+    - su pmos -c "pmbootstrap build --arch=aarch64 iskey --force"
+    - su pmos -c "pmbootstrap build --arch=aarch64 mkbootimg-osm0sis --force"
+    - su pmos -c "pmbootstrap build --arch=aarch64 gcc-x86_64"
   rules:
     - if: *mr_rule
-  before_script:
-    - .ci/lib/gitlab_prepare_ci.sh
+      changes:
+        - cross/gcc-x86_64/APKBUILD
+  artifacts:
+    when: always
+    paths:
+      - log.txt
+    expire_in: 1 week
