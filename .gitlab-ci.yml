@@ -97,7 +97,6 @@ pytest-commits:
   rules:
     - if: *mr_rule
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
     - .ci/pytest.sh
     - .ci/check-changed-versions.sh
   artifacts:
@@ -150,7 +149,6 @@ kernel-kconfig:
       changes:
         - device/*/linux-*/APKBUILD
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
     - .ci/kconfig.sh
 
 # validate generic kernel kconfig
@@ -174,7 +172,6 @@ verify-checksums:
   rules:
     - if: *mr_rule
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
     - .ci/verify-checksums.sh
 
 # MR settings
@@ -213,8 +210,6 @@ pmbootstrap minimum version:
 # be set to "parent_pipeline", and only the jobs that extend .build will run
 generate-build-jobs:
   stage: prepare
-  before_script:
-    - .ci/lib/gitlab_prepare_ci.sh
   needs: []
   script:
     - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/install_pmbootstrap.sh"
@@ -276,8 +271,6 @@ auto-update:
     # This variable is set in the scheduled pipeline configuration. It should be a space separated list of
     # package names to update.
     - if: $AUTOUPDATE_PACKAGES != null && $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
-  before_script:
-    - .ci/lib/gitlab_prepare_ci.sh
   script:
     - .ci/autoupdate.sh "$AUTOUPDATE_PACKAGES"
   after_script:
@@ -294,5 +287,3 @@ auto-update:
   stage: test
   rules:
     - if: *mr_rule
-  before_script:
-    - .ci/lib/gitlab_prepare_ci.sh
