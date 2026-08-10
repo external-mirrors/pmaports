@@ -3,7 +3,7 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Dang Huynh <dang.huynh@mainlining.org>"
 pkgname=linux-pine64-pinetab2
-pkgver=7.1.3
+pkgver=7.1.8
 pkgrel=0
 _danctnix_kernel_rel=1
 pkgdesc="Pine64 PineTab 2 mainline"
@@ -39,7 +39,6 @@ source="
 	linux-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	$_tags.patch.zst::https://codeberg.org/DanctNIX/linux-pinetab2/releases/download/$_tags/$_tags.patch.zst
 	$_config
-	libbpf-Fix-UAF-in-strset__add_str.patch
 "
 builddir="$srcdir/linux-$pkgver"
 _outdir="out"
@@ -75,8 +74,7 @@ package() {
 }
 
 sha512sums="
-1c5e7e16c73f4942dcdc1783987e65351259d1f2d4ff39c91182529e2f9e689b62b3df3ec89b61514c473eb13ecb004a3825716b9c583fc41e25fc01fe569b30  linux-7.1.3.tar.xz
-fdc3de811e281ea448088ca3d8ff879fe6955e9ee7c9b1afdcf8ad0637b56ea3e7e6183d3443e8c25968805320cd41a50f7a4bc82b50a4c6e6f13343075e6d81  v7.1.3-danctnix1.patch.zst
-94c5355e00e97ccc4f0ef52541bbd51dc64615ea6c1379dc07066d4524ca57c3a15956d1f8d66870cfb453489446e287e0cf7438b873bced4974637f3deca289  config-pine64-pinetab2.aarch64
-e2555390d48cbbdc32a7d3f0c27599ff88f2fe3e786d1d0086caaa5b092cc3edcb6e95e2fb07034edb3793f6dc954da0662c723202eb7e2c4956c99b50919b12  libbpf-Fix-UAF-in-strset__add_str.patch
+e17057478fd498fd4d83c4b6d3712fdfc3c6ae1d077114ea74ee41186cbd75add292f5e5f810fdf41242fd506a476d34447392b1c8194b5e8a6af1a59ac48a74  linux-7.1.8.tar.xz
+d005aece060c6209e4a4ad7a518cc1a1bf6695f3752fbb9b497f97bf763f5c1428d85686c5160de5ed3a0042cc8c04e31f6ffbbcf129c2b6ec01a1314a36d0ea  v7.1.8-danctnix1.patch.zst
+52eab368c89b21a8b178c9f2b4956d6907fa921592415ba967191440e93de3768ebeb8bd720ea57cb7d721147604bfd03ce2e483f35b2e3898c26681df437ab2  config-pine64-pinetab2.aarch64
 "
