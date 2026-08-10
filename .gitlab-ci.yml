@@ -58,7 +58,7 @@ ruff:
         - .ci/build-jobs.yaml.j2
         - .gitlab-ci.yml
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/ruff.sh
 
 # testcases typechecking
@@ -70,7 +70,7 @@ mypy:
         - .ci/**/*
         - .gitlab-ci.yml
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/mypy.sh
 
 # shellcheck and various grep checks
@@ -79,7 +79,7 @@ shellcheck-grep:
   rules:
     - if: *mr_rule
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/shellcheck.sh
     - .ci/grep.sh
 
@@ -88,7 +88,7 @@ editor-config:
   rules:
     - if: *mr_rule
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/ec.sh
 
 # aports checks (generic)
@@ -116,7 +116,7 @@ aport-lint:
   rules:
     - if: *mr_rule
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/apkbuild-lint.sh
   allow_failure: true
 
@@ -131,7 +131,7 @@ dint:
         - device/*/device-*/deviceinfo
         - deviceinfo_schema.toml
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/dint.sh
   allow_failure:
     exit_codes:
@@ -195,7 +195,7 @@ pmbootstrap minimum version:
         - .gitlab-ci.yml
         - pmaports.cfg
   script:
-    - .ci/lib/gitlab_prepare_ci.sh
+    - adduser -D build
     - .ci/check-pmbootstrap-min-version.sh
 
 # Calculate build of changed aports using a dynamic downstream pipelines:
