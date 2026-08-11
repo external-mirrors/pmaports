@@ -913,6 +913,11 @@ start_unudhcpd() {
 	[ "$(pidof unudhcpd)" ] && return
 
 	local usb_iface
+	# Don't run if there's no USB gadget.
+	if [ -z "$(cat "$CONFIGFS/g1/UDC" 2>/dev/null)" ] &&
+		! [ -e /sys/class/android_usb/android0 ]; then
+		return
+	fi
 
 	# Skip if disabled
 	# shellcheck disable=SC2154
