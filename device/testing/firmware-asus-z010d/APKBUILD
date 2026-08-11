@@ -1,11 +1,10 @@
-# Archived: unmaintained
-maintainer=""
+maintainer="Alderpaw <foxy9855@gmail.com>"
 pkgname=firmware-asus-z010d
-pkgver=5
+pkgver=6
 _commit=0997fd7efa1deeddb3fde0670cb8f242fd5f1574
 pkgrel=0
 pkgdesc="Firmware for Asus Zenfone Max ZC550KL"
-url="https://gitlab.com/camillathechicken/firmware-max"
+url="https://gitlab.postmarketos.org/Alderpaw/firmware-max"
 subpackages="$pkgname-wcnss-nv:wcnss_nv $pkgname-venus"
 arch="aarch64"
 license="proprietary"
@@ -14,7 +13,7 @@ makedepends="pil-squasher"
 source="$pkgname-$_commit.tar.bz2::https://gitlab.com/camillathechicken/firmware-max/-/archive/$_commit/firmware-max-$_commit.tar.bz2"
 builddir="$srcdir/firmware-max-$_commit"
 
-_fwdir="/lib/firmware/postmarketos"
+_fwdir="/usr/lib/firmware/postmarketos"
 
 build() {
 	pil-squasher venus2.mbn venus.mdt
@@ -27,7 +26,6 @@ package() {
 
 wcnss_nv() {
 	pkgdesc="Asus Zenfone Max ZC550KL WiFi/BT firmware configuration"
-	replaces="firmware-asus-z010d-wcnss"
 	install -Dm644 "$builddir"/WCNSS_qcom_wlan_nv.bin -t "$subpkgdir/$_fwdir"/wlan/prima
 }
 
