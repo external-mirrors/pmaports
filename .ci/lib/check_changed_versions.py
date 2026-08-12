@@ -26,7 +26,9 @@ def get_package_contents(package, revision, check=True):
         stderr = subprocess.DEVNULL
 
     # Run something like "git show upstream/main:main/hello-world/APKBUILD"
-    apkbuild_content = common.run_git(["show", revision + ":" + package], check, stderr)
+    apkbuild_content = common.run_git(
+        ["show", revision + ":" + package + "/APKBUILD"], check, stderr
+    )
     if not apkbuild_content:
         return None
 
@@ -178,7 +180,7 @@ def check_versions(packages):
 
 if __name__ == "__main__":
     # Get and print modified packages
-    packages = common.get_changed_packages()
+    packages = common.get_changed_packages(keep_dir=True)
     if len(packages) == 0:
         print("no aports changed in this branch")
         sys.exit(0)
