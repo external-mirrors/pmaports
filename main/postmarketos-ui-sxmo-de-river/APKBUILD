@@ -5,21 +5,21 @@
 maintainer="Willow Barraco <contact@willowbarraco.fr>"
 pkgname=postmarketos-ui-sxmo-de-river
 pkgver=1.18.0 # Bump this so the file names in bpo are correct
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple Mobile: Mobile environment based on SXMO and running on river"
 url="http://sr.ht/~mil/Sxmo"
 # zig and river are only available for these arches
 arch="aarch64 x86_64"
 license="AGPL-3.0-only"
 depends="
-	mmsd-tng
-	modemmanager
 	postmarketos-base-ui
 	postmarketos-base-ui-audio
 	postmarketos-base-ui-networkmanager
 	sxmo-utils-audio-bluetooth
+	sxmo-utils-modem
+	sxmo-utils-modem-mms
+	sxmo-utils-modem-vvm
 	sxmo-utils-river
-	vvmd
 	"
 install="
 	$pkgname.post-install
