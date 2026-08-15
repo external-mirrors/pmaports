@@ -13,10 +13,12 @@ custom_valid_options = [
     "!pmb:kconfigcheck",
     "pmb:cross-native",
     "pmb:cross-native2",
+    "pmb:default-openrc",
+    "pmb:default-systemd",
     "pmb:drm",
     "pmb:generic-kernel",
-    "pmb:systemd",
-    "pmb:systemd-never",
+    "pmb:support-openrc",
+    "pmb:support-systemd",
 ]
 
 
