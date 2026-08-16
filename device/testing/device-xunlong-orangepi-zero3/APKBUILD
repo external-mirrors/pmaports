@@ -1,9 +1,8 @@
-# Archived: unmaintained
 # Reference: <https://postmarketos.org/devicepkg>
-maintainer=""
+maintainer="Pavel Zakopaylo <zakopaylo2@gmail.com>"
 pkgname=device-xunlong-orangepi-zero3
 pkgdesc="Xunlong Orange Pi Zero 3"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,13 +11,9 @@ options="!check !archcheck"
 depends="
 	linux-postmarketos-allwinner
 	postmarketos-base
+	u-boot-sunxi
 "
 makedepends="devicepkg-dev"
-_pmb_select="$pkgname-u-boot-select"
-subpackages="
-	$pkgname-u-boot-select-sunxi:u_boot_sunxi
-	$pkgname-u-boot-select-orangepi-zero3:u_boot_orangepi_zero3
-"
 source="deviceinfo kernel-cmdline.conf"
 
 build() {
@@ -26,28 +21,7 @@ build() {
 }
 
 package() {
-	depends="$depends $pkgname-u-boot-select"
 	devicepkg_package $startdir $pkgname
-}
-
-u_boot_sunxi() {
-	pkgdesc="Use upstream U-Boot (u-boot-sunxi) (WARNING: does not support 1.5 GB models)"
-	depends="u-boot-sunxi"
-
-	provides="$pkgname-u-boot-select"
-	provider_priority=1
-
-	mkdir -p $subpkgdir
-}
-
-u_boot_orangepi_zero3() {
-	pkgdesc="Use downstream U-Boot package specifically for the Orange Pi Zero 3"
-	depends="u-boot-xunlong-orangepi-zero3"
-
-	provides="$pkgname-u-boot-select"
-	provider_priority=100
-
-	mkdir -p $subpkgdir
 }
 
 sha512sums="
