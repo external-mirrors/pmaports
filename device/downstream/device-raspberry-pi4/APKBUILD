@@ -1,9 +1,7 @@
-# Archived: Maintainer dropped package
-
 # Reference: <https://postmarketos.org/devicepkg>
-maintainer=""
+maintainer="User8395 <therealuser8395@proton.me>"
 pkgname=device-raspberry-pi4
-pkgver=6
+pkgver=7
 pkgrel=0
 pkgdesc="Raspberry Pi 4"
 url="https://postmarketos.org"
@@ -18,8 +16,6 @@ depends="
 	"
 makedepends="devicepkg-dev"
 subpackages="
-	$pkgname-openrc
-	$pkgname-plasma-bigscreen:plasma_bigscreen
 	$pkgname-udev
 	"
 source="
@@ -28,7 +24,6 @@ source="
 	modules-initfs
 	usercfg.txt
 	95-vchiq-permissions.rules
-	enforce-platform.sh
 	"
 
 build() {
@@ -40,30 +35,12 @@ package() {
 	install -Dm644 "$srcdir"/usercfg.txt "$pkgdir"/boot/usercfg.txt
 	install -Dm644 "$srcdir"/95-vchiq-permissions.rules \
 		"$pkgdir"/usr/lib/udev/rules.d/95-vchiq-permissions.rules
-	install -Dm755 "$srcdir"/enforce-platform.sh -t "$pkgdir"/etc/profile.d/
 }
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-	depends="openrc"
-
-	mkdir -p "$subpkgdir"
-}
-
-plasma_bigscreen() {
-	pkgdesc="$pkgdesc (Plasma Bigscreen)"
-	install_if="$pkgname plasma-bigscreen"
-
-	amove etc/profile.d
-}
-
 
 sha512sums="
-fca4414a7335adf4fabb03dc829d4c888568421b898ecb481a1d7e17e102ad993b81bab212299ff160de21e5ee9a0af1995f24acc5d15eb371de5bc47a5aa4d2  deviceinfo
+f0bb389a4e206300e0910a80636975f5d5a2e6242f729dbeb685c67a517200dedff8bbdc5ecc7bce968ea886f9276ce8a425e23c3ac70c7b624710e0bb73669d  deviceinfo
 d60c4e19dc92b0847f5667a1655a9cf95931b5be6630673fe987ff42f9ac94f19ce59ccf0e34960a686753549bd62677c0f5a6c15e1a4a842b99bda5825d62be  kernel-cmdline.conf
 e3515cf9f41807917eac1f7663e0131bd18783824facf15f2bb0381635bf6d9a0c334f3786b6fb76d01469de6449878c871f8b747f45e9e3cee77699905cf319  modules-initfs
-4562c2f6da8bc567806a1ae0c9195f552e659a3ce6419ea387072553b9ebcbb87f9ac7ea4e472c23a70b4aaf64e13d52de43de8094c37139bcf55baa6e1184cb  usercfg.txt
+02bf4fa7248a4bc7b4bd99ccbc90984e147a63eb4f3b293be398961fc6c5ace19d9a8c264a72be4280c0c12e0ab92372c9df55565dd12920783c5ab06a3453d9  usercfg.txt
 7e5505cb07d5b4a81bd28443d508336b5c547356538f1c06f91ed93ad0d7d456d4f74f1d24df5a2e08c17e74f0a66607352ac4874e967e9a91dfec9522d2d58d  95-vchiq-permissions.rules
-56d3ca295eeced3535d033a2a492774254a9bfefa6595ae12cf8146917af1521ad6e25440670657c39a7b1a66d61da298334d3019acf0dbf7568cfed01600414  enforce-platform.sh
 "
