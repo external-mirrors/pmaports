@@ -2,7 +2,7 @@ maintainer="Vishwas Rajashekar <dev@vrajashkr.com>"
 pkgname=firmware-samsung-lt03lte
 pkgdesc="Firmware for Samsung Galaxy Note 10.1 2014 LTE"
 pkgver=1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 arch="armv7"
 license="proprietary"
@@ -17,13 +17,13 @@ source="
 package() {
 	# Touchscreen
 	install -Dm644 "$srcdir/maxtouch.cfg" \
-		-t "$pkgdir/lib/firmware/postmarketos/"
+		-t "$pkgdir/usr/lib/firmware/postmarketos/"
 	install -Dm644 "$srcdir/30-touchscreen-firmware.files" \
 		-t "$pkgdir/usr/share/mkinitfs/files/"
 
 }
 
 sha512sums="
-d92d73d06d88371d8842cca02b9a396414d6f9e879c74afd8fd540c76a97edbd8655d903815a2aed508785b3fe96fa5798fbd1ceb918098b8b788555ba4267cf  30-touchscreen-firmware.files
+f94b8be4fd9e3879aeaac5de2e99825ed2f831794fa86b75cbdb7aaf83611892f55ea4901331993c3d6454905be7b215485570d1994faef737a12ba0132c754c  30-touchscreen-firmware.files
 9644a57849ed208037acd65e7f2341aeef8a1298b69d63e631c381d1cf33b19f78bfefa29b3a6110ba9d55468701224605acdce4ac9ba2d36f2fe545f03a608d  maxtouch.cfg
 "
