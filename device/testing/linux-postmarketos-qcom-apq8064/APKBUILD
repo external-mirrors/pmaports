@@ -2,7 +2,7 @@ maintainer="Alexandre MINETTE <contact@alex-min.fr>"
 _flavor="postmarketos-qcom-apq8064"
 pkgname=linux-postmarketos-qcom-apq8064
 pkgver=7.1
-pkgrel=1
+pkgrel=2
 _commit="085b3970a6a591d6703749aeed290413fe2a68b4"
 pkgdesc="Mainline Kernel fork for APQ8064 devices"
 url="https://github.com/apq8064-mainline/linux"
@@ -19,8 +19,10 @@ options="
 makedepends="
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
@@ -68,5 +70,5 @@ package() {
 
 sha512sums="
 78bd43da0abccdb49f716af5ebb78733bd2f55b5223d522624d093e16aca2a7b61ad06b196eabdc24104181d277cdf88f81e7e476d1a099ee7076bed6f877aa5  085b3970a6a591d6703749aeed290413fe2a68b4.tar.gz
-08db1882a0159602db254e9c8b4a387a3c69b0dfd80ccd5ec3bdae949c19dbd5ef73094080cf3af3cd1dc66b4b0cc66c547e00bcdf00c6bd278252602d2569b9  config-postmarketos-qcom-apq8064.armv7
+a8db1cb89f22f0b67cd76d7a3843d704cdbb748ce012d58e7e888829709ee83c94482283998d2309fa78bb581dce37a1cf358afc4fad152776ebedfcb5092130  config-postmarketos-qcom-apq8064.armv7
 "
