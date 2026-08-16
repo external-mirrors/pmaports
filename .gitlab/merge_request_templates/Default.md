@@ -6,3 +6,5 @@
 
     Thanks for your contribution!
 -->
+
+%{first_multiline_commit_description}
