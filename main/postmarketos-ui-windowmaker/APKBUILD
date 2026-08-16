@@ -28,7 +28,7 @@ install="$pkgname.post-install $pkgname-openrc.post-install"
 source="autostart.sh postmarketOS.style WindowMaker"
 replaces="windowmaker"
 subpackages="$pkgname-openrc"
-options="!check" # note: we should default to OpenRC and in addition support systemd
+options="!check pmb:default-openrc pmb:support-openrc pmb:support-systemd"
 
 package() {
 	install -Dm644 "$srcdir"/autostart.sh \
