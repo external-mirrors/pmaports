@@ -6,6 +6,7 @@ from pathlib import Path
 import common
 import pmb.parse
 from pmb.core.arch import Arch
+from pmb.core.pkgrepo import pkgrepo_iglob
 
 
 def test_aports_ui():
@@ -46,3 +47,30 @@ def test_aports_ui():
                             f"{path}: package '{package}' from _pmb_recommends "
                             f"of -extras subpackage is not found for arch '{arch}'"
                         )
+
+
+def test_aports_ui_service_manager():
+    """
+    Enforce we have valid systemd / openrc options in each UI package.
+    https://docs.postmarketos.org/pmaports/main/packaging/ui-packages/apkbuild-metadata.html
+    """
+    for path in pkgrepo_iglob("main/postmarketos-ui-*/APKBUILD"):
+        opts = pmb.parse.apkbuild(path)["options"]
+
+        assert "pmb:default-systemd" in opts or "pmb:default-openrc" in opts, (
+            f"{path}: must have either pmb:default-systemd or pmb:default-openrc"
+        )
+
+        assert "pmb:default-systemd" not in opts or "pmb:default-openrc" not in opts, (
+            f"{path}: can't have both pmb:default-systemd and pmb:default-openrc"
+        )
+
+        if "pmb:default-systemd" in opts:
+            assert "pmb:support-systemd" in opts, (
+                f"{path}: pmb:default-systemd without pmb:support-systemd"
+            )
+
+        if "pmb:default-openrc" in opts:
+            assert "pmb:support-openrc" in opts, (
+                f"{path}: pmb:default-openrc without pmb:support-openrc"
+            )
