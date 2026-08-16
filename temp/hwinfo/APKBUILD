@@ -13,12 +13,18 @@ subpackages="$pkgname-dev $pkgname-doc $pkgname-libs"
 source="$pkgname-$_pkgver.tar.gz::https://github.com/openSUSE/hwinfo/archive/$_pkgver.tar.gz
 	respect-flags.patch
 	"
-options="!check"  # no tests provided
+options="!check !pmb:crossdirect"  # no tests provided
 builddir="$srcdir/$pkgname-$_pkgver"
 
 export HWINFO_VERSION=$_pkgver
 
 build() {
+	# HACK: print the "check_hd" program log, so pmbootstrap doesn't kill
+	# the build after printing no output for 15 minutes. As mentioned below
+	# this takes forever, and it is worse when running through QEMU.
+	tail -F src/ids/hd.log &
+	local tail_pid=$!
+
 	# Build full and tiny static libraries.
 	#make tinystatic  # FIXME: fails
 	# this takes forever but it's not stuck
@@ -28,6 +34,9 @@ build() {
 
 	# Build full shared library.
 	make -j1 shared LIBDIR=/usr/lib
+
+	# Avoid "umount: can't unmount …/chroot_native/dev: Resource busy"
+	kill $tail_pid
 }
 
 package() {
