@@ -4,13 +4,14 @@
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=u-boot-amlogic
 pkgver=2026.04
-pkgrel=0
+pkgrel=1
 pkgdesc="U-Boot bootloader for Amlogic AArch64-based devices"
 url="https://u-boot.org/"
 arch="aarch64"
 license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
 	ISC LGPL-2.0-only LGPL-2.1-only X11 proprietary"
 makedepends="$depends_dev
+	amlogic-fiptool
 	bc
 	bison
 	crust
@@ -18,6 +19,7 @@ makedepends="$depends_dev
 	flex
 	gxlimg
 	gnutls-dev
+	meson-tools
 	openssl-dev
 	py3-setuptools
 	python3-dev
@@ -47,6 +49,9 @@ replaces="
 _fip_builddir="$srcdir/amlogic-boot-fip-$_amlogicblob_commit"
 
 # Format: <board>:<board u-boot defconfig>,<amlogic-boot-fip board files>
+_gxbb_boards="
+	odroid-c2:odroid-c2,odroid-c2
+"
 _gxl_boards="
 	beelink-gt1:beelink-gt1-ultimate,beelink-gt1
 	librecomputer-lepotato:libretech-cc,lepotato
@@ -58,6 +63,7 @@ _g12a_boards="
 	radxa-zero:radxa-zero,radxa-zero
 "
 _boards="
+	$_gxbb_boards
 	$_gxl_boards
 	$_g12a_boards
 "
@@ -85,6 +91,36 @@ _build_u_boot() {
 #
 # SoC-specific FIP building
 #
+
+_build_fip_gxbb() {
+	board_fip_dir="$1"
+	u_boot="$2"
+
+	if [ -e "$board_fip_dir/bl2.package" ]; then
+		# ODROID C2-specific steps
+		bl2bin="$board_fip_dir/bl2.package"
+		bl30bin="$board_fip_dir/bl30.bin"
+		bl301bin="$board_fip_dir/bl301.bin"
+		bl31bin="$board_fip_dir/bl31.bin"
+		fip_create \
+			--bl30 "$bl30bin" \
+			--bl301 "$bl301bin" \
+			--bl31 "$bl31bin" \
+			--bl33 "$u_boot" \
+			"$board_fip_dir/fip.bin"
+
+		cat "$bl2bin" "$board_fip_dir/fip.bin" > "$board_fip_dir/boot_new.bin"
+
+		amlbootsig "$board_fip_dir/boot_new.bin" "$board_fip_dir/u-boot.gxbb"
+
+		dd if="$board_fip_dir/bl1.bin.hardkernel" of="$board_fip_dir/bl2.bin.emmc-header.bin" conv=fsync,notrunc bs=1 count=442
+		dd if="$board_fip_dir/bl1.bin.hardkernel" of="$board_fip_dir/bl2.bin.sd.bin" conv=fsync,notrunc bs=512 skip=1
+		dd if="$board_fip_dir/u-boot.gxbb" of="$board_fip_dir/u-boot.bin" conv=fsync,notrunc bs=512 skip=96
+	fi
+
+	# TODO: Implement "regular" Amlogic S905 FIP building steps here
+}
+
 _build_fip_gxl() {
 	board_fip_dir="$1"
 	u_boot="$2"
@@ -175,15 +211,22 @@ build() {
 		cd $_fip_builddir
 		mkdir -p ./build
 
-		if echo $_gxl_boards | grep -q $board; then
+		if echo $_gxbb_boards | grep -q $board; then
+			msg "Building Amlogic GXBB firmware package for $board_codename (FIP: $board_fip_dir)"
+			_build_fip_gxbb "$board_fip_dir" "$builddir/u-boot.bin"
+			dd if="$board_fip_dir/bl2.bin.emmc-header.bin" of="./build/u-boot-$board_codename.bin.emmc-hdr.bin" conv=fsync,notrunc bs=512
+			dd if="$board_fip_dir/bl2.bin.sd.bin" of="./build/u-boot-$board_codename.bin.bl2.bin" conv=fsync,notrunc bs=512
+			dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512
+		elif echo $_gxl_boards | grep -q $board; then
 			msg "Building Amlogic GXL firmware package for $board_codename (FIP: $board_fip_dir)"
 			_build_fip_gxl "$board_fip_dir" "$builddir/u-boot.bin"
+			dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512
 		elif echo $_g12a_boards | grep -q $board; then
 			msg "Building Amlogic G12A firmware package for $board_codename (FIP: $board_fip_dir)"
 			_build_fip_g12a "$board_fip_dir" "$builddir/u-boot.bin"
+			dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512
 		fi
 
-		dd if="$board_fip_dir/u-boot.bin" of="./build/u-boot-$board_codename.bin.sd-stripped.bin" conv=fsync,notrunc bs=512
 		cd $builddir
 	done
 }
@@ -200,6 +243,13 @@ _board_package() {
 	mkdir -p "$subpkgdir/usr/share/u-boot/$board_codename/"
 	install -D -m644 "$srcdir/amlogic-boot-fip-$_amlogicblob_commit/build/u-boot-$board_codename.bin.sd-stripped.bin" \
 		"$subpkgdir/usr/share/u-boot/$board_codename/u-boot.bin.sd-stripped.bin"
+	if echo $_gxbb_boards | grep -q $board_codename; then
+		# eMMC @AML header for S905 devices (newer SoCs have it in the same location as the SD header)
+		install -D -m644 "$srcdir/amlogic-boot-fip-$_amlogicblob_commit/build/u-boot-$board_codename.bin.emmc-hdr.bin" \
+			"$subpkgdir/usr/share/u-boot/$board_codename/u-boot.bin.emmc-hdr.bin"
+		install -D -m644 "$srcdir/amlogic-boot-fip-$_amlogicblob_commit/build/u-boot-$board_codename.bin.bl2.bin" \
+			"$subpkgdir/usr/share/u-boot/$board_codename/u-boot.bin.bl2.bin"
+	fi
 }
 
 for board in $_boards; do
