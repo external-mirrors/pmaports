@@ -270,8 +270,8 @@ without a version, but given that one is versioned would still conflict. For
 example.
 
 :::{warning}
-The example below shows a packaging bug. Forks should have never used virtual
-providers! This is helpful to showcase this common pitfall
+The example below shows a (former) packaging bug. Forks should have never used
+virtual providers! This is helpful to showcase this common pitfall
 :::
 
 ```sh
@@ -324,14 +324,14 @@ only in some specific circumstances? In those situations we have to:
     are other constraints (like the device package dependency on the fork).
   * If the fork has an equal or higher version that then original package,
     however, we might bump into the situation that installs that shouldn't have
-    the fork still get it installed due to the higher version. The solution to
-    that problem is to force a dependency on the non-forked version in a common
-    package used by most users. For example, `postmarketos-ui-gnome` added
-    `!gnome-shell-mobile` to avoid regular installs getting the mobile versions.
-    Sometimes, however, this gets complicated due to the fact that the provider
-    is the name of the original package (like in the case of `alsa-ucm-conf`
-    above). In those situations, it might be needed to introduce an alternative
-    versioned provider to disambiguate (e.g:
+    the fork still get it installed due to the higher version. The easiest
+    solution to that problem is to force a dependency on the non-forked version
+    in a common package used by most users. For example, `postmarketos-ui-gnome`
+    added `!gnome-shell-mobile` to avoid regular installs getting the mobile
+    versions.  Sometimes, however, this gets complicated due to the fact that
+    the provider is the name of the original package (like in the case of
+    `alsa-ucm-conf` above). In those situations, it might be needed to introduce
+    an alternative versioned provider to disambiguate (e.g:
     `provides="audio-conf=$pkgver-r$pkgrel"`), or to force the forked packages
     to provide a lower version than the other package.
 
