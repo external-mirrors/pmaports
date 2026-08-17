@@ -2,7 +2,7 @@
 # Co-Maintainer: Ingo Reitz <9l@9lo.re>
 maintainer="Adam Thiede <me@adamthiede.com>"
 pkgname=linux-postmarketos-mediatek-mt8173
-pkgver=7.1.8
+pkgver=7.2.2
 pkgrel=0
 pkgdesc="Mainline kernel fork for Mediatek MT8173 devices"
 arch="aarch64"
@@ -46,7 +46,6 @@ source="
 	https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-${pkgver//_/-}.tar.xz
 	$_config
 	0001-resolve_btfids-preserve-parameter-names-when-process.patch
-	0003-display-blank.patch
 "
 builddir="$srcdir/linux-${_kernver//_/-}"
 
@@ -77,8 +76,7 @@ package() {
 }
 
 sha512sums="
-e17057478fd498fd4d83c4b6d3712fdfc3c6ae1d077114ea74ee41186cbd75add292f5e5f810fdf41242fd506a476d34447392b1c8194b5e8a6af1a59ac48a74  linux-7.1.8.tar.xz
-e74df7a7c2ab77fc88b212a684939ef58bdecb8e6f47b1364cceb8c9c2147518b85722ab12dd62ced1742550a44b7b7f83b0cd6f69d1d1c289c4f7674bb1d920  config-postmarketos-mediatek-mt8173.aarch64
+6ca338fd2f9d2224b9187ba1cad18c05417c0504771917203a023467a8ac3a34e346bd3bc5a3f5716aa9810381a28c730ea5fc3726773dca36d75a4677178b13  linux-7.2.2.tar.xz
+92dffe35ffbb0abf573b4be7c3aadd80f84031873b651ac62db1a5488cf203b66940f3cad1ad2495a29f2f71524d9425ce73dbbb4ae0e3963ba9d02a191cf16e  config-postmarketos-mediatek-mt8173.aarch64
 901780c4c468ebf8b6af7c27530fafb0439dfae889208c35f22aa7447902078d147db69a1c8e2115cd13f51c641eef878d9335b7527dc7fa2240cd617e045aab  0001-resolve_btfids-preserve-parameter-names-when-process.patch
-aedbf42178f26a0b38b0deee02cbf24a7d3cfaf90cdcf30da12ff1cc334be1e14eada0d924b0082830812d16eebd432230a1476542d23238acd9da527973facf  0003-display-blank.patch
 "
