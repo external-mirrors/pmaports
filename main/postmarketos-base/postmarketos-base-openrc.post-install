@@ -1,5 +1,8 @@
 #!/bin/sh -e
 
+# Symlink unudhcpd.usb0
+ln -s /etc/init.d/unudhcpd /etc/init.d/unudhcpd.usb0
+
 # Enable eudev service
 rc-update add udev sysinit
 rc-update add udev-trigger sysinit
@@ -10,7 +13,7 @@ rc-update add udev-postmount default
 for service in devfs dmesg; do
 	rc-update -q add $service sysinit
 done
-for service in hwclock modules sysctl hostname bootmisc logbookd tmpfs; do
+for service in hwclock modules sysctl hostname bootmisc logbookd tmpfs unudhcpd.usb0; do
 	rc-update -q add $service boot
 done
 for service in sshd swapfile local postmarketos-zram-swap; do

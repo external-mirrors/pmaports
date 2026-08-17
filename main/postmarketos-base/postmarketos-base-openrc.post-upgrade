@@ -24,6 +24,13 @@ if old_ver_less "31-r1"; then
     set +x
 fi
 
+# unudhcpd is now OpenRC-managed, previously it was started by the initramfs and
+# kept running completely unmanaged. Enable it on upgrade
+if old_ver_less "67-r0"; then # nice
+    ln -s /etc/init.d/unudhcpd /etc/init.d/unudhcpd.usb0
+    rc-update add unudhcpd.usb0 boot
+fi
+
 # Fixup old pmOS installations that run setup-timezone without "-i" option
 # and those later installations that run with it, but have missing
 # https://gitlab.alpinelinux.org/alpine/alpine-conf/-/merge_requests/157
