@@ -8,9 +8,9 @@ url="https://github.com/AYNTechnologies/audioreach-topology"
 # these files are not specific to cpu architecture, but only make sense on aarch64 devices
 arch="aarch64"
 license="BSD-3-Clause"
-makedepends="alsa-utils cmake m4 samurai"
+makedepends_build="alsa-utils cmake m4 samurai"
 source="$pkgname-$_commit.tar.gz::$url/archive/$_commit.tar.gz"
-options="!check !tracedeps pmb:cross-native"
+options="!check !tracedeps pmb:cross-native2"
 builddir="$srcdir/audioreach-topology-$_commit"
 
 build() {

@@ -13,6 +13,7 @@ def test_aports_firmware():
     """
 
     excluded = [
+        "firmware-ayn-audioreach-topology",  # Doesn't work with pmb:cross-native
         "firmware-motorola-ali",  # Depends on firmware-qcom-adreno-a530
         "firmware-motorola-potter",  # Depends on soc-qcom-msm8916-ucm
         "firmware-oneplus-msm8998",  # Depends on soc-qcom-sdm845-nonfree-firmware
