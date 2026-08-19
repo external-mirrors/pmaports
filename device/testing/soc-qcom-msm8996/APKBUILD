@@ -1,7 +1,7 @@
 maintainer="Yassine Oudjana (Tooniis) <y.oudjana@protonmail.com>"
 pkgname=soc-qcom-msm8996
 pkgdesc="Common package for Qualcomm MSM8996 devices"
-pkgver=3
+pkgver=4
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -19,8 +19,7 @@ package() {
 }
 
 ucm() {
-	provides="alsa-ucm-conf"
-	provider_priority=1
+	provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
 
 	# install audio config files
 	mkdir -p "$subpkgdir"/usr/share/alsa/ucm2

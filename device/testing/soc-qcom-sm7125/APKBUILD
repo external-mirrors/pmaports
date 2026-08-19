@@ -1,7 +1,7 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Erikas Bitovtas <xerikasxx@gmail.com>"
 pkgname=soc-qcom-sm7125
-pkgver=6
+pkgver=7
 pkgrel=0
 pkgdesc="Common package for Qualcomm SM7125 devices"
 url="https://postmarketos.org"
@@ -44,8 +44,7 @@ openrc() {
 }
 
 ucm() {
-	provides="alsa-ucm-conf"
-	provider_priority=1
+	provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
 
 	# install audio config files
 	mkdir -p "$subpkgdir"/usr/share/alsa/ucm2

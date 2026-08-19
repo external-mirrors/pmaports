@@ -1,7 +1,7 @@
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 pkgname=soc-qcom-msm89x7
 pkgdesc="Common package for Qualcomm MSM89x7 devices"
-pkgver=6
+pkgver=7
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -35,8 +35,7 @@ package() {
 }
 
 ucm() {
-	provides="alsa-ucm-conf"
-	provider_priority=1
+	provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
 
 	cd "$srcdir/alsa-ucm-conf-$_ucm_commit"
 	mkdir -p "$subpkgdir"/usr/share/alsa

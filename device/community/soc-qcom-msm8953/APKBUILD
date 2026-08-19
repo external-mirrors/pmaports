@@ -2,7 +2,7 @@
 maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
 pkgname=soc-qcom-msm8953
 pkgdesc="Common package for Qualcomm MSM8953 devices"
-pkgver=20
+pkgver=21
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -33,8 +33,7 @@ package() {
 }
 
 ucm() {
-	provides="alsa-ucm-conf"
-	provider_priority=1
+	provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
 
 	cd "$srcdir/alsa-ucm-conf-$_ucm_commit"
 	mkdir -p "$subpkgdir"/usr/share/alsa

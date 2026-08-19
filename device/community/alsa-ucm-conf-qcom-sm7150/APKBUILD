@@ -3,13 +3,12 @@
 maintainer="Danila Tikhonov <danila@jiaxyga.com>"
 pkgname=alsa-ucm-conf-qcom-sm7150
 pkgver=1.2.15.3_git20260513
-pkgrel=0
+pkgrel=1
 pkgdesc="ALSA UCM configuration for SM7150 devices"
 url="https://github.com/sm7150-mainline/alsa-ucm-conf"
 arch="aarch64"
 license="BSD-3-Clause"
-provides="alsa-ucm-conf"
-provider_priority=1
+provides="alsa-ucm-conf=0.${pkgver%_*}-r$pkgrel" # versioned provides need to be below default version
 _commit="4821070589906c1d80c83210639591678c245369"
 source="$pkgname-$_commit.tar.gz::https://github.com/sm7150-mainline/alsa-ucm-conf/archive/$_commit.tar.gz"
 options="!check"
