@@ -36,7 +36,7 @@ def test_aports_firmware():
                 " preferred because it results in significantly"
                 " lower build times. If the package doesn't build"
                 " with the option, you can add an exemption in"
-                " .gitlab-ci/testcases/test_firmware.py."
+                " .ci/testcases/test_firmware.py."
             )
 
         if "!tracedeps" not in apkbuild["options"]:
