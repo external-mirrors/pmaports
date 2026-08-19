@@ -1,14 +1,13 @@
 # Co-Maintainer: Joel Selvaraj <foss@joelselvaraj.com>
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=alsa-ucm-conf-sdm845
-pkgver=2
-pkgrel=1
+pkgver=3
+pkgrel=0
 pkgdesc="ALSA UCM configuration for Qualcomm SDM845 devices"
 url="https://gitlab.com/sdm845-mainline/alsa-ucm-conf"
 arch="aarch64"
 license="BSD-3-Clause"
-provides="alsa-ucm-conf"
-provider_priority=1
+provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
 replaces="soc-qcom-sdm845-ucm"
 _commit="1b8d290e5aa2ca16b7f2fa8d74910ad19ef88b3a"
 source="$pkgname-$_commit.tar.gz::https://gitlab.com/sdm845-mainline/alsa-ucm-conf/-/archive/$_commit/alsa-ucm-conf-$_commit.tar.gz"
