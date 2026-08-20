@@ -1,0 +1,249 @@
+From c5f08a2e5cf1f246c908ddaaefbccdcfbdbaa754 Mon Sep 17 00:00:00 2001
+From: Nick Rosbrook <enr0n@ubuntu.com>
+Date: Fri, 19 Jun 2026 15:00:59 -0400
+Subject: [PATCH] json-util: generalize json_dispatch_address_family
+
+There are several places where address family is dispatched from JSON,
+so take json_dispatch_address_family from networkd and put it in
+json-util.c.
+
+Update the all instances in the tree to use this new function, adding
+SD_JSON_RELAX to the dispatch flags if AF_UNSPEC should be allowed
+in that case.
+---
+ src/libsystemd/sd-json/json-util.c | 24 ++++++++++++++++++++++++
+ src/libsystemd/sd-json/json-util.h |  1 +
+ src/network/networkd-serialize.c   | 22 ----------------------
+ src/nss-resolve/nss-resolve.c      | 23 +++--------------------
+ src/resolve/resolvectl.c           |  2 +-
+ src/resolve/resolved-varlink.c     | 15 +++------------
+ src/shared/dns-configuration.c     | 14 +++++++-------
+ 7 files changed, 39 insertions(+), 62 deletions(-)
+
+diff --git a/src/libsystemd/sd-json/json-util.c b/src/libsystemd/sd-json/json-util.c
+index c6727ac760..485b4a03c8 100644
+--- a/src/libsystemd/sd-json/json-util.c
++++ b/src/libsystemd/sd-json/json-util.c
+@@ -918,3 +918,27 @@ int json_variant_compare(sd_json_variant *a, sd_json_variant *b) {
+ 
+         return CMP(sd_json_variant_type(a), sd_json_variant_type(b));
+ }
++
++int json_dispatch_address_family(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata) {
++        int *family = ASSERT_PTR(userdata), r;
++
++        assert(variant);
++
++        if (sd_json_variant_is_negative(variant))
++                return json_log(variant, flags, SYNTHETIC_ERRNO(EINVAL),
++                                "JSON field '%s' for an address family cannot be negative.", strna(name));
++
++        int k = AF_UNSPEC;
++        if (!sd_json_variant_is_null(variant)) {
++                r = sd_json_dispatch_int(name, variant, flags, &k);
++                if (r < 0)
++                        return r;
++        }
++
++        if (!IN_SET(k, AF_INET, AF_INET6) && !(FLAGS_SET(flags, SD_JSON_RELAX) && k == AF_UNSPEC))
++                return json_log(variant, flags, SYNTHETIC_ERRNO(ERANGE),
++                                "JSON field '%s' out of range for an address family.", strna(name));
++
++        *family = k;
++        return 0;
++}
+diff --git a/src/libsystemd/sd-json/json-util.h b/src/libsystemd/sd-json/json-util.h
+index ecb4e2d633..de7790a6d3 100644
+--- a/src/libsystemd/sd-json/json-util.h
++++ b/src/libsystemd/sd-json/json-util.h
+@@ -133,6 +133,7 @@ int json_dispatch_log_level(const char *name, sd_json_variant *variant, sd_json_
+ int json_dispatch_strv_environment(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata);
+ int json_dispatch_access_mode(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata);
+ int json_dispatch_job_id(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata);
++int json_dispatch_address_family(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata);
+ 
+ static inline int json_variant_unbase64_iovec(sd_json_variant *v, struct iovec *ret) {
+         return sd_json_variant_unbase64(v, ret ? &ret->iov_base : NULL, ret ? &ret->iov_len : NULL);
+diff --git a/src/network/networkd-serialize.c b/src/network/networkd-serialize.c
+index 394f03ced6..224fcc93a0 100644
+--- a/src/network/networkd-serialize.c
++++ b/src/network/networkd-serialize.c
+@@ -102,28 +102,6 @@ int manager_set_serialization_fd(Manager *manager, int fd, const char *name) {
+ 
+ static JSON_DISPATCH_ENUM_DEFINE(json_dispatch_network_config_source, NetworkConfigSource, network_config_source_from_string);
+ 
+-static int json_dispatch_address_family(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata) {
+-        int r, *i = ASSERT_PTR(userdata);
+-        int64_t i64;
+-
+-        assert_return(variant, -EINVAL);
+-
+-        if (FLAGS_SET(flags, SD_JSON_RELAX) && sd_json_variant_is_null(variant)) {
+-                *i = AF_UNSPEC;
+-                return 0;
+-        }
+-
+-        r = sd_json_dispatch_int64(name, variant, flags, &i64);
+-        if (r < 0)
+-                return r;
+-
+-        if (!IN_SET(i64, AF_INET, AF_INET6) && !(FLAGS_SET(flags, SD_JSON_RELAX) && i64 == AF_UNSPEC))
+-                return json_log(variant, flags, SYNTHETIC_ERRNO(ERANGE), "JSON field '%s' out of bounds for an address family.", strna(name));
+-
+-        *i = (int) i64;
+-        return 0;
+-}
+-
+ typedef struct AddressParam {
+         int family;
+         struct iovec address;
+diff --git a/src/nss-resolve/nss-resolve.c b/src/nss-resolve/nss-resolve.c
+index 86eaf4e3b3..9f4225be3f 100644
+--- a/src/nss-resolve/nss-resolve.c
++++ b/src/nss-resolve/nss-resolve.c
+@@ -78,23 +78,6 @@ static uint32_t ifindex_to_scopeid(int family, const void *a, int ifindex) {
+         return in6_addr_is_link_local(&in6) ? ifindex : 0;
+ }
+ 
+-static int json_dispatch_family(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata) {
+-        int *family = ASSERT_PTR(userdata);
+-        int64_t t;
+-
+-        assert(variant);
+-
+-        if (!sd_json_variant_is_integer(variant))
+-                return json_log(variant, flags, SYNTHETIC_ERRNO(EINVAL), "JSON field '%s' is not an integer.", strna(name));
+-
+-        t = sd_json_variant_integer(variant);
+-        if (t < 0 || t > INT_MAX)
+-                return json_log(variant, flags, SYNTHETIC_ERRNO(EINVAL), "JSON field '%s' is not a valid family.", strna(name));
+-
+-        *family = (int) t;
+-        return 0;
+-}
+-
+ typedef struct ResolveHostnameReply {
+         sd_json_variant *addresses;
+         char *name;
+@@ -159,9 +142,9 @@ static int json_dispatch_address(const char *name, sd_json_variant *variant, sd_
+ }
+ 
+ static const sd_json_dispatch_field address_parameters_dispatch_table[] = {
+-        { "ifindex", SD_JSON_VARIANT_INTEGER, json_dispatch_ifindex, offsetof(AddressParameters, ifindex), 0                 },
+-        { "family",  SD_JSON_VARIANT_INTEGER, json_dispatch_family,  offsetof(AddressParameters, family),  SD_JSON_MANDATORY },
+-        { "address", SD_JSON_VARIANT_ARRAY,   json_dispatch_address, 0,                                    SD_JSON_MANDATORY },
++        { "ifindex", SD_JSON_VARIANT_INTEGER, json_dispatch_ifindex,        offsetof(AddressParameters, ifindex), 0                 },
++        { "family",  SD_JSON_VARIANT_INTEGER, json_dispatch_address_family, offsetof(AddressParameters, family),  SD_JSON_MANDATORY },
++        { "address", SD_JSON_VARIANT_ARRAY,   json_dispatch_address,        0,                                    SD_JSON_MANDATORY },
+         {}
+ };
+ 
+diff --git a/src/resolve/resolvectl.c b/src/resolve/resolvectl.c
+index 67be81195a..b3895df6cf 100644
+--- a/src/resolve/resolvectl.c
++++ b/src/resolve/resolvectl.c
+@@ -2386,7 +2386,7 @@ static int dump_cache_scope(sd_json_variant *scope) {
+ 
+         static const sd_json_dispatch_field dispatch_table[] = {
+                 { "protocol",     SD_JSON_VARIANT_STRING,        sd_json_dispatch_const_string,  offsetof(struct scope_info, protocol),          SD_JSON_MANDATORY },
+-                { "family",       _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_int,           offsetof(struct scope_info, family),            0                 },
++                { "family",       _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_address_family,   offsetof(struct scope_info, family),            SD_JSON_RELAX     },
+                 { "ifindex",      _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_ifindex,          offsetof(struct scope_info, ifindex),           SD_JSON_RELAX     },
+                 { "ifname",       SD_JSON_VARIANT_STRING,        sd_json_dispatch_const_string,  offsetof(struct scope_info, ifname),            0                 },
+                 { "cache",        SD_JSON_VARIANT_ARRAY,         sd_json_dispatch_variant_noref, offsetof(struct scope_info, cache),             SD_JSON_MANDATORY },
+diff --git a/src/resolve/resolved-varlink.c b/src/resolve/resolved-varlink.c
+index 2ac4ee9555..db26ccb11a 100644
+--- a/src/resolve/resolved-varlink.c
++++ b/src/resolve/resolved-varlink.c
+@@ -346,7 +346,7 @@ static int vl_method_resolve_hostname(sd_varlink *link, sd_json_variant *paramet
+         static const sd_json_dispatch_field dispatch_table[] = {
+                 { "ifindex", _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_ifindex,         offsetof(LookupParameters, ifindex), SD_JSON_RELAX     },
+                 { "name",    SD_JSON_VARIANT_STRING,        sd_json_dispatch_const_string, offsetof(LookupParameters, name),    SD_JSON_MANDATORY },
+-                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_int,          offsetof(LookupParameters, family),  0                 },
++                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_address_family,  offsetof(LookupParameters, family),  SD_JSON_RELAX     },
+                 { "flags",   _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_uint64,       offsetof(LookupParameters, flags),   0                 },
+                 {}
+         };
+@@ -377,9 +377,6 @@ static int vl_method_resolve_hostname(sd_varlink *link, sd_json_variant *paramet
+         if (r == 0)
+                 return sd_varlink_error_invalid_parameter(link, JSON_VARIANT_STRING_CONST("name"));
+ 
+-        if (!IN_SET(p.family, AF_UNSPEC, AF_INET, AF_INET6))
+-                return sd_varlink_error_invalid_parameter(link, JSON_VARIANT_STRING_CONST("family"));
+-
+         if (validate_and_mangle_query_flags(m, &p.flags, p.name, SD_RESOLVED_NO_SEARCH) < 0)
+                 return sd_varlink_error_invalid_parameter(link, JSON_VARIANT_STRING_CONST("flags"));
+ 
+@@ -475,7 +472,7 @@ finish:
+ static int vl_method_resolve_address(sd_varlink *link, sd_json_variant *parameters, sd_varlink_method_flags_t flags, void *userdata) {
+         static const sd_json_dispatch_field dispatch_table[] = {
+                 { "ifindex", _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_ifindex,          offsetof(LookupParameters, ifindex), SD_JSON_RELAX     },
+-                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_int,           offsetof(LookupParameters, family),  SD_JSON_MANDATORY },
++                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_address_family,   offsetof(LookupParameters, family),  SD_JSON_MANDATORY },
+                 { "address", SD_JSON_VARIANT_ARRAY,         json_dispatch_byte_array_iovec, offsetof(LookupParameters, address), SD_JSON_MANDATORY },
+                 { "flags",   _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_uint64,        offsetof(LookupParameters, flags),   0                 },
+                 {}
+@@ -501,9 +498,6 @@ static int vl_method_resolve_address(sd_varlink *link, sd_json_variant *paramete
+         if (r != 0)
+                 return r;
+ 
+-        if (!IN_SET(p.family, AF_INET, AF_INET6))
+-                return sd_varlink_error_invalid_parameter(link, JSON_VARIANT_STRING_CONST("family"));
+-
+         if (FAMILY_ADDRESS_SIZE(p.family) != p.address.iov_len)
+                 return sd_varlink_error(link, "io.systemd.Resolve.BadAddressSize", NULL);
+ 
+@@ -961,7 +955,7 @@ static int vl_method_resolve_service(sd_varlink* link, sd_json_variant* paramete
+                 { "type",    SD_JSON_VARIANT_STRING,        sd_json_dispatch_const_string, offsetof(LookupParametersResolveService, type),    0                 },
+                 { "domain",  SD_JSON_VARIANT_STRING,        sd_json_dispatch_const_string, offsetof(LookupParametersResolveService, domain),  SD_JSON_MANDATORY },
+                 { "ifindex", _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_ifindex,         offsetof(LookupParametersResolveService, ifindex), SD_JSON_RELAX     },
+-                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_int,          offsetof(LookupParametersResolveService, family),  0                 },
++                { "family",  _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_address_family,  offsetof(LookupParametersResolveService, family),  SD_JSON_RELAX     },
+                 { "flags",   _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_uint64,       offsetof(LookupParametersResolveService, flags),   0                 },
+                 {}
+         };
+@@ -987,9 +981,6 @@ static int vl_method_resolve_service(sd_varlink* link, sd_json_variant* paramete
+         if (r != 0)
+                 return r;
+ 
+-        if (!IN_SET(p.family, AF_INET, AF_INET6, AF_UNSPEC))
+-                return sd_varlink_error_invalid_parameter(link, JSON_VARIANT_STRING_CONST("family"));
+-
+         if (isempty(p.name))
+                 p.name = NULL;
+         else if (!dns_service_name_is_valid(p.name))
+diff --git a/src/shared/dns-configuration.c b/src/shared/dns-configuration.c
+index 1194e87258..01b59bbd89 100644
+--- a/src/shared/dns-configuration.c
++++ b/src/shared/dns-configuration.c
+@@ -36,7 +36,7 @@ static int dispatch_dns_server(const char *name, sd_json_variant *variant, sd_js
+         static const sd_json_dispatch_field dns_server_dispatch_table[] = {
+                 { "address",       SD_JSON_VARIANT_ARRAY,         json_dispatch_byte_array_iovec, offsetof(DNSServer, addr),        SD_JSON_MANDATORY },
+                 { "addressString", _SD_JSON_VARIANT_TYPE_INVALID, NULL,                           0,                                0                 },
+-                { "family",        SD_JSON_VARIANT_UNSIGNED,      sd_json_dispatch_uint,          offsetof(DNSServer, family),      SD_JSON_MANDATORY },
++                { "family",        SD_JSON_VARIANT_INTEGER,       json_dispatch_address_family,   offsetof(DNSServer, family),      SD_JSON_MANDATORY },
+                 { "port",          SD_JSON_VARIANT_UNSIGNED,      sd_json_dispatch_uint16,        offsetof(DNSServer, port),        0                 },
+                 { "ifindex",       SD_JSON_VARIANT_UNSIGNED,      json_dispatch_ifindex,          offsetof(DNSServer, ifindex),     SD_JSON_RELAX     },
+                 { "name",          SD_JSON_VARIANT_STRING,        sd_json_dispatch_string,        offsetof(DNSServer, server_name), 0                 },
+@@ -177,12 +177,12 @@ DEFINE_PRIVATE_HASH_OPS_WITH_VALUE_DESTRUCTOR(
+ 
+ static int dispatch_dns_scope(const char *name, sd_json_variant *variant, sd_json_dispatch_flags_t flags, void *userdata) {
+         static const sd_json_dispatch_field dns_scope_dispatch_table[] = {
+-                { "protocol",   SD_JSON_VARIANT_STRING,   sd_json_dispatch_string, offsetof(DNSScope, protocol),               SD_JSON_MANDATORY },
+-                { "family",     SD_JSON_VARIANT_UNSIGNED, sd_json_dispatch_uint,   offsetof(DNSScope, family),                 0                 },
+-                { "ifname",     SD_JSON_VARIANT_STRING,   sd_json_dispatch_string, offsetof(DNSScope, ifname),                 0                 },
+-                { "ifindex",    SD_JSON_VARIANT_UNSIGNED, json_dispatch_ifindex,   offsetof(DNSScope, ifindex),                SD_JSON_RELAX     },
+-                { "dnssec",     SD_JSON_VARIANT_STRING,   sd_json_dispatch_string, offsetof(DNSScope, dnssec_mode_str),        0                 },
+-                { "dnsOverTLS", SD_JSON_VARIANT_STRING,   sd_json_dispatch_string, offsetof(DNSScope, dns_over_tls_mode_str),  0                 },
++                { "protocol",   SD_JSON_VARIANT_STRING,   sd_json_dispatch_string,      offsetof(DNSScope, protocol),              SD_JSON_MANDATORY },
++                { "family",     SD_JSON_VARIANT_INTEGER,  json_dispatch_address_family, offsetof(DNSScope, family),                SD_JSON_RELAX     },
++                { "ifname",     SD_JSON_VARIANT_STRING,   sd_json_dispatch_string,      offsetof(DNSScope, ifname),                0                 },
++                { "ifindex",    SD_JSON_VARIANT_UNSIGNED, json_dispatch_ifindex,        offsetof(DNSScope, ifindex),               SD_JSON_RELAX     },
++                { "dnssec",     SD_JSON_VARIANT_STRING,   sd_json_dispatch_string,      offsetof(DNSScope, dnssec_mode_str),       0                 },
++                { "dnsOverTLS", SD_JSON_VARIANT_STRING,   sd_json_dispatch_string,      offsetof(DNSScope, dns_over_tls_mode_str), 0                 },
+                 {},
+         };
+         DNSScope **ret = ASSERT_PTR(userdata);
+-- 
+2.55.0
+
