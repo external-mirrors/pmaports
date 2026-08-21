@@ -42,6 +42,17 @@ def apkbuild_check_provides(path, apkbuild, version, pkgname, subpkgname=None):
         # already replaces the variables, so we check against the inserted
         # values here.
         if not provide.endswith(f"={version}"):
+            # alsa-ucm-conf is a bit of a special case, since many packages
+            # provide it. And we need to make sure that the provide has a
+            # version below that of upstream
+            if provide.startswith("alsa-ucm-conf"):
+                if not provide.startswith("alsa-ucm-conf=0."):
+                    error = f"error in alsa-ucm-conf provider for {path}\n."
+                    error += "The alsa-ucm-conf provider version must start"
+                    error += " with '0.' to not replace the normal upstream"
+                    error += " alsa-ucm-conf in other devices"
+                    ret.append(error)
+                continue
             # Valid version strings, per the APKBUILD reference, are fine. This regex
             # attempts to detect those.
             pattern = (
