@@ -36,7 +36,12 @@ _pmb_recommends="
 	phosh-tour
 	"
 _pmb_groups="feedbackd"
-install="$pkgname.post-install $pkgname.post-upgrade"
+install="
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	"
 subpackages="
 	$pkgname-default-osk:default_osk
 	$pkgname-duranium
@@ -74,7 +79,6 @@ default_osk() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="greetd-openrc"
 	replaces="greetd-openrc"
 
