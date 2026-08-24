@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=261.2
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -232,6 +232,7 @@ source="
 	0001-json-util-generalize-json_dispatch_address_family.patch
 	0001-json-util-introduce-json_dispatch_in_addr_data.patch
 	0001-resolvectl-use-varlink-instead-of-dbus-for-ResolveHo.patch
+	0001-resolved-don-t-count-local-routing-errors-against-se.patch
 	"
 builddir=${_upstream_srcdir:-"$srcdir/$pkgname-$_pkgver"}
 _meson_builddir=${_meson_builddir:-build}
@@ -651,4 +652,5 @@ sha512sums="
 ce7f4aa7a490da7e469f2e09fac4128d2dbab69a3c0c1384ec85c46a8b9f1d5074b75462f08ac60d4a09fb8cdea36d22850d634c8f7db434632497f47bae142f  0001-json-util-generalize-json_dispatch_address_family.patch
 1267f3a25d9a242ed9a3027aeacb2b6adb38864ca316215c7db2edee8f8c66d2448f58c1754e3f08be1ba70cf68b3cc503aec67d170de64a378c09f18260e32b  0001-json-util-introduce-json_dispatch_in_addr_data.patch
 8d9436dc5c150c9b8c3b1b19512fbea5fa1f0953a4261f4fb089a90878768156db5d47feb41450594bd9547d40ef14c50ca751c5a046cdd253bb5b72cf1fd54c  0001-resolvectl-use-varlink-instead-of-dbus-for-ResolveHo.patch
+6f6fae0806700cf2fe67d58f311d585f7e1fdc2e3683efe8617cd42ceedb6138abf602711f8431bb2cc4d1dfb974f947c9704de32ff024dc9eaca1144cd1a9cd  0001-resolved-don-t-count-local-routing-errors-against-se.patch
 "
