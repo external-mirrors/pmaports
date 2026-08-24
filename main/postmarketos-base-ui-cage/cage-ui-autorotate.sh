@@ -2,7 +2,7 @@
 
 set -ueo pipefail
 
-CONNECTORS=$(drm_info -j 2>/dev/null | jq -rc '[.[].connectors | .[] | select( .status == 1 )]')
+CONNECTORS=$(drm_info -j 2>/dev/null | jq -rc '[.[] | (.connectors // empty) | .[] | select(.status == 1)]')
 
 while read -r CONNECTOR ; do
 	CONNECTOR_ID=$(echo "$CONNECTOR" | jq -rc '.id')

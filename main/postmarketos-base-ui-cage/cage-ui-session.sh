@@ -4,12 +4,13 @@
 
 if [ -d /etc/cage-ui ]; then
 	for script in /etc/cage-ui/*.sh; do
+		[ -e "$script" ] || continue
 		# shellcheck source=/dev/null # since we do not control these scripts
 		. "$script"
 	done
 fi
 
-if [ -z "$CAGE_UI_COMMAND" ]; then
+if [ -z "${CAGE_UI_COMMAND:-}" ]; then
 	if command -v postmarketos-demos >/dev/null 2>&1; then
 		CAGE_UI_COMMAND=postmarketos-demos
 	else
