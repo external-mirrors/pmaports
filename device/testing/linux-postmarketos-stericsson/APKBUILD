@@ -3,8 +3,8 @@ maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 _flavor="postmarketos-stericsson"
 _config="config-$_flavor.armv7"
 pkgname=linux-$_flavor
-pkgver=6.18.2
-pkgrel=3
+pkgver=7.2.0
+pkgrel=0
 pkgdesc="Mainline kernel for ST-Ericsson NovaThor devices"
 arch="armv7"
 _carch="arm"
@@ -40,8 +40,6 @@ esac
 source="
 	https://cdn.kernel.org/pub/linux/kernel/v${_kernver%%.*}.x/linux-$_kernver.tar.xz
 	config-$_flavor.armv7
-
-	drm-regressions.patch
 	"
 builddir="$srcdir/linux-${_kernver//_/-}"
 _defconfig="u8500_defconfig"
@@ -72,7 +70,6 @@ package() {
 }
 
 sha512sums="
-15989d1a26c6a5200b8eab4ba348b308466398aa75dda3844b37e7eb320206236d47c94cbc0e0b1d7ead10385ca84d34d0f2aa02ba5c1bd65ca6a5aa71c57117  linux-6.18.2.tar.xz
-44396d5eca70a9c818de96c62daf7198e968d332550961d668e927f5b35e90e9723b8c3316455ef1472c09d39fd15ef74a254376f4232a702e3221e8657600a6  config-postmarketos-stericsson.armv7
-2ba9304f4f2d8578906017699255aadb10d1f0dc62704400632859b9bdad06a10c5837ce1a524813b1d205b33e8b5f7990038a700942e2ee728b79b7ecc45282  drm-regressions.patch
+47e63679363261a864d271277340a6f2d45f544e1a056be4159df081f4f6537d0efa865c4af26611ab33a3079ee65db88ec2f6bc0e5fff43e0c043cde0cd91e1  linux-7.2.tar.xz
+58de2313be4f3de35a59fc12895322e908e0359c270b2b0cc1bac2be8575631d36220baec486c97fa856fd26dbd082a6a9837f24abb41c95c1e6925952888ba3  config-postmarketos-stericsson.armv7
 "
