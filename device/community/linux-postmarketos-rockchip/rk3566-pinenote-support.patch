@@ -41,71 +41,33 @@ index 3c9b4054e..6915884d5 100644
  required:
    - compatible
    - reg
-diff --git a/Documentation/devicetree/bindings/regulator/tps65185.yaml b/Documentation/devicetree/bindings/regulator/tps65185.yaml
-new file mode 100644
-index 000000000..3f53b14b9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/tps65185.yaml
-@@ -0,0 +1,228 @@
-+# make dt_binding_check DT_SCHEMA_FILES=tps65185.yaml
-+
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/tps65185.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TPS65185x PMIC for E-Paper displays
-+
-+maintainers:
-+  - ??? <???@???.??>
-+
-+description: |
-+  The TPS65185x is a power management IC (PMIC) for EPD displays, providing
-+  positive and negative driving rails for EPD displays, as well as a
-+  bias voltage (VCOM) line and a separate 3.3 V output. The IC is controlled
-+  via I2C.
-+
-+allOf:
-+  - $ref: "regulator.yaml#"
-+
-+properties:
-+  compatible:
-+    const: ti,tps65185
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
+diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
+index af0f638b8..6be643b44 100644
+--- a/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
++++ b/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
+@@ -21,6 +21,9 @@ properties:
+   reg:
+     maxItems: 1
+ 
 +  '#io-channel-cells':
 +    const: 1
 +
-+  powerup-gpios:
-+    description: GPIO to control the vdrive supply
-+    maxItems: 1
-+
-+  pwr_good-gpios:
-+    description: GPIO indicating vdrive supply state
-+    maxItems: 1
-+
-+  vcom_ctrl-gpios:
-+    description: GPIO to control VCOM voltage output
-+    maxItems: 1
-+
-+  vin-supply:
-+    description: Input supply phandle for vin input
-+
+   enable-gpios:
+     description:
+       PWRUP pin
+@@ -37,9 +40,39 @@ properties:
+ 
+   vin-supply: true
+ 
 +  vin3p3-supply:
 +    description: Input supply phandle for 3.3 Volt input
 +
-+  wakeup-gpios:
-+    description: GPIO to wake up the device from sleep
-+    maxItems: 1
-+
+   interrupts:
+     maxItems: 1
+ 
 +  ti,up-sequence:
-+    description: Controls the activation order of the four rails
++    description:
++      Controls the activation order of the four rails
 +      grouped in the vdrive regulator (VDDH, VPOS, VEE, and VNEG)
 +      via the UPSEQ0 register.
 +      TODO how to document the four numbers and the possible 4 values?
@@ -113,7 +75,7 @@ index 000000000..3f53b14b9
 +      nr 2 VEE 0 -> strobe1, 1 -> strobe2, 2 -> strobe3, 3 -> strobe 4
 +      nr 3 VPOS 0 -> strobe1, 1 -> strobe2, 2 -> strobe3, 3 -> strobe 4
 +      nr 4 VDDH 0 -> strobe1, 1 -> strobe2, 2 -> strobe3, 3 -> strobe 4
-+    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
 +    maxItems: 4
 +
 +  ti,up-delay-ms:
@@ -123,163 +85,31 @@ index 000000000..3f53b14b9
 +
 +  ti,down-sequence:
 +    description: TODO same as with up sequence
-+    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
 +    maxItems: 4
 +
 +  ti,down-delay-ms:
 +    description: TODO same as with up delays
 +    maxItems: 4
 +
-+  regulators:
-+    type: object
-+    description: List of regulators and its properties
-+
-+    properties:
-+      "v3p3":
-+        type: object
-+        $ref: regulator.yaml#
-+        description:
-+          3.3 V output regulator
-+          TODO How do we include the requirement for the PineNote to always
-+          turn this on? Also, I think the driver at some locations assumes
-+          this regulator stays on.
-+
-+        properties:
-+          regulator-name: true
-+          regulator-always-on: true
-+          regulator-boot-on: true
-+          regulator-min-microvolt: true
-+          regulator-max-microvolt: true
-+
-+        required:
-+          - regulator-name
-+          - regulator-min-microvolt
-+          - regulator-max-microvolt
-+
-+        additionalProperties: false
-+
-+      "vcom":
-+        type: object
-+        $ref: regulator.yaml#
-+        description:
-+          VCOM voltage (back-plane bias for the epd panel) output regulator,
-+          -5.11 V to 0 V. (The minus sign is dropped here to conform to the
-+          regulator framework).
-+          TODO Make sure to note that by default the vcom value should be read
-+          by the driver from the internal memory, but can also be specified
-+          here.
-+
-+        properties:
-+          regulator-name: true
-+          regulator-always-on: true
-+          regulator-boot-on: true
-+
-+        required:
-+          - regulator-name
-+
-+        additionalProperties: false
-+
-+      "vdrive":
-+        type: object
-+        $ref: regulator.yaml#
-+        description:
-+          Controls the power rails (VDDH, VPOS, VEE, and VNEG).
-+
-+        properties:
-+          regulator-name: true
-+          regulator-always-on: true
-+          # TODO: this should probably be false. It works, but should not be
-+          # the default as constantly driving vdrive can damage the epd
-+          # display
-+          regulator-boot-on: true
-+          # TODO: This is a virtual regulator in the sense that it groups four
-+          # different voltages whose voltages we do not have (direct) control
-+          # over. Are these values required?
-+          regulator-min-microvolt: true
-+          regulator-max-microvolt: true
-+
-+        required:
-+          - regulator-name
-+          - regulator-min-microvolt
-+          - regulator-max-microvolt
-+
-+        additionalProperties: false
-+
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - powerup-gpios
-+  - pwr_good-gpios
-+  - vcom_ctrl-gpios
-+  - vin-supply
+   regulators:
+     type: object
+     additionalProperties: false
+@@ -54,6 +87,9 @@ required:
+   - reg
+   - pwr-good-gpios
+   - vin-supply
 +  - vin3p3-supply
-+  - wakeup-gpios
 +  - ti,up-sequence
-+  - ti,up-delay-ms
-+  - ti,down-sequence
-+  - ti,down-delay-ms
 +  - regulators
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      ebc_pmic: pmic@68 {
-+        compatible = "ti,tps65185";
-+        reg = <0x68>;
-+        interrupt-parent = <&gpio3>;
-+        interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
-+        #io-channel-cells = <1>;
-+        pinctrl-0 = <&ebc_pmic_pins>;
-+        pinctrl-names = "default";
-+        powerup-gpios = <&gpio3 8 GPIO_ACTIVE_HIGH>;
-+        pwr_good-gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>;
-+        vcom_ctrl-gpios = <&gpio4 10 GPIO_ACTIVE_HIGH>;
-+        vin-supply = <&vcc_bat>;
-+        vin3p3-supply = <&vcc_3v3>;
-+        wakeup-gpios = <&gpio3 5 GPIO_ACTIVE_HIGH>;
-+        ti,up-sequence = <1>, <0>, <2>, <3>;
-+        ti,up-delay-ms = <3>, <3>, <3>, <3>;
-+        ti,down-sequence = <2>, <3>, <1>, <0>;
-+        ti,down-delay-ms = <3>, <6>, <6>, <6>;
-+
-+        regulators {
-+          v3p3: v3p3 {
-+            regulator-name = "v3p3";
-+            regulator-always-on;
-+            regulator-min-microvolt = <3300000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          vcom: vcom {
-+            regulator-name = "vcom";
-+            /* voltage range is board-specific */
-+            /* regulator-min-microvolt = <930000>; */
-+            /* regulator-max-microvolt = <930000>; */
-+          };
-+
-+          vdrive: vdrive {
-+            regulator-name = "vdrive";
-+            regulator-min-microvolt = <15000000>;
-+            regulator-max-microvolt = <15000000>;
-+          };
-+        };
-+      };
-+    };
+ 
+ additionalProperties: false
+ 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index e08767323..ef133e67e 100644
+index d1cc0e12f..a051cbfd0 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -7863,7 +7863,9 @@ M:	Ruben Wauters <rubenru09@aol.com>
+@@ -7976,7 +7976,9 @@ M:	Ruben Wauters <rubenru09@aol.com>
  S:	Maintained
  W:	https://github.com/notro/gud/wiki
  T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
@@ -334,7 +164,7 @@ index 6bbc4c675..92ef19676 100644
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
-index 5c6f8cc40..bc8cb5945 100644
+index 791719acb..25644f290 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
 @@ -5,6 +5,7 @@
@@ -403,9 +233,9 @@ index 5c6f8cc40..bc8cb5945 100644
  			gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_HIGH>;
 +			linux,default-trigger = "rk817-battery-charging";
 +			retain-state-suspended;
- 		};
- 	};
- 
++		};
++	};
++
 +	panel {
 +		compatible = "eink,ed103tc2";
 +
@@ -413,9 +243,9 @@ index 5c6f8cc40..bc8cb5945 100644
 +			panel_in_ebc: endpoint {
 +				remote-endpoint = <&ebc_out_panel>;
 +			};
-+		};
-+	};
-+
+ 		};
+ 	};
+ 
 +	rockchip-suspend {
 +		compatible = "rockchip,pm-rk3568";
 +		status = "okay";
@@ -512,7 +342,7 @@ index 5c6f8cc40..bc8cb5945 100644
 +	io-channels = <&ebc_pmic 0>;
 +	panel-supply = <&v3p3>;
 +	vcom-supply = <&vcom>;
-+	vdrive-supply = <&vdrive>;
++	vdrive-supply = <&vposneg>;
 +	status = "okay";
 +
 +	port {
@@ -617,64 +447,30 @@ index 5c6f8cc40..bc8cb5945 100644
  
  		connector {
  			compatible = "usb-c-connector";
-@@ -499,6 +695,56 @@ typec_hs_usb2phy0: endpoint {
- 			};
- 		};
- 	};
-+
-+	/* TODO: write binding */
-+	ebc_pmic: pmic@68 {
-+		compatible = "ti,tps65185";
-+		reg = <0x68>;
-+		interrupt-parent = <&gpio3>;
-+		interrupts = <RK_PA6 IRQ_TYPE_LEVEL_LOW>;
-+		#io-channel-cells = <1>;
-+		pinctrl-0 = <&ebc_pmic_pins>;
-+		pinctrl-names = "default";
-+		powerup-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
-+		pwr_good-gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_HIGH>;
-+		vcom_ctrl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
-+		vin-supply = <&vcc_bat>;
+@@ -511,8 +707,14 @@ ebc_pmic: pmic@68 {
+ 		pwr-good-gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_HIGH>;
+ 		vcom-ctrl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
+ 		vin-supply = <&vcc_bat>;
 +		vin3p3-supply = <&vcc_3v3>;
-+		wakeup-gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_HIGH>;
+ 		wakeup-gpios = <&gpio3 RK_PA5 GPIO_ACTIVE_HIGH>;
+ 
 +		ti,up-sequence = <1>, <0>, <2>, <3>;
 +		ti,up-delay-ms = <3>, <3>, <3>, <3>;
 +		ti,down-sequence = <2>, <3>, <1>, <0>;
 +		ti,down-delay-ms = <3>, <6>, <6>, <6>;
-+
-+		regulators {
-+			v3p3: v3p3 {
-+				regulator-name = "v3p3";
-+				/* At least pinenote v1.1 and v1.2: Information provided by
-+				 * smaeul (Samuel Holland): Allowing this regulator to turn off
-+				 * can lead to interrupt storms
-+				 * While writing a driver for the TPS65185, I ran into an
-+				 * interrupt storm. The reason is that EBC_PMIC_INT is pulled
-+				 * up to VCC_EINK1 through R2003. But this is the output of the
-+				 * V3P3 switch. So that means the IRQ cannot be enabled while
-+				 * V3P3 is turned off.
-+				*/
-+				regulator-always-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+
-+			vcom: vcom {
-+				regulator-name = "vcom";
-+				/* voltage range is board-specific */
-+			};
-+
-+			vdrive: vdrive {
-+				regulator-name = "vdrive";
-+				regulator-min-microvolt = <15000000>;
-+				regulator-max-microvolt = <15000000>;
-+			};
-+		};
-+	};
- };
++		#io-channel-cells = <1>;
+ 		regulators {
+ 			v3p3: v3p3 {
+ 				regulator-name = "v3p3";
+@@ -524,6 +726,7 @@ v3p3: v3p3 {
  
- &i2c5 {
-@@ -514,6 +760,31 @@ accelerometer@18 {
+ 			vcom: vcom {
+ 				regulator-name = "vcom";
++				/* voltage range is board-specific */
+ 			};
+ 
+ 			vposneg: vposneg {
+@@ -548,6 +751,31 @@ accelerometer@18 {
  		st,drdy-int-pin = <1>;
  		vdd-supply = <&vcc_3v3>;
  		vddio-supply = <&vcc_3v3>;
@@ -706,7 +502,7 @@ index 5c6f8cc40..bc8cb5945 100644
  	};
  };
  
-@@ -523,6 +794,11 @@ &i2s1_8ch {
+@@ -557,6 +785,11 @@ &i2s1_8ch {
  	status = "okay";
  };
  
@@ -718,7 +514,7 @@ index 5c6f8cc40..bc8cb5945 100644
  &pdm {
  	pinctrl-0 = <&pdmm0_clk1>, <&pdmm0_sdi1>, <&pdmm0_sdi2>;
  	/* microphones are on channels 1 and 2 */
-@@ -549,6 +825,29 @@ backlight_hwen_h: backlight-hwen-h {
+@@ -583,6 +816,29 @@ backlight_hwen_h: backlight-hwen-h {
  		};
  	};
  
@@ -748,29 +544,7 @@ index 5c6f8cc40..bc8cb5945 100644
  	bt {
  		bt_enable_h: bt-enable-h {
  			rockchip,pins = <0 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -563,6 +862,21 @@ bt_wake_h: bt-wake-h {
- 		};
- 	};
- 
-+	ebc-pmic {
-+		ebc_pmic_pins: ebc-pmic-pins {
-+			rockchip,pins = /* wakeup */
-+					<3 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>,
-+					/* int */
-+					<3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
-+					/* pwr_good */
-+					<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_none>,
-+					/* pwrup */
-+					<3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>,
-+					/* vcom_ctrl */
-+					<4 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	led {
- 		led_pin: led-pin {
- 			rockchip,pins = <3 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -611,6 +925,16 @@ tcpc_int_l: tcpc-int-l {
+@@ -660,6 +916,16 @@ tcpc_int_l: tcpc-int-l {
  		};
  	};
  
@@ -787,7 +561,7 @@ index 5c6f8cc40..bc8cb5945 100644
  	vcc-wl {
  		vcc_wl_pin: vcc-wl-pin {
  			rockchip,pins = <0 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -681,16 +1005,19 @@ &uart1 {
+@@ -730,16 +996,19 @@ &uart1 {
  	pinctrl-names = "default";
  	uart-has-rtscts;
  	status = "okay";
@@ -810,7 +584,7 @@ index 5c6f8cc40..bc8cb5945 100644
  		vbat-supply = <&vcc_wl>;
  		vddio-supply = <&vcca_1v8_pmu>;
  	};
-@@ -718,3 +1045,7 @@ usb2phy0_typec_hs: endpoint {
+@@ -767,3 +1036,7 @@ usb2phy0_typec_hs: endpoint {
  		};
  	};
  };
@@ -819,7 +593,7 @@ index 5c6f8cc40..bc8cb5945 100644
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index a9021c524..c5a1068ca 100644
+index a9021c524..73de84087 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 @@ -212,6 +212,20 @@ vcc_sys: regulator-vcc-sys {
@@ -869,7 +643,7 @@ index a9021c524..c5a1068ca 100644
 +        io-channels = <&ebc_pmic 0>;
 +        panel-supply = <&v3p3>;
 +        vcom-supply = <&vcom>;
-+        vdrive-supply = <&vdrive>;
++        vdrive-supply = <&vposneg>;
 +
 +        port {
 +			ebc_out_panel: endpoint {
@@ -906,12 +680,12 @@ index a9021c524..c5a1068ca 100644
 +			pinctrl-names = "default";
 +			// [EBC_PMIC_ON] changed
 +			/* powerup-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>; */
-+			powerup-gpios = <&gpio4 RK_PC4 GPIO_ACTIVE_HIGH>;
++			enable-gpios = <&gpio4 RK_PC4 GPIO_ACTIVE_HIGH>;
 +			// changed q64-A
 +			/* pwr_good-gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_HIGH>; */
-+			pwr_good-gpios = <&gpio4 RK_PB1 GPIO_ACTIVE_HIGH>;
++			pwr-good-gpios = <&gpio4 RK_PB1 GPIO_ACTIVE_HIGH>;
 +			// ok q64-A
-+			vcom_ctrl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
++			vcom-ctrl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
 +			// changed
 +			vin-supply = <&vcc_sys_ebc>;
 +			vin3p3-supply = <&vcc_sys_ebc>;
@@ -938,8 +712,8 @@ index a9021c524..c5a1068ca 100644
 +                            regulator-max-microvolt = <1170000>;
 +					};
 +
-+					vdrive: vdrive {
-+							regulator-name = "vdrive";
++					vposneg: vposneg {
++							regulator-name = "vposneg";
 +							regulator-min-microvolt = <15000000>;
 +							regulator-max-microvolt = <15000000>;
 +					};
@@ -11734,9 +11508,9 @@ index 000000000..a9de615e0
 +};
 +
 +static const struct regulator_desc tps65185_vdrive_desc = {
-+	.name			= "vdrive",
++	.name			= "vposneg",
 +	.supply_name		= "vin",
-+	.of_match		= "vdrive",
++	.of_match		= "vposneg",
 +	.regulators_node	= "regulators",
 +	.ops			= &tps65185_vdrive_ops,
 +	.owner			= THIS_MODULE,
@@ -12060,20 +11834,20 @@ index 000000000..a9de615e0
 +	 * Drive POWERUP and VCOM_CTRL low before driving WAKEUP high to avoid
 +	 * powering up the output rails.
 +	 */
-+	tps->powerup_gpio = devm_gpiod_get_optional(dev, "powerup", GPIOD_OUT_LOW);
++	tps->powerup_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
 +	if (IS_ERR(tps->powerup_gpio))
 +		return dev_err_probe(dev, PTR_ERR(tps->powerup_gpio),
-+				     "Failed to get %s GPIO\n", "powerup");
++				     "Failed to get %s GPIO\n", "enable");
 +
-+	tps->pwr_good_gpio = devm_gpiod_get_optional(dev, "pwr_good", GPIOD_IN);
++	tps->pwr_good_gpio = devm_gpiod_get_optional(dev, "pwr-good", GPIOD_IN);
 +	if (IS_ERR(tps->pwr_good_gpio))
 +		return dev_err_probe(dev, PTR_ERR(tps->pwr_good_gpio),
-+				     "Failed to get %s GPIO\n", "pwr_good");
++				     "Failed to get %s GPIO\n", "pwr-good");
 +
-+	tps->vcom_ctrl_gpio = devm_gpiod_get_optional(dev, "vcom_ctrl", GPIOD_OUT_LOW);
++	tps->vcom_ctrl_gpio = devm_gpiod_get_optional(dev, "vcom-ctrl", GPIOD_OUT_LOW);
 +	if (IS_ERR(tps->vcom_ctrl_gpio))
 +		return dev_err_probe(dev, PTR_ERR(tps->vcom_ctrl_gpio),
-+				     "Failed to get %s GPIO\n", "vcom_ctrl");
++				     "Failed to get %s GPIO\n", "vcom-ctrl");
 +
 +	tps->wakeup_gpio = devm_gpiod_get(dev, "wakeup", GPIOD_OUT_HIGH);
 +	if (IS_ERR(tps->wakeup_gpio))
