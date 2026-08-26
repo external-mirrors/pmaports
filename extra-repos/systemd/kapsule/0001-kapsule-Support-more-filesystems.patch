@@ -1,0 +1,90 @@
+From d7a1283346d04b6eab6712b231e1f8c156caeff8 Mon Sep 17 00:00:00 2001
+From: Bart Ribbers <bribbers@disroot.org>
+Date: Fri, 28 Aug 2026 08:20:59 +0200
+Subject: [PATCH] Support non-btrfs filesystems
+
+While KDE Linux is guaranteed to always use btrfs, we can not be so sure
+on other distributions. In my case my system uses regular good 'ol ext4
+which I'd also like to use Kapsule on, so we have to use a non-btrfs
+driver for it.
+---
+ CMakeLists.txt        |  1 +
+ src/daemon/service.py | 28 +++++++++++++++++++++++-----
+ 2 files changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f42b51c..1907021 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -142,6 +142,7 @@ if(INSTALL_PYTHON_DAEMON AND VENDOR_PYTHON_DEPS)
+         "dbus-fast>=2.0.0"
+         "pyyaml>=6.0"
+         "pydantic>=2.0"
++        "psutil>=7.2.0"
+         # Transitive dependencies that need to be included
+         "httpcore"
+         "anyio"
+diff --git a/src/daemon/service.py b/src/daemon/service.py
+index a833b22..6c09a03 100644
+--- a/src/daemon/service.py
++++ b/src/daemon/service.py
+@@ -13,8 +13,10 @@ import contextvars
+ import json
+ import logging
+ from dataclasses import dataclass
++from pathlib import Path
+ from typing import Annotated
+ 
++import psutil
+ from dbus_fast import BusType, Message, MessageType, Variant
+ from dbus_fast.aio import MessageBus
+ from dbus_fast.annotations import (
+@@ -633,12 +635,23 @@ class KapsuleService:
+             self._bus.disconnect()
+             self._bus = None
+ 
++    async def _get_filesystem_type(self, path: Path) -> str | None:
++        for part in psutil.disk_partitions(all=False):
++            if Path(part.mountpoint) == path:
++                return part.fstype
++
++        # For non-mountpoints
++        for part in psutil.disk_partitions(all=False):
++            if path.is_relative_to(Path(part.mountpoint)):
++                return part.fstype
++
++        return None
++
+     async def _ensure_storage_pool(self) -> None:
+         """Ensure the 'default' btrfs storage pool exists.
+ 
+-        KDE Linux uses btrfs for container storage.  If Incus has not
+-        been initialised yet (first boot, sysext update, etc.) the pool
+-        will be missing.  We create it here so that every subsequent
++        If Incus has not been initialised yet (first boot, sysext update, etc.)
++        the pool will be missing. We create it here so that every subsequent
+         operation can assume it exists.
+ 
+         This is fatal — without a storage pool nothing will work.
+@@ -648,11 +661,16 @@ class KapsuleService:
+             logger.info("Storage pool 'default' already exists")
+             return
+ 
+-        logger.info("Creating btrfs storage pool 'default'...")
++        filesystem_type = await self._get_filesystem_type(Path("/var/lib/incus"))
++        storage_driver = "dir"
++        if filesystem_type == "btrfs":
++            storage_driver = "btrfs"
++
++        logger.info("Creating %s storage pool 'default'...", storage_driver)
+         try:
+             await self._incus.create_storage_pool(
+                 name="default",
+-                driver="btrfs",
++                driver=storage_driver,
+                 config={"source": "/var/lib/incus/storage-pools/default"},
+             )
+         except IncusError as e:
+-- 
+2.55.0
+
