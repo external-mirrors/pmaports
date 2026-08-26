@@ -1,0 +1,280 @@
+# Forked from Alpine to add systemd support
+
+maintainer="Bart Ribbers <bribbers@disroot.org>"
+pkgname=incus
+pkgver=99997.0.1
+_pkgver=7.0.1 #LTS releases only
+pkgrel=0
+pkgdesc="Powerful system container and virtual machine manager"
+url="https://github.com/lxc/incus"
+arch="all"
+license="Apache-2.0"
+depends="
+	acl
+	attr
+	ca-certificates
+	dbus
+	dnsmasq
+	lxc>=6.0.0
+	iproute2
+	netcat-openbsd
+	nftables
+	rsync
+	squashfs-tools
+	shadow-subids
+	tar
+	xz
+	"
+makedepends="
+	acl-dev
+	autoconf
+	automake
+	cowsql-dev
+	raft-cowsql-dev
+	eudev-dev
+	gettext-dev
+	go
+	intltool
+	libcap-dev
+	libtool
+	libuv-dev
+	linux-headers
+	lxc-dev
+	lz4-dev
+	sqlite-dev
+	systemd-dev
+	tcl-dev
+	"
+subpackages="$pkgname-client
+	$pkgname-agent
+	$pkgname-agent-openrc:agent_openrc:noarch
+	$pkgname-user
+	$pkgname-user-openrc:user_openrc:noarch
+	$pkgname-openrc
+	$pkgname-systemd
+	$pkgname-conversion
+	$pkgname-utils
+	$pkgname-bash-completion:bashcomp:noarch
+	"
+install="$pkgname.pre-install $pkgname.post-upgrade"
+options="net !check"
+if [ "$CARCH" = "loongarch64" ]; then
+	options="$options !check" # random test failures on loongarch64
+fi
+source="$pkgname-$pkgver.tar.gz::https://github.com/lxc/incus/archive/refs/tags/v$_pkgver.tar.gz
+	incusd.confd
+	incusd.initd
+	$pkgname-agent.initd
+	$pkgname-user.initd
+	incus-user.service
+	incus-user.socket
+	incus.service
+	incus.socket
+	incus.sysusers
+
+	0001-statically-build-incus-agent-and-incus-migrate.patch
+	"
+builddir="$srcdir/$pkgname-$_pkgver"
+
+# armhf, armv7, x86: no qemu on 32-bit
+case "$CARCH" in
+armhf|armv7|x86) ;;
+*) subpackages="$subpackages $pkgname-vm:vm:noarch" ;;
+esac
+
+_tools="fuidshift
+	generate-config
+	generate-database
+	incus
+	incus-benchmark
+	incus-migrate
+	incus-simplestreams
+	lxc-to-incus
+	lxd-to-incus
+	mini-oidc
+	sysinfo
+	tls2jwt
+	"
+
+_project="github.com/lxc/incus"
+
+export GOFLAGS="$GOFLAGS -tags=libsqlite3"
+export GOPATH="$srcdir"
+
+# secfixes:
+#   7.0.1-r0:
+#     - CVE-2026-55622
+#     - CVE-2026-55621
+#     - CVE-2026-48769
+#     - CVE-2026-48755
+#     - CVE-2026-48752
+#     - CVE-2026-48751
+#     - CVE-2026-48750
+#     - CVE-2026-48749
+#     - CVE-2026-48756
+#     - CVE-2026-48754
+#     - CVE-2026-47753
+#     - CVE-2026-48753
+#   7.0.0-r0:
+#     - CVE-2026-35527
+#     - CVE-2026-40195
+#     - CVE-2026-40197
+#     - CVE-2026-40251
+#     - CVE-2026-41647
+#     - CVE-2026-41684
+#     - CVE-2026-41685
+#     - CVE-2026-40243
+#     - CVE-2026-41648
+#   6.0.6-r0:
+#     - CVE-2025-54286
+#     - CVE-2025-54287
+#     - CVE-2025-54288
+#     - CVE-2025-54289
+#     - CVE-2025-54290
+#     - CVE-2025-54291
+#     - CVE-2025-54293
+#     - CVE-2026-28384
+#     - CVE-2025-64507
+#   6.0.5-r6:
+#     - CVE-2026-23953
+#     - CVE-2026-23954
+
+prepare() {
+	default_prepare
+	go mod download
+}
+
+build() {
+	export CGO_CFLAGS="-I/usr/include/raft -I/usr/include/cowsql"
+	export CGO_LDFLAGS="$LDFLAGS -lintl"
+	export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+
+	make
+}
+
+package() {
+	# generate bash shell completion script
+	chmod 755 "$srcdir"/bin/incus
+	"$srcdir"/bin/incus completion bash > "$builddir"/scripts/bash-completion
+
+	for daemon in incusd incus-agent incus-user; do
+		install -Dm755 "$srcdir"/bin/$daemon "$pkgdir"/usr/sbin/$daemon
+	done
+
+	for tool in $_tools; do
+		install -Dm755 "$srcdir"/bin/$tool "$pkgdir"/usr/bin/$tool
+	done
+
+	for init in incusd incus-agent incus-user; do
+		install -Dm755 "$srcdir"/$init.initd \
+		"$pkgdir"/etc/init.d/$init
+	done
+	install -Dm644 "$srcdir"/incusd.confd \
+		"$pkgdir"/etc/conf.d/incusd
+
+	install -Dm644 "$builddir"/scripts/bash-completion \
+		"$pkgdir"/usr/share/bash-completion/completions/incus
+
+	install -Dm755 "$builddir"/scripts/empty-incus.sh \
+		"$pkgdir"/usr/bin/empty-incus.sh
+
+	install -Dm644 "$srcdir"/incus-user.service "$pkgdir"/usr/lib/systemd/user/incus-user.service
+	install -Dm644 "$srcdir"/incus-user.socket "$pkgdir"/usr/lib/systemd/user/incus-user.socket
+	install -Dm644 "$srcdir"/incus.service "$pkgdir"/usr/lib/systemd/system/incus.service
+	install -Dm644 "$srcdir"/incus.socket "$pkgdir"/usr/lib/systemd/system/incus.socket
+	install -Dm644 "$srcdir"/incus.sysusers "$pkgdir"/usr/lib/sysusers.d/incus.conf
+}
+
+agent() {
+	pkgdesc="Incus agent"
+	amove usr/sbin/incus-agent
+}
+
+agent_openrc() {
+	pkgdesc="Incus agent OpenRC scripts"
+	install_if="openrc ${subpkgname%-openrc}=$pkgver-r$pkgrel"
+	amove etc/init.d/incus-agent
+}
+
+client() {
+	pkgdesc="Incus CLI client"
+	install -d "$subpkgdir"/usr/bin
+	amove usr/bin/incus
+}
+
+user() {
+	pkgdesc="Incus user project daemon"
+	amove usr/sbin/incus-user
+}
+
+user_openrc() {
+	pkgdesc="Incus user project daemon OpenRC scripts"
+	install_if="openrc ${subpkgname%-openrc}=$pkgver-r$pkgrel"
+	amove etc/init.d/incus-user
+}
+
+conversion() {
+	pkgdesc="Tools to convert a prior lxc/lxd instance to incus"
+	amove usr/bin/lxc-to-incus
+	amove usr/bin/lxd-to-incus
+}
+
+utils() {
+	pkgdesc="Incus utilities and scripts"
+	depends="$pkgname py3-lxc jq losetup"
+
+	amove usr/bin
+}
+
+vm() {
+	pkgdesc="Install packages required to run VMs under Incus"
+	case "$CARCH" in
+		x86_64)  depends=ovmf  ;;
+		aarch64) depends=aavmf ;;
+	esac
+	depends="$depends
+		qemu-system-x86_64>=8.2
+		qemu-chardev-spice
+		qemu-hw-usb-redirect
+		qemu-hw-display-virtio-vga
+		qemu-img
+		qemu-ui-spice-core
+		incus-agent
+		incus-utils
+		sgdisk
+		util-linux-misc
+		virtiofsd
+		"
+	install -d "$subpkgdir"
+}
+
+openrc() {
+	provides=$pkgname-lts-openrc=$pkgver-r$pkgrel
+	default_openrc
+}
+
+systemd() {
+	provides=$pkgname-lts-systemd=$pkgver-r$pkgrel
+	default_systemd
+}
+
+check() {
+	export CGO_LDFLAGS="$LDFLAGS -lintl"
+
+	# FIXME: disable failing tests
+	go test -v -skip "TestCluster_*|TestIntegration_UnixSocket|TestContainerTestSuite_*|TestDotGo|TestParse|TestPackages|TestConvertNetworkConfig|TestSnapshotCommon|TestHttpRequest" ./...
+}
+
+sha512sums="
+f9668fc2d281c09a3d8e0fb5ba71a67bf892348f1fce743963f173baf784fc73688bd247deed2e72f0fb770fd4a18b973e2e881d9ca63c8bf2e85c405136f424  incus-99997.0.1.tar.gz
+0340f06589acc1509d6cf4c844320f23a40e8da9d6fd1aab59b7424b286bb109e81ded97e26b9a1467f64f378914f4d13f9726c48188468900ab8d88eb528d91  incusd.confd
+ca8762648020b4c933879a7a01b3f6699e9efc1dc1141228342e6619d7e9b07b13d359121767d8cd1ce6d83752ced226964138040454eebec17a3479acdbcda3  incusd.initd
+a495ca525f2d98771e076026e9046f5d120aa929ed114cae330829ad698c4dbc5d80ed815328f3558584520f6c8d44d7b037721eb977b70f0ad288f6ad19e9cf  incus-agent.initd
+ac40bdeb902a95c10d814a92ebf8f94b7d03858796278258b3bac43044329790d64fbd29a90db2491964d0228f894a098fee27699a37e635295b5c4386a50028  incus-user.initd
+bea29326d719ab0ff5ea9fabbfa2c734f69c365bd8e7f8e68756f741e8be11c4f9aac5f8d17cffebf13dc3043ad8dff18ae04cdcd62b6d5a7fc9ff203e4448ff  incus-user.service
+146030dc54444e95ff943ea6a2ad201a3ee9a665e4ee6b5914c8f9916383de41e4802da1c44090bbe6438d60c6f82e76480366ec7baa56e18b946def01923a98  incus-user.socket
+63ada6e6531770b40131e7d3f38dea6750eba946dee3580f86bc0f9a4c3bbe0053d496a8a5afe2269bc161004e7fe713c283437bf8ab860965b4590d04216f1d  incus.service
+61ffac87225603fdaf0b92b04fcbe6c6d7c0c11ea75a92ac24ff4df9ff8cc3196eb4b89a890c8bf34168461e9305f22ceaadf0ace11fff29e8787593538cfc65  incus.socket
+a67a56646b6877f076d8037a85854f804b355e6638863791aa2b3b6a2b6daf9a5648b2ae3d936e7cef85a5003f68700aa95b259c0cff268a3210880c112a5bb7  incus.sysusers
+3cab43fa7747a9d3d265a209ad0797639e05cf421a376d0a90e8ceb7d06e9b7243366a581e9925f24ac58b6739cc2370a0babb67545e725b9da4404128ca21bd  0001-statically-build-incus-agent-and-incus-migrate.patch
+"

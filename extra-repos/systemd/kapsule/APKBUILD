@@ -1,0 +1,68 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+maintainer="team/kde <bribbers@disroot.org>"
+pkgname=kapsule
+pkgver=0_git20260823
+pkgrel=0
+_commit="a868c9d72169d14b8411d0caf8a8f98c01072da5"
+# armhf blocked by qt6-qtdeclarative -> ki18n
+arch="all !armhf"
+url="https://invent.kde.org/kde-linux/kapsule"
+pkgdesc="Incus-based container management with native KDE/Plasma integration"
+license="GPL-3.0-or-later AND LGPL-2.1-or-later AND BSD-3-Clause"
+depends="
+	incus
+	incus-client
+	py3-dbus-fast
+	py3-httpx
+	py3-psutil
+	py3-pydantic
+	py3-websockets
+	py3-yaml
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	kcmutils-dev
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kio-dev
+	python3
+	qcoro-dev
+	qt6-qtbase-dev
+	samurai
+	systemd
+	"
+subpackages="
+	$pkgname-systemd
+	$pkgname-dev
+	"
+_repo_url="https://invent.kde.org/kde-linux/kapsule.git"
+source="$pkgname-$_commit.tar.gz::https://invent.kde.org/kde-linux/kapsule/-/archive/$_commit.tar.gz
+	0001-kapsule-Support-more-filesystems.patch
+	kapsule.conf
+	"
+options="!check" # No tests
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DVENDOR_PYTHON_DEPS=OFF
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	rm "$pkgdir"/usr/lib/kapsule/kapsule.conf
+	install -Dm644 "$srcdir"/kapsule.conf "$pkgdir"/usr/lib/kapsule/kapsule.conf
+}
+
+sha512sums="
+e07b2b4f6535cd65bb56b0b2d25a0edfd84189630f53c038a772e8945d3aecfe55f649246de5dddb5007bfd4a8fba02c5a2c613e504e313bec3a8cde5ce84fa7  kapsule-a868c9d72169d14b8411d0caf8a8f98c01072da5.tar.gz
+6a5e47347f26dd4084db9c17c9af01d5b371dec42b14feb38bbea795f03d61c7abc49e314ccf09df500e6c4c48db582e4f0edd15955fe4502d7291b2a86ef26b  0001-kapsule-Support-more-filesystems.patch
+c8c10e94c36e417abf1f6c7451bffae84eeff53f428f287558217ddf9383784b66a0246fcc0363be6e1d70cbb016367d83daac5a114d449ed97c3d4af6ed9317  kapsule.conf
+"
