@@ -1,7 +1,7 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=firmware-samsung-i9100
 pkgver=3
-pkgrel=0
+pkgrel=1
 pkgdesc="Samsung Galaxy S II Firmware"
 url="https://github.com/TheMuppets/proprietary_vendor_samsung"
 arch="armv7"
@@ -22,7 +22,7 @@ package() {
 	install -Dm644 "$srcdir/$pkgname-$_commit-nvram_net.txt"  \
 		"$pkgdir/lib/firmware/postmarketos/brcm/brcmfmac4330-sdio.samsung,i9100.txt"
 	install -Dm644 "$srcdir/$pkgname-$_commit-bcm4330B1.hcd"  \
-		"$pkgdir/lib/firmware/postmarketos/brcm/bcm4330B1.hcd"
+		"$pkgdir/lib/firmware/postmarketos/brcm/BCM4330B1.hcd"
 }
 
 sha512sums="
