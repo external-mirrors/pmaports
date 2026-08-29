@@ -27,6 +27,7 @@ depends="
 	systemd-boot
 "
 makedepends="devicepkg-dev"
+install="$subpkgname.post-install"
 source="
 	HiFi.conf
 	nabu.pa
@@ -37,7 +38,6 @@ source="
 	kernel-cmdline.conf
 	modules-initfs
 "
-
 subpackages="
 	$pkgname-audio
 	$pkgname-openrc
@@ -66,7 +66,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install"
 	depends="
 		qbootctl-openrc
 		tqftpserv-openrc
