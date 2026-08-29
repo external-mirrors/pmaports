@@ -1,0 +1,70 @@
+maintainer="Stefan Hansson <newbyte@postmarketos.org>"
+pkgname=firmware-samsung-a52q
+pkgver=20220820
+pkgrel=0
+pkgdesc="Firmware for Samsung Galaxy A52"
+url="https://github.com/budderbrot/a52q-firmware"
+arch="aarch64"
+license="proprietary"
+options="!check !strip !archcheck !tracedeps pmb:cross-native"
+_commit="3ec32aecf7837a34240702955f5d01a336cf0c2c"
+_commit_mbn="91d5b57ef0e9ff77186a9c32cc42c84aedce05db"
+source="https://github.com/budderbrot/a52q-firmware/archive/$_commit/a52q-firmware-$_commit.tar.gz
+	https://github.com/Newbytee/a52q-firmware/archive/$_commit_mbn/a52q-firmware-$_commit_mbn.tar.gz
+	"
+builddir="$srcdir/a52q-firmware-$_commit"
+_builddir2="$srcdir/a52q-firmware-$_commit_mbn"
+
+package() {
+	# Adreno
+	install -Dm644 "$_builddir2"/a615_zap.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/a615_zap.mbn"
+	install -Dm644 "$builddir"/a6* -t \
+		"$pkgdir/usr/lib/firmware/qcom/"
+
+	# ADSP
+	install -Dm644 "$_builddir2"/adsp.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/adsp.mbn"
+	install -Dm644 "$builddir"/adsp* -t \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+
+	# CDSP
+	install -Dm644 "$_builddir2"/cdsp.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/cdsp.mbn"
+	install -Dm644 "$builddir"/cdsp* -t \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+
+	# ipa
+	install -Dm644 "$_builddir2"/ipa_fws.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/ipa_fws.mbn"
+	install -Dm644 "$builddir"/ipa_fws.* -t \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+
+	# Modem
+	# cp because of the modem_pr directory
+	install -Dm644 "$_builddir2"/modem.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/modem.mbn"
+	cp -r "$builddir"/modem* \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+	find "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/" \
+		-type f -exec chmod 0644 {} \;
+
+	# Venus
+	install -Dm644 "$_builddir2"/venus.mbn "$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/venus.mbn"
+	install -Dm644 "$builddir"/venus.* -t \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+
+	# WLAN
+	install -Dm644 "$builddir"/board-2.bin -t \
+		"$pkgdir/usr/lib/firmware/ath10k/WCN3990/hw1.0/"
+	install -Dm644 "$builddir"/firmware-5.bin -t \
+		"$pkgdir/usr/lib/firmware/ath10k/WCN3990/hw1.0/"
+	install -Dm644 "$builddir"/wlanmdsp.mbn -t \
+		"$pkgdir/usr/lib/firmware/qcom/sm7125/a52q/"
+
+	# Bluetooth
+	install -Dm644 "$builddir"/crbtfw21.tlv -t \
+		"$pkgdir/usr/lib/firmware/qca/"
+	install -Dm644 "$builddir"/crnv21.* -t \
+		"$pkgdir/usr/lib/firmware/qca/sm7125/a52q/"
+}
+
+sha512sums="
+fbd93fc61903d16489f531c8431e8e1a4d5c21c0ada0c998c619c3b5193506c2fc6b6b56d6dd3002f834955e5d884dd80519eee260a04c96319b125ffad4b60a  a52q-firmware-3ec32aecf7837a34240702955f5d01a336cf0c2c.tar.gz
+af1ca8adfaa917aec24411d8aa8b7e235ddd4b95e3d95d3072a72660cd6c1a61e7c83ca9c0fb9a9a612acd053878d15668965c6afb6afe153bd69fa7d2784fa4  a52q-firmware-91d5b57ef0e9ff77186a9c32cc42c84aedce05db.tar.gz
+"
