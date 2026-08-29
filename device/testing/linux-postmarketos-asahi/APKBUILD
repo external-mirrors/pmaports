@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=linux-postmarketos-asahi
-pkgver=7.1.9_p1
+pkgver=7.1.10_p1
 pkgrel=0
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -17,6 +17,9 @@ options="!strip
 	!tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
+	pmb:kconfigcheck-lockdown
+	pmb:kconfigcheck-rust
+	pmb:kconfigcheck-selinux
 	pmb:kconfigcheck-uefi
 	pmb:kconfigcheck-virt
 "
@@ -87,7 +90,7 @@ package() {
 }
 
 sha512sums="
-86820081776dc1d1114dbe64cf0599d8b5e45bfccd89d3600999023bad43f7f8ec5ff4ddb28bf3b10215537c809d3c1261e6b834f3ce23fcee3ceff22b252870  linux-postmarketos-asahi-7.1.9-1.tar.gz
-601a717ccd8d7e4ab6b01ff03defbc2611ceded5d24906c93f75e8df25cef186e9eb32530fcae07160802bedc3c5b06f8290ad27bf27b789c37faabea629fd10  config-postmarketos-asahi.aarch64
+de0ac7bffbd301b8c69264df3ac3268f69beba63a479d8d8adbe04a9803999cddbb9437ef77bcb350deb7995903619d50cff6c7031159b1958567554a6fd52c2  linux-postmarketos-asahi-7.1.10-1.tar.gz
+2b2a2edae121c6053395f0a017c818c1741527d90bc277ac1fef36a4e10d4f75cbe3277acf4f28157d3d49852de95ad962b720b6235a617b154311916d9e7433  config-postmarketos-asahi.aarch64
 e8b595f3e076896dc38f249c8908d58e2e6a858eaa77fe1e680f27db0e76d3d74c0b5dfebb7a4c57d546fee0b0f6eb81a38b20dfd72f985c9d02f28d79a5eceb  enable-dynamic-ftrace.patch
 "
