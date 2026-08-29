@@ -1,0 +1,41 @@
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=epitaph
+pkgver=1.2.0
+pkgrel=0
+pkgdesc="Wayland Mobile panel (for Catacomb)"
+url="https://catacombing.org/"
+arch="all !riscv64" # riscv64: compiles too slowly
+license="GPL-3.0-only"
+options="net" # need to download some cargo deps
+makedepends="
+	cargo
+	cargo-auditable
+	curl
+	eudev-dev
+	fontconfig-dev
+	libpulse
+	libxkbcommon-dev
+	rust
+"
+source="$pkgname-v$pkgver.tar.gz::https://git.sr.ht/~undeadleech/epitaph/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+prepare() {
+	default_prepare
+	cargo fetch --target="$CHOST" --locked
+}
+
+build() {
+	cargo auditable build --release --frozen
+}
+
+check() {
+	cargo test --workspace --release --frozen
+}
+
+package() {
+	install -Dm755 target/release/epitaph -t "$pkgdir"/usr/bin/
+}
+sha512sums="
+b6fef4d8c02c5b58cc655d7df4fb8fdecdb3fd971f30f3190ce41a2c3af62e247ada8a63b5c378f8d273bcd76fd55b1d4ec14edc09f341346f25a07de6fa2cef  epitaph-v1.2.0.tar.gz
+"
