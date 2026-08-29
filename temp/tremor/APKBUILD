@@ -1,0 +1,32 @@
+maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
+pkgname=tremor
+pkgver=1.0.1
+pkgrel=0
+pkgdesc="Force-feedback device control utility (for Catacomb)"
+url="https://catacombing.org/"
+arch="all !riscv64" # riscv64: compiles too slowly
+license="GPL-3.0-only"
+options="net" # need to download cargo deps
+makedepends="rust cargo cargo-auditable"
+source="$pkgname-v$pkgver.tar.gz::https://git.sr.ht/~undeadleech/tremor/archive/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+prepare() {
+	default_prepare
+	cargo fetch --target="$CHOST" --locked
+}
+
+build() {
+	cargo auditable build --release --frozen
+}
+
+check() {
+	cargo test --workspace --release --frozen
+}
+
+package() {
+	install -Dm755 target/release/tremor -t "$pkgdir"/usr/bin/
+}
+sha512sums="
+f594c9eb1d7ee4b9be62faad14abbfb17300d5606b7686216983133adb57fd2f8e447e5df640818fa18640a3bdf689c83a25e4e4804206e2e41747c80655a92e  tremor-v1.0.1.tar.gz
+"
