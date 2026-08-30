@@ -1,8 +1,6 @@
 # Copyright 2025 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
-import os
-from pathlib import Path
 
 import pmb.parse
 from pmb.core.context import get_context
@@ -14,10 +12,10 @@ def test_systemd_stage0_version():
     logging.getLogger().setLevel(logging.DEBUG)
 
     config = get_context().config
-    pma_systemd = os.path.join(config.aports, "extra-repos/systemd")
+    pma_systemd = config.aports / "extra-repos/systemd"
 
-    sd0 = pmb.parse.apkbuild(Path(os.path.join(pma_systemd, "systemd-stage0/APKBUILD")))
-    sd1 = pmb.parse.apkbuild(Path(os.path.join(pma_systemd, "systemd/APKBUILD")))
+    sd0 = pmb.parse.apkbuild(pma_systemd / "systemd-stage0/APKBUILD")
+    sd1 = pmb.parse.apkbuild(pma_systemd / "systemd/APKBUILD")
 
     assert sd0["pkgver"] == sd1["pkgver"], (
         f"systemd-stage0 pkgver ({sd0['pkgver']}) doesn't match systemd pkgver ({sd1['pkgver']})!"
