@@ -3,7 +3,7 @@
 maintainer="Arnav Singh <me@arnavion.dev>"
 pkgname=device-pine64-pinephone
 pkgver=15
-pkgrel=1
+pkgrel=2
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -16,7 +16,6 @@ subpackages="
 	$pkgname-openrc
 	$pkgname-plasma-mobile:plasma_mobile
 	$pkgname-sensorfw
-	$pkgname-shelli
 	$pkgname-upower
 	$pkgname-vccq-mod:vccq_mod
 	$pkgname-sway
@@ -183,14 +182,6 @@ upower() {
 	# Shutdown when PMIC reports critical battery level
 	install -Dm644 "$srcdir"/UPower.conf \
 		"$subpkgdir"/etc/UPower/UPower.conf.d/50-pinephone.conf
-}
-
-shelli() {
-	install_if="$pkgname=$pkgver-r$pkgrel shelli"
-
-	# Alsa default audio must be stereo
-	install -Dm644 "$srcdir"/00_alsa_pinephone_dshare.conf \
-		"$subpkgdir"/usr/share/alsa/alsa.conf.d/00_alsa_pinephone_dshare.conf
 }
 
 vccq_mod() {
