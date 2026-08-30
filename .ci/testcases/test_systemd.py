@@ -14,7 +14,7 @@ def test_systemd_stage0_version():
     logging.getLogger().setLevel(logging.DEBUG)
 
     config = get_context().config
-    pma_systemd = os.path.join(config.aports[0], "extra-repos/systemd")
+    pma_systemd = os.path.join(config.aports, "extra-repos/systemd")
 
     sd0 = pmb.parse.apkbuild(Path(os.path.join(pma_systemd, "systemd-stage0/APKBUILD")))
     sd1 = pmb.parse.apkbuild(Path(os.path.join(pma_systemd, "systemd/APKBUILD")))
