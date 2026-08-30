@@ -1,7 +1,6 @@
-# Archived: unmaintained
-maintainer=""
+maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-samsung-milletwifi
-pkgver=1
+pkgver=2
 pkgrel=0
 _name="Samsung Galaxy Tab 4 8.0"
 pkgdesc="Firmware for $_name"
@@ -15,7 +14,7 @@ _commit=5e4b9570d31203d1f19fb5dbf591fb7a5b35a49b
 source="$pkgname-$_commit.tar.gz::https://gitlab.com/susurrus/$_repository/-/archive/$_commit.tar.gz"
 builddir="$srcdir/$_repository-$_commit"
 
-_fwdir="/lib/firmware/postmarketos"
+_fwdir="/usr/lib/firmware/postmarketos"
 
 package() {
 	# parent package is empty
