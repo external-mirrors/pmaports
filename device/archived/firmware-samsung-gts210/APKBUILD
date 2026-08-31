@@ -1,7 +1,7 @@
 # Archived: unmaintained
 maintainer=""
 pkgname=firmware-samsung-gts210
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="Firmware for Samsung tablets based on exynos5433"
 url="https://github.com/universal5433/proprietary_vendor_samsung"
@@ -53,7 +53,7 @@ package() {
 	local file
 	for file in $_gts210_wifi_files_common; do
 		install -Dm644 "$srcdir/$pkgname-$_commit-$file" \
-		    "$pkgdir/lib/firmware/postmarketos/$file"
+		    "$pkgdir/usr/lib/firmware/postmarketos/$file"
 	done
 }
 
@@ -61,7 +61,7 @@ lte() {
 	local file
 	for file in $_gts210_wifi_files_lte; do
 		install -Dm644 "$srcdir/$pkgname-$_commit-$file" \
-		    "$subpkgdir/lib/firmware/postmarketos/$file"
+		    "$subpkgdir/usr/lib/firmware/postmarketos/$file"
 	done
 }
 
