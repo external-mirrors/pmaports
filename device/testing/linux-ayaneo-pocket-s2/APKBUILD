@@ -1,7 +1,7 @@
 # Kernel config based on: arch/arm64/configs/defconfig
 maintainer="Neil Armstrong <neil.armstrong@linaro.org>"
 pkgname=linux-ayaneo-pocket-s2
-pkgver=7.1_git20260625
+pkgver=7.2_git20260831
 pkgrel=0
 pkgdesc="Ayaneo Pocket S2 kernel fork"
 arch="aarch64"
@@ -45,7 +45,7 @@ makedepends="
 # Source
 _url="https://gitlab.com/superna9999/"
 _repository="linux"
-_commit="f23e4dcf9732d1b264de2370a3eb425ac004c87f"
+_commit="13e13258cd20d0dee73d97a6538adf3c4b60b2ef"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::$_url/$_repository/-/archive/$_commit/$_repository-$_commit.tar.gz
@@ -86,8 +86,8 @@ package() {
 }
 
 sha512sums="
-abc185abcb3305b31c09df0cac3c1e11fc725584490dd6297367da4916ce927f5ff085a54c316698215e58fa1f87bfc931c92b079fa8b45f1b203d0cf2681149  linux-ayaneo-pocket-s2-f23e4dcf9732d1b264de2370a3eb425ac004c87f.tar.gz
+0fa3244cb4acdfcc289466ac88bbbe2eae36e853d022b4409b5613f5e68cdf22928ae044b21ff46959aa96870df4ec596a56e27c4060fd406d65c3537cc4d8e3  linux-ayaneo-pocket-s2-13e13258cd20d0dee73d97a6538adf3c4b60b2ef.tar.gz
 4e705e038a91466a86fc5317b0028c2220aa1e7a4807e5d86db2f9ac815a927c59666a8f21ed50c4632147d3ce183d8042378a76f95341dbcd3db1047faf39e3  linux7.0-resolve_btfids-preserve-tag-and-parameter-names-when.patch
 f7712cb52ab2abae02deb3f90d0bdba83bcdf1af9b5f4fdb97963d729d1a0161301ecb3b5948dcd7a7f182c14e52d3863ec48f22a00276008d3bb0615d29ba68  misc.config
-48dc1cb8d00fe0b81cf7b6a82a7befd5c5db4adb08a99bbfee3d0551dc4852a58582644342993c89303766adc9c3bcb1afac4f16a1e4bc9a2223d4b9126f4e1f  config-ayaneo-pocket-s2.aarch64
+8903dff83b2c82d278d96c6e154ab8e0e3f1ccc671992ccbf6169e4c6ec8ae4ff5d20ee6ba1ef526ef7c322a0b5cd77a1f8fa2f0353ce2b1786bce32d017e4b8  config-ayaneo-pocket-s2.aarch64
 "
