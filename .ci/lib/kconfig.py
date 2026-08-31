@@ -92,10 +92,6 @@ if __name__ == "__main__":
     elif common.commit_message_has_string("[ci:skip-kconfigcheck]"):
         print("WARNING: not checking kernel configs ([ci:skip-kconfigcheck])")
         sys.exit(0)
-    elif common.all_committed_by_merge_bot():
-        # This can removed once we manage to stabilize kconfigcheck
-        print("All commits in branch committed by merge bot, skipping check")
-        sys.exit(0)
 
     last_failed = check_kconfig(pkgnames)
 
