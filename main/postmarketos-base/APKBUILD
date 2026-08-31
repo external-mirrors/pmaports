@@ -26,7 +26,13 @@ depends="
 	util-linux-login
 	"
 _pmb_recommends="sudo-rs"
-install="$pkgname.post-install $pkgname.post-upgrade"
+install="
+	$pkgname-nftables-openrc.post-install
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	"
 triggers="$pkgname.trigger=/usr/share/deviceinfo"
 subpackages="
 	$pkgname-apk:_apk
@@ -191,7 +197,6 @@ nftables() {
 nftables_openrc() {
 	install_if="$pkgname-openrc=$pkgver-r$pkgrel nftables"
 	depends="nftables-openrc openrc"
-	install="$subpkgname.post-install"
 
 	mkdir -p "$subpkgdir"
 }
@@ -236,7 +241,6 @@ sudo_rs() {
 openrc() {
 	provides="$pkgname-init"
 	provider_priority=10
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	replaces="
 		busybox-openrc
 		eudev
