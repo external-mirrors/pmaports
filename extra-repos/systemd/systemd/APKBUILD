@@ -14,10 +14,10 @@
 
 maintainer="Clayton Craft <craftyguy@postmarketos.org>"
 pkgname=systemd
-pkgver=261.2
+pkgver=262_rc1
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=1
+pkgrel=0
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -44,7 +44,7 @@ triggers="$pkgname.trigger=/usr/lib/systemd/catalog:\
 /etc/systemd/system:\
 /etc/systemd/user
 "
-checkdepends="grep postmarketos-release"
+checkdepends="cpio grep postmarketos-release"
 # clang: used for bpf compilation. this is the default compiler
 # grep: test-kernel-install requires 'grep -G', which is not supported by BusyBox grep.
 makedepends="
@@ -227,11 +227,6 @@ fi
 source="
 	$pkgname-$pkgver.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$_pkgver.tar.gz
 	wired.network
-	42275.patch
-	43380.patch
-	0001-json-util-generalize-json_dispatch_address_family.patch
-	0001-json-util-introduce-json_dispatch_in_addr_data.patch
-	0001-resolvectl-use-varlink-instead-of-dbus-for-ResolveHo.patch
 	"
 builddir=${_upstream_srcdir:-"$srcdir/$pkgname-$_pkgver"}
 _meson_builddir=${_meson_builddir:-build}
@@ -644,11 +639,6 @@ _resolve_packages() {
 
 
 sha512sums="
-876f043970cb65b39ae15fba39f23bf94c7c3d80569503d6e8ea2c8013c30ee40ce43cb55cbcb1cf14d5c3021aafc09c0f67473bbf742d8964bf9fa30693b971  systemd-261.2.tar.gz
+5bd4ed38246de1ea17b46fcc6f921f94a53047cec4dc53b005afd4ca75cd50d631b92c6662204871ad2c0808694244ec15d90732b1251d15bf5f9d74b6a2a7f0  systemd-262_rc1.tar.gz
 81c897fed8a3fbfb67ec591b2398a5d65e4af1b3ef379376c157c98d71f085b707f8ebc896d5571a94f99f8fc84fd6b43e3b879ca9b0d57fc6c4596034c7a777  wired.network
-3e01f711f68e565f37e590e10f55ce9dfd371cc1f8d124f3a0fad47747449d92053d9701216eac96bb6203cf952a22dc8215bc9dff74c1866ce9a07f1cb84b3c  42275.patch
-2991d3c38e7f78715970a964ece27c56c591e6e1daab5d41772c86023c3d66a07a4f89c22619a1da6422ff5447a8aee906c7862aeb4788274b66c807313ddbf1  43380.patch
-ce7f4aa7a490da7e469f2e09fac4128d2dbab69a3c0c1384ec85c46a8b9f1d5074b75462f08ac60d4a09fb8cdea36d22850d634c8f7db434632497f47bae142f  0001-json-util-generalize-json_dispatch_address_family.patch
-1267f3a25d9a242ed9a3027aeacb2b6adb38864ca316215c7db2edee8f8c66d2448f58c1754e3f08be1ba70cf68b3cc503aec67d170de64a378c09f18260e32b  0001-json-util-introduce-json_dispatch_in_addr_data.patch
-8d9436dc5c150c9b8c3b1b19512fbea5fa1f0953a4261f4fb089a90878768156db5d47feb41450594bd9547d40ef14c50ca751c5a046cdd253bb5b72cf1fd54c  0001-resolvectl-use-varlink-instead-of-dbus-for-ResolveHo.patch
 "
