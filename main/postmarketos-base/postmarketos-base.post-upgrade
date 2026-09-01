@@ -9,9 +9,9 @@ if mount | grep "on /lib" ; then
     exit 0
 fi
 
-if [ -d /bin -a ! -L /bin ] || \
-       [ -d /sbin -a ! -L /sbin ] || \
-       [ -d /lib -a ! -L /lib ]; then
+if [ -d /bin ] && [ ! -L /bin ] || \
+       [ -d /sbin ] && [ ! -L /sbin ] || \
+       [ -d /lib ] && [ ! -L /lib ]; then
     echo "INFO: /usr merge dryrun to check for errors"
     if merge-usr --dryrun ; then
         echo "INFO: Doing the /usr merge"
