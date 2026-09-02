@@ -15,6 +15,7 @@ import pmb.parse
 import pmb.parse._apkbuild
 from pmb.core.arch import Arch
 from pmb.core.context import get_context
+from pmb.types import WithExtraRepos
 
 
 def build_strict(packages, arch: Arch):
@@ -75,7 +76,7 @@ if __name__ == "__main__":
             systemd_pkgs.append(package)
             continue
 
-        apkbuild_path = pmb.helpers.pmaports.find(package)
+        apkbuild_path = pmb.helpers.pmaports.find(package, with_extra_repos=WithExtraRepos.DISABLED)
         apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(apkbuild_path, "APKBUILD"))
 
         if arch not in Arch.from_arch_field(apkbuild["arch"]):
@@ -102,7 +103,7 @@ if __name__ == "__main__":
         # (Iterate over copy of `systemd_pkgs`, because we modify it in this loop)
         for package in systemd_pkgs.copy():
             apkbuild_path = pmb.helpers.pmaports.find(
-                package, True, True, with_extra_repos="enabled"
+                package, True, True, with_extra_repos=WithExtraRepos.ENABLED
             )
             apkbuild = pmb.parse._apkbuild.apkbuild(
                 pathlib.Path(apkbuild_path, "APKBUILD")
