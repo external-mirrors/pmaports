@@ -9,15 +9,13 @@ import sys
 import common
 
 # pmbootstrap
-import pmb.core
-import pmb.helpers.pmaports
 import pmb.parse
 import pmb.parse._apkbuild
 from pmb.core.arch import Arch
 from pmb.core.context import get_context
 
 
-def build_strict(packages, arch: Arch):
+def build_packages(packages, arch: Arch):
     common.run_pmbootstrap(["build_init"])
     # We set the timeout to 1 hour because linking the Linux kernel with
     # ThinLTO on our aarch64 runners takes slightly over 30 minutes
@@ -28,7 +26,6 @@ def build_strict(packages, arch: Arch):
             "--timeout",
             "3600",
             "build",
-            "--strict",
             "--force",
             "--arch",
             str(arch),
@@ -44,78 +41,54 @@ if __name__ == "__main__":
         sys.exit(1)
     arch = Arch(sys.argv[1])
 
-    # Get and print modified packages
-    packages = common.get_changed_packages(skip_archived=True)
+    # Full paths of changed packages, keeping the repo location
+    # (e.g. "temp/foo" or "extra-repos/systemd/foo"), which is used to derive
+    # which repo the package is in
+    pkg_paths = common.get_changed_packages(skip_archived=True, keep_dir=True)
 
     # Load context
     sys.argv = ["pmbootstrap.py", "chroot"]
     args = pmb.parse.arguments()
     context = get_context()
 
-    # Get set of all buildable packages for the enabled repos, for skipping unbuildable
-    # aports later. We might be given a changed aport from e.g. extra-repos/systemd when
-    # that repo is not enabled
-    buildable_pkgs = set()
-    for path in pmb.core.pkgrepo.pkgrepo_iter_package_dirs():
-        buildable_pkgs.add(os.path.basename(path))
+    # Two groups, determined purely by path:
+    #   packages --> default repos, built with systemd disabled
+    #   systemd_pkgs --> extra-repos/systemd, built with systemd enabled
+    # FIXME: this should probably be more generic, if other repos are added later?
+    packages: list[str] = []
+    systemd_pkgs: list[str] = []
 
-    # To store a list of packages from extra-repos/systemd for special handling later:
-    systemd_pkgs = []
+    for path in pkg_paths:
+        # path is relative to the pmaports root
+        if path.startswith("extra-repos/systemd/"):
+            group = systemd_pkgs
+        else:
+            group = packages
 
-    # Filter out packages that either:
-    #  1. can't be built for given arch
-    #  2. are not found in enabled repos
-    # (Iterate over copy of packages, because we modify it in this loop)
-    for package in packages.copy():
-        if package not in buildable_pkgs:
-            print(f"{package}: not in any available repos, skipping")
-            packages.remove(package)
-            # FIXME: this should probably be more generic, if other repos are added later?
-            # This just tosses the package into the list of packages to try building later w/ systemd enabled, and assumes it'll be found there.
-            systemd_pkgs.append(package)
+        apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(path, "APKBUILD"))
+        if arch not in Arch.from_arch_field(apkbuild["arch"]):
+            print(f"{path}: not enabled for {arch}, skipping")
             continue
 
-        apkbuild_path = pmb.helpers.pmaports.find(package)
-        apkbuild = pmb.parse._apkbuild.apkbuild(pathlib.Path(apkbuild_path, "APKBUILD"))
+        package = os.path.basename(path)
+        # we are assuming that path will never end up with a trailing `/`, but
+        # if for some reason it does then basename will return an empty string
+        # and we need to guard against that
+        assert package != ""
+        group.append(os.path.basename(path))
 
-        if arch not in Arch.from_arch_field(apkbuild["arch"]):
-            print(f"{package}: not enabled for {arch}, skipping")
-            packages.remove(package)
+    if packages:
+        common.run_pmbootstrap(["config", "service_manager", "openrc"])
+        build_packages(packages, arch)
+    else:
+        print(f"main: no packages changed, which can be built for {arch}")
 
-    # No packages: skip build
-    if len(packages) == 0:
-        print(f"no packages changed, which can be built for {arch}")
-        sys.exit(0)
-
-    build_strict(packages, arch)
-
-    # Build packages in extra-repos/systemd
-    # FIXME: this should probably be more generic, if other repos are added later?
+    # Build packages in extra-repos/systemd (systemd must be enabled first)
     if systemd_pkgs:
-        common.run_pmbootstrap(["config", "systemd", "always"])
-        # To fix the ERROR: Chroot 'native' is for the 'edge' channel, but you are on the
-        # 'systemd-edge' channel. Run 'pmbootstrap zap' to delete your chroots and try again.
-        # To do this automatically, run 'pmbootstrap config auto_zap_misconfigured_chroots yes'.
+        common.run_pmbootstrap(["config", "service_manager", "systemd"])
+        # Fix "Chroot 'native' is for the 'edge' channel..." error by
+        # auto-zapping misconfigured chroots.
         common.run_pmbootstrap(["config", "auto_zap_misconfigured_chroots", "yes"])
-
-        # filter out packages that can't be built for arch
-        # (Iterate over copy of `systemd_pkgs`, because we modify it in this loop)
-        for package in systemd_pkgs.copy():
-            apkbuild_path = pmb.helpers.pmaports.find(
-                package, True, True, with_extra_repos="enabled"
-            )
-            apkbuild = pmb.parse._apkbuild.apkbuild(
-                pathlib.Path(apkbuild_path, "APKBUILD")
-            )
-            if arch not in Arch.from_arch_field(apkbuild["arch"]):
-                print(
-                    f"(extra-repos/systemd) {package}: not enabled for {arch}, skipping"
-                )
-                systemd_pkgs.remove(package)
-
-        # No packages: skip build
-        if len(systemd_pkgs) == 0:
-            print(f"no packages changed, which can be built for {arch}")
-            sys.exit(0)
-
-        build_strict(systemd_pkgs, arch)
+        build_packages(systemd_pkgs, arch)
+    else:
+        print(f"systemd: no packages changed, which can be built for {arch}")
