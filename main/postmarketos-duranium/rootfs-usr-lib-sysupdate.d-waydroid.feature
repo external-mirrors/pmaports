@@ -1,3 +1,3 @@
 [Feature]
-Description=Waydroid
+Description=Waydroid (Run Android applications)
 Enabled=false
