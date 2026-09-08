@@ -16,6 +16,8 @@ variables:
   # seems like a reasonable balance. If this is too low, git merge-base (from ci/
   # common.py) can fail
   GIT_DEPTH: 100
+  # Needed by ci-common for the pmaports codepath.
+  PMB_CHANNELS_CFG: "/tmp/ci-common/channels.cfg"
   # So that anything that runs install_pmbootstrap and tries to import pmb module
   # can find it.
   PYTHONPATH: "/tmp/pmbootstrap"
