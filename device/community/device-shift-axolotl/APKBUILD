@@ -4,7 +4,7 @@
 maintainer="Alexander Martinz <amartinz@shiftphones.com>"
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=26
+pkgver=27
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,7 +12,7 @@ arch="aarch64"
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf-sdm845
-	firmware-shift-sdm845>=20230815-r2
+	firmware-shift-sdm845>=20260908
 	firmware-shift-sdm845-sensors
 	fwupd>=1.8.6
 	hexagonrpcd>=0.3.2-r3
@@ -33,7 +33,6 @@ source="
 	hexagonrpcd.confd
 	modules-initfs
 	q6voiced.conf
-	81-libssc-shift-axolotl.rules
 "
 subpackages="
 	$pkgname-openrc
@@ -48,8 +47,6 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 
-	install -Dm644 "$srcdir"/81-libssc-shift-axolotl.rules \
-		-t "$pkgdir"/usr/lib/udev/rules.d/
 	install -Dm644 "$srcdir"/q6voiced.conf \
 		-t "$pkgdir"/usr/share/q6voiced/
 	install -Dm644 "$srcdir"/hexagonrpcd.confd \
@@ -78,5 +75,4 @@ f16e550f623522be29027954c69a956eb6543f2f608a4c6b37c1a3983403a3edaa24e70aa42dbe88
 5966325963a3a62c919b5f39f7bc56e1785f192f50c40a6cc644a2fea0c9b8dd083e287ef43c59c2b9cab5c88d65266b0cd9cf1f5110924950bd250be5385622  hexagonrpcd.confd
 a7a86b0ac85f2080d9001b2ec117897fa1d474106bebc25f59123d9f6c4ac8f70bff863c0bf7f28cb8379af6baa8778d1716dfe6ccf30b705488e70d3c71b661  modules-initfs
 2a3cbdad5aa91181d24a4e56e63986af6accf887c64fa4d1b6ddad1926e29050243c4b1e2fd892d38ca7c16e24dff8545a16552e5749ae31b6d01bf428468e51  q6voiced.conf
-3bd3a82b88a7aca4e2df2f5522cee7a98d017994f1dc1a965a7e386be9c17632b9cdbe013feb737dec12e99d74f54a9e4599144193bb57ec18e6d6a18c94cf1f  81-libssc-shift-axolotl.rules
 "
