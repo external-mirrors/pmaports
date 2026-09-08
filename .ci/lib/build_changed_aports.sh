@@ -5,9 +5,11 @@
 # https://postmarketos.org/pmb-ci
 
 if [ "$(id -u)" = 0 ]; then
+	apk add file
 	set -x
 	wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/newbyte/channels-cfg-again/install_pmbootstrap.sh"
 	sh ./install_pmbootstrap.sh
+	file "$PMB_CHANNELS_CFG"
 	exec su "${TESTUSER:-pmos}" -c "sh -e $0"
 fi
 
