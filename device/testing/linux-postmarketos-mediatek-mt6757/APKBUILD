@@ -3,7 +3,7 @@ maintainer="Ben Grisdale <bengris32@protonmail.ch>"
 _flavor="postmarketos-mediatek-mt6757"
 pkgname=linux-$_flavor
 pkgver=6.18.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline kernel fork for MT6757"
 arch="aarch64"
 _carch="arm64"
@@ -15,17 +15,20 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-community
 "
 makedepends="
-	bash
 	bison
 	clang
+	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	openssl-dev
+	pahole
 	perl
 	postmarketos-installkernel
 	python3
+	zstd
 "
 
 # Source
@@ -55,10 +58,10 @@ package() {
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot/ \
-		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
@@ -66,5 +69,5 @@ package() {
 
 sha512sums="
 28f6871db70de95e79f99e175dbf724fa2e8541e68681008b5d9fdb0f3e6d7a01eb60ab4f5a10f05d2cdcdbdf84d1907f848195631c788793fda18bac9535236  linux-6.18.0-r0.tar.gz
-24592b38290f49492939480e7142df24d7e3e33631003d9bf6eb2791aa61573da6337b80be953b8bfd8066d474bfe1a9ce114ab3d582d78c8a994a1a1aa31c23  config-postmarketos-mediatek-mt6757.aarch64
+4f2c8022586eb6aa1498ec74f21249d509a1be25336c486af8755e4d603ba3dbc46ac2f2cc47bd9f792dad1c3137da3e5e0f8806eea8dd9979511f3a73016602  config-postmarketos-mediatek-mt6757.aarch64
 "
