@@ -3,7 +3,7 @@
 maintainer="User0 <user0thenyancat@proton.me>"
 pkgname=linux-amazon-checkers
 pkgver=4.9.77
-pkgrel=2
+pkgrel=3
 pkgdesc="Amazon Echo Show 5 1st Generation kernel fork"
 arch="armv7"
 _carch="arm"
@@ -15,13 +15,11 @@ makedepends="
 	bash
 	bc
 	bison
-	clang
 	devicepkg-dev
 	dtc
 	findutils
 	flex
-	lld
-	llvm
+	gcc6
 	openssl-dev
 	perl
 "
@@ -50,18 +48,12 @@ source="
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
 
-export CC=clang
-export LD=ld.lld
-export AR=llvm-ar
-export NM=llvm-nm
-export STRIP=llvm-strip
-export OBJCOPY=llvm-objcopy
-export OBJDUMP=llvm-objdump
-export READELF=llvm-readelf
-export HOSTCC=clang
-export HOSTCXX=clang++
-export HOSTAR=llvm-ar
-export HOSTLD=ld.lld
+# Compiler: GCC 6 (doesn't compile with LLVM)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
 
 prepare() {
 	default_prepare
