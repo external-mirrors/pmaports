@@ -1,7 +1,7 @@
-From 2004321a59de1889325505efbf3af46762d368af Mon Sep 17 00:00:00 2001
+From 0d2459501533844393df5dc3dba883b2e138d07a Mon Sep 17 00:00:00 2001
 From: Arseniy Velikanov <me@adomerle.pw>
 Date: Wed, 11 Feb 2026 21:05:40 +0700
-Subject: [PATCH 06/12] drm/panel: Add support for Novatek NT36532 panel
+Subject: [PATCH] drm/panel: Add support for Novatek NT36532 panel
 
 Add a driver for panels using the Novatek NT36532 Display Driver IC,
 including support for the CSOT panel used in the Xiaomi Pad 6 tablets.
@@ -11,15 +11,15 @@ Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
 ---
  drivers/gpu/drm/panel/Kconfig                 |  10 +
  drivers/gpu/drm/panel/Makefile                |   1 +
- drivers/gpu/drm/panel/panel-novatek-nt36532.c | 609 ++++++++++++++++++
- 3 files changed, 620 insertions(+)
+ drivers/gpu/drm/panel/panel-novatek-nt36532.c | 608 ++++++++++++++++++
+ 3 files changed, 619 insertions(+)
  create mode 100644 drivers/gpu/drm/panel/panel-novatek-nt36532.c
 
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 307152ad7759..97a6ea3829bb 100644
+index 3eac4d0f88bc..aec18771770b 100644
 --- a/drivers/gpu/drm/panel/Kconfig
 +++ b/drivers/gpu/drm/panel/Kconfig
-@@ -533,6 +533,16 @@ config DRM_PANEL_NOVATEK_NT36523
+@@ -622,6 +622,16 @@ config DRM_PANEL_NOVATEK_NT36523
  	  around the Novatek NT36523 display controller, such as some
  	  Boe panels used in Xiaomi Mi Pad 5 and 5 Pro tablets.
  
@@ -35,25 +35,25 @@ index 307152ad7759..97a6ea3829bb 100644
 +
  config DRM_PANEL_NOVATEK_NT36672A
  	tristate "Novatek NT36672A DSI panel"
- 	depends on OF
+ 	depends on GPIOLIB
 diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index aeffaa95666d..e1511dba37a7 100644
+index c2c5cf817116..b618893d03cd 100644
 --- a/drivers/gpu/drm/panel/Makefile
 +++ b/drivers/gpu/drm/panel/Makefile
-@@ -52,6 +52,7 @@ obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
+@@ -60,6 +60,7 @@ obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35532) += panel-novatek-nt35532.o
  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35560) += panel-novatek-nt35560.o
  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35950) += panel-novatek-nt35950.o
  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36523) += panel-novatek-nt36523.o
 +obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36532) += panel-novatek-nt36532.o
  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36672A) += panel-novatek-nt36672a.o
  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36672E) += panel-novatek-nt36672e.o
- obj-$(CONFIG_DRM_PANEL_NOVATEK_NT37801) += panel-novatek-nt37801.o
+ obj-$(CONFIG_DRM_PANEL_NOVATEK_NT37700F) += panel-novatek-nt37700f.o
 diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36532.c b/drivers/gpu/drm/panel/panel-novatek-nt36532.c
 new file mode 100644
-index 000000000000..cf0c92766f89
+index 000000000000..8ff454843569
 --- /dev/null
 +++ b/drivers/gpu/drm/panel/panel-novatek-nt36532.c
-@@ -0,0 +1,609 @@
+@@ -0,0 +1,608 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +// Copyright (c) 2024 Luka Panio <lukapanio@gmail.com>
 +
@@ -546,9 +546,10 @@ index 000000000000..cf0c92766f89
 +	struct device_node *dsi_sec;
 +	int ret, i;
 +
-+	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
++	ctx = devm_drm_panel_alloc(dev, struct nt36532, panel,
++				   &nt36532_panel_funcs, DRM_MODE_CONNECTOR_DSI);
++	if (IS_ERR(ctx))
++		return PTR_ERR(ctx);
 +
 +	ctx->supplies[0].supply = "vddio";
 +	ctx->supplies[1].supply = "dvddbuck";
@@ -597,8 +598,6 @@ index 000000000000..cf0c92766f89
 +	ctx->dsi[0] = dsi;
 +	mipi_dsi_set_drvdata(dsi, ctx);
 +
-+	drm_panel_init(&ctx->panel, dev, &nt36532_panel_funcs,
-+		       DRM_MODE_CONNECTOR_DSI);
 +	ctx->panel.prepare_prev_first = true;
 +
 +	ret = drm_panel_of_backlight(&ctx->panel);
@@ -664,5 +663,5 @@ index 000000000000..cf0c92766f89
 +MODULE_DESCRIPTION("DRM panel driver for the Novatek NT36532 Driver-IC");
 +MODULE_LICENSE("GPL");
 -- 
-2.52.0
+2.55.0
 

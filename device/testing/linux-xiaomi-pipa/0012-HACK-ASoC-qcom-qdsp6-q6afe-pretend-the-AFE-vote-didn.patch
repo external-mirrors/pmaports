@@ -1,8 +1,8 @@
-From 2d71cebdf27c7b9e7e5c568837ebabfaddfd6bfa Mon Sep 17 00:00:00 2001
+From 1197a4b8a4c3d2a8dbd1198abc3ac0cf925e45d7 Mon Sep 17 00:00:00 2001
 From: Val Packett <val@packett.cool>
 Date: Sat, 25 Apr 2026 18:24:08 +0000
-Subject: [PATCH 12/12] HACK: ASoC: qcom: qdsp6: q6afe: pretend the AFE vote
- didn't return an error
+Subject: [PATCH] HACK: ASoC: qcom: qdsp6: q6afe: pretend the AFE vote  didn't
+ return an error
 
 Depending on the luck, AFE will fail to vote even though the correct configuration is used.
 Force the AFE vote to always succeed.
@@ -11,10 +11,10 @@ Force the AFE vote to always succeed.
  1 file changed, 6 insertions(+)
 
 diff --git a/sound/soc/qcom/qdsp6/q6afe.c b/sound/soc/qcom/qdsp6/q6afe.c
-index 638ee42a1c67..b8ef41b28ac7 100644
+index 28b5b6b91897..f707df834558 100644
 --- a/sound/soc/qcom/qdsp6/q6afe.c
 +++ b/sound/soc/qcom/qdsp6/q6afe.c
-@@ -990,6 +990,12 @@ static int q6afe_callback(struct apr_device *adev, const struct apr_resp_pkt *da
+@@ -996,6 +996,12 @@ static int q6afe_callback(struct apr_device *adev, const struct apr_resp_pkt *da
  				wake_up(&afe->wait);
  			}
  			break;
@@ -28,5 +28,5 @@ index 638ee42a1c67..b8ef41b28ac7 100644
  			dev_err(afe->dev, "Unknown cmd 0x%x\n",	res->opcode);
  			break;
 -- 
-2.52.0
+2.55.0
 

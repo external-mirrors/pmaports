@@ -1,28 +1,28 @@
-From 79deaf1aaed2158665a87698d32743ae91c14582 Mon Sep 17 00:00:00 2001
+From e3eac78fee4650314820d172471589924d3db975 Mon Sep 17 00:00:00 2001
 From: bluebunny <1812-bluebunny@users.noreply.gitlab.postmarketos.org>
 Date: Thu, 19 Mar 2026 14:52:20 +0900
-Subject: [PATCH 01/12] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree
- for Xiaomi Pad 6
+Subject: [PATCH] arm64: dts: qcom: sm8250-xiaomi-pipa: Add device tree for
+ Xiaomi Pad 6
 
 Co-developed-by: Ryo Kenrie Wongso <developer@damillora.com>
 Signed-off-by: Ryo Kenrie Wongso <developer@damillora.com>
 ---
  arch/arm64/boot/dts/qcom/Makefile             |    3 +-
- .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1414 +++++++++++++++++
+ .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   | 1415 +++++++++++++++++
  .../boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts |   23 +
  .../dts/qcom/sm8250-xiaomi-pipa-tianma.dts    |   23 +
  .../boot/dts/qcom/sm8250-xiaomi-pipa.dts      |  541 -------
- 5 files changed, 1462 insertions(+), 542 deletions(-)
+ 5 files changed, 1463 insertions(+), 542 deletions(-)
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-csot.dts
  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-tianma.dts
  delete mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa.dts
 
 diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index f80b5d9cf1e8..d3ec6c7cb25b 100644
+index 6f33c4e2f09c..c44b11db877c 100644
 --- a/arch/arm64/boot/dts/qcom/Makefile
 +++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -315,7 +315,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+@@ -362,7 +362,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-boe.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-csot.dtb
@@ -34,10 +34,10 @@ index f80b5d9cf1e8..d3ec6c7cb25b 100644
  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
 diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
 new file mode 100644
-index 000000000000..8c6672ffdd66
+index 000000000000..511272e685b0
 --- /dev/null
 +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-@@ -0,0 +1,1414 @@
+@@ -0,0 +1,1415 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +/*
 + * Copyright (c) 2023 Luka Panio <lukapanio@gmail.com>
@@ -944,6 +944,7 @@ index 000000000000..8c6672ffdd66
 +		data-role = "dual";
 +		try-power-role = "sink";
 +		self-powered;
++		vbus-supply = <&pm8150b_vbus>;
 +
 +		op-sink-microwatt = <15000000>;
 +
@@ -2058,4 +2059,5 @@ index 078ba13f8762..000000000000
 -	status = "okay";
 -};
 -- 
-2.52.0
+2.55.0
+

@@ -1,8 +1,227 @@
+---
+ .../dts/qcom/sm8250-xiaomi-pipa-common.dtsi   |  191 ++
+ drivers/power/supply/Kconfig                  |   11 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/nu1665.c                 | 2624 +++++++++++++++++
+ drivers/power/supply/nu1665.h                 |  247 ++
+ 5 files changed, 3074 insertions(+)
+ create mode 100644 drivers/power/supply/nu1665.c
+ create mode 100644 drivers/power/supply/nu1665.h
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
+index 8cb5f5d1524e..3c8337f8c183 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
+@@ -728,6 +728,25 @@
+ 	};
+ };
+ 
++&i2c8 {
++	clock-frequency = <400000>;
++	status = "okay";
++
++	nuvolta_1665: nuvolta_1665@41 {
++		compatible = "nuvolta,rx1665";
++		reg = <0x41>;
++		rx-irq-gpios = <&tlmm 113 0x00>;
++		hall-int3-gpios = <&tlmm 136 0x00>;
++		hall-int4-gpios = <&tlmm 138 0x00>;
++		reverse-chg-ovp-gpios = <&tlmm 47 0x00>;
++		reverse-boost-gpios = <&tlmm 22 0x00>;
++		wpc-det-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "idt_active", "idt_suspend";
++		pinctrl-0 = <&idt_int_active &hall_intr3_active &hall_intr4_active &txon_enable_active &power_good_active &reverse_booset_enable_active>;
++		pinctrl-1 = <&idt_int_suspend &hall_intr3_suspend &hall_intr4_suspend &txon_enable_suspend &power_good_suspend &reverse_booset_enable_suspend>;
++	};
++};
++
+ &i2c11 {
+ 	clock-frequency = <400000>;
+ 	status = "okay";
+@@ -1285,6 +1304,178 @@
+ 		input-enable;
+ 	};
+ 
++	hall {
++		hall_intr3_active: hall_intr3-active-state {
++			mux {
++				pins = "gpio136";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio136";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		hall_intr3_suspend: hall_intr3-suspend-state {
++			mux {
++				pins = "gpio136";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio136";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		hall_intr4_active: hall_intr4-active-state {
++			mux {
++				pins = "gpio138";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio138";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		hall_intr4_suspend: hall_intr4-suspend-state {
++			mux {
++				pins = "gpio138";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio138";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++	};
++
++	idt {
++		idt_int_active: idt-int-active-state {
++			mux {
++				pins = "gpio113";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio113";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		idt_int_suspend: idt-int-suspend-state {
++			mux {
++				pins = "gpio113";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio113";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		txon_enable_active: txon-enable-active-state {
++			mux {
++				pins = "gpio47";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio47";
++				drive-strength = <16>;
++				bias-pull-down;
++				output-low;
++			};
++		};
++
++		txon_enable_suspend: txon-enable-suspend-state {
++			mux {
++				pins = "gpio47";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio47";
++				drive-strength = <16>;
++				bias-pull-down;
++				output-low;
++			};
++		};
++
++		power_good_active: power-good-active-state {
++			mux {
++				pins = "gpio145";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio145";
++				drive-strength = <2>;
++				bias-pull-down;
++				input-enable;
++			};
++		};
++
++		power_good_suspend: power-good-suspend-state {
++			mux {
++				pins = "gpio145";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio145";
++				drive-strength = <2>;
++				bias-pull-up;
++				input-enable;
++			};
++		};
++
++		reverse_booset_enable_active: reverse-boost-enable-active-state {
++			mux {
++				pins = "gpio22";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio22";
++				drive-strength = <16>;
++				bias-pull-down;
++				output-low;
++			};
++		};
++
++		reverse_booset_enable_suspend: reverse-boost-enable-suspend-state {
++			mux {
++				pins = "gpio22";
++				function = "gpio";
++			};
++
++			config {
++				pins = "gpio22";
++				drive-strength = <16>;
++				bias-pull-down;
++				output-low;
++			};
++		};
++	};
++
+ 	mclk0_active: mclk0_active-state {
+ 		pins = "gpio94";
+ 		function = "cam_mclk";
 diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index e981b8bbdfdf..2ae1024a021a 100644
+index f229cb2d896a..c0e3b5ecef9c 100644
 --- a/drivers/power/supply/Kconfig
 +++ b/drivers/power/supply/Kconfig
-@@ -919,6 +919,17 @@ config CHARGER_SC2731
+@@ -1027,6 +1027,17 @@ config CHARGER_SC2731
  	  Say Y here to enable support for battery charging with SC2731
  	  PMIC chips.
  
@@ -21,10 +240,10 @@ index e981b8bbdfdf..2ae1024a021a 100644
  	tristate "Spreadtrum SC27XX fuel gauge driver"
  	depends on MFD_SC27XX_PMIC || COMPILE_TEST
 diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 6334ab4c3555..8145a3d8c88a 100644
+index 1eb4c51771e7..8af60abf63e8 100644
 --- a/drivers/power/supply/Makefile
 +++ b/drivers/power/supply/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_CHARGER_CROS_CONTROL)	+= cros_charge-control.o
+@@ -117,6 +117,7 @@ obj-$(CONFIG_CHARGER_CROS_CONTROL)	+= cros_charge-control.o
  obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
  obj-$(CONFIG_CHARGER_CROS_PCHG)	+= cros_peripheral_charger.o
  obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
@@ -34,7 +253,7 @@ index 6334ab4c3555..8145a3d8c88a 100644
  obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
 diff --git a/drivers/power/supply/nu1665.c b/drivers/power/supply/nu1665.c
 new file mode 100644
-index 000000000000..a83472b91be2
+index 000000000000..42f25d829e1b
 --- /dev/null
 +++ b/drivers/power/supply/nu1665.c
 @@ -0,0 +1,2624 @@
@@ -2915,212 +3134,6 @@ index 000000000000..a39c2815520c
 +};
 +
 +#endif
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-index 111111111111..222222222222 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
-@@ -640,6 +640,25 @@ &i2c6 {
- 	};
- };
- 
-+&i2c8 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	nuvolta_1665: nuvolta_1665@41 {
-+		compatible = "nuvolta,rx1665";
-+		reg = <0x41>;
-+		rx-irq-gpios = <&tlmm 113 0x00>;
-+		hall-int3-gpios = <&tlmm 136 0x00>;
-+		hall-int4-gpios = <&tlmm 138 0x00>;
-+		reverse-chg-ovp-gpios = <&tlmm 47 0x00>;
-+		reverse-boost-gpios = <&tlmm 22 0x00>;
-+		wpc-det-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "idt_active", "idt_suspend";
-+		pinctrl-0 = <&idt_int_active &hall_intr3_active &hall_intr4_active &txon_enable_active &power_good_active &reverse_booset_enable_active>;
-+		pinctrl-1 = <&idt_int_suspend &hall_intr3_suspend &hall_intr4_suspend &txon_enable_suspend &power_good_suspend &reverse_booset_enable_suspend>;
-+	};
-+};
-+
- &i2c11 {
- 	clock-frequency = <400000>;
- 	status = "okay";
-@@ -1275,6 +1294,178 @@ &tlmm {
- 		input-enable;
- 	};
- 
-+	hall {
-+		hall_intr3_active: hall_intr3-active-state {
-+			mux {
-+				pins = "gpio136";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio136";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		hall_intr3_suspend: hall_intr3-suspend-state {
-+			mux {
-+				pins = "gpio136";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio136";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		hall_intr4_active: hall_intr4-active-state {
-+			mux {
-+				pins = "gpio138";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio138";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		hall_intr4_suspend: hall_intr4-suspend-state {
-+			mux {
-+				pins = "gpio138";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio138";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+	};
-+
-+	idt {
-+		idt_int_active: idt-int-active-state {
-+			mux {
-+				pins = "gpio113";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio113";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		idt_int_suspend: idt-int-suspend-state {
-+			mux {
-+				pins = "gpio113";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio113";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		txon_enable_active: txon-enable-active-state {
-+			mux {
-+				pins = "gpio47";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio47";
-+				drive-strength = <16>;
-+				bias-pull-down;
-+				output-low;
-+			};
-+		};
-+
-+		txon_enable_suspend: txon-enable-suspend-state {
-+			mux {
-+				pins = "gpio47";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio47";
-+				drive-strength = <16>;
-+				bias-pull-down;
-+				output-low;
-+			};
-+		};
-+
-+		power_good_active: power-good-active-state {
-+			mux {
-+				pins = "gpio145";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio145";
-+				drive-strength = <2>;
-+				bias-pull-down;
-+				input-enable;
-+			};
-+		};
-+
-+		power_good_suspend: power-good-suspend-state {
-+			mux {
-+				pins = "gpio145";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio145";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+				input-enable;
-+			};
-+		};
-+
-+		reverse_booset_enable_active: reverse-boost-enable-active-state {
-+			mux {
-+				pins = "gpio22";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio22";
-+				drive-strength = <16>;
-+				bias-pull-down;
-+				output-low;
-+			};
-+		};
-+
-+		reverse_booset_enable_suspend: reverse-boost-enable-suspend-state {
-+			mux {
-+				pins = "gpio22";
-+				function = "gpio";
-+			};
-+
-+			config {
-+				pins = "gpio22";
-+				drive-strength = <16>;
-+				bias-pull-down;
-+				output-low;
-+			};
-+		};
-+	};
-+
- 	mclk0_active: mclk0_active-state {
- 		pins = "gpio94";
- 		function = "cam_mclk";
+-- 
+2.55.0
+

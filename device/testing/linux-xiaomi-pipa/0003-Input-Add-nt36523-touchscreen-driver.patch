@@ -1,18 +1,18 @@
-From 269b0a4050e2aff1b3e2caad2a5487fa47efcd91 Mon Sep 17 00:00:00 2001
+From 918332c966bc6f9e66fbef52b6f3e9d04603c8ae Mon Sep 17 00:00:00 2001
 From: Jianhua Lu <lujianhua000@gmail.com>
 Date: Thu, 4 Aug 2022 13:26:26 +0800
-Subject: [PATCH 03/12] Input: Add nt36523 touchscreen driver
+Subject: [PATCH] Input: Add nt36523 touchscreen driver
 
 ---
  drivers/input/touchscreen/Kconfig             |    2 +
  drivers/input/touchscreen/Makefile            |    1 +
  drivers/input/touchscreen/nt36523/Kconfig     |   11 +
  drivers/input/touchscreen/nt36523/Makefile    |    8 +
- drivers/input/touchscreen/nt36523/nt36xxx.c   | 1933 +++++++++++++++++
- drivers/input/touchscreen/nt36523/nt36xxx.h   |  264 +++
+ drivers/input/touchscreen/nt36523/nt36xxx.c   | 1980 +++++++++++++++++
+ drivers/input/touchscreen/nt36523/nt36xxx.h   |  267 +++
  .../touchscreen/nt36523/nt36xxx_fw_update.c   |  902 ++++++++
  .../touchscreen/nt36523/nt36xxx_mem_map.h     |  656 ++++++
- 8 files changed, 3777 insertions(+)
+ 8 files changed, 3827 insertions(+)
  create mode 100644 drivers/input/touchscreen/nt36523/Kconfig
  create mode 100644 drivers/input/touchscreen/nt36523/Makefile
  create mode 100644 drivers/input/touchscreen/nt36523/nt36xxx.c
@@ -21,7 +21,7 @@ Subject: [PATCH 03/12] Input: Add nt36523 touchscreen driver
  create mode 100644 drivers/input/touchscreen/nt36523/nt36xxx_mem_map.h
 
 diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
-index 7d5b72ee07fa..b1a31da786f8 100644
+index 9b9ae8ac3f7f..5c3415aafa40 100644
 --- a/drivers/input/touchscreen/Kconfig
 +++ b/drivers/input/touchscreen/Kconfig
 @@ -12,6 +12,8 @@ menuconfig INPUT_TOUCHSCREEN
@@ -34,10 +34,10 @@ index 7d5b72ee07fa..b1a31da786f8 100644
  	tristate "Marvell 88PM860x touchscreen"
  	depends on MFD_88PM860X
 diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
-index ab9abd151078..acb41060482c 100644
+index bfd9de83389d..c6ce251231e0 100644
 --- a/drivers/input/touchscreen/Makefile
 +++ b/drivers/input/touchscreen/Makefile
-@@ -120,3 +120,4 @@ obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5xx.o
+@@ -119,3 +119,4 @@ obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5xx.o
  obj-$(CONFIG_TOUCHSCREEN_IQS7211)	+= iqs7211.o
  obj-$(CONFIG_TOUCHSCREEN_ZINITIX)	+= zinitix.o
  obj-$(CONFIG_TOUCHSCREEN_HIMAX_HX83112B)	+= himax_hx83112b.o
@@ -75,7 +75,7 @@ index 000000000000..d16afc8f127f
 +	nt36xxx_fw_update.o
 diff --git a/drivers/input/touchscreen/nt36523/nt36xxx.c b/drivers/input/touchscreen/nt36523/nt36xxx.c
 new file mode 100644
-index 000000000000..83eddb597544
+index 000000000000..45f5e3dc3671
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.c
 @@ -0,0 +1,1980 @@
@@ -2061,7 +2061,7 @@ index 000000000000..83eddb597544
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/input/touchscreen/nt36523/nt36xxx.h b/drivers/input/touchscreen/nt36523/nt36xxx.h
 new file mode 100644
-index 000000000000..beb5fc07dd6c
+index 000000000000..8efd6c595982
 --- /dev/null
 +++ b/drivers/input/touchscreen/nt36523/nt36xxx.h
 @@ -0,0 +1,267 @@
@@ -3903,4 +3903,5 @@ index 000000000000..b4b6fce51a60
 +		.mmap = &NT36676F_memory_map, .hwinfo = &NT36676F_hw_info}
 +};
 -- 
-2.52.0
+2.55.0
+
