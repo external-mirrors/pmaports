@@ -1,0 +1,33 @@
+# Reference: <https://nura.eco/devicepkg>
+maintainer="Barnabas Czeman <barnabas.czeman@postmarketos.org>"
+pkgname=device-xiaomi-laurel
+pkgdesc="Xiaomi Mi A3"
+pkgver=6
+pkgrel=0
+url="https://nura.eco"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	android-tools-mkbootimg
+	linux-nura-qcom-sm61x5
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+0468b46a2069e6c1de516ad43f4d575e0f68ce3937c14d65711c253908d7493d23e540a93e3f5fb22ce8c3ef8ef7f8bde6559fa43fce17648490415f6535451c  deviceinfo
+031265ea5f04cdddac7cdfd7f189e66893cd65259b92d586a7f72f8e0509ca1c6c6262e3dc81987dc9c625a19d88112721db5cb5257bc84c76f38fc81b8794e4  modules-initfs
+"
