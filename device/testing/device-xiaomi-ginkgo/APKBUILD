@@ -1,0 +1,34 @@
+# Reference: <https://nura.eco/devicepkg>
+# Co-Maintainer: Barnabas Czeman <barnabas.czeman@postmarketos.org>
+maintainer="Biswapriyo Nath <nathbappai@gmail.com>"
+pkgname=device-xiaomi-ginkgo
+pkgdesc="Xiaomi Redmi Note 8"
+pkgver=1
+pkgrel=0
+url="https://nura.eco"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	android-tools-mkbootimg
+	linux-nura-qcom-sm61x5
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	kernel-cmdline.conf
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+17e52b17fcf723b41cb179e11595f2c40b4eb98a67e590a4e7435159e01849b5b6947d8240d09950022d796260a2b9f2ff6157778e58171a7f9a1ae2b9bc9330  deviceinfo
+2b5d4ffa85b94bb81e21883c64955480fb09d50f7dd52118763f6b0b136ba7e3efe08ef29a759fa00ec1d7d0a9e87ba08d41f378452e0f41ff9881db34ec777c  kernel-cmdline.conf
+"
