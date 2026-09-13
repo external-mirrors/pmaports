@@ -3,7 +3,7 @@
 maintainer="User0 <user0thenyancat@proton.me>"
 pkgname=linux-amazon-checkers
 pkgver=4.9.77
-pkgrel=4
+pkgrel=5
 pkgdesc="Amazon Echo Show 5 1st Generation kernel fork"
 arch="armv7"
 _carch="arm"
@@ -31,6 +31,10 @@ _commit_firmware_wifi="ba66f7a1535bda706f67d5becd8d3148523e5eec"
 _config="config-$_flavor.$arch"
 
 # NOTE: despite the github namespace, this is *NOT* a mainline kernel!
+#
+# Add the last three patches as links to pull due to them being very large
+# They can be removed once https://github.com/checkers-mainline/linux-downstream/pull/1
+# is merged
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/checkers-mainline/$_repository/archive/$_commit.tar.gz
 	$pkgname-wifi-$_commit_firmware_wifi.tar.gz::https://github.com/user0-07161/$_repository_firmware_wifi/archive/$_commit_firmware_wifi.tar.gz
@@ -44,6 +48,10 @@ source="
 	fix-check-lxdialog-makefile.patch
 	remove-dummy-audio-mmap.patch
 	remove-mno-thumb-interwork.patch
+	0001-disable-dtc-werror.patch
+	https://github.com/JustSoup312/linux-downstream/commit/0309c9359782c961b3983fe40f66296cab6974bc.patch
+	https://github.com/JustSoup312/linux-downstream/commit/732c250e6b6b2dc30c5603a6dc9734d1ccbf7ae9.patch
+	https://github.com/JustSoup312/linux-downstream/commit/04cdbe9425ac6f59221afd9e4a416eb94db72eaf.patch
 "
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
@@ -67,6 +75,15 @@ prepare() {
 	# Replace x86_64 dtc_overlay binary
 	rm "$builddir"/scripts/dtc/dtc_overlay
 	ln -s /usr/bin/dtc "$builddir"/scripts/dtc/dtc_overlay
+
+	# Remove -Werror from all makefiles
+	local i
+	local makefiles="$(find . -type f -name Makefile)
+	    $(find . -type f -name Kbuild)"
+	for i in $makefiles; do
+	    sed -i 's/-Werror-/-W/g' "$i"
+	    sed -i 's/-Werror//g' "$i"
+	done
 
 	. downstreamkernel_prepare
 }
@@ -101,4 +118,8 @@ ad4fce05db2247c9353afe63f54cfaac54bd96266ffc6572e0e0dfeefe090b90e08ee44e0825e59e
 c33fad9de627e72f12e61e728fa1ec53ef15259c7790392a997cc7269e60e45da9534d58851c3b348a1729aaa134d1df305e33546e8a1f3654462f2c3c1d9563  fix-check-lxdialog-makefile.patch
 e6f11b7a87c68ad0d9bb85361fe0d99f957e2bcba6c86d314b9ef558b526a7dfd8efcbe7698b686c396ef31f98ae33bd097736ea20f65612755838acb94a03bf  remove-dummy-audio-mmap.patch
 e7f4f35229580ff87572cc8c98fe4d79689c18690fb5c0a0f91de9d8159e7dc0043d3e3e27b788fa421dd682c0bde3ffbfb8ec36663e018c34e5a030ec4a7e6e  remove-mno-thumb-interwork.patch
+401ccbd665758444c1cccbf62e1acac2b9384188aaad1a55b8b63506eddbfd247cd257624c55d13b3879c00bbb45a136709ff8c7ea83ae349c800714fd61886e  0001-disable-dtc-werror.patch
+575ba2ac96b1c30953ae88292192b33067f7394b4c833a7171cd41cafe8d2d4b151f9c6d33987aa59b3c9efa427e113981f447178cb694ba8eb99f7f6e18d498  0309c9359782c961b3983fe40f66296cab6974bc.patch
+5bf2c270c459ccf771abd73cde75470d967b61759f4ccc598959ff15779e3fecdbb8b7b9a4bcb3b1e3441d0ad01ad85469134c47df64dc7093029c731c5d1ff2  732c250e6b6b2dc30c5603a6dc9734d1ccbf7ae9.patch
+1e6f0f4534a1a5f54d41a2560a743291b841c6ba2de7b31b31566b18f249af907983dc20c6df3fcdc05831505b4ba214ac8045ba1b261410c7f5a2c2c6c320be  04cdbe9425ac6f59221afd9e4a416eb94db72eaf.patch
 "

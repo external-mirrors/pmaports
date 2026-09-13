@@ -1,0 +1,25 @@
+From 01fc2ba5cce839ff83649180afa8143e2293697a Mon Sep 17 00:00:00 2001
+From: Aster Boese <asterboese@mailbox.org>
+Date: Sun, 13 Sep 2026 17:27:31 -0400
+Subject: [PATCH] disable dtc werror
+
+---
+ scripts/dtc/checks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index 044d438..386f956 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -86,7 +86,7 @@ struct check {
+ #define TREE_CHECK(nm, d, ...) \
+ 	CHECK(nm, check_##nm, NULL, NULL, d, __VA_ARGS__)
+ #define NODE_WARNING(nm, d, ...) \
+-	ERROR(nm, NULL, check_##nm, NULL, d,  __VA_ARGS__)
++	WARNING(nm, NULL, check_##nm, NULL, d,  __VA_ARGS__)
+ #define NODE_ERROR(nm, d, ...) \
+ 	ERROR(nm, NULL, check_##nm, NULL, d, __VA_ARGS__)
+ #define NODE_CHECK(nm, d, ...) \
+-- 
+2.55.0
+
