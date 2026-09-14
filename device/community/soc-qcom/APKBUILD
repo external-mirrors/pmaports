@@ -2,7 +2,7 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=soc-qcom
 pkgdesc="Common package for Qualcomm devices"
-pkgver=13
+pkgver=14
 pkgrel=0
 url="https://postmarketos.org"
 license="BSD-3-Clause"
@@ -133,7 +133,7 @@ qbootctl() {
 
 qbootctl_openrc() {
 	install_if="$pkgname-qbootctl=$pkgver-r$pkgrel openrc"
-	depends="openrc"
+	depends="openrc qbootctl-openrc"
 
 	mkdir "$subpkgdir"
 }
