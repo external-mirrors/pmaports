@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=17
+pkgver=18
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
@@ -66,6 +66,7 @@ _source644="
 	usr/lib/sysupdate.d/dev-tools.feature
 	usr/lib/sysupdate.d/waydroid.feature
 	usr/lib/sysusers.d/10-pmos-user.conf
+	usr/lib/tmpfiles.d/00-duranium-link-os-release.conf
 	usr/lib/tmpfiles.d/duranium.conf
 	usr/lib/udev/rules.d/90-udisks-ignore-verity-hack.rules
 	usr/lib/udev/rules.d/98-mark-subpartitions-workaround.rules
@@ -259,6 +260,7 @@ fe0a3a0be13d4b4a8d632859cc54f95d69021f1f100debe5565beb55d909fff8bbf2f0bd561e27c6
 89a7bddc6ebe2fd4a41355bbdc7418382e96f10d4e9e9748405f534a549bc64280f543fae16c4aa60f30830f3679d94a87357c941dff83f5134eb5ac4b654706  rootfs-usr-lib-sysupdate.d-dev-tools.feature
 340def7230c67888789d59ed3e88ed6232bae8b491cf183aa11c1ab70a77bc50623607b0fd7fdbb496ca75d2e89461f4071199495bcd6bf66af1809951e2a098  rootfs-usr-lib-sysupdate.d-waydroid.feature
 fa1c3dd727fd20d16d18695d58dd10ec335d64ece00152346c84ae750ed5ade8faf5ba11747135d79972dd1a3f4f1ab496ae9425ebcf7232a4203ca9396fa7e0  rootfs-usr-lib-sysusers.d-10-pmos-user.conf
+63dfc336e53575f73d15a6d33632ff2dd02ca153f1d58b6b4f15749dc030c5b70174cc8bdc5fa0c982b1b9de5659635a877e762839aebe81bd628a06d21cb965  rootfs-usr-lib-tmpfiles.d-00-duranium-link-os-release.conf
 fc4bf2b78e25b3f04add2ef7fbcfe70f24f8a865526ea817252a6bc4585755d40873909c4a1eb37acc86f93424f7de0bc2add29265eb2e5df69764ae0018fd76  rootfs-usr-lib-tmpfiles.d-duranium.conf
 a51fa1cf454169183ff086c70a777eb3d23f2f70c8e75ec27f96d06fd964c354621736901b8a53e42dcf3e5e891ced8c0ea06b793d910fbdff8c5c3bea8dc7b9  rootfs-usr-lib-udev-rules.d-90-udisks-ignore-verity-hack.rules
 f34f2835f61c24f9477bb97410c40825843c9b0dac7664b2cd3d3d8316e3838b48517c4991718c10cc32905680eb98c5b17169b62264c773c60f4a6442953230  rootfs-usr-lib-udev-rules.d-98-mark-subpartitions-workaround.rules
