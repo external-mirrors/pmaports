@@ -52,7 +52,9 @@ enable iwd.service
 enable wpa_supplicant.service
 
 # UIs:
-enable greetd.service
+# NOTE: UIs that use greetd end up running greetd in their own units, and
+# greetd.service directly conflicts with those units.
+disable greetd.service
 
 ## plasma
 enable hfd-service.service
