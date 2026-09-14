@@ -1,0 +1,95 @@
+From a241cffb199f4135db356c99fef706f771674d58 Mon Sep 17 00:00:00 2001
+From: Felix <felix@niederer.dev>
+Date: Sun, 13 Sep 2026 14:02:31 +0200
+Subject: [PATCH] power: supply: qcom_pm8150b: correct float voltage
+ programming
+
+---
+ drivers/power/supply/qcom_pm8150b_charger.c | 36 +++++++++++++++++----
+ 1 file changed, 29 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/power/supply/qcom_pm8150b_charger.c b/drivers/power/supply/qcom_pm8150b_charger.c
+index e1437eca8..47a672552 100644
+--- a/drivers/power/supply/qcom_pm8150b_charger.c
++++ b/drivers/power/supply/qcom_pm8150b_charger.c
+@@ -256,8 +256,12 @@
+ #define DCP_CURRENT_UA			3300000
+ #define CURRENT_MAX_UA			DCP_CURRENT_UA
+ 
+-/* pmi8150b registers represent current in increments of 1/40th of an amp */
+-#define CURRENT_SCALE_FACTOR		50000
++/* pmi8150b registers represent current in increments of 50mA */
++#define CURRENT_SCALE_FACTOR			50000
++
++#define FLOAT_VOLTAGE_MIN_UV			3600000
++#define FLOAT_VOLTAGE_MAX_UV			4790000
++#define FLOAT_VOLTAGE_STEP_UV			10000
+ /* clang-format on */
+ 
+ enum charger_status {
+@@ -763,10 +767,6 @@ static const struct smb5_register smb5_init_seq[] = {
+ 	{ .addr = CHARGE_RCHG_SOC_THRESHOLD_CFG_REG,
+ 	  .mask = CHARGE_RCHG_SOC_THRESHOLD_CFG_MASK,
+ 	  .val = 98 },
+-	/* Enable charging */
+-	{ .addr = CHARGING_ENABLE_CMD,
+-	  .mask = CHARGING_ENABLE_CMD_BIT,
+-	  .val = CHARGING_ENABLE_CMD_BIT },
+ 	/* Enable BC1P2 Src detect */
+ 	{ .addr = USBIN_OPTIONS_1_CFG,
+ 	  .mask = BC1P2_SRC_DETECT_BIT,
+@@ -845,6 +845,7 @@ static int smb5_probe(struct platform_device *pdev)
+ 	struct power_supply_desc *desc;
+ 	struct smb5_chip *chip;
+ 	int rc, irq;
++	int float_voltage_uv;
+ 
+ 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+ 	if (!chip)
+@@ -874,6 +875,11 @@ static int smb5_probe(struct platform_device *pdev)
+ 				     "Couldn't get usb_in_i_uv IIO channel\n");
+ 	}
+ 
++	rc = smb5_set_prop_charging_enabled(chip, 0);
++	if (rc < 0)
++		return dev_err_probe(chip->dev, rc,
++				     "Couldn't disable charging\n");
++
+ 	rc = smb5_init_hw(chip);
+ 	if (rc < 0)
+ 		return rc;
+@@ -908,7 +914,18 @@ static int smb5_probe(struct platform_device *pdev)
+ 		return dev_err_probe(chip->dev, rc,
+ 				     "Failed to init status change work\n");
+ 
+-	rc = (chip->batt_info->voltage_max_design_uv - 3487500) / 7500 + 1;
++	float_voltage_uv = chip->batt_info->voltage_max_design_uv;
++
++	if (float_voltage_uv < FLOAT_VOLTAGE_MIN_UV ||
++	    float_voltage_uv > FLOAT_VOLTAGE_MAX_UV)
++		return dev_err_probe(
++			chip->dev, -EINVAL,
++			"Requested voltage %d uV outside valid range [%d, %d] uV\n",
++			float_voltage_uv, FLOAT_VOLTAGE_MIN_UV,
++			FLOAT_VOLTAGE_MAX_UV);
++
++	rc = (float_voltage_uv - FLOAT_VOLTAGE_MIN_UV) / FLOAT_VOLTAGE_STEP_UV;
++
+ 	rc = regmap_update_bits(chip->regmap, chip->base + FLOAT_VOLTAGE_CFG,
+ 				FLOAT_VOLTAGE_SETTING_MASK, rc);
+ 	if (rc < 0)
+@@ -935,6 +952,11 @@ static int smb5_probe(struct platform_device *pdev)
+ 	if (rc < 0)
+ 		return dev_err_probe(chip->dev, rc, "Couldn't set wake irq\n");
+ 
++	rc = smb5_set_prop_charging_enabled(chip, 1);
++	if (rc < 0)
++		return dev_err_probe(chip->dev, rc,
++				     "Couldn't enable charging\n");
++
+ 	platform_set_drvdata(pdev, chip);
+ 
+ 	/* Initialise charger state */
+-- 
+2.55.0
+

@@ -1,0 +1,26 @@
+From 05e6c0627216850a91a053340ce632a89e491af5 Mon Sep 17 00:00:00 2001
+From: Felix <felix@niederer.dev>
+Date: Mon, 14 Sep 2026 20:11:05 +0200
+Subject: [PATCH] arm64: dts: qcom: pipa: restrict charging to 5 V
+
+---
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
+index d5aa263d5..2c055b19f 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-pipa-common.dtsi
+@@ -963,8 +963,7 @@ PDO_FIXED_USB_COMM |
+ 		sink-pdos = <PDO_FIXED(5000, 3000,
+ 				       PDO_FIXED_DUAL_ROLE |
+ 				       PDO_FIXED_USB_COMM |
+-				       PDO_FIXED_DATA_SWAP)
+-				       PDO_VAR(5000, 9000, 5000)>;
++				       PDO_FIXED_DATA_SWAP)>;
+ 
+ 		altmodes {
+ 			displayport {
+-- 
+2.55.0
+
