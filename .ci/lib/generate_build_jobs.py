@@ -16,9 +16,9 @@ import pmb.helpers.logging
 import pmb.helpers.package
 import pmb.parse
 from jinja2 import Template
+from pmb.core.apk_package import Apkbuild
 from pmb.core.arch import Arch
 from pmb.parse.deviceinfo import Deviceinfo
-from pmb.types import Apkbuild
 
 
 class Device:
