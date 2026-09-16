@@ -10,9 +10,9 @@ import sys
 import traceback
 
 from jinja2 import Template
+from pmb.core.apk_package import Apkbuild
 import pmb.parse
 from pmb.parse.deviceinfo import Deviceinfo
-from pmb.types import Apkbuild
 import pmb.helpers.devices
 import pmb.helpers.logging
 import pmb.helpers.package
