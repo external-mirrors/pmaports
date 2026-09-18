@@ -3,7 +3,7 @@
 # Co-Maintainer: Achill Gilgenast <achill@achill.org>
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=gnome-shell
-_pkgver=50.4
+_pkgver=51.0
 pkgver=9999$_pkgver
 pkgrel=0
 pkgdesc="GNOME shell"
@@ -24,6 +24,8 @@ depends="
 	gst-plugins-good
 	gstreamer
 	ibus
+	libglycin
+	libgnome-qr-4
 	librsvg
 	networkmanager
 	systemd
@@ -45,6 +47,7 @@ makedepends="
 	ibus-dev
 	libcanberra-dev
 	libnma-dev
+	librsvg-dev
 	libxml2-dev
 	libxml2-utils
 	meson
@@ -71,7 +74,6 @@ subpackages="
 	$pkgname-doc
 	$pkgname-lang
 	$pkgname-schemas::noarch
-	gnome-extensions-app:extensions_app:noarch
 	"
 source="https://download.gnome.org/sources/gnome-shell/${_pkgver%.*}/gnome-shell-$_pkgver.tar.xz
 	gsh.patch
@@ -102,18 +104,6 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
-extensions_app() {
-	pkgdesc="Manage GNOME Shell extensions"
-	depends="gnome-shell libadwaita"
-	replaces="gnome-shell"
-
-	amove usr/bin/gnome-extensions-app
-	amove usr/share/applications/org.gnome.Extensions.desktop
-	amove usr/share/gnome-shell/org.gnome.Extensions
-	amove usr/share/gnome-shell/org.gnome.Extensions.data.gresource
-	amove usr/share/gnome-shell/org.gnome.Extensions.src.gresource
-}
-
 schemas() {
 	pkgdesc="GNOME Shell gsetting schemas"
 	depends=""
@@ -124,6 +114,6 @@ schemas() {
 }
 
 sha512sums="
-0b3a52861ee7255901fa8b9bf4ad07ff97261a762e16679b5779adc477e115e281b083a31e47f6a42a4b0bda93192431773e0e54fd690e640fcbeb0f42a54d1d  gnome-shell-50.4.tar.xz
+15ea0700fa803ec64c97f8d2c2d7ea9a97be4a99d2570384c3c2efb3c2ee0d3be128cff0d7aedc014c9152e8ebadb21aa86811e1d67ffe7aca6c826fb516b3c5  gnome-shell-51.0.tar.xz
 ae4ac679bacd35948b44068e5a70407f473bd96986ee126abb1bdf066db5cbc2087a3ffae0b390286689cacbe8325870fd43663ba39f4f7543216e02bf083934  gsh.patch
 "
