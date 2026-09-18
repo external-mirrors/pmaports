@@ -1,8 +1,8 @@
 # Reference: https://postmarketos.org/uipkg
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-ui-cosmic
-pkgver=2
-pkgrel=4
+pkgver=3
+pkgrel=0
 pkgdesc="COSMIC Desktop Environment from System76"
 url="https://system76.com/cosmic/"
 # Only tested on these archs.
@@ -45,6 +45,7 @@ _pmb_recommends="
 	tuned-ppd
 "
 source="
+	60-postmarketos-cosmic.conf
 	amplification_sink.conf
 	favorites.conf
 	wallpaper.conf
@@ -64,6 +65,9 @@ package() {
 		"$pkgdir"/usr/share/cosmic/com.system76.CosmicAppList/v1/favorites
 	install -Dm644 amplification_sink.conf \
 		"$pkgdir"/usr/share/cosmic/com.system76.CosmicAudio/v1/amplification_sink
+
+	install -Dm644 60-postmarketos-cosmic.preset \
+		-t "$pkgdir"/usr/lib/systemd/system-preset
 }
 
 openrc() {
@@ -84,6 +88,7 @@ openrc() {
 }
 
 sha512sums="
+49497473dba5a6f20cab39fdd05f5b6b5217065215d4b18bfa4d0a291a641ab628db3f436f1eed4f411a2da7befe02ae10b892532ca0c1927e7ce93261a723a1  60-postmarketos-cosmic.preset
 a0d71be3f1c5b3da25c46a98d2c86aaa3e2fc256c5ae7fcd648ee296e7428b6978fcf994be1103ada28a8051619843e3b26174124aa804f76d550c68c4fcc1c0  amplification_sink.conf
 671a0c696edbed71355c0ff842259d27a8eb2466ed472ac3c8de2a72c0f764cc02be3fb683f8dd709b7ba72fe2e07c7691240d84c01a639110df9e3b11a45abe  favorites.conf
 2f665d5040072aa2172a4755a1cd8c03ff950ae1d5cc1fe888f74ea1cca4587bb065686507849d81429c49a78c5baaa877231dd4bbe49c351c7978ce82789041  wallpaper.conf
