@@ -45,18 +45,16 @@ _pmb_recommends="
 	tuned-ppd
 "
 source="
-	60-postmarketos-cosmic.conf
+	60-postmarketos-cosmic.preset
 	amplification_sink.conf
 	favorites.conf
 	wallpaper.conf
 "
-subpackages="$pkgname-openrc"
 options="!check pmb:drm pmb:default-systemd pmb:support-systemd"
 replaces="
 	cosmic-applets
 	cosmic-bg
 "
-install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 
 package() {
 	install -Dm644 wallpaper.conf \
@@ -68,23 +66,6 @@ package() {
 
 	install -Dm644 60-postmarketos-cosmic.preset \
 		-t "$pkgdir"/usr/lib/systemd/system-preset
-}
-
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	depends="
-		bluez-openrc
-		cosmic-greeter-openrc
-		elogind-openrc
-		networkmanager-openrc
-		openrc
-		seatd
-		seatd-openrc
-		"
-	_pmb_recommends="
-		tuned-ppd-openrc
-		"
-	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
