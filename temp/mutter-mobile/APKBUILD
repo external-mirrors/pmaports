@@ -4,7 +4,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=mutter-mobile
 pkgver=48.0
-pkgrel=3
+pkgrel=4
 pkgdesc="clutter-based window manager and compositor"
 url="https://wiki.gnome.org/Projects/Mutter/"
 arch="all"
@@ -77,6 +77,8 @@ source="mutter-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/mutter-mo
 	https://gitlab.gnome.org/GNOME/gvdb/-/archive/$_gvdb_commit/gvdb-$_gvdb_commit.tar.gz
 	pcver.patch
 	fix-freeze.patch
+	0001-Stop-using-G_GNUC_CONST-in-_get_type-functions.patch
+	0002-clutter-Fix-build-with-recent-pango.patch
 	"
 builddir="$srcdir/mutter-mobile-$_commit"
 
@@ -125,4 +127,6 @@ c1aef60e14662b373ddeab88d7b49f153165ab2bfb63906aeb64f6de9d224ed3d4c9c5b3cd8a7b12
 1cd8d689758cda662737e5ec78d55e4f4c6934b0f429d8cadcec4a423bafd8765040f8d62c51d8797b101fff89df75a7b85e37006ea133ab81e600f205c2ef1e  gvdb-b54bc5da25127ef416858a3ad92e57159ff565b3.tar.gz
 5b4851ba1728f9d539cebdf5feb8e49dffc61c5b8f992e84145b654b0c3cadb4e585a4c1d53a4992132e4472771c97bbad2c261525fb17f91c4715da7eea799d  pcver.patch
 b7d0bea395c47558a089f75c2c30ac04da2ffc60d044364653098dcb30302aeeb839631fc51c5b5673d11f07fe85af645ea6fe9b2ebe107f8fc67541d5a8e3eb  fix-freeze.patch
+af0542149d031e53647a52bd249cd09e5b3ee2adae0c1e3e105b15cb1905f45c7a33fdc9b5ef53dc1cb93bc184d4bdac7d3e97564890d64527be1088eb7df1be  0001-Stop-using-G_GNUC_CONST-in-_get_type-functions.patch
+7c56306d6f090ff17f38f35e32486f6cf20ae4ccf50ac7cb4f57433ce38e920ca59fc916f226013c5ed10359a558f538a061e3cf3b1d9e5bd66da3a764653a3c  0002-clutter-Fix-build-with-recent-pango.patch
 "
