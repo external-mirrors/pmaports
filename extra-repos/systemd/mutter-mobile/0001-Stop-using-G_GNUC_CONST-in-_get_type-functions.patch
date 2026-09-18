@@ -1,0 +1,599 @@
+From b2fe26569c25646b6468f5fc4265e023c3e7f7e6 Mon Sep 17 00:00:00 2001
+From: Maximiliano Sandoval <msandova@gnome.org>
+Date: Sat, 4 Jul 2026 15:55:50 +0200
+Subject: [PATCH 1/1] Stop using G_GNUC_CONST in _get_type functions
+
+As per g_type_ensure's documentation it is technically incorrect to mark
+_get_type fns with G_GNUC_CONST since they have side-effects on their
+first run.
+
+See https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5223 for more
+details.
+
+Part-of: <https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/5162>
+Signed-off-by: Achill Gilgenast <achill@achill.org>
+---
+ clutter/clutter/clutter-actor.h               |  2 +-
+ clutter/clutter/clutter-backend.h             |  2 +-
+ clutter/clutter/clutter-enum-types.h.in       |  2 +-
+ clutter/clutter/clutter-event.h               |  4 ++--
+ clutter/clutter/clutter-input-device.h        |  2 +-
+ clutter/clutter/clutter-paint-node-private.h  |  4 ++--
+ clutter/clutter/clutter-paint-node.h          |  2 +-
+ clutter/clutter/clutter-paint-nodes.h         | 20 +++++++++----------
+ clutter/clutter/clutter-pick-stack-private.h  |  2 +-
+ clutter/clutter/clutter-shader-types.h        |  6 +++---
+ clutter/clutter/clutter-stage.h               |  2 +-
+ clutter/clutter/clutter-types.h               |  6 +++---
+ clutter/clutter/pango/clutter-text-node.h     |  2 +-
+ cogl/cogl/cogl-atlas-texture.h                |  2 +-
+ cogl/cogl/cogl-attribute-buffer.h             |  2 +-
+ cogl/cogl/cogl-buffer.h                       |  2 +-
+ cogl/cogl/cogl-color.h                        |  2 +-
+ cogl/cogl/cogl-enum-types.h.in                |  2 +-
+ cogl/cogl/cogl-index-buffer.h                 |  2 +-
+ cogl/cogl/cogl-pixel-buffer.h                 |  2 +-
+ cogl/cogl/cogl-sub-texture.h                  |  2 +-
+ cogl/cogl/cogl-texture-2d-sliced.h            |  2 +-
+ cogl/cogl/cogl-texture-2d.h                   |  2 +-
+ src/backends/meta-stage-impl-private.h        |  2 +-
+ .../native/meta-input-device-native.h         |  2 +-
+ src/meta-private-enum-types.h.in              |  2 +-
+ src/meta/barrier.h                            |  2 +-
+ src/meta/display.h                            |  2 +-
+ src/meta/meta-enum-types.h.in                 |  2 +-
+ src/meta/meta-keymap-description.h            |  2 +-
+ .../conform/actor-offscreen-redirect.c        |  2 +-
+ src/x11/meta-shadow-factory.h                 |  2 +-
+ src/x11/meta-window-shape.h                   |  2 +-
+ 33 files changed, 48 insertions(+), 48 deletions(-)
+
+diff --git a/clutter/clutter/clutter-actor.h b/clutter/clutter/clutter-actor.h
+index 4bf492ee0ea5..2a63c1f76b95 100644
+--- a/clutter/clutter/clutter-actor.h
++++ b/clutter/clutter/clutter-actor.h
+@@ -267,7 +267,7 @@ struct _ClutterActorIter
+ };
+ 
+ CLUTTER_EXPORT
+-GType clutter_actor_get_type (void) G_GNUC_CONST;
++GType clutter_actor_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterActor *                  clutter_actor_new                               (void);
+diff --git a/clutter/clutter/clutter-backend.h b/clutter/clutter/clutter-backend.h
+index 796ffc7f3ff8..2beb696165e5 100644
+--- a/clutter/clutter/clutter-backend.h
++++ b/clutter/clutter/clutter-backend.h
+@@ -44,7 +44,7 @@ typedef struct _ClutterBackend          ClutterBackend;
+ typedef struct _ClutterBackendClass     ClutterBackendClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_backend_get_type (void) G_GNUC_CONST;
++GType clutter_backend_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterBackend *                clutter_get_default_backend             (void);
+diff --git a/clutter/clutter/clutter-enum-types.h.in b/clutter/clutter/clutter-enum-types.h.in
+index 2272a051ebe7..ff477acbd80a 100644
+--- a/clutter/clutter/clutter-enum-types.h.in
++++ b/clutter/clutter/clutter-enum-types.h.in
+@@ -16,7 +16,7 @@ G_BEGIN_DECLS
+ /*** END file-production ***/
+ 
+ /*** BEGIN value-header ***/
+-CLUTTER_EXPORT GType @enum_name@_get_type (void) G_GNUC_CONST;
++CLUTTER_EXPORT GType @enum_name@_get_type (void);
+ #define CLUTTER_TYPE_@ENUMSHORT@ (@enum_name@_get_type())
+ 
+ /*** END value-header ***/
+diff --git a/clutter/clutter/clutter-event.h b/clutter/clutter/clutter-event.h
+index 9da132956606..d87f3ec36e3c 100644
+--- a/clutter/clutter/clutter-event.h
++++ b/clutter/clutter/clutter-event.h
+@@ -129,10 +129,10 @@ typedef gboolean (* ClutterEventFilterFunc) (const ClutterEvent *event,
+                                              gpointer            user_data);
+ 
+ CLUTTER_EXPORT
+-GType clutter_event_get_type (void) G_GNUC_CONST;
++GType clutter_event_get_type (void);
+ 
+ CLUTTER_EXPORT
+-GType clutter_event_sequence_get_type (void) G_GNUC_CONST;
++GType clutter_event_sequence_get_type (void);
+ 
+ CLUTTER_EXPORT
+ gboolean                clutter_events_pending                  (void);
+diff --git a/clutter/clutter/clutter-input-device.h b/clutter/clutter/clutter-input-device.h
+index 92b6ff610ca6..afb5029984c2 100644
+--- a/clutter/clutter/clutter-input-device.h
++++ b/clutter/clutter/clutter-input-device.h
+@@ -66,7 +66,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (ClutterInputDevice, g_object_unref)
+ typedef struct _ClutterInputDeviceClass ClutterInputDeviceClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_input_device_get_type (void) G_GNUC_CONST;
++GType clutter_input_device_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterInputDeviceType  clutter_input_device_get_device_type    (ClutterInputDevice  *device);
+diff --git a/clutter/clutter/clutter-paint-node-private.h b/clutter/clutter/clutter-paint-node-private.h
+index 92c7523c7e2f..f54afbc0f0bc 100644
+--- a/clutter/clutter/clutter-paint-node-private.h
++++ b/clutter/clutter/clutter-paint-node-private.h
+@@ -97,7 +97,7 @@ struct _ClutterPaintOperation
+   } op;
+ };
+ 
+-GType _clutter_dummy_node_get_type (void) G_GNUC_CONST;
++GType _clutter_dummy_node_get_type (void);
+ 
+ void                    clutter_paint_node_init_types                   (ClutterBackend *clutter_backend);
+ gpointer                _clutter_paint_node_create                      (GType gtype);
+@@ -132,7 +132,7 @@ typedef struct _ClutterEffectNode ClutterEffectNode;
+ typedef struct _ClutterEffectNode ClutterEffectNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_effect_node_get_type (void) G_GNUC_CONST;
++GType clutter_effect_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_effect_node_new (ClutterEffect *effect);
+diff --git a/clutter/clutter/clutter-paint-node.h b/clutter/clutter/clutter-paint-node.h
+index 895ea65bbda3..f94067a13c59 100644
+--- a/clutter/clutter/clutter-paint-node.h
++++ b/clutter/clutter/clutter-paint-node.h
+@@ -41,7 +41,7 @@ typedef struct _ClutterPaintNodePrivate ClutterPaintNodePrivate;
+ typedef struct _ClutterPaintNodeClass   ClutterPaintNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_paint_node_get_type (void) G_GNUC_CONST;
++GType clutter_paint_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_paint_node_ref                          (ClutterPaintNode      *node);
+diff --git a/clutter/clutter/clutter-paint-nodes.h b/clutter/clutter/clutter-paint-nodes.h
+index 68d83ff28402..c35ca9dd02c3 100644
+--- a/clutter/clutter/clutter-paint-nodes.h
++++ b/clutter/clutter/clutter-paint-nodes.h
+@@ -41,7 +41,7 @@ typedef struct _ClutterColorNode                ClutterColorNode;
+ typedef struct _ClutterColorNodeClass           ClutterColorNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_color_node_get_type (void) G_GNUC_CONST;
++GType clutter_color_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_color_node_new          (const CoglColor    *color);
+@@ -54,7 +54,7 @@ typedef struct _ClutterTextureNode              ClutterTextureNode;
+ typedef struct _ClutterTextureNodeClass         ClutterTextureNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_texture_node_get_type (void) G_GNUC_CONST;
++GType clutter_texture_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_texture_node_new        (CoglTexture           *texture,
+@@ -70,7 +70,7 @@ typedef struct _ClutterClipNode                 ClutterClipNode;
+ typedef struct _ClutterClipNodeClass            ClutterClipNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_clip_node_get_type (void) G_GNUC_CONST;
++GType clutter_clip_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_clip_node_new           (void);
+@@ -83,7 +83,7 @@ typedef struct _ClutterPipelineNode             ClutterPipelineNode;
+ typedef struct _ClutterPipelineNodeClass        ClutterPipelineNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_pipeline_node_get_type (void) G_GNUC_CONST;
++GType clutter_pipeline_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_pipeline_node_new       (CoglPipeline          *pipeline);
+@@ -96,7 +96,7 @@ typedef struct _ClutterActorNode ClutterActorNode;
+ typedef struct _ClutterActorNode ClutterActorNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_actor_node_get_type (void) G_GNUC_CONST;
++GType clutter_actor_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_actor_node_new (ClutterActor *actor,
+@@ -110,7 +110,7 @@ typedef struct _ClutterRootNode                 ClutterRootNode;
+ typedef struct _ClutterPaintNodeClass           ClutterRootNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_root_node_get_type (void) G_GNUC_CONST;
++GType clutter_root_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_root_node_new           (CoglFramebuffer       *framebuffer,
+@@ -126,7 +126,7 @@ typedef struct _ClutterLayerNode                ClutterLayerNode;
+ typedef struct _ClutterLayerNodeClass           ClutterLayerNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_layer_node_get_type (void) G_GNUC_CONST;
++GType clutter_layer_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_layer_node_new_to_framebuffer (CoglFramebuffer *framebuffer,
+@@ -141,7 +141,7 @@ typedef struct _ClutterTransformNode            ClutterTransformNode;
+ typedef struct _ClutterPaintNodeClass           ClutterTransformNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_transform_node_get_type (void) G_GNUC_CONST;
++GType clutter_transform_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode *      clutter_transform_node_new          (const graphene_matrix_t *projection);
+@@ -154,7 +154,7 @@ typedef struct _ClutterBlitNode                 ClutterBlitNode;
+ typedef struct _ClutterPaintNodeClass           ClutterBlitNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_blit_node_get_type (void) G_GNUC_CONST;
++GType clutter_blit_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_blit_node_new (CoglFramebuffer *src);
+@@ -176,7 +176,7 @@ typedef struct _ClutterBlurNode                 ClutterBlurNode;
+ typedef struct _ClutterLayerNodeClass           ClutterBlurNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_blur_node_get_type (void) G_GNUC_CONST;
++GType clutter_blur_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_blur_node_new (unsigned int width,
+diff --git a/clutter/clutter/clutter-pick-stack-private.h b/clutter/clutter/clutter-pick-stack-private.h
+index 7e1d8404da6c..6fb533630a56 100644
+--- a/clutter/clutter/clutter-pick-stack-private.h
++++ b/clutter/clutter/clutter-pick-stack-private.h
+@@ -28,7 +28,7 @@ G_BEGIN_DECLS
+ 
+ typedef struct _ClutterPickStack ClutterPickStack;
+ 
+-GType clutter_pick_stack_get_type (void) G_GNUC_CONST;
++GType clutter_pick_stack_get_type (void);
+ 
+ ClutterPickStack * clutter_pick_stack_new (CoglContext *context);
+ 
+diff --git a/clutter/clutter/clutter-shader-types.h b/clutter/clutter/clutter-shader-types.h
+index cc2070b5b9e1..32b4fa64b494 100644
+--- a/clutter/clutter/clutter-shader-types.h
++++ b/clutter/clutter/clutter-shader-types.h
+@@ -64,11 +64,11 @@ typedef struct _ClutterShaderMatrix   ClutterShaderMatrix;
+ #define CLUTTER_VALUE_HOLDS_SHADER_MATRIX(x) (G_VALUE_HOLDS ((x), CLUTTER_TYPE_SHADER_MATRIX))
+ 
+ CLUTTER_EXPORT
+-GType clutter_shader_float_get_type  (void) G_GNUC_CONST;
++GType clutter_shader_float_get_type  (void);
+ CLUTTER_EXPORT
+-GType clutter_shader_int_get_type    (void) G_GNUC_CONST;
++GType clutter_shader_int_get_type    (void);
+ CLUTTER_EXPORT
+-GType clutter_shader_matrix_get_type (void) G_GNUC_CONST;
++GType clutter_shader_matrix_get_type (void);
+ 
+ CLUTTER_EXPORT
+ void            clutter_value_set_shader_float  (GValue       *value,
+diff --git a/clutter/clutter/clutter-stage.h b/clutter/clutter/clutter-stage.h
+index f9cd4629af85..e025a24ef21d 100644
+--- a/clutter/clutter/clutter-stage.h
++++ b/clutter/clutter/clutter-stage.h
+@@ -133,7 +133,7 @@ struct _ClutterFrameInfo
+ };
+ 
+ CLUTTER_EXPORT
+-GType clutter_perspective_get_type (void) G_GNUC_CONST;
++GType clutter_perspective_get_type (void);
+ 
+ CLUTTER_EXPORT
+ void            clutter_stage_get_perspective                   (ClutterStage          *stage,
+diff --git a/clutter/clutter/clutter-types.h b/clutter/clutter/clutter-types.h
+index 5f1ff677357f..660ea9fae12f 100644
+--- a/clutter/clutter/clutter-types.h
++++ b/clutter/clutter/clutter-types.h
+@@ -180,7 +180,7 @@ struct _ClutterActorBox
+ #define CLUTTER_ACTOR_BOX_UNINITIALIZED { .x1 = INFINITY, .y1 = INFINITY, .x2 = -INFINITY, .y2 = -INFINITY }
+ 
+ CLUTTER_EXPORT
+-GType            clutter_actor_box_get_type      (void) G_GNUC_CONST;
++GType            clutter_actor_box_get_type      (void);
+ CLUTTER_EXPORT
+ ClutterActorBox *clutter_actor_box_new           (gfloat                 x_1,
+                                                   gfloat                 y_1,
+@@ -267,7 +267,7 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (ClutterActorBox, clutter_actor_box_free)
+  */
+ 
+ CLUTTER_EXPORT
+-GType clutter_paint_volume_get_type (void) G_GNUC_CONST;
++GType clutter_paint_volume_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintVolume *clutter_paint_volume_copy                (const ClutterPaintVolume *pv);
+@@ -331,7 +331,7 @@ struct _ClutterMargin
+ };
+ 
+ CLUTTER_EXPORT
+-GType clutter_margin_get_type (void) G_GNUC_CONST;
++GType clutter_margin_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterMargin * clutter_margin_new      (void) G_GNUC_MALLOC;
+diff --git a/clutter/clutter/pango/clutter-text-node.h b/clutter/clutter/pango/clutter-text-node.h
+index c7b4337810a0..fe7985db7e65 100644
+--- a/clutter/clutter/pango/clutter-text-node.h
++++ b/clutter/clutter/pango/clutter-text-node.h
+@@ -42,7 +42,7 @@ typedef struct _ClutterTextNode ClutterTextNode;
+ typedef struct _ClutterTextNodeClass ClutterTextNodeClass;
+ 
+ CLUTTER_EXPORT
+-GType clutter_text_node_get_type (void) G_GNUC_CONST;
++GType clutter_text_node_get_type (void);
+ 
+ CLUTTER_EXPORT
+ ClutterPaintNode * clutter_text_node_new (PangoLayout     *layout,
+diff --git a/cogl/cogl/cogl-atlas-texture.h b/cogl/cogl/cogl-atlas-texture.h
+index fb53b9f823e7..3f39dd587a18 100644
+--- a/cogl/cogl/cogl-atlas-texture.h
++++ b/cogl/cogl/cogl-atlas-texture.h
+@@ -76,7 +76,7 @@ typedef struct _CoglAtlasTextureClass CoglAtlasTextureClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglAtlasTexture, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_atlas_texture_get_type       (void) G_GNUC_CONST;
++GType               cogl_atlas_texture_get_type       (void);
+ 
+ /**
+  * cogl_atlas_texture_new_with_size:
+diff --git a/cogl/cogl/cogl-attribute-buffer.h b/cogl/cogl/cogl-attribute-buffer.h
+index 4e95ad2fe50a..02c5d29eaa74 100644
+--- a/cogl/cogl/cogl-attribute-buffer.h
++++ b/cogl/cogl/cogl-attribute-buffer.h
+@@ -61,7 +61,7 @@ typedef struct _CoglAttributeBufferClass CoglAttributeBufferClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglAttributeBuffer, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_attribute_buffer_get_type       (void) G_GNUC_CONST;
++GType               cogl_attribute_buffer_get_type       (void);
+ 
+ /**
+  * cogl_attribute_buffer_new_with_size:
+diff --git a/cogl/cogl/cogl-buffer.h b/cogl/cogl/cogl-buffer.h
+index b3a7e17e0cc3..f27c8d32cad0 100644
+--- a/cogl/cogl/cogl-buffer.h
++++ b/cogl/cogl/cogl-buffer.h
+@@ -76,7 +76,7 @@ typedef struct _CoglBufferClass CoglBufferClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglBuffer, g_object_unref)
+ 
+ COGL_EXPORT
+-GType       cogl_buffer_get_type (void) G_GNUC_CONST;
++GType       cogl_buffer_get_type (void);
+ 
+ /**
+  * cogl_buffer_get_size:
+diff --git a/cogl/cogl/cogl-color.h b/cogl/cogl/cogl-color.h
+index fdd03bca8418..98c86c834876 100644
+--- a/cogl/cogl/cogl-color.h
++++ b/cogl/cogl/cogl-color.h
+@@ -342,7 +342,7 @@ COGL_EXPORT
+ const CoglColor * cogl_value_get_color (const GValue *value);
+ 
+ COGL_EXPORT
+-GType cogl_param_color_get_type (void) G_GNUC_CONST;
++GType cogl_param_color_get_type (void);
+ 
+ 
+ /**
+diff --git a/cogl/cogl/cogl-enum-types.h.in b/cogl/cogl/cogl-enum-types.h.in
+index 6fae5a20560c..bae960efa2fc 100644
+--- a/cogl/cogl/cogl-enum-types.h.in
++++ b/cogl/cogl/cogl-enum-types.h.in
+@@ -16,7 +16,7 @@ G_BEGIN_DECLS
+ /*** END file-production ***/
+ 
+ /*** BEGIN value-header ***/
+-COGL_EXPORT GType @enum_name@_get_type (void) G_GNUC_CONST;
++COGL_EXPORT GType @enum_name@_get_type (void);
+ #define COGL_TYPE_@ENUMSHORT@ (@enum_name@_get_type())
+ 
+ /*** END value-header ***/
+diff --git a/cogl/cogl/cogl-index-buffer.h b/cogl/cogl/cogl-index-buffer.h
+index ec741831800d..e31b46cc7a0c 100644
+--- a/cogl/cogl/cogl-index-buffer.h
++++ b/cogl/cogl/cogl-index-buffer.h
+@@ -62,7 +62,7 @@ typedef struct _CoglIndexBuffer CoglIndexBuffer;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglIndexBuffer, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_index_buffer_get_type       (void) G_GNUC_CONST;
++GType               cogl_index_buffer_get_type       (void);
+ 
+ /**
+  * cogl_index_buffer_new:
+diff --git a/cogl/cogl/cogl-pixel-buffer.h b/cogl/cogl/cogl-pixel-buffer.h
+index 856e95178ad1..ffad555c5112 100644
+--- a/cogl/cogl/cogl-pixel-buffer.h
++++ b/cogl/cogl/cogl-pixel-buffer.h
+@@ -61,7 +61,7 @@ typedef struct _CoglPixelBufferClass CoglPixelBufferClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglPixelBuffer, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_pixel_buffer_get_type       (void) G_GNUC_CONST;
++GType               cogl_pixel_buffer_get_type       (void);
+ 
+ /**
+  * cogl_pixel_buffer_new:
+diff --git a/cogl/cogl/cogl-sub-texture.h b/cogl/cogl/cogl-sub-texture.h
+index 8cb6085f8d49..4a784b11d771 100644
+--- a/cogl/cogl/cogl-sub-texture.h
++++ b/cogl/cogl/cogl-sub-texture.h
+@@ -59,7 +59,7 @@ typedef struct _CoglSubTextureClass CoglSubTextureClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglSubTexture, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_sub_texture_get_type       (void) G_GNUC_CONST;
++GType               cogl_sub_texture_get_type       (void);
+ /**
+  * cogl_sub_texture_new:
+  * @ctx: A #CoglContext pointer
+diff --git a/cogl/cogl/cogl-texture-2d-sliced.h b/cogl/cogl/cogl-texture-2d-sliced.h
+index b6a31b736ad4..e181cccd0f35 100644
+--- a/cogl/cogl/cogl-texture-2d-sliced.h
++++ b/cogl/cogl/cogl-texture-2d-sliced.h
+@@ -79,7 +79,7 @@ typedef struct _CoglTexture2DSlicedClass CoglTexture2DSlicedClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglTexture2DSliced, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_texture_2d_sliced_get_type       (void) G_GNUC_CONST;
++GType               cogl_texture_2d_sliced_get_type       (void);
+ 
+ /**
+  * cogl_texture_2d_sliced_new_with_size:
+diff --git a/cogl/cogl/cogl-texture-2d.h b/cogl/cogl/cogl-texture-2d.h
+index aea59c383989..c32374ee62a6 100644
+--- a/cogl/cogl/cogl-texture-2d.h
++++ b/cogl/cogl/cogl-texture-2d.h
+@@ -66,7 +66,7 @@ typedef struct _CoglTexture2DClass CoglTexture2DClass;
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (CoglTexture2D, g_object_unref)
+ 
+ COGL_EXPORT
+-GType               cogl_texture_2d_get_type       (void) G_GNUC_CONST;
++GType               cogl_texture_2d_get_type       (void);
+ 
+ typedef enum _CoglEglImageFlags
+ {
+diff --git a/src/backends/meta-stage-impl-private.h b/src/backends/meta-stage-impl-private.h
+index 5fe652869464..14f94136dbc8 100644
+--- a/src/backends/meta-stage-impl-private.h
++++ b/src/backends/meta-stage-impl-private.h
+@@ -58,7 +58,7 @@ struct _MetaStageImplClass
+   ClutterStageWindowClass parent_class;
+ };
+ 
+-GType meta_stage_impl_get_type (void) G_GNUC_CONST;
++GType meta_stage_impl_get_type (void);
+ 
+ MetaBackend * meta_stage_impl_get_backend (MetaStageImpl *stage_impl);
+ 
+diff --git a/src/backends/native/meta-input-device-native.h b/src/backends/native/meta-input-device-native.h
+index 02b4e01867d2..99578f6ad79e 100644
+--- a/src/backends/native/meta-input-device-native.h
++++ b/src/backends/native/meta-input-device-native.h
+@@ -106,7 +106,7 @@ struct _MetaInputDeviceNativeClass
+   ClutterInputDeviceClass parent_class;
+ };
+ 
+-GType                     meta_input_device_native_get_type        (void) G_GNUC_CONST;
++GType                     meta_input_device_native_get_type        (void);
+ 
+ ClutterInputDevice *      meta_input_device_native_new_in_impl     (MetaSeatImpl            *seat_impl,
+                                                                     struct libinput_device  *libinput_device);
+diff --git a/src/meta-private-enum-types.h.in b/src/meta-private-enum-types.h.in
+index 692d6f631300..081d091614bf 100644
+--- a/src/meta-private-enum-types.h.in
++++ b/src/meta-private-enum-types.h.in
+@@ -17,7 +17,7 @@ G_END_DECLS
+ /*** END file-tail ***/
+ 
+ /*** BEGIN value-header ***/
+-GType @enum_name@_get_type (void) G_GNUC_CONST;
++GType @enum_name@_get_type (void);
+ #define META_TYPE_@ENUMSHORT@ (@enum_name@_get_type())
+ 
+ /*** END value-header ***/
+diff --git a/src/meta/barrier.h b/src/meta/barrier.h
+index e26fcf050a0e..42d7e12b1806 100644
+--- a/src/meta/barrier.h
++++ b/src/meta/barrier.h
+@@ -102,6 +102,6 @@ struct _MetaBarrierEvent {
+ #define META_TYPE_BARRIER_EVENT (meta_barrier_event_get_type ())
+ 
+ META_EXPORT
+-GType meta_barrier_event_get_type (void) G_GNUC_CONST;
++GType meta_barrier_event_get_type (void);
+ 
+ G_END_DECLS
+diff --git a/src/meta/display.h b/src/meta/display.h
+index 23083110095f..443d3b7390bd 100644
+--- a/src/meta/display.h
++++ b/src/meta/display.h
+@@ -81,7 +81,7 @@ typedef struct _MetaDisplayClass MetaDisplayClass;
+ #define META_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), META_TYPE_DISPLAY, MetaDisplayClass))
+ 
+ META_EXPORT
+-GType meta_display_get_type (void) G_GNUC_CONST;
++GType meta_display_get_type (void);
+ 
+ META_EXPORT
+ void meta_display_close (MetaDisplay *display,
+diff --git a/src/meta/meta-enum-types.h.in b/src/meta/meta-enum-types.h.in
+index a1eb497a9181..fb45739db7dc 100644
+--- a/src/meta/meta-enum-types.h.in
++++ b/src/meta/meta-enum-types.h.in
+@@ -19,7 +19,7 @@ G_END_DECLS
+ /*** END file-tail ***/
+ 
+ /*** BEGIN value-header ***/
+-META_EXPORT GType @enum_name@_get_type (void) G_GNUC_CONST;
++META_EXPORT GType @enum_name@_get_type (void);
+ #define META_TYPE_@ENUMSHORT@ (@enum_name@_get_type())
+ 
+ /*** END value-header ***/
+diff --git a/src/meta/meta-keymap-description.h b/src/meta/meta-keymap-description.h
+index d4f9431ef892..3dbec1900225 100644
+--- a/src/meta/meta-keymap-description.h
++++ b/src/meta/meta-keymap-description.h
+@@ -26,7 +26,7 @@ typedef struct _MetaKeymapDescription MetaKeymapDescription;
+ #define META_TYPE_KEYMAP_DESCRIPTION (meta_keymap_description_get_type ())
+ 
+ META_EXPORT
+-GType meta_keymap_description_get_type (void) G_GNUC_CONST;
++GType meta_keymap_description_get_type (void);
+ 
+ META_EXPORT
+ MetaKeymapDescription * meta_keymap_description_new_from_rules (const char *model,
+diff --git a/src/tests/clutter/conform/actor-offscreen-redirect.c b/src/tests/clutter/conform/actor-offscreen-redirect.c
+index 204e559065b6..64a163f41024 100644
+--- a/src/tests/clutter/conform/actor-offscreen-redirect.c
++++ b/src/tests/clutter/conform/actor-offscreen-redirect.c
+@@ -29,7 +29,7 @@ typedef struct
+   gboolean was_painted;
+ } Data;
+ 
+-GType foo_actor_get_type (void) G_GNUC_CONST;
++GType foo_actor_get_type (void);
+ 
+ G_DEFINE_TYPE (FooActor, foo_actor, CLUTTER_TYPE_ACTOR);
+ 
+diff --git a/src/x11/meta-shadow-factory.h b/src/x11/meta-shadow-factory.h
+index 337406c56e14..e9a97478393b 100644
+--- a/src/x11/meta-shadow-factory.h
++++ b/src/x11/meta-shadow-factory.h
+@@ -26,7 +26,7 @@
+ #include "cogl/cogl.h"
+ #include "x11/meta-window-shape.h"
+ 
+-GType meta_shadow_get_type (void) G_GNUC_CONST;
++GType meta_shadow_get_type (void);
+ 
+ /**
+  * MetaShadowParams:
+diff --git a/src/x11/meta-window-shape.h b/src/x11/meta-window-shape.h
+index a10ca74f879d..5cba7382632b 100644
+--- a/src/x11/meta-window-shape.h
++++ b/src/x11/meta-window-shape.h
+@@ -26,7 +26,7 @@
+ 
+ #include "meta/common.h"
+ 
+-GType meta_window_shape_get_type (void) G_GNUC_CONST;
++GType meta_window_shape_get_type (void);
+ 
+ /**
+  * MetaWindowShape:
+-- 
+2.55.0
+
