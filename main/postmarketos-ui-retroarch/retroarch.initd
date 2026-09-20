@@ -13,8 +13,8 @@ depend() {
 }
 
 start_pre() {
-    # default to 10000 if none set in config
-    [ -z "$AUTOLOGIN_UID" ] && AUTOLOGIN_UID=10000
+	# default to 10000 if none set in config
+	[ -z "$AUTOLOGIN_UID" ] && AUTOLOGIN_UID=10000
 
 	user=$(getent passwd ${AUTOLOGIN_UID} | cut -d: -f1)
 	[ -z "$user" ] && {
