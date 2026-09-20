@@ -6,4 +6,4 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 	export XDG_RUNTIME_DIR
 fi
 
-retroarch && loginctl poweroff
+gamescope --force-windows-fullscreen retroarch && loginctl poweroff
