@@ -1,8 +1,8 @@
 maintainer="askiiart <mail@askiiart.net>"
 pkgname=firmware-hp-elitebook-ultra-g1q
 pkgdesc="Firmware for the HP EliteBook Ultra G1q"
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 url="https://postmarketos.org"
 license="proprietary"
 arch="aarch64"
@@ -28,13 +28,13 @@ package() {
 
 common() {
 	# just a symlink to make the asus-s5507q firmware work on here as well
-	mkdir -p "$subpkgdir/lib/firmware/qcom/x1e80100/hp/"
-	ln -s ../ASUSTeK/vivobook-s15/ "$subpkgdir/lib/firmware/qcom/x1e80100/hp/elitebook-ultra-g1q"
+	mkdir -p "$subpkgdir/usr/lib/firmware/qcom/x1e80100/hp/"
+	ln -s ../ASUSTeK/vivobook-s15/ "$subpkgdir/usr/lib/firmware/qcom/x1e80100/hp/elitebook-ultra-g1q"
 }
 
 wifi() {
-	mkdir -p "$subpkgdir/lib/firmware/ath11k/WCN6855/hw2.1/"
-	install -Dm644 "$srcdir/board-2.bin.zst" "$subpkgdir/lib/firmware/ath11k/WCN6855/hw2.1/board-2.bin.zst"
+	mkdir -p "$subpkgdir/usr/lib/firmware/ath11k/WCN6855/hw2.1/"
+	install -Dm644 "$srcdir/board-2.bin.zst" "$subpkgdir/usr/lib/firmware/ath11k/WCN6855/hw2.1/board-2.bin.zst"
 }
 
 sha512sums="
