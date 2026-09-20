@@ -1,6 +1,6 @@
 maintainer="Hendra Manudinata <hendra@manoedinata.com>"
 pkgname=firmware-samsung-j4lte
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="Proprietary firmware for Samsung Galaxy J4 (j4lte)"
 url="https://github.com/manoe-firmware/samsung_j4lte_dump"
@@ -22,7 +22,7 @@ for _file in $_files_wifi; do
 done
 
 package() {
-	j4lte_dir="$pkgdir/lib/firmware/postmarketos/samsung-j4lte"
+	j4lte_dir="$pkgdir/usr/lib/firmware/postmarketos/samsung-j4lte"
 	local file
 	for file in $_files_wifi; do
 		install -Dm644 "$srcdir/$pkgname-$_commit-$file" \
