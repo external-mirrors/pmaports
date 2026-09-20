@@ -2,7 +2,7 @@
 # Co-Maintainer: Hugo Osvaldo Barrera <hugo@whynothugo.nl>
 maintainer="Sandelinos <postmarketos@sandelinos.me>"
 pkgname=postmarketos-ui-retroarch
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="RetroArch in KMS mode"
 url="https://www.retroarch.com"
@@ -14,7 +14,7 @@ depends="
 	polkit-elogind
 	retroarch
 	"
-depends_openrc="elogind-openrc"
+depends_openrc="elogind-openrc mkrundir"
 install="postmarketos-ui-retroarch-openrc.post-install postmarketos-ui-retroarch-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="
@@ -30,5 +30,5 @@ package() {
 
 sha512sums="
 07b2177325734bdb8358265c48f6849ba39e9801b2b1a871d7242259f4d456ff974eed126a6e5775bca87bf5286422db0afd4a2fa0b96a170f18682edd60a0cd  retroarch.initd
-317299beaf517274f5027c59c4903301abfa531043184dab8824d74cab22c4e2cd573b56492195caf9f151f6ad41da1dd3a4a561d986d8e8034b7e459c859983  postmarketos-ui-retroarch.sh
+6815798ed460b41716baffa02b00ac23e99d6440c04a24f88dcb8cdd76d681fad6d6730ec95b73b6361465f94693218271edd4083ac04d118c202b6f5ae8bbc9  postmarketos-ui-retroarch.sh
 "
