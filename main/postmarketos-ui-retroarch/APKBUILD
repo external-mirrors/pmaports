@@ -10,11 +10,10 @@ arch="noarch"
 license="GPL-3.0-or-later"
 depends="
 	autologin
-	elogind
-	polkit-elogind
 	retroarch
+	seatd
 	"
-depends_openrc="elogind-openrc mkrundir"
+depends_openrc="mkrundir"
 install="postmarketos-ui-retroarch-openrc.post-install postmarketos-ui-retroarch-openrc.post-upgrade"
 subpackages="$pkgname-openrc"
 source="
@@ -22,6 +21,7 @@ source="
 	postmarketos-ui-retroarch.sh
 	"
 options="!check pmb:drm pmb:default-openrc pmb:support-openrc pmb:support-systemd"
+_pmb_groups="seat"
 
 package() {
 	install -Dm755 retroarch.initd "$pkgdir/etc/init.d/retroarch"
