@@ -1,6 +1,6 @@
 maintainer="Jasper Korten <jja2000@gmail.com>"
 pkgname=firmware-google-smaug
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="Firmware for the Google Pixel C"
 url="https://android.googlesource.com/device/google/dragon/+/refs/heads/oreo-m8-release"
@@ -16,11 +16,11 @@ builddir="$srcdir/android_hardware_broadcom_wlan-$_commit"
 package() {
 	# WiFi
 	install -Dm644 "$srcdir"/dragon_vendor-$_commit/bcmdhd.cal \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4354-sdio.google,smaug-rev8.txt
+		"$pkgdir"/usr/lib/firmware/postmarketos/brcm/brcmfmac4354-sdio.google,smaug-rev8.txt
 
 	# Bluetooth
 	install -Dm644 "$srcdir"/dragon_vendor-$_commit/bluetooth/"BCM4354_003.001.012.0443.0863.hcd" \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/BCM4354.google,smaug-rev8.hcd
+		"$pkgdir"/usr/lib/firmware/postmarketos/brcm/BCM4354.google,smaug-rev8.hcd
 }
 
 sha512sums="
