@@ -1,20 +1,17 @@
-# Archived: unmaintained
 # Reference: <https://postmarketos.org/devicepkg>
-maintainer=""
+maintainer="SED4906 <sed4906birdie@gmail.com>"
 pkgname=device-amazon-ford
 pkgdesc="Amazon Fire 7 (2015)"
-pkgver=5
+pkgver=6
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
 depends="
-	linux-amazon-ford
-	mkbootimg
+	android-tools-mkbootimg
+	linux-postmarketos-mediatek-mt8127
 	postmarketos-base
-	postmarketos-base-downstream
-	msm-fb-refresher
 "
 makedepends="devicepkg-dev"
 subpackages="$pkgname-udev"
@@ -35,7 +32,7 @@ package() {
 }
 
 sha512sums="
-a6ba4b4ec558c88e8b98af1382b33bfd0d6b8eefb2dabf9140a36cdd53849d8e7dc4805303d6a802b504e09f68ca548f4286ddec72379a3cd1d1a9126dd7764b  deviceinfo
-9dbe50f298f56ce5b2045d668ea5e4a411e11ece54f5afbcf34446c19aea71b77504cc75da8ae5a34ffacdbe943071245cd9fafa29d8c155992d22eb01685825  kernel-cmdline.conf
+97b3fc39ec9585c133d0efb14e1bd9749eb47d74e62e19b24d9518dd51148b5ec3f1f6212cc5b3ceb8d48910621578c503c55fc68fded2b77e43a17a53cac498  deviceinfo
+0f5ed4188b54177b8bbd24e55dddf4b104a8a7568b9204aaca867df27ad493db0110490e8de6283194e61f42619bd57426be021bae5b991701034b2128b59e60  kernel-cmdline.conf
 f3d0b7d44f549100b3402fb287e80654279ae962a6b7721f3dc676324bdcf5c104391f9e4f3c5eac5733eff0ad467aa959a5f66553e7668c08124a1609ed3145  90-android-touch-dev.rules
 "
