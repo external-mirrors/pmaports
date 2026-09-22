@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
-pkgver=17
+pkgver=18
 pkgrel=0
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
@@ -20,6 +20,14 @@ depends="
 	shadow-subids
 	systemd-efistub
 	tar
+"
+# Add some common shells, so that people can very easily use these as login
+# shells
+depends="
+	$depends
+	bash
+	fish
+	zsh
 "
 # x86: f0rmz
 # armhf: linux-stable, systemd
