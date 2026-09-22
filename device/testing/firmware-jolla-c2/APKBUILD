@@ -1,7 +1,7 @@
 maintainer="Affe Null <affenull2345@gmail.com>"
 pkgname=firmware-jolla-c2
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 pkgdesc="Firmware for the Jolla C2"
 url="https://git.abscue.de/linux-mainlining/sailfish-os/device-bsp-s19mps"
 arch="aarch64"
@@ -31,7 +31,7 @@ package() {
 
 wcn() {
 	pkgdesc="Jolla C2 WiFi, Bluetooth and GNSS firmware"
-	_fwdir="$subpkgdir"/lib/firmware/postmarketos/sprd
+	_fwdir="$subpkgdir"/usr/lib/firmware/postmarketos/sprd
 
 	cd "$srcdir/prebuilts/"
 	install -Dm644 odm/firmware/wcnmodem.bin -t "$_fwdir"
