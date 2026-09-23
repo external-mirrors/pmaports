@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=262
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=0
+pkgrel=1
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -60,20 +60,16 @@ makedepends="
 	coreutils
 	cryptsetup-dev
 	curl-dev
+	dbus-dev
 	elfutils
-	glib-dev
 	gperf
 	grep
 	kmod-dev
 	libapparmor-dev
 	libarchive-dev
 	libbpf-dev
-	libcap-dev
 	libfido2-dev
 	libgcc
-	libgcrypt-dev
-	libintl
-	libiptcdata-dev
 	libmicrohttpd-dev
 	libpwquality-dev
 	libqrencode-dev
@@ -81,19 +77,19 @@ makedepends="
 	libselinux-dev
 	libucontext-dev
 	libxkbcommon-dev
+	linux-headers
 	linux-pam-dev
 	linux-stable-dev
 	lz4-dev
 	meson
 	musl-dev
 	pcre2-dev
-	perl
 	pkgconf
+	polkit-dev
 	py3-elftools
 	py3-jinja2
 	py3-lxml
 	python3-dev
-	rsync
 	tpm2-tss-dev
 	tpm2-tss-esys
 	tpm2-tss-mu
@@ -104,9 +100,6 @@ makedepends="
 	xz-dev
 	zlib-dev
 	zstd-dev
-
-	dbus-dev
-	polkit-dev
 	"
 
 # valgrind-dev: not available on armhf and loongarch64.
@@ -134,12 +127,10 @@ depends="
 	libblkid
 	libbpf
 	libbz2
-	libcap2
 	libdw
 	libelf
 	libfdisk
 	libfido2
-	libgcrypt
 	libidn2
 	libmount
 	libpwquality

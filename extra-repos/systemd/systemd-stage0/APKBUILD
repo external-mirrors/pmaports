@@ -5,7 +5,7 @@ pkgname=systemd-stage0
 pkgver=262
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd!
-pkgrel=0
+pkgrel=1
 pkgdesc="Minimal systemd bootstrap package"
 url="https://github.com/systemd/systemd"
 # armhf: pmb#2618
@@ -33,15 +33,9 @@ makedepends_build="
 	py3-jinja2
 	bash
 "
-# Use dbus-dev from Alpine
 makedepends_host="
-	dbus-dev<9990
-	libblkid
-	libcap
-	libcap-dev
-	libintl
 	libucontext-dev
-	musl-libintl
+	linux-headers
 	util-linux
 	util-linux-dev
 "
