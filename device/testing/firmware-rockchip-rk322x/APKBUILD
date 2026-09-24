@@ -1,6 +1,6 @@
 maintainer="leap123 <leap123@canaglie.org>"
 pkgname=firmware-rockchip-rk322x
-pkgver=1
+pkgver=2
 pkgrel=0
 pkgdesc="Firmware files for Rockchip RK3228/RK3229 devices from ilmich's LibreELEC port"
 url="https://github.com/ilmich/rkbin"
@@ -13,7 +13,7 @@ options="!check !strip !archcheck !tracedeps pmb:cross-native"
 _commit="84f2356cf510319665874daf29df9ad8a94ac7e4"
 source="rkbin-$_commit.tar.gz::$url/archive/$_commit.tar.gz"
 
-_fwdir="/lib/firmware/postmarketos"
+_fwdir="/usr/lib/firmware/postmarketos"
 builddir="$srcdir/rkbin-$_commit"
 
 package() {
