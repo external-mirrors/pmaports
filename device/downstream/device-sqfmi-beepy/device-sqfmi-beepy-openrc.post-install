@@ -1,2 +1,4 @@
 #!/bin/sh
+
+grep beepy-kbd.map /etc/conf.d/loadkeys || sed -e 's,^keymap=.*,keymap="/usr/share/kbd/keymaps/beepy-kbd.map",' -i /etc/conf.d/loadkeys
 rc-update add loadkeys default
