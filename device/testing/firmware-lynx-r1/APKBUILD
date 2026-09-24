@@ -1,7 +1,7 @@
 maintainer="Alicja Michalska <alicja.michalska@9elements.com>"
 pkgname=firmware-lynx-r1
 pkgver=20250704
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware for Lynx R1"
 subpackages="
 	$pkgname-adreno
@@ -31,7 +31,7 @@ adreno() {
 	pkgdesc="Adreno 650 FW"
 
 	install -Dm644 "$builddir"/a650_zap.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Audio DSP
@@ -39,9 +39,9 @@ adsp() {
 	pkgdesc="Lynx R1 ADSP FW"
 
 	install -Dm644 "$builddir"/adsp*.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 	install -Dm644 "$builddir"/adsp*.jsn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Compute DSP
@@ -49,9 +49,9 @@ cdsp() {
 	pkgdesc="Lynx R1 CDSP FW"
 
 	install -Dm644 "$builddir"/cdsp*.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 	install -Dm644 "$builddir"/cdsp*.jsn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Camera V... Position? Not sure.
@@ -59,7 +59,7 @@ cvpss() {
 	pkgdesc="Lynx R1 CVPSS FW"
 
 	install -Dm644 "$builddir"/cvpss.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Finger tracking? Wincyj blobow, filesystem wytrzyma
@@ -67,7 +67,7 @@ fingerpr() {
 	pkgdesc="Lynx R1 FingerPR FW"
 
 	install -Dm644 "$builddir"/fingerpr.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Neural Processing Unit
@@ -75,7 +75,7 @@ npu() {
 	pkgdesc="Lynx R1 NPU FW"
 
 	install -Dm644 "$builddir"/npu.mbn \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Sensor Low Power Island
@@ -83,7 +83,7 @@ slpi() {
 	pkgdesc="Lynx R1 SLPI FW"
 
 	install -Dm644 "$builddir"/slpi.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 # Video Processing Unit
@@ -91,7 +91,7 @@ venus() {
 	pkgdesc="Lynx R1 Venus FW"
 
 	install -Dm644 "$builddir"/venus.mbn -t \
-		"$subpkgdir/lib/firmware/postmarketos/"
+		"$subpkgdir/usr/lib/firmware/postmarketos/"
 }
 
 sha512sums="
