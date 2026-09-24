@@ -1,6 +1,6 @@
 maintainer="Craig Comstock <craig@unreasonablefarm.org>"
 pkgname=firmware-motorola-surnia
-pkgver=2
+pkgver=3
 pkgrel=0
 pkgdesc="Firmware for Motorola Moto E 2015 (2nd gen)"
 url="https://github.com/linuxgorl/vendor_motorola_surnia"
@@ -14,7 +14,7 @@ source="$pkgname-$_commit.tar.gz::$url/archive/$_commit.tar.gz"
 
 builddir="$srcdir/vendor_motorola_surnia-$_commit"
 
-_fwdir="/lib/firmware/postmarketos"
+_fwdir="/usr/lib/firmware/postmarketos"
 
 package() {
 	mkdir -p "$pkgdir"
