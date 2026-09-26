@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=262
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=1
+pkgrel=2
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -433,6 +433,7 @@ networkd() {
 	amove usr/lib/systemd/system/systemd-networkd.socket
 	amove usr/lib/systemd/system/systemd-networkd-wait-online.service
 	amove usr/lib/sysusers.d/systemd-network.conf
+	amove usr/lib/tmpfiles.d/systemd-network.conf
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.DHCPServer.xml
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.Link.xml
 	amove usr/share/dbus-1/interfaces/org.freedesktop.network1.Manager.xml
