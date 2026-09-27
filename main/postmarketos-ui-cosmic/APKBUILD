@@ -1,14 +1,16 @@
 # Reference: https://postmarketos.org/uipkg
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-ui-cosmic
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="COSMIC Desktop Environment from System76"
 url="https://system76.com/cosmic/"
 # Only tested on these archs.
 # If you want to add support for a new arch add it here and in the Alpine
 # packages and build locally.
-arch="x86_64 aarch64 ppc64le loongarch64"
+# armv7, x86: slow, fail often
+# ppc64le: rustix failing
+arch="x86_64 aarch64 loongarch64"
 license="GPL-3.0-or-later"
 depends="
 	bluez
