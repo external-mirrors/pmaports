@@ -4,7 +4,7 @@ pkgname=postmarketos-ui-xfce4
 # note: pkgver of this UI pkg doesn't follow normal conventions for UI pkgs, the
 # version below is a tagged version in a different repo
 pkgver=0.6.0
-pkgrel=5
+pkgrel=6
 pkgdesc="(X11) Lightweight desktop (stylus recommended)"
 url="https://gitlab.postmarketos.org/postmarketOS/xfce4-phone"
 arch="noarch"
@@ -44,6 +44,10 @@ _pmb_recommends="
 	xfce4-whiskermenu-plugin
 	"
 replaces="xfce4-power-manager" # for polkit policy file pointing to /usr/bin, see #4919
+install="
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	"
 subpackages="$pkgname-openrc"
 source="
 	xfce4-phone-$pkgver.tar.gz::https://gitlab.postmarketos.org/postmarketOS/xfce4-phone/-/archive/$pkgver/xfce4-phone-$pkgver.tar.gz
@@ -85,7 +89,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		bluez-openrc
 		brightnessctl-openrc

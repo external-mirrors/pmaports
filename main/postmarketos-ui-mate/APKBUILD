@@ -2,7 +2,7 @@
 maintainer="Jakko <jahau@rocketmail.com>"
 pkgname=postmarketos-ui-mate
 pkgver=12
-pkgrel=0
+pkgrel=1
 pkgdesc="(X11) MATE Desktop Environment, fork of GNOME2 (stylus recommended)"
 url="http://mate-desktop.org/"
 arch="noarch"
@@ -35,6 +35,10 @@ _pmb_recommends="
 	network-manager-applet
 	"
 replaces="mate-power-manager" # for polkit policy file pointing to /usr/bin, see #4919
+install="
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	"
 subpackages="$pkgname-openrc"
 source="
 	10_caja-single-click.gschema.override
@@ -92,7 +96,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		bluez-openrc
 		elogind-openrc
