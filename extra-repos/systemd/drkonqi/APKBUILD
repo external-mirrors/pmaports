@@ -1,7 +1,7 @@
 maintainer="team/kde <bribbers@disroot.org>"
 pkgname=drkonqi
 pkgver=6.7.5
-pkgrel=0
+pkgrel=1
 pkgdesc="The KDE crash handler"
 # armhf blocked by qt6-qtdeclarative -> ki18n
 # riscv64: slow Alpine builders
@@ -45,6 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 subpackages="
+	$pkgname-dbg
 	$pkgname-lang
 	$pkgname-systemd
 	"
