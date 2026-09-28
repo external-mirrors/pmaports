@@ -4,7 +4,7 @@ pkgname=postmarketos-ui-xfce4
 # note: pkgver of this UI pkg doesn't follow normal conventions for UI pkgs, the
 # version below is a tagged version in a different repo
 pkgver=0.6.0
-pkgrel=4
+pkgrel=5
 pkgdesc="(X11) Lightweight desktop (stylus recommended)"
 url="https://gitlab.postmarketos.org/postmarketOS/xfce4-phone"
 arch="noarch"
@@ -43,6 +43,7 @@ _pmb_recommends="
 	xfce4-terminal
 	xfce4-whiskermenu-plugin
 	"
+replaces="xfce4-power-manager" # for polkit policy file pointing to /usr/bin, see #4919
 subpackages="$pkgname-openrc"
 source="
 	xfce4-phone-$pkgver.tar.gz::https://gitlab.postmarketos.org/postmarketOS/xfce4-phone/-/archive/$pkgver/xfce4-phone-$pkgver.tar.gz
@@ -51,6 +52,7 @@ source="
 	70-lightdm-pmos.conf
 	enable-scrollbars.sh
 	onboard-autostart.desktop
+	org.xfce.power.policy
 	xfce4-phone.sh
 	"
 options="!check pmb:default-systemd pmb:support-openrc pmb:support-systemd"
@@ -76,6 +78,9 @@ package() {
 
 	install -Dm644 -t "$pkgdir"/usr/share/lightdm/lightdm.conf.d \
 		"$srcdir"/70-lightdm-pmos.conf
+
+	install -Dm644 -t "$pkgdir"/usr/share/polkit-1/actions \
+		"$srcdir"/org.xfce.power.policy
 }
 
 openrc() {
@@ -99,5 +104,6 @@ sha512sums="
 c11a66b639570ecad51b97c127898afc3f123e2de95ea2a788abc51a45c23c82dbf1022224c15a88691656a8065874d6f396aee0df64e93e1966a82b32d6a31c  70-lightdm-pmos.conf
 262cdcf334cfa56872797c960cb8683b79c7b13b0a8179cd002e598576f0e9fe07057fd0fe724e87a6664db4b91b31a8c0cbf026ab137533b07675f838ae57bb  enable-scrollbars.sh
 ce7921f500b603796572bc02fa123e58d58ed1e9efd4d909de8f73c11a3e0bc0893639ce159f0701578b19db764893d021502d1c98cc24eb692e9d48320ff68c  onboard-autostart.desktop
+6b0b0979813ef9bc128d07501e24e999fc319ab1ca1ccb1eeb57676fc3ef50a67ee3014aac54260886a2df7aef7fbcf98c5c689df1c24cab7c35992616de0713  org.xfce.power.policy
 9ef0891cb1476c693175cf1ef8c64112354c1b2bf80c3cdfff4aabb2b9b9c434ccfa7dbdde3385fb215e94fc6216f3dc898be31b4ce9ad5bdb1c23bbb338d633  xfce4-phone.sh
 "
