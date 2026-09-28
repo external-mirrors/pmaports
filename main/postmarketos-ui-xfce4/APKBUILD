@@ -4,7 +4,7 @@ pkgname=postmarketos-ui-xfce4
 # note: pkgver of this UI pkg doesn't follow normal conventions for UI pkgs, the
 # version below is a tagged version in a different repo
 pkgver=0.6.0
-pkgrel=3
+pkgrel=4
 pkgdesc="(X11) Lightweight desktop (stylus recommended)"
 url="https://gitlab.postmarketos.org/postmarketOS/xfce4-phone"
 arch="noarch"
@@ -70,12 +70,12 @@ package() {
 	install -Dm644 -t "$pkgdir"/etc/xdg/xfce4-phone/autostart \
 		"$srcdir"/onboard-autostart.desktop
 
-	install -Dm644 -t "$pkgdir"/usr/share/lightdm/lightdm.conf.d \
-		"$srcdir"/70-lightdm-pmos.conf
-
 	install -Dm644 -t "$pkgdir"/usr/share/glib-2.0/schemas \
 		"$srcdir"/10_onboard.gschema.override \
 		"$srcdir"/10_slick-greeter.gschema.override
+
+	install -Dm644 -t "$pkgdir"/usr/share/lightdm/lightdm.conf.d \
+		"$srcdir"/70-lightdm-pmos.conf
 }
 
 openrc() {
