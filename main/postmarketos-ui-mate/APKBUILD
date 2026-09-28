@@ -1,7 +1,7 @@
 # Reference: https://postmarketos.org/uipkg
 maintainer="Jakko <jahau@rocketmail.com>"
 pkgname=postmarketos-ui-mate
-pkgver=11
+pkgver=12
 pkgrel=0
 pkgdesc="(X11) MATE Desktop Environment, fork of GNOME2 (stylus recommended)"
 url="http://mate-desktop.org/"
@@ -34,6 +34,7 @@ _pmb_recommends="
 	mate-tweak
 	network-manager-applet
 	"
+replaces="mate-power-manager" # for polkit policy file pointing to /usr/bin, see #4919
 subpackages="$pkgname-openrc"
 source="
 	10_caja-single-click.gschema.override
@@ -51,6 +52,7 @@ source="
 	gtk.css
 	mate-terminal-maximized.desktop
 	onboard-autostart.desktop
+	org.mate.power.policy
 	pmOS-panel.layout
 	"
 options="!check pmb:default-systemd pmb:support-systemd pmb:support-openrc"
@@ -83,6 +85,9 @@ package() {
 
 	install -Dm644 -t "$pkgdir"/usr/share/mate-panel/layouts \
 		"$srcdir"/pmOS-panel.layout
+
+	install -Dm644 -t "$pkgdir"/usr/share/polkit-1/actions \
+		"$srcdir"/org.mate.power.policy
 }
 
 openrc() {
@@ -114,5 +119,6 @@ c11a66b639570ecad51b97c127898afc3f123e2de95ea2a788abc51a45c23c82dbf1022224c15a88
 4532cf5c4cb687947c922d75cc942f26d4a695762a6b90cf53fddab84f2185799b7ee04c95b5e2263655e68a9a111967d92062ef5eb99b4122068c8585cf43a1  gtk.css
 adff2ad4dbd82debd3be32e521c8d70f8ea7a05c4942f1f72b28146149f93fcda7c0569d4be80b61fb3a46aa3d3312629c06f0ae112515efb8e735b19d9a1d53  mate-terminal-maximized.desktop
 d598b806bf749e0fedfdaeb51aa035b3877fedf4adc123ce2e50aef20f3cc6727b520a379aa26e88f9a2fe0f1fb96c4682895bb49c6a9cf4b5a5fd963ea93747  onboard-autostart.desktop
+8e8d196f08e1ee9ac8f6b52dcbaf972b952bc3e205a8debf07012c4fbb0f185e286f5fa37a375e96cb18258497b8b0a0847c1b452f5b46a2f100a38ddf621621  org.mate.power.policy
 eb6269566be4114be04fb27ced5c3233b361478f3e63a777deb109723658876b41644bf39446dc40c062e0e618c33baff627f7066f699d0a3d6c811a4466c84b  pmOS-panel.layout
 "
