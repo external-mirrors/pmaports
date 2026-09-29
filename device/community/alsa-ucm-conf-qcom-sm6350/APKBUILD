@@ -1,0 +1,23 @@
+maintainer="Luca Weiss <luca@lucaweiss.eu>"
+pkgname=alsa-ucm-conf-qcom-sm6350
+pkgver=1
+pkgrel=0
+pkgdesc="ALSA UCM configuration for sm6350 devices"
+url="https://github.com/sm6350-mainline/alsa-ucm-conf"
+arch="aarch64"
+license="BSD-3-Clause"
+provides="alsa-ucm-conf=0.$pkgver-r$pkgrel" # versioned provides need to be below default version
+_commit="4618b054b80f32bd8f0deeaf93e37fbfde256251"
+source="$pkgname-$_commit.tar.gz::https://github.com/sm6350-mainline/alsa-ucm-conf/archive/$_commit.tar.gz"
+options="!check"
+builddir="$srcdir/alsa-ucm-conf-$_commit"
+
+package() {
+	# install audio config files
+	mkdir -p "$pkgdir"/usr/share/alsa
+	cp -r ucm2 "$pkgdir"/usr/share/alsa/
+}
+
+sha512sums="
+7d5cf59b6a71bafb11a19a23c08c9ac206cfe47116671f5e4d4851241a1ce7955e39eb6c0ef09206c8c61e76c464ba5b7a835015b36ddf9b56fe2476b98cf963  alsa-ucm-conf-qcom-sm6350-4618b054b80f32bd8f0deeaf93e37fbfde256251.tar.gz
+"
