@@ -45,6 +45,10 @@ source="$pkgname-$_commit.tar.gz::https://invent.kde.org/kde-linux/kapsule/-/arc
 options="!check" # No tests
 builddir="$srcdir/$pkgname-$_commit"
 
+# Really just a hack to get this installed with the Plasma desktop image as
+# packages in non-extra repos can not depend on packages in the extra repo
+install_if="postmarketos-ui-plasma-desktop"
+
 build() {
 	cmake -B build -G Ninja \
 		-DCMAKE_BUILD_TYPE=None \
