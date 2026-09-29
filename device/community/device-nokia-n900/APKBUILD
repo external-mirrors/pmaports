@@ -1,14 +1,15 @@
-# Reference: <https://postmarketos.org/devicepkg>
+# Reference: <https://nura.eco/devicepkg>
 maintainer="Danct12 <danct12@disroot.org>"
 pkgname=device-nokia-n900
-pkgver=67
+pkgver=68
 pkgrel=0
 pkgdesc="Nokia N900"
-url="https://postmarketos.org"
+url="https://nura.eco"
 arch="armv7"
 license="MIT"
 depends="
 	alsa-utils
+	gps-nokia-n900
 	kbd
 	kbd-bkeymaps
 	linux-firmware-ti-connectivity
@@ -87,7 +88,7 @@ options="!check !archcheck"
 
 build() {
 	devicepkg_build $startdir $pkgname
-	mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n postmarketos -d "$srcdir"/uboot-script.cmd "$srcdir"/boot.scr
+	mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n nura -d "$srcdir"/uboot-script.cmd "$srcdir"/boot.scr
 	cd "$srcdir"
 	mkdir keymaps
 
@@ -299,7 +300,7 @@ sha512sums="
 3d55e34b95791636e44a5f41754f3d0de039dbba41f7a556d43a95c9e64afcfa930046b4b96b40020b6f196096ffba93514682927e32fa4488686fdd19c6da5a  backlight-enable.sh
 344ec50cee2a4d864debad12810a83070ab8257f9f07dcfa9be3eea1d8b26f3ab4fbe322fe05a384152b40fc5e1481df51d191624c7062186dd70f95a0784ea8  bq27k-options.conf
 c5b8e03ca9f720a794f2593a3e938640cbd91ac44dd761079bbf4614a0d288a9d7b72de8ed2493c062dc9f37be580bea529f454d2335f55b7a9f4d14024b42a9  bq27k-monitor.sh
-381ffb693334e67b7a8dca106439f33f00109afe9557ba6a189f7764c22b833c4611e23d9b76894ca2af8f0f0eacfe324269ea4024a58f10c123abcb656b26c0  deviceinfo
+b829687dcc0c53daacb55dd1a9e8af9402bbcd2fe7f88344460a2909ae06c05f1e63a3a004de76bfe22331f31252e064192a34572911b051f6082f6498dd91f9  deviceinfo
 1c7499eb84948eb5b73d58474b1b71a5f2f63116a2a3e1f9a4238064dcf6c152ccefa108bd4ab1074712a2319111c8fdd4bfcf0dbe4d26b5a319404def1b11d2  etc-profile.d-25wlr-pixman.sh
 a8152e94262629e11abdd8809d187c3b7ed1866a6128fb1f435e17e72120536ac8114262e66df6decb2627743027f2b923ddbe8a94e3e844099b6fad02ec252b  i3blocks.conf
 8a35a4ea9de9a30a5c1a5f01f8a8d211a7dbd43b77773eaf904fe633d4f9d1b0641c0b81493599af2b5cefefb6947c9c9d7a4d633d041f3503394dbfa90cf4f5  battery-bq27200
