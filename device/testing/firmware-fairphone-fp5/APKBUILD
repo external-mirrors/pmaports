@@ -1,7 +1,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=firmware-fairphone-fp5
 pkgver=20250623
-pkgrel=1
+pkgrel=2
 pkgdesc="Firmware for Fairphone 5"
 subpackages="
 	$pkgname-adreno
@@ -84,10 +84,6 @@ hexagonfs() {
 	mkdir -p "$subpkgdir"/usr/share/qcom/qcm6490/Fairphone/
 	cp -r "$builddir"/hexagonfs/ \
 		"$subpkgdir"/usr/share/qcom/qcm6490/Fairphone/fp5
-
-	# Remove files that we don't need - for now
-	rm -r "$subpkgdir"/usr/share/qcom/qcm6490/Fairphone/fp5/acdb/
-	rm -r "$subpkgdir"/usr/share/qcom/qcm6490/Fairphone/fp5/dsp/
 
 	find "$subpkgdir/usr/share/qcom/qcm6490/Fairphone/fp5/" \
 		-type f -exec chmod 0644 {} \;
