@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-base-ui
-pkgver=61
+pkgver=62
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -46,6 +46,7 @@ subpackages="
 	$pkgname-tinydm
 	$pkgname-tinydm-openrc:tinydm_openrc
 	$pkgname-wayland
+	$pkgname-wayland-systemd:wayland_systemd
 	$pkgname-wifi-iwd:iwd
 	$pkgname-wifi-iwd-openrc:iwd_openrc
 	$pkgname-wifi-wpa_supplicant-openrc:wpa_supplicant_openrc
@@ -149,8 +150,14 @@ alsa_utils() {
 }
 
 wayland() {
-	install_if="$pkgname=$pkgver-r$pkgrel wayland-server-libs"
+	install_if="$pkgname=$pkgver-r$pkgrel wayland-libs-server"
 
+	mkdir -p "$subpkgdir"
+}
+
+wayland_systemd() {
+	depends="clampazzo"
+	default_systemd
 	mkdir -p "$subpkgdir"
 }
 
