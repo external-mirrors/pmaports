@@ -4,7 +4,7 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=gnome-shell-mobile
 pkgver=48.0
-pkgrel=11
+pkgrel=12
 pkgdesc="GNOME shell"
 url="https://wiki.gnome.org/Projects/GnomeShell"
 # armhf: gjs -> mozjs
@@ -84,6 +84,7 @@ source="gnome-shell-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/gnom
 	0004-data-Overhaul-systemd-units.patch
 	0005-windowPreview-Only-try-to-close-closable-windows.patch
 	0006-keyboard-Avoid-spinning-idle-source-when-window-actor-is-unavailable.patch
+	0007-keyboard-Add-paste-option-to-language-popover.patch
 	"
 builddir="$srcdir/gnome-shell-mobile-$_commit"
 options="!check" # Tests have circular dependency 'gnome-shell <-> gdm'
@@ -150,4 +151,5 @@ dec336bf74305fa016ffc1f9272e2b671c41dba458ebbf62b782a3dd091f02ae85315f139ab7ac40
 413bd3cd1ba63dae79afc84a2cc1cdce7b8ea8f5457fdae7a1472ea41d0c6c93a8b66c115bd112699b72ea8b7f1050d8cda23f1259f14c7b0fd7b423a1afde35  0004-data-Overhaul-systemd-units.patch
 19859a78910afe6af7e7c52a616f817051eeef2741361228eb8da41c77f5834b939cbcd4954d6b98c353d61e516fadccc1ff674ac77c854c7745f07ee8974d85  0005-windowPreview-Only-try-to-close-closable-windows.patch
 df9693e0bd6ca7d8157a69b0849882958d552d28334fe4bea2e6794cc0b65c43b6c318a1b5168963fae7ea7569b78e62fdb59189da7df946f7e1e4564b0328be  0006-keyboard-Avoid-spinning-idle-source-when-window-actor-is-unavailable.patch
+044cd4b0e670f41d79f92485d338a670769f31ff9e1b5f3077cb589a1bd4418096ba9dff00de46d63844b6af49545b102008c51fc9e2bf9b80cd9dc56bcff70f  0007-keyboard-Add-paste-option-to-language-popover.patch
 "

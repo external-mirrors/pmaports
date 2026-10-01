@@ -1,0 +1,81 @@
+From 2405be79df63178c23998edc407f933f10a345cc Mon Sep 17 00:00:00 2001
+From: Jan-Michael Brummer <jan.brummer@tabos.org>
+Date: Tue, 23 Jun 2026 17:32:04 +0200
+Subject: [PATCH] keyboard: Add paste option to language popover
+
+---
+ js/ui/keyboard.js | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/js/ui/keyboard.js b/js/ui/keyboard.js
+index 8e551b48f..596c5b8ac 100644
+--- a/js/ui/keyboard.js
++++ b/js/ui/keyboard.js
+@@ -246,9 +246,12 @@ class Suggestions extends St.BoxLayout {
+ });
+ 
+ class LanguageSelectionPopup extends PopupMenu.PopupMenu {
+-    constructor(actor) {
++    constructor(actor, keyboardController) {
+         super(actor, 0.5, St.Side.BOTTOM);
+ 
++        this._keyboardController = keyboardController;
++        this._clipboard = St.Clipboard.get_default();
++
+         let inputSourceManager = InputSourceManager.getInputSourceManager();
+         let inputSources = inputSourceManager.inputSources;
+ 
+@@ -265,6 +268,8 @@ class LanguageSelectionPopup extends PopupMenu.PopupMenu {
+                 : PopupMenu.Ornament.NO_DOT);
+         }
+ 
++        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
++        this._addPasteItem();
+         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+         item = this.addSettingsAction(_('Keyboard Settings'), 'gnome-keyboard-panel.desktop');
+         item.can_focus = false;
+@@ -275,6 +280,21 @@ class LanguageSelectionPopup extends PopupMenu.PopupMenu {
+         }, this);
+     }
+ 
++    _addPasteItem() {
++        this._pasteItem = new PopupMenu.PopupMenuItem(_('Paste'));
++        this._pasteItem.connect('activate', () => {
++            this._clipboard.get_text(St.ClipboardType.CLIPBOARD,
++                (clipboard, text) => {
++                    if (!text)
++                        return;
++                    this._keyboardController.commit(text).catch(console.error);
++                });
++        });
++        this._pasteItem.can_focus = false;
++        this._pasteItem.setSensitive(false);
++        this.addMenuItem(this._pasteItem);
++    }
++
+     open(animate) {
+         if (!this._coverActor) {
+             this._coverActor = new Clutter.Actor({ reactive: true });
+@@ -296,6 +316,10 @@ class LanguageSelectionPopup extends PopupMenu.PopupMenu {
+             Main.layoutManager.keyboardBox.add_child(this._coverActor);
+         }
+ 
++        this._clipboard.get_text(St.ClipboardType.CLIPBOARD,
++            (clipboard, text) => {
++                this._pasteItem.setSensitive(text && text !== '');
++            });
+         super.open(animate);
+     }
+ 
+@@ -2205,7 +2229,7 @@ export const Keyboard = GObject.registerClass({
+         if (this._languagePopup)
+             this._languagePopup.destroy();
+ 
+-        this._languagePopup = new LanguageSelectionPopup(keyActor);
++        this._languagePopup = new LanguageSelectionPopup(keyActor, this._keyboardController);
+         Main.layoutManager.keyboardBox.add_child(this._languagePopup.actor);
+         this._languagePopup.open(true);
+     }
+-- 
+2.55.0
+
