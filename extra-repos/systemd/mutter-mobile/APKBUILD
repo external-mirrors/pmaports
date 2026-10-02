@@ -5,7 +5,7 @@ maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=mutter-mobile
 _pkgver=48.0
 pkgver=9999$_pkgver
-pkgrel=3
+pkgrel=4
 pkgdesc="clutter-based window manager and compositor"
 url="https://wiki.gnome.org/Projects/Mutter/"
 # armhf: pmb#2618
@@ -79,6 +79,7 @@ source="mutter-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/mutter-mo
 	fix-freeze.patch
 	0001-Stop-using-G_GNUC_CONST-in-_get_type-functions.patch
 	0002-clutter-Fix-build-with-recent-pango.patch
+	0003-fix-auto-rotate.patch
 	"
 builddir="$srcdir/mutter-mobile-$_commit"
 
@@ -136,4 +137,5 @@ c1aef60e14662b373ddeab88d7b49f153165ab2bfb63906aeb64f6de9d224ed3d4c9c5b3cd8a7b12
 b7d0bea395c47558a089f75c2c30ac04da2ffc60d044364653098dcb30302aeeb839631fc51c5b5673d11f07fe85af645ea6fe9b2ebe107f8fc67541d5a8e3eb  fix-freeze.patch
 af0542149d031e53647a52bd249cd09e5b3ee2adae0c1e3e105b15cb1905f45c7a33fdc9b5ef53dc1cb93bc184d4bdac7d3e97564890d64527be1088eb7df1be  0001-Stop-using-G_GNUC_CONST-in-_get_type-functions.patch
 7c56306d6f090ff17f38f35e32486f6cf20ae4ccf50ac7cb4f57433ce38e920ca59fc916f226013c5ed10359a558f538a061e3cf3b1d9e5bd66da3a764653a3c  0002-clutter-Fix-build-with-recent-pango.patch
+6f2e821e648749c048df03320400fc1efb26604490a39578e634167a13d80d2f12a12121c78d42c7c2c68705589eaa5d4458299e422af5148294829b722fe578  0003-fix-auto-rotate.patch
 "
