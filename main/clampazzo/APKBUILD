@@ -1,0 +1,27 @@
+maintainer="Clayton Craft <clayton@craftyguy.net>"
+pkgname=clampazzo
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="Set the minimum scheduler clamp performance floor for wayland compositors"
+url="https://gitlab.postmarketos.org/postmarketOS/pmaports"
+arch="all"
+license="GPL-3.0-or-later"
+source="clampazzo clampazzo.service clampazzo.path"
+depends="lsof util-linux-misc"
+options="!check"  # no tests
+subpackages="$pkgname-systemd"
+
+package() {
+	install -Dm755 clampazzo \
+		-t "$pkgdir"/usr/bin
+	install -Dm644 clampazzo.path \
+		-t "$pkgdir"/usr/lib/systemd/user
+	install -Dm644 clampazzo.service \
+		-t "$pkgdir"/usr/lib/systemd/user
+}
+
+sha512sums="
+e215e8714b966aebdcdfcf57bb4b270fe3addf1dee1341c7403710d56e0e3867f6ba0e2a15b09a1a7f8da804ec5cef2bd7e332e6b283fbf6b4431ca34e2db9f0  clampazzo
+d60feabd4eb92854430d93239606cb64065cb2ae897ba0a4b3477d7d472104999b6d0364de0b0a416b6358a7b30ea623be1a5aac9d6d0445da399b73849ce727  clampazzo.service
+25c8867081a523842b1da4c8536246c83b6903b26136009e67df8657d37f10431b64ac856b66a87c4f446d2a10165f7e017a991aa28547b93fe190b03cf36d0f  clampazzo.path
+"

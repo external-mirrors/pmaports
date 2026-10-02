@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Gets the wayland compositor pid and runs uclamp on it.
+# Expects a TRIGGER_PATH var set to essentially XDG_RUNTIME_DIR/WAYLAND_DISPLAY
+# Expects a value for uclamp --min, passed as argv[1], else it uses a default
+set -u
+
+value="${1:-800}"
+
+lock="$TRIGGER_PATH"
+
+# NOTE: this requires full lsof, not busybox...
+pid="$(lsof -F p "$lock" | head -1)"
+# NOTE: output has a leading 'p'
+pid=${pid##p}
+
+if [ -z "$pid" ]; then
+    echo "unable to get pid locking: $lock, skipping"
+    exit 0
+fi
+
+uclampset -a -p "$pid" -v -m "$value"
+
+# Note: shell process names are hardcoded, there doesn't appear to be a reliable
+# way to discover these like we can with the compositor above...
+shells="phosh plasmashell gnome-shell"
+i=0
+while [ "$i" -lt 10 ]; do
+    for shell in $shells; do
+        shell_pid="$(pgrep -x "$shell" 2>/dev/null | head -1)"
+        if [ -n "$shell_pid" ]; then
+            uclampset -a -p "$shell_pid" -v -m "$value"
+            exit 0
+        fi
+    done
+    sleep 1
+    i=$((i + 1))
+done
+
+echo "unable to find a shell to clamp, tried: $shells"
