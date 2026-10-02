@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# Gets the wayland compositor pid and runs uclamp on it.
+# Expects a TRIGGER_PATH var set to essentially XDG_RUNTIME_DIR/WAYLAND_DISPLAY
+# Expects a value for uclamp --min, passed as argv[1], else it uses a default
+set -u
+
+value="${1:-800}"
+
+lock="$TRIGGER_PATH"
+
+# NOTE: this requires full lsof, not busybox...
+pid="$(lsof -F p "$lock")"
+# NOTE: output has a leading 'p'
+pid=${pid##p}
+
+if [ -z "$pid" ]; then
+    echo "unable to get pid locking: $lock, skipping"
+    exit 0
+fi
+
+uclampset -a -p $pid -v -m "$value"

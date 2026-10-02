@@ -1,0 +1,12 @@
+[Service]
+Type=oneshot
+# The value passed to this exe signifies the minimum level of "performance"
+# to clamp Wayland compositors to.
+# The maximum value is 1024, which reflects the maximum amount of performance
+# from the most powerful CPU core on the system. It should be adjusted, using
+# a unit override.conf, so that scrolling and other tasks in the UI are smooth.
+# The default value of 800 was chosen as a baseline, it works well on sdm845
+# when running Phosh/phoc, but it may not be appropriate for all devices.
+# For more information, see:
+# - https://docs.kernel.org/scheduler/sched-util-clamp.html
+ExecStart=/usr/bin/clampazzo 800
