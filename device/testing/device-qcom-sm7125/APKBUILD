@@ -2,19 +2,25 @@
 # Co-Maintainer: Erikas Bitovtas <xerikasxx@gmail.com>
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=device-qcom-sm7125
-pkgver=1
-pkgrel=1
+pkgver=2
+pkgrel=0
 pkgdesc="Generic device package for Qualcomm SM7125 devices"
 url="https://postmarketos.org"
 arch="aarch64"
 license="MIT"
 depends="
 	alsa-ucm-conf-qcom-sm7125
-	firmware-samsung-a72q
-	hexagonrpcd
+	android-tools-mkbootimg
+	hexagonrpcd>=0.3.2-r3
+	linux-firmware-ath10k
+	linux-firmware-qca
 	linux-postmarketos-qcom-sm7125
 	make-dynpart-mappings
+	msm-firmware-loader
+	msm-firmware-loader-hexagonrpcd
 	postmarketos-base
+	soc-qcom
+	soc-qcom-modem
 	swclock-offset
 	systemd-boot
 "
