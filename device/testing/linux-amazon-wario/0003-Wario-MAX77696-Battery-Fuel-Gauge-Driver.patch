@@ -1,0 +1,237 @@
+From 45ca7b9e01303e36eb5e8b5c28c87c37488943a5 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 20:36:29 +0100
+Subject: [PATCH] Wario: MAX77696 Battery/Fuel Gauge Driver
+
+---
+ drivers/power/supply/Kconfig            |   7 +
+ drivers/power/supply/Makefile           |   1 +
+ drivers/power/supply/max77696_battery.c | 186 ++++++++++++++++++++++++
+ 3 files changed, 194 insertions(+)
+ create mode 100644 drivers/power/supply/max77696_battery.c
+
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 83392ed6a..f640c3a59 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -636,6 +636,13 @@ config CHARGER_MAX77693
+ 	help
+ 	  Say Y to enable support for the Maxim MAX77693 battery charger.
+ 
++config BATTERY_MAX77696
++	tristate "Maxim MAX77696 Fuel Gauge"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  MAX77696 is the PMIC on the Kindle PW3
++
+ config CHARGER_MAX77705
+ 	tristate "Maxim MAX77705 battery charger driver"
+ 	depends on MFD_MAX77705
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 7ee839dca..aa14945dc 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -86,6 +86,7 @@ obj-$(CONFIG_CHARGER_MAX14577)	+= max14577_charger.o
+ obj-$(CONFIG_CHARGER_DETECTOR_MAX14656)	+= max14656_charger_detector.o
+ obj-$(CONFIG_CHARGER_MAX77650)	+= max77650-charger.o
+ obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
++obj-$(CONFIG_BATTERY_MAX77696)	+= max77696_battery.o
+ obj-$(CONFIG_CHARGER_MAX77705)	+= max77705_charger.o
+ obj-$(CONFIG_CHARGER_MAX77976)	+= max77976_charger.o
+ obj-$(CONFIG_CHARGER_MAX8971)	+= max8971_charger.o
+diff --git a/drivers/power/supply/max77696_battery.c b/drivers/power/supply/max77696_battery.c
+new file mode 100644
+index 000000000..5fe65be11
+--- /dev/null
++++ b/drivers/power/supply/max77696_battery.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * MAX77696 Battery driver
++ *
++ * Reads the Max77696 battery status
++ *
++ */
++
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++#include <linux/power_supply.h>
++#include <linux/of.h>
++#include <linux/module.h>
++
++/* FG register offsets (see max77696_registers.h FG_*_REG) */
++#define MAX77696_FG_SOCREP_REG   0x06
++#define MAX77696_FG_VCELL_REG    0x09
++#define MAX77696_FG_CURRENT_REG   0x0A
++
++/* board sense resistor value in micro-ohms*/
++#define MAX77696_GAUGE_DEFAULT_RSNS   10000
++
++struct max77696_battery {
++	struct power_supply *psy;
++	struct regmap *regmap;
++	unsigned int capacity; /* percent */
++	unsigned int vcell;    /* mV */
++	int current_now;    /* uA */
++};
++
++static int max77696_battery_update_vcell(struct max77696_battery *bat)
++{
++	unsigned int raw;
++	int rc;
++
++	rc = regmap_read(bat->regmap, MAX77696_FG_VCELL_REG, &raw);
++	if (rc)
++		return rc;
++
++	/* raw[15:3] = voltage, LSB = 78.125uV -> (raw >> 3) * 625 / 1000 = mV */
++	bat->vcell = ((raw >> 3) * 625) / 1000;
++
++	return 0;
++}
++
++static int max77696_battery_update_capacity(struct max77696_battery *bat)
++{
++	unsigned int raw;
++	int rc;
++
++	rc = regmap_read(bat->regmap, MAX77696_FG_SOCREP_REG, &raw);
++	if (rc)
++		return rc;
++
++	/* SOC percent lives in the upper byte */
++	bat->capacity = raw >> 8;
++
++	return 0;
++}
++
++static int max77696_battery_update_current(struct max77696_battery *bat)
++{
++	unsigned int raw;
++	int rc;
++	s16 signed_raw;
++
++	rc = regmap_read(bat->regmap, MAX77696_FG_CURRENT_REG, &raw);
++	if (rc)
++		return rc;
++
++	signed_raw = (s16)raw;
++
++	/* current in uA; positive = charging */
++	bat->current_now = signed_raw * (1562500 / MAX77696_GAUGE_DEFAULT_RSNS);
++
++	return 0;
++}
++
++static enum power_supply_property max77696_battery_props[] = {
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++};
++
++static int max77696_battery_get_property(struct power_supply *psy,
++					   enum power_supply_property psp,
++					   union power_supply_propval *val)
++{
++	struct max77696_battery *bat = power_supply_get_drvdata(psy);
++	int rc;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		rc = max77696_battery_update_vcell(bat);
++		if (rc)
++			return rc;
++		val->intval = bat->vcell * 1000; /* mV -> uV */
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		rc = max77696_battery_update_capacity(bat);
++		if (rc)
++			return rc;
++		val->intval = bat->capacity;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		rc = max77696_battery_update_current(bat);
++		if (rc)
++			return rc;
++		val->intval = bat->current_now; /* already uA */
++		break;
++	default:
++		return -EINVAL;
++	}
++	return 0;
++}
++
++static const struct power_supply_desc max77696_battery_desc = {
++	.name           = "max77696-battery",
++	.type           = POWER_SUPPLY_TYPE_BATTERY,
++	.properties     = max77696_battery_props,
++	.num_properties = ARRAY_SIZE(max77696_battery_props),
++	.get_property   = max77696_battery_get_property,
++};
++
++static const struct regmap_config max77696_gauge_regmap_config = {
++	.name              = "max77696-gauge",
++	.reg_bits          = 8,
++	.val_bits          = 16,
++	.val_format_endian = REGMAP_ENDIAN_LITTLE,
++};
++
++static int max77696_battery_probe(struct i2c_client *client)
++{
++	struct max77696_battery *bat;
++	struct power_supply_config psy_cfg = {};
++
++	bat = devm_kzalloc(&client->dev, sizeof(*bat), GFP_KERNEL);
++	if (!bat)
++		return -ENOMEM;
++
++	bat->regmap = devm_regmap_init_i2c(client, &max77696_gauge_regmap_config);
++	if (IS_ERR(bat->regmap))
++		return dev_err_probe(&client->dev, PTR_ERR(bat->regmap),
++				     "failed to init gauge regmap\n");
++
++	i2c_set_clientdata(client, bat);
++	psy_cfg.drv_data = bat;
++	psy_cfg.fwnode = dev_fwnode(&client->dev);
++
++	bat->psy = devm_power_supply_register(&client->dev,
++					       &max77696_battery_desc, &psy_cfg);
++
++	dev_info(&client->dev, "MAX77696 Battery Gauge\n");
++
++	return PTR_ERR_OR_ZERO(bat->psy);
++}
++
++static const struct of_device_id max77696_battery_of_match[] = {
++	{ .compatible = "maxim,max77696-battery" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_battery_of_match);
++
++static const struct i2c_device_id max77696_battery_id[] = {
++	{ "max77696-battery", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, max77696_battery_id);
++
++static struct i2c_driver max77696_battery_driver = {
++	.driver = {
++		.name           = "max77696-battery",
++		.of_match_table = max77696_battery_of_match,
++	},
++	.probe    = max77696_battery_probe,
++	.id_table = max77696_battery_id,
++};
++module_i2c_driver(max77696_battery_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("MAX77696 Battery driver");
++MODULE_AUTHOR("James Coxon");
+-- 
+2.47.3
+

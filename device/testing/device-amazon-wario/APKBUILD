@@ -1,0 +1,35 @@
+# Reference: <https://postmarketos.org/devicepkg>
+maintainer="James Coxon <solarcene@protonmail.com>"
+pkgname=device-amazon-wario
+pkgver=1
+pkgrel=0
+pkgdesc="Amazon Kindle PaperWhite 3"
+url="https://postmarketos.org"
+arch="armv7"
+license="MIT"
+depends="
+	linux-amazon-wario
+	postmarketos-base
+	postmarketos-base-eink
+	"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	kernel-cmdline.conf
+	modules-initfs
+	"
+options="!archcheck !check"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+d708c8af58c7a8dd03895f1e66fc915c78ef59661ff2f8d4e995c1f5639e13f808a9e823764525a30827d85cc5d4947d047de3502813569f3f83b4b83bb3c750  deviceinfo
+b35d958590ea7557ac6ba58a3dbab90acc26ba686520edd09184854610f440c9e16c4bb6e59bf0f8d541aae1191cddbe2313d3c492a8c3f725f7007180c1131d  kernel-cmdline.conf
+ffffe437ad72d902e39bb7eae2927b40c5829ba3fdbe7061d61f3208be16c42de6de07a8023ede969be045ec184b688654a3f5e354153d29a39e2130c0d44015  modules-initfs
+"

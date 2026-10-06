@@ -1,0 +1,25 @@
+From eb7331412272a0e7ff13f85ddfdd972b48c620a1 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 07:23:08 +0100
+Subject: [PATCH] Wario: fix for suspend to mem, CFI triggered oops
+
+---
+ arch/arm/mach-imx/pm-imx6.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
+index a671ca498..d9b0c1803 100644
+--- a/arch/arm/mach-imx/pm-imx6.c
++++ b/arch/arm/mach-imx/pm-imx6.c
+@@ -360,7 +360,7 @@ int imx6_set_lpm(enum mxc_cpu_pwr_mode mode)
+ 	return 0;
+ }
+ 
+-static int imx6q_suspend_finish(unsigned long val)
++static int __nocfi imx6q_suspend_finish(unsigned long val)
+ {
+ 	if (!imx6_suspend_in_ocram_fn) {
+ 		cpu_do_idle();
+-- 
+2.47.3
+

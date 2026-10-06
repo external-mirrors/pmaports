@@ -1,0 +1,716 @@
+From 7651cf89b4c7732e93cad35c6c3a79403bfe5c88 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 20:30:45 +0100
+Subject: [PATCH] Wario: add drivers for MAX77696 (MFD, REG for CPU/USB, EPD)
+
+---
+ drivers/mfd/Kconfig              |  13 ++
+ drivers/mfd/Makefile             |   1 +
+ drivers/mfd/max77696.c           | 101 ++++++++++++
+ drivers/regulator/Kconfig        |  12 ++
+ drivers/regulator/Makefile       |   2 +
+ drivers/regulator/max77696-epd.c | 260 +++++++++++++++++++++++++++++++
+ drivers/regulator/max77696-reg.c | 144 +++++++++++++++++
+ include/linux/mfd/max77696.h     |  92 +++++++++++
+ 8 files changed, 625 insertions(+)
+ create mode 100644 drivers/mfd/max77696.c
+ create mode 100644 drivers/regulator/max77696-epd.c
+ create mode 100644 drivers/regulator/max77696-reg.c
+ create mode 100644 include/linux/mfd/max77696.h
+
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 7192c9d1d..240aa31ff 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1001,6 +1001,19 @@ config MFD_MAX77693
+ 	  additional drivers must be enabled in order to use the functionality
+ 	  of the device.
+ 
++config MFD_MAX77696
++        tristate "Maxim MAX77696 PMIC Support"
++        depends on I2C
++        depends on OF
++        select MFD_CORE
++        select REGMAP_I2C
++        help
++          Say Y here to add support for Maxim Semiconductor MAX77696
++          Power Management ICs.
++	  This driver provides common support for accessing the device;
++	  additional drivers must be enabled in order to use the functionality
++	  of the device.
++
+ config MFD_MAX77705
+ 	tristate "Maxim MAX77705 PMIC Support"
+ 	depends on I2C
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index e75e8045c..7ec3d5a93 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -174,6 +174,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+ obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+ obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+ obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
++obj-$(CONFIG_MFD_MAX77696)	+= max77696.o
+ obj-$(CONFIG_MFD_MAX77705)	+= max77705.o
+ obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
+ obj-$(CONFIG_MFD_MAX77759)	+= max77759.o
+diff --git a/drivers/mfd/max77696.c b/drivers/mfd/max77696.c
+new file mode 100644
+index 000000000..46f7afb11
+--- /dev/null
++++ b/drivers/mfd/max77696.c
+@@ -0,0 +1,101 @@
++/* SPDX-License-Identifier: GPL-2.0
++ *
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * Core MFD driver for MAXIM 77696 power-supply.
++ * Currently supports cells for electronic paper display,
++ * regulators, front LEDs and the single physical button
++ * on the Kindle PaperWhite 3.
++ *
++*/
++
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/max77696.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++
++static const struct resource max77696_onkey_resources[] = {
++	DEFINE_RES_IRQ_NAMED(0, "max77696-onkey"),
++};
++
++static const struct mfd_cell max77696_cells[] = {
++	{
++		.name		= "max77696-epd",
++		.of_compatible	= "maxim,max77696-epd",
++	}, {
++		.name		= "max77696-reg",
++		.of_compatible	= "maxim,max77696-reg",
++	}, {
++		.name		= "max77696-wled",
++		.of_compatible	= "maxim,max77696-wled",
++	}, {
++		.name		= "max77696-onkey",
++		.of_compatible	= "maxim,max77696-onkey",
++		.resources	= max77696_onkey_resources,
++		.num_resources	= ARRAY_SIZE(max77696_onkey_resources),
++	},
++};
++
++static const struct regmap_config max77696_regmap_config = {
++	.name		= "max77696",
++	.reg_bits	= 8,
++	.val_bits	= 8,
++};
++
++static int max77696_i2c_probe(struct i2c_client *client)
++{
++	struct max77696 *chip;
++	unsigned int val;
++	int rv;
++
++	// Allocate memory
++	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
++	if (!chip)
++		return -ENOMEM;
++
++	chip->dev = &client->dev;
++	i2c_set_clientdata(client, chip);
++
++	// Setup regmap
++	chip->regmap = devm_regmap_init_i2c(client, &max77696_regmap_config);
++	if (IS_ERR(chip->regmap)) {
++		dev_err(chip->dev, "Unable to initialise I2C Regmap\n");
++		return PTR_ERR(chip->regmap);
++	}
++
++	// Read the Chip ID to confirm successfully loaded
++	rv = regmap_read(chip->regmap, MAX77696_REG_CID, &val);
++	if (rv) {
++		dev_err(chip->dev, "Unable to read Chip ID\n");
++		return rv;
++	}
++
++	dev_info(chip->dev, "Chip Detected ID: 0x%02x\n", val);
++
++	return devm_mfd_add_devices(chip->dev, PLATFORM_DEVID_NONE,
++				    max77696_cells, ARRAY_SIZE(max77696_cells),
++				    NULL, client->irq, NULL);
++}
++
++static const struct of_device_id max77696_of_match[] = {
++	{ .compatible = "maxim,max77696" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_of_match);
++
++static struct i2c_driver max77696_i2c_driver = {
++	.driver = {
++		.name = "max77696",
++		.of_match_table = max77696_of_match,
++	},
++	.probe = max77696_i2c_probe,
++};
++module_i2c_driver(max77696_i2c_driver);
++
++MODULE_DESCRIPTION("MAXIM 77696 multi-function core driver");
++MODULE_AUTHOR("James Coxon <solarcene@protonmail.com>");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index 87554ab92..598d40e4b 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -785,6 +785,18 @@ config REGULATOR_MAX77693
+ 	  and one current regulator 'CHARGER'. This is suitable for
+ 	  Exynos-4x12 (MAX77693) or Exynos5433 (MAX77843) SoC chips.
+ 
++config REGULATOR_MAX77696_REG
++        tristate "Maxim 77696 REG regulator"
++        depends on MFD_MAX77696 || COMPILE_TEST
++        help
++          This driver controls a Maxim 77696 REG regulators via I2C bus.
++
++config REGULATOR_MAX77696_EPD
++        tristate "Maxim 77696 EPD regulator"
++        depends on MFD_MAX77696 || COMPILE_TEST
++        help
++          This driver controls a Maxim 77696 EPD regulators via I2C bus.
++
+ config REGULATOR_MAX77802
+ 	tristate "Maxim 77802 regulator"
+ 	depends on MFD_MAX77686 || COMPILE_TEST
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 35639f311..315da1b02 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -93,6 +93,8 @@ obj-$(CONFIG_REGULATOR_MAX20086) += max20086-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX20411) += max20411-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77686) += max77686-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77693) += max77693-regulator.o
++obj-$(CONFIG_REGULATOR_MAX77696_REG) += max77696-reg.o
++obj-$(CONFIG_REGULATOR_MAX77696_EPD) += max77696-epd.o
+ obj-$(CONFIG_REGULATOR_MAX77802) += max77802-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77826) += max77826-regulator.o
+ obj-$(CONFIG_REGULATOR_MAX77838) += max77838-regulator.o
+diff --git a/drivers/regulator/max77696-epd.c b/drivers/regulator/max77696-epd.c
+new file mode 100644
+index 000000000..ccf788b16
+--- /dev/null
++++ b/drivers/regulator/max77696-epd.c
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * MAX77696 EPD (E-Paper Display) power supply driver
++ *
++ * Drives the EPD regulator block of the MAX77696 PMIC.
++ * Registers DISPLAY, VCOM and V3P3 regulators needed by
++ * the i.MX6SL EPDC driver.
++ *
++ */
++
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++#include <linux/mfd/max77696.h>
++#include <linux/platform_device.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/regulator/of_regulator.h>
++#include <linux/gpio/consumer.h>
++#include <linux/of.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/delay.h>
++
++static int vcom_cal_microvolt = -2476280;
++module_param(vcom_cal_microvolt, int, S_IRUSR);
++MODULE_PARM_DESC(vcom_cal_microvolt, "VCOM is a factory-calibrated, per-panel value");
++
++enum {
++	MAX77696_EPD_DISPLAY,
++	MAX77696_EPD_VCOM,
++	MAX77696_EPD_V3P3,
++	MAX77696_EPD_NUM_REGS,
++};
++
++/*
++ * max77696_epd_vcom_enable - enable VCOM with fault detection and retry.
++ *
++ * EPDINT (0x62) is read-to-clear
++ *
++ * Called by the regulator core as the .enable op for VCOM only.
++ * DISPLAY and V3P3 use the generic regmap enable op.
++ */
++static int max77696_vcom_enable(struct regulator_dev *rdev)
++{
++
++	struct max77696 *chip = rdev_get_drvdata(rdev);
++	struct regmap *regmap = chip->regmap;
++	struct device *dev = chip->dev;
++
++	unsigned int val;
++	int i, ret;
++
++	for (i = 0; i < MAX77696_EPD_VCOM_FAULT_RETRIES; i++) {
++		/* Enable VCOM via the standard regmap bit */
++		ret = regulator_enable_regmap(rdev);
++		if (ret) {
++			dev_err(dev, "VCOM enable failed (attempt %d): %d\n",
++				i + 1, ret);
++			return ret;
++		}
++
++		msleep(MAX77696_EPD_VCOM_SETTLE_MS);
++
++		/*
++		 * Read EPDINT. This is read-to-clear, so a single read
++		 * both samples and clears the fault status.
++		 */
++		ret = regmap_read(regmap, EPDINT_REG, &val);
++		if (ret) {
++			dev_err(dev, "EPDINT read failed: %d\n", ret);
++			return ret;
++		}
++
++		if (!(val & EPDINT_VCOM_FAULT)) {
++			if (i > 0)
++				dev_info(dev,
++					 "VCOM stable after %d attempt(s)\n",
++					 i + 1);
++			return 0;
++		}
++
++		dev_warn(chip->dev,
++			 "VCOM fault detected (EPDINT=0x%02x), "
++			 "retrying (%d/%d)\n",
++			 val, i + 1, MAX77696_EPD_VCOM_FAULT_RETRIES);
++
++		ret = regulator_disable_regmap(rdev);
++		if (ret) {
++			dev_err(dev, "VCOM disable (for retry) failed: %d\n",
++				ret);
++			return ret;
++		}
++
++		msleep(MAX77696_EPD_VCOM_RETRY_DELAY_MS);
++	}
++
++	dev_err(dev,
++		"VCOM failed to stabilise after %d attempts; "
++		"last EPDINT=0x%02x\n",
++		MAX77696_EPD_VCOM_FAULT_RETRIES, val);
++	return -EIO;
++}
++
++static const struct regulator_ops max77696_regmap_ops = {
++	.enable     = regulator_enable_regmap,
++	.disable    = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++};
++
++static const struct regulator_ops max77696_vcom_ops = {
++	.enable     = max77696_vcom_enable,
++	.disable    = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++};
++
++static const struct regulator_desc max77696_regs[] = {
++	[MAX77696_EPD_DISPLAY] = {
++		.name           = "DISPLAY",
++		.of_match       = "DISPLAY",
++		.regulators_node = "regulators",
++		.id             = MAX77696_EPD_DISPLAY,
++		.ops            = &max77696_regmap_ops,
++		.type           = REGULATOR_VOLTAGE,
++		.owner          = THIS_MODULE,
++		.enable_reg     = EPDCNFG_REG,
++		.enable_mask    = EPDCNFG_EPDEN,
++	},
++	[MAX77696_EPD_VCOM] = {
++		.name           = "VCOM",
++		.of_match       = "VCOM",
++		.regulators_node = "regulators",
++		.id             = MAX77696_EPD_VCOM,
++		.ops            = &max77696_vcom_ops,  /* fault-aware enable */
++		.type           = REGULATOR_VOLTAGE,
++		.owner          = THIS_MODULE,
++		.enable_reg     = EPDCNFG_REG,
++		.enable_mask    = EPDCNFG_VCOMEN,
++	},
++	[MAX77696_EPD_V3P3] = {
++		.name           = "V3P3",
++		.of_match       = "V3P3",
++		.regulators_node = "regulators",
++		.id             = MAX77696_EPD_V3P3,
++		.ops            = &max77696_regmap_ops,
++		.type           = REGULATOR_VOLTAGE,
++		.owner          = THIS_MODULE,
++		.enable_reg     = EPDCNFG_REG,
++		.enable_mask    = EPDCNFG_SSHVDDH,
++	},
++};
++
++static int max77696_regulator_probe(struct platform_device *pdev)
++{
++
++	struct max77696 *chip = dev_get_drvdata(pdev->dev.parent);
++	struct regulator_config config = { };
++	struct regulator_dev *rdev;
++
++	unsigned int vcom_val, vcomr_val, lsw4;
++
++	int i, ret;
++
++	bool vcomr;
++
++	config.dev = &pdev->dev;
++	config.regmap = chip->regmap;
++	config.driver_data = chip;
++
++
++	dev_info(&pdev->dev, "of_node = %pOF\n", pdev->dev.of_node);
++
++	for (i = 0; i < ARRAY_SIZE(max77696_regs); i++) {
++		rdev = devm_regulator_register(&pdev->dev, &max77696_regs[i], &config);
++
++		if (IS_ERR(rdev))
++			return dev_err_probe(chip->dev, PTR_ERR(rdev),
++					     "register %s failed\n",
++					     max77696_regs[i].name);
++	}
++
++	/*
++	 * Set VCOM to its factory-calibrated voltage. Written at probe independent
++	 * of state which is how it works in lab126 code. Can be set with module parameters.
++	 */
++
++	u32 target_uV = abs(vcom_cal_microvolt);
++	u32 value = DIV_ROUND_CLOSEST(target_uV, 9985);
++	vcomr = false;
++
++	if (value >= 0xFF) {
++		value -= 0xFF;
++		vcomr = true;
++	}
++
++	if (target_uV == 0 || target_uV > (0xFF + 0xFF) * 9985) {
++		dev_err(chip->dev, "vcom_microvolt=%d out of representable range\n", vcom_cal_microvolt);
++		return -EINVAL;
++	}
++
++	ret = regmap_update_bits(chip->regmap, EPDVCOMR_REG, EPDVCOMR_VCOMR, vcomr ? EPDVCOMR_VCOMR : 0);
++	if (ret)
++		return dev_err_probe(chip->dev, ret, "failed to set VCOMR\n");
++
++	ret = regmap_write(chip->regmap, EPDVCOM_REG, (u8)value);
++	if (ret)
++		return dev_err_probe(chip->dev, ret, "failed to set VCOM calibration\n");
++
++
++	regmap_read(chip->regmap, EPDVCOM_REG, &vcom_val);
++	regmap_read(chip->regmap, EPDVCOMR_REG, &vcomr_val);
++	dev_info(chip->dev, "VCOM readback: EPDVCOM=0x%02x EPDVCOMR=0x%02x\n",
++		vcom_val, vcomr_val & EPDVCOMR_VCOMR);
++
++	/* Enable LSW4 (DISP_GATED) — gates 3.3V to panel logic on Muscat WFO.
++	 * LSW4 = DISP_GATED-old per board-mx6sl_wario.c MAX77696_VREG_CONSUMERS.
++	 */
++	ret = regmap_update_bits(chip->regmap, LSW4_CNTRL_REG, LSW4_OUTLS, LSW4_OUTLS);
++	if (ret)
++		return dev_err_probe(chip->dev, ret, "failed to enable LSW4 (DISP_GATED)\n");
++
++	/* Verify LSW4 enable latched */
++	regmap_read(chip->regmap, LSW4_CNTRL_REG, &lsw4);
++	dev_info(chip->dev, "LSW4: 0x%02x\n", lsw4);
++
++	dev_info(chip->dev, "MAX77696 v0.9 EPD VCOM configured: requested=%d uV, "
++		"EPDVCOM=0x%02x VCOMR=%d, actual=%d uV\n",
++		vcom_cal_microvolt, value, vcomr,
++		-(int)(vcomr ? (value + 0xFF) : value) * 9985);
++
++	return 0;
++}
++
++static const struct of_device_id max77696_regulator_of_match[] = {
++	{ .compatible = "maxim,max77696-epd" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_regulator_of_match);
++
++static const struct platform_device_id max77696_regulator_id[] = {
++	{ "max77696-epd", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, max77696_regulator_id);
++
++static struct platform_driver max77696_regulator_driver = {
++	.driver = {
++		.name           = "max77696-epd",
++		.of_match_table = max77696_regulator_of_match,
++	},
++	.probe    = max77696_regulator_probe,
++	.id_table = max77696_regulator_id,
++};
++module_platform_driver(max77696_regulator_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("MAX77696 EPD power supply driver");
++MODULE_AUTHOR("James Coxon");
+diff --git a/drivers/regulator/max77696-reg.c b/drivers/regulator/max77696-reg.c
+new file mode 100644
+index 000000000..9839195ce
+--- /dev/null
++++ b/drivers/regulator/max77696-reg.c
+@@ -0,0 +1,144 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * MAX77696 Regulator power supply driver
++ *
++ * Drives the regulator block of the MAX77696 PMIC.
++ * Registers LDO2 which supplies USB_GADGET_PHY
++ *
++ * Uses the kernel regulator driver framework and max77696 MFD driver
++ *
++ * Regulator registers extracted from lab126 linux-3.0.35 and tested
++ * on Kindle Paperwhite3
++ *
++ */
++
++#include <linux/i2c.h>
++#include <linux/regmap.h>
++#include <linux/mfd/max77696.h>
++#include <linux/platform_device.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/regulator/of_regulator.h>
++#include <linux/of.h>
++#include <linux/module.h>
++
++#define MAX77696_BUCK_MIN_UV		600000
++#define MAX77696_BUCK_STEP_UV		12500
++#define MAX77696_BUCK_N_VOLTAGES	224	/* 600 mV .. 3387.5 mV */
++#define MAX77696_BUCK_VSEL_MASK		0xff
++#define MAX77696_BUCK_PWRMD_MASK	0x30
++#define MAX77696_BUCK1_VOUT_REG		0x31
++#define MAX77696_BUCK1_CNFG_REG		0x39
++
++enum {
++	MAX77696_REG_LDO2,
++	MAX77696_REG_BUCK1,
++	MAX77696_REG_NUM_REGS,
++};
++
++static const struct regulator_ops max77696_regmap_ops = {
++	.enable     = regulator_enable_regmap,
++	.disable    = regulator_disable_regmap,
++	.is_enabled = regulator_is_enabled_regmap,
++};
++
++static const struct regulator_ops max77696_buck_ops = {
++	.list_voltage    = regulator_list_voltage_linear,
++	.map_voltage     = regulator_map_voltage_linear,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++	.set_voltage_sel = regulator_set_voltage_sel_regmap,
++	.is_enabled      = regulator_is_enabled_regmap,
++};
++
++static const struct regulator_desc max77696_regs[] = {
++	[MAX77696_REG_LDO2] = {
++		.name           = "LDO2",
++		.of_match       = "LDO2",
++		.regulators_node = "regulators",
++		.id             = MAX77696_REG_LDO2,
++		.ops            = &max77696_regmap_ops,
++		.type           = REGULATOR_VOLTAGE,
++		.owner          = THIS_MODULE,
++		.enable_reg      = LDO_L02_CNFG1_REG,
++		.enable_mask     = LDO_PWRMD_MASK,
++		.enable_val      = LDO_PWRMD_NORMAL,
++		.disable_val     = MAX77696_LDO_POWERMODE_OFF << 6,
++	},
++	[MAX77696_REG_BUCK1] = {
++		.name           = "BUCK1",
++		.of_match       = "BUCK1",
++		.regulators_node = "regulators",
++		.id             = MAX77696_REG_BUCK1,
++		.ops            = &max77696_buck_ops,
++		.type           = REGULATOR_VOLTAGE,
++		.owner          = THIS_MODULE,
++		.min_uV         = MAX77696_BUCK_MIN_UV,
++		.uV_step        = MAX77696_BUCK_STEP_UV,
++		.n_voltages     = MAX77696_BUCK_N_VOLTAGES,
++		.vsel_reg       = MAX77696_BUCK1_VOUT_REG,
++		.vsel_mask      = MAX77696_BUCK_VSEL_MASK,
++		.enable_reg     = MAX77696_BUCK1_CNFG_REG,	/* is_enabled only */
++		.enable_mask    = MAX77696_BUCK_PWRMD_MASK,
++		.ramp_delay     = 250, /* might need to be changed if real figure found */
++	},
++};
++
++static int max77696_regulator_probe(struct platform_device *pdev)
++{
++
++	struct max77696 *chip = dev_get_drvdata(pdev->dev.parent);
++	struct regulator_config config = { };
++	struct regulator_dev *rdev;
++
++	int i;
++
++	config.dev = &pdev->dev;
++	config.regmap = chip->regmap;
++	config.driver_data = chip;
++
++
++	dev_info(&pdev->dev, "of_node = %pOF\n", pdev->dev.of_node);
++
++	for (i = 0; i < ARRAY_SIZE(max77696_regs); i++) {
++		rdev = devm_regulator_register(&pdev->dev, &max77696_regs[i], &config);
++
++		if (IS_ERR(rdev))
++			return dev_err_probe(chip->dev, PTR_ERR(rdev),
++					     "register %s failed\n",
++					     max77696_regs[i].name);
++	}
++
++	dev_info(chip->dev, "MAX77696 v0.2 Regulator configured\n");
++
++	return 0;
++}
++
++static const struct of_device_id max77696_regulator_of_match[] = {
++	{ .compatible = "maxim,max77696-reg" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_regulator_of_match);
++
++static const struct platform_device_id max77696_regulator_id[] = {
++	{ "max77696-reg", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, max77696_regulator_id);
++
++static struct platform_driver max77696_regulator_driver = {
++	.driver = {
++		.name           = "max77696-reg",
++		.of_match_table = max77696_regulator_of_match,
++	},
++	.probe    = max77696_regulator_probe,
++	.id_table = max77696_regulator_id,
++};
++module_platform_driver(max77696_regulator_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("MAX77696 Regulator power supply driver");
++MODULE_AUTHOR("James Coxon");
+diff --git a/include/linux/mfd/max77696.h b/include/linux/mfd/max77696.h
+new file mode 100644
+index 000000000..3b45b8b4e
+--- /dev/null
++++ b/include/linux/mfd/max77696.h
+@@ -0,0 +1,92 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon
++ *
++ * Common definitions for MAXIM 77696 charger/power-supply.
++ */
++
++#ifndef MAX77696_H
++#define MAX77696_H
++
++#include <linux/bits.h>
++
++struct max77696 {
++        struct regmap *regmap;
++        struct device *dev;
++};
++
++#define MAX77696_REG_CID		0x0
++
++#define EPDCNFG_REG       0x60
++#define EPDCNFG_EPDEN     BIT(7)
++#define EPDCNFG_VCOMEN    BIT(6)
++#define EPDCNFG_SSHVDDH   BIT(1)
++
++#define EPDVCOM_REG       0x64
++#define EPDVCOMR_REG      0xB4
++#define EPDVCOMR_VCOMR    BIT(0)
++
++/*
++ * EPDINT (0x62) — interrupt/fault status register.
++ * Bit 6 (0x40): VCOM fault.
++ *
++ *  The stock driver retries up to MAX77696_EPD_VCOM_FAULT_RETRIES 
++ *  times with a fixed delay before giving up.
++ */
++
++#define EPDINT_REG              0x62
++#define EPDINT_VCOM_FAULT       BIT(6)
++#define MAX77696_EPD_VCOM_FAULT_RETRIES   5
++#define MAX77696_EPD_VCOM_SETTLE_MS       100
++#define MAX77696_EPD_VCOM_RETRY_DELAY_MS  100
++
++#define LSW4_CNTRL_REG    0x5F
++#define LSW4_OUTLS        BIT(0)
++
++/* WLED register addresses */
++#define LEDBST_CNTRL1_REG   0x6C
++#define LEDBST_CNTRL1_LED1EN    BIT(7)  /* boost + LED enable */
++
++#define LED1CURRENT_1_REG   0x6D   /* bits 11:4 of brightness (MSB) */
++#define LED1CURRENT_2_REG   0x6E   /* bits  3:0 of brightness (LSB) */
++
++#define MAX77696_BL_MAX_BRIGHTNESS  0xFFF  /* 12-bit DAC */
++#define MAX77696_BL_MIN_BRIGHTNESS  0
++
++#define GLBLINT_REG                      0x05
++#define GLBLINTM_REG                     0x06
++#define GLBLSTAT_REG                     0x07
++
++#define GLBLINT_EN0_R                    BIT (7)
++#define GLBLINT_EN0_F                    BIT (6)
++#define GLBLINT_EN0_1SEC                 BIT (5)
++#define GLBLINT_MRWRN                    BIT (4)
++#define GLBLINT_MBATTLOW_R               BIT (3)
++#define GLBLINT_TJALRM1_R                BIT (2)
++#define GLBLINT_TJALRM2_R                BIT (1)
++#define GLBLINT_IRQ                      BIT (0)
++
++/* IRQ */
++#define INTTOP1_REG         0xA2
++#define INTTOP1M_REG        0xA3
++
++#define TOPSYSINT_M         BIT (7)
++
++/* LDO_L02 */
++
++#define LDO_L02_CNFG1_REG 0x45
++#define LDO_PWRMD_NORMAL 0xC0
++#define LDO_PWRMD_MASK 0xC0
++#define MAX77696_LDO_POWERMODE_OFF                0b00
++#define MAX77696_LDO_POWERMODE_NORMAL             0b11
++
++#define MAX77696_BUCK_MIN_UV            600000
++#define MAX77696_BUCK_STEP_UV           12500
++#define MAX77696_BUCK_N_VOLTAGES        224     /* 600 mV .. 3387.5 mV */
++#define MAX77696_BUCK_VSEL_MASK         0xff
++#define MAX77696_BUCK_PWRMD_MASK        0x30
++#define MAX77696_BUCK1_VOUT_REG         0x31
++#define MAX77696_BUCK1_CNFG_REG         0x39
++
++#endif /* MAX77696_H */
+-- 
+2.47.3
+

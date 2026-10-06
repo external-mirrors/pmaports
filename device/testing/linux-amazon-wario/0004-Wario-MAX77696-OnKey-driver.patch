@@ -1,0 +1,179 @@
+From 0cdca45a4105bf8e9182f147b7df027a5a49ef00 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 20:42:32 +0100
+Subject: [PATCH] Wario: MAX77696 OnKey driver
+
+---
+ drivers/input/misc/Kconfig          |   9 ++
+ drivers/input/misc/Makefile         |   1 +
+ drivers/input/misc/max77696-onkey.c | 126 ++++++++++++++++++++++++++++
+ 3 files changed, 136 insertions(+)
+ create mode 100644 drivers/input/misc/max77696-onkey.c
+
+diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+index 94a753fcb..68bac6858 100644
+--- a/drivers/input/misc/Kconfig
++++ b/drivers/input/misc/Kconfig
+@@ -282,6 +282,15 @@ config INPUT_MAX77693_HAPTIC
+ 	  To compile this driver as module, choose M here: the
+ 	  module will be called max77693-haptic.
+ 
++config INPUT_MAX77696_ONKEY
++	tristate "Maxim MAX77696 ONKEY support"
++	depends on MFD_MAX77696
++	help
++	  Support the ONKEY of the MAX77696 PMIC as an input device.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called max77696-onkey.
++
+ config INPUT_MAX8925_ONKEY
+ 	tristate "MAX8925 ONKEY support"
+ 	depends on MFD_MAX8925
+diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+index 415fc4e29..9e5ff9925 100644
+--- a/drivers/input/misc/Makefile
++++ b/drivers/input/misc/Makefile
+@@ -55,6 +55,7 @@ obj-$(CONFIG_INPUT_M68K_BEEP)		+= m68kspkr.o
+ obj-$(CONFIG_INPUT_MAX7360_ROTARY)	+= max7360-rotary.o
+ obj-$(CONFIG_INPUT_MAX77650_ONKEY)	+= max77650-onkey.o
+ obj-$(CONFIG_INPUT_MAX77693_HAPTIC)	+= max77693-haptic.o
++obj-$(CONFIG_INPUT_MAX77696_ONKEY)	+= max77696-onkey.o
+ obj-$(CONFIG_INPUT_MAX8925_ONKEY)	+= max8925_onkey.o
+ obj-$(CONFIG_INPUT_MAX8997_HAPTIC)	+= max8997_haptic.o
+ obj-$(CONFIG_INPUT_MC13783_PWRBUTTON)	+= mc13783-pwrbutton.o
+diff --git a/drivers/input/misc/max77696-onkey.c b/drivers/input/misc/max77696-onkey.c
+new file mode 100644
+index 000000000..9a2703bf5
+--- /dev/null
++++ b/drivers/input/misc/max77696-onkey.c
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * MAX77696 On Key
++ *
++ */
++
++#include <linux/input.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/max77696.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/pm_wakeup.h>
++#include <linux/pm_wakeirq.h>
++
++struct max77696_onkey {
++	struct input_dev *input;
++	struct regmap *regmap;
++};
++
++static void max77696_onkey_remove(struct platform_device *pdev)
++{
++	dev_pm_clear_wake_irq(&pdev->dev);
++	device_init_wakeup(&pdev->dev, false);
++}
++
++static irqreturn_t max77696_onkey_irq(int irq, void *data)
++{
++	struct max77696_onkey *onkey = data;
++	unsigned int glblint;
++
++	regmap_read(onkey->regmap, GLBLINT_REG, &glblint);
++	regmap_write(onkey->regmap, GLBLINT_REG, glblint); /* clear latched bits */
++
++	if (glblint & GLBLINT_EN0_F) {
++		//dev_info(onkey->input->dev.parent, "onkey: pressed\n");
++		input_report_key(onkey->input, KEY_POWER, 1);
++	}
++	if (glblint & GLBLINT_EN0_R) {
++		//dev_info(onkey->input->dev.parent, "onkey: released\n");
++		input_report_key(onkey->input, KEY_POWER, 0);
++	}
++
++	input_sync(onkey->input);
++
++	return IRQ_HANDLED;
++}
++
++static int max77696_onkey_probe(struct platform_device *pdev)
++{
++	struct max77696 *chip = dev_get_drvdata(pdev->dev.parent);
++	struct max77696_onkey *onkey;
++	unsigned int glblint;
++	int irq, rv;
++
++	onkey = devm_kzalloc(&pdev->dev, sizeof(*onkey), GFP_KERNEL);
++	if (!onkey)
++		return -ENOMEM;
++
++	onkey->regmap = chip->regmap;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	onkey->input = devm_input_allocate_device(&pdev->dev);
++	if (!onkey->input)
++		return -ENOMEM;
++
++	onkey->input->name = "max77696-onkey";
++	onkey->input->phys = "max77696-onkey/input0";
++	input_set_capability(onkey->input, EV_KEY, KEY_POWER);
++
++	rv = input_register_device(onkey->input);
++	if (rv)
++		return rv;
++
++	/* clear any stale latched state before enabling */
++	regmap_read(onkey->regmap, GLBLINT_REG, &glblint);
++	regmap_write(onkey->regmap, GLBLINT_REG, glblint);
++
++	/* unmask EN0 rising/falling edges in GLBLINTM */
++	regmap_update_bits(onkey->regmap, GLBLINTM_REG,
++			    GLBLINT_EN0_R | GLBLINT_EN0_F, 0);
++
++	/* unmask TOPSYSINT so global events (incl. EN0) propagate to client irq */
++	regmap_update_bits(onkey->regmap, INTTOP1M_REG, TOPSYSINT_M, 0);
++
++	dev_info(&pdev->dev, "onkey probe: irq=%d\n", irq);
++
++	rv = devm_request_threaded_irq(&pdev->dev, irq, NULL,
++					max77696_onkey_irq,
++					IRQF_ONESHOT, "max77696-onkey", onkey);
++	if (rv)
++		return rv;
++
++	device_init_wakeup(&pdev->dev, true);
++	dev_pm_set_wake_irq(&pdev->dev, irq);
++
++	platform_set_drvdata(pdev, onkey);
++	return 0;
++}
++
++static const struct of_device_id max77696_onkey_of_match[] = {
++	{ .compatible = "maxim,max77696-onkey" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_onkey_of_match);
++
++static struct platform_driver max77696_onkey_driver = {
++	.driver = {
++		.name = "max77696-onkey",
++		.of_match_table = max77696_onkey_of_match,
++	},
++	.probe = max77696_onkey_probe,
++	.remove = max77696_onkey_remove,
++};
++module_platform_driver(max77696_onkey_driver);
++
++MODULE_DESCRIPTION("MAXIM 77696 onkey driver");
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("James Coxon");
+-- 
+2.47.3
+

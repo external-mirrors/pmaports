@@ -1,0 +1,234 @@
+From 3a0e476fad0a6a367374db0e633ee9ae3e8cfa14 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 20:48:38 +0100
+Subject: [PATCH] Wario: add driver for MAX77696 Backlight WLED driver
+
+---
+ drivers/video/backlight/Kconfig         |   6 +
+ drivers/video/backlight/Makefile        |   1 +
+ drivers/video/backlight/max77696-wled.c | 187 ++++++++++++++++++++++++
+ 3 files changed, 194 insertions(+)
+ create mode 100644 drivers/video/backlight/max77696-wled.c
+
+diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+index 8bf726e8a..5577c1cdd 100644
+--- a/drivers/video/backlight/Kconfig
++++ b/drivers/video/backlight/Kconfig
+@@ -289,6 +289,12 @@ config BACKLIGHT_DA9052
+ 	help
+ 	  Enable the Backlight Driver for DA9052-BC and DA9053-AA/Bx PMICs.
+ 
++config BACKLIGHT_MAX77696
++	tristate "Backlight driver for MAX77696"
++	depends on MFD_MAX77696 || COMPILE_TEST
++	help
++	  Enable driver for MAX77696 Front WLEDs (Kindle PW3).
++
+ config BACKLIGHT_MAX8925
+ 	tristate "Backlight driver for MAX8925"
+ 	depends on MFD_MAX8925
+diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
+index 2ac011af9..9aa1d5d3b 100644
+--- a/drivers/video/backlight/Makefile
++++ b/drivers/video/backlight/Makefile
+@@ -63,3 +63,4 @@ obj-$(CONFIG_BACKLIGHT_WM831X)		+= wm831x_bl.o
+ obj-$(CONFIG_BACKLIGHT_ARCXCNN) 	+= arcxcnn_bl.o
+ obj-$(CONFIG_BACKLIGHT_RAVE_SP)		+= rave-sp-backlight.o
+ obj-$(CONFIG_BACKLIGHT_LED)		+= led_bl.o
++obj-$(CONFIG_BACKLIGHT_MAX77696)	+= max77696-wled.o
+diff --git a/drivers/video/backlight/max77696-wled.c b/drivers/video/backlight/max77696-wled.c
+new file mode 100644
+index 000000000..9333be9e3
+--- /dev/null
++++ b/drivers/video/backlight/max77696-wled.c
+@@ -0,0 +1,187 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *
++ * Copyright (C) 2026 James Coxon
++ * Author: James Coxon <solarcene@protonmail.com>
++ *
++ * MAX77696 WLED Backlight Driver
++ *
++ * Controls the WLED boost regulator block of the MAX77696 PMIC,
++ * used as the frontlight driver on the Amazon Kindle Paperwhite 3
++ * (Wario).
++ *
++ */
++
++#include <linux/backlight.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++#include <linux/mfd/max77696.h>
++#include <linux/platform_device.h>
++
++#define MAX77696_BL_DEFAULT_BRIGHTNESS  240
++
++struct max77696_bl {
++	struct regmap *regmap;
++	struct device *dev;
++	int brightness;
++};
++
++/*
++ * max77696_bl_set - write brightness to hardware.
++ *
++ * At brightness=0, disable the boost converter (LED1EN=0).
++ * At brightness>0, write current registers then enable (LED1EN=1).
++ */
++
++static int max77696_bl_set(struct max77696_bl *bl, int brightness)
++{
++	int ret;
++
++	brightness = clamp(brightness,
++			   MAX77696_BL_MIN_BRIGHTNESS,
++			   MAX77696_BL_MAX_BRIGHTNESS);
++
++	if (brightness == MAX77696_BL_MIN_BRIGHTNESS) {
++		/* Disable boost converter */
++		ret = regmap_update_bits(bl->regmap, LEDBST_CNTRL1_REG,
++					 LEDBST_CNTRL1_LED1EN, 0);
++		if (ret)
++			return ret;
++		bl->brightness = 0;
++		return 0;
++	}
++
++	/* Write 12-bit brightness: MSB in LED1CURRENT_1, LSB in LED1CURRENT_2 */
++	ret = regmap_write(bl->regmap, LED1CURRENT_1_REG,
++			   (brightness >> 4) & 0xFF);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(bl->regmap, LED1CURRENT_2_REG,
++			   brightness & 0x0F);
++	if (ret)
++		return ret;
++
++	/* Enable boost converter */
++	ret = regmap_update_bits(bl->regmap, LEDBST_CNTRL1_REG,
++				 LEDBST_CNTRL1_LED1EN, LEDBST_CNTRL1_LED1EN);
++	if (ret)
++		return ret;
++
++	bl->brightness = brightness;
++	return 0;
++}
++
++static int max77696_bl_update_status(struct backlight_device *bd)
++{
++	struct max77696_bl *bl = bl_get_data(bd);
++	int brightness = backlight_get_brightness(bd);
++
++	return max77696_bl_set(bl, brightness);
++}
++
++static int max77696_bl_get_brightness(struct backlight_device *bd)
++{
++	struct max77696_bl *bl = bl_get_data(bd);
++	unsigned int msb, lsb, enabled;
++	int ret;
++
++	ret = regmap_read(bl->regmap, LEDBST_CNTRL1_REG, &enabled);
++	if (ret)
++		return ret;
++
++	if (!(enabled & LEDBST_CNTRL1_LED1EN))
++		return 0;
++
++	ret = regmap_read(bl->regmap, LED1CURRENT_1_REG, &msb);
++	if (ret)
++		return ret;
++
++	ret = regmap_read(bl->regmap, LED1CURRENT_2_REG, &lsb);
++	if (ret)
++		return ret;
++
++	return (msb << 4) | (lsb & 0x0F);
++}
++
++static const struct backlight_ops max77696_bl_ops = {
++	.options        = BL_CORE_SUSPENDRESUME,
++	.update_status  = max77696_bl_update_status,
++	.get_brightness = max77696_bl_get_brightness,
++};
++
++static int max77696_bl_probe(struct platform_device *pdev)
++{
++        struct max77696 *chip = dev_get_drvdata(pdev->dev.parent);
++
++	struct device *dev = &pdev->dev;
++	struct max77696_bl *bl;
++	struct backlight_device *bd;
++	struct backlight_properties props = {
++		.type           = BACKLIGHT_RAW,
++		.max_brightness = MAX77696_BL_MAX_BRIGHTNESS,
++		.brightness     = MAX77696_BL_DEFAULT_BRIGHTNESS,
++	};
++	u32 brightness;
++	int ret;
++
++	bl = devm_kzalloc(dev, sizeof(*bl), GFP_KERNEL);
++	if (!bl)
++		return -ENOMEM;
++
++	bl->regmap = chip->regmap;
++	bl->dev = dev;
++
++	/* Allow DT override of default brightness */
++	if (!of_property_read_u32(dev->of_node, "default-brightness", &brightness))
++		props.brightness = clamp_t(u32, brightness,
++					   MAX77696_BL_MIN_BRIGHTNESS,
++					   MAX77696_BL_MAX_BRIGHTNESS);
++
++	bd = devm_backlight_device_register(dev, "max77696-wled", dev, bl,
++					    &max77696_bl_ops, &props);
++	if (IS_ERR(bd))
++		return dev_err_probe(dev, PTR_ERR(bd),
++				     "backlight device register failed\n");
++
++	platform_set_drvdata(pdev, bd);
++
++	/* Apply initial brightness */
++	ret = max77696_bl_set(bl, props.brightness);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "failed to set initial brightness\n");
++
++	dev_info(dev, "MAX77696 WLED backlight registered (brightness=%d/%d)\n",
++		 props.brightness, MAX77696_BL_MAX_BRIGHTNESS);
++
++	return 0;
++}
++
++static const struct of_device_id max77696_bl_of_match[] = {
++	{ .compatible = "maxim,max77696-wled" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max77696_bl_of_match);
++
++static const struct platform_device_id max77696_bl_id[] = {
++	{ "max77696-wled", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, max77696_bl_id);
++
++static struct platform_driver max77696_bl_driver = {
++	.driver = {
++		.name           = "max77696-wled",
++		.of_match_table = max77696_bl_of_match,
++	},
++	.probe    = max77696_bl_probe,
++	.id_table = max77696_bl_id,
++};
++module_platform_driver(max77696_bl_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MAX77696 WLED Backlight Driver");
++MODULE_AUTHOR("James Coxon");
+-- 
+2.47.3
+

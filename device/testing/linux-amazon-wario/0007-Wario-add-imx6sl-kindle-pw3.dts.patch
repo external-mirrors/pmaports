@@ -1,0 +1,397 @@
+From 827db479fad8f72f8ee159cc659ea3d990271f44 Mon Sep 17 00:00:00 2001
+From: smallsolar <solarcene@protonmail.com>
+Date: Sun, 4 Oct 2026 20:12:52 +0100
+Subject: [PATCH] Wario: add imx6sl-kindle-pw3.dts
+
+---
+ arch/arm/boot/dts/nxp/imx/Makefile            |   1 +
+ .../boot/dts/nxp/imx/imx6sl-kindle-pw3.dts    | 365 ++++++++++++++++++
+ 2 files changed, 366 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6sl-kindle-pw3.dts
+
+diff --git a/arch/arm/boot/dts/nxp/imx/Makefile b/arch/arm/boot/dts/nxp/imx/Makefile
+index 21a6d05c4..4ec01d1a6 100644
+--- a/arch/arm/boot/dts/nxp/imx/Makefile
++++ b/arch/arm/boot/dts/nxp/imx/Makefile
+@@ -334,6 +334,7 @@ dtb-$(CONFIG_SOC_IMX6SL) += \
+ 	imx6sl-tolino-shine3.dtb \
+ 	imx6sl-tolino-vision.dtb \
+ 	imx6sl-tolino-vision5.dtb \
++	imx6sl-kindle-pw3.dtb \
+ 	imx6sl-warp.dtb
+ dtb-$(CONFIG_SOC_IMX6SLL) += \
+ 	imx6sll-evk.dtb \
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6sl-kindle-pw3.dts b/arch/arm/boot/dts/nxp/imx/imx6sl-kindle-pw3.dts
+new file mode 100644
+index 000000000..4a0458cd2
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6sl-kindle-pw3.dts
+@@ -0,0 +1,365 @@
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include "imx6sl.dtsi"
++#include "imx6sl-pinfunc.h"
++
++/ {
++    model = "Amazon Kindle Paperwhite 3 (Wario)";
++    compatible = "amazon,kindle-pw3", "fsl,imx6sl";
++
++    aliases {
++        mmc1 = &usdhc2;
++    };
++
++    memory@80000000 {
++        device_type = "memory";
++        reg = <0x80000000 0x20000000>;
++    };
++
++    chosen {
++        stdout-path = &uart1;
++    };
++
++    regulators {
++        compatible = "simple-bus";
++
++        emmc_3v3: regulator-emmc-3v3 {
++            compatible = "regulator-fixed";
++            regulator-name = "emmc-3v3";
++            regulator-min-microvolt = <3300000>;
++            regulator-max-microvolt = <3300000>;
++            gpio = <&gpio4 17 0>;  /* gpio-113 */
++            enable-active-high;
++	    regulator-always-on; 
++	    regulator-boot-on;
++        };
++
++        emmc_1v8: regulator-emmc-1v8 {
++            compatible = "regulator-fixed";
++            regulator-name = "emmc-1v8";
++            regulator-min-microvolt = <1800000>;
++            regulator-max-microvolt = <1800000>;
++            gpio = <&gpio4 23 0>;  /* gpio-119 */
++            enable-active-high;
++	    regulator-always-on; 
++	    regulator-boot-on;
++
++        };
++
++	wifi_pwr: regulator-wifi {
++		compatible = "regulator-fixed";
++		regulator-name = "wifi-pwr";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio3 29 0>;  /* gpio-93 */
++		enable-active-high;
++	};
++    };
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++
++    imx6sl-kindle {
++        pinctrl_uart1: uart1grp {
++            fsl,pins = <
++                MX6SL_PAD_UART1_TXD__UART1_TX_DATA  0x1b0b1
++                MX6SL_PAD_UART1_RXD__UART1_RX_DATA  0x1b0b1
++            >;
++        };
++
++	pinctrl_usdhc2: usdhc2grp {
++			fsl,pins = <
++				/*
++				LVE_ENABLED,HYS_ENABLED,PUS_22KOHM_PU,PUE_PULL,
++				PKE_ENABLED,ODE_DISABLED,SPD_100MHZ,DSE_40OHM,SRE_FAST
++				*/
++				MX6SL_PAD_SD2_CLK__SD2_CLK			0x41F071
++				MX6SL_PAD_SD2_CMD__SD2_CMD			0x41F071
++				MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x41F071
++				MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x41F071
++				MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x41F071
++				MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x41F071
++				MX6SL_PAD_SD2_DAT4__SD2_DATA4		0x41F071
++				MX6SL_PAD_SD2_DAT5__SD2_DATA5		0x41F071
++				MX6SL_PAD_SD2_DAT6__SD2_DATA6		0x41F071
++				MX6SL_PAD_SD2_DAT7__SD2_DATA7		0x41F071
++				/*
++				LVE_ENABLED,HYS_ENABLED,PUS_100KOHM_PU,PUE_PULL,
++				PKE_ENABLED,ODE_DISABLED,SPD_100MHZ,DSE_40OHM,SRE_FAST
++				*/
++				MX6SL_PAD_SD2_RST__SD2_RESET		0x413071
++			>;
++		};
++
++		pinctrl_epdc0: epdcgrp0 {
++			fsl,pins = <
++				MX6SL_PAD_EPDC_D0__EPDC_DATA00     0x4100b1
++				MX6SL_PAD_EPDC_D1__EPDC_DATA01     0x4100b1
++				MX6SL_PAD_EPDC_D2__EPDC_DATA02     0x4100b1
++				MX6SL_PAD_EPDC_D3__EPDC_DATA03     0x4100b1
++				MX6SL_PAD_EPDC_D4__EPDC_DATA04     0x4100b1
++				MX6SL_PAD_EPDC_D5__EPDC_DATA05     0x4100b1
++				MX6SL_PAD_EPDC_D6__EPDC_DATA06     0x4100b1
++				MX6SL_PAD_EPDC_D7__EPDC_DATA07     0x4100b1
++				MX6SL_PAD_EPDC_D8__EPDC_DATA08     0x4100b1
++				MX6SL_PAD_EPDC_D9__EPDC_DATA09     0x4100b1
++				MX6SL_PAD_EPDC_D10__EPDC_DATA10     0x4100b1
++				MX6SL_PAD_EPDC_D11__EPDC_DATA11     0x4100b1
++				MX6SL_PAD_EPDC_D12__EPDC_DATA12     0x4100b1
++				MX6SL_PAD_EPDC_D13__EPDC_DATA13     0x4100b1
++				MX6SL_PAD_EPDC_D14__EPDC_DATA14     0x4100b1
++				MX6SL_PAD_EPDC_D15__EPDC_DATA15     0x4100b1
++				MX6SL_PAD_EPDC_SDCLK__EPDC_SDCLK_P     0x4100b1
++				MX6SL_PAD_EPDC_SDLE__EPDC_SDLE  0x4100b1
++				MX6SL_PAD_EPDC_SDOE__EPDC_SDOE  0x4100b1
++				MX6SL_PAD_EPDC_SDSHR__EPDC_SDSHR       0x4100b1
++				MX6SL_PAD_EPDC_SDCE0__EPDC_SDCE0       0x4100b1
++				MX6SL_PAD_EPDC_GDCLK__EPDC_GDCLK       0x4100b1
++				MX6SL_PAD_EPDC_GDOE__EPDC_GDOE  0x4100b1
++				MX6SL_PAD_EPDC_GDRL__EPDC_GDRL  0x4100b1
++				MX6SL_PAD_EPDC_GDSP__EPDC_GDSP  0x4100b1
++		       >;
++		};
++
++		pinctrl_usdhc3: usdhc3grp {
++			fsl,pins = < 
++			        MX6SL_PAD_SD3_CMD__SD3_CMD     0x41f0b1
++			        MX6SL_PAD_SD3_CLK__SD3_CLK     0x41f0b1
++			        MX6SL_PAD_SD3_DAT0__SD3_DATA0  0x41f0b1
++			        MX6SL_PAD_SD3_DAT1__SD3_DATA1  0x41f0b1
++			        MX6SL_PAD_SD3_DAT2__SD3_DATA2  0x41f0b1
++			        MX6SL_PAD_SD3_DAT3__SD3_DATA3  0x41f0b1
++			    >;
++		};
++
++		pinctrl_i2c1: i2c1grp {
++			fsl,pins = <
++				MX6SL_PAD_I2C1_SCL__I2C1_SCL	0x4001b8b1
++				MX6SL_PAD_I2C1_SDA__I2C1_SDA	0x4001b8b1
++			>;
++		};
++
++		pinctrl_i2c2: i2c2grp {
++		    fsl,pins = <
++				MX6SL_PAD_I2C2_SCL__I2C2_SCL  0x4001b8b1
++				MX6SL_PAD_I2C2_SDA__I2C2_SDA  0x4001b8b1
++			>;
++		};
++
++    };
++};
++
++&uart1 {
++    pinctrl-names = "default";
++    pinctrl-0 = <&pinctrl_uart1>;
++    status = "okay";
++};
++
++/* eMMC */
++&usdhc2 {
++    pinctrl-names = "default";
++    pinctrl-0 = <&pinctrl_usdhc2>;
++    bus-width = <8>;
++    non-removable;
++    vqmmc-supply = <&emmc_1v8>;
++    vmmc-supply = <&emmc_3v3>;
++    status = "okay";
++};
++
++/* WiFi — ath6kl on SDIO */
++&usdhc3 {
++    pinctrl-names = "default";
++    pinctrl-0 = <&pinctrl_usdhc3>;
++    bus-width = <4>;
++    non-removable;
++    vmmc-supply = <&wifi_pwr>;
++    status = "okay";
++};
++
++/*
++ * CPU voltage scaling.
++ *
++ * Amazon's stock kernel runs with the internal anatop LDOs bypassed
++ * (CONFIG_MX6_INTER_LDO_BYPASS) and does all DVFS on the MAX77696 bucks:
++ *   BUCK1 = SW1_VDDCORE (VDD_ARM), BUCK2 = SW2_VDDSOC.
++ *
++ */
++
++&reg_arm {
++    status = "disabled";
++};
++
++&cpu0 {
++    arm-supply = <&buck1_reg>;
++
++    operating-points =
++        /* kHz    uV */
++        <996000  1250000>,
++        <792000  1250000>,
++        <396000  1050000>;
++    fsl,soc-operating-points =
++        <996000  1175000>,
++        <792000  1175000>,
++        <396000  1175000>;
++};
++
++/*
++ * MAX77696 PMIC on I2C0.
++ * Core MFD driver: drivers/mfd/max77696.c, compatible "maxim,max77696".
++ * Cells match child nodes by of_compatible:
++ *   - "maxim,max77696-epd"       -> drivers/regulator/max77696-epd.c
++ *   - "maxim,max77696-regulator" -> general BUCK/LDO regulators
++ *   - "maxim,max77696-backlight" -> WLED backlight
++ *
++ * RTC at 0x68 is a max77696 internal sub-address, not a separate chip
++ * (confirmed: not ds1307). Not yet exposed — using SNVS RTC for now.
++ */
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	clock-frequency = <100000>;
++	status = "okay";
++
++	max77696_gauge: fuel-gauge@34 {
++		compatible = "maxim,max77696-battery";
++		reg = <0x34>;
++	};
++
++	max77696_extcon: extcon@35 {
++		compatible = "maxim,max77696-extcon";
++		reg = <0x35>;
++	};
++
++	max77696: pmic@3c {
++		compatible = "maxim,max77696";
++		reg = <0x3c>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <20 IRQ_TYPE_LEVEL_LOW>; /* gpio-116 */
++
++		max77696_epd: epd {
++			compatible = "maxim,max77696-epd";
++
++			regulators {
++				DISPLAY_reg: DISPLAY {
++					regulator-name = "DISPLAY";
++				};
++
++				VCOM_reg: VCOM {
++					regulator-name = "VCOM";
++				};
++
++				V3P3_reg: V3P3 {
++					regulator-name = "V3P3";
++				};
++			};
++		};
++
++		max77696_bl: backlight {
++			compatible = "maxim,max77696-wled";
++			default-brightness = <240>;
++		};
++
++		max77696_onkey: onkey {
++			compatible = "maxim,max77696-onkey";
++		};
++
++		max77696_regulator: regulator {
++			compatible = "maxim,max77696-reg";
++
++			regulators {
++				ldo2_reg: LDO2 {
++					regulator-name = "usb_gadget_phy";
++					regulator-always-on;
++					regulator-boot-on;
++				};
++
++				/*
++				 * VDD_ARM. Bootloader leaves this at 1.25 V (VOUT1 = 0x34).
++				 * Limits copied from Amazon's board file (900-1300 mV).
++				 * Do not touch VOUT1DVS (0x32): the stock kernel never
++				 * used it. always-on + boot-on: never switch the core rail.
++				 */
++				buck1_reg: BUCK1 {
++					regulator-name = "vdd_arm";
++					regulator-min-microvolt = <900000>;
++					regulator-max-microvolt = <1300000>;
++					regulator-always-on;
++					regulator-boot-on;
++				};
++			};
++		};
++	};
++};
++
++/* Touchscreen on I2C1 */
++&i2c2 {
++    pinctrl-names = "default";
++    pinctrl-0 = <&pinctrl_i2c2>;
++    clock-frequency = <100000>;
++    status = "okay";
++
++    touchscreen@24 {
++        compatible = "cypress,cyttsp4-i2c";
++        reg = <0x24>;
++        irq-gpios = <&gpio4 3 GPIO_ACTIVE_LOW>;
++        reset-gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;
++    };
++};
++
++/* Watchdog — enable so mainline manages it */
++&wdog1 {
++    status = "okay";
++};
++
++&epdc {
++    pinctrl-names = "default";
++    pinctrl-0 = <&pinctrl_epdc0>;
++    status = "okay";
++
++    DISPLAY-supply = <&DISPLAY_reg>;
++    VCOM-supply    = <&VCOM_reg>;
++    V3P3-supply    = <&V3P3_reg>;
++
++    /* EPD-specific timing parameters for ED060TC1_3CE_CARTA_1_2 (Muscat/KPW3) */
++    vscan-holdoff  = <4>;
++    sdoed-width    = <10>;
++    sdoed-delay    = <20>;
++    sdoez-width    = <10>;
++    sdoez-delay    = <20>;
++    gdclk-hp-offs  = <562>;
++    gdsp-offs      = <662>;
++    gdoe-offs      = <0>;
++    gdclk-offs     = <225>;
++    num-ce         = <3>;
++
++    rotation = <270>;
++
++    timing: timing {
++        clock-frequency = <80000000>;
++        hactive = <1448>;
++        vactive = <1072>;
++        hback-porch = <16>;
++        hfront-porch = <104>;
++        hsync-len = <26>;
++        vback-porch = <4>;
++        vfront-porch = <4>;
++        vsync-len = <2>;
++    };
++
++};
++
++&gpu_2d {
++    status = "disabled";
++};
++
++&gpu_vg {
++    status = "disabled";
++};
++
++&usbotg1 {
++	dr_mode = "peripheral";
++	disable-over-current;
++	status = "okay";
++};
+-- 
+2.47.3
+

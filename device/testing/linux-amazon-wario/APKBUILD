@@ -1,0 +1,83 @@
+# Kernel config based on: arch/arm/configs/wario_defconfig
+maintainer="James Coxon <solarcene@protonmail.com>"
+pkgname=linux-amazon-wario
+pkgver=7.1.10
+pkgrel=0
+_commit="8c68d420f2a30cfdd6673d971e8ae325e9835fe6"
+pkgdesc="Amazon Kindle Paperwhite3 (wario) Fork of i.MX E-Book reader kernel fork, close to mainline"
+provides="linux-amazon-wario-mainline=$pkgver-r$pkgrel"
+arch="armv7"
+_carch="arm"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native pmb:kconfigcheck-nftables"
+makedepends="
+	bison
+	clang
+	elfutils-dev
+	findutils
+	flex
+	linux-headers
+	llvm
+	lld
+	openssl-dev
+	pahole
+	perl
+	postmarketos-installkernel
+	python3
+	zstd
+"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/akemnade/linux/archive/$_commit.tar.gz
+	config-${pkgname#linux-}.$arch
+	0001-Wario-fix-for-suspend-to-mem-CFI-triggered-oops.patch
+	0002-Wario-add-drivers-for-MAX77696-MFD-REG-for-CPU-USB-E.patch
+	0003-Wario-MAX77696-Battery-Fuel-Gauge-Driver.patch
+	0004-Wario-MAX77696-OnKey-driver.patch
+	0005-Wario-add-driver-for-MAX77696-Backlight-WLED-driver.patch
+	0006-Wario-cyttsp4-driver-ported-from-6.x-includes-fix-fo.patch
+	0007-Wario-add-imx6sl-kindle-pw3.dts.patch
+"
+builddir="$srcdir/linux-$_commit"
+
+# Used internally by pmbootstrap. Don't touch.
+# TODO: Remove once minimum default pmbootstrap version supports
+# kernel packages without '_flavor' and '_config'.
+_config="config-${pkgname#linux-}.$arch"
+_flavor="${pkgname#linux-}"
+
+prepare() {
+	default_prepare
+	cp -v "$srcdir"/config-${pkgname#linux-}.$arch .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" LLVM=1 \
+		KBUILD_BUILD_VERSION="$(( pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make zinstall modules_install dtbs_install \
+		LLVM=1 \
+		ARCH="$_carch" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir/usr" \
+		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+	install -Dm644 "$builddir"/include/config/kernel.release \
+		"$pkgdir/usr/share/kernel/${pkgname#linux-}/kernel.release"
+}
+
+sha512sums="
+6f4e24bf20b8e0aba06282793e89bc660bbe4d4712a3591709bfeebce0dda3b2d86909fcbb95bd1b84654fed3dad99ba9b85392141dfd737cb4cde923ac2ef61  linux-amazon-wario-8c68d420f2a30cfdd6673d971e8ae325e9835fe6.tar.gz
+1ae422e5a727374682b52ceee0c2d00da25cafd3a3cfb3418112debf3296a169834d6cbf4827f587437f70a2b56c71ad04aa8b4e6939d146692d4b1882c8e2a1  config-amazon-wario.armv7
+8d4f6359636698c883ef6a93ea27d1e90a41287a6e8ad30ea33583bb96c203a241dbbc3498693dc4fabdc94ae8d891ccca4bd00462239c1b1dac45bb99738aa6  0001-Wario-fix-for-suspend-to-mem-CFI-triggered-oops.patch
+ad955b180f930858b5ba8e2d8ce4f40b952e3de5f3f68039b1eb6a12479d649b07e14217b58834cf76d7ab019161f7caebe002096fdb231b250fb410b548e81c  0002-Wario-add-drivers-for-MAX77696-MFD-REG-for-CPU-USB-E.patch
+fd9c190eacccf7137320d4375b5586ca019e33d152a839b3dbc00a3383a76248d5a95426b5fef5c460def490521dd7fdded0a785b739cdbbaf3c1bb973ac1739  0003-Wario-MAX77696-Battery-Fuel-Gauge-Driver.patch
+64eb9d5d109d5c28177ca64638cccbe023f110e28f77546dca3e367ced0d357053efe1d48f378161b29fb0971894db6907394ef6ce8459af46b8a10816b3cccd  0004-Wario-MAX77696-OnKey-driver.patch
+03619981f5904d9de9b0b475c27caf663748149ce8f93df99c6a33fc5b99cd8c3e7437959f8990af00780ba45a3d00769296f92e8c57d2acb1e086fa9cead93d  0005-Wario-add-driver-for-MAX77696-Backlight-WLED-driver.patch
+fad36bc6a82643daec7b26cf07ef64b8fc57f7196b0d840e9694bc6402c7840f79c8bf32c0ea317dcd088dbc3a211df6137fd313276bd9f2261eae618b309a46  0006-Wario-cyttsp4-driver-ported-from-6.x-includes-fix-fo.patch
+0eabdcd8ec92c427c2fd95a017379ac94686a673c9b29316a0685c022cc4e8bf39cd469e9304a4429b373f74f58b05293ba5b980cef10b78bd6a4cb16937b3fa  0007-Wario-add-imx6sl-kindle-pw3.dts.patch
+"
