@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=262
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=3
+pkgrel=4
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -136,7 +136,6 @@ depends="
 	libpwquality
 	libqrencode
 	libseccomp
-	libselinux
 	libxkbcommon
 	linux-pam
 	lz4-libs
@@ -282,7 +281,7 @@ build() {
 		-Dbootloader="$_bootloader" \
 		-Dinitrd=true \
 		-Dhibernate=false \
-		-Dselinux=enabled \
+		-Dselinux=disabled \
 		-Dukify=disabled \
 		-Dtpm2=enabled \
 		\
