@@ -1,7 +1,7 @@
-From 5f350d71db338ac8d363762231d5111e87e511e0 Mon Sep 17 00:00:00 2001
+From 1d48b0c83e370979817ffb7e5505afbb7c7c1d47 Mon Sep 17 00:00:00 2001
 From: Frederic Laing <dev@fredfunk.tech>
 Date: Tue, 25 Aug 2026 18:16:06 +0000
-Subject: [PATCH 8/8] libcamera: Add quad-Bayer CFA layout support
+Subject: [PATCH 6/6] libcamera: Add quad-Bayer CFA layout support
 
 Quad-Bayer sensors arrange pixels in 2x2 same-colour cells. Treating
 the IMX371 full-resolution stream as a conventional Bayer pattern
@@ -32,13 +32,13 @@ Signed-off-by: Frederic Laing <dev@fredfunk.tech>
  src/libcamera/shaders/bayer_1x_packed.frag    |  49 +++-
  src/libcamera/software_isp/debayer.cpp        |   4 +-
  src/libcamera/software_isp/debayer.h          |   3 +-
- src/libcamera/software_isp/debayer_egl.cpp    |  61 +++--
+ src/libcamera/software_isp/debayer_egl.cpp    |  62 +++--
  src/libcamera/software_isp/debayer_egl.h      |   5 +-
  src/libcamera/software_isp/software_isp.cpp   |  13 +-
  src/libcamera/software_isp/swstats_cpu.cpp    |  58 ++++-
  test/meson.build                              |   1 +
  test/quad-bayer.cpp                           | 224 ++++++++++++++++++
- 18 files changed, 613 insertions(+), 41 deletions(-)
+ 18 files changed, 614 insertions(+), 41 deletions(-)
  create mode 100644 include/libcamera/internal/sensor_cfa_layout.h
  create mode 100644 include/libcamera/internal/software_isp/quad_bayer.h
  create mode 100644 test/quad-bayer.cpp
@@ -548,7 +548,7 @@ index 28f1b857b388..6c52ed0249a4 100644
  private:
  	virtual Size patternSize(PixelFormat inputFormat) = 0;
 diff --git a/src/libcamera/software_isp/debayer_egl.cpp b/src/libcamera/software_isp/debayer_egl.cpp
-index ae06dc0d2a3d..f8cf81dad172 100644
+index fdb1efec2a7b..aaa42b5b3932 100644
 --- a/src/libcamera/software_isp/debayer_egl.cpp
 +++ b/src/libcamera/software_isp/debayer_egl.cpp
 @@ -24,6 +24,7 @@
@@ -582,16 +582,17 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  
  	/* Specify GL_OES_EGL_image_external */
  	egl_.pushEnv(shaderEnv, "#extension GL_OES_EGL_image_external: enable");
-@@ -290,6 +295,8 @@ int DebayerEGL::configure(const StreamConfiguration &inputCfg,
- {
- 	if (getInputConfig(inputCfg.pixelFormat, inputConfig_) != 0)
+@@ -294,6 +299,9 @@ int DebayerEGL::configure(const StreamConfiguration &inputCfg,
  		return -EINVAL;
+ 	}
+ 
 +	if (quadBayer_)
 +		inputConfig_.patternSize = { 4, 4 };
- 
++
  	if (stats_->configure(inputCfg) != 0)
  		return -EINVAL;
-@@ -332,18 +339,22 @@ int DebayerEGL::configure(const StreamConfiguration &inputCfg,
+ 
+@@ -335,18 +343,22 @@ int DebayerEGL::configure(const StreamConfiguration &inputCfg,
  	outputSize_ = outputCfg.size;
  	nativeOutputSize_ = outSizeRange.max;
  
@@ -621,7 +622,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  
  	inputBufferCount_ = inputCfg.bufferCount;
  	outputBufferCount_ = outputCfg.bufferCount;
-@@ -363,6 +374,9 @@ Size DebayerEGL::patternSize(PixelFormat inputFormat)
+@@ -366,6 +378,9 @@ Size DebayerEGL::patternSize(PixelFormat inputFormat)
  
  std::vector<PixelFormat> DebayerEGL::formats(PixelFormat inputFormat)
  {
@@ -631,7 +632,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  	DebayerEGL::DebayerInputConfig config;
  
  	if (getInputConfig(inputFormat, config) != 0)
-@@ -409,8 +423,10 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
+@@ -412,8 +427,10 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
  	 * the input size. Keep the aspect ratio and prefer cropping over black
  	 * bars.
  	 */
@@ -644,7 +645,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  	GLfloat trans = -(1.0f - scale);
  	GLfloat projMatrix[] = {
  		scale, 0, 0, 0,
-@@ -425,12 +441,8 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
+@@ -428,12 +445,8 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
  		{ +1.0f, +1.0f },
  		{ +1.0f, -1.0f },
  	};
@@ -659,7 +660,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  
  	/* vertexIn - bayer_8.vert */
  	glEnableVertexAttribArray(attributeVertex_);
-@@ -440,7 +452,7 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
+@@ -443,7 +456,7 @@ void DebayerEGL::setShaderVariableValues(eGLImage &eglImageIn, const DebayerPara
  	/* textureIn - bayer_8.vert */
  	glEnableVertexAttribArray(attributeTexture_);
  	glVertexAttribPointer(attributeTexture_, 2, GL_FLOAT, GL_TRUE,
@@ -668,7 +669,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  
  	/*
  	 * Set the sampler2D to the respective texture unit for each texutre
-@@ -623,7 +635,9 @@ int DebayerEGL::debayerGPU(FrameBuffer *input, FrameBuffer *output, const Debaye
+@@ -626,7 +639,9 @@ int DebayerEGL::debayerGPU(FrameBuffer *input, FrameBuffer *output, const Debaye
  	egl_.attachTextureToFBO(*eglImageOut);
  	setShaderVariableValues(*eglImageIn, params);
  
@@ -679,7 +680,7 @@ index ae06dc0d2a3d..f8cf81dad172 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  	glDrawArrays(GL_TRIANGLE_FAN, 0, DEBAYER_OPENGL_COORDS);
  
-@@ -718,6 +732,15 @@ void DebayerEGL::stop()
+@@ -721,6 +736,15 @@ void DebayerEGL::stop()
  
  SizeRange DebayerEGL::sizes(PixelFormat inputFormat, const Size &inputSize)
  {
@@ -1111,5 +1112,5 @@ index 000000000000..ddbee01c3f12
 +
 +TEST_REGISTER(QuadBayerTest)
 -- 
-2.55.0
+2.56.0
 

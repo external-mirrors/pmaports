@@ -3,7 +3,7 @@ maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
 _pkgver=0.7.2
 pkgver=9999$_pkgver
-pkgrel=3
+pkgrel=4
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -58,14 +58,12 @@ _tuning_files="
 	s5kjn1.yaml
 	"
 source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libcamera-v$_pkgver.tar.gz
-	0001-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
-	0002-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
-	0003-software_isp-debayer_egl-Re-add-log-for-failing-DMAB.patch
-	0004-ipa-simple-Derive-AGC-minimum-gain-step-from-sensor-.patch
-	0005-debayer-Further-demote-Unsupported-input-format-log.patch
-	0006-debayer_egl-Use-untransposed-matrix-to-fix-GLES-2.0.patch
-	0007-simple-Limit-swISP-output-sizes.patch
-	0008-libcamera-Add-quad-Bayer-CFA-layout-support.patch
+	0001-software_isp-debayer_egl-Re-add-log-for-failing-DMAB.patch
+	0002-libcamera-camera_sensor-Add-Sony-IMX355-sensor-prope.patch
+	0003-libcamera-software_isp-debayer_egl-Use-untransposed-.patch
+	0004-debayer-Further-demote-Unsupported-input-format-log.patch
+	0005-ipa-simple-Derive-AGC-minimum-gain-step-from-sensor-.patch
+	0006-libcamera-Add-quad-Bayer-CFA-layout-support.patch
 	qcam.desktop
 	$_tuning_files
 	"
@@ -180,14 +178,12 @@ py3() {
 
 sha512sums="
 b317cdc96f61682ee0bf26dfb7c4d6441db9a9c5b93ab53528121a8cd44862b3d59cbaa3881bb0837e3e381564c184c7b742124aef4267eea754c6083de353c1  libcamera-v0.7.2.tar.gz
-c6e4d44758bc3afa639d5dfa30113e92270094f1dca8505982e85629ff88fab890ec3f14098600bdf7498259becea4bdadbff117aa96b8bc0a043ffeb4fb2f4f  0001-libcamera-simple-Enable-softISP-for-the-Pinephone.patch
-1a84267c138192f3999b870985030b0cf9bf0b61b911481bdef73d6a377bea4159f438a21180db87c3ff97c9da9f00fb0885cfedde828f4237d0ce03196d6ed7  0002-libcamera-simple-Skip-hwISP-formats-if-swISP-is-acti.patch
-e90c6c742a594e6af2efec8b9ce7cf133ed294645840f72a07408eabc010e50192462a653ef6e43b4558c9390ac516d0eefbc606691da55e604f5d20f871a0db  0003-software_isp-debayer_egl-Re-add-log-for-failing-DMAB.patch
-6159dc60692382a712c683fa63bb131bd1d4978e1e639b90940ae5f340ac396d1f9b1abfb9b450cf29c0e484018af3f80e87cc9a4b7b4e856038bd4154bdab2c  0004-ipa-simple-Derive-AGC-minimum-gain-step-from-sensor-.patch
-de5fd287fea2c71754beb7d72a6fd739a94ec7a47ed3ea09a60130bee1c08efdcf94e12b1830914e7e498b0d80a0cb4550a614aeb899129fba9d4f06918f5c63  0005-debayer-Further-demote-Unsupported-input-format-log.patch
-875788a4571ec8485f17b0abf9681238acdf3c92a1152363d4416d68e171eb7a9231dd51b59b9f56e2815f6e81bbb33fbde5419e3b9b15e1963800ebe6eddb14  0006-debayer_egl-Use-untransposed-matrix-to-fix-GLES-2.0.patch
-ac4e3c742fde4f8e4775bd2afbaaecb18fa49b869eb4309032bae985680f97443353eb384de19a9b588b632bb1711f82c318e0431214afe09068910b2e901252  0007-simple-Limit-swISP-output-sizes.patch
-2b8ee82c974a0a54279700c70dc8973038f5e1b517cade87872319d5f0b5aa9be6df0a827a9098da3fb498238b1fe080419e9950e34def0edadca0247794f269  0008-libcamera-Add-quad-Bayer-CFA-layout-support.patch
+53e6627a4d1bdb9af7c76add1bcad784e7f620e0b0667ccce202a9ee1417bb3701df5e2ace43086eb69ae3b816be0e0833ed5d5a6d1bf0ff1d801a052ac8bcc8  0001-software_isp-debayer_egl-Re-add-log-for-failing-DMAB.patch
+512565fcf40617b3c199e0bdea66de8377e77dbd5873c52338c4ca2978a87ba22ec2b675b1f943f77ce2dcbd373f1b3c68f8668ce20d7d54bc2b8c6b0c2a8824  0002-libcamera-camera_sensor-Add-Sony-IMX355-sensor-prope.patch
+80189ce5f542647e163b499f040e4b92fa1cce5717d72bed3034490214220ac92a9ce14af496f478aa765bcfc227a90600a87f177c9ca9bb64ed1ae91eb52443  0003-libcamera-software_isp-debayer_egl-Use-untransposed-.patch
+915dcc65861cb27485636647586155f3dc9ace914b4df51e1889c05e15a82a87a35ef06c44a3f09153d29fc834bc10aa60394c594233fe72a52b6fa0a8605c9a  0004-debayer-Further-demote-Unsupported-input-format-log.patch
+50fd6a28353534e143418207ee07d462f017078091c2909ca2d495840facf7849dfebb061a7ed29a62f57dbf4e506aa9ec085b0c05ccd054d19c31a987b7e37d  0005-ipa-simple-Derive-AGC-minimum-gain-step-from-sensor-.patch
+47277fedc943ad45391ba150f1c4ae70b7bd041fb162239996fe5430429c50fe27a1c5915c9de90cb714ec578c68c4ba5e4c25a3431e35e721fdd232368b703f  0006-libcamera-Add-quad-Bayer-CFA-layout-support.patch
 22167a4eceb6d1b40b0b7c45fdf116c71684f5340de7f767535cb8e160ad9d2ae0f00cb3d461f73a344520a48a4641cf46226841d78bee06bfbfd2a91337f754  qcam.desktop
 2ee566653b17d565d2c0de67cbe6ebad25df5aac6051cad78e6bae52016fa2ca0247e964d735ac776b3e0bd447ead9c4fcb26cd7629228cdba3ceb91b46f378f  hi846.yaml
 4942edd551dcf51630246f71e600c17760d3574d5d45e5530d6cfeefe2c9ab1a812fbe220f8e89d92e19a499c592b2507c801ca4eb74cd15fcecb60bff5c650b  imx355.yaml
