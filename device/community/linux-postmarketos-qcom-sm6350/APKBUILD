@@ -2,7 +2,7 @@ maintainer="Luca Weiss <luca@lucaweiss.eu>"
 _flavor="postmarketos-qcom-sm6350"
 pkgname=linux-$_flavor
 pkgver=7.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SM6350/SM7225 devices"
 arch="aarch64"
 _carch="arm64"
@@ -32,14 +32,16 @@ makedepends="
 
 _repo="linux"
 _config="config-$_flavor.$arch"
-_tag="v$pkgver-sm6350"
+#_tag="v$pkgver-sm6350"
+_tag="d09cf091f77e685080da5a4ad10b658d77ba67b3"
 
 # Source
 source="
 	https://github.com/sm6350-mainline/$_repo/archive/$_tag/$_repo-$_tag.tar.gz
 	$_config
 "
-builddir="$srcdir/$_repo-$pkgver-sm6350"
+#builddir="$srcdir/$_repo-$pkgver-sm6350"
+builddir="$srcdir/$_repo-$_tag"
 
 prepare() {
 	default_prepare
@@ -75,6 +77,6 @@ package() {
 }
 
 sha512sums="
-2247377b260eba48a3bc2840fe8a55cec82c391949b59dc83093af27cdec66245efb8f3c7fc4e105fa8b1da090335cacad8bcc6cfa128dd25ff7b473297f2530  linux-v7.2.0-sm6350.tar.gz
-e20a5b4921cd0a496ed95422696e5e93a9c717c8b903b4877166f34c7c773b02adceb8edd6394648ed95e7d55f066dcf89c64df3ffe9fb6cb6565335e8d51631  config-postmarketos-qcom-sm6350.aarch64
+8514f0af5ca5bd0fc29c93e65a7dfa0856d5f83636686509602c3125fa2fcb6b0ba5eb210326fc0e4157ddc405b39cc081d764d4f606c274b72b4655d4c07b7a  linux-d09cf091f77e685080da5a4ad10b658d77ba67b3.tar.gz
+d34fa50c0a1ef27068e4aa3603b2ff6f271697601416b9401f3f3829265464f5a2721ec11c3e97532d37696e0eb4f250ed941872562aa2aeef7faf0ece8a41f2  config-postmarketos-qcom-sm6350.aarch64
 "
