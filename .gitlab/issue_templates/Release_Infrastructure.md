@@ -12,7 +12,7 @@ push it forward):
 - [ ] Create the gitlab milestone for the release
 - [ ] Add this infrastructure issue to the milestone
 - [ ] Update the
-      [timeline](https://docs.postmarketos.org/policies-and-processes/development/releases/current-timeline.html)
+      [timeline](https://docs.nura.eco/policies-and-processes/development/releases/current-timeline.html)
       for the next release
 
 ### 1. Pre-Build phase
@@ -30,7 +30,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Update `pmb/config/__init__.py:apk_tools_min_version`. This should be a
   trivial change, push it directly to main.
 - [ ] (can be done later, at start of test phase) make a new [pmbootstrap
-  release](https://wiki.postmarketos.org/wiki/Pmbootstrap_release) <small>bpo
+  release](https://wiki.nura.eco/wiki/Pmbootstrap_release) <small>bpo
   uses the main branch, so it will be fine without a release, however users
   will want to try out the new release and may not run main.</small>
 
@@ -49,7 +49,7 @@ This phase is to get some extra time for building packages. The branch will be r
 #### pmaports: update main branch
 - [ ] `git checkout main`
 - [ ] Add the new branch to
-  [channels.cfg](https://wiki.postmarketos.org/wiki/Channels.cfg_reference):
+  [channels.cfg](https://wiki.nura.eco/wiki/Channels.cfg_reference):
   - [Example](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/commit/c43571ceaf9b8155519bc9fb760bdeccd96e7e9c)
   - Check if you need to set `branch_aports=master` initially if the stable
     branch does not exist yet.
@@ -79,7 +79,7 @@ This phase is to get some extra time for building packages. The branch will be r
 
 #### bpo: adjust config
 - [ ] Add the branch to the
-  [build.postmarketos.org](https://gitlab.postmarketos.org/postmarketOS/build.postmarketos.org)
+  [bpo](https://gitlab.postmarketos.org/postmarketOS/build-package-orchestrator)
   config in `bpo/config/const/__init__.py:branches` below `branches["main"]`,
   so it builds with lower priority than main until it's released. Set `ignore_errors` to `True`.
 - [ ] Make a merge request, wait until CI passes, merge it (or if you can directly push to main that's also fine since it's a trivial change)
@@ -90,7 +90,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Fix all failing `x86_64` packages (Remember: patches need to go through
       edge first, then get backported to the stable branch!)
   - Try to get build fixes merged to edge quickly, ask for reviews in
-    #postmarketos-devel, and consider merging trivial fixes right after they
+    the devel channel, and consider merging trivial fixes right after they
     pass CI.
   - Devices in testing and archived categories that don't build: consider
     trying to fix them, or just delete them from the branch
@@ -215,18 +215,20 @@ This phase is to get some extra time for building packages. The branch will be r
   the release is tested and ready! During the testing phase, we can use
   postmarketos-release-upgrade from main directly: `wget
   https://gitlab.postmarketos.org/postmarketOS/postmarketos-release-upgrade/-/raw/main/upgrade.sh`)
-- [ ] Add the branch to pkgs.postmarketos.org
+- [ ] Add the branch to pkgs.nura.eco
 - [ ] Merge the blog post
 - [ ] Edit channels.cfg, change descriptions:
   - New release: "Latest release / Recommended for best stability"
   - Old release: "Old release (supported until YYYY-MM-DD)" (one month from date of the release)
 - [ ] Create a milestone for the next release
 - [ ] Create an issue for the next release notes and attach it to that milestone
-- [ ] Update the [Releases](https://docs.postmarketos.org/pmaports/main/releases.html) page
+- [ ] Update the [Releases](https://docs.nura.eco/pmaports/main/releases.html) page
   - Move the new release to the list of active releases, link to the blog post
   - Update the announcement and title for the release
   - Add a new upcoming release below
-- [ ] Update [Template:Latest stable release](https://wiki.postmarketos.org/wiki/Template:Latest_stable_release) on the wiki with the new version
+- [ ] Update
+      [Template:Latest stable release](https://wiki.nura.eco/wiki/Template:Latest_stable_release)
+      on the wiki with the new version
 - [ ] Update "Default description template for issues" in pmaports (.gitlab dir)
   - In "On what postmarketOS version did you encounter the issue?", change:
     - previous release: add " (supported until YYYY-MM-DD)"

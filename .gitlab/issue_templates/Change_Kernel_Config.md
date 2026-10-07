@@ -4,7 +4,7 @@
 
 ### Read the fine manual, please :)
 
-- [ ] I have read https://postmarketos.org/kconfig-adjust-multiple
+- [ ] I have read https://nura.eco/kconfig-adjust-multiple
 
 ### What benefit does the change have?
 

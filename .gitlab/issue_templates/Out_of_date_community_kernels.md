@@ -6,7 +6,7 @@
 -->
 
 Hi, as per our
-[device categorization requirements for the community category](https://docs.postmarketos.org/pmaports/main/device-categorization.html#community),
+[device categorization requirements for the community category](https://docs.nura.eco/pmaports/main/device-categorization.html#community),
 devices in the community category may not use a kernel version older than 6
 months.
 

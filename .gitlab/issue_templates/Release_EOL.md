@@ -1,5 +1,5 @@
 <!--
-    This template is for marking a postmarketOS stable release as EOL.
+    This template is for marking a Nura stable release as EOL.
 
     Name this issue "vYY.MM EOL".
 -->
@@ -23,7 +23,7 @@ When the release has reached its EOL date:
     the amount of branches that get checked minimal
 - [ ] pmaports.git channels.cfg: change description:
   - "Old release (unsupported)"
-- [ ] Update the [Releases](https://docs.postmarketos.org/pmaports/main/releases.html) page
+- [ ] Update the [Releases](https://docs.nura.eco/pmaports/main/releases.html) page
   - Move the release from active to old
 - [ ] Consider removing images for the previous releases to save disk space
   (people can build their own images with pmbootstrap if needed)
