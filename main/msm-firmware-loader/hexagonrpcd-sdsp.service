@@ -1,0 +1,7 @@
+[Unit]
+Requires=msm-firmware-loader.service
+After=msm-firmware-loader.service
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/hexagonrpcd -f /dev/fastrpc-sdsp -d sdsp -s -R /run/msm-firmware-loader/hexagonrpc

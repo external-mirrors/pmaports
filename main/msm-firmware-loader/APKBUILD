@@ -1,14 +1,25 @@
 maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=msm-firmware-loader
-pkgver=1.8.0
-pkgrel=3
+pkgver=1.9.0
+pkgrel=0
 pkgdesc="Set of init services to automatically load firmware from device partitions"
 url="https://postmarketos.org/"
-subpackages="$pkgname-openrc $pkgname-systemd $pkgname-wcnss"
+subpackages="
+	$pkgname-hexagonrpcd
+	$pkgname-hexagonrpcd-systemd:hexagonrpcd_systemd
+	$pkgname-hexagonrpcd-openrc:hexagonrpcd_openrc
+	$pkgname-openrc
+	$pkgname-systemd
+	$pkgname-wcnss
+"
 arch="armhf armv7 aarch64"
 license="MIT"
 source="
 	https://gitlab.postmarketos.org/postmarketOS/msm-firmware-loader/-/archive/$pkgver/msm-firmware-loader-$pkgver.tar.gz
+	hexagonrpcd-adsp-rootpd.service
+	hexagonrpcd-adsp-sensorspd.service
+	hexagonrpcd-sdsp.service
+	hexagonrpcd.confd
 "
 install="$pkgname-openrc.post-install"
 options="!check"
@@ -39,6 +50,41 @@ wcnss() {
 	mkdir -p "$subpkgdir"
 }
 
+hexagonrpcd() {
+	pkgdesc="Load hexagonrpc firmware"
+
+	# meta package to install either $pkgname-hexagonrpcd-systemd or $pkgname-hexagonrpcd-openrc
+	mkdir -p "$subpkgdir"
+}
+
+hexagonrpcd_systemd() {
+	pkgdesc="systemd override for hexagonrpc to select msm-firmware-loader directory"
+	install_if="$pkgname-hexagonrpcd=$pkgver-r$pkgrel hexagonrpcd-systemd"
+
+	install -Dm644 "$srcdir"/hexagonrpcd-adsp-rootpd.service \
+		"$subpkgdir"/usr/lib/systemd/system/hexagonrpcd-adsp-rootpd.service.d/10-msm-firmware-loader.conf
+	install -Dm644 "$srcdir"/hexagonrpcd-adsp-sensorspd.service \
+		"$subpkgdir"/usr/lib/systemd/system/hexagonrpcd-adsp-sensorspd.service.d/10-msm-firmware-loader.conf
+	install -Dm644 "$srcdir"/hexagonrpcd-sdsp.service \
+		"$subpkgdir"/usr/lib/systemd/system/hexagonrpcd-sdsp.service.d/10-msm-firmware-loader.conf
+}
+
+hexagonrpcd_openrc() {
+	pkgdesc="openrc config for hexagonrpc to select msm-firmware-loader directory"
+	install_if="$pkgname-hexagonrpcd=$pkgver-r$pkgrel hexagonrpcd-openrc"
+
+	install -Dm644 "$srcdir"/hexagonrpcd.confd \
+		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-rootpd.conf
+	install -Dm644 "$srcdir"/hexagonrpcd.confd \
+		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-adsp-sensorspd.conf
+	install -Dm644 "$srcdir"/hexagonrpcd.confd \
+		"$subpkgdir"/usr/share/hexagonrpcd/hexagonrpcd-sdsp.conf
+}
+
 sha512sums="
-c87e9e45fa47b046eb056e1830b32f081a9100bd937e683794aa95913d93e39bdc8911e599b8ab6a368c42b0bf56d9a29c4f0e6ba31b7fb31747c43eb6053bbd  msm-firmware-loader-1.8.0.tar.gz
+2c83289c67588a2dfa9623c7f5b4b94de5d9ca89fbace1c1f49036a87f2803ed2334402a8af598966ed55ad9a9e72e873f41f21305d620830334f87f8e316014  msm-firmware-loader-1.9.0.tar.gz
+40907eca4d20c6644ceeef59b1093080313ea925f34e0c858630d9e34bef3fd85d4b82043ba945f577c4b30e81c71809ab186287d78dcc6b72b1e81d882b66ab  hexagonrpcd-adsp-rootpd.service
+134762b172fbc2a28c1963f5594829661ffe0d49d354d85c376c7121d9d761a25b87dc5ffdba5bf021fc729bae0ce9cdc3a9af74ef415ee0860ffae391d260b2  hexagonrpcd-adsp-sensorspd.service
+71e9363b3d89c5493fdb5dae198c5fdabe707953bb3a0f1591d2001750479eaf167d4f657e2503cf1b1321df9123bcbe29f1762c0d7520416716a44488795de5  hexagonrpcd-sdsp.service
+82e772778b0489e185f7bf845d45434f0b3146eabcfc98fd493b643f26d4bb843f7ca09526f6189572b5d2116d0ebfd5020d95850f482b2803bc992a67037330  hexagonrpcd.confd
 "
