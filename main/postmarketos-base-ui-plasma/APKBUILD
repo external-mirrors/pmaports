@@ -3,7 +3,7 @@
 maintainer="Bart Ribbers <bribbers@disroot.org>"
 pkgname=postmarketos-base-ui-plasma
 pkgver=3
-pkgrel=1
+pkgrel=2
 pkgdesc="Meta package for shared configuration for Plasma-based UIs"
 url="https://postmarketos.org"
 arch="noarch !armhf" # armhf is not supported
@@ -43,10 +43,14 @@ _pmb_recommends="
 	xdg-user-dirs
 	"
 subpackages="$pkgname-openrc $pkgname-systemd"
-if [ "$CARCH" != "armv7" ]; then
-	# Temporary measure for armv7 due to lack of qtwebengine
-	subpackages="$subpackages $pkgname-kaccounts"
-fi
+case "$CARCH" in
+	armhf|x86|armv7|s390x|riscv64)
+		# kaccounts-providers isn't being built for these arches in Alpine
+		;;
+	*)
+		subpackages="$subpackages $pkgname-kaccounts"
+		;;
+esac
 install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 source="
 	drkonqirc
