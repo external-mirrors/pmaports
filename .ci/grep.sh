@@ -188,9 +188,9 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 	NEW_APKBUILDS=$(git show --pretty="" --name-only --diff-filter=A "$CI_MERGE_REQUEST_DIFF_BASE_SHA"..HEAD | grep APKBUILD || true)
 
 	if [ -n "$NEW_APKBUILDS" ]; then
-		if [ -n "$(grep -L '^maintainer="[^"]\+"$' $NEW_APKBUILDS || true)" ]; then
+		if [ -n "$(grep -L '^maintainer="[^"]\+"$' --exclude-dir='archived' $NEW_APKBUILDS || true)" ]; then
 			echo "ERROR: A new package does not have a maintainer set."
-			grep --color=always -L '^maintainer="[^"]\+"$' $NEW_APKBUILDS || true
+			grep --color=always -L '^maintainer="[^"]\+"$' --exclude-dir='archived' $NEW_APKBUILDS || true
 			exit_code=1
 		fi
 	fi
