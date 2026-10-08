@@ -1,6 +1,90 @@
+From 7780e65fd63f71a049e273f2426bbff53e83fd92 Mon Sep 17 00:00:00 2001
+From: Antoine Martin <dev@ayakael.net>
+Date: Thu, 8 Oct 2026 09:45:23 -0400
+Subject: [PATCH 1/2] rk3566 pinenote support
+
+---
+ .../ABI/testing/configfs-usb-gadget-gud       |   13 +
+ .../leds/backlight/lm3630a-backlight.yaml     |   13 +
+ .../bindings/regulator/ti,tps65185.yaml       |   36 +
+ MAINTAINERS                                   |    2 +
+ .../dts/rockchip/rk3566-pinenote-v1.2.dts     |   36 +
+ .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  232 ++
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  125 +
+ arch/arm64/boot/dts/rockchip/rk356x-base.dtsi |   80 +
+ arch/arm64/configs/pinenote_defconfig         | 1610 +++++++++++
+ drivers/firmware/Kconfig                      |    7 +
+ drivers/firmware/Makefile                     |    1 +
+ drivers/firmware/rockchip_sip.c               |  547 ++++
+ drivers/gpu/drm/Kconfig                       |    6 +
+ drivers/gpu/drm/Makefile                      |    8 +-
+ drivers/gpu/drm/drm_client.c                  |   44 +-
+ drivers/gpu/drm/drm_client_modeset.c          |  157 +
+ drivers/gpu/drm/drm_epd_helper.c              |  711 +++++
+ drivers/gpu/drm/gud/Kconfig                   |    6 +
+ drivers/gpu/drm/gud/Makefile                  |    1 +
+ drivers/gpu/drm/gud/gud_gadget.c              | 1386 +++++++++
+ drivers/gpu/drm/gud/gud_internal.h            |    2 +
+ drivers/gpu/drm/panel/panel-simple.c          |  251 ++
+ drivers/gpu/drm/rockchip/Kconfig              |   22 +
+ drivers/gpu/drm/rockchip/Makefile             |    7 +
+ drivers/gpu/drm/rockchip/rockchip_ebc.c       | 2527 +++++++++++++++++
+ drivers/gpu/drm/rockchip/rockchip_ebc.h       |  252 ++
+ .../gpu/drm/rockchip/rockchip_ebc_blit_neon.c | 1253 ++++++++
+ .../gpu/drm/rockchip/rockchip_ebc_blit_neon.h |   62 +
+ drivers/iio/accel/st_accel_i2c.c              |   40 +
+ .../common/st_sensors/st_sensors_trigger.c    |   10 +
+ drivers/input/misc/Kconfig                    |    8 +
+ drivers/input/misc/Makefile                   |    1 +
+ drivers/input/misc/ws8100-pen.c               |  801 ++++++
+ drivers/input/touchscreen/cyttsp5.c           |   62 +-
+ drivers/media/platform/rockchip/rga/rga-hw.c  |    9 +
+ drivers/media/platform/rockchip/rga/rga-hw.h  |   11 +-
+ drivers/media/platform/rockchip/rga/rga.c     |  125 +-
+ drivers/media/platform/rockchip/rga/rga.h     |   15 +
+ drivers/media/v4l2-core/v4l2-common.c         |    1 +
+ drivers/regulator/Kconfig                     |   12 +-
+ drivers/regulator/Makefile                    |    2 +-
+ drivers/regulator/tps65185-regulator.c        |  782 +++++
+ drivers/soc/rockchip/Kconfig                  |    6 +
+ drivers/soc/rockchip/Makefile                 |    1 +
+ drivers/soc/rockchip/rockchip_pm_config.c     |  291 ++
+ drivers/spi/spi-gpio.c                        |    3 +-
+ drivers/usb/gadget/Kconfig                    |   12 +
+ drivers/usb/gadget/function/Makefile          |    2 +
+ drivers/usb/gadget/function/f_gud.c           |  866 ++++++
+ drivers/video/backlight/lm3630a_bl.c          |  122 +-
+ include/drm/drm_client.h                      |   43 +-
+ include/drm/drm_epd_helper.h                  |  107 +
+ include/drm/gud.h                             |   12 +
+ include/dt-bindings/suspend/rockchip-rk3568.h |   57 +
+ include/linux/platform_data/lm3630a_bl.h      |   12 +
+ include/linux/rockchip/rockchip_sip.h         |  333 +++
+ include/uapi/drm/rockchip_ebc_drm.h           |  172 ++
+ include/uapi/linux/v4l2-controls.h            |   11 +-
+ scripts/package/debian/rules                  |    2 +-
+ 59 files changed, 13296 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/ABI/testing/configfs-usb-gadget-gud
+ create mode 100644 arch/arm64/configs/pinenote_defconfig
+ create mode 100644 drivers/firmware/rockchip_sip.c
+ create mode 100644 drivers/gpu/drm/drm_epd_helper.c
+ create mode 100644 drivers/gpu/drm/gud/gud_gadget.c
+ create mode 100644 drivers/gpu/drm/rockchip/rockchip_ebc.c
+ create mode 100644 drivers/gpu/drm/rockchip/rockchip_ebc.h
+ create mode 100644 drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.c
+ create mode 100644 drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.h
+ create mode 100644 drivers/input/misc/ws8100-pen.c
+ create mode 100644 drivers/regulator/tps65185-regulator.c
+ create mode 100644 drivers/soc/rockchip/rockchip_pm_config.c
+ create mode 100644 drivers/usb/gadget/function/f_gud.c
+ create mode 100644 include/drm/drm_epd_helper.h
+ create mode 100644 include/dt-bindings/suspend/rockchip-rk3568.h
+ create mode 100644 include/linux/rockchip/rockchip_sip.h
+ create mode 100644 include/uapi/drm/rockchip_ebc_drm.h
+
 diff --git a/Documentation/ABI/testing/configfs-usb-gadget-gud b/Documentation/ABI/testing/configfs-usb-gadget-gud
 new file mode 100644
-index 000000000..bbf32d494
+index 000000000000..bbf32d494d98
 --- /dev/null
 +++ b/Documentation/ABI/testing/configfs-usb-gadget-gud
 @@ -0,0 +1,13 @@
@@ -18,7 +102,7 @@ index 000000000..bbf32d494
 +		formats - Byte string of GUD_PIXEL_FORMAT_* values to include.
 +		connectors - 32-bit mask of connectors to include.
 diff --git a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
-index 3c9b4054e..6915884d5 100644
+index 3c9b4054ed9a..6915884d566b 100644
 --- a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
 +++ b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
 @@ -33,6 +33,19 @@ properties:
@@ -42,7 +126,7 @@ index 3c9b4054e..6915884d5 100644
    - compatible
    - reg
 diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
-index af0f638b8..6be643b44 100644
+index af0f638b80bc..6be643b44d88 100644
 --- a/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
 +++ b/Documentation/devicetree/bindings/regulator/ti,tps65185.yaml
 @@ -21,6 +21,9 @@ properties:
@@ -106,10 +190,10 @@ index af0f638b8..6be643b44 100644
  additionalProperties: false
  
 diff --git a/MAINTAINERS b/MAINTAINERS
-index d1cc0e12f..a051cbfd0 100644
+index 8014b9f8253e..fa3ce1b1a96b 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -7976,7 +7976,9 @@ M:	Ruben Wauters <rubenru09@aol.com>
+@@ -8065,7 +8065,9 @@ M:	Ruben Wauters <rubenru09@aol.com>
  S:	Maintained
  W:	https://github.com/notro/gud/wiki
  T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
@@ -120,7 +204,7 @@ index d1cc0e12f..a051cbfd0 100644
  
  DRM DRIVER FOR GRAIN MEDIA GM12U320 PROJECTORS
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.2.dts b/arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.2.dts
-index 6bbc4c675..92ef19676 100644
+index 6bbc4c675d64..92ef19676e25 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.2.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-pinenote-v1.2.dts
 @@ -16,3 +16,39 @@ &pmu_io_domains {
@@ -164,7 +248,7 @@ index 6bbc4c675..92ef19676 100644
 +	};
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
-index 791719acb..25644f290 100644
+index 071cbdc3f6d5..6c10b842cc5b 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
 @@ -5,6 +5,7 @@
@@ -175,29 +259,10 @@ index 791719acb..25644f290 100644
  
  #include "rk3566.dtsi"
  
-@@ -40,6 +41,51 @@ spk_amp: audio-amplifier {
- 		sound-name-prefix = "Speaker Amp";
+@@ -59,6 +60,32 @@ battery: battery {
+ 					<3500000  0>;
  	};
  
-+	battery_cell: battery-cell {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <4000000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <96000>;
-+		voltage-max-design-microvolt = <4200000>;
-+		voltage-min-design-microvolt = <3500000>;
-+
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 = <4168000 100>,
-+				       <4109000 95>, <4066000 90>, <4023000 85>, <3985000 80>,
-+				       <3954000 75>, <3924000 70>, <3897000 65>, <3866000 60>,
-+				       <3826000 55>, <3804000 50>, <3789000 45>, <3777000 40>,
-+				       <3770000 35>, <3763000 30>, <3750000 25>, <3732000 20>,
-+				       <3710000 15>, <3680000 10>, <3670000  5>, <3500000  0>;
-+	};
-+
 +	bt_sco_codec: bt-sco-codec {
 +		compatible = "linux,bt-sco";
 +		#sound-dai-cells = <1>;
@@ -227,15 +292,15 @@ index 791719acb..25644f290 100644
  	dmic_codec: dmic-codec {
  		compatible = "dmic-codec";
  		num-channels = <6>;
-@@ -71,9 +117,43 @@ led-0 {
+@@ -90,9 +117,43 @@ led-0 {
  			color = <LED_COLOR_ID_WHITE>;
  			function = LED_FUNCTION_CHARGING;
  			gpios = <&gpio3 RK_PC5 GPIO_ACTIVE_HIGH>;
 +			linux,default-trigger = "rk817-battery-charging";
 +			retain-state-suspended;
-+		};
-+	};
-+
+ 		};
+ 	};
+ 
 +	panel {
 +		compatible = "eink,ed103tc2";
 +
@@ -243,9 +308,9 @@ index 791719acb..25644f290 100644
 +			panel_in_ebc: endpoint {
 +				remote-endpoint = <&ebc_out_panel>;
 +			};
- 		};
- 	};
- 
++		};
++	};
++
 +	rockchip-suspend {
 +		compatible = "rockchip,pm-rk3568";
 +		status = "okay";
@@ -271,7 +336,7 @@ index 791719acb..25644f290 100644
  	sdio_pwrseq: sdio-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		clocks = <&rk817 1>;
-@@ -131,6 +211,34 @@ link1_codec: codec {
+@@ -150,6 +211,34 @@ link1_codec: codec {
  		};
  	};
  
@@ -306,16 +371,16 @@ index 791719acb..25644f290 100644
  	vbat_4g: regulator-vbat-4g {
  		compatible = "regulator-fixed";
  		regulator-name = "vbat_4g";
-@@ -199,6 +307,27 @@ vdda_0v9: regulator-vdda-0v9 {
+@@ -218,6 +307,27 @@ vdda_0v9: regulator-vdda-0v9 {
  	};
  };
  
 +&cru {
 +		// assigned-clocks = <&pmucru CLK_RTC_32K>, <&cru PLL_GPLL>, <&pmucru PLL_PPLL>, <&cru ACLK_RGA_PRE>, <&cru HCLK_RGA_PRE>;
 +		assigned-clocks = <&pmucru CLK_RTC_32K>,
-+  			<&cru ACLK_TOP_HIGH>, <&cru ACLK_TOP_LOW>,
++			<&cru ACLK_TOP_HIGH>, <&cru ACLK_TOP_LOW>,
 +			<&cru PLL_GPLL>, <&pmucru PLL_PPLL>,
-+ 			<&cru ACLK_RGA_PRE>, <&cru CPLL_250M>,
++			<&cru ACLK_RGA_PRE>, <&cru CPLL_250M>,
 +			<&cru HCLK_RGA_PRE>, <&cru HCLK_EBC>,
 +		    <&cru HCLK_JENC>, <&cru CPLL_333M>;
 +		// assigned-clock-rates = <32768>, <1200000000>, <200000000>, <300000000>, <300000000>;
@@ -334,8 +399,8 @@ index 791719acb..25644f290 100644
  &cpu0 {
  	cpu-supply = <&vdd_cpu>;
  };
-@@ -215,6 +344,29 @@ &cpu3 {
- 	cpu-supply = <&vdd_cpu>;
+@@ -239,6 +349,24 @@ &gpu {
+ 	status = "okay";
  };
  
 +&ebc {
@@ -356,38 +421,10 @@ index 791719acb..25644f290 100644
 +	status = "okay";
 +};
 +
-+&gpu {
-+	mali-supply = <&vdd_gpu_npu>;
-+	status = "okay";
-+};
-+
  &i2c0 {
  	status = "okay";
  
-@@ -260,6 +412,22 @@ rk817: pmic@20 {
- 		vcc8-supply = <&vcc_sys>;
- 		vcc9-supply = <&dcdc_boost>;
- 
-+		// used for  kernel 5.17
-+		battery {
-+			monitored-battery = <&battery_cell>;
-+			rockchip,resistor-sense-micro-ohms = <10000>;
-+			rockchip,sleep-enter-current-microamp = <150000>;
-+			rockchip,sleep-filter-current-microamp = <100000>;
-+		};
-+
-+		// newer kernels (at least >= 6.2)
-+		rk817_charger: charger {
-+		    monitored-battery = <&battery_cell>;
-+		    rockchip,resistor-sense-micro-ohms = <10000>;
-+		        rockchip,sleep-enter-current-microamp = <150000>;
-+		    rockchip,sleep-filter-current-microamp = <100000>;
-+		};
-+
- 		regulators {
- 			vdd_logic: DCDC_REG1 {
- 				regulator-name = "vdd_logic";
-@@ -277,6 +445,7 @@ regulator-state-mem {
+@@ -308,6 +436,7 @@ regulator-state-mem {
  
  			vdd_gpu_npu: DCDC_REG2 {
  				regulator-name = "vdd_gpu_npu";
@@ -395,7 +432,7 @@ index 791719acb..25644f290 100644
  				regulator-min-microvolt = <500000>;
  				regulator-max-microvolt = <1350000>;
  				regulator-ramp-delay = <6001>;
-@@ -453,17 +622,43 @@ led-controller@36 {
+@@ -484,17 +613,43 @@ led-controller@36 {
  		pinctrl-names = "default";
  		#address-cells = <1>;
  		#size-cells = <0>;
@@ -439,7 +476,7 @@ index 791719acb..25644f290 100644
  		};
  	};
  
-@@ -474,6 +669,7 @@ wusb3801: tcpc@60 {
+@@ -505,6 +660,7 @@ wusb3801: tcpc@60 {
  		interrupts = <RK_PA4 IRQ_TYPE_LEVEL_LOW>;
  		pinctrl-0 = <&tcpc_int_l>;
  		pinctrl-names = "default";
@@ -447,7 +484,7 @@ index 791719acb..25644f290 100644
  
  		connector {
  			compatible = "usb-c-connector";
-@@ -511,8 +707,14 @@ ebc_pmic: pmic@68 {
+@@ -542,8 +698,14 @@ ebc_pmic: pmic@68 {
  		pwr-good-gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_HIGH>;
  		vcom-ctrl-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
  		vin-supply = <&vcc_bat>;
@@ -462,23 +499,15 @@ index 791719acb..25644f290 100644
  		regulators {
  			v3p3: v3p3 {
  				regulator-name = "v3p3";
-@@ -524,6 +726,7 @@ v3p3: v3p3 {
- 
- 			vcom: vcom {
- 				regulator-name = "vcom";
-+				/* voltage range is board-specific */
- 			};
- 
- 			vposneg: vposneg {
-@@ -548,6 +751,31 @@ accelerometer@18 {
+@@ -579,6 +741,31 @@ accelerometer@18 {
  		st,drdy-int-pin = <1>;
  		vdd-supply = <&vcc_3v3>;
  		vddio-supply = <&vcc_3v3>;
 +		// if we use panel-reflection=1 from the ebc driver, then the
 +		// accelerometer must be rotated
-+ 		mount-matrix = "-1", "0", "0",
-+ 					   "0", "1", "0",
-+ 					   "0", "0", "1";
++		mount-matrix = "-1", "0", "0",
++					   "0", "1", "0",
++					   "0", "0", "1";
 +	};
 +
 +	touchscreen@24 {
@@ -502,7 +531,7 @@ index 791719acb..25644f290 100644
  	};
  };
  
-@@ -557,6 +785,11 @@ &i2s1_8ch {
+@@ -588,6 +775,11 @@ &i2s1_8ch {
  	status = "okay";
  };
  
@@ -514,7 +543,7 @@ index 791719acb..25644f290 100644
  &pdm {
  	pinctrl-0 = <&pdmm0_clk1>, <&pdmm0_sdi1>, <&pdmm0_sdi2>;
  	/* microphones are on channels 1 and 2 */
-@@ -583,6 +816,29 @@ backlight_hwen_h: backlight-hwen-h {
+@@ -614,6 +806,29 @@ backlight_hwen_h: backlight-hwen-h {
  		};
  	};
  
@@ -544,7 +573,7 @@ index 791719acb..25644f290 100644
  	bt {
  		bt_enable_h: bt-enable-h {
  			rockchip,pins = <0 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -660,6 +916,16 @@ tcpc_int_l: tcpc-int-l {
+@@ -691,6 +906,16 @@ tcpc_int_l: tcpc-int-l {
  		};
  	};
  
@@ -561,7 +590,7 @@ index 791719acb..25644f290 100644
  	vcc-wl {
  		vcc_wl_pin: vcc-wl-pin {
  			rockchip,pins = <0 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -730,16 +996,19 @@ &uart1 {
+@@ -761,6 +986,8 @@ &uart1 {
  	pinctrl-names = "default";
  	uart-has-rtscts;
  	status = "okay";
@@ -570,21 +599,15 @@ index 791719acb..25644f290 100644
  
  	bluetooth {
  		compatible = "brcm,bcm43438-bt";
- 		clocks = <&rk817 1>;
- 		clock-names = "lpo";
--		device-wakeup-gpios = <&gpio0 RK_PC2 GPIO_ACTIVE_HIGH>;
--		host-wakeup-gpios = <&gpio0 RK_PC3 GPIO_ACTIVE_HIGH>;
-+        host-wakeup-gpios = <&gpio0 RK_PC3 GPIO_ACTIVE_HIGH>;
-+        device-wakeup-gpios = <&gpio0 RK_PC2 GPIO_ACTIVE_HIGH>;
-+        shutdown-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
-+        max-speed = <3000000>;
+@@ -771,6 +998,7 @@ bluetooth {
  		pinctrl-0 = <&bt_enable_h>, <&bt_host_wake_l>, <&bt_wake_h>;
  		pinctrl-names = "default";
--		shutdown-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+ 		shutdown-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
++		max-speed = <3000000>;
  		vbat-supply = <&vcc_wl>;
  		vddio-supply = <&vcca_1v8_pmu>;
  	};
-@@ -767,3 +1036,7 @@ usb2phy0_typec_hs: endpoint {
+@@ -798,3 +1026,7 @@ usb2phy0_typec_hs: endpoint {
  		};
  	};
  };
@@ -593,7 +616,7 @@ index 791719acb..25644f290 100644
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index a9021c524..73de84087 100644
+index a9021c524afb..73de84087413 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
 @@ -212,6 +212,20 @@ vcc_sys: regulator-vcc-sys {
@@ -757,10 +780,10 @@ index a9021c524..73de84087 100644
  
  &pmu_io_domains {
 diff --git a/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi b/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
-index a2c4957a5..86e70bb25 100644
+index a5832895bd39..71e2f64bd642 100644
 --- a/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
-@@ -127,6 +127,61 @@ l3_cache: l3-cache {
+@@ -128,6 +128,61 @@ l3_cache: l3-cache {
  		cache-sets = <512>;
  	};
  
@@ -822,7 +845,7 @@ index a2c4957a5..86e70bb25 100644
  	display_subsystem: display-subsystem {
  		compatible = "rockchip,display-subsystem";
  		ports = <&vop_out>;
-@@ -578,6 +633,29 @@ vpu: video-codec@fdea0400 {
+@@ -598,6 +653,29 @@ vpu: video-codec@fdea0400 {
  		power-domains = <&power RK3568_PD_VPU>;
  	};
  
@@ -852,7 +875,7 @@ index a2c4957a5..86e70bb25 100644
  	vdpu_mmu: iommu@fdea0800 {
  		compatible = "rockchip,rk3568-iommu";
  		reg = <0x0 0xfdea0800 0x0 0x40>;
-@@ -597,6 +675,7 @@ rga: rga@fdeb0000 {
+@@ -617,6 +695,7 @@ rga: rga@fdeb0000 {
  		resets = <&cru SRST_RGA_CORE>, <&cru SRST_A_RGA>, <&cru SRST_H_RGA>;
  		reset-names = "core", "axi", "ahb";
  		power-domains = <&power RK3568_PD_RGA>;
@@ -860,7 +883,7 @@ index a2c4957a5..86e70bb25 100644
  	};
  
  	vepu: video-codec@fdee0000 {
-@@ -1381,6 +1460,7 @@ uart1: serial@fe650000 {
+@@ -1449,6 +1528,7 @@ uart1: serial@fe650000 {
  		clocks = <&cru SCLK_UART1>, <&cru PCLK_UART1>;
  		clock-names = "baudclk", "apb_pclk";
  		dmas = <&dmac0 2>, <&dmac0 3>;
@@ -870,7 +893,7 @@ index a2c4957a5..86e70bb25 100644
  		reg-io-width = <4>;
 diff --git a/arch/arm64/configs/pinenote_defconfig b/arch/arm64/configs/pinenote_defconfig
 new file mode 100644
-index 000000000..7dc6c656b
+index 000000000000..7dc6c656be6b
 --- /dev/null
 +++ b/arch/arm64/configs/pinenote_defconfig
 @@ -0,0 +1,1610 @@
@@ -2485,10 +2508,10 @@ index 000000000..7dc6c656b
 +CONFIG_SND_USB_TONEPORT=m
 +CONFIG_SND_USB_VARIAX=m
 diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index bbd2155d8..e062e6a03 100644
+index 12dc70254842..6b94900b530a 100644
 --- a/drivers/firmware/Kconfig
 +++ b/drivers/firmware/Kconfig
-@@ -178,6 +178,13 @@ config MTK_ADSP_IPC
+@@ -181,6 +181,13 @@ config MTK_ADSP_IPC
  	  ADSP exists on some mtk processors.
  	  Client might use shared memory to exchange information with ADSP.
  
@@ -2503,7 +2526,7 @@ index bbd2155d8..e062e6a03 100644
  	bool
  	select BOOT_VESA_SUPPORT
 diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-index 4ddec2820..32850a0d1 100644
+index 4ddec2820c96..32850a0d1f06 100644
 --- a/drivers/firmware/Makefile
 +++ b/drivers/firmware/Makefile
 @@ -16,6 +16,7 @@ obj-$(CONFIG_FIRMWARE_MEMMAP)	+= memmap.o
@@ -2516,7 +2539,7 @@ index 4ddec2820..32850a0d1 100644
  obj-$(CONFIG_TH1520_AON_PROTOCOL) += thead,th1520-aon.o
 diff --git a/drivers/firmware/rockchip_sip.c b/drivers/firmware/rockchip_sip.c
 new file mode 100644
-index 000000000..7fe034df9
+index 000000000000..7fe034df92c7
 --- /dev/null
 +++ b/drivers/firmware/rockchip_sip.c
 @@ -0,0 +1,547 @@
@@ -3068,10 +3091,10 @@ index 000000000..7fe034df9
 +MODULE_DESCRIPTION("Rockchip SIP Call");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index ed85d0cee..4c15feed2 100644
+index 323422861e8f..77cc82285dc6 100644
 --- a/drivers/gpu/drm/Kconfig
 +++ b/drivers/gpu/drm/Kconfig
-@@ -185,6 +185,12 @@ config DRM_LOAD_EDID_FIRMWARE
+@@ -195,6 +195,12 @@ config DRM_LOAD_EDID_FIRMWARE
  
  source "drivers/gpu/drm/display/Kconfig"
  
@@ -3085,7 +3108,7 @@ index ed85d0cee..4c15feed2 100644
  	tristate
  	depends on DRM && MMU
 diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index d26191717..9084bc106 100644
+index e97faabcd783..58e639707de7 100644
 --- a/drivers/gpu/drm/Makefile
 +++ b/drivers/gpu/drm/Makefile
 @@ -121,6 +121,12 @@ drm_dma_helper-$(CONFIG_DRM_FBDEV_EMULATION) += drm_fbdev_dma.o
@@ -3111,7 +3134,7 @@ index d26191717..9084bc106 100644
  obj-$(CONFIG_DRM_UDL) += udl/
  obj-$(CONFIG_DRM_AST) += ast/
 diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index a82d741e6..45fd0adb3 100644
+index 46c465bce98c..b735ba5a4744 100644
 --- a/drivers/gpu/drm/drm_client.c
 +++ b/drivers/gpu/drm/drm_client.c
 @@ -107,6 +107,36 @@ int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
@@ -3185,7 +3208,7 @@ index a82d741e6..45fd0adb3 100644
  EXPORT_SYMBOL(drm_client_register);
  
 diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
-index 4a72f323e..c9f069461 100644
+index 0080a8e9556a..aee13a22e818 100644
 --- a/drivers/gpu/drm/drm_client_modeset.c
 +++ b/drivers/gpu/drm/drm_client_modeset.c
 @@ -89,6 +89,10 @@ static void drm_client_modeset_release(struct drm_client_dev *client)
@@ -3331,7 +3354,7 @@ index 4a72f323e..c9f069461 100644
   * drm_client_rotation() - Check the initial rotation value
   * @modeset: DRM modeset
 @@ -1038,6 +1166,7 @@ static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool
- 	struct drm_atomic_state *state;
+ 	struct drm_atomic_commit *state;
  	struct drm_modeset_acquire_ctx ctx;
  	struct drm_mode_set *mode_set;
 +	unsigned int i;
@@ -3382,7 +3405,7 @@ index 4a72f323e..c9f069461 100644
  #endif
 diff --git a/drivers/gpu/drm/drm_epd_helper.c b/drivers/gpu/drm/drm_epd_helper.c
 new file mode 100644
-index 000000000..47a5c8257
+index 000000000000..47a5c8257fea
 --- /dev/null
 +++ b/drivers/gpu/drm/drm_epd_helper.c
 @@ -0,0 +1,711 @@
@@ -4098,7 +4121,7 @@ index 000000000..47a5c8257
 +MODULE_DESCRIPTION("DRM EPD waveform LUT library");
 +MODULE_LICENSE("Dual MIT/GPL");
 diff --git a/drivers/gpu/drm/gud/Kconfig b/drivers/gpu/drm/gud/Kconfig
-index b4d213694..292bdd499 100644
+index b4d2136942f0..292bdd4991e5 100644
 --- a/drivers/gpu/drm/gud/Kconfig
 +++ b/drivers/gpu/drm/gud/Kconfig
 @@ -13,3 +13,9 @@ config DRM_GUD
@@ -4112,7 +4135,7 @@ index b4d213694..292bdd499 100644
 +	select LZ4_DECOMPRESS
 +	select BACKLIGHT_CLASS_DEVICE
 diff --git a/drivers/gpu/drm/gud/Makefile b/drivers/gpu/drm/gud/Makefile
-index 68a1c622c..685003e79 100644
+index 68a1c622cf33..685003e79c93 100644
 --- a/drivers/gpu/drm/gud/Makefile
 +++ b/drivers/gpu/drm/gud/Makefile
 @@ -2,3 +2,4 @@
@@ -4122,7 +4145,7 @@ index 68a1c622c..685003e79 100644
 +obj-$(CONFIG_DRM_GUD_GADGET)	+= gud_gadget.o
 diff --git a/drivers/gpu/drm/gud/gud_gadget.c b/drivers/gpu/drm/gud/gud_gadget.c
 new file mode 100644
-index 000000000..d82941bdf
+index 000000000000..d82941bdff71
 --- /dev/null
 +++ b/drivers/gpu/drm/gud/gud_gadget.c
 @@ -0,0 +1,1386 @@
@@ -5513,10 +5536,10 @@ index 000000000..d82941bdf
 +MODULE_AUTHOR("Noralf Trønnes");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/gpu/drm/gud/gud_internal.h b/drivers/gpu/drm/gud/gud_internal.h
-index d27c31648..a662b115a 100644
+index 95744b0b6c72..fabb1d450813 100644
 --- a/drivers/gpu/drm/gud/gud_internal.h
 +++ b/drivers/gpu/drm/gud/gud_internal.h
-@@ -153,6 +153,8 @@ static inline void gud_to_display_mode(struct drm_display_mode *dst,
+@@ -157,6 +157,8 @@ static inline void gud_to_display_mode(struct drm_display_mode *dst,
  	dst->hsync_start = le16_to_cpu(src->hsync_start);
  	dst->hsync_end = le16_to_cpu(src->hsync_end);
  	dst->htotal = le16_to_cpu(src->htotal);
@@ -5526,10 +5549,10 @@ index d27c31648..a662b115a 100644
  	dst->vsync_start = le16_to_cpu(src->vsync_start);
  	dst->vsync_end = le16_to_cpu(src->vsync_end);
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 162cc58c7..32540f79a 100644
+index c09bf3db5e78..3774c8b41616 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2214,6 +2214,254 @@ static const struct panel_desc edt_etmv570g2dhu = {
+@@ -2301,6 +2301,254 @@ static const struct panel_desc edt_etmv570g2dhu = {
  	.connector_type = DRM_MODE_CONNECTOR_DPI,
  };
  
@@ -5784,7 +5807,7 @@ index 162cc58c7..32540f79a 100644
  static const struct display_timing eink_vb3300_kca_timing = {
  	.pixelclock = { 40000000, 40000000, 40000000 },
  	.hactive = { 334, 334, 334 },
-@@ -5220,6 +5468,9 @@ static const struct of_device_id platform_of_match[] = {
+@@ -5816,6 +6064,9 @@ static const struct of_device_id platform_of_match[] = {
  	}, {
  		.compatible = "edt,etmv570g2dhu",
  		.data = &edt_etmv570g2dhu,
@@ -5795,10 +5818,10 @@ index 162cc58c7..32540f79a 100644
  		.compatible = "eink,vb3300-kca",
  		.data = &eink_vb3300_kca,
 diff --git a/drivers/gpu/drm/rockchip/Kconfig b/drivers/gpu/drm/rockchip/Kconfig
-index b7b025814..1ca0396a8 100644
+index e7f49fe845ea..a62b122b566f 100644
 --- a/drivers/gpu/drm/rockchip/Kconfig
 +++ b/drivers/gpu/drm/rockchip/Kconfig
-@@ -145,4 +145,26 @@ config ROCKCHIP_RK3066_HDMI
+@@ -149,4 +149,26 @@ config ROCKCHIP_RK3066_HDMI
  	  This selects support for Rockchip SoC specific extensions
  	  for the RK3066 HDMI driver. If you want to enable
  	  HDMI on RK3066 based SoC, you should select this option.
@@ -5826,10 +5849,10 @@ index b7b025814..1ca0396a8 100644
 +
  endif
 diff --git a/drivers/gpu/drm/rockchip/Makefile b/drivers/gpu/drm/rockchip/Makefile
-index 097f06239..eae5991e2 100644
+index 948b0f906d3d..7f76568ab8ad 100644
 --- a/drivers/gpu/drm/rockchip/Makefile
 +++ b/drivers/gpu/drm/rockchip/Makefile
-@@ -21,3 +20,10 @@ rockchipdrm-$(CONFIG_ROCKCHIP_RGB) += rockchip_rgb.o
+@@ -21,3 +21,10 @@ rockchipdrm-$(CONFIG_ROCKCHIP_RGB) += rockchip_rgb.o
  rockchipdrm-$(CONFIG_ROCKCHIP_RK3066_HDMI) += rk3066_hdmi.o
  
  obj-$(CONFIG_DRM_ROCKCHIP) += rockchipdrm.o
@@ -5842,7 +5865,7 @@ index 097f06239..eae5991e2 100644
 +endif
 diff --git a/drivers/gpu/drm/rockchip/rockchip_ebc.c b/drivers/gpu/drm/rockchip/rockchip_ebc.c
 new file mode 100644
-index 000000000..6453460f3
+index 000000000000..8ed386002399
 --- /dev/null
 +++ b/drivers/gpu/drm/rockchip/rockchip_ebc.c
 @@ -0,0 +1,2527 @@
@@ -7431,7 +7454,7 @@ index 000000000..6453460f3
 +}
 +
 +static int rockchip_ebc_crtc_atomic_check(struct drm_crtc *crtc,
-+					  struct drm_atomic_state *state)
++					  struct drm_atomic_commit *state)
 +{
 +	struct rockchip_ebc *ebc = crtc_to_ebc(crtc);
 +	struct ebc_crtc_state *ebc_crtc_state;
@@ -7467,7 +7490,7 @@ index 000000000..6453460f3
 +}
 +
 +static void rockchip_ebc_crtc_atomic_flush(struct drm_crtc *crtc,
-+					   struct drm_atomic_state *state)
++					   struct drm_atomic_commit *state)
 +{
 +	// TODO: consider moving copying to final_buffer, moving of areas, setting switch_required, waking up process here
 +	// TODO: also look at atomic_commit
@@ -7475,7 +7498,7 @@ index 000000000..6453460f3
 +}
 +
 +static void rockchip_ebc_crtc_atomic_enable(struct drm_crtc *crtc,
-+					    struct drm_atomic_state *state)
++					    struct drm_atomic_commit *state)
 +{
 +	struct rockchip_ebc *ebc = crtc_to_ebc(crtc);
 +	struct drm_crtc_state *crtc_state;
@@ -7489,7 +7512,7 @@ index 000000000..6453460f3
 +}
 +
 +static void rockchip_ebc_crtc_atomic_disable(struct drm_crtc *crtc,
-+					     struct drm_atomic_state *state)
++					     struct drm_atomic_commit *state)
 +{
 +	struct rockchip_ebc *ebc = crtc_to_ebc(crtc);
 +	struct drm_crtc_state *crtc_state;
@@ -7597,7 +7620,7 @@ index 000000000..6453460f3
 +}
 +
 +static int rockchip_ebc_plane_atomic_check(struct drm_plane *plane,
-+					   struct drm_atomic_state *state)
++					   struct drm_atomic_commit *state)
 +{
 +	struct drm_atomic_helper_damage_iter iter;
 +	struct ebc_plane_state *ebc_plane_state;
@@ -7630,7 +7653,7 @@ index 000000000..6453460f3
 +}
 +
 +static void rockchip_ebc_plane_atomic_update(struct drm_plane *plane,
-+					     struct drm_atomic_state *state)
++					     struct drm_atomic_commit *state)
 +{
 +	struct rockchip_ebc *ebc = plane_to_ebc(plane);
 +	struct ebc_plane_state *ebc_plane_state;
@@ -8375,7 +8398,7 @@ index 000000000..6453460f3
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/rockchip/rockchip_ebc.h b/drivers/gpu/drm/rockchip/rockchip_ebc.h
 new file mode 100644
-index 000000000..9d3ba1363
+index 000000000000..9d3ba1363197
 --- /dev/null
 +++ b/drivers/gpu/drm/rockchip/rockchip_ebc.h
 @@ -0,0 +1,252 @@
@@ -8633,7 +8656,7 @@ index 000000000..9d3ba1363
 +#endif /* _ROCKCHIP_EBC_H */
 diff --git a/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.c b/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.c
 new file mode 100644
-index 000000000..2fae7d242
+index 000000000000..2fae7d2428b9
 --- /dev/null
 +++ b/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.c
 @@ -0,0 +1,1253 @@
@@ -9892,7 +9915,7 @@ index 000000000..2fae7d242
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.h b/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.h
 new file mode 100644
-index 000000000..778e5736e
+index 000000000000..778e5736e12b
 --- /dev/null
 +++ b/drivers/gpu/drm/rockchip/rockchip_ebc_blit_neon.h
 @@ -0,0 +1,62 @@
@@ -9959,10 +9982,10 @@ index 000000000..778e5736e
 +
 +#endif /* _ROCKCHIP_EBC_BLIT_NEON_H */
 diff --git a/drivers/iio/accel/st_accel_i2c.c b/drivers/iio/accel/st_accel_i2c.c
-index f24449500..5f6dd93c7 100644
+index 99522a885d71..985e060d4e30 100644
 --- a/drivers/iio/accel/st_accel_i2c.c
 +++ b/drivers/iio/accel/st_accel_i2c.c
-@@ -202,11 +202,51 @@ static int st_accel_i2c_probe(struct i2c_client *client)
+@@ -201,11 +201,51 @@ static int st_accel_i2c_probe(struct i2c_client *client)
  	return st_accel_common_probe(indio_dev);
  }
  
@@ -10015,7 +10038,7 @@ index f24449500..5f6dd93c7 100644
  	.probe = st_accel_i2c_probe,
  	.id_table = st_accel_id_table,
 diff --git a/drivers/iio/common/st_sensors/st_sensors_trigger.c b/drivers/iio/common/st_sensors/st_sensors_trigger.c
-index 8a8ab688d..d989f0e78 100644
+index 8a8ab688d798..d989f0e78888 100644
 --- a/drivers/iio/common/st_sensors/st_sensors_trigger.c
 +++ b/drivers/iio/common/st_sensors/st_sensors_trigger.c
 @@ -87,6 +87,16 @@ static irqreturn_t st_sensors_irq_thread(int irq, void *p)
@@ -10036,10 +10059,10 @@ index 8a8ab688d..d989f0e78 100644
  		return IRQ_NONE;
  	}
 diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index 94a753fcb..bb51f2772 100644
+index 1f6c57dba030..b4e2af5fae05 100644
 --- a/drivers/input/misc/Kconfig
 +++ b/drivers/input/misc/Kconfig
-@@ -1003,4 +1003,12 @@ config INPUT_STPMIC1_ONKEY
+@@ -993,4 +993,12 @@ config INPUT_STPMIC1_ONKEY
  	  To compile this driver as a module, choose M here: the
  	  module will be called stpmic1_onkey.
  
@@ -10053,10 +10076,10 @@ index 94a753fcb..bb51f2772 100644
 +
  endif
 diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-index 415fc4e29..7151713af 100644
+index 2281d6803fce..a7e929089f88 100644
 --- a/drivers/input/misc/Makefile
 +++ b/drivers/input/misc/Makefile
-@@ -93,6 +93,7 @@ obj-$(CONFIG_INPUT_TWL6040_VIBRA)	+= twl6040-vibra.o
+@@ -92,6 +92,7 @@ obj-$(CONFIG_INPUT_TWL6040_VIBRA)	+= twl6040-vibra.o
  obj-$(CONFIG_INPUT_UINPUT)		+= uinput.o
  obj-$(CONFIG_INPUT_WISTRON_BTNS)	+= wistron_btns.o
  obj-$(CONFIG_INPUT_WM831X_ON)		+= wm831x-on.o
@@ -10066,7 +10089,7 @@ index 415fc4e29..7151713af 100644
  obj-$(CONFIG_INPUT_IDEAPAD_SLIDEBAR)	+= ideapad_slidebar.o
 diff --git a/drivers/input/misc/ws8100-pen.c b/drivers/input/misc/ws8100-pen.c
 new file mode 100644
-index 000000000..ce6a31d10
+index 000000000000..ce6a31d10954
 --- /dev/null
 +++ b/drivers/input/misc/ws8100-pen.c
 @@ -0,0 +1,801 @@
@@ -10872,10 +10895,10 @@ index 000000000..ce6a31d10
 +MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-index 47f427139..63e71f3b1 100644
+index 9266c07314be..320500ac99ae 100644
 --- a/drivers/input/touchscreen/cyttsp5.c
 +++ b/drivers/input/touchscreen/cyttsp5.c
-@@ -525,15 +525,66 @@ static int cyttsp5_get_sysinfo_regs(struct cyttsp5 *ts)
+@@ -524,15 +524,66 @@ static int cyttsp5_get_sysinfo_regs(struct cyttsp5 *ts)
  	struct cyttsp5_sensing_conf_data_dev *scd_dev =
  		(struct cyttsp5_sensing_conf_data_dev *)
  		&ts->response_buf[HID_SYSINFO_SENSING_OFFSET];
@@ -10947,7 +10970,7 @@ index 47f427139..63e71f3b1 100644
  
  	return 0;
  }
-@@ -933,6 +984,7 @@ static int cyttsp5_i2c_probe(struct i2c_client *client)
+@@ -932,6 +983,7 @@ static int cyttsp5_i2c_probe(struct i2c_client *client)
  
  static const struct of_device_id cyttsp5_of_match[] = {
  	{ .compatible = "cypress,tt21000", },
@@ -10956,10 +10979,10 @@ index 47f427139..63e71f3b1 100644
  };
  MODULE_DEVICE_TABLE(of, cyttsp5_of_match);
 diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
-index 43ed742a1..1136fbf29 100644
+index be1bc8ddbd03..a6eb51edc2fa 100644
 --- a/drivers/media/platform/rockchip/rga/rga-hw.c
 +++ b/drivers/media/platform/rockchip/rga/rga-hw.c
-@@ -213,6 +213,11 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
+@@ -222,6 +222,11 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
  		}
  	}
  
@@ -10971,23 +10994,7 @@ index 43ed742a1..1136fbf29 100644
  	if (ctx->vflip)
  		src_info.data.mir_mode |= RGA_SRC_MIRR_MODE_X;
  
-@@ -234,6 +239,7 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
- 		break;
- 	}
- 
-+
- 	/*
- 	 * Calculate the up/down scaling mode/factor.
- 	 *
-@@ -293,6 +299,7 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
- 	src_act_info.data.act_width = src_w - 1;
- 
- 	dst_vir_info.data.vir_stride = ctx->out.stride >> 2;
-+
- 	dst_act_info.data.act_height = dst_h - 1;
- 	dst_act_info.data.act_width = dst_w - 1;
- 
-@@ -407,6 +414,10 @@ static void rga_cmd_set_mode(struct rga_ctx *ctx)
+@@ -415,6 +420,10 @@ static void rga_cmd_set_mode(struct rga_ctx *ctx)
  	dest[(RGA_ALPHA_CTRL1 - RGA_MODE_BASE_REG) >> 2] = alpha_ctrl1.val;
  
  	dest[(RGA_MODE_CTRL - RGA_MODE_BASE_REG) >> 2] = mode.val;
@@ -10999,7 +11006,7 @@ index 43ed742a1..1136fbf29 100644
  
  static void rga_cmd_set(struct rga_ctx *ctx,
 diff --git a/drivers/media/platform/rockchip/rga/rga-hw.h b/drivers/media/platform/rockchip/rga/rga-hw.h
-index cc6bd7f5b..e451f5c7b 100644
+index 14ffa5ebd453..3b9a599077d4 100644
 --- a/drivers/media/platform/rockchip/rga/rga-hw.h
 +++ b/drivers/media/platform/rockchip/rga/rga-hw.h
 @@ -59,6 +59,8 @@
@@ -11011,7 +11018,7 @@ index cc6bd7f5b..e451f5c7b 100644
  #define RGA_MASK_BASE 0x0168
  
  #define RGA_MMU_CTRL1 0x016C
-@@ -321,8 +323,15 @@ union rga_dst_info {
+@@ -323,8 +325,15 @@ union rga_dst_info {
  		/* [16:18] */
  		unsigned int csc_mode:2;
  		unsigned int csc_clip:1;
@@ -11029,10 +11036,10 @@ index cc6bd7f5b..e451f5c7b 100644
  };
  
 diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 43f6a8d99..66b6f30ba 100644
+index b3cb6bf8eb86..1a032523356d 100644
 --- a/drivers/media/platform/rockchip/rga/rga.c
 +++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -135,17 +135,63 @@ static int rga_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -141,12 +141,29 @@ static int rga_s_ctrl(struct v4l2_ctrl *ctrl)
  	spin_lock_irqsave(&ctx->rga->ctrl_lock, flags);
  	switch (ctrl->id) {
  	case V4L2_CID_HFLIP:
@@ -11059,8 +11066,10 @@ index 43f6a8d99..66b6f30ba 100644
 +			spin_unlock_irqrestore(&ctx->rga->ctrl_lock, flags);
 +			return -EINVAL;
 +		}
- 		ctx->rotate = ctrl->val;
- 		break;
+ 		if (vb2_is_streaming(v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)) &&
+ 		    vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx))) {
+ 			ret = rga_check_scaling(hw, &ctx->in.crop,
+@@ -159,6 +176,35 @@ static int rga_s_ctrl(struct v4l2_ctrl *ctrl)
  	case V4L2_CID_BG_COLOR:
  		ctx->fill_color = ctrl->val;
  		break;
@@ -11094,9 +11103,9 @@ index 43f6a8d99..66b6f30ba 100644
 +		ctx->y4map_lut1 = ctrl->val;
 +		break;
  	}
- 	spin_unlock_irqrestore(&ctx->rga->ctrl_lock, flags);
- 	return 0;
-@@ -155,11 +201,78 @@ static const struct v4l2_ctrl_ops rga_ctrl_ops = {
+ 	ctx->cmdbuf_dirty = true;
+ 
+@@ -171,11 +217,78 @@ static const struct v4l2_ctrl_ops rga_ctrl_ops = {
  	.s_ctrl = rga_s_ctrl,
  };
  
@@ -11174,11 +11183,11 @@ index 43f6a8d99..66b6f30ba 100644
 -	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 4);
 +	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 10);
  
- 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
- 			  V4L2_CID_HFLIP, 0, 1, 1, 0);
-@@ -173,6 +286,13 @@ static int rga_setup_ctrls(struct rga_ctx *ctx)
- 	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
- 			  V4L2_CID_BG_COLOR, 0, 0xffffffff, 1, 0);
+ 	if (rga->hw->features & RGA_FEATURE_FLIP) {
+ 		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
+@@ -193,6 +306,13 @@ static int rga_setup_ctrls(struct rga_ctx *ctx)
+ 		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
+ 				  V4L2_CID_BG_COLOR, 0, 0xffffffff, 1, 0);
  
 +	v4l2_ctrl_new_custom(&ctx->ctrl_handler, &ctrl_y400_enable, NULL);
 +	v4l2_ctrl_new_custom(&ctx->ctrl_handler, &ctrl_dithering_down_enable, NULL);
@@ -11190,27 +11199,9 @@ index 43f6a8d99..66b6f30ba 100644
  	if (ctx->ctrl_handler.error) {
  		int err = ctx->ctrl_handler.error;
  
-@@ -311,6 +431,17 @@ static struct rga_fmt formats[] = {
- 		.y_div = 2,
- 		.x_div = 2,
- 	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_Y4,
-+		.color_swap = RGA_COLOR_NONE_SWAP,
-+		/* hard will switch from yuv420P to yuv400 when y4 conversion is
-+		 * activated using the relevant registers*/
-+		.hw_format = RGA_COLOR_FMT_YUV420P,
-+		.depth = 4,
-+		.uv_factor = 1,
-+		.y_div = 1,
-+		.x_div = 1,
-+	},
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUV422P,
- 		.color_swap = RGA_COLOR_NONE_SWAP,
-@@ -959,6 +1090,9 @@ static const struct of_device_id rockchip_rga_match[] = {
- 	{
- 		.compatible = "rockchip,rk3399-rga",
+@@ -917,6 +1037,9 @@ static const struct of_device_id rockchip_rga_match[] = {
+ 		.compatible = "rockchip,rk3588-rga3",
+ 		.data = &rga3_hw,
  	},
 +	{
 +		.compatible = "rockchip,rk356x-rga",
@@ -11219,10 +11210,10 @@ index 43f6a8d99..66b6f30ba 100644
  };
  
 diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
-index 72a28b120..dccec0405 100644
+index bd431534d0d3..2eb423d6769d 100644
 --- a/drivers/media/platform/rockchip/rga/rga.h
 +++ b/drivers/media/platform/rockchip/rga/rga.h
-@@ -12,6 +12,14 @@
+@@ -14,6 +14,14 @@
  #include <media/v4l2-device.h>
  
  #define RGA_NAME "rockchip-rga"
@@ -11235,9 +11226,9 @@ index 72a28b120..dccec0405 100644
 +#define RGA_V4L2_CID_Y4MAP_LUT0 (V4L2_CID_USER_RGA_BASE + 4)
 +#define RGA_V4L2_CID_Y4MAP_LUT1 (V4L2_CID_USER_RGA_BASE + 5)
  
- struct rga_fmt {
- 	u32 fourcc;
-@@ -66,6 +74,13 @@ struct rga_ctx {
+ #define DEFAULT_WIDTH 100
+ #define DEFAULT_HEIGHT 100
+@@ -56,6 +64,13 @@ struct rga_ctx {
  	u32 vflip;
  	u32 rotate;
  	u32 fill_color;
@@ -11252,10 +11243,10 @@ index 72a28b120..dccec0405 100644
  
  static inline struct rga_ctx *file_to_rga_ctx(struct file *filp)
 diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 554c591e1..f0279e86c 100644
+index 65db7340ad38..03c58c3edf72 100644
 --- a/drivers/media/v4l2-core/v4l2-common.c
 +++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -305,6 +305,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+@@ -333,6 +333,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
  		{ .format = V4L2_PIX_FMT_YVU420,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
  		{ .format = V4L2_PIX_FMT_YUV422P, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
  		{ .format = V4L2_PIX_FMT_GREY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
@@ -11263,9 +11254,47 @@ index 554c591e1..f0279e86c 100644
  
  		/* Tiled YUV formats */
  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 2 },
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index a54a549196fe..737a1f9a9e1c 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -1710,15 +1710,13 @@ config REGULATOR_TPS65132
+ 	  power supply specifically designed for display panels.
+ 
+ config REGULATOR_TPS65185
+-	tristate "TI TPS65185 EPD regulator"
+-	depends on I2C
++	tristate "TI TPS65185 PMIC for E-Paper Display"
++	depends on GPIOLIB && I2C && IIO
++	select IIO_TRIGGERED_EVENT
+ 	select REGMAP_I2C
+ 	help
+-	  This driver supports the TPS65185 voltage regulator chip
+-	  which is used to provide power to Electronic Paper Displays
+-	  so it is found in E-Book readers.
+-	  If HWWON is enabled, it also provides temperature measurement.
+-
++	  This driver supports the voltage regulators on the TPS65185 PMIC
++	  specifically designed for e-paper display panels.
+ 
+ config REGULATOR_TPS65217
+ 	tristate "TI TPS65217 Power regulators"
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 134eee274dbf..abab0db5c3ba 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -194,7 +194,7 @@ obj-$(CONFIG_REGULATOR_TPS65023) += tps65023-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS6507X) += tps6507x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65090) += tps65090-regulator.o
+-obj-$(CONFIG_REGULATOR_TPS65185) += tps65185.o
++obj-$(CONFIG_REGULATOR_TPS65185) += tps65185-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65218) += tps65218-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65219) += tps65219-regulator.o
 diff --git a/drivers/regulator/tps65185-regulator.c b/drivers/regulator/tps65185-regulator.c
 new file mode 100644
-index 000000000..a9de615e0
+index 000000000000..bb3a86713fd5
 --- /dev/null
 +++ b/drivers/regulator/tps65185-regulator.c
 @@ -0,0 +1,782 @@
@@ -12052,7 +12081,7 @@ index 000000000..a9de615e0
 +MODULE_DESCRIPTION("TPS65185 PMIC driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-index 785f60c6f..17ccb0fb1 100644
+index 785f60c6f3ad..17ccb0fb19e1 100644
 --- a/drivers/soc/rockchip/Kconfig
 +++ b/drivers/soc/rockchip/Kconfig
 @@ -30,4 +30,10 @@ config ROCKCHIP_DTPM
@@ -12067,7 +12096,7 @@ index 785f60c6f..17ccb0fb1 100644
 +
  endif
 diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-index 23d414433..d62676283 100644
+index 23d414433c8c..d6267628340b 100644
 --- a/drivers/soc/rockchip/Makefile
 +++ b/drivers/soc/rockchip/Makefile
 @@ -5,3 +5,4 @@
@@ -12077,7 +12106,7 @@ index 23d414433..d62676283 100644
 +obj-$(CONFIG_ROCKCHIP_SUSPEND_MODE) += rockchip_pm_config.o
 diff --git a/drivers/soc/rockchip/rockchip_pm_config.c b/drivers/soc/rockchip/rockchip_pm_config.c
 new file mode 100644
-index 000000000..655241816
+index 000000000000..eefc84883b79
 --- /dev/null
 +++ b/drivers/soc/rockchip/rockchip_pm_config.c
 @@ -0,0 +1,291 @@
@@ -12095,7 +12124,7 @@ index 000000000..655241816
 +#include <linux/bitops.h>
 +#include <linux/cpu.h>
 +#include <linux/module.h>
-+#include <linux/of_gpio.h>
++#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/pm.h>
 +#include <linux/regulator/driver.h>
@@ -12163,23 +12192,23 @@ index 000000000..655241816
 +
 +	switch (state) {
 +	case RK_PM_MEM:
-+		strncpy(on_prop_name, "rockchip,regulator-on-in-mem",
++		strscpy(on_prop_name, "rockchip,regulator-on-in-mem",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
-+		strncpy(off_prop_name, "rockchip,regulator-off-in-mem",
++		strscpy(off_prop_name, "rockchip,regulator-off-in-mem",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
 +	break;
 +
 +	case RK_PM_MEM_LITE:
-+		strncpy(on_prop_name, "rockchip,regulator-on-in-mem-lite",
++		strscpy(on_prop_name, "rockchip,regulator-on-in-mem-lite",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
-+		strncpy(off_prop_name, "rockchip,regulator-off-in-mem-lite",
++		strscpy(off_prop_name, "rockchip,regulator-off-in-mem-lite",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
 +	break;
 +
 +	case RK_PM_MEM_ULTRA:
-+		strncpy(on_prop_name, "rockchip,regulator-on-in-mem-ultra",
++		strscpy(on_prop_name, "rockchip,regulator-on-in-mem-ultra",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
-+		strncpy(off_prop_name, "rockchip,regulator-off-in-mem-ultra",
++		strscpy(off_prop_name, "rockchip,regulator-off-in-mem-ultra",
 +			MAX_ON_OFF_REG_PROP_NAME_LEN);
 +	break;
 +
@@ -12373,7 +12402,7 @@ index 000000000..655241816
 +MODULE_DESCRIPTION("Rockchip suspend mode config");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
-index c8dadb532..658cad85c 100644
+index c32c33b27e1a..969b212b2ea8 100644
 --- a/drivers/spi/spi-gpio.c
 +++ b/drivers/spi/spi-gpio.c
 @@ -6,6 +6,7 @@
@@ -12382,9 +12411,9 @@ index c8dadb532..658cad85c 100644
  #include <linux/gpio/consumer.h>
 +#include <linux/delay.h>
  #include <linux/kernel.h>
- #include <linux/mod_devicetable.h>
  #include <linux/module.h>
-@@ -85,7 +86,7 @@ static inline int getmiso(const struct spi_device *spi)
+ #include <linux/platform_device.h>
+@@ -84,7 +85,7 @@ static inline int getmiso(const struct spi_device *spi)
   * reaching even one Mbit/sec (except when we can inline bitops), so for now
   * we'll just assume we never need additional per-bit slowdowns.
   */
@@ -12394,7 +12423,7 @@ index c8dadb532..658cad85c 100644
  #include "spi-bitbang-txrx.h"
  
 diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
-index 76521555e..6a765c899 100644
+index 76521555e3c1..6a765c89978e 100644
 --- a/drivers/usb/gadget/Kconfig
 +++ b/drivers/usb/gadget/Kconfig
 @@ -223,6 +223,9 @@ config USB_F_PRINTER
@@ -12424,7 +12453,7 @@ index 76521555e..6a765c899 100644
  
  endif # USB_GADGET
 diff --git a/drivers/usb/gadget/function/Makefile b/drivers/usb/gadget/function/Makefile
-index 7ce163727..9e2c8ab5a 100644
+index 7ce1637276f0..9e2c8ab5a13b 100644
 --- a/drivers/usb/gadget/function/Makefile
 +++ b/drivers/usb/gadget/function/Makefile
 @@ -56,3 +56,5 @@ usb_f_printer-y			:= f_printer.o
@@ -12435,7 +12464,7 @@ index 7ce163727..9e2c8ab5a 100644
 +obj-$(CONFIG_USB_F_GUD)		+= usb_f_gud.o
 diff --git a/drivers/usb/gadget/function/f_gud.c b/drivers/usb/gadget/function/f_gud.c
 new file mode 100644
-index 000000000..826d5582d
+index 000000000000..826d5582d6cf
 --- /dev/null
 +++ b/drivers/usb/gadget/function/f_gud.c
 @@ -0,0 +1,866 @@
@@ -13306,7 +13335,7 @@ index 000000000..826d5582d
 +MODULE_AUTHOR("Noralf Trønnes");
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/video/backlight/lm3630a_bl.c b/drivers/video/backlight/lm3630a_bl.c
-index 37651c2b9..1eecb0ca5 100644
+index 8f49e59ce374..1b5fca739992 100644
 --- a/drivers/video/backlight/lm3630a_bl.c
 +++ b/drivers/video/backlight/lm3630a_bl.c
 @@ -85,18 +85,34 @@ static int lm3630a_chip_init(struct lm3630a_chip *pchip)
@@ -13477,7 +13506,7 @@ index 37651c2b9..1eecb0ca5 100644
  		if (rval) {
  			dev_err(&client->dev, "fail : parse node\n");
 diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index c972a8a33..d9316ec0c 100644
+index 49a21f3dcb36..36c221b7cf30 100644
 --- a/include/drm/drm_client.h
 +++ b/include/drm/drm_client.h
 @@ -17,6 +17,7 @@ struct drm_file;
@@ -13553,7 +13582,7 @@ index c972a8a33..d9316ec0c 100644
  
  /**
   * struct drm_client_buffer - DRM client buffer
-@@ -209,12 +242,18 @@ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
+@@ -212,12 +245,18 @@ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
  int drm_client_modeset_create(struct drm_client_dev *client);
  void drm_client_modeset_free(struct drm_client_dev *client);
  int drm_client_modeset_probe(struct drm_client_dev *client, unsigned int width, unsigned int height);
@@ -13574,7 +13603,7 @@ index c972a8a33..d9316ec0c 100644
   * drm_client_for_each_modeset() - Iterate over client modesets
 diff --git a/include/drm/drm_epd_helper.h b/include/drm/drm_epd_helper.h
 new file mode 100644
-index 000000000..6386fbce2
+index 000000000000..6386fbce2659
 --- /dev/null
 +++ b/include/drm/drm_epd_helper.h
 @@ -0,0 +1,107 @@
@@ -13686,7 +13715,7 @@ index 000000000..6386fbce2
 +
 +#endif /* __DRM_EPD_HELPER_H__ */
 diff --git a/include/drm/gud.h b/include/drm/gud.h
-index c52a8ba4a..0d3d57e53 100644
+index c52a8ba4ae4e..0d3d57e53e40 100644
 --- a/include/drm/gud.h
 +++ b/include/drm/gud.h
 @@ -332,4 +332,16 @@ struct gud_state_req {
@@ -13708,7 +13737,7 @@ index c52a8ba4a..0d3d57e53 100644
  #endif
 diff --git a/include/dt-bindings/suspend/rockchip-rk3568.h b/include/dt-bindings/suspend/rockchip-rk3568.h
 new file mode 100644
-index 000000000..91e89f64a
+index 000000000000..91e89f64a067
 --- /dev/null
 +++ b/include/dt-bindings/suspend/rockchip-rk3568.h
 @@ -0,0 +1,57 @@
@@ -13770,7 +13799,7 @@ index 000000000..91e89f64a
 +
 +#endif
 diff --git a/include/linux/platform_data/lm3630a_bl.h b/include/linux/platform_data/lm3630a_bl.h
-index 530be9318..921ccf5ab 100644
+index 530be9318711..921ccf5aba70 100644
 --- a/include/linux/platform_data/lm3630a_bl.h
 +++ b/include/linux/platform_data/lm3630a_bl.h
 @@ -33,6 +33,8 @@ enum lm3630a_ledb_ctrl {
@@ -13816,7 +13845,7 @@ index 530be9318..921ccf5ab 100644
  #endif /* __LINUX_LM3630A_H */
 diff --git a/include/linux/rockchip/rockchip_sip.h b/include/linux/rockchip/rockchip_sip.h
 new file mode 100644
-index 000000000..c77bbb78c
+index 000000000000..c77bbb78c830
 --- /dev/null
 +++ b/include/linux/rockchip/rockchip_sip.h
 @@ -0,0 +1,333 @@
@@ -14155,7 +14184,7 @@ index 000000000..c77bbb78c
 +#endif
 diff --git a/include/uapi/drm/rockchip_ebc_drm.h b/include/uapi/drm/rockchip_ebc_drm.h
 new file mode 100644
-index 000000000..f9b27f30f
+index 000000000000..f9b27f30ffb0
 --- /dev/null
 +++ b/include/uapi/drm/rockchip_ebc_drm.h
 @@ -0,0 +1,172 @@
@@ -14332,7 +14361,7 @@ index 000000000..f9b27f30f
 +
 +#endif /* __ROCKCHIP_EBC_DRM_H__*/
 diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index f84ed133a..4378671ad 100644
+index affec0ab4781..c3eab7ad99fd 100644
 --- a/include/uapi/linux/v4l2-controls.h
 +++ b/include/uapi/linux/v4l2-controls.h
 @@ -204,16 +204,11 @@ enum v4l2_colorfx {
@@ -14356,7 +14385,7 @@ index f84ed133a..4378671ad 100644
  /*
   * The base for the uvc driver controls.
 diff --git a/scripts/package/debian/rules b/scripts/package/debian/rules
-index a417a7f8b..5159f60e6 100755
+index a417a7f8bbc1..5159f60e6f87 100755
 --- a/scripts/package/debian/rules
 +++ b/scripts/package/debian/rules
 @@ -56,7 +56,7 @@ define binary
@@ -14368,41 +14397,6 @@ index a417a7f8b..5159f60e6 100755
  	$(Q)dh_md5sums $(DH_OPTIONS)
  	$(Q)dh_builddeb $(DH_OPTIONS) -- $(addprefix -Z,$(KDEB_COMPRESS))
  endef
-diff --git a/drivers/regulator/Kconfig.orig b/drivers/regulator/Kconfig
-index d10b6f9..97ce6d7 100644
---- a/drivers/regulator/Kconfig.orig
-+++ b/drivers/regulator/Kconfig
-@@ -1709,15 +1709,13 @@ config REGULATOR_TPS65132
- 	  power supply specifically designed for display panels.
- 
- config REGULATOR_TPS65185
--	tristate "TI TPS65185 EPD regulator"
--	depends on I2C
-+	tristate "TI TPS65185 PMIC for E-Paper Display"
-+	depends on GPIOLIB && I2C && IIO
-+	select IIO_TRIGGERED_EVENT
- 	select REGMAP_I2C
- 	help
--	  This driver supports the TPS65185 voltage regulator chip
--	  which is used to provide power to Electronic Paper Displays
--	  so it is found in E-Book readers.
--	  If HWWON is enabled, it also provides temperature measurement.
--
-+	  This driver supports the voltage regulators on the TPS65185 PMIC
-+	  specifically designed for e-paper display panels.
- 
- config REGULATOR_TPS65217
- 	tristate "TI TPS65217 Power regulators"
-diff --git a/drivers/regulator/Makefile.orig b/drivers/regulator/Makefile
-index 35639f3..c1eb8fd 100644
---- a/drivers/regulator/Makefile.orig
-+++ b/drivers/regulator/Makefile
-@@ -194,7 +194,7 @@ obj-$(CONFIG_REGULATOR_TPS65023) += tps65023-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6507X) += tps6507x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65090) += tps65090-regulator.o
--obj-$(CONFIG_REGULATOR_TPS65185) += tps65185.o
-+obj-$(CONFIG_REGULATOR_TPS65185) += tps65185-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65218) += tps65218-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65219) += tps65219-regulator.o
+-- 
+2.56.0
+

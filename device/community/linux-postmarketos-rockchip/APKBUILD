@@ -1,6 +1,6 @@
 maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=linux-postmarketos-rockchip
-pkgver=7.0.14
+pkgver=7.2.9
 _kernver=${pkgver%.*}
 pkgrel=0
 pkgdesc="Mainline kernel for rockchip devices"
@@ -18,6 +18,8 @@ makedepends="
 	bash
 	bison
 	clang
+	clang-libclang
+	diffutils
 	elfutils-dev
 	findutils
 	flex
@@ -30,7 +32,11 @@ makedepends="
 	perl
 	postmarketos-installkernel
 	python3
-	xz
+	rust
+	rust-bindgen
+	rust-src
+	rustfmt
+	sed
 	zstd
 "
 # to allow A/B comparison testing
@@ -94,9 +100,9 @@ package() {
 }
 
 sha512sums="
-7e4d106e62e7ad9cb5e23f439f6ddf4418dbbf37008bc7d1349ab231dac41b857805b6689db25095640cb990ccff2d8e5c8aaa136dd463b345b9d5777ee08e0f  linux-postmarketos-rockchip-7.0.14.patch.xz
-8c85b708342f8f09ca25b2234b22e93b62b144a9ef919fbb21827f52fa47498e778c79db1559524dd7fb360f95b2ce174171443c1859656c281be41d2b6c5a0b  linux-7.0.tar.xz
-a847efc685757cf8250891e06434ee65e449ec1d83d49f3157f2b72528db2da9da11b23b7a1b223645de577414fde15e06fce621bfce5ff02779598ad1d41cf5  rk3566-pinenote-support.patch
-665bdc843912a22bc9f1840bf89195f6cccabd2b8ca3313f3c61b5503c84f98395e3de0d28bc31cbc9f1b4be4a41a483db156fad353506bb5be7abdc22e46501  rk3566-pinenote-ultra-suspend.patch
-b350b844142e94b9f7da65e6e4cf936c2442270f19e6be6bb1f714f005842303965401f91ecc6064484ac09df005b37e4036b57d5d60b2caa6a8d2fda5fdc01a  config-postmarketos-rockchip.aarch64
+7f53f7fb4d7208dabaf257a1f031d188de262897c5a136d332b8fb53903122ad2a599531a679ee365bedac7bbc06f341fa3a4410da9245e8d529ce70fb827d85  linux-postmarketos-rockchip-7.2.9.patch.xz
+47e63679363261a864d271277340a6f2d45f544e1a056be4159df081f4f6537d0efa865c4af26611ab33a3079ee65db88ec2f6bc0e5fff43e0c043cde0cd91e1  linux-7.2.tar.xz
+2f72573bdcb9ab664845487463605a2b503e9640d38878bd663c829c66cfd13c6bf73c0bd200c5530e5e87e4887e47af93a413dd8cc2eb643613bed028aeef07  rk3566-pinenote-support.patch
+bcb43e41178eceb20713720644afca63715d6a17a5c3fbd2b6cec43be173d2327e004f569deb953a2bd5a0566e1773a79ad5ad7ce5f30f3942d1e0978693cee8  rk3566-pinenote-ultra-suspend.patch
+7abd4c96ce5a0a6887fb41f2177cca2d929af0fb4f75efbce52f92cd19bc47e896d323074dab4914d940b76b51f2a0948e4da2b1018d473ad67e40e02ecae57d  config-postmarketos-rockchip.aarch64
 "
