@@ -1,0 +1,83 @@
+From 7d127303535c6e52350cb2a45c3adb82ca029db7 Mon Sep 17 00:00:00 2001
+From: Jan-Michael Brummer <jan.brummer@tabos.org>
+Date: Tue, 23 Jun 2026 17:38:24 +0200
+Subject: [PATCH] systemActions: Add fallback power option via logind
+
+---
+ js/misc/systemActions.js | 43 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 40 insertions(+), 3 deletions(-)
+
+diff --git a/js/misc/systemActions.js b/js/misc/systemActions.js
+index 7264578eb..6d72a89b7 100644
+--- a/js/misc/systemActions.js
++++ b/js/misc/systemActions.js
+@@ -341,11 +341,28 @@ const SystemActions = GObject.registerClass({
+             const [canShutdown] = await this._session.CanShutdownAsync();
+             this._canHavePowerOff = canShutdown;
+         } catch (e) {
+-            this._canHavePowerOff = false;
++            this._canHavePowerOff = await this._canShutdownViaLogind();
+         }
+         this._updatePowerOff();
+     }
+ 
++    async _canShutdownViaLogind() {
++        try {
++            const result = await Gio.DBus.system.call(
++                'org.freedesktop.login1',
++                '/org/freedesktop/login1',
++                'org.freedesktop.login1.Manager',
++                'CanPowerOff',
++                null, null,
++                Gio.DBusCallFlags.NONE,
++                -1, null);
++            const val = result.deepUnpack()[0];
++            return val === 'yes' || val === 'challenge';
++        } catch (e) {
++            return false;
++        }
++    }
++
+     _updatePowerOff() {
+         let disabled = Main.sessionMode.isLocked ||
+                        (Main.sessionMode.isGreeter &&
+@@ -449,14 +466,34 @@ const SystemActions = GObject.registerClass({
+         if (!this._actions.get(POWER_OFF_ACTION_ID).available)
+             throw new Error('The power-off action is not available!');
+ 
+-        this._session.ShutdownAsync(0).catch(logError);
++        this._session.ShutdownAsync(0).catch(() => {
++            this._logindPowerAction('PowerOff').catch(logError);
++        });
+     }
+ 
+     activateRestart() {
+         if (!this._actions.get(RESTART_ACTION_ID).available)
+             throw new Error('The restart action is not available!');
+ 
+-        this._session.RebootAsync().catch(logError);
++        this._session.RebootAsync().catch(() => {
++            this._logindPowerAction('Reboot').catch(logError);
++        });
++    }
++
++    async _logindPowerAction(method) {
++        try {
++            await Gio.DBus.system.call(
++                'org.freedesktop.login1',
++                '/org/freedesktop/login1',
++                'org.freedesktop.login1.Manager',
++                method,
++                new GLib.Variant('(b)', [true]),
++                null,
++                Gio.DBusCallFlags.NONE,
++                -1, null);
++        } catch (e) {
++            logError(e, `Failed to ${method} via logind`);
++        }
+     }
+ 
+     activateSuspend() {
+-- 
+2.55.0
+

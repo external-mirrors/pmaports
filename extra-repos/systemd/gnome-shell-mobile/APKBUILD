@@ -5,7 +5,7 @@ maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=gnome-shell-mobile
 _pkgver=48.0
 pkgver=9999$_pkgver
-pkgrel=7
+pkgrel=8
 pkgdesc="GNOME shell mobile"
 url="https://wiki.gnome.org/Projects/GnomeShell"
 # armhf: mutter-mobile, gjs
@@ -88,6 +88,7 @@ source="gnome-shell-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/gnom
 	0005-windowPreview-Only-try-to-close-closable-windows.patch
 	0006-keyboard-Avoid-spinning-idle-source-when-window-actor-is-unavailable.patch
 	0007-keyboard-Add-paste-option-to-language-popover.patch
+	0008-systemActions-Add-fallback-power-option-via-logind.patch
 	"
 builddir="$srcdir/gnome-shell-mobile-$_commit"
 options="!check" # Tests have circular dependency 'gnome-shell <-> gdm'
@@ -160,4 +161,5 @@ f1575dd86772e4bad9357f0322b2ba396478ec45a691c072c4ff98c299d8814aaaf0386fb90f883b
 19859a78910afe6af7e7c52a616f817051eeef2741361228eb8da41c77f5834b939cbcd4954d6b98c353d61e516fadccc1ff674ac77c854c7745f07ee8974d85  0005-windowPreview-Only-try-to-close-closable-windows.patch
 df9693e0bd6ca7d8157a69b0849882958d552d28334fe4bea2e6794cc0b65c43b6c318a1b5168963fae7ea7569b78e62fdb59189da7df946f7e1e4564b0328be  0006-keyboard-Avoid-spinning-idle-source-when-window-actor-is-unavailable.patch
 044cd4b0e670f41d79f92485d338a670769f31ff9e1b5f3077cb589a1bd4418096ba9dff00de46d63844b6af49545b102008c51fc9e2bf9b80cd9dc56bcff70f  0007-keyboard-Add-paste-option-to-language-popover.patch
+712541a8585785012564fda9c364549e1a52741201b54e6b1403581f6ead84963470e061479339d98bedf46e9d2f6d12f46fc4e157999b19cb97da38c64709cd  0008-systemActions-Add-fallback-power-option-via-logind.patch
 "
