@@ -1,0 +1,39 @@
+# Reference: <https://nura.eco/devicepkg>
+maintainer="Adrian Nguyen <thenguyen1024@gmail.com>"
+pkgname=device-vsmart-zangyapro
+pkgver=1
+pkgrel=0
+pkgdesc="Vsmart Active 1"
+url="https://nura.eco"
+arch="aarch64"
+license="MIT"
+depends="
+	android-tools-mkbootimg
+	firmware-qcom-adreno-a530
+	firmware-vsmart-zangyapro
+	linux-postmarketos-qcom-sdm660
+	msm-firmware-loader
+	postmarketos-base
+	qbootctl
+	soc-qcom-sdm660
+	soc-qcom-sdm660-rproc
+	"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+	"
+options="!archcheck !check"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+4cc1b7c8ca47c986078a3755e65a54c61d2e1b637b0d8454fae510c047d2967529160e1c869ebaa99797d8a8dd4dece8bb82d6888b37c5855f966cea99331905  deviceinfo
+ac22d4ca340c1e20b6e59319d9d99ee180119179942d0c86138c671cc0912501688d0a79522aec8fbb9618fdbbc78470e1280429df9247d6ac43718c611e0025  modules-initfs
+"
