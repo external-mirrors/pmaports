@@ -9,7 +9,7 @@ especially on mobile devices with wireless connectivity or graphics processors.
 While for the longest time, pmbootstrap used to prompt the user whether they
 wanted to install firmware or not, it was decided in early 2024 that nonfree
 firmware would be [installed by
-default](https://postmarketos.org/edge/2024/02/15/default-nonfree-fw/).
+default](https://nura.eco/edge/2024/02/15/default-nonfree-fw/).
 
 Nonfree firmware dependencies should therefore now be in the `depends` of the
 device package and also not in a separate subpackage. It would technically be
@@ -45,7 +45,7 @@ system. It is also generally considered the most secure alternative. CVEs in
 non-free firmware for things like the modem have existed. Packaging firmware and
 keeping it up-to-date ensures that all users get the newest security patches,
 and do not depend on the Android version they had before installing
-postmarketOS.
+Nura.
 
 Unfortunately, there are cases where none of the other options are possible, for
 example, when firmware files are specific to the device: unit-specific

@@ -46,7 +46,7 @@ Alpine with:
 For devices specifically: if it is useful to list someone who has worked on a
 device who would be available for contact for questions about the device,
 consider adding them under a "Maintainers" section of the
-[device's wiki page](https://wiki.postmarketos.org/wiki/Device_specific_package).
+[device's wiki page](https://wiki.nura.eco/wiki/Device_specific_package).
 
 ## Package versioning (pkgver, pkgrel)
 

@@ -1,11 +1,12 @@
 # Device Categorization
 
-There are a [lot of devices](https://wiki.postmarketos.org/wiki/Devices) that
-can boot postmarketOS. These devices are divided into different categories. The
-categorization serves to provide users with information about what to expect in
-the present and future from a specific device. Therefore, the categories provide
-information about a minimum set of working features, but also about the expected
-level of support and stability that those features will have in the future.
+There are a [lot of devices](https://wiki.nura.eco/wiki/Devices) that can boot
+Nura. These devices are divided into different categories. The categorization
+serves to provide users with information about what to expect in the present
+and future from a specific device. Therefore, the categories provide
+information about a minimum set of working features, but also about the
+expected level of support and stability that those features will have in the
+future.
 
 ## Categories
 
@@ -18,28 +19,27 @@ or support from maintainers might be lower than what higher categories require.
 
 Main devices should be usable in the most common use-cases for which the device
 is designed. They are also expected to be reliable and have few regressions in
-functionality. One can expect some level of support from the postmarketOS team,
-always respecting the volunteer nature of the project. See
-[state](https://postmarketos.org/state/) to understand what that means.
+functionality. One can expect some level of support from the Nura team, always
+respecting the volunteer nature of the project. See
+[state](https://nura.eco/state/) to understand what that means.
 
 Requirements:
-* The [postmarketOS team](https://postmarketos.org/team) must endorse the new
+* The [Nura team](https://nura.eco/team) must endorse the new
   device.
 * A device maintainer team of at least 5 people, of which the majority are
-  part of the [postmarketOS team](https://postmarketos.org/team).
-* The postmarketOS team and device maintainer teams must cover their
-  responsibilities as listed below. Within the teams, they must figure out
-  themselves who covers what responsibilities.
+  part of the [Nura team](https://nura.eco/team).
+* The Nura team and device maintainer teams must cover their responsibilities
+  as listed below. Within the teams, they must figure out themselves who covers
+  what responsibilities.
 * Hardware CI in at least two locations for (in total) at least 3 devices.
 * Boot via UEFI.
-* Must use
-  [generic postmarketOS kernels](https://docs.postmarketos.org/pmaports/main/generic-kernels.html)
+* Must use [generic Nura kernels](generic-kernels)
 * Must not depend on forked device-specific packages, such as forks of
   `alsa-ucm-conf`.
 * Must use a generic device package for the target architecture.
 * Everything from community (see below).
 
-Responsibilities for the postmarketOS team:
+Responsibilities for the Nura team:
 * Regularly checking if requirements are still fulfilled, and if not:
   * Discuss with the device maintainers team.
   * Make calls for help early to e.g. find new members for the device
@@ -56,7 +56,7 @@ Responsibilities for the device maintainer team:
     Wi-Fi, audio, battery charging, Bluetooth and camera. Exceptions can be
     made by the device maintainer team, together with reasoning why they are
     necessary (e.g. fingerprint reader is not working because the driver is
-    missing). The postmarketOS team decides if the port is complete enough for
+    missing). The Nura team decides if the port is complete enough for
     the main category based on that list.
 * Organize regular meetings with device maintainers.
 * Organize regular meetings with vendors (if we have contacts there).
@@ -76,11 +76,11 @@ Responsibilities for the device maintainer team:
 Community devices have a reasonable set of features enabled, although there is
 not a fixed feature set: users should not assume that everything works and are
 expected to look at the device wiki page. Community devices have generally
-received a lot of work and should, in general, remain working quite
-well. However, there is no commitment from the postmarketOS team, and it can
-happen that maintainers are unable to continue working on them, leading to them
-eventually getting demoted. The team will always notify the community about such
-changes through the standard communication channels: Fediverse and blog posts.
+received a lot of work and should, in general, remain working quite well.
+However, there is no commitment from the Nura team, and it can happen that
+maintainers are unable to continue working on them, leading to them eventually
+getting demoted. The team will always notify the community about such changes
+through the standard communication channels: Fediverse and blog posts.
 
 Requirements:
 
@@ -96,12 +96,11 @@ Requirements:
     `deviceinfo_flash_kernel_on_update=true`.
   * For other devices which directly boot a kernel from a boot partition, or
     which use lk2nd, usually nothing needs to be done.
-* Maintainer(s) must take part in the workflow for new postmarketOS releases:
-  * Join the [testing
-    channel](https://wiki.postmarketos.org/wiki/Matrix_and_IRC) coordinate the
-    release
+* Maintainer(s) must take part in the workflow for new Nura releases:
+  * Join the [testing channel](https://wiki.nura.eco/wiki/Matrix_and_IRC)
+    coordinate the release
   * Testing their device and related fixing issues, according to the
-    [timeline](https://wiki.postmarketos.org/wiki/Creating_a_release_branch#Timeline)
+    [timeline](https://wiki.nura.eco/wiki/Creating_a_release_branch#Timeline)
     (test yourself/coordinate with the
     [Testing Team](https://wiki.postmarketos.org/wiki/Testing_Team); testing
     one device per SoC is enough for community devices, but of course more is
@@ -150,8 +149,8 @@ Requirements:
 
 A port might be in archived if the port has been replaced with a better
 alternative (e.g. ports using downstream kernels when a functional mainline port
-exists), the port no longer boots with the current version of postmarketOS,
-or it became unmaintained.
+exists), the port no longer boots with the current version of Nura, or it
+became unmaintained.
 
 The archived category exists to simplify bringing back old ports (so new
 maintainers don't have to dig through the git history), and for specific
@@ -167,12 +166,13 @@ This category was formerly called *unmaintained*
 
 ## Official Images
 
-Official images are built by [BPO](https://build.postmarketos.org). We
-configure the images as follows:
+Official images are built by [BPO](https://build.nura.eco). We configure the
+images as follows:
 
 * Build images for _all_ devices in main and community
 * Build images for _some_ devices in testing, maintainers may
-  [enable building images](https://wiki.postmarketos.org/wiki/Bpo#Image_configuration) if:
+  [enable building images](https://wiki.nura.eco/wiki/Bpo#Image_configuration)
+  if:
   * The port runs a mainline kernel.
   * The port is actively maintained.
   * The maintainer has been active for some time (~6 months).
@@ -227,7 +227,7 @@ straight to main.
 
 * Change the category of the devices in the wiki
 * When moved from testing to community:
-  [enable building images](https://wiki.postmarketos.org/wiki/Bpo#Image_configuration)
+  [enable building images](https://wiki.nura.eco/wiki/Bpo#Image_configuration)
 
 ### Moving to a lower category
 

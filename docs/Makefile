@@ -7,7 +7,7 @@ default: venv
 venv: .venv/done
 .venv/done:
 	python3 -m venv .venv
-	. .venv/bin/activate && pip install "pmos-theme @ git+https://gitlab.postmarketos.org/postmarketOS/docs.postmarketos.org.git/#subdirectory=theme"
+	. .venv/bin/activate && pip install "pmos-theme @ git+https://gitlab.postmarketos.org/postmarketOS/docs.nura.eco.git/#subdirectory=theme"
 	touch $@
 
 run:

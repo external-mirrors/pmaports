@@ -1,12 +1,12 @@
 # UI Packages
 
 UIs (otherwise referred to as desktops or 'DE's) are the primary graphical way
-that users interact with their systems. On postmarketOS, these UIs are packaged
+that users interact with their systems. On Nura, these UIs are packaged
 in `postmarketos-ui-*` packages under `main/` in pmaports. The UI packages do not
 include the projects that make up a UI, as those are instead packaged in
-Alpine Linux's aports. The purpose of a UI package in postmarketOS is to
-combine the individual components of a UI, alongside postmarketOS-specific
-configuration, to create a functional out-of-the-box experience for users.
+Alpine Linux's aports. The purpose of a UI package in Nura is to combine the
+individual components of a UI, alongside Nura-specific configuration, to create
+a functional out-of-the-box experience for users.
 
 ## How to add a new UI
 
@@ -18,7 +18,7 @@ it is also possible to create a `postmarketos-base-ui-<UI Name>` package and
 have the individual UIs depend upon it.
 
 After adding a UI, add it to:
-https://wiki.postmarketos.org/wiki/Category:Interface
+https://wiki.nura.eco/wiki/Category:Interface
 
 ## Requirements for UI packages
 
@@ -35,7 +35,7 @@ https://wiki.postmarketos.org/wiki/Category:Interface
   different device form-factor, to modify basic branding, or to comply with
   any other requirements.
 - A UI shall be rejected if its inclusion would be a risk to community
-  cohesion through the actions of the UIs upstream community, non-postmarketOS
+  cohesion through the actions of the UIs upstream community, non-Nura
   userbase, and/or other outstanding factors that make it obvious that a UI's
   inclusion would damage the project in some way.
 
@@ -52,8 +52,8 @@ https://wiki.postmarketos.org/wiki/Category:Interface
   Remember to put these packages in [`_pmb_recommends`](pmb-recommends) in the
   subpackage to allow the user to uninstall them.
 - If a UI supports the ability to set a wallpaper, it is expected that the
-  default wallpaper of postmarketOS is set by default. This is not a strict
-  rule, as this is sometimes not possible due to technical constraints.
+  default wallpaper of Nura is set by default. This is not a strict rule, as
+  this is sometimes not possible due to technical constraints.
 
 ```{eval-rst}
 .. toctree::

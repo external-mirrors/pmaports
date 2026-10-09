@@ -1,7 +1,7 @@
 # Approval Rules
 
 pmaports follows the general
-[code review and merge](https://docs.postmarketos.org/policies-and-processes/development/code-review-and-merge.html)
+[code review and merge](https://docs.nura.eco/policies-and-processes/development/code-review-and-merge.html)
 rules, but with the following changes.
 
 ## Regular MR approvals

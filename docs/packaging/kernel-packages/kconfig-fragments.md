@@ -6,7 +6,7 @@ The kernel's build system will silently drop config if dependencies are unmet, w
 
 ## Overview
 
-Fragment-based kernel packages in postmarketOS generate their final configuration using `pmbootstrap kconfig generate`, which pulls kernel configuration from multiple sources:
+Fragment-based kernel packages in Nura generate their final configuration using `pmbootstrap kconfig generate`, which pulls kernel configuration from multiple sources:
 
 1. **defconfig**: base configuration from the kernel source tree
 2. **kconfigcheck.toml**: distro-wide requirements, selected via `pmb:kconfigcheck-*` options in the APKBUILD

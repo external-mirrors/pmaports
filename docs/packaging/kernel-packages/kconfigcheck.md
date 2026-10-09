@@ -1,7 +1,7 @@
 # kconfigcheck
 
-postmarketOS defines a set of kernel configuration options that should be
-enabled in all kernel packages.
+Nura defines a set of kernel configuration options that should be enabled in
+all kernel packages.
 
 These are for example options required for the initramfs or our firewall to
 function, but also include required options for commonly used software

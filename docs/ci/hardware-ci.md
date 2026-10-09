@@ -63,7 +63,7 @@ in the device folder.
 
 ## Tests
 
-There are 3 kind of tests in the postmarketOS hardware CI setup:
+There are 3 kind of tests in the Nura hardware CI setup:
 
 ### Kernel tests
 

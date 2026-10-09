@@ -40,8 +40,8 @@ CW 24 <small>(2026-06-08 - 2026-06-14)</small>
 
 Maintainers:
 * Test your devices and UIs (test yourself if you can and/or coordinate with
-  the [Testing Team](https://wiki.postmarketos.org/wiki/Testing_Team))
-* Report back in the issue ([template for devices](https://wiki.postmarketos.org/wiki/Kernel_upgrade_testing#Stable_release_testing))
+  the [Testing Team](https://wiki.nura.eco/wiki/Testing_Team))
+* Report back in the issue ([template for devices](https://wiki.nura.eco/wiki/Kernel_upgrade_testing#Stable_release_testing))
 * Fix stuff that is broken by creating MRs against pmaports main and assigning
   the `backport-to-YY.MM` label
 

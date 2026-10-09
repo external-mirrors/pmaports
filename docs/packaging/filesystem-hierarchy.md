@@ -7,7 +7,7 @@ located and which directories are good for use. The purpose of this document is
 to clarify these paths and explain where to put what during packaging and
 usage. Anything not listed here can be assumed to follow the LSFH normally.
 
-The version of LSFH that postmarketOS uses is 0.1.
+The version of LSFH that Nura uses is 0.1.
 
 These rules do not apply to packages forked from Alpine or that are replacing
 a files that Alpine provides due to limitations in apk-tools.
@@ -90,14 +90,14 @@ which to use.
 
 ### /usr/lib64/
 
-This path is a Debian-specific library path that should not be used on
-postmarketOS. `/usr/lib/` should always be used instead.
+This path is a Debian-specific library path that should not be used on Nura.
+`/usr/lib/` should always be used instead.
 
 ### /usr/local/
 
 This path is an old style user override directory meant to be a user version
-of the base `/usr/` path. This is depreciated in postmarketOS and has never
-been a valid path to install files.
+of the base `/usr/` path. This is depreciated in Nura and has never been a
+valid path to install files.
 
 ## tmpfiles.d
 
@@ -108,7 +108,7 @@ alternative paths. This is a bug upstream, so please file an issue with the
 upstream project if there is not already one about lack of a configuration
 directory under `/usr/`.
 
-As a workaround, postmarketOS supports
+As a workaround, Nura supports
 [tmpfiles.d](https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html)
 on systemd. tmpfiles.d is a powerful tool that allows creating files and
 symlinks, copying files, and much more at runtime. When working with

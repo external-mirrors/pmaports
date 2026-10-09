@@ -1,13 +1,13 @@
 # Releases
 
-postmarketOS can be installed from either edge, or from a stable release. New
-stable releases are created every six months in June and December (one month
-after [Alpine's releases](https://alpinelinux.org/releases/)).
+Nura can be installed from either edge, or from a stable release. New stable
+releases are created every six months in June and December (one month after
+[Alpine's releases](https://alpinelinux.org/releases/)).
 
 **edge** is a rolling release where all packages are kept at their newest
 version. This offers faster access to software at the expense of less user
 testing. In practice, issues on edge are relatively uncommon, and are
-documented in the [edge blog](https://postmarketos.org/edge/) when found.
+documented in the [edge blog](https://nura.eco/edge/) when found.
 
 **stable releases** are a snapshot of edge, in which updates to packages only
 contain bug fixes (with few exceptions). This means new features usually won't
@@ -38,19 +38,19 @@ appear, but you will get a more a more tried and tested, solid experience.
 | v21.03   | [2021-03-31][2103] | Beta 2                                                    | v21.03           | 3.13-stable    | [#8][m8]    |
 | v20.05   | [2020-05-31][2005] | Beta 1                                                    | v20.05           | 3.12-stable    | [#2][m2]    |
 
-[2606]: https://postmarketos.org/blog/2026/06/21/v26.06-release/
-[2512]: https://postmarketos.org/blog/2025/12/23/v25.12-release/
-[2506]: https://postmarketos.org/blog/2025/06/22/v25.06-release/
-[2412]: https://postmarketos.org/blog/2024/12/23/v24.12-release/
-[2406]: https://postmarketos.org/blog/2024/06/16/v24.06-release/
-[2312]: https://postmarketos.org/blog/2023/12/18/v23.12-release/
-[2306]: https://postmarketos.org/blog/2023/06/07/v23.06-release/
-[2212]: https://postmarketos.org/blog/2022/12/18/v22.12-release/
-[2206]: https://postmarketos.org/blog/2022/06/12/v22.06-release/
-[2112]: https://postmarketos.org/blog/2021/12/29/v21.12-release/
-[2106]: https://postmarketos.org/blog/2021/07/04/v21.06-release/
-[2103]: https://postmarketos.org/blog/2021/03/31/v21.03-release/
-[2005]: https://postmarketos.org/blog/2020/05/31/three-years/#stable-release-channel
+[2606]: https://nura.eco/blog/2026/06/21/v26.06-release/
+[2512]: https://nura.eco/blog/2025/12/23/v25.12-release/
+[2506]: https://nura.eco/blog/2025/06/22/v25.06-release/
+[2412]: https://nura.eco/blog/2024/12/23/v24.12-release/
+[2406]: https://nura.eco/blog/2024/06/16/v24.06-release/
+[2312]: https://nura.eco/blog/2023/12/18/v23.12-release/
+[2306]: https://nura.eco/blog/2023/06/07/v23.06-release/
+[2212]: https://nura.eco/blog/2022/12/18/v22.12-release/
+[2206]: https://nura.eco/blog/2022/06/12/v22.06-release/
+[2112]: https://nura.eco/blog/2021/12/29/v21.12-release/
+[2106]: https://nura.eco/blog/2021/07/04/v21.06-release/
+[2103]: https://nura.eco/blog/2021/03/31/v21.03-release/
+[2005]: https://nura.eco/blog/2020/05/31/three-years/#stable-release-channel
 
 [m35]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/35
 [m33]: https://gitlab.postmarketos.org/groups/postmarketOS/-/milestones/33

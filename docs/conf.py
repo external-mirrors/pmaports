@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 
 project = "pmaports"
-copyright = str(datetime.date.today().year) + ", postmarketOS contributors"
+copyright = str(datetime.date.today().year) + ", Nura contributors"
 exclude_patterns = ["_build", "_out", "Thumbs.db", ".DS_Store", ".venv", "README.md"]
 
 extensions = [
@@ -25,7 +25,7 @@ html_theme_options = {
 }
 
 # Set the explicit title of the HTML output
-html_title = "postmarketOS Packaging"
+html_title = "Nura Packaging"
 
 # Redirects for moved pages
 redirects = {

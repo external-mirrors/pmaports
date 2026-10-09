@@ -1,7 +1,6 @@
 # Welcome to pmaports' documentation!
 
-pmaports is the repository that holds the package build definitions in
-postmarketOS.
+pmaports is the repository that holds the package build definitions in Nura.
 
 When porting a new device or doing maintenance work around the distribution,
 you will usually be working inside of pmaports.

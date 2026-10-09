@@ -1,17 +1,18 @@
+(generic-kernels)=
 # Generic Kernels
 
-postmarketOS includes a couple of generic kernel packages in the `main` device
+Nura includes a couple of generic kernel packages in the `main` device
 category: `linux-postmarketos-mainline`, `linux-postmarketos-stable`,
 `linux-postmarketos-lts` and `linux-next`.
 
 These are kernels intended to work on a wide variety of devices and are the
-postmarketOS equivalents to Alpine kernels such as `linux-stable` or
-`linux-lts`. Having these kernels in postmarketOS means that we have full
-control over the kernel configuration and build process, which allows us to
-integrate them with our [kernel configuration checks](./kconfigcheck).
+Nura equivalents to Alpine kernels such as `linux-stable` or `linux-lts`.
+Having these kernels in Nura means that we have full control over the kernel
+configuration and build process, which allows us to integrate them with our
+[kernel configuration checks](./kconfigcheck).
 
 In the long term, all devices using Alpine kernels should be migrated to the
-postmarketOS generic kernels.
+Nura generic kernels.
 
 ## Configuration
 
@@ -34,10 +35,10 @@ for an architecture in the Linux kernel.
 ## Adding new options
 
 If a required option for your device is missing in the generic kernels, take a
-moment to consider whether this is an option that *all* kernels in postmarketOS
-should have enabled. If that's the case, then you should open a MR to add it
-to `kconfigcheck.toml`, see [the documentation](./kconfigcheck) on the topic
-for further details.
+moment to consider whether this is an option that *all* kernels in Nura should
+have enabled. If that's the case, then you should open a MR to add it to
+`kconfigcheck.toml`, see [the documentation](./kconfigcheck) on the topic for
+further details.
 
 If that's not the case, then it is probably a good fit for
 `kconfig-generic.toml`. Suppose your device has an Omnivision 8856 camera and
