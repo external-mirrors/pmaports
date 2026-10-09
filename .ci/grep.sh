@@ -190,7 +190,7 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 	if [ -n "$NEW_APKBUILDS" ]; then
 		if [ -n "$(grep -L '^maintainer="[^"]\+"$' $NEW_APKBUILDS || true)" ]; then
 			echo "ERROR: A new package does not have a maintainer set."
-			grep --color=always -L '^maintainer="[^"]\+"$' $NEW_APKBUILDS
+			grep --color=always -L '^maintainer="[^"]\+"$' $NEW_APKBUILDS || true
 			exit_code=1
 		fi
 	fi
