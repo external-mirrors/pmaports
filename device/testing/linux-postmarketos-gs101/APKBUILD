@@ -1,7 +1,7 @@
 maintainer="Ingo Reitz <9l@9lo.re>"
 pkgname=linux-postmarketos-gs101
 pkgver=7.0.6
-pkgrel=1
+pkgrel=3
 pkgdesc="Google gs101 (Pixel 6 Series) close-to-mainline kernel"
 arch="aarch64"
 _carch="arm64"
@@ -19,6 +19,7 @@ makedepends="
 	lz4
 	openssl-dev
 	perl
+	python3
 	zstd
 "
 
@@ -39,30 +40,31 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" LLVM=1 \
+	make all Image.lz4 ARCH="$_carch" LLVM=1 \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
 package() {
-	mkdir -p "$pkgdir"/boot
+	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+		"$pkgdir/boot/linux.efi"
 
-	make Image.lz4 modules_install dtbs_install \
+	install -Dm644 "$builddir/arch/$_carch/boot/Image.lz4" \
+		"$pkgdir/boot/vmlinuz"
+
+	make modules_install dtbs_install \
 		ARCH="$_carch" \
 		LLVM=1 \
 		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir"/usr \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
 
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
-
-	install -Dm644 "$builddir/arch/$_carch/boot/Image.lz4" \
-		"$pkgdir/boot/vmlinuz"
 }
 
 sha512sums="
 4d4a5568d3cc4c6ee957893a1168dd72274715e2491a19fcf314dcdf2fd5a466a088f2c4ca5d54578c68677f3899724643e07ac3f8fb1ee5fbe97f0c4c12dc91  linux-postmarketos-gs101-d28cfa4275b95e93f4b7a1e743de31b723bd21b8.tar.gz
-d8444741931ca26cdca20c959a3563eea777f6e3d2d378aeba9851fdb98adab8de2dd6b1466b61e49a9d89712ba7b066fb21a1b9e0a56e171507993b656ef6f6  config-postmarketos-gs101.aarch64
+8ea513182f82d1bdb21aceba93fe73e1045fb1d1e000e283697dbdfef7cb7c001a2fdff5ebd6c906122d349dc333a228d2e1b4eb04247b53b465ae80b20f1464  config-postmarketos-gs101.aarch64
 "
