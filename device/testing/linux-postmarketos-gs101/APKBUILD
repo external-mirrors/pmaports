@@ -1,8 +1,8 @@
 # Co-Maintainer: Lukas Timmermann <foss@timmermann.space>
 maintainer="Ingo Reitz <9l@9lo.re>"
 pkgname=linux-postmarketos-gs101
-pkgver=7.0.6
-pkgrel=3
+pkgver=7.3_rc6
+pkgrel=0
 pkgdesc="Google gs101 (Pixel 6 Series) close-to-mainline kernel"
 arch="aarch64"
 _carch="arm64"
@@ -16,6 +16,7 @@ makedepends="
 	elfutils-dev
 	findutils
 	flex
+	linux-headers
 	lld
 	llvm
 	lz4
@@ -27,10 +28,10 @@ makedepends="
 "
 
 # Source
-_commit="d28cfa4275b95e93f4b7a1e743de31b723bd21b8"
+_commit="e8f42849a581ea8e915ad0f10c25951e696dc6b5"
 _config="config-$_flavor.$arch"
 source="
-	$pkgname-$_commit.tar.gz::https://github.com/gs101-mainline/linux/archive/$_commit.tar.gz
+	$pkgname-$_commit.tar.gz::https://gitlab.postmarketos.org/soc/tensor-exynos/linux/-/archive/$_commit/linux-$_commit.tar.gz
 	$_config
 "
 builddir="$srcdir/linux-$_commit"
@@ -68,6 +69,6 @@ package() {
 }
 
 sha512sums="
-4d4a5568d3cc4c6ee957893a1168dd72274715e2491a19fcf314dcdf2fd5a466a088f2c4ca5d54578c68677f3899724643e07ac3f8fb1ee5fbe97f0c4c12dc91  linux-postmarketos-gs101-d28cfa4275b95e93f4b7a1e743de31b723bd21b8.tar.gz
-7d45e307c56bd0e6fbe94ef162169cb053a22c5bf958ee380ec1cc871186c73b96fc36dbb9e5b5aa146525940237ec046dce85dc14c02d912bd47e793652f2bc  config-postmarketos-gs101.aarch64
+10dde8872a1d917254bd713ac3aba7fd288cb4d6ae0c2475b7eb33a055826e67dbe9939e0c38822118d6a62a1761e2b40fcf13a83afd25bde1a58ffd3c772320  linux-postmarketos-gs101-e8f42849a581ea8e915ad0f10c25951e696dc6b5.tar.gz
+1b75abbe47a602ea9c991f18690415410304852c3ccf34d25fb0ed76f526b01020e277efe39394c91c4ee0a70f90ddd0336515c012d6b0bd3d5eea5104e1b8f0  config-postmarketos-gs101.aarch64
 "
