@@ -17,7 +17,7 @@ pkgname=systemd
 pkgver=262
 _pkgver="${pkgver/_/-}"
 # pkgrel must match systemd-stage0!
-pkgrel=4
+pkgrel=5
 pkgdesc="System and service manager"
 url="https://github.com/systemd/systemd"
 # armhf: no linux-stable
@@ -402,7 +402,6 @@ timesyncd() {
 	pkgdesc="systemd Time Synchronization"
 	depends="$pkgname=$pkgver-r$pkgrel"
 
-	amove usr/bin/timedatectl
 	amove usr/lib/systemd/ntp-units.d/80-systemd-timesync.list
 	amove usr/lib/systemd/systemd-timesyncd
 	amove usr/lib/systemd/system/systemd-timesyncd.service
