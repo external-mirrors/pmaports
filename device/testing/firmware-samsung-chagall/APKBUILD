@@ -1,6 +1,6 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=firmware-samsung-chagall
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Firmware for Samsung chagallwifi and chagalllte"
 url="https://github.com/exynos5420/android_vendor_samsung_chagall-common"
@@ -40,11 +40,11 @@ downstream() {
 	local file
 	for file in $_chagall_wifi_files; do
 		 install -Dm644 "$srcdir/$pkgname-$_chagall_commit-$file" \
-			"$subpkgdir/lib/firmware/postmarketos/$file"
+			"$subpkgdir/usr/lib/firmware/postmarketos/$file"
 	done
-	ln -s nvram_net.txt_4354_a1 "$subpkgdir"/lib/firmware/postmarketos/nvram_net.txt_4354_a0
-	ln -s bcmdhd_sta.bin "$subpkgdir"/lib/firmware/postmarketos/bcmdhd_sta.bin_4354_a1
-	ln -s bcmdhd_sta.bin "$subpkgdir"/lib/firmware/postmarketos/bcmdhd_sta.bin_4354_a0
+	ln -s nvram_net.txt_4354_a1 "$subpkgdir"/usr/lib/firmware/postmarketos/nvram_net.txt_4354_a0
+	ln -s bcmdhd_sta.bin "$subpkgdir"/usr/lib/firmware/postmarketos/bcmdhd_sta.bin_4354_a1
+	ln -s bcmdhd_sta.bin "$subpkgdir"/usr/lib/firmware/postmarketos/bcmdhd_sta.bin_4354_a0
 }
 
 mainline() {
@@ -53,9 +53,9 @@ mainline() {
 	mkdir -p "$subpkgdir"
 
 	install -Dm644 "$srcdir/$pkgname-$_chagall_commit"-nvram_net.txt_4354_a1 \
-		"$subpkgdir"/lib/firmware/brcm/brcmfmac4354-sdio.samsung,chagall-wifi.txt
+		"$subpkgdir"/usr/lib/firmware/brcm/brcmfmac4354-sdio.samsung,chagall-wifi.txt
 	ln -s brcmfmac4354-sdio.samsung,chagall-wifi.txt \
-		"$subpkgdir"/lib/firmware/brcm/brcmfmac4354-sdio.samsung,chagall-lte.txt
+		"$subpkgdir"/usr/lib/firmware/brcm/brcmfmac4354-sdio.samsung,chagall-lte.txt
 }
 
 sha512sums="
