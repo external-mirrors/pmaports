@@ -3,7 +3,7 @@ maintainer="Erikas Bitovtas <xerikasxx@gmail.com>"
 _flavor="postmarketos-qcom-sm7125"
 pkgname=linux-$_flavor
 pkgver=6.14.7
-pkgrel=2
+pkgrel=3
 pkgdesc="Mainline Kernel fork for SM7125 devices"
 arch="aarch64"
 _carch="arm64"
@@ -32,7 +32,7 @@ makedepends="
 	python3
 	"
 
-_tag="sm7125-$pkgver-a52q-a72q"
+_tag="sm7125-$pkgver-r1"
 
 source="
 	linux-$_tag.tar.gz::https://github.com/sm7125-mainline/linux/archive/$_tag/linux-$_tag.tar.gz
@@ -67,6 +67,6 @@ package() {
 }
 
 sha512sums="
-844551dbc3ec91e630af20498132f0386ac5c5c38f3067db31a67254a0bace3949ca48c20742aa955fb422626d7ba40ee20ce88801a475e294d14251089a3e34  linux-sm7125-6.14.7-a52q-a72q.tar.gz
+1ffd204c5d4d13bf3e6ab2f9398aefb749489bbabd1bac2f66290d41e4a6168450505648c682090d5efc4581bcc312cb65cd7be6b72f2e54837a2b81311afde6  linux-sm7125-6.14.7-r1.tar.gz
 0b88d8e5203c96a8bd3cc117585dc451416ead4cbceb543856a2b8838a7fef0d86fcbe9074b4096eb3757a1aae1228acc5a55d1b9a70295dbd25108ccf8817c4  config-postmarketos-qcom-sm7125.aarch64
 "
