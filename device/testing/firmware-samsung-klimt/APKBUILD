@@ -1,6 +1,6 @@
 maintainer="Henrik Grimler <henrik@grimler.se>"
 pkgname=firmware-samsung-klimt
-pkgver=4
+pkgver=5
 pkgrel=0
 pkgdesc="Firmware for Samsung klimtwifi and klimtlte"
 url="https://github.com/exynos5420/android_vendor_samsung_klimt-common"
@@ -40,7 +40,7 @@ downstream() {
 	local file
 	for file in $_klimt_wifi_files; do
 		 install -Dm644 "$srcdir/$pkgname-$_klimt_commit-$file" \
-			"$subpkgdir/lib/firmware/postmarketos/$file"
+			"$subpkgdir/usr/lib/firmware/postmarketos/$file"
 	done
 }
 
@@ -50,9 +50,9 @@ mainline() {
 	mkdir -p "$subpkgdir"
 
 	install -Dm644 "$srcdir/$pkgname-$_klimt_commit"-nvram_net.txt \
-		"$subpkgdir"/lib/firmware/brcm/brcmfmac4354-sdio.samsung,klimt-wifi.txt
+		"$subpkgdir"/usr/lib/firmware/brcm/brcmfmac4354-sdio.samsung,klimt-wifi.txt
 	ln -s brcmfmac4354-sdio.samsung,klimt-wifi.txt \
-		"$subpkgdir"/lib/firmware/brcm/brcmfmac4354-sdio.samsung,klimt-lte.txt
+		"$subpkgdir"/usr/lib/firmware/brcm/brcmfmac4354-sdio.samsung,klimt-lte.txt
 }
 
 sha512sums="
