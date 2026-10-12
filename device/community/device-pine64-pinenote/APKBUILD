@@ -1,7 +1,7 @@
 maintainer="Antoine Martin (ayakael) <dev@ayakael.net>"
 pkgname=device-pine64-pinenote
 pkgdesc="Pine64 PineNote"
-pkgver=16
+pkgver=17
 pkgrel=0
 _commit="42cf0c3dc26d6e0b2a32ef5a00e7ca4ae77034c7"
 _swayconfver="v1.1.0"
@@ -42,11 +42,9 @@ source="
 	partition-table.txt
 
 	pinenote-init-waveform.initd
-	30-eink-waveform.files
+	30-pine64-pinenote.files
 	50-touchscreen.conf
 	panfrost.conf
-	tinydm-ebc-workaround-systemd.conf
-	tinydm-ebc-workaround-openrc.initd
 "
 subpackages="
 	$pkgname-openrc
@@ -112,8 +110,9 @@ package() {
 		# waveform firmware is provided locally via /dev/disk/by-label/waveform
 		# extracted using waveform_exctract.sh, then adapted to kernel using wbf_to_custom.py
 		# initd or systemd service execute these on first boot
-		install -Dm644 "$srcdir"/30-eink-waveform.files \
-			"$pkgdir"/usr/share/mkinitfs/files/30-eink-waveform.files
+		# includes modprobe config rockchip_ebc so that redraw_delay is set to 200
+		install -Dm644 "$srcdir"/30-pine64-pinenote.files \
+			"$pkgdir"/usr/share/mkinitfs/files/30-pine64-pinenote.files
 		install -Dm755 \
 			"$builddir"/bin/wbf_to_custom.py \
 			"$builddir"/bin/read_file.py \
@@ -241,10 +240,6 @@ xournalpp() {
 
 openrc() {
 	replaces="device-pine64-pinenote-nonfree-firmware-openrc"
-	# rockchip_ebc sometimes fails to load the initial waveform.
-	# This forces a reload before starting tinydm
-	install -Dm755 "$srcdir"/tinydm-ebc-workaround-openrc.initd \
-		"$subpkgdir"/etc/init.d/tinydm-ebc
 
 	install -Dm755 "$srcdir"/pinenote-init-waveform.initd \
 		"$subpkgdir"/etc/init.d/pinenote-init-waveform
@@ -255,11 +250,6 @@ openrc() {
 
 systemd() {
 	replaces="device-pine64-pinenote-nonfree-firmware-systemd"
-	# rockchip_ebc sometimes fails to load the initial waveform.
-	# This forces a reload before starting tinydm
-	install -Dm644 \
-		"$srcdir"/tinydm-ebc-workaround-systemd.conf \
-		"$subpkgdir"/usr/lib/systemd/system/tinydm.service.d/override.conf
 
 	install -Dm644 \
 		"$builddir"/systemd/pinenote-hrdl-extract-waveform.service \
@@ -296,9 +286,7 @@ ffac62b7e8ff4004f523564b37f64238493655cc5d5f5560aec8b4c0e166e154bfeff303c7fec970
 1a02e95cea915cd3f035eb799197679d7a79511e7f3354cf2397f870e7127f3770706426b1586af0fc90f919f1f311cc448cc96d627c4ee6aedbc40c2b0a663b  modules-initfs
 df0565391a66eed53ed817d3d1415bef000f9ed33ef2e8aa3016be3ecc21dd4a357e57838979d2710256776666dc01bfee8bf8a95b08a20a62d46cfbd8ac6c35  partition-table.txt
 13430e4860e1d8b502c9ef03590049455ecb02fca2844648763ff45973ba51d8d93d19d62a59caf947edc2e722e6b17ec8624862eb183a904261a25df3a02348  pinenote-init-waveform.initd
-f47bed3ec2e9d5eaffa02e36c01879ed0422f196cbf6fe40ecf44887806a31596732c46c026dc47455875a89917fb236efba540c16b0767aabf75157cf25766f  30-eink-waveform.files
+f82ec8644843f421de4a32c83d123cbfbd4c17b2410945bd43917a7ab01746171820dc618bc785880ef14a5ede4e7a2fc7e4bc0f3261920c1b3935b68aee292d  30-pine64-pinenote.files
 ac433eebbc35a48561837495997aee4e55510b979bc0d8e3bafb761bc1be5b4bdeed2f456369dcbc582688aefd07c63966b0d72b6ffa99e84cfd868e677f02c8  50-touchscreen.conf
 6ba6638754e00908243de2f73ed6898dac03638a200dcf7b7cd9684757355ee1eb0ac874af0f971ad2e054c1a8c471867bdaea4d9aaf7eea6d3cf81ac7dd73a2  panfrost.conf
-3b95a2292a7367d228f281a1f0e031fffb3d26748350d7010d26b18a3fb46bceb214b083e0c8e2d5fe318c67ae3776663ad78fef83ce9030529d3a89b581b703  tinydm-ebc-workaround-systemd.conf
-2432031a5785eecf84697c70e7ed17d4b10b9a36ebb73969b0016aefbc4feb1768b144031966fdf478c47f7b1032566975aa4affcbb66293c5f348e1d2151b37  tinydm-ebc-workaround-openrc.initd
 "
