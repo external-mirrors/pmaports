@@ -1,7 +1,7 @@
 maintainer="Stefan Hansson (@Newbyte) <newbyte@postmarketos.org>"
 pkgname=reboot-mode
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Reboot the device to a specific mode"
 url="https://postmarketos.org"
 arch="all"
@@ -17,7 +17,7 @@ build() {
 
 package() {
 	install -Dm755 reboot-mode \
-		"$pkgdir"/usr/sbin/reboot-mode
+		"$pkgdir"/usr/bin/reboot-mode
 }
 
 sha512sums="926fae6f1b78b144f092d291f1d0edf58f2a5ea98d3af7aa812f4f1e1330002feb5a8c4499fe334e6d22bc515467359a5a0651e3995d2217a844f3c1b668ae9b  reboot-mode-1.0.0.tar.gz"
