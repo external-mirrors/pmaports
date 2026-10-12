@@ -22,6 +22,13 @@
 	PinePhone: which revision exactly? See https://wiki.pine64.org/index.php/PinePhone#Hardware_revisions
 -->
 
+### On what Nura variant did you encounter the issue?
+<!--
+	Replace space inside `[ ]` with `x` to fill the checkbox
+-->
+* [ ] classic (`mutable`)
+* [ ] duranium (`immutable`)
+
 ### On what Nura version did you encounter the issue?
 <!--
 	Replace space inside `[ ]` with `x` to fill the checkbox
@@ -29,7 +36,7 @@
 * [ ] edge (`main` branch)
 * [ ] `v26.06`
 
-* [ ] I confirm that the issue still is present after running `sudo apk upgrade -a`
+* [ ] I confirm that the issue still is present after running `sudo apk upgrade -a` (classic variant) or after booting latest available image (duranium variant)
 
 ### On what environment did you encounter the issue?
 #### Environments
@@ -43,8 +50,11 @@
 * [ ] OpenRC
 * [ ] systemd
 ### How did you get your Nura image?
-* [ ] from https://images.nura.eco
-* [ ] I built it using pmbootstrap
+<!--
+	Replace space inside `[ ]` with `x` to fill the checkbox
+-->
+* [ ] from https://images.nura.eco or https://duranium.nura.eco
+* [ ] I built it using pmbootstrap or duranium-build
 * [ ] It was preinstalled on my device
 ### What's the build date of the image? (in yyyy-mm-dd format)
 <!--
