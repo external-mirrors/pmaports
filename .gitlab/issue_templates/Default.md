@@ -9,6 +9,7 @@
 	instead of opening an issue here!
 -->
 ### Describe your issue
+
 #### What's the expected behaviour?
 
 #### What's the current behaviour?
@@ -39,16 +40,25 @@
 * [ ] I confirm that the issue still is present after running `sudo apk upgrade -a` (classic variant) or after booting latest available image (duranium variant)
 
 ### On what environment did you encounter the issue?
+
 #### Environments
+<!--
+	Replace space inside `[ ]` with `x` to fill the checkbox
+-->
 * [ ] COSMIC
 * [ ] GNOME Shell on Mobile
 * [ ] Phosh (*Please attach the debug information of the Mobile settings app, see [this video](https://peertube.debian.social/w/4GwDjCJNcAmp8cb7dqXz1T) or use `phosh-mobile-settings -d`*)
 * [ ] Plasma Mobile
 * [ ] Sxmo (Wayland/Sway) **Please post the output of `sxmo_version.sh`**
 * [ ] Other: **Please fill out**
+
 ### Which init system are you using?
+<!--
+	Replace space inside `[ ]` with `x` to fill the checkbox
+-->
 * [ ] OpenRC
 * [ ] systemd
+
 ### How did you get your Nura image?
 <!--
 	Replace space inside `[ ]` with `x` to fill the checkbox
@@ -56,6 +66,7 @@
 * [ ] from https://images.nura.eco or https://duranium.nura.eco
 * [ ] I built it using pmbootstrap or duranium-build
 * [ ] It was preinstalled on my device
+
 ### What's the build date of the image? (in yyyy-mm-dd format)
 <!--
 	Notes:
