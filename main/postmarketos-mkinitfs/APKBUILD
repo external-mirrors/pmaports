@@ -3,7 +3,7 @@
 maintainer="Oliver Smith <ollieparanoid@postmarketos.org>"
 pkgname=postmarketos-mkinitfs
 pkgver=2.12.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Tool to generate initramfs images for postmarketOS"
 url="https://gitlab.postmarketos.org/postmarketOS/postmarketos-mkinitfs"
 depends="
@@ -67,7 +67,7 @@ build() {
 }
 
 package() {
-	make PREFIX=/usr DESTDIR="$pkgdir" install
+	make PREFIX=/usr BINDIR=/usr/bin DESTDIR="$pkgdir" install
 }
 
 check() {
