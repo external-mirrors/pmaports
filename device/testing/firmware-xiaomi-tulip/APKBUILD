@@ -1,6 +1,6 @@
 maintainer="m0rf30 <morf3089@gmail.com>"
 pkgname=firmware-xiaomi-tulip
-pkgver=4
+pkgver=5
 pkgrel=0
 _commit="c8f750d4cdd8c5353c4aaa423f81774c63f87d27"
 pkgdesc="Firmware files for Xiaomi Redmi Note 6 Pro"
@@ -12,7 +12,7 @@ makedepends="qca-swiss-army-knife"
 source="$pkgname-$_commit.tar.gz::https://github.com/M0Rf30/postmarketos-vendor-xiaomi-tulip/archive/$_commit.tar.gz"
 
 builddir="$srcdir/postmarketos-vendor-xiaomi-tulip-$_commit"
-_fwdir="/lib/firmware"
+_fwdir="/usr/lib/firmware"
 
 package() {
 	ath10k-fwencoder --create \
