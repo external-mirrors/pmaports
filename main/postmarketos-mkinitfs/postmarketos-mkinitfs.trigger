@@ -17,4 +17,4 @@ if [ -f /in-pmbootstrap ]; then
 	exit 0
 fi
 
-/usr/sbin/mkinitfs
+mkinitfs
