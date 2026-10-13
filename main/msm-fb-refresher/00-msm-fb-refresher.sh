@@ -1,5 +1,6 @@
 #!/bin/sh
-/usr/sbin/msm-fb-refresher --loop &
+
+/usr/bin/msm-fb-refresher --loop &
 {
 	echo "#!/bin/sh"
 	echo "kill $!"
