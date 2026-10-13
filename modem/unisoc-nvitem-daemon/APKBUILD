@@ -2,7 +2,7 @@ maintainer="Affe Null <affenull2345@gmail.com>"
 pkgname=unisoc-nvitem-daemon
 pkgver=0_git20250618
 _commit="23f3be10fd5b54bd0fedde3189b98dcfb88f16c2"
-pkgrel=2
+pkgrel=3
 pkgdesc="NV item daemon for Unisoc modems"
 url="https://git.abscue.de/linux-mainlining/unisoc-nvitem-daemon"
 arch="aarch64"
@@ -11,6 +11,7 @@ subpackages="$pkgname-openrc $pkgname-systemd"
 source="$url/-/archive/$_commit/unisoc-nvitem-daemon-$_commit.tar.gz
 	unisoc-nvitem-daemon.initd
 	90-unisoc-nvitem-daemon.preset
+	0001-point-to-new-bin-path-of-binary.patch
 	"
 options="!check" # no tests
 builddir="$srcdir/unisoc-nvitem-daemon-$_commit"
@@ -20,7 +21,7 @@ build() {
 }
 
 package() {
-	install -Dm755 unisoc-nvitem-daemon -t "$pkgdir"/usr/sbin
+	install -Dm755 unisoc-nvitem-daemon -t "$pkgdir"/usr/bin
 
 	install -Dm755 "$srcdir"/unisoc-nvitem-daemon.initd \
 		"$pkgdir"/etc/init.d/unisoc-nvitem-daemon
@@ -38,6 +39,7 @@ openrc() {
 
 sha512sums="
 eafbd3fe9fb80ad09b24e0f420fd8e1f29fd1457b003d78c6a8bf0e9ca8937547d6b1dc2147d55de517ab049f486e112d89bae38da14681aa198443dd4c3bfc0  unisoc-nvitem-daemon-23f3be10fd5b54bd0fedde3189b98dcfb88f16c2.tar.gz
-65a6bd77e9e277afbe8940dbe9897a0ba0d07c0030a8cea8f2468e731ccaf1b1ecdddce6f9da0d316f62b4592af109808b64bf58c11ef83b4899cad265129c4a  unisoc-nvitem-daemon.initd
+79e6bc7c82953177c6c183094c68e4f91887eafa143b53044f842448d7331def3a236e95806f4f060421067311c2425c32c6ac566c457f0e88632f1d911460c6  unisoc-nvitem-daemon.initd
 af2e929ee37e919c8b9787b075d8c4f18de2d817adb97814d97b883c10c2e444e007bd01e78302993f9ea369593459b61fb87788612b99e7c7bd9d923db2d46c  90-unisoc-nvitem-daemon.preset
+6a633c83f8e6094dee21d65384d00acd26a26559658fd74b9da800d8c942dd1a3819775067aadff5e3551279a5d874115eca756edc1777b320f445486a4d24e3  0001-point-to-new-bin-path-of-binary.patch
 "

@@ -1,0 +1,26 @@
+From d4a9cbe87120e59411ee04466c190f32cfc9fd34 Mon Sep 17 00:00:00 2001
+From: Aster Boese <asterboese@mailbox.org>
+Date: Tue, 13 Oct 2026 18:37:27 -0400
+Subject: [PATCH] point to new bin path of binary
+
+Signed-off-by: Aster Boese <asterboese@mailbox.org>
+---
+ unisoc-nvitem-daemon.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/unisoc-nvitem-daemon.service b/unisoc-nvitem-daemon.service
+index 2f85bbd..375d69f 100644
+--- a/unisoc-nvitem-daemon.service
++++ b/unisoc-nvitem-daemon.service
+@@ -3,7 +3,7 @@ Description=Unisoc NV item daemon
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/sbin/unisoc-nvitem-daemon /dev/wwan0sprdnv0
++ExecStart=/usr/bin/unisoc-nvitem-daemon /dev/wwan0sprdnv0
+ Restart=always
+ RestartSec=3
+ 
+-- 
+2.56.0
+
