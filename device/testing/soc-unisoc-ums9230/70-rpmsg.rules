@@ -20,7 +20,7 @@ GOTO="rpmsg_end"
 
 LABEL="rpmsg_export"
 
-ENV{RPMSG_PATH}=="pmsys/pm_ctl", RUN+="/usr/sbin/rpmsgexport /dev/$name pm_ctl0 -1 -1"
-ENV{RPMSG_PATH}=="pmsys/pm_gnss", RUN+="/usr/sbin/rpmsgexport /dev/$name gnss_pipe0 -1 -1"
+ENV{RPMSG_PATH}=="pmsys/pm_ctl", RUN+="/usr/bin/rpmsgexport /dev/$name pm_ctl0 -1 -1"
+ENV{RPMSG_PATH}=="pmsys/pm_gnss", RUN+="/usr/bin/rpmsgexport /dev/$name gnss_pipe0 -1 -1"
 
 LABEL="rpmsg_end"
