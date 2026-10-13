@@ -1,19 +1,19 @@
-# postmarketOS aports repository
+# Nura aports repository
 
-This repository contains the APKBUILD files for postmarketOS-specific packages, along with the required patches and scripts, if any.
+This repository contains the APKBUILD files for Nura-specific packages, along with the required patches and scripts, if any.
 
 There are many more packages defined in the [Alpine Linux aports](https://gitlab.alpinelinux.org/alpine/aports/) on which these packages depend.
 
 Helpful resources:
 
 * [Issues](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items)
-* [How to create a package](https://wiki.postmarketos.org/wiki/Create_a_package)
+* [How to create a package](https://wiki.nura.eco/wiki/Create_a_package)
 * [APKBUILD reference](https://wiki.alpinelinux.org/wiki/APKBUILD_Reference)
 * [pmaports commit style](./COMMITSTYLE.md)
 * [Approval rules](docs/merge-requests/approval-rules.md)
 * [Alpine Linux aports](https://gitlab.alpinelinux.org/alpine/aports/)
 * [Alpine Linux package search](https://pkgs.alpinelinux.org/packages)
-* [postmarketOS package search](https://pkgs.postmarketos.org/packages)
+* [postmarketOS package search](https://pkgs.nura.eco/packages)
 
 ## Git Hooks
 
