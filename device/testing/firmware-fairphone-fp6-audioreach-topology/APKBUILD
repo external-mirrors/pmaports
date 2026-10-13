@@ -1,0 +1,30 @@
+maintainer="Luca Weiss <luca@lucaweiss.eu>"
+pkgname=firmware-fairphone-fp6-audioreach-topology
+pkgver=0_git20261013
+_commit="6f6e4ac2334b8f7ca265a9b78b2722abb9c4037a"
+pkgrel=0
+pkgdesc="Audioreach Topology for Fairphone (Gen. 6)"
+url="https://github.com/z3ntu/audioreach-topology"
+# these files are not specific to cpu architecture, but only make sense on aarch64 devices
+arch="aarch64"
+license="BSD-3-Clause"
+makedepends_build="alsa-utils cmake m4 samurai zstd"
+source="$pkgname-$_commit.tar.gz::https://github.com/z3ntu/audioreach-topology/archive/$_commit.tar.gz"
+options="!check !tracedeps pmb:cross-native2"
+builddir="$srcdir/audioreach-topology-$_commit"
+
+build() {
+	cmake -B build -S .
+	cmake --build build \
+		--target topology_MILOS-Fairphone-Gen6
+}
+
+package() {
+	zstd build/qcom/milos/MILOS-Fairphone-Gen6-tplg.bin
+	install -Dm644 build/qcom/milos/MILOS-Fairphone-Gen6-tplg.bin.zst \
+		-t "$pkgdir"/usr/lib/firmware/qcom/milos
+}
+
+sha512sums="
+f2467c8e778ee2e831166904ccfe43133382fff7598b8cb757a447c43e6cccefc411131e74ddf165d7ce628b0f723696e856a202bf9f3155618ffea4eff08848  firmware-fairphone-fp6-audioreach-topology-6f6e4ac2334b8f7ca265a9b78b2722abb9c4037a.tar.gz
+"
