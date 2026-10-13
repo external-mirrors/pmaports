@@ -1,0 +1,26 @@
+From 8b81e0973e40327937486afda63974ac85d25954 Mon Sep 17 00:00:00 2001
+From: Aster Boese <asterboese@mailbox.org>
+Date: Tue, 13 Oct 2026 18:53:50 -0400
+Subject: [PATCH] point to new bin path of binary
+
+Signed-off-by: Aster Boese <asterboese@mailbox.org>
+---
+ unisoc-timesync-daemon.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/unisoc-timesync-daemon.service b/unisoc-timesync-daemon.service
+index 9168767..1504f47 100644
+--- a/unisoc-timesync-daemon.service
++++ b/unisoc-timesync-daemon.service
+@@ -3,7 +3,7 @@ Description=Unisoc modem timesync daemon
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/sbin/unisoc-timesync-daemon /dev/wwan0sprdtime0
++ExecStart=/usr/bin/unisoc-timesync-daemon /dev/wwan0sprdtime0
+ Restart=always
+ RestartSec=3
+ 
+-- 
+2.56.0
+

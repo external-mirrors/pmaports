@@ -2,7 +2,7 @@ maintainer="Affe Null <affenull2345@gmail.com>"
 pkgname=unisoc-timesync-daemon
 pkgver=0_git20250619
 _commit="5b137db011231e0f9dfa3d3d23aebadb30700806"
-pkgrel=2
+pkgrel=3
 pkgdesc="NV item daemon for Unisoc modems"
 url="https://git.abscue.de/linux-mainlining/unisoc-timesync-daemon"
 arch="aarch64"
@@ -11,6 +11,7 @@ subpackages="$pkgname-openrc $pkgname-systemd"
 source="$url/-/archive/$_commit/unisoc-timesync-daemon-$_commit.tar.gz
 	unisoc-timesync-daemon.initd
 	90-unisoc-timesync-daemon.preset
+	0001-point-to-new-bin-path-of-binary.patch
 	"
 options="!check" # no tests
 builddir="$srcdir/unisoc-timesync-daemon-$_commit"
@@ -20,7 +21,7 @@ build() {
 }
 
 package() {
-	install -Dm755 unisoc-timesync-daemon -t "$pkgdir"/usr/sbin
+	install -Dm755 unisoc-timesync-daemon -t "$pkgdir"/usr/bin
 
 	install -Dm755 "$srcdir"/unisoc-timesync-daemon.initd \
 		"$pkgdir"/etc/init.d/unisoc-timesync-daemon
@@ -38,6 +39,7 @@ openrc() {
 
 sha512sums="
 be4297461d482fd3acf739804c1fe5a7cef840c3b329cf11bf691f434b2a4d8ebdc4093934cb1eed3e781ce65861f0b103258a76c46816a211fa78a8aaae3a37  unisoc-timesync-daemon-5b137db011231e0f9dfa3d3d23aebadb30700806.tar.gz
-492fe8d8da7b9578bd0cd552a2cdbaf219590770cacbe42acff967a534be150957252f96a5b5cc93995ebade25f233ccb214b285ff2f3740f901d4bea9aa94bb  unisoc-timesync-daemon.initd
+50a7e5a1f78a61cd464a3810b8d4c8a080cc6607341f6f0de6d2c24e0a77e1ecbb9239390a5f2629d35aebfbbfd31449143aaf418aa34ada058cca54b8b91c16  unisoc-timesync-daemon.initd
 c85fa86de3499ee3144c6e18e8c88a359a99a9c5d7e1c5104c23c9daab375306130d55858cfe8a70e7d2da317eb4eee6ac09ea3c5b07a7cef63cb3b5d7158fc2  90-unisoc-timesync-daemon.preset
+31ad3872177f8ab47042bd03ead2019f0da36f68759a81dd80eac4ab0639ee362685f1804bcc325ea59c260f878df6b22032130228835d8a184a2e40b9693d30  0001-point-to-new-bin-path-of-binary.patch
 "
