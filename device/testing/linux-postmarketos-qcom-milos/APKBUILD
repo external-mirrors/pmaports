@@ -2,7 +2,7 @@ maintainer="Luca Weiss <luca@lucaweiss.eu>"
 _flavor="postmarketos-qcom-milos"
 pkgname=linux-$_flavor
 pkgver=7.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for Qualcomm Milos SoC (SM7635, etc.) devices"
 arch="aarch64"
 _carch="arm64"
@@ -32,14 +32,15 @@ makedepends="
 
 _repo="linux"
 _config="config-$_flavor.$arch"
-_tag="v$pkgver-milos"
+#_tag="v$pkgver-milos"
+_commit="08186c3d6b266113c14f255dddd8f35862e461e5"
 
 # Source
 source="
-	https://github.com/milos-mainline/$_repo/archive/refs/tags/$_tag/$_repo-$_tag.tar.gz
+	https://github.com/milos-mainline/$_repo/archive/$_commit/$_repo-$_commit.tar.gz
 	$_config
 "
-builddir="$srcdir/$_repo-$pkgver-milos"
+builddir="$srcdir/$_repo-$_commit"
 
 prepare() {
 	default_prepare
@@ -75,6 +76,6 @@ package() {
 }
 
 sha512sums="
-71851b0a7b5ff23569732c8ac64541b087a691815c3db3fa18af2439cc95c750e4058d27dc313819482978b0e99a5b93920121e8931c7b4f1cd58707f1b9b0b7  linux-v7.2.0-milos.tar.gz
-61154daffb27eca745422a1219d1c2aff77fdd09612dac03c4aba0fc3e64ecf93845e8b5d0b212f75ac156809237a6d722cc6a7e9dffa7e7308ea7886de63914  config-postmarketos-qcom-milos.aarch64
+ac5f23b76d831360f5397f8cdf2b4854c7cb6799ee25c25b65c3c31ffcdb58f0c8923c8ccf7c629d3d6a65547eb70d89594096eeee4a51c3c095893f3e799925  linux-08186c3d6b266113c14f255dddd8f35862e461e5.tar.gz
+b27a555e8b6d1c638ddacbc12c43071fa1d87c4161f9ff23f97e90cbccafb0cb4748deef7c98936f870be3a36080f275011ba1390d8882bbb8531f30e01cdd9a  config-postmarketos-qcom-milos.aarch64
 "
