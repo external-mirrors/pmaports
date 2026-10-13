@@ -19,7 +19,7 @@ start() {
         mv custom_wf.bin /usr/lib/firmware/rockchip/.
 
         einfo "Regenerating initramfs"
-        /usr/sbin/mkinitfs  2>&1 | tee -a "$error_log"
+        mkinitfs  2>&1 | tee -a "$error_log"
 
         einfo "Reloading rockchip_ebc"
         modprobe -r rockchip_ebc
