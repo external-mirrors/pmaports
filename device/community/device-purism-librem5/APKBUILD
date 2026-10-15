@@ -2,10 +2,10 @@
 # Co-Maintainer: Stefan Hansson <newbyte@postmarketos.org>
 maintainer="Alistair Francis <alistair@alistair23.me>"
 pkgname=device-purism-librem5
-pkgver=17
+pkgver=18
 pkgrel=0
-_confver=77
-_purismrel=2
+_confver=78
+_purismrel=1
 # <librem5-base ver>.<purism release>
 _purismver=${_confver}pureos$_purismrel
 pkgdesc="Purism Librem 5 Phone (librem5-base: $_purismver)"
@@ -59,6 +59,8 @@ source="
 	l5-ship-mode.initd
 	udev/70-brcm-bluetooth.rules
 	udev/70-wifi-pm.rules
+	HiFi.conf
+	Librem5.conf
 "
 # $pkgname-openrc is out of order to allow collecting the remaining openrc
 # files using the default function
@@ -165,9 +167,9 @@ package() {
 		"$pkgdir"/usr/lib/systemd/system-sleep/l5-btsleep.sh
 
 	# install audio config files from Purism
-	install -Dm644 "$builddir"/default/audio/ucm2/conf.d/simple-card/Librem\ 5.conf \
+	install -Dm644 "$srcdir"/Librem5.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/NXP/iMX8/Librem_5/Librem\ 5.conf
-	install -Dm644 "$builddir"/default/audio/ucm2/conf.d/simple-card/HiFi.conf \
+	install -Dm644 "$srcdir"/HiFi.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/NXP/iMX8/Librem_5/HiFi.conf
 	mkdir -p "$pkgdir"/usr/share/alsa/ucm2/conf.d/simple-card
 	# relative path seems to be required or else alsa-lib can't figure it out
@@ -197,7 +199,7 @@ package() {
 }
 
 sha512sums="
-ab1db95e614070eee712914b8b7f1133f4993d6ed0a9d4b88f1d87e87c024c726b6260e570211656f02712565e23ae92ad2c4708c4d0d7bd1eb30dc1443fa33c  librem5-base-pureos-77pureos2.tar.gz
+c5a442946835e4a50ee9d6ca907fe68d4387686012935a7b8033a985fc58cc5aafb2bdd4a1718b98d81e3977bd4cf1ec5d0a7878244debf75923b576e96139e0  librem5-base-pureos-78pureos1.tar.gz
 2e72d9a084ecd6c96cafbbd8fda461ae8b2ebd14ffda601d9f36d73f08f04088213de17da078293ddd958d4c76d33148c7af6e252eb0709f6934855a55578509  00-mesa.sh
 18e6bc6c214fa8c0ec74e8d6ada8df0ed5981d4c8589116e158b2432a6249fbc94899e5906b5584603c9ceab17e488ffc678b319e547fa57e798680b0fe84ee8  deviceinfo
 138ed85e6509e4611bf21a0061c312e6c2ce60f722ee9e4565d19c5f025301d4df3fa321343524219a54b20c5288dc6ed1b058ac66f4d608af22eb5bc83e84c6  modules-initfs
@@ -217,4 +219,6 @@ b45749fcddfd65a302b502bcabfa5828d1b63e45d844fd50e44009a756b919db20fe9526102947c0
 c723764d507ccd4b04aa5ce79b1d1ebc131873cdc37a943cb0f92b8a08a3c69eb9e0d31fcd4589fd8c40a9676bae9897e4f12ec2ebe4db8214ac85669ef35a53  l5-ship-mode.initd
 b7f5ecd0fefe8a122ed20e7ac21a23a65e007f62a7343c7178712955ed580f5473ca923cedb9f86cd10ecb13a76ab50c91a2f7b8b2fd456ee8420aeca75f3fec  70-brcm-bluetooth.rules
 8b6fa7b12c15f439c561901f3ffe24a1ef2a0c343401c0a79281060854ab29e08a1fb5e7adae8684b12aa9f535ed99e2dad993dce9724822cb0fbf2497dd86e5  70-wifi-pm.rules
+8cb971442804ecaa80b5fe0067cadcd79f41cd4cf5d1f26a592c2c119cf695cd2d0901918d8567cab3a2768b9c5efcb0892310535ab5385e1ac138c2591350ae  HiFi.conf
+eef305ac8f5f26fb2767db9527c1ef53e0d51c97c280f2e135cd021b5d423c02e046c4559619e10e1d82a4af8abadfccd3d70db5da85d90b5073ff022c5b4d7c  Librem5.conf
 "
