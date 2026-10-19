@@ -2,7 +2,7 @@
 maintainer="Federico Amedeo Izzo <federico@izzo.pro>"
 pkgname=device-motorola-dubai
 pkgdesc="Motorola Edge 30"
-pkgver=1
+pkgver=2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -30,6 +30,7 @@ subpackages="
 	$pkgname-kernel-tianma:kernel_tianma
 "
 source="
+	80-device-motorola-dubai.preset
 	81-libssc-motorola-dubai.rules
 	deviceinfo
 	kernel-cmdline.conf
@@ -49,6 +50,9 @@ package() {
 
 	install -Dm644 "$srcdir"/81-libssc-motorola-dubai.rules -t \
 		"$pkgdir"/usr/lib/udev/rules.d
+
+	install -Dm644 "$srcdir"/80-device-motorola-dubai.preset \
+		-t "$pkgdir"/usr/lib/systemd/system-preset/
 }
 
 kernel_csot() {
@@ -64,6 +68,7 @@ kernel_tianma() {
 }
 
 sha512sums="
+59f3811e770e570129bc9794abde918ee3869d08ff2d6a616616ea9d29dd952d4391d769550596973c7e1046038e9e1db6444a1881a0c57af2120bb41286fff5  80-device-motorola-dubai.preset
 2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-motorola-dubai.rules
 5ffd3897eddfbf47e7f41e5105c40c67a36f647b91b384313013cc761b5a43dfcc264319a4f086a892eb47a5c6d68e780f66591805e4b792c783d75f0e6f562e  deviceinfo
 330062377f7eb28e65b31a41259a8f7f01c2b011926465b7ac507f08eda43a32b007d5e8735000851d8a2e9111ff018757801c076048d4c5a5ffe04c3d1594b3  kernel-cmdline.conf
