@@ -1,0 +1,26 @@
+maintainer="Frieder Hannenheim <git@fhannenheim.net>"
+pkgname=alsa-ucm-conf-oneplus-kebab
+pkgver=1
+pkgrel=0
+pkgdesc="ALSA UCM configuration for oneplus kebab"
+url="https://nura.eco"
+arch="aarch64"
+license="BSD-3-Clause"
+depends="alsa-ucm-conf"
+source="
+	OnePlus8T.conf
+	HiFi.conf
+"
+options="!check"
+builddir="$srcdir"
+
+package() {
+	mv OnePlus8T.conf "OnePlus 8T.conf"
+	install -Dm644 "OnePlus 8T.conf" -t "$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250"
+	install -Dm644 "HiFi.conf" -t "$pkgdir/usr/share/alsa/ucm2/OnePlus"
+}
+
+sha512sums="
+856cb81ce9979547c6d7f8268e3d18a5932f4ac9efc9131d28fc562d37a1fec347c00535760140e39a922328e4a4efe6bb05751db1cd8f40c2b56e01d80f33fd  OnePlus8T.conf
+a336cf1887bfa15367aacb14bda2b8aef06735a3416d781a587e40927275f2054241e3702b912c3038caabbc34c2f4ed8d4684eaa847dad0d65aa54fc0022361  HiFi.conf
+"

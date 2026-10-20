@@ -1,0 +1,42 @@
+maintainer="Frieder Hannenheim <git@fhannenheim.net>"
+pkgname=firmware-oneplus-kebab
+pkgver=1
+pkgrel=0
+pkgdesc="Firmware for OnePlus 8T (kebab)"
+url="https://git.sr.ht/~jane400/firmware-oneplus-kebab"
+arch="aarch64"
+license="proprietary"
+options="!check !strip !archcheck !tracedeps pmb:cross-native"
+depends="
+	firmware-oneplus-instantnoodlep-bluetooth
+	firmware-oneplus-instantnoodlep-wifi
+	linux-firmware-qca
+	linux-firmware-ath11k
+	firmware-qcom-adreno-a650
+"
+
+_commit="d92ee8bfda53cd0e24f4823c45da6e46c6100cf4"
+source="
+	https://git.sr.ht/~jane400/firmware-oneplus-kebab/archive/$_commit.tar.gz
+"
+builddir="$srcdir/firmware-oneplus-kebab-$_commit"
+
+package() {
+	mkdir -p "$pkgdir"
+
+	install -Dm644 "$builddir/adsp.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+	install -Dm644 "$builddir/cdsp.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+
+	install -Dm644 "$builddir/a650_zap.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+
+	install -Dm644 "$builddir/ipa_fws.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+	install -Dm644 "$builddir/ipa_uc.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+
+	install -Dm644 "$builddir/slpi.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+	install -Dm644 "$builddir/venus.mbn" -t $pkgdir/lib/firmware/qcom/sm8250/OnePlus/kebab
+}
+
+
+sha512sums="
+92ddab552e198b34088c568ba1d6f400e1aeecd0f9c09491271857eb101235711481daa26883540420f48d5ff54ce94365801890f0e1b7410c85c58cd00ccfe7  d92ee8bfda53cd0e24f4823c45da6e46c6100cf4.tar.gz
+"
