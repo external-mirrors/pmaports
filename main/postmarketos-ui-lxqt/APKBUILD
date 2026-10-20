@@ -4,7 +4,7 @@ pkgname=postmarketos-ui-lxqt
 # note: pkgver of this UI pkg doesn't follow normal conventions for UI pkgs, the
 # version below is a tagged version in a different repo
 pkgver=0.4
-pkgrel=4
+pkgrel=5
 pkgdesc="(X11) Lightweight Qt Desktop Environment (stylus recommended)"
 url="https://lxqt-project.org/"
 # armhf: lxqt-desktop not available
@@ -47,7 +47,12 @@ _pmb_recommends="
 	screengrab
 	unclutter-xfixes
 	"
-install="$pkgname.post-install $pkgname.post-upgrade"
+install="
+	$pkgname.post-install
+	$pkgname.post-upgrade
+	$pkgname-openrc.post-install
+	$pkgname-openrc.post-upgrade
+	"
 subpackages="$pkgname-openrc"
 source="
 	$pkgname-$pkgver.tar.gz::https://gitlab.com/antoni.aloytorrens/lxqt-tablet/-/archive/$pkgver/lxqt-tablet-$pkgver.tar.gz
@@ -89,7 +94,6 @@ package() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
 		brightnessctl-openrc
 		elogind-openrc
