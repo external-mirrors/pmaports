@@ -3,8 +3,8 @@
 maintainer="Casey Connolly <kcxt@postmarketos.org>"
 pkgname=device-shift-otter
 pkgdesc="SHIFTphone 8"
-pkgver=5
-pkgrel=2
+pkgver=6
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -13,6 +13,7 @@ depends="
 	alsa-ucm-conf-qcom-sc7280
 	firmware-qcom-adreno-a660
 	firmware-shift-otter
+	hexagonrpcd
 	linux-firmware-ath11k
 	linux-postmarketos-qcom-sc7280
 	make-dynpart-mappings
@@ -25,6 +26,8 @@ depends="
 	unl0kr-fbforcerefresh
 "
 makedepends="devicepkg-dev"
+subpackages="$pkgname-openrc"
+install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
 source="
 	deviceinfo
 	modules-initfs
@@ -36,6 +39,13 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+}
+
+openrc() {
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	depends="hexagonrpcd-openrc openrc"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
