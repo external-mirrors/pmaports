@@ -1,6 +1,6 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=linux-postmarketos-asahi
-pkgver=7.1.13_p3
+pkgver=7.2.12_p2
 pkgrel=0
 _rel=${pkgver#*_p}
 _kver=${pkgver%_p*}
@@ -68,12 +68,12 @@ prepare() {
 build() {
 	unset LDFLAGS
 	make ARCH="$_carch" LLVM=1 \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+		KBUILD_BUILD_VERSION="$((pkgrel + 1))-$_flavor"
 }
 
 package() {
 	install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
-			"$pkgdir/boot/linux.efi"
+		"$pkgdir/boot/linux.efi"
 
 	make modules_install dtbs_install \
 		ARCH="$_carch" \
@@ -90,7 +90,7 @@ package() {
 }
 
 sha512sums="
-52e4934c442fd804f3766c3ab7271e2a09011adf83afb0aad7209ea443d7be57e657aa4e11e56b6f7c50d9d853a9d1738e3c0dcae2b8bf9ef479846e873affd6  linux-postmarketos-asahi-7.1.13-3.tar.gz
-bc843d18e9c8666f5d7f355cb0c452e85478e74cd0cd8dae28cbc3419522980f74de67efcac386765c6d4e7718bdd63c5fedb29f6cbcaa4a896e9065ffca2528  config-postmarketos-asahi.aarch64
+67195ab51297d8882520d0579855e5ebc78c35593b1cf35b29e2d2d8558ff3a411136440d96abaf13f261c4e8af7fbcfe10c9b465df1ae17dc14dcbf9fa5a58b  linux-postmarketos-asahi-7.2.12-2.tar.gz
+d22d55e6b64d696568a28894ea8ed3672ed4b9a8346631d53140ac80d8e95c2f72c5f18b7451aae7da9ba70a1389a0e16847069fe2e556455bf07b5f6fa51352  config-postmarketos-asahi.aarch64
 e8b595f3e076896dc38f249c8908d58e2e6a858eaa77fe1e680f27db0e76d3d74c0b5dfebb7a4c57d546fee0b0f6eb81a38b20dfd72f985c9d02f28d79a5eceb  enable-dynamic-ftrace.patch
 "
