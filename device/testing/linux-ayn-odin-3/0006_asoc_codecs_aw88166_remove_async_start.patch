@@ -1,0 +1,121 @@
+From: Aaron Kling <webgeek1234@gmail.com>
+Subject: ASoC: codecs: aw88166: remove async start
+Date: Fri, 25 Sep 2026 02:47:33 -0500
+
+Codec drivers are not supposed to do anything like this. The result was
+that the first second or so of playback was essentially inaudible, and
+very short alert sounds could be missed entirely. Let's not do this.
+
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+ sound/soc/codecs/aw88166.c | 33 ++++-----------------------------
+ sound/soc/codecs/aw88166.h |  5 -----
+ 2 files changed, 4 insertions(+), 34 deletions(-)
+
+diff --git a/sound/soc/codecs/aw88166.c b/sound/soc/codecs/aw88166.c
+index ab7af3eaceb28..6b98864de81a9 100644
+--- a/sound/soc/codecs/aw88166.c
++++ b/sound/soc/codecs/aw88166.c
+@@ -24,7 +24,6 @@ struct aw88166 {
+ 	struct aw_device *aw_pa;
+ 	struct mutex lock;
+ 	struct gpio_desc *reset_gpio;
+-	struct delayed_work start_work;
+ 	struct regmap *regmap;
+ 	struct aw_container *aw_cfg;
+ 
+@@ -1148,16 +1147,7 @@ static void aw88166_start_pa(struct aw88166 *aw88166)
+ 		dev_err(aw88166->aw_pa->dev, "start failure (%d)\n", ret);
+ }
+ 
+-static void aw88166_startup_work(struct work_struct *work)
+-{
+-	struct aw88166 *aw88166 =
+-		container_of(work, struct aw88166, start_work.work);
+-
+-	guard(mutex)(&aw88166->lock);
+-	aw88166_start_pa(aw88166);
+-}
+-
+-static void aw88166_start(struct aw88166 *aw88166, bool sync_start)
++static void aw88166_start(struct aw88166 *aw88166)
+ {
+ 	int ret;
+ 
+@@ -1173,12 +1163,7 @@ static void aw88166_start(struct aw88166 *aw88166, bool sync_start)
+ 		return;
+ 	}
+ 
+-	if (sync_start == AW88166_SYNC_START)
+-		aw88166_start_pa(aw88166);
+-	else
+-		queue_delayed_work(system_dfl_wq,
+-			&aw88166->start_work,
+-			AW88166_START_WORK_DELAY_MS);
++	aw88166_start_pa(aw88166);
+ }
+ 
+ static int aw_dev_check_sysint(struct aw_device *aw_dev)
+@@ -1550,7 +1535,7 @@ static int aw88166_profile_set(struct snd_kcontrol *kcontrol,
+ 
+ 	if (aw88166->aw_pa->status) {
+ 		aw88166_stop(aw88166->aw_pa);
+-		aw88166_start(aw88166, AW88166_SYNC_START);
++		aw88166_start(aw88166);
+ 	}
+ 
+ 	return 1;
+@@ -1725,7 +1710,7 @@ static int aw88166_playback_event(struct snd_soc_dapm_widget *w,
+ 	guard(mutex)(&aw88166->lock);
+ 	switch (event) {
+ 	case SND_SOC_DAPM_PRE_PMU:
+-		aw88166_start(aw88166, AW88166_ASYNC_START);
++		aw88166_start(aw88166);
+ 		break;
+ 	case SND_SOC_DAPM_POST_PMD:
+ 		aw88166_stop(aw88166->aw_pa);
+@@ -1759,8 +1744,6 @@ static int aw88166_codec_probe(struct snd_soc_component *component)
+ 	struct aw88166 *aw88166 = snd_soc_component_get_drvdata(component);
+ 	int ret;
+ 
+-	INIT_DELAYED_WORK(&aw88166->start_work, aw88166_startup_work);
+-
+ 	ret = aw88166_request_firmware_file(aw88166);
+ 	if (ret)
+ 		dev_err(aw88166->aw_pa->dev, "%s failed\n", __func__);
+@@ -1768,16 +1751,8 @@ static int aw88166_codec_probe(struct snd_soc_component *component)
+ 	return ret;
+ }
+ 
+-static void aw88166_codec_remove(struct snd_soc_component *aw_codec)
+-{
+-	struct aw88166 *aw88166 = snd_soc_component_get_drvdata(aw_codec);
+-
+-	cancel_delayed_work_sync(&aw88166->start_work);
+-}
+-
+ static const struct snd_soc_component_driver soc_codec_dev_aw88166 = {
+ 	.probe = aw88166_codec_probe,
+-	.remove = aw88166_codec_remove,
+ 	.dapm_widgets = aw88166_dapm_widgets,
+ 	.num_dapm_widgets = ARRAY_SIZE(aw88166_dapm_widgets),
+ 	.dapm_routes = aw88166_audio_map,
+diff --git a/sound/soc/codecs/aw88166.h b/sound/soc/codecs/aw88166.h
+index 1a61e56f607c9..b8dbfe0f307c4 100644
+--- a/sound/soc/codecs/aw88166.h
++++ b/sound/soc/codecs/aw88166.h
+@@ -670,11 +670,6 @@ enum AW88166_DEV_DSP_CFG {
+ 	AW88166_DEV_DSP_BYPASS = 1,
+ };
+ 
+-enum {
+-	AW88166_SYNC_START = 0,
+-	AW88166_ASYNC_START,
+-};
+-
+ enum {
+ 	AW88166_RECORD_SEC_DATA = 0,
+ 	AW88166_RECOVERY_SEC_DATA = 1,
+
+-- 
+2.54.0

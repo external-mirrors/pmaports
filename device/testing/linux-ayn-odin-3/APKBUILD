@@ -1,6 +1,6 @@
 maintainer="Anton Bambura <jenneron@protonmail.com>"
 pkgname=linux-ayn-odin-3
-pkgver=7.1.3
+pkgver=7.2
 pkgrel=0
 pkgdesc="AYN Odin 3 kernel fork"
 arch="aarch64"
@@ -42,92 +42,127 @@ makedepends="
 "
 
 # not needed:
-# $_rocknix_base_url/0500-ROCKNIX-set-boot-fanspeed.patch
-# $_rocknix_base_url/0501-ROCKNIX-fix-wifi-and-bt-mac.patch
-# $_rocknix_base_url/0503-ROCKNIX-battery-name.patch
+# $_rocknix_base_url/9998-silence-initramfs-unpack-warn.patch
+# $_rocknix_base_url/9999-fix-rust-build-error.patch
+# $_rocknix_base_url_sm8750/0032-ASoC-codecs-aw88166-AYN-Products-Specific-modificati.patch
+# $_rocknix_base_url_sm8750/0500-ROCKNIX-set-boot-fanspeed.patch
+# $_rocknix_base_url_sm8750/0501-ROCKNIX-fix-wifi-and-bt-mac.patch
+# $_rocknix_base_url_sm8750/0503-ROCKNIX-battery-name.patch
 
 # this seems to be the most active place for development, however it does not
 # have a kernel tree that we can properly use, thanks rocknix for the patches
 _rocknix_repo="https://raw.githubusercontent.com/ROCKNIX/distribution"
-_rocknix_commit="b98de0d3b41047841c63b932304a3f844e2a2602"
-_rocknix_base_url="$_rocknix_repo/$_rocknix_commit/projects/ROCKNIX/devices/SM8750/patches/linux"
+_rocknix_commit="03d71e321737a95ca7f3b8a738261dd6af790b43"
+_rocknix_base_url="$_rocknix_repo/$_rocknix_commit/projects/ROCKNIX/packages/linux/patches/7.2"
+_rocknix_base_url_sm8750="$_rocknix_repo/$_rocknix_commit/projects/ROCKNIX/devices/SM8750/patches/linux"
 _rocknix_patches="
-	$_rocknix_base_url/0026-dt-bindings-arm-qcom-ids-Add-SoC-ID-for-CQ8725S.patch
-	$_rocknix_base_url/0027-soc-qcom-socinfo-Add-CQ8725S-SoC-ID.patch
-	$_rocknix_base_url/0028-drm-panel-Add-panel-driver-for-Chipone-ICNA35XX-base.patch
-	$_rocknix_base_url/0029-Input-edt-ft5x06-add-no_regmap_bulk_read-option.patch
-	$_rocknix_base_url/0030-leds-Add-driver-for-HEROIC-HTR3212.patch
-	$_rocknix_base_url/0031_input--Add-driver-for-RSInput-Gamepad.patch
-	$_rocknix_base_url/0032-ASoC-codecs-aw88166-AYN-Products-Specific-modificati.patch
-	$_rocknix_base_url/0033-arm64-dts-qcom-sm8750-gpu-clock-controllers.patch
-	$_rocknix_base_url/0034-arm64-dts-qcom-sm8750-Add-UART15.patch
-	$_rocknix_base_url/0038-arm64-dts-qcom-sm8750-add-GPU-nodes.patch
-	$_rocknix_base_url/0039-wifi-ath12k-add-initial-hardware-definition-for-WCN7.patch
-	$_rocknix_base_url/0040-wifi-ath12k-send-QDSS-config-when-CNSS_QDSS_CFG_MISS.patch
-	$_rocknix_base_url/0041-wifi-ath12k-disable-CNSS_QDSS_CFG_MISS_V01-for-the-W.patch
-	$_rocknix_base_url/0042-PCI-pwrctrl-pwrseq-add-support-for-WCN7860.patch
-	$_rocknix_base_url/0043-power-sequencing-qcom-wcn-add-support-for-WCN7860.patch
-	$_rocknix_base_url/0044-clk-qcom-gcc-sm8750-Do-not-turn-off-PCIe-GDSCs-durin.patch
-	$_rocknix_base_url/0045-Bluetooth-qca-add-WCN7860-support.patch
-	$_rocknix_base_url/0046-arm64-dts-qcom-Add-AYN-CQ8725S-Common.patch
-	$_rocknix_base_url/0047-arm64-dts-qcom-Add-AYN-Odin3.patch
-	$_rocknix_base_url/0048-drm-msm-dsi-reparent-byte-pixel-src-to-xo-on-disable.patch
-	$_rocknix_base_url/0049-drm-msm-a8xx-add-adreno-830-catalog.patch
-	$_rocknix_base_url/0050-clk-qcom-gxclkctl-kaanapali-fix-gx-gdsc-collapse.patch
-	$_rocknix_base_url/0051-drm-msm-a6xx-limit-gxpd-votes-to-recovery-in-a8x.patch
-	$_rocknix_base_url/0052-arm64-dts-qcom-cq8725s-ayn-wire-ss-through-redriver.patch
-	$_rocknix_base_url/0052-pmdomain-qcom-rpmhpd-presync-floor-gmu-rails.patch
-	$_rocknix_base_url/0054-regulator-add-sgm3804-i2c-regulator-for-panel-power-.patch
-	$_rocknix_base_url/0055-gpu-drm-panel-add-pocket-fit-panel.patch
-	$_rocknix_base_url/0056-backlight-aw99706-enable-hwen-before-chip-id-read.patch
-	$_rocknix_base_url/0057-backlight-aw99706-konkr-cfg7.patch
-	$_rocknix_base_url/0058-input-joystick-add-ayaneo-mcu-joystick.patch
-	$_rocknix_base_url/0059-ASoC-aw88395-lib-skip-monitor-sections-in-V1-ACF-parse.patch
-	$_rocknix_base_url/0060-ASoC-qcom-sc8280xp-enable-MI2S-bit-clock-on-BE-startup.patch
-	$_rocknix_base_url/0061-input-touchscreen-add-chipone-tddi.patch
-	$_rocknix_base_url/0062-backlight-aw99706-honor-blank-power-state.patch
-	$_rocknix_base_url/0063-ASoC-wcd939x-route-usbss-on-integrated-jack-insert.patch
-	$_rocknix_base_url/0064-ASoC-wcd-mbhc-clear-stale-jack-report-on-mechanical-removal.patch
-	$_rocknix_base_url/0066-scsi-ufs-ufs-qcom-add-sm8750-compatible.patch
-	$_rocknix_base_url/0069-input-misc-add-konkr-sysbtn-MCU-system-buttons.patch
-	$_rocknix_base_url/0072-ASoC-lpass-rx-macro-add-HPH-PCM-mode.patch
-	$_rocknix_base_url/0073-ASoC-wcd939x-add-HPH-PCM-HiFi-mode.patch
-	$_rocknix_base_url/0074-soundwire-qcom-PCM-data-port-format-enable.patch
-	$_rocknix_base_url/0075-arm64-dts-qcom-sm8750-add-CPU-thermal-cooling.patch
-	$_rocknix_base_url/0076-arm64-dts-qcom-sm8750-set-CPU-capacity-dmips-mhz.patch
-	$_rocknix_base_url/0504-Enable-64-bit-processes-to-use-compat-input-syscalls.patch
-	$_rocknix_base_url/0504-wakeup-qcom-ipcc-remove-IRQF-NO-SUSPEND.patch
-	$_rocknix_base_url/0505-msm_gem-lock-before-put_iova_spaces.patch
-	$_rocknix_base_url/0508-input-rsinput-add-pm-resume-to-reinit-mcu-after-suspend.patch
-	$_rocknix_base_url/0509-soc-qcom-pmic_glink_altmode-defer-until-mux-switch-ready.patch
-	$_rocknix_base_url/0509-usb-typec-ucsi-clear-USB-role.patch
-	$_rocknix_base_url/0517-usb-typec-mux-dont-swallow-EPROBE_DEFER.patch
-	$_rocknix_base_url/0601-ROCKNIX-odin3-pwm-fan-sysfs.patch
-	$_rocknix_base_url/0602-ROCKNIX-odin3-rtc-persist-offset-sdam.patch
-	$_rocknix_base_url/0603-ASoC-codecs-wcd939x-keep-the-codec-resumed-while-a-ja.patch
-	$_rocknix_base_url/0604-arm64-dts-qcom-cq8725s-ayn-enable-swr1-PCM-port-mask.patch
-	$_rocknix_base_url/0612-ROCKNIX-odin3-q6apm-start-mi2s-port-at-prepare.patch
-	$_rocknix_base_url/1000-input-misc-qcom-hv-haptics-sm8750.patch
-	$_rocknix_base_url/1001-haptics-driver-support-periodic-sine-and-fixes.patch
-	$_rocknix_base_url/1002-input-rsinput-sm8750-ff.patch
-	$_rocknix_base_url/1003-arm64-dts-qcom-ayn-cq8725s-common-hv-haptics.patch
-	$_rocknix_base_url/1300-input-rsinput-ranges.patch
+	$_rocknix_base_url/0010-msm-resource-cleanup.patch
+	$_rocknix_base_url/0011-drm-msm-signal-hw_done-before-the-flip-event.patch
+	$_rocknix_base_url/0011-thermal-adc-tm5-drop-iio-val-int-check.patch
+	$_rocknix_base_url/0012-drm-msm-dpu-qos-lut-for-scaled-compressed-fetch.patch
+	$_rocknix_base_url/0013-drm-msm-dpu-fix-inline-rotation.patch
+	$_rocknix_base_url/0014-drm-msm-dpu-scaled-fetch-line-width.patch
+	$_rocknix_base_url/0015-drm-msm-dpu-sm8250-linear-danger-lut.patch
+	$_rocknix_base_url/0016-drm-msm-dp-return-0-from-audio_prepare-when-cable-is-disconnected.patch
+	$_rocknix_base_url/0017-clk-qcom-blank-dsi-panels-before-dispcc-park.patch
+	$_rocknix_base_url/0018-drm-msm-dpu-preload-seven-pixels-in-qseed4-behind-the-inline-rotator.patch
+	$_rocknix_base_url_sm8750/0026-dt-bindings-arm-qcom-ids-Add-SoC-ID-for-CQ8725S.patch
+	$_rocknix_base_url_sm8750/0027-soc-qcom-socinfo-Add-CQ8725S-SoC-ID.patch
+	$_rocknix_base_url_sm8750/0028-drm-panel-Add-panel-driver-for-Chipone-ICNA35XX-base.patch
+	$_rocknix_base_url_sm8750/0029-Input-edt-ft5x06-add-no_regmap_bulk_read-option.patch
+	$_rocknix_base_url_sm8750/0030-leds-Add-driver-for-HEROIC-HTR3212.patch
+	$_rocknix_base_url_sm8750/0031_input--Add-driver-for-RSInput-Gamepad.patch
+	$_rocknix_base_url_sm8750/0033-arm64-dts-qcom-sm8750-gpu-clock-controllers.patch
+	$_rocknix_base_url_sm8750/0034-arm64-dts-qcom-sm8750-Add-UART15.patch
+	$_rocknix_base_url_sm8750/0038-arm64-dts-qcom-sm8750-add-GPU-nodes.patch
+	$_rocknix_base_url_sm8750/0039-wifi-ath12k-add-initial-hardware-definition-for-WCN7.patch
+	$_rocknix_base_url_sm8750/0040-wifi-ath12k-send-QDSS-config-when-CNSS_QDSS_CFG_MISS.patch
+	$_rocknix_base_url_sm8750/0041-wifi-ath12k-disable-CNSS_QDSS_CFG_MISS_V01-for-the-W.patch
+	$_rocknix_base_url_sm8750/0042-PCI-pwrctrl-pwrseq-add-support-for-WCN7860.patch
+	$_rocknix_base_url_sm8750/0043-power-sequencing-qcom-wcn-add-support-for-WCN7860.patch
+	$_rocknix_base_url_sm8750/0044-clk-qcom-gcc-sm8750-Do-not-turn-off-PCIe-GDSCs-durin.patch
+	$_rocknix_base_url_sm8750/0045-Bluetooth-qca-add-WCN7860-support.patch
+	$_rocknix_base_url_sm8750/0048-drm-msm-dsi-reparent-byte-pixel-src-to-xo-on-disable.patch
+	$_rocknix_base_url_sm8750/0049-drm-msm-a8xx-add-adreno-830-catalog.patch
+	$_rocknix_base_url_sm8750/0050-clk-qcom-gxclkctl-kaanapali-fix-gx-gdsc-collapse.patch
+	$_rocknix_base_url_sm8750/0052-pmdomain-qcom-rpmhpd-presync-floor-gmu-rails.patch
+	$_rocknix_base_url_sm8750/0055-backlight-aw99706-upstream-fixes.patch
+	$_rocknix_base_url_sm8750/0055-gpu-drm-panel-add-pocket-fit-panel.patch
+	$_rocknix_base_url_sm8750/0056-backlight-aw99706-enable-hwen-before-chip-id-read.patch
+	$_rocknix_base_url_sm8750/0057-backlight-aw99706-konkr-cfg7.patch
+	$_rocknix_base_url_sm8750/0058-input-joystick-add-ayaneo-mcu-joystick.patch
+	$_rocknix_base_url_sm8750/0059-ASoC-aw88395-lib-skip-monitor-sections-in-V1-ACF-parse.patch
+	$_rocknix_base_url_sm8750/0060-ASoC-qcom-sc8280xp-enable-MI2S-bit-clock-on-BE-startup.patch
+	$_rocknix_base_url_sm8750/0061-input-touchscreen-add-chipone-tddi.patch
+	$_rocknix_base_url_sm8750/0063-ASoC-wcd939x-route-usbss-on-integrated-jack-insert.patch
+	$_rocknix_base_url_sm8750/0064-ASoC-wcd-mbhc-clear-stale-jack-report-on-mechanical-removal.patch
+	$_rocknix_base_url_sm8750/0066-scsi-ufs-ufs-qcom-add-sm8750-compatible.patch
+	$_rocknix_base_url_sm8750/0067-drm-msm-dpu-enable-qseed-detail-enhancer.patch
+	$_rocknix_base_url_sm8750/0068-drm-msm-dpu-enable-sm8750-inline-rotation.patch
+	$_rocknix_base_url_sm8750/0069-input-misc-add-konkr-sysbtn-MCU-system-buttons.patch
+	$_rocknix_base_url_sm8750/0072-ASoC-lpass-rx-macro-add-HPH-PCM-mode.patch
+	$_rocknix_base_url_sm8750/0073-ASoC-wcd939x-add-HPH-PCM-HiFi-mode.patch
+	$_rocknix_base_url_sm8750/0074-soundwire-qcom-PCM-data-port-format-enable.patch
+	$_rocknix_base_url_sm8750/0075-arm64-dts-qcom-sm8750-add-CPU-thermal-cooling.patch
+	$_rocknix_base_url_sm8750/0076-arm64-dts-qcom-sm8750-set-CPU-capacity-dmips-mhz.patch
+	$_rocknix_base_url_sm8750/0504-Enable-64-bit-processes-to-use-compat-input-syscalls.patch
+	$_rocknix_base_url_sm8750/0504-wakeup-qcom-ipcc-remove-IRQF-NO-SUSPEND.patch
+	$_rocknix_base_url_sm8750/0505-msm_gem-lock-before-put_iova_spaces.patch
+	$_rocknix_base_url_sm8750/0508-input-rsinput-add-pm-resume-to-reinit-mcu-after-suspend.patch
+	$_rocknix_base_url_sm8750/0509-soc-qcom-pmic_glink_altmode-defer-until-mux-switch-ready.patch
+	$_rocknix_base_url_sm8750/0509-usb-typec-ucsi-clear-USB-role.patch
+	$_rocknix_base_url_sm8750/0517-usb-typec-mux-dont-swallow-EPROBE_DEFER.patch
+	$_rocknix_base_url_sm8750/0518-ROCKNIX-odin3-panel-frame-length-calibration.patch
+	$_rocknix_base_url_sm8750/0603-ASoC-codecs-wcd939x-keep-the-codec-resumed-while-a-ja.patch
+	$_rocknix_base_url_sm8750/0606-phy-qcom-qmp-pcie-switch-pipe-clk-mux-to-phy.patch
+	$_rocknix_base_url_sm8750/0612-ROCKNIX-odin3-q6apm-start-mi2s-port-at-prepare.patch
+	$_rocknix_base_url_sm8750/1000-input-misc-qcom-hv-haptics-sm8750.patch
+	$_rocknix_base_url_sm8750/1001-haptics-driver-support-periodic-sine-and-fixes.patch
+	$_rocknix_base_url_sm8750/1002-input-rsinput-sm8750-ff.patch
+	$_rocknix_base_url_sm8750/1004-input-qcom-hv-haptics-defer-rsinput-playback.patch
+	$_rocknix_base_url_sm8750/1300-input-rsinput-ranges.patch
 "
-# kernel config is also based on rocknix
+# from https://lore.kernel.org/linux-sound/20260925-aw88166-cleanup-v1-0-11f74cb5fe28@gmail.com/
+# and https://lore.kernel.org/lkml/20260708125002.202515-8-phucduc.bui@gmail.com/
+_aw88166_patches="
+	0001_asoc_codecs_aw88166_use_guard_for_mutex_locks.patch
+	0002_asoc_codecs_aw88166_support_changing_sample_rate_and_bit_width.patch
+	0003_asoc_codecs_aw88166_add_tdm_support.patch
+	0004_asoc_codecs_aw88166_reduce_log_spam.patch
+	0005_asoc_codecs_aw88166_remove_fade_in_out_on_start_stop.patch
+	0006_asoc_codecs_aw88166_remove_async_start.patch
+	0007_asoc_codecs_aw88166_make_volume_control_usable.patch
+"
+_rocknix_base_url_dts="$_rocknix_repo/$_rocknix_commit/projects/ROCKNIX/devices/SM8750/linux/dts/qcom"
+# include sm8750-konkr-pf-elite.dts because we can
+_rocknix_dts="
+	$_rocknix_base_url_dts/cq8725s-ayn-common.dtsi
+	$_rocknix_base_url_dts/cq8725s-ayn-odin3.dts
+	$_rocknix_base_url_dts/sm8750-konkr-pf-elite.dts
+"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$pkgver.tar.xz::$url/pub/linux/kernel/v7.x/linux-$pkgver.tar.xz
 	misc.config
 	$_config
 	$_rocknix_patches
+	$_rocknix_dts
+	$_aw88166_patches
 	disable-fan-on-boot.patch
-	libbpf-Fix-UAF-in-strset__add_str.patch
 "
 builddir="$srcdir/linux-$pkgver"
 
 prepare() {
 	default_prepare
 	cp "$srcdir/config-$_flavor.$arch" .config
+
+	# device-trees from ROCKNIX tree
+	for dts in $_rocknix_dts; do
+		cp "$srcdir/$(basename "$dts")" arch/arm64/boot/dts/qcom/
+	done
+
+	echo 'dtb-$(CONFIG_ARCH_QCOM) += cq8725s-ayn-odin3.dtb' >> arch/arm64/boot/dts/qcom/Makefile
+	echo 'dtb-$(CONFIG_ARCH_QCOM) += sm8750-konkr-pf-elite.dtb' >> arch/arm64/boot/dts/qcom/Makefile
 }
 
 build() {
@@ -156,69 +191,83 @@ package() {
 }
 
 sha512sums="
-1c5e7e16c73f4942dcdc1783987e65351259d1f2d4ff39c91182529e2f9e689b62b3df3ec89b61514c473eb13ecb004a3825716b9c583fc41e25fc01fe569b30  linux-ayn-odin-3-7.1.3.tar.xz
+47e63679363261a864d271277340a6f2d45f544e1a056be4159df081f4f6537d0efa865c4af26611ab33a3079ee65db88ec2f6bc0e5fff43e0c043cde0cd91e1  linux-ayn-odin-3-7.2.tar.xz
 f7712cb52ab2abae02deb3f90d0bdba83bcdf1af9b5f4fdb97963d729d1a0161301ecb3b5948dcd7a7f182c14e52d3863ec48f22a00276008d3bb0615d29ba68  misc.config
-a92419c36561bcbced710613db563bdc31224ce1651131a3d7b6ce4d634ff363f52a1b8b898a238889486ea995f99a34089f1ce10e93ab704f0ee2cec74d72f8  config-ayn-odin-3.aarch64
-79e0661e1fe63a407269746648efcde372ddca85fbcd008d2a47ff5e569909fdd20cd6bd450b3e457cbdb522efdafcc3a47a1d6216f27b23817dc866d7d37dcc  0026-dt-bindings-arm-qcom-ids-Add-SoC-ID-for-CQ8725S.patch
-70636cba8c497850c4e31be92e400058ecc2ae1d8ee1b1dfde0511a129db26f34b8aece377b5c2bc5885054efb16934b0d07066280626d8fe0c48fba6b7ea7a3  0027-soc-qcom-socinfo-Add-CQ8725S-SoC-ID.patch
-2757630a2e7f2f63227cc21720279bcf691d336d9fd899e753f6edc95f0182dc62480a1d6014afaf59fcee7207526c9358e57380da6a6b6231a42398ae79bfe3  0028-drm-panel-Add-panel-driver-for-Chipone-ICNA35XX-base.patch
-b1a1425331a2f656b1cd1cc6e81cc605f9b9f22aa2e7b4f090b2f8a00296b053aea91a4bf411f1fe103aedf998ec44dfe541a48d13bbe430dea88e86937d7f6b  0029-Input-edt-ft5x06-add-no_regmap_bulk_read-option.patch
+657e176499f5145824ed019d0265d75c8700e5bdb91ba68bbda7c3048b397a4fa48f225bb862210ad4db1737d632f26fa5a0ba129accb6aaea795f9ddfb9ff2c  config-ayn-odin-3.aarch64
+3c83840312fe3562dae63b79fdfa1db861a82105a515a8f1e001fc4704ab71d69ed9031fbcf8381f766b925a64c17f539cadd19135410a26731ed534a265737d  0010-msm-resource-cleanup.patch
+965fdb56d15fe016305f09a78859bbed195f1b0d84ad3abe9bdab65924e4ea9706b8785963199cef61034e653b2837dab53257e61a2332f29eba415a31b0cc3a  0011-drm-msm-signal-hw_done-before-the-flip-event.patch
+90aef8618218ef7adaf8f45615df62cb5f5c34a572c9628ca423b7375c41896072670d19fa212fb62ea9fa4ab37b8f8faeb10298e863b4a24445cbda489fec37  0011-thermal-adc-tm5-drop-iio-val-int-check.patch
+754df774e96384997351b1aea7c7431f94f6bb8e1826b760c206952ed55ec62ede00a4ffbe026e9d5f06c64b6a98aa4cdae0bfb4a3b491ca75bde454b02ba9a5  0012-drm-msm-dpu-qos-lut-for-scaled-compressed-fetch.patch
+e024e826a747296accd7eb048408c86e9f7db4caae57c68783299c6ad5f6fddc38b9932a088135c04030d2244b9c8bbbee77ad036f84a618bd813846b0984073  0013-drm-msm-dpu-fix-inline-rotation.patch
+078599f3a44396c8861504a51ecec8b78e56a39648753cd4b4430a189e8d2429ab6e983b7372aeafc88bdd1b6b757fa0a6e247eaa7438ad440f53651d55e7b67  0014-drm-msm-dpu-scaled-fetch-line-width.patch
+f09dc3e5e1e02b248dfcbcfb7a5c53a9c590b69a60e984ac68737ee11e5590d639224bd73a91d88069e6266090cdfb54e4b741fc9d6a72c3f5fbd1d5d88230ac  0015-drm-msm-dpu-sm8250-linear-danger-lut.patch
+d1bd4521916b4fd09e7226b8f0137db3b5e03c5d8a4dc8a7ecfd766551b0f91eb7163d1050b82b8f6c373970ef8ee9d84c0b1fc0faee7f0a72c8d43469a026c7  0016-drm-msm-dp-return-0-from-audio_prepare-when-cable-is-disconnected.patch
+a34e29d675159a1137d774f15134e6112411f20a61cbf683bcd844e59dfbf52d868b1ceed3b0d8c10ee6b8b8604903d5f8b20d9e10da7c2cdc19891af3e351bf  0017-clk-qcom-blank-dsi-panels-before-dispcc-park.patch
+49f6c8a92518e2211d066983998bf8b621045f478a72b1878d8e038ba041900d4bba6de7a5b2a69984be3dc048ac5032a944ae9d858549e1f9bd7c38436b3dee  0018-drm-msm-dpu-preload-seven-pixels-in-qseed4-behind-the-inline-rotator.patch
+a19c569aee4e6e0c19b7dce7cfdb4f6a454e812c4d236f8e8c4953197865301fab8a2b9a742a548c410b274f6375589dec1f230cdf3cdb5bcc28665c895e2f7e  0026-dt-bindings-arm-qcom-ids-Add-SoC-ID-for-CQ8725S.patch
+08e4b20b18eda38830e4c070dda6e70462531521cfc309897ec8a9ba7b5c643aa425ffcdea0fb68b8bd251c1c3edeb881f7a6a7ca6ee360b3cfd2d1519ba0d23  0027-soc-qcom-socinfo-Add-CQ8725S-SoC-ID.patch
+ee4353730171d13ebe59c4f14f828670f1503361e773518931746a9f9d88bc5966f73e372ab752a2c633123e8c147a805ddb86f47eaf7b3b033e3a13271b929e  0028-drm-panel-Add-panel-driver-for-Chipone-ICNA35XX-base.patch
+db2a9ef66d4500aeb0695e634a3de350e04d8c3716fd6f475ea71ff819ede97f6b209a1cf560fa60485e4dd5be2081078e8a92b8d34d178c2d6f35b4a9e953a2  0029-Input-edt-ft5x06-add-no_regmap_bulk_read-option.patch
 6cd94e65469c6b97facaa1d0f0a838a703b92c816f7fbdbf34cda9aaa9114527937141bcdd9ac5430755bf3c880aac12be9d120b51284d60eecd154e35af83b7  0030-leds-Add-driver-for-HEROIC-HTR3212.patch
-9269f737855f1f12e735333c5e79d0e8dd7d30476d083f05bcac50f4a70fe7316f9e9537a6c8487006e848268526b1c71cb1cb01f0fdc7a5788ac7575392a3ba  0031_input--Add-driver-for-RSInput-Gamepad.patch
-f13e042b9715021d0bbcf4ce69ea69c5664ba1308e0577757c1107773a907d7cb28a2d25fa44ab728769ed59ce45a748c19ebbc13c12480f0e45df55cd07020f  0032-ASoC-codecs-aw88166-AYN-Products-Specific-modificati.patch
-b7ceb8fe057a3db247c265f39e976e021624f4cc87b72615019f64ee4b1855afc724836a378a7ed6d71542dfa563b81cb5fd7161307c9595680d11170db42f9a  0033-arm64-dts-qcom-sm8750-gpu-clock-controllers.patch
-ee6c2b471925da5d5347aa03bba3c7b411dba0dacb927f159c6392173d300e14bc96ba7b69aa0afd5e9c16c61e32c1e5024125b7f1b276a61ed4e649b2aa9379  0034-arm64-dts-qcom-sm8750-Add-UART15.patch
-2b4ddde4710418c5a05c96212db852ab07af03b71a8bff1db7d2446a57f439e1ddc45821e67450292c5611cea27754d679a4d648c6e305952a93901b7b0dd9ce  0038-arm64-dts-qcom-sm8750-add-GPU-nodes.patch
-487b6745f670adaa99fdcc5280a40259bd94de2e30f1e5b25644f309260e603f00fa5a80854c6f9e63dd196af6975558dac37c77bc5d633f6c625bdac42a59f6  0039-wifi-ath12k-add-initial-hardware-definition-for-WCN7.patch
-1381d135f19c65ef5d3a616bf6a97532ea9701dd68c99e4fa419e6b3878ffe4e5e13e802051c331d10482672f31a28a5f411c899f83b446b89035cff364162f8  0040-wifi-ath12k-send-QDSS-config-when-CNSS_QDSS_CFG_MISS.patch
-7cec5910b2f3d805a01cdc189f11520cb05eac5e0913a5212bc6d275a8d1e12e7f7de95326ae4a9ec8788d2a26a68b0a0c96d62674f354dd486b0e09df378203  0041-wifi-ath12k-disable-CNSS_QDSS_CFG_MISS_V01-for-the-W.patch
-974990d2436dd84254bd50d33abf4bf16af81ba51955b81c3cc72e67802a1dfe74caac3f33817244b196051e24954c2048fd9a30dcb61a4aa0d31cae8ed630fa  0042-PCI-pwrctrl-pwrseq-add-support-for-WCN7860.patch
-a51d1f61d0067347258298757ce36e4986d30a7a4826c12a6bd5ddefdd1722d7fac3c35c215601449ca619ecc610eb72ecbbe14fb61e7c013e64c53dd012e27f  0043-power-sequencing-qcom-wcn-add-support-for-WCN7860.patch
-e79d68433849b43cdc8755ab3e368e0cc17b5b90125bd69bd037fb0c90e1b17dc3a0f53db8a890961afa1ec8301ece40157965cfdefdcafc651b546153a36379  0044-clk-qcom-gcc-sm8750-Do-not-turn-off-PCIe-GDSCs-durin.patch
-0dbebe9bfb9d4fe2383c6ea0c4e6dbc11aa7766b155787316f2c560c9c23209e80337aba0b57335c9c4985ff088632400a801d57831421b4d881ee70acd14a06  0045-Bluetooth-qca-add-WCN7860-support.patch
-b7bab526b15602dc1593e7ae5cb635ace1cc4bd79a5c1ba3f24c3f13080a3bd7f121ea0516726251c13b170d10b1053c932c0b806f8caf1eb15897be535e00aa  0046-arm64-dts-qcom-Add-AYN-CQ8725S-Common.patch
-008b5ee4db22b0d4ac7653a58f088894bbfb7bef4102a55cc670bb3e93debe90275f34f38b552116e12fc039d719d9971b9631bb0e85ab6d51e66b2abf21a731  0047-arm64-dts-qcom-Add-AYN-Odin3.patch
+70e43b30b444ca4434082ab2d6ccb96d217dc3bbb7dad68877d9a8167a34aafeabc08145cf31c862f216c4bed93fb104b0810932ab75f5b0fafeec4a32c61fdd  0031_input--Add-driver-for-RSInput-Gamepad.patch
+01511db3efeaf778874bf241f3dec4337d9c6cf72a4f92a05be047a5ea5188f770d308d44501741f6d323f54ab3aa20124a6c6294eefcb4cded5021387582897  0033-arm64-dts-qcom-sm8750-gpu-clock-controllers.patch
+2147cb17a53a0f22823f98de234771b144d8abb4a5a84f10cf059904f7e1737128c3ecca8d139eb202eaac0157810b500828625ed5029ec24ce536a7eb0f506b  0034-arm64-dts-qcom-sm8750-Add-UART15.patch
+c1111f90ab8ec21d8bf871fc2e03fb2ecd91d4e9714fcbd5436c1a465ed40c94a596853128190f2cc4c540f26c79306f23823642ccd134bf41755aeff7c7e13b  0038-arm64-dts-qcom-sm8750-add-GPU-nodes.patch
+80a87101252a4012b6f43b932bc93adcb4dab91eef7b949ec46691128fc78e08b89ce06bfef4e6b2b0e79e7bda2cb9b4a6cd1eb1870917bd89dd68e5e89f361d  0039-wifi-ath12k-add-initial-hardware-definition-for-WCN7.patch
+a5487252efb1bb5332f55cc2f1e764be6416ae45d6ec36365ef617bf8b7ba944af4cb59c98bbbfe06a934180e54f85e0ff95b76de4677a7bd06bcc0499c17787  0040-wifi-ath12k-send-QDSS-config-when-CNSS_QDSS_CFG_MISS.patch
+41b04db98c2f79b5900794713ea1c17f6a98d47b697a49d8047fabdab304ccb3a8752518001fb4e5a22e96c40bc6c96cca20bb8fb4220e7d6c015d31106b286f  0041-wifi-ath12k-disable-CNSS_QDSS_CFG_MISS_V01-for-the-W.patch
+a56df83b320f57878b1236b086aedb0b6b027b1a8a4e321d00d2d9803283a0fe2b9778f3927753405ab7edeccbcb9f15da4ea1b3dd515af4938a7ec7b5ef4597  0042-PCI-pwrctrl-pwrseq-add-support-for-WCN7860.patch
+751cd4fbce6754a3eabcf7a2175a5d4b0ca7317489556ebbc3a416bbff97bd015fb9df51e761055bf811bdbf243495a73b55104868af906e227df4fc403e0797  0043-power-sequencing-qcom-wcn-add-support-for-WCN7860.patch
+693e9b3d85c50cfbea923ae82d3d904a858c58fb8d225bfba002b0ecff05af4dc0fa10c6ada3f25bcfb42bdd23202397533867cf3c3b93ef9888b99198cf72f8  0044-clk-qcom-gcc-sm8750-Do-not-turn-off-PCIe-GDSCs-durin.patch
+d412aa7ea9b3a1135460a8983ef9a4b0efad60e423aaed6593fdcf7a30bd20ac1ca41887043ddf22ec6cfc017dd4b61575054f85c4be0b087c210d84cbdb915d  0045-Bluetooth-qca-add-WCN7860-support.patch
 e6ba008cd3cf7bf57e340877dae051b7178723b88bd26c97e6bc137b8d5e518c2bb999fa28fad218c328e095341c064ad9c040793a60fb6efbedfe3f11ea4501  0048-drm-msm-dsi-reparent-byte-pixel-src-to-xo-on-disable.patch
-55668715cef2d5e4d1f579d6367959fd6960c87221f1f5b5f7201d12a891a5a6fd3d82e89eb60b7bcb1526a7ff165be0795d0dafd0412c5b07a82691aaf8cbc2  0049-drm-msm-a8xx-add-adreno-830-catalog.patch
-5c2c0725a175f4f312be50f3db768c23ebb4ef981617c6681faae291d0c8cb247d0089147f55e55ccc837e594e3c45f0a54d9d00be66eb95a8e6d04908a23c35  0050-clk-qcom-gxclkctl-kaanapali-fix-gx-gdsc-collapse.patch
-a17003ce50db84b00ea2c01be06c7e7b7f5a058530613f6b7b67a015504cab2ffe526a9bc39342c47cf4bbac4144e5394104c6d045dcb284dd912931bb4abb20  0051-drm-msm-a6xx-limit-gxpd-votes-to-recovery-in-a8x.patch
-19c304be9066db9a2e6c5830f76668746ad2240582d79d8274757ed19976d4a99a3224a48b5c7805f10a2d84be7770b28bd9d2aef4723d2b807822ca3774bb19  0052-arm64-dts-qcom-cq8725s-ayn-wire-ss-through-redriver.patch
-841823fc096115dceabfad900abbbbd4d883d8841a76341b7d6ee6b6128fa0122baba2bd45925dd7e34c04a7670880b9db216a27180695ba7383b60a143979cb  0052-pmdomain-qcom-rpmhpd-presync-floor-gmu-rails.patch
-eb9b7caac9929768d530f074aaee002c15fcf6f3470d2011f41a2c3bd3a64c51c4aef958ed5e0dce2221483f0b25e87bf0460a4e5c0df97c0edd43a74bade793  0054-regulator-add-sgm3804-i2c-regulator-for-panel-power-.patch
-fae34ae5e4bffb40553ef633c20f2a9972af113e9a57a1eff0a34575c819eb1ffb86413acae539bbb2aa31f0d765e72c313c1d88b05d11aba20a64ce5e3c5832  0055-gpu-drm-panel-add-pocket-fit-panel.patch
+c7f952625fe9477a897dfa2d6aaa01bd884c688e587a2f2c434f5a1a11ccb0ea4804549525fc5628985381566982501c697af1870bf17a09671b7231914cc11a  0049-drm-msm-a8xx-add-adreno-830-catalog.patch
+fe091f86a407077ae60b856423beeb1a6bd411732e84836c740627d859b06466345e0247aea2208858baa42c2365b689150dccf385c39383bb720f9eaafc72ac  0050-clk-qcom-gxclkctl-kaanapali-fix-gx-gdsc-collapse.patch
+e438efe76a27b232c052515a597838bfe5dc46f32c36b9935de39630a38b1e02cb7632ced07cd280f57e6539e2240956a058f4cbf39cb61197715f8e5bead274  0052-pmdomain-qcom-rpmhpd-presync-floor-gmu-rails.patch
+51e2abe1725379699c8a066e1ce54785c8ec4ebe7997281f33343b24f793ff59953daa207f054bc4ab8bcf45cd9eefa626903ce31a44e9d646e0ac2985e3d5b9  0055-backlight-aw99706-upstream-fixes.patch
+ed2f0ee11477375af974808c36956c687ca3ddc003f273b2411044034ad704595944ed3b47b51de5b93265f18ea8df99d53df95ddcc7703024513ce925ad9f68  0055-gpu-drm-panel-add-pocket-fit-panel.patch
 126c06bf74db5b6800c02f256a50021928b0765bd1b45b1ab3ae53d7f13ff7867a01684639a4e800f2c9ec8b6976dd3fe2840851a269674aa981fb6ba8745de1  0056-backlight-aw99706-enable-hwen-before-chip-id-read.patch
 c7669cb8c049d870c7ae69a3082e4df051fc325e111fd568555ba69a53358b2d2c4486543e915164868a5df6e93f7bebd0c6245e088fe2ee34432e379f94cb03  0057-backlight-aw99706-konkr-cfg7.patch
 0f8b9234b1ef7ea3970468678eeac677a09e8886e8a6c7a5cd1a63184a23318716cca2f45ddf2edd627be4002eab853c827debc046c0c5445d387d028837ee51  0058-input-joystick-add-ayaneo-mcu-joystick.patch
 c4b1ae03cf4f2efd9f8299d466acf6f4277eaf61c715fda819949dba6acdb4b5192ffc8da41428105208768a34f128655c96a9e4f1eae4635d951e8686667ee9  0059-ASoC-aw88395-lib-skip-monitor-sections-in-V1-ACF-parse.patch
 6f832ac16b72c1447f4efb709a05fbbb19cf5567355fde04da38eab423ea4f787f0cc05abd31e6b4867a38c9c819aaed152ed5fb75965d486ece01d8295160f9  0060-ASoC-qcom-sc8280xp-enable-MI2S-bit-clock-on-BE-startup.patch
 f32cf558ac5d10b70fdb2513c3c875da353bce90a94c4ba7d4398106d5366da92342f2df7947c2fc90d7a7bb3827a5cb56049b602d67bd97513318c24d5b0978  0061-input-touchscreen-add-chipone-tddi.patch
-f278a171d3703f43f7a507f8e181404a35c3f8663e4c140dfd4b386a75c161e3e0558543e54bb067d7a3bb7cd62e0ee7a78e276bbee18828f5ff6aced5716a80  0062-backlight-aw99706-honor-blank-power-state.patch
-f46fbfe065d699169b634c106c4b518727ecf199e921dc5e9e6d32adee5bd433b60d805b42ed247ee2b987f7e64169a620d6e56dba1c6c0f3c993f6e51dd09f2  0063-ASoC-wcd939x-route-usbss-on-integrated-jack-insert.patch
+89a848204cb5eef0caf45bf805a0ccd9c46f9a7c00bca4895c1c54fd499647e2a06c1cad24261be535de08d0c34851de9dd5b503329320df121d467b891811e6  0063-ASoC-wcd939x-route-usbss-on-integrated-jack-insert.patch
 042de5cbb5693e0b206bbaa1bcca478aaefab35b857d68940f1163b5924fdcffdfad5cbf6a7059a938748dbd1688decefed9c7f9bcba284faa704be1ab1a1f0d  0064-ASoC-wcd-mbhc-clear-stale-jack-report-on-mechanical-removal.patch
-3c73cbf9aa211a016c44b8a8386bab23638dcadb04fb21739a504abc45dc2808966fb22ce09e468cf17204422d2a76567e0f155db7cb17243c6c1e790833c25c  0066-scsi-ufs-ufs-qcom-add-sm8750-compatible.patch
-7cfe9090e4d2310694b09eb5292b1cfca9786fdb522f9ba7246bb958518e3bd1bf51096df62fca05d6ba6f78c8610fd3ba50452daf5567c80e165bf087cc92f9  0069-input-misc-add-konkr-sysbtn-MCU-system-buttons.patch
+18fd2a50dbd0670aade934ba77b7a1ff90dd67f3730fa2f36378c30e065cb8cf9ae0725825c58c67c98eb3f2afdbf1023c53a5e355180a91cc92d9abac8cd903  0066-scsi-ufs-ufs-qcom-add-sm8750-compatible.patch
+9b549aea4bc92b73f4531da093ed6eec465750da5dbe7559c6444c6113334a6693b6a2e11a2715941ea4471ec5dda845f8dfc055046b0d68efae78f96ab58473  0067-drm-msm-dpu-enable-qseed-detail-enhancer.patch
+5d4b85e8ff437e01729debc7338238823bb685fb4d69c8dd2bc9a58b9aafd5262c3154b4fd21f5cb8833ed86303e4d5f3cee61671155b71c3b83dddd85bfe24a  0068-drm-msm-dpu-enable-sm8750-inline-rotation.patch
+d2036d2a40dcd0a2705b4a32d43daf03e292564f675ceb8fdac480085e4b4a05c53d000e1981a84160b112f5cfe6c1e60a28b25cc3f6d77c8db6fe3e7567ff42  0069-input-misc-add-konkr-sysbtn-MCU-system-buttons.patch
 9d7c914d2fe8acfc71a9d0830bfec0e4367238a680c7d338b44657a798688c606f1cf2960927360d63f0c69e5c2728e118909b30bbdada646a22ea3dc38d7694  0072-ASoC-lpass-rx-macro-add-HPH-PCM-mode.patch
 deb5eef88dadac6d2748e22e6e49915b1513fb4b632763bc43b40729da61d0b4ca8d9cd6708e16330e14d271ff2e3664aef3215694424ee04f581056b3d3303f  0073-ASoC-wcd939x-add-HPH-PCM-HiFi-mode.patch
 2a4dc06d18afa84e5aa534c25cb5122d317c8ea168831fedbd25181cf66bc5122806ddcadfce98eba71f467d317d3e80065ae1c859175e3782aa83080e407881  0074-soundwire-qcom-PCM-data-port-format-enable.patch
-ae5dbdec0155d7496e2b80d957997079782d733f910e2f0d275a70bf87532a5bb7185faddc4cc8d978e78d7d91a00e6506a53ab80f1a59544f605b665459b7e0  0075-arm64-dts-qcom-sm8750-add-CPU-thermal-cooling.patch
-b236c8ee2fcd79a6a83f14dff0bd16ae047ec41c4c720e09d64b92ef145e5611655bf7f6200fde709f6f6911f7852283730dabe8780a42ee14ed91861c86e3c7  0076-arm64-dts-qcom-sm8750-set-CPU-capacity-dmips-mhz.patch
-5d232b7102c079fa78cee04119f612973dfd07fa295e5ee330dc93a830edfecf418627dfd1a417f58fa7251cd9eba1d968cc8593efe8037148ad7e1e52259796  0504-Enable-64-bit-processes-to-use-compat-input-syscalls.patch
+2ca292bdd3b7eac2b4a639ae89883e3ed0c9fa570231d84715c6e26bde3bf0456a7adcd01cffe7f47540a3e691c3704c7f017c33ac31ca3261fc5c8ecb6852d2  0075-arm64-dts-qcom-sm8750-add-CPU-thermal-cooling.patch
+1e42148cd2f9dcb69cdc9d1892adca70eeba55b4a9493d214b5e1f72305ca43490b978da45f30ff77da559f5d0d9e5e7077e08172639c3fdc371bf956193b02e  0076-arm64-dts-qcom-sm8750-set-CPU-capacity-dmips-mhz.patch
+11dbc2c1730a89c0ee4318672c8ffc92fb45817ef75c59732c9f0ed9ae41101dae79c9f03231cc5f36f2a82c660984c83b09a981f77c61c9615afe96782c2095  0504-Enable-64-bit-processes-to-use-compat-input-syscalls.patch
 36dcb2e94ddea9f1973dc28a6799570f8982e0831b85e0248ecb4c7205d4e8fdfb137f843014ccbd1b0c8d169efa80ac1105bd5e8e1c2cff8568100766966094  0504-wakeup-qcom-ipcc-remove-IRQF-NO-SUSPEND.patch
-42d68f0341030713868b44ccb419bf1c444e390e050672378e562660892fbeb81de7881fe4a49723e28c41a45e5a0f55e3b84079199b7b549af225da451af39c  0505-msm_gem-lock-before-put_iova_spaces.patch
+d49f3e80d59efec0ebe5c38f7cf6db2b1479698614a374df95b3fb0c6acff66fa7113b2165a8e32e0f895461152a77cbc93d576776c72053e147e39c0f62a441  0505-msm_gem-lock-before-put_iova_spaces.patch
 96da39491e3f220c7f37c86d4dfbf18422545ed6b4607e09e8e9ec695210529240aed175ca64274ca8fd03e9d766317cbc601b86ead3a8c41c45f9845b557494  0508-input-rsinput-add-pm-resume-to-reinit-mcu-after-suspend.patch
 99de9d5ee884f2d20fbe6308afc2510c7f7bff4823b0a1d5c0ed25f0c624d6e21492792e6365c094d331c3477c920cfceee675b6315a67060dee8fce8ab1a630  0509-soc-qcom-pmic_glink_altmode-defer-until-mux-switch-ready.patch
-fd0de628ffe46a598e01abf516616d97fbd084fcbc5ede1aba0163814c5dcf488338dc7d392df43c4692b29a81e934ad1795fd191324f10e4bd3176e2534060a  0509-usb-typec-ucsi-clear-USB-role.patch
-d4c360906a7098bee0f8e4b4142aefc0b6f5887f0fba2b63d2206fd3adc977b1330264bfe71644c7694e7b643016c9746ab228f2da0ce82212133adb2959358d  0517-usb-typec-mux-dont-swallow-EPROBE_DEFER.patch
-df129e940d4c11667f1419ba67d92c1c5f43ee1ae2b1723c9a96228c1da3716746eb2ff738826f24f47d5d92c1b5f106c225730d7fa9d6d7948830e4a0878506  0601-ROCKNIX-odin3-pwm-fan-sysfs.patch
-635175022760ad582f5e3ea62a69d7647985ab75b12caec0942ae8490623d85070a6032c164f013e3fbb7981b5940891c4c91f5e7b0dabc1ce2db7b8d30c3b50  0602-ROCKNIX-odin3-rtc-persist-offset-sdam.patch
-38454d805a924c769bcb6fa0268d51fcdf7232b1efa90b09910f600f54097df80e7ccadcae6a43535c58aa838fcd18d53d6c1b3c19f1bb7e439e35cbc21ee7bc  0603-ASoC-codecs-wcd939x-keep-the-codec-resumed-while-a-ja.patch
-7d6b4b6455a5492b3ab0112c5124aff0dabf9fd22cfdc4642a7e570596fa460a90d1f4f3051e2855b61858d5bbc5393121303211b90dd500b6fb1ec04614e801  0604-arm64-dts-qcom-cq8725s-ayn-enable-swr1-PCM-port-mask.patch
+3c62671d3a59d1baa6d3b30c2a3eca28c56c2e2b4e1e1df3c0ca16dfe2dcccdd2ea7bca37bc0a1aaa031382a5bf2e2c2bf023348678016fc001ba9ac3ec3642d  0509-usb-typec-ucsi-clear-USB-role.patch
+5eb154f614f0d9569940e5d2b28092dec54557cd7f81aea35f7d1d5dd7c5154b41792b3a89309e75e18e4179ad21212bffc6c415298b07f6b874a0a41f88acc6  0517-usb-typec-mux-dont-swallow-EPROBE_DEFER.patch
+3d8e1a6b8557a5c5fee3875d64676db9cc4752337375f635ea5385d888ee6d6f86472e75a1d52261b563129148a492bf9cb9c462b9de6730939f6388c1f0f9f3  0518-ROCKNIX-odin3-panel-frame-length-calibration.patch
+db6f4322a057beff1659a7790ce9d5037cc6ee890f964b19854a2da8c0d63ef42223f485cbee2747653d2bdce1f2849abe58b4840aca7495a6ac8733c707ead6  0603-ASoC-codecs-wcd939x-keep-the-codec-resumed-while-a-ja.patch
+0aaa50f2b1f25b4bc330439f98f22b75d5de9daffda70e8fc863933cb5b501bf21688d4daddbc4fe0b414baccaecfb0cb3eef66f9c29eba58d2d732e42743708  0606-phy-qcom-qmp-pcie-switch-pipe-clk-mux-to-phy.patch
 2bbb85b12d24035599ab9e3128abb6477539d3003068b382675328cf91f68105b95182bf103bb1b22a122d3ce7311b390dcc6ebce6edb80d4f99465b996a12c2  0612-ROCKNIX-odin3-q6apm-start-mi2s-port-at-prepare.patch
-2a292162b6ff77dc0d1aeaadf0f93765a93a37d2cddff72abf71881067cd9aea489dc44507c4469fad670e724bb2639fdbba96337cb853c059df5549e165611d  1000-input-misc-qcom-hv-haptics-sm8750.patch
-bd79aa30af706499ec109306bd38fcd024d8a78c7181c48855f2beef4602a01550d418398dedc1444f8c77c581ba18f96938efec7fedea21aae4b79f1bfe18f0  1001-haptics-driver-support-periodic-sine-and-fixes.patch
+547936bde357a833c9cb549d65c3d3f71ff9d8da3feb91f98038eb6efff61a0d74c9a303c82c731ac05081505cd6a3cbe222fbd51389eee8d70361e2342dfe1e  1000-input-misc-qcom-hv-haptics-sm8750.patch
+e54cf320d6681635273e68f287fe833693e058dce4a16d7f06339a4a734b3d0d6dd2300d4da550ac5eb5d212a20bff2f14d4911c7d8e9610f888ab9c1e64ddc2  1001-haptics-driver-support-periodic-sine-and-fixes.patch
 a65406e46d8dbf3c4fbabc77680ae2aabd7e6c4e645df8e25c9c447146c3c51eb23406230c36f22779eddf7c87a3409539e9dc999ef2a2bcec13d49d8d84b702  1002-input-rsinput-sm8750-ff.patch
-bd77e8bcf7c2d9785825666d36f4b62223c085b92b7c6d6145fce421552eefe75ce4a4798bfd3889badb8da8cc5bb6a21a2f2ad083a00acba97808dc35e0b288  1003-arm64-dts-qcom-ayn-cq8725s-common-hv-haptics.patch
-d9d658fae117a316e92540ff7f0ae238c3b434ce8417e80f7a93540984aeb0f381045bbc55cffbf9749ac0b8062ccea741296264b171edb35c7a7510e34fadb8  1300-input-rsinput-ranges.patch
+3bfa762009d2a3bba5cdde745d20d2abde643abce1fb443057d23f8ac65848f403a76d835eb832cb7ac1305c9867a70e7133cabd5b8502d3f33e8b99c4df71f6  1004-input-qcom-hv-haptics-defer-rsinput-playback.patch
+f559f4ce2e24a8acec02dad341ffe65abb4b9287ef7fe0424b994f2c946f3aff50428670a4d25dfd6cc80f20ae40fe4b642678881eac1c2abf31f7a948fa9321  1300-input-rsinput-ranges.patch
+9c9870fcdff9aff775ded985c2bc20bfdf6a75df720a2109a3cf895ee7e07b2711d989d577e3f4deebd9b2916053dcc68700c5b3f32e000e9f63ba16d34b3ddc  cq8725s-ayn-common.dtsi
+16b82b0d283c850451c8941020446db403c7baef56e7b60c1768572b8517d54ebf55f9c93f455b99716a92dd9e9e326f714008215b96b37d2fd82b5af913765c  cq8725s-ayn-odin3.dts
+f6f7c110a299b2445892c9ab6236ac88aab46cb7c748bd46e81a096bec43f12dbd047fcce62851cb14af241126e1a80a624bf73cd3e6afea55533afa4c7ebbb4  sm8750-konkr-pf-elite.dts
+d4743e14cf90152e092591738bf4fe138fa5c5e81a59691b36f03c62baee83e9d6a79c6bb732381ea97566d0678ae35c0da468b2d590f2b494ffe2a71265ef0d  0001_asoc_codecs_aw88166_use_guard_for_mutex_locks.patch
+11225b0ffe56e55ace41a651452efec04304995ec65494f3b6b542a87acfb052dbc1fb6460f1baa614b23928351f045b50e6ee53f19656ee6f3c3a0cb8f80b1b  0002_asoc_codecs_aw88166_support_changing_sample_rate_and_bit_width.patch
+5faeb3b94c52db2d55fb9b5fee450bbf457fc9c5ca910e4fbe12b9126315a2939111f12805a23e84d7f96c0d841597d601f4c977e98c95ee2c434210b2e5c4b3  0003_asoc_codecs_aw88166_add_tdm_support.patch
+dab6523da2537bf2ce4138b7471174dc15446caf0f8a7d37fd58a60ed33ef1f5cfd4a3969637976f5b584e9dfab108201466156b147bb4ad5ab4308b5ee87da2  0004_asoc_codecs_aw88166_reduce_log_spam.patch
+0ab52c9c8afbc588ebb4de853a3191300c01ad63eb56d52ad47a23f7a6fe00b2a8cf6798747eb9a2035cc0df3d612f186ef17b2e78f88507952d8119b5570840  0005_asoc_codecs_aw88166_remove_fade_in_out_on_start_stop.patch
+1a689aa2dd920a9e3a485653e92b547d4f6799fb659f8c9456e69fee000a2811e97a7474c0023e708bdb7d67274745fd542b1316dcf786117d6655ddaeef00fb  0006_asoc_codecs_aw88166_remove_async_start.patch
+85c5a5ff1db2ddbc3e13966b774ae23d8f2605be3155303b7c75d8a8245b926dbcb554b8fb54d80b72b9bd08ba7b27f5e9f2c458b75e57c84fee9102b5d4fc81  0007_asoc_codecs_aw88166_make_volume_control_usable.patch
 b2803fecd63d0c2d4ed21272ad9acb263f1003f1d554f4c99eb912108b30fed132e27a609d3ed7e12aa0374844c853cb91f6901bf21f402c72f14a32a65cd63d  disable-fan-on-boot.patch
-e2555390d48cbbdc32a7d3f0c27599ff88f2fe3e786d1d0086caaa5b092cc3edcb6e95e2fb07034edb3793f6dc954da0662c723202eb7e2c4956c99b50919b12  libbpf-Fix-UAF-in-strset__add_str.patch
 "
