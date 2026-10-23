@@ -1,0 +1,172 @@
+Patch-Source: https://github.com/ClusterM/ClockworkPi-linux/commit/081322da869991cb26e0e9aaf12e0c2149f5c41c
+From 081322da869991cb26e0e9aaf12e0c2149f5c41c Mon Sep 17 00:00:00 2001
+From: Alexey Cluster <cluster@cluster.wtf>
+Date: Sat, 1 Aug 2026 04:26:31 +0200
+Subject: [PATCH] Fixed overlays for the new Linux kernel (hardware i2c on 0/1)
+
+---
+ .../clockworkpi-devterm-cm5-overlay.dts       | 15 +++++-----
+ .../clockworkpi-uconsole-cm3-overlay.dts      | 20 ++++++++-----
+ .../clockworkpi-uconsole-cm5-overlay.dts      | 29 +++++++++----------
+ 3 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/arch/arm/boot/dts/overlays/clockworkpi-devterm-cm5-overlay.dts b/arch/arm/boot/dts/overlays/clockworkpi-devterm-cm5-overlay.dts
+index 61c409ec7b97ad..236f1807086ad0 100644
+--- a/arch/arm/boot/dts/overlays/clockworkpi-devterm-cm5-overlay.dts
++++ b/arch/arm/boot/dts/overlays/clockworkpi-devterm-cm5-overlay.dts
+@@ -1,22 +1,21 @@
+ /dts-v1/;
+ /plugin/;
+ 
+-#include <dt-bindings/gpio/gpio.h>
+-
+ / {
+ 	compatible = "brcm,bcm2835";
++
++	/*
++	 * AXP PMIC on hardware I2C0 (RP1 GPIO0/1). Avoid i2c-gpio: RP1 strict
++	 * pinmux rejects GPIO claims on pins muxed as i2c0.
++	 */
+ 	fragment@0 {
+ 		target = <&i2c0>;
+ 		__overlay__ {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-			compatible = "i2c-gpio";
+-			reg = <3>;
+-			pinctrl-0 = <&i2c0_pins>;
+ 			pinctrl-names = "default";
+-			gpios = <&rp1_gpio 0 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)
+-					&rp1_gpio 1 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+-			i2c-gpio,delay-us = <2>;
++			pinctrl-0 = <&rp1_i2c0_0_1>;
++			clock-frequency = <100000>;
+ 			status = "okay";
+ 			axp22x: pmic@34 {
+ 				interrupt-controller;
+diff --git a/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm3-overlay.dts b/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm3-overlay.dts
+index 5dda9466e1bbf4..a5ad28c3c9dd48 100644
+--- a/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm3-overlay.dts
++++ b/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm3-overlay.dts
+@@ -158,11 +158,11 @@
+ 		};
+ 	};
+ 
+-	// 96-99 handles i2c bus selection
++	// 96-99 handles i2c bus selection (default: hardware i2c0 on GPIO0/1)
+ 
+ 	fragment@96 {
+ 		target-path = "/";
+-		__overlay__ {
++		__dormant__ {
+ 			i2c_uconsole_sw: i2c@100 {
+ 				reg = <100>;
+ 				compatible = "i2c-gpio";
+@@ -178,21 +178,21 @@
+ 
+ 	fragment@97 {
+ 		target = <&i2c0>;
+-		i2c_uconsole_hw0: __dormant__ {
++		i2c_uconsole_hw0: __overlay__ {
+ 			status = "okay";
+ 		};
+ 	};
+ 
+ 	fragment@98 {
+ 		target = <&i2c0if>;
+-		__dormant__ {
++		__overlay__ {
+ 			status = "okay";
+ 		};
+ 	};
+ 
+ 	fragment@99 {
+ 		target = <&i2c0mux>;
+-		__dormant__ {
++		__overlay__ {
+ 			status = "okay";
+ 		};
+ 	};
+@@ -201,7 +201,7 @@
+ 	// since we use i2c selection, pmu fragment's target should be editable
+ 	frag_pmu: fragment@101 {
+ 		/* PMU */
+-		target = <&i2c_uconsole_sw>;
++		target = <&i2c_uconsole_hw0>;
+ 		__overlay__ {
+ 			axp22x: pmic@34 {
+ 				interrupt-controller;
+@@ -354,8 +354,12 @@
+ 				<&reg_eldo1>, "regulator-always-on!",
+ 				<&reg_eldo2>, "regulator-always-on!",
+ 				<&reg_eldo3>, "regulator-always-on!";
+-		hwi2c = <0>, "-96+97+98+99", // disable SW i2c, enable HW i2c0
+-				<&frag_pmu>, "target:0=",<&i2c_uconsole_hw0>; // move PMU from sw i2c(3) to hw i2c0
++		/* Default is hardware i2c0; keep hwi2c as a no-op for old config.txt */
++		hwi2c = <0>, "-96+97+98+99",
++				<&frag_pmu>, "target:0=",<&i2c_uconsole_hw0>;
++		/* Optional bitbang fallback on GPIO0/1 */
++		swi2c = <0>, "+96-97-98-99",
++				<&frag_pmu>, "target:0=",<&i2c_uconsole_sw>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm5-overlay.dts b/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm5-overlay.dts
+index 695b734d2d4f81..cd7c5771381cdc 100644
+--- a/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm5-overlay.dts
++++ b/arch/arm/boot/dts/overlays/clockworkpi-uconsole-cm5-overlay.dts
+@@ -1,25 +1,26 @@
+ /dts-v1/;
+ /plugin/;
+ 
+-#include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/clock/rp1.h>
+ 
+-
+ / {
+ 	compatible = "brcm,bcm2835";
++
++	/*
++	 * AXP PMIC on hardware I2C0 (RP1 GPIO0/1 = SDA/SCL).
++	 * Do not use i2c-gpio here: with RP1 strict pinmux, requesting those
++	 * pins as GPIO while muxed as i2c0 fails, so the PMIC never probes.
++	 */
+ 	fragment@0 {
+ 		target = <&i2c0>;
+ 		__overlay__ {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-			compatible = "i2c-gpio";
+-			reg = <3>;
+-			pinctrl-0 = <&i2c0_pins>;
+ 			pinctrl-names = "default";
+-			gpios = <&rp1_gpio 0 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)
+-					&rp1_gpio 1 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+-			i2c-gpio,delay-us = <2>;
++			pinctrl-0 = <&rp1_i2c0_0_1>;
++			clock-frequency = <100000>;
+ 			status = "okay";
++
+ 			axp22x: pmic@34 {
+ 				interrupt-controller;
+ 				#interrupt-cells = <1>;
+@@ -130,14 +131,10 @@ battery: battery@0 {
+ 			};
+ 		};
+ 	};
+-	fragment@2 {
+-		target = <&i2c1>;
+-		__overlay__ {
+-			status = "okay";
+-			pinctrl-0 = <&rp1_i2c1_2_3>;
+-			clock-frequency = <100000>;
+-		};
+-	};
++	/*
++	 * Do not enable i2c1 on rp1_i2c1_2_3 here: GPIO2 is the AXP IRQ line.
++	 * Claiming those pins as i2c1 breaks the PMIC under strict pinmux.
++	 */
+ 	fragment@3 {
+ 		target-path = "/";
+ 		__overlay__ {
+
