@@ -1,7 +1,7 @@
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-duranium
 pkgver=24
-pkgrel=0
+pkgrel=1
 pkgdesc="Configuration for building and booting immutable postmarketOS images"
 url="https://wiki.postmarketos.org/wiki/Duranium_(Immutable_postmarketOS)"
 # check: no tests
@@ -39,6 +39,7 @@ subpackages="
 	$pkgname-initramfs
 	$pkgname-sysext-dev-tools:sysext_dev_tools
 	$pkgname-sysext-waydroid:sysext_waydroid
+	$pkgname-plasma
 "
 
 _source644="
@@ -244,6 +245,14 @@ sysext_waydroid() {
 	# "manually" enable the rule for now, see:
 	# https://gitlab.postmarketos.org/postmarketOS/pmaports/-/merge_requests/7791
 	ln -s /usr/share/nftables.avail/51_waydroid.nft "$subpkgdir"/etc/nftables.d/
+}
+
+plasma() {
+	description="Meta package for Plasma additions for immutable systems"
+	install_if="$pkgname discover"
+	depends="discover-backend-sysupdate"
+
+	mkdir -p "$subpkgdir"
 }
 
 sha512sums="
