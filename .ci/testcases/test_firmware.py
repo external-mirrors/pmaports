@@ -24,6 +24,7 @@ def test_aports_firmware():
         "firmware-xiaomi-ferrari",  # Depends on soc-qcom-msm8916
         "firmware-xiaomi-willow",  # Doesn't build, source link is dead (pma#1212)
         "firmware-samsung-i9105p",  # Depends on firmware-aosp-broadcom-wlan
+        "firmware-sipeed-licheepi-4a", # Depends on opensbi which only exists for riscv64
     ]
 
     for path in pkgrepo_iglob("**/firmware-*/APKBUILD", recursive=True):
