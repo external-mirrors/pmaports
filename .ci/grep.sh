@@ -3,7 +3,7 @@
 # shellcheck shell=busybox
 
 # Description: check various bad patterns with grep
-# https://postmarketos.org/pmb-ci
+# https://nura.eco/pmb-ci
 
 exit_code=0
 
@@ -59,7 +59,7 @@ if grep -qr 'deviceinfo_modules_initfs' -- *; then
 fi
 
 POSTMARKETOS_WALLPAPER_PATH='/usr/share/wallpapers/postmarketos.jpg'
-# See https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2529
+# See https://gitlab.nura.eco/nura/pmaports/-/issues/2529
 if grep -qr $POSTMARKETOS_WALLPAPER_PATH --exclude-dir='archived' -- device; then
 	echo "ERROR: Please don't include configuration files that set the default wallpaper in device-specific packages!"
 	grep --color=always -r $POSTMARKETOS_WALLPAPER_PATH --exclude-dir='archived' -- device
@@ -84,7 +84,7 @@ fi
 if grep -qEr '^deviceinfo_kernel_cmdline.*[\"\s]console=null' -- device/; then
 	echo "ERROR: Do not use console=null in the kernel command line."
 	echo "Use these params to quiet console on boot: quiet loglevel=2"
-	echo "For more information, see: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2989"
+	echo "For more information, see: https://gitlab.nura.eco/nura/pmaports/-/issues/2989"
 	exit_code=1
 fi
 
@@ -114,7 +114,7 @@ fi
 # Disallow sysadmin OpenRC files
 if grep -qr '/etc/local.d' --exclude-dir='archived' -- *; then
 	echo "ERROR: Please replace the '/etc/local.d' script with real OpenRC service files."
-	echo "See https://gitlab.postmarketos.org/postmarketOS/pmaports/-/work_items/4360"
+	echo "See https://gitlab.nura.eco/nura/pmaports/-/work_items/4360"
 	grep --color=always -r '/etc/local.d' --exclude-dir='archived' -- *
 	exit_code=1
 fi
@@ -130,7 +130,7 @@ fi
 # Disallow contributor comments
 if grep -qr '# Contributor:' --exclude-dir='docs' -- *; then
 	echo 'ERROR: Please remove the contributor comment(s).'
-	echo "See https://docs.postmarketos.org/pmaports/main/packaging.html"
+	echo "See https://docs.nura.eco/pmaports/main/packaging.html"
 	grep --color=always -r '# Contributor:' --exclude-dir='docs' -- *
 	exit_code=1
 fi
@@ -138,7 +138,7 @@ fi
 	# Disallow non-free firmware subpackages
 if grep -qr 'pkgname-nonfree-firmware' --exclude-dir='archived' -- *; then
 	echo "ERROR: Please remove the nonfree-firmware subpackage(s) and move the firmware to depends in the following APKBUILDs."
-	echo "See https://docs.postmarketos.org/pmaports/main/packaging/firmware-packages.html"
+	echo "See https://docs.nura.eco/pmaports/main/packaging/firmware-packages.html"
 	grep --color=always -r 'pkgname-nonfree-firmware' --exclude-dir='archived' -- *
 	exit_code=1
 fi
@@ -150,7 +150,7 @@ if [ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]; then
 	if [ -n "$MODIFIED_MAINLINE_KERNEL_PACKAGES" ]; then
 		if [ -n "$(grep -L LLVM=1 $MODIFIED_MAINLINE_KERNEL_PACKAGES || true)" ]; then
 			echo "ERROR: A new or modified close-to-mainline kernel package is not being built with LLVM."
-			echo "See https://postmarketos.org/edge/2025/11/11/kernels-llvm/ for more details"
+			echo "See https://nura.eco/edge/2025/11/11/kernels-llvm/ for more details"
 			grep --color=always -L LLVM=1 $MODIFIED_MAINLINE_KERNEL_PACKAGES
 			exit_code=1
 		fi

@@ -59,14 +59,14 @@ def get_upstream_branch():
         return target_branch
 
     # Get channel (e.g. "stable") from pmaports.cfg
-    # https://postmarketos.org/pmaports.cfg
+    # https://nura.eco/pmaports.cfg
     pmaports_dir = get_pmaports_dir()
     pmaports_cfg = configparser.ConfigParser()
     pmaports_cfg.read(f"{pmaports_dir}/pmaports.cfg")
     channel = pmaports_cfg["pmaports"]["channel"]
 
     # Get branch_pmaports (e.g. "v20.05") from channels.cfg
-    # https://postmarketos.org/channels.cfg
+    # https://nura.eco/channels.cfg
     channels_cfg_str = run_git(["show", "upstream/main:channels.cfg"])
     channels_cfg = configparser.ConfigParser()
     channels_cfg.read_string(channels_cfg_str)
@@ -88,13 +88,13 @@ def get_base_commit() -> str:
     if commit is not None:
         return commit
 
-    # Add a remote pointing to postmarketOS/pmaports
+    # Add a remote pointing to nura/pmaports
     run_git(
         [
             "remote",
             "add",
             "upstream",
-            "https://gitlab.postmarketos.org/postmarketOS/pmaports.git",
+            "https://gitlab.nura.eco/nura/pmaports.git",
         ],
         False,
     )

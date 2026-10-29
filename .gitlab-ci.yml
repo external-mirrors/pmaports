@@ -185,7 +185,7 @@ mr-settings:
   before_script:
     - apk -q add python3
   script:
-    - wget -q "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/check_mr_settings.py"
+    - wget -q "https://gitlab.nura.eco/nura/ci-common/-/raw/main/check_mr_settings.py"
     - python3 ./check_mr_settings.py
 
 pmbootstrap minimum version:
@@ -216,7 +216,7 @@ generate-build-jobs:
     - .ci/lib/gitlab_prepare_ci.sh
   needs: []
   script:
-    - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/install_pmbootstrap.sh"
+    - wget "https://gitlab.nura.eco/nura/ci-common/-/raw/main/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh py3-jinja2
 
     # HACK: Make the pmb library happy to use the currently-cloned pmaports repo
@@ -259,10 +259,10 @@ build-docs:
 deploy-docs:
   stage: deploy
   trigger:
-    project: postmarketOS/docs.nura.eco
+    project: nura/docs.nura.eco
     strategy: depend
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAMESPACE == "postmarketOS"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAMESPACE == "nura"
       changes:
         - deviceinfo_schema.toml
         - docs/**
@@ -292,7 +292,7 @@ cross-gcc-tests:
   stage: test
   tags: [qemu]
   before_script:
-    - wget "https://gitlab.postmarketos.org/postmarketOS/ci-common/-/raw/main/install_pmbootstrap.sh"
+    - wget "https://gitlab.nura.eco/nura/ci-common/-/raw/main/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh
   script:
     - su pmos -c "pmbootstrap build gcc-aarch64"

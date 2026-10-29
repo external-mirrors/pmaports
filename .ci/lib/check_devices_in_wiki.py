@@ -41,7 +41,7 @@ def get_wiki_devices_html(path: Path | None) -> dict[str, str]:
             content = handle.read()
     else:
         # Download wiki page
-        url = "https://wiki.postmarketos.org/wiki/Devices"
+        url = "https://wiki.nura.eco/wiki/Devices"
         with urllib.request.urlopen(url) as f:
             content = f.read().decode("utf-8")
 
@@ -57,7 +57,7 @@ def get_wiki_devices_html(path: Path | None) -> dict[str, str]:
 def get_wiki_renamed_devices_html() -> str:
     """:returns: HTML of the page"""
     # Download wiki page
-    url = "https://wiki.postmarketos.org/wiki/Renamed_Devices"
+    url = "https://wiki.nura.eco/wiki/Renamed_Devices"
     with urllib.request.urlopen(url) as f:
         res: bytes = f.read()
         return res.decode("utf-8")
@@ -131,11 +131,11 @@ def main() -> int:
     # Ask to adjust the wiki
     if error:
         print("*** Wiki check failed!")
-        print("Thank you for porting postmarketOS to a new device! \\o/")
+        print("Thank you for porting Nura to a new device! \\o/")
         print()
         print("Now it's time to add some documentation:")
         print("1) Create a device specific wiki page as described here:")
-        print("   https://wiki.postmarketos.org/wiki/Help:Device_Page")
+        print("   https://wiki.nura.eco/wiki/Help:Device_Page")
         print("2) Set 'booting = yes' in the infobox of your device page.")
         print("3) Run these tests again with an empty commit in your MR:")
         print("   $ git commit --allow-empty -m 'run tests again'")
@@ -149,7 +149,7 @@ def main() -> int:
         print()
         print("NOTE: if you renamed a device in pmaports, rename it in the")
         print("wiki as well and make sure to add it here:")
-        print("https://postmarketos.org/renamed")
+        print("https://nura.eco/renamed")
         return 1
 
     print("*** Wiki check successful!")

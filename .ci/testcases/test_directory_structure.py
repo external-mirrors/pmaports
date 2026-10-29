@@ -31,7 +31,7 @@ def test_directories():
 
 
 # Ensure no file in pmaports are executable.
-# see https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/593.
+# see https://gitlab.nura.eco/nura/pmaports/-/issues/593.
 def test_executable_files():
     for file in glob.iglob("[!temp]**/**/*", recursive=True):
         if os.path.isdir(file) or os.path.islink(file):

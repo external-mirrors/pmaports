@@ -12,7 +12,7 @@ pmbootstrap_min_age_days="30"
 pmbootstrap_min_version_field="$(grep pmbootstrap_min_version= pmaports.cfg)"
 pmbootstrap_min_version="${pmbootstrap_min_version_field#*=}"
 
-tag_date=$(curl -s "https://gitlab.postmarketos.org/api/v4/projects/postmarketOS%2Fpmbootstrap/repository/tags/$pmbootstrap_min_version" \
+tag_date=$(curl -s "https://gitlab.nura.eco/api/v4/projects/nura%2Fpmbootstrap/repository/tags/$pmbootstrap_min_version" \
 	| jq -r ".created_at")
 
 tag_age_timestamp=$(date -d "$tag_date" +"%s")

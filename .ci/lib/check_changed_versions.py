@@ -78,10 +78,10 @@ def exit_with_error_message():
     print("Your options:")
     print("a) If you made changes to the packages, and did not increase the")
     print("   pkgrel/pkgver: increase them now, and force push your branch.")
-    print("   => https://postmarketos.org/howto-bump-pkgrel-pkgver")
+    print("   => https://nura.eco/howto-bump-pkgrel-pkgver")
     print("b) If you had already increased the package versions, rebase on")
     print(f"   '{branch}', increase the versions again and then force push:")
-    print("   => https://postmarketos.org/rebase")
+    print("   => https://nura.eco/rebase")
     print("c) If you made a change, that does not require rebuilding the")
     print("   packages, such as only changing the arch=... line: you can")
     print("   disable this check by adding '[ci:skip-vercheck]' to the")
@@ -106,7 +106,7 @@ def check_versions(packages):
             "remote",
             "add",
             "upstream",
-            "https://gitlab.postmarketos.org/postmarketOS/pmaports.git",
+            "https://gitlab.nura.eco/nura/pmaports.git",
         ],
         False,
     )
@@ -145,7 +145,7 @@ def check_versions(packages):
             if not pkgver.isdigit():
                 print(
                     f' - {package}: invalid pkgver "{pkgver}"'
-                    "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
+                    "See: https://docs.nura.eco/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
                 )
                 error = True
 
@@ -158,7 +158,7 @@ def check_versions(packages):
             ):
                 print(
                     f" - {package}: pkgrel should be 0 when pkgver changes."
-                    "See: https://docs.postmarketos.org/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
+                    "See: https://docs.nura.eco/pmaports/main/packaging-guidelines.html#package-versioning-pkgver-pkgrel"
                 )
                 error = True
 
