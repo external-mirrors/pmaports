@@ -1,8 +1,8 @@
 <!--
-    Hi there, this is the last step to submitting your contribution to postmarketOS!
+    Hi there, this is the last step to submitting your contribution to Nura!
 
     Before you submit it, read our AI policy:
-    https://docs.postmarketos.org/policies-and-processes/development/ai-policy.html
+    https://docs.nura.eco/policies-and-processes/development/ai-policy.html
 
     Thanks for your contribution!
 -->
