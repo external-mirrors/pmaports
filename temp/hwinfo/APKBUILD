@@ -1,7 +1,7 @@
 # Forked from Alpine to remove patch expecting udevadm in sbin. Drop after bin-merge
 maintainer="Aster Boese <asterboese@mailbox.org>"
 pkgname=hwinfo
-_pkgver=25.4
+_pkgver=26.0
 pkgver=9999.$_pkgver
 pkgrel=0
 pkgdesc="Hardware information tool"
@@ -9,7 +9,7 @@ url="https://github.com/openSUSE/hwinfo"
 arch="all"
 license="GPL-2.0-or-later"
 makedepends="flex perl linux-headers util-linux-dev libx86emu-dev"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-libs"
+subpackages="$pkgname-bash-completion $pkgname-dev $pkgname-doc $pkgname-libs"
 source="$pkgname-$_pkgver.tar.gz::https://github.com/openSUSE/hwinfo/archive/$_pkgver.tar.gz
 	respect-flags.patch
 	"
@@ -49,14 +49,11 @@ package() {
 	install -m 644 -t "$pkgdir"/usr/lib/ libhd.a
 	#install -m 644 -t "$pkgdir"/usr/lib/ libhd_tiny.a  # FIXME: disabled above
 
-	mkdir -p "$pkgdir"/usr/share/man/man1
-	cp doc/*.1 "$pkgdir"/usr/share/man/man1/
-
-	mkdir -p "$pkgdir"/usr/share/man/man8
-	cp doc/*.8 "$pkgdir"/usr/share/man/man8/
+	install -Dm644 doc/*.1 -t "$pkgdir"/usr/share/man/man1/
+	install -Dm644 doc/*.8 -t "$pkgdir"/usr/share/man/man8/
 }
 
 sha512sums="
-0d850a076ad23f8ae35144b3552e16c86ff3ae7d0c0b56f9aa535f1163c6d1ecec5cdd72004f8b65c0f8772f8330c96c4ca26ac38576b1065a61abb83b227722  hwinfo-25.4.tar.gz
-2016f76bdfd65fb9b8f331ed82d6e5a1a85ab003615fe6815c3b41127398ae25fedd83abada9930dcbc9409fda69cf701ebdc5f12874e518784e194fcf4a0ff8  respect-flags.patch
+243ee67863b0b7d8cc4f14ba3dfe41a0e05064d257813e4ad9ec094613812b2894509d14124007b440ccad5a2ffe0317864ad1e643dd1b1f12d529015e1da10b  hwinfo-26.0.tar.gz
+98ce2fdccea06c5284e32fe9c6e21fb9a870577099bf46e0e5d2861f10e7d4af5d19f4776b51b5b82117d0884b24f5d1a0423b92e29814ab685bf71c5f93091a  respect-flags.patch
 "
