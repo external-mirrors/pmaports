@@ -12,9 +12,9 @@ When the release has reached its EOL date:
   - [ ] push it to the branch
   - [ ] make sure bpo built and released the updated packages
 - [ ] drop the old release from
-  [monitoring](https://gitlab.postmarketos.org/postmarketOS/monitoring)
+  [monitoring](https://gitlab.nura.eco/nura/monitoring)
 - [ ] drop the "oldold -> old" release check from
-  [postmarketos-release-upgrade](https://gitlab.postmarketos.org/postmarketOS/postmarketos-release-upgrade/)
+  [postmarketos-release-upgrade](https://gitlab.nura.eco/nura/postmarketos-release-upgrade/)
   CI
 - [ ] bpo: configure images so they don't get built for the old release anymore
 - [ ] bpo: configure branches so we don't try to build packages for old

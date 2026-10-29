@@ -1,5 +1,5 @@
 <!--
-    This template is for creating a new postmarketOS stable release.
+    This template is for creating a new Nura stable release.
 
     Name this issue "vYY.MM Infrastructure".
 -->
@@ -44,13 +44,13 @@ This phase is to get some extra time for building packages. The branch will be r
     <small>`pmbootstrap ci` reads these</small>
 - [ ] `git push`
 - [ ] Ensure the branch is protected in the
-      [repository settings](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/settings/repository)
+      [repository settings](https://gitlab.nura.eco/nura/pmaports/-/settings/repository)
 
 #### pmaports: update main branch
 - [ ] `git checkout main`
 - [ ] Add the new branch to
   [channels.cfg](https://wiki.nura.eco/wiki/Channels.cfg_reference):
-  - [Example](https://gitlab.postmarketos.org/postmarketOS/pmaports/-/commit/c43571ceaf9b8155519bc9fb760bdeccd96e7e9c)
+  - [Example](https://gitlab.nura.eco/nura/pmaports/-/commit/c43571ceaf9b8155519bc9fb760bdeccd96e7e9c)
   - Check if you need to set `branch_aports=master` initially if the stable
     branch does not exist yet.
 - [ ] `git push`
@@ -60,7 +60,7 @@ This phase is to get some extra time for building packages. The branch will be r
 - [ ] Update `postmarketos-base`:
   - [ ] Set version info for `/usr/lib/os-release` in
     `main/postmarketos-base/rootfs-usr-lib-os-release`
-    (`PRETTY_NAME="postmarketOS vYY.MM"`, `VERSION_ID="vYY.MM"`,
+    (`PRETTY_NAME="Nura vYY.MM"`, `VERSION_ID="vYY.MM"`,
     `VERSION="vYY.MM"`)
   - `pmbootstrap pkgrel_bump postmarketos-base`
   - `pmbootstrap config mirrors.pmaports none`
@@ -79,7 +79,7 @@ This phase is to get some extra time for building packages. The branch will be r
 
 #### bpo: adjust config
 - [ ] Add the branch to the
-  [bpo](https://gitlab.postmarketos.org/postmarketOS/build-package-orchestrator)
+  [bpo](https://gitlab.nura.eco/nura/build-package-orchestrator)
   config in `bpo/config/const/__init__.py:branches` below `branches["main"]`,
   so it builds with lower priority than main until it's released. Set `ignore_errors` to `True`.
 - [ ] Make a merge request, wait until CI passes, merge it (or if you can directly push to main that's also fine since it's a trivial change)
@@ -102,7 +102,7 @@ This phase is to get some extra time for building packages. The branch will be r
 
 #### Wallpaper poll
 - [ ] Team meeting: make a short list of 4 wallpapers from [the
-  pool](https://gitlab.postmarketos.org/postmarketOS/artwork/-/tree/main/wallpapers/2024)
+  pool](https://gitlab.nura.eco/nura/artwork/-/tree/main/wallpapers/2024)
 - [ ] Make a poll on the wallpapers on mastodon
   ([example](https://fosstodon.org/@postmarketOS/113624366198561582))
   - Make sure to thank the wallpaper authors (usually dikasp) for the amazing
@@ -121,12 +121,12 @@ This phase is to get some extra time for building packages. The branch will be r
     - Consider fixing it in edge, so we don't run into this with the next
       release
 - [ ] Adjust
-  [upstream-compat](https://gitlab.postmarketos.org/postmarketOS/continuous-testing/upstream-compat)
+  [upstream-compat](https://gitlab.nura.eco/nura/continuous-testing/upstream-compat)
   to run on the new release and make sure it passes
-  ([example](https://gitlab.postmarketos.org/postmarketOS/continuous-testing/upstream-compat/-/merge_requests/10))
+  ([example](https://gitlab.nura.eco/nura/continuous-testing/upstream-compat/-/merge_requests/10))
 
 #### Adjust release upgrade script
-- [ ] Add the new release to `upgrade.sh` in [postmarketos-release-upgrade](https://gitlab.postmarketos.org/postmarketOS/postmarketos-release-upgrade/)
+- [ ] Add the new release to `upgrade.sh` in [postmarketos-release-upgrade](https://gitlab.nura.eco/nura/postmarketos-release-upgrade/)
 - [ ] Bump `SCRIPT_VERSION`, tag a new release
 - [ ] Package it for edge (make MR), backport it to the new release, but NOT to
   the old release yet (otherwise users may upgrade by accident, without
@@ -168,7 +168,7 @@ This phase is to get some extra time for building packages. The branch will be r
   - Tag the testers of each device and UI
   - Ask to verify that the images work as expected
   - Release upgrade script: when coming from the previous release, grab it from
-    main: `wget https://gitlab.postmarketos.org/postmarketOS/postmarketos-release-upgrade/-/raw/main/upgrade.sh`
+    main: `wget https://gitlab.nura.eco/nura/postmarketos-release-upgrade/-/raw/main/upgrade.sh`
 - [ ] Announce the new phase in the testing chat - and ask them to do the
   testing within one week, as in the timeline.
 - Prioritize merging fixes from maintainers (they do the heavy lifting in the
@@ -214,7 +214,7 @@ This phase is to get some extra time for building packages. The branch will be r
   upgrading to the new release, to the previous release (don't do this before
   the release is tested and ready! During the testing phase, we can use
   postmarketos-release-upgrade from main directly: `wget
-  https://gitlab.postmarketos.org/postmarketOS/postmarketos-release-upgrade/-/raw/main/upgrade.sh`)
+  https://gitlab.nura.eco/nura/postmarketos-release-upgrade/-/raw/main/upgrade.sh`)
 - [ ] Add the branch to pkgs.nura.eco
 - [ ] Merge the blog post
 - [ ] Edit channels.cfg, change descriptions:
@@ -230,7 +230,7 @@ This phase is to get some extra time for building packages. The branch will be r
       [Template:Latest stable release](https://wiki.nura.eco/wiki/Template:Latest_stable_release)
       on the wiki with the new version
 - [ ] Update "Default description template for issues" in pmaports (.gitlab dir)
-  - In "On what postmarketOS version did you encounter the issue?", change:
+  - In "On what Nura version did you encounter the issue?", change:
     - previous release: add " (supported until YYYY-MM-DD)"
     - add the new release
 - [ ] Put a reminder in recurring-admin-tasks to drop support for the old release
