@@ -138,13 +138,7 @@ class Device:
 
 class ArchTagSet(set):
     def update(self, iterable):
-        supported_arches = Arch.supported_binary()
-        # This ignores things like !armv7, that could be a follow-up optimization
-        if "noarch" in iterable or "all" in iterable:
-            iterable = [arch for arch in supported_arches]
-        super().update(
-            [Arch(arch) for arch in iterable if Arch(arch) in supported_arches]
-        )
+        super().update(Arch.from_arch_field(iterable).intersection(Arch.supported_binary()))
 
 
 if __name__ == "__main__":
