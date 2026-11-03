@@ -1,19 +1,23 @@
+# Co-Maintainer: Ferass El Hafidi <funderscore@postmarketos.org>
 maintainer="Clayton Craft <clayton@craftyguy.net>"
 pkgname=postmarketos-plymouth-themes
-pkgver=1.2.3
-pkgrel=0
+pkgver=1.2.3_git20261103
+pkgrel=1
 pkgdesc="Plymouth themes for postmarketOS"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-3.0-or-later"
-source="https://gitlab.postmarketos.org/postmarketOS/plymouth-themes/-/archive/$pkgver/plymouth-themes-$pkgver.tar.gz"
+_commit=d2453afb75a5f4cd36126290d5c2bab04ff78cde
+source="https://gitlab.postmarketos.org/postmarketOS/plymouth-themes/-/archive/$_commit/plymouth-themes-$_commit.tar.gz"
 options="!check" # no tests
-builddir="$srcdir/plymouth-themes-$pkgver"
+builddir="$srcdir/plymouth-themes-$_commit"
 
 package() {
 	mkdir -p "$pkgdir"/usr/share/plymouth/themes
 	cp -r pmos-spin "$pkgdir"/usr/share/plymouth/themes/
+	cp -r pmos-eink "$pkgdir"/usr/share/plymouth/themes/
 }
+
 sha512sums="
-50b4f1af616fdd14135225cb7bdf0bce685c683ff1eeba10ea2075e307d45dfe4d5780ff780b5d96d82f0e06fc3a9a6a873419e9749f2a64aa175964eb493170  plymouth-themes-1.2.3.tar.gz
+c226f4fe13df0d2eb17f861da8b90e729c26c48e0c7d171ca5fda075942e2f89a5ff48908611421e24a2031d9886da83e9e0ac5bde38b4a36861c70c63715f3d  plymouth-themes-d2453afb75a5f4cd36126290d5c2bab04ff78cde.tar.gz
 "
