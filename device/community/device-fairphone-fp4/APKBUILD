@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp4
 pkgdesc="Fairphone 4"
-pkgver=14
+pkgver=15
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -33,10 +33,15 @@ depends="
 "
 makedepends="devicepkg-dev"
 install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
-subpackages="$pkgname-openrc"
+subpackages="
+	$pkgname-openrc
+	$pkgname-pmtest
+	"
 source="
+	30-device-fairphone-fp4-pmtest.files
 	52-fairphone-fp4.conf
 	81-libssc-fairphone-fp4.rules
+	bootrr-fairphone-fp4
 	deviceinfo
 	modules-initfs
 	"
@@ -62,9 +67,22 @@ openrc() {
 	mkdir -p "$subpkgdir"
 }
 
+pmtest() {
+	depends="postmarketos-test-bootrr postmarketos-test-unl0kr"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
+
+	install -Dm755 "$srcdir"/bootrr-fairphone-fp4 \
+		"$subpkgdir"/usr/libexec/bootrr/boards/fairphone,fp4
+
+	install -Dm644 "$srcdir"/30-device-fairphone-fp4-pmtest.files \
+		"$subpkgdir"/usr/share/mkinitfs/files/30-device-fairphone-fp4-pmtest.files
+}
+
 sha512sums="
+9eb471a604ed9322a94f1d2643652b949af7243b89f8e09f93ef9b25ebf4ef2a26c9a55e629464302a0647f4e02fc1a04a2d35d095e390fc265c2016e815c3ea  30-device-fairphone-fp4-pmtest.files
 fdf1973c32c3834f2e1194d2366fbe1ce6b1ac6ee6211fb720677793f3dcea9adaeeada0e7284d72de848692939e2bc2977997d72ab2126d4f4f8c19428ac846  52-fairphone-fp4.conf
 2c16ba75e0077b2b1eaefa4c73b287475505a1aeb291ec29316d41cc094277320f9d2aaabfd91eb1dc0f488ab2d61a94faef16e7afe0f1e226779113761b9a37  81-libssc-fairphone-fp4.rules
+54b87692f0c4fdb10a171ae4fd1197b5db34635c8830d6d94f7f69317122eb58eb710c4d956b4b759ff837a55b0c9ba59acf52ddf3c344183903732b3ac4d698  bootrr-fairphone-fp4
 7bb0da47b15ab975b2c673e89f1894e2099b2d12814c1baa87e26d3ccf730e27bb2a3d3d066ef8d3d0c4e5301f5e9d6aaf4990ceeb5999d3f804195537f3ad42  deviceinfo
 cb302d6863bc4bbbefcd3184c0abf4776c9975de335061716e7c0489a80e33a208471421b3d61a5a353cb43f6ce90c204f66860a220ce7d4bd03e98b19f6c981  modules-initfs
 "
