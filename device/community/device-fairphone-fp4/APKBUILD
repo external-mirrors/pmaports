@@ -2,7 +2,7 @@
 maintainer="Luca Weiss <luca@lucaweiss.eu>"
 pkgname=device-fairphone-fp4
 pkgdesc="Fairphone 4"
-pkgver=12
+pkgver=13
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -33,7 +33,10 @@ depends="
 "
 makedepends="devicepkg-dev"
 install="$pkgname-openrc.post-install $pkgname-openrc.post-upgrade"
-subpackages="$pkgname-openrc"
+subpackages="
+	$pkgname-openrc
+	$pkgname-pmtest
+	"
 source="
 	52-fairphone-fp4.conf
 	81-libssc-fairphone-fp4.rules
@@ -58,6 +61,13 @@ package() {
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	depends="hexagonrpcd-openrc openrc"
+
+	mkdir -p "$subpkgdir"
+}
+
+pmtest() {
+	depends="postmarketos-test-bootrr qrtr postmarketos-test-unl0kr"
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-mkinitfs-hook-ci"
 
 	mkdir -p "$subpkgdir"
 }
