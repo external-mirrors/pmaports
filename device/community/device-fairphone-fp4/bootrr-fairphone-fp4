@@ -1,0 +1,399 @@
+assert_cpufreq_enabled cpufreq-enabled 7
+assert_cpuidle_enabled cpuidle-enabled 7
+
+assert_driver_present "qcom-q6adm-driver-present" "qcom-q6adm"
+assert_device_present aprsvc:service:4:8-probed "qcom-q6adm" aprsvc:service:4:8
+
+assert_driver_present "qcom-q6afe-driver-present" "qcom-q6afe"
+assert_device_present aprsvc:service:4:4-probed "qcom-q6afe" aprsvc:service:4:4
+
+assert_driver_present "qcom-q6asm-driver-present" "qcom-q6asm"
+assert_device_present aprsvc:service:4:7-probed "qcom-q6asm" aprsvc:service:4:7
+
+assert_driver_present "qcom-q6core-driver-present" "qcom-q6core"
+assert_device_present aprsvc:service:4:3-probed "qcom-q6core" aprsvc:service:4:3
+
+assert_driver_present "qcom_pd_mapper.qcom-pdm-mapper-driver-present" "qcom_pd_mapper.qcom-pdm-mapper"
+assert_device_present qcom_common.pd-mapper.1-probed "qcom_pd_mapper.qcom-pdm-mapper" qcom_common.pd-mapper.1
+assert_device_present qcom_common.pd-mapper.2-probed "qcom_pd_mapper.qcom-pdm-mapper" qcom_common.pd-mapper.2
+assert_device_present qcom_common.pd-mapper.0-probed "qcom_pd_mapper.qcom-pdm-mapper" qcom_common.pd-mapper.0
+
+assert_driver_present "snd_usb_audio_qmi.qc-usb-audio-offload-driver-present" "snd_usb_audio_qmi.qc-usb-audio-offload"
+assert_device_present q6usb.qc-usb-audio-offload.0-probed "snd_usb_audio_qmi.qc-usb-audio-offload" q6usb.qc-usb-audio-offload.0
+
+assert_device_present psci-cpuidle-probed "faux_driver" psci-cpuidle
+
+assert_driver_present "at24-driver-present" "at24"
+assert_device_present 0-0050-probed "at24" 0-0050
+assert_device_present 2-0050-probed "at24" 2-0050
+assert_device_present 1-0050-probed "at24" 1-0050
+
+assert_driver_present "aw8695-haptics-driver-present" "aw8695-haptics"
+assert_device_present 5-005a-probed "aw8695-haptics" 5-005a
+
+# FIXME downstream driver
+assert_driver_present "aw882xx_smartpa-driver-present" "aw882xx_smartpa"
+assert_device_present 3-0034-probed "aw882xx_smartpa" 3-0034
+assert_device_present 3-0035-probed "aw882xx_smartpa" 3-0035
+
+# FIXME downstream driver
+assert_driver_present "himax_tp-driver-present" "himax_tp"
+assert_device_present 4-0048-probed "himax_tp" 4-0048
+
+# FIXME not upstream yet
+assert_driver_present "imx576-driver-present" "imx576"
+assert_device_present 2-0010-probed "imx576" 2-0010
+
+# FIXME not upstream yet
+assert_driver_present "imx582-driver-present" "imx582"
+assert_device_present 1-001a-probed "imx582" 1-001a
+assert_device_present 0-001a-probed "imx582" 0-001a
+
+assert_driver_present "pm8008-driver-present" "pm8008"
+assert_device_present 5-0008-probed "pm8008" 5-0008
+
+assert_driver_present "panel-himax-hx83112a-driver-present" "panel-himax-hx83112a"
+assert_device_present ae94000.dsi.0-probed "panel-himax-hx83112a" ae94000.dsi.0
+
+assert_driver_present "mmcblk-driver-present" "mmcblk"
+assert_device_present mmc0:aaaa-probed "mmcblk" mmc0:aaaa
+
+assert_driver_present "adreno-driver-present" "adreno"
+assert_device_present 3d00000.gpu-probed "adreno" 3d00000.gpu
+
+assert_driver_present "arm-scmi-driver-present" "arm-scmi"
+
+assert_driver_present "arm-smmu-driver-present" "arm-smmu"
+assert_device_present 3d40000.iommu-probed "arm-smmu" 3d40000.iommu
+assert_device_present 15000000.iommu-probed "arm-smmu" 15000000.iommu
+
+assert_driver_present "ath10k_snoc-driver-present" "ath10k_snoc"
+assert_device_present 18800000.wifi-probed "ath10k_snoc" 18800000.wifi
+
+assert_driver_present "bam-dma-engine-driver-present" "bam-dma-engine"
+assert_device_present 1dc4000.dma-controller-probed "bam-dma-engine" 1dc4000.dma-controller
+
+assert_driver_present "bcm_voter-driver-present" "bcm_voter"
+assert_device_present 18200000.rsc:bcm-voter-probed "bcm_voter" 18200000.rsc:bcm-voter
+
+assert_driver_present "clk-rpmh-driver-present" "clk-rpmh"
+assert_device_present 18200000.rsc:clock-controller-probed "clk-rpmh" 18200000.rsc:clock-controller
+
+assert_driver_present "cmd-db-driver-present" "cmd-db"
+assert_device_present 80860000.memory-probed "cmd-db" 80860000.memory
+
+assert_driver_present "disp_cc-sm6350-driver-present" "disp_cc-sm6350"
+assert_device_present af00000.clock-controller-probed "disp_cc-sm6350" af00000.clock-controller
+
+assert_driver_present "dwc3-driver-present" "dwc3"
+assert_device_present a600000.usb-probed "dwc3" a600000.usb
+
+assert_driver_present "dwc3-qcom-driver-present" "dwc3-qcom"
+
+assert_driver_present "dwc3-qcom-legacy-driver-present" "dwc3-qcom-legacy"
+assert_device_present a6f8800.usb-probed "dwc3-qcom-legacy" a6f8800.usb
+
+assert_driver_present "gcc-sm6350-driver-present" "gcc-sm6350"
+assert_device_present 100000.clock-controller-probed "gcc-sm6350" 100000.clock-controller
+
+assert_driver_present "generic-adc-thermal-driver-present" "generic-adc-thermal"
+assert_device_present thermal-sensor-rear-cam-probed "generic-adc-thermal" thermal-sensor-rear-cam
+assert_device_present thermal-sensor-msm-probed "generic-adc-thermal" thermal-sensor-msm
+assert_device_present thermal-sensor-bat-therm-probed "generic-adc-thermal" thermal-sensor-bat-therm
+
+assert_driver_present "geni_i2c-driver-present" "geni_i2c"
+assert_device_present 988000.i2c-probed "geni_i2c" 988000.i2c
+assert_device_present 990000.i2c-probed "geni_i2c" 990000.i2c
+assert_device_present 880000.i2c-probed "geni_i2c" 880000.i2c
+
+assert_driver_present "geni_se_qup-driver-present" "geni_se_qup"
+assert_device_present 9c0000.geniqup-probed "geni_se_qup" 9c0000.geniqup
+assert_device_present 8c0000.geniqup-probed "geni_se_qup" 8c0000.geniqup
+
+assert_driver_present "gpi-driver-present" "gpi"
+assert_device_present 900000.dma-controller-probed "gpi" 900000.dma-controller
+assert_device_present 800000.dma-controller-probed "gpi" 800000.dma-controller
+
+assert_driver_present "gpio-keys-driver-present" "gpio-keys"
+assert_device_present gpio-keys-probed "gpio-keys" gpio-keys
+
+assert_driver_present "i2c-qcom-cci-driver-present" "i2c-qcom-cci"
+assert_device_present ac4a000.cci-probed "i2c-qcom-cci" ac4a000.cci
+assert_device_present ac4b000.cci-probed "i2c-qcom-cci" ac4b000.cci
+
+assert_driver_present "ipa-driver-present" "ipa"
+assert_device_present 1e40000.ipa-probed "ipa" 1e40000.ipa
+
+assert_driver_present "leds-qcom-flash-driver-present" "leds-qcom-flash"
+assert_device_present c440000.spmi:pmic@5:led-controller@d300-probed "leds-qcom-flash" c440000.spmi:pmic@5:led-controller@d300
+
+assert_driver_present "msm-mdss-driver-present" "msm-mdss"
+assert_device_present ae00000.display-subsystem-probed "msm-mdss" ae00000.display-subsystem
+
+assert_driver_present "msm_dpu-driver-present" "msm_dpu"
+assert_device_present ae01000.display-controller-probed "msm_dpu" ae01000.display-controller
+
+assert_driver_present "msm_dsi-driver-present" "msm_dsi"
+assert_device_present ae94000.dsi-probed "msm_dsi" ae94000.dsi
+
+assert_driver_present "msm_dsi_phy-driver-present" "msm_dsi_phy"
+assert_device_present ae94400.phy-probed "msm_dsi_phy" ae94400.phy
+
+assert_driver_present "osm-l3-driver-present" "osm-l3"
+assert_device_present 18321000.interconnect-probed "osm-l3" 18321000.interconnect
+
+assert_driver_present "pm8941-pwrkey-driver-present" "pm8941-pwrkey"
+assert_device_present c440000.spmi:pmic@0:pon@800:resin-probed "pm8941-pwrkey" c440000.spmi:pmic@0:pon@800:resin
+assert_device_present c440000.spmi:pmic@0:pon@800:pwrkey-probed "pm8941-pwrkey" c440000.spmi:pmic@0:pon@800:pwrkey
+
+assert_driver_present "psci-cpuidle-domain-driver-present" "psci-cpuidle-domain"
+assert_device_present psci-probed "psci-cpuidle-domain" psci
+
+assert_driver_present "q6afe-clock-driver-present" "q6afe-clock"
+assert_device_present 3000000.remoteproc:glink-edge:apr:service@4:clock-controller-probed "q6afe-clock" 3000000.remoteproc:glink-edge:apr:service@4:clock-controller
+
+assert_driver_present "q6afe-dai-driver-present" "q6afe-dai"
+assert_device_present 3000000.remoteproc:glink-edge:apr:service@4:dais-probed "q6afe-dai" 3000000.remoteproc:glink-edge:apr:service@4:dais
+
+assert_driver_present "q6asm-dai-driver-present" "q6asm-dai"
+assert_device_present 3000000.remoteproc:glink-edge:apr:service@7:dais-probed "q6asm-dai" 3000000.remoteproc:glink-edge:apr:service@7:dais
+
+assert_driver_present "q6routing-driver-present" "q6routing"
+assert_device_present 3000000.remoteproc:glink-edge:apr:service@8:routing-probed "q6routing" 3000000.remoteproc:glink-edge:apr:service@8:routing
+
+assert_driver_present "q6usb-dai-driver-present" "q6usb-dai"
+assert_device_present 3000000.remoteproc:glink-edge:apr:service@4:usbd-probed "q6usb-dai" 3000000.remoteproc:glink-edge:apr:service@4:usbd
+
+assert_driver_present "qcom,fastrpc-cb-driver-present" "qcom,fastrpc-cb"
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@5-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@5
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@3-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@3
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1
+assert_device_present 3000000.remoteproc:glink-edge:fastrpc:compute-cb@5-probed "qcom,fastrpc-cb" 3000000.remoteproc:glink-edge:fastrpc:compute-cb@5
+assert_device_present 3000000.remoteproc:glink-edge:fastrpc:compute-cb@3-probed "qcom,fastrpc-cb" 3000000.remoteproc:glink-edge:fastrpc:compute-cb@3
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@8-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@8
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@6-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@6
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@4-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@4
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2
+assert_device_present 3000000.remoteproc:glink-edge:fastrpc:compute-cb@4-probed "qcom,fastrpc-cb" 3000000.remoteproc:glink-edge:fastrpc:compute-cb@4
+assert_device_present 8300000.remoteproc:glink-edge:fastrpc:compute-cb@7-probed "qcom,fastrpc-cb" 8300000.remoteproc:glink-edge:fastrpc:compute-cb@7
+
+assert_driver_present "qcom,pmic-typec-driver-present" "qcom,pmic-typec"
+assert_device_present c440000.spmi:pmic@2:typec@1500-probed "qcom,pmic-typec" c440000.spmi:pmic@2:typec@1500
+
+# FIXME downstream driver
+assert_driver_present "qcom,qcom_qg-driver-present" "qcom,qcom_qg"
+assert_device_present c440000.spmi:pmic@2:battery@4800-probed "qcom,qcom_qg" c440000.spmi:pmic@2:battery@4800
+
+assert_driver_present "qcom,qfprom-driver-present" "qcom,qfprom"
+assert_device_present 784000.qfprom-probed "qcom,qfprom" 784000.qfprom
+
+assert_driver_present "qcom,spmi-sdam-driver-present" "qcom,spmi-sdam"
+assert_device_present c440000.spmi:pmic@6:nvram@8400-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@8400
+assert_device_present c440000.spmi:pmic@6:nvram@7d00-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@7d00
+assert_device_present c440000.spmi:pmic@2:nvram@b100-probed "qcom,spmi-sdam" c440000.spmi:pmic@2:nvram@b100
+assert_device_present c440000.spmi:pmic@6:nvram@7100-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@7100
+assert_device_present c440000.spmi:pmic@6:nvram@7400-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@7400
+assert_device_present c440000.spmi:pmic@6:nvram@8600-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@8600
+assert_device_present c440000.spmi:pmic@6:nvram@9800-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@9800
+assert_device_present c440000.spmi:pmic@6:nvram@7c00-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@7c00
+assert_device_present c440000.spmi:pmic@6:nvram@9d00-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@9d00
+assert_device_present c440000.spmi:pmic@6:nvram@7000-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@7000
+assert_device_present c440000.spmi:pmic@6:nvram@8500-probed "qcom,spmi-sdam" c440000.spmi:pmic@6:nvram@8500
+
+assert_driver_present "qcom,wled-driver-present" "qcom,wled"
+assert_device_present c440000.spmi:pmic@5:leds@d800-probed "qcom,wled" c440000.spmi:pmic@5:leds@d800
+
+assert_driver_present "qcom-bwmon-driver-present" "qcom-bwmon"
+assert_device_present 90b6300.pmu-probed "qcom-bwmon" 90b6300.pmu
+assert_device_present 90cd000.pmu-probed "qcom-bwmon" 90cd000.pmu
+
+assert_driver_present "qcom-camss-driver-present" "qcom-camss"
+assert_device_present acb3000.isp-probed "qcom-camss" acb3000.isp
+
+assert_driver_present "qcom-cpufreq-hw-driver-present" "qcom-cpufreq-hw"
+assert_device_present 18323000.cpufreq-probed "qcom-cpufreq-hw" 18323000.cpufreq
+
+assert_driver_present "qcom-ipcc-driver-present" "qcom-ipcc"
+assert_device_present 408000.mailbox-probed "qcom-ipcc" 408000.mailbox
+
+assert_driver_present "qcom-llcc-driver-present" "qcom-llcc"
+assert_device_present 9200000.system-cache-controller-probed "qcom-llcc" 9200000.system-cache-controller
+
+assert_driver_present "qcom-pm8008-regulator-driver-present" "qcom-pm8008-regulator"
+assert_device_present pm8008-regulator.1.auto-probed "qcom-pm8008-regulator" pm8008-regulator.1.auto
+
+assert_driver_present "qcom-pon-driver-present" "qcom-pon"
+assert_device_present c440000.spmi:pmic@0:pon@800-probed "qcom-pon" c440000.spmi:pmic@0:pon@800
+
+assert_driver_present "qcom-qmp-combo-phy-driver-present" "qcom-qmp-combo-phy"
+assert_device_present 88e8000.phy-probed "qcom-qmp-combo-phy" 88e8000.phy
+
+assert_driver_present "qcom-qmp-ufs-phy-driver-present" "qcom-qmp-ufs-phy"
+assert_device_present 1d87000.phy-probed "qcom-qmp-ufs-phy" 1d87000.phy
+
+assert_driver_present "qcom-qusb2-phy-driver-present" "qcom-qusb2-phy"
+assert_device_present 88e3000.phy-probed "qcom-qusb2-phy" 88e3000.phy
+
+assert_driver_present "qcom-refgen-regulator-driver-present" "qcom-refgen-regulator"
+assert_device_present 88e7000.regulator-probed "qcom-refgen-regulator" 88e7000.regulator
+
+assert_driver_present "qcom-rpmh-regulator-driver-present" "qcom-rpmh-regulator"
+assert_device_present 18200000.rsc:regulators-0-probed "qcom-rpmh-regulator" 18200000.rsc:regulators-0
+assert_device_present 18200000.rsc:regulators-1-probed "qcom-rpmh-regulator" 18200000.rsc:regulators-1
+
+assert_driver_present "qcom-rpmhpd-driver-present" "qcom-rpmhpd"
+assert_device_present 18200000.rsc:power-controller-probed "qcom-rpmhpd" 18200000.rsc:power-controller
+
+assert_driver_present "qcom-sm6350-lpass-lpi-pinctrl-driver-present" "qcom-sm6350-lpass-lpi-pinctrl"
+assert_device_present 33c0000.pinctrl-probed "qcom-sm6350-lpass-lpi-pinctrl" 33c0000.pinctrl
+
+# FIXME not upstream yet
+assert_driver_present "qcom-smbx-charger-driver-present" "qcom-smbx-charger"
+assert_device_present c440000.spmi:pmic@2:charger@1000-probed "qcom-smbx-charger" c440000.spmi:pmic@2:charger@1000
+
+assert_driver_present "qcom-smem-driver-present" "qcom-smem"
+assert_device_present smem-probed "qcom-smem" smem
+
+assert_driver_present "qcom-socinfo-driver-present" "qcom-socinfo"
+assert_device_present qcom-socinfo-probed "qcom-socinfo" qcom-socinfo
+
+assert_driver_present "qcom-spmi-adc-tm5-driver-present" "qcom-spmi-adc-tm5"
+assert_device_present c440000.spmi:pmic@4:adc-tm@3500-probed "qcom-spmi-adc-tm5" c440000.spmi:pmic@4:adc-tm@3500
+assert_device_present c440000.spmi:pmic@2:adc-tm@3500-probed "qcom-spmi-adc-tm5" c440000.spmi:pmic@2:adc-tm@3500
+assert_device_present c440000.spmi:pmic@6:adc-tm@3400-probed "qcom-spmi-adc-tm5" c440000.spmi:pmic@6:adc-tm@3400
+
+assert_driver_present "qcom-spmi-adc5-driver-present" "qcom-spmi-adc5"
+assert_device_present c440000.spmi:pmic@6:adc@3100-probed "qcom-spmi-adc5" c440000.spmi:pmic@6:adc@3100
+assert_device_present c440000.spmi:pmic@2:adc@3100-probed "qcom-spmi-adc5" c440000.spmi:pmic@2:adc@3100
+assert_device_present c440000.spmi:pmic@4:adc@3100-probed "qcom-spmi-adc5" c440000.spmi:pmic@4:adc@3100
+
+assert_driver_present "qcom-spmi-gpio-driver-present" "qcom-spmi-gpio"
+assert_device_present c440000.spmi:pmic@0:gpio@c000-probed "qcom-spmi-gpio" c440000.spmi:pmic@0:gpio@c000
+assert_device_present c440000.spmi:pmic@4:gpio@c000-probed "qcom-spmi-gpio" c440000.spmi:pmic@4:gpio@c000
+assert_device_present c440000.spmi:pmic@6:gpio@b000-probed "qcom-spmi-gpio" c440000.spmi:pmic@6:gpio@b000
+assert_device_present c440000.spmi:pmic@2:gpio@c000-probed "qcom-spmi-gpio" c440000.spmi:pmic@2:gpio@c000
+
+assert_driver_present "qcom-tsens-driver-present" "qcom-tsens"
+assert_device_present c265000.thermal-sensor-probed "qcom-tsens" c265000.thermal-sensor
+assert_device_present c263000.thermal-sensor-probed "qcom-tsens" c263000.thermal-sensor
+
+assert_driver_present "qcom-usb-vbus-regulator-driver-present" "qcom-usb-vbus-regulator"
+assert_device_present c440000.spmi:pmic@2:usb-vbus-regulator@1100-probed "qcom-usb-vbus-regulator" c440000.spmi:pmic@2:usb-vbus-regulator@1100
+
+assert_driver_present "qcom_aoss_qmp-driver-present" "qcom_aoss_qmp"
+assert_device_present c300000.power-management-probed "qcom_aoss_qmp" c300000.power-management
+
+assert_driver_present "qcom_geni_serial-driver-present" "qcom_geni_serial"
+assert_device_present 884000.serial-probed "qcom_geni_serial" 884000.serial
+assert_device_present 98c000.serial-probed "qcom_geni_serial" 98c000.serial
+
+assert_driver_present "qcom_hwspinlock-driver-present" "qcom_hwspinlock"
+assert_device_present 1f40000.hwlock-probed "qcom_hwspinlock" 1f40000.hwlock
+
+assert_driver_present "qcom_pdc-driver-present" "qcom_pdc"
+assert_device_present b220000.interrupt-controller-probed "qcom_pdc" b220000.interrupt-controller
+
+assert_driver_present "qcom_q6v5_pas-driver-present" "qcom_q6v5_pas"
+assert_device_present 4080000.remoteproc-probed "qcom_q6v5_pas" 4080000.remoteproc
+assert_device_present 3000000.remoteproc-probed "qcom_q6v5_pas" 3000000.remoteproc
+assert_device_present 8300000.remoteproc-probed "qcom_q6v5_pas" 8300000.remoteproc
+
+assert_driver_present "qcom_rmtfs_mem-driver-present" "qcom_rmtfs_mem"
+assert_device_present efe01000.memory-probed "qcom_rmtfs_mem" efe01000.memory
+
+assert_driver_present "qcom_rng-driver-present" "qcom_rng"
+assert_device_present 793000.rng-probed "qcom_rng" 793000.rng
+
+assert_driver_present "qcom_scm-driver-present" "qcom_scm"
+assert_device_present firmware:scm-probed "qcom_scm" firmware:scm
+
+assert_driver_present "qcom_smp2p-driver-present" "qcom_smp2p"
+assert_device_present smp2p-mpss-probed "qcom_smp2p" smp2p-mpss
+assert_device_present smp2p-adsp-probed "qcom_smp2p" smp2p-adsp
+assert_device_present smp2p-cdsp-probed "qcom_smp2p" smp2p-cdsp
+
+assert_driver_present "qcom_stats-driver-present" "qcom_stats"
+assert_device_present c3f0000.sram-probed "qcom_stats" c3f0000.sram
+
+assert_driver_present "qcom_wdt-driver-present" "qcom_wdt"
+assert_device_present 17c10000.watchdog-probed "qcom_wdt" 17c10000.watchdog
+
+assert_driver_present "qcrypto-driver-present" "qcrypto"
+assert_device_present 1dfa000.crypto-probed "qcrypto" 1dfa000.crypto
+
+assert_driver_present "qnoc-sm6350-driver-present" "qnoc-sm6350"
+assert_device_present 1500000.interconnect-probed "qnoc-sm6350" 1500000.interconnect
+assert_device_present 9990000.interconnect-probed "qnoc-sm6350" 9990000.interconnect
+assert_device_present 1700000.interconnect:interconnect-compute-noc-probed "qnoc-sm6350" 1700000.interconnect:interconnect-compute-noc
+assert_device_present 1620000.interconnect-probed "qnoc-sm6350" 1620000.interconnect
+assert_device_present 1620000.interconnect:interconnect-clk-virt-probed "qnoc-sm6350" 1620000.interconnect:interconnect-clk-virt
+assert_device_present 9680000.interconnect-probed "qnoc-sm6350" 9680000.interconnect
+assert_device_present 16e0000.interconnect-probed "qnoc-sm6350" 16e0000.interconnect
+assert_device_present 1740000.interconnect-probed "qnoc-sm6350" 1740000.interconnect
+assert_device_present 1700000.interconnect-probed "qnoc-sm6350" 1700000.interconnect
+assert_device_present 9160000.interconnect-probed "qnoc-sm6350" 9160000.interconnect
+
+assert_driver_present "reg-fixed-voltage-driver-present" "reg-fixed-voltage"
+assert_device_present regulator-48m-ois-avdd0-1p8-probed "reg-fixed-voltage" regulator-48m-ois-avdd0-1p8
+assert_device_present regulator-32m-cam-dvdd-1p05-probed "reg-fixed-voltage" regulator-32m-cam-dvdd-1p05
+assert_device_present regulator-ois-2p8-probed "reg-fixed-voltage" regulator-ois-2p8
+assert_device_present regulator-lcdb-dummy-probed "reg-fixed-voltage" regulator-lcdb-dummy
+assert_device_present regulator-48m-uw-avdd0-1p8-probed "reg-fixed-voltage" regulator-48m-uw-avdd0-1p8
+
+assert_driver_present "rpmh-driver-present" "rpmh"
+assert_device_present 18200000.rsc-probed "rpmh" 18200000.rsc
+
+assert_driver_present "rtc-pm8xxx-driver-present" "rtc-pm8xxx"
+assert_device_present c440000.spmi:pmic@6:rtc@6100-probed "rtc-pm8xxx" c440000.spmi:pmic@6:rtc@6100
+
+assert_driver_present "sdhci_msm-driver-present" "sdhci_msm"
+assert_device_present 8804000.mmc-probed "sdhci_msm" 8804000.mmc
+
+assert_driver_present "simple-framebuffer-driver-present" "simple-framebuffer"
+
+assert_driver_present "sm6350-camcc-driver-present" "sm6350-camcc"
+assert_device_present ad00000.clock-controller-probed "sm6350-camcc" ad00000.clock-controller
+
+assert_driver_present "sm6350-gpucc-driver-present" "sm6350-gpucc"
+assert_device_present 3d90000.clock-controller-probed "sm6350-gpucc" 3d90000.clock-controller
+
+assert_driver_present "sm6350-tlmm-driver-present" "sm6350-tlmm"
+assert_device_present f100000.pinctrl-probed "sm6350-tlmm" f100000.pinctrl
+
+assert_driver_present "snd-sm8250-driver-present" "snd-sm8250"
+assert_device_present sound-probed "snd-sm8250" sound
+
+assert_driver_present "spmi-temp-alarm-driver-present" "spmi-temp-alarm"
+assert_device_present c440000.spmi:pmic@2:temp-alarm@2400-probed "spmi-temp-alarm" c440000.spmi:pmic@2:temp-alarm@2400
+assert_device_present c440000.spmi:pmic@0:temp-alarm@2400-probed "spmi-temp-alarm" c440000.spmi:pmic@0:temp-alarm@2400
+assert_device_present c440000.spmi:pmic@4:temp-alarm@2400-probed "spmi-temp-alarm" c440000.spmi:pmic@4:temp-alarm@2400
+
+assert_driver_present "spmi_pmic_arb-driver-present" "spmi_pmic_arb"
+assert_device_present c440000.spmi-probed "spmi_pmic_arb" c440000.spmi
+
+assert_driver_present "ufshcd-qcom-driver-present" "ufshcd-qcom"
+assert_device_present 1d84000.ufshc-probed "ufshcd-qcom" 1d84000.ufshc
+
+assert_driver_present "video_cc-sm6350-driver-present" "video_cc-sm6350"
+assert_device_present aaf0000.clock-controller-probed "video_cc-sm6350" aaf0000.clock-controller
+
+assert_driver_present "qcom,apr-driver-present" "qcom,apr"
+assert_device_present 3000000.remoteproc:glink-edge.apr_audio_svc.-1.-1-probed "qcom,apr" 3000000.remoteproc:glink-edge.apr_audio_svc.-1.-1
+
+assert_driver_present "qcom,fastrpc-driver-present" "qcom,fastrpc"
+assert_device_present 8300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1-probed "qcom,fastrpc" 8300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1
+assert_device_present 3000000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1-probed "qcom,fastrpc" 3000000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1
+
+assert_driver_present "qcom_glink_ssr-driver-present" "qcom_glink_ssr"
+assert_device_present 4080000.remoteproc:glink-edge.glink_ssr.-1.-1-probed "qcom_glink_ssr" 4080000.remoteproc:glink-edge.glink_ssr.-1.-1
+
+assert_driver_present "qcom_smd_qrtr-driver-present" "qcom_smd_qrtr"
+assert_device_present 3000000.remoteproc:glink-edge.IPCRTR.-1.-1-probed "qcom_smd_qrtr" 3000000.remoteproc:glink-edge.IPCRTR.-1.-1
+assert_device_present 4080000.remoteproc:glink-edge.IPCRTR.-1.-1-probed "qcom_smd_qrtr" 4080000.remoteproc:glink-edge.IPCRTR.-1.-1
+assert_device_present 8300000.remoteproc:glink-edge.IPCRTR.-1.-1-probed "qcom_smd_qrtr" 8300000.remoteproc:glink-edge.IPCRTR.-1.-1
+
+assert_driver_present "hci_uart_qca-driver-present" "hci_uart_qca"
+assert_device_present serial0-0-probed "hci_uart_qca" serial0-0
+
+assert_soundcard_present F4-playback F4 pcm0p
+assert_soundcard_present F4-capture F4 pcm0c
