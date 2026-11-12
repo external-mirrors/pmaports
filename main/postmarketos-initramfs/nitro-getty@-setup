@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cat <<-EOF > /README
+Nura debug shell
+https://nura.eco/debug-shell
+
+Status of initramfs services:
+EOF
+
+# Display some info
+cat <<-EOF > /etc/profile
+cat /README
+nitroctl
+EOF
+
+cat <<-EOF > /sbin/pmos_getty
+#!/bin/sh
+/bin/sh -l
+EOF
+chmod +x /sbin/pmos_getty

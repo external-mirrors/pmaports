@@ -1,0 +1,35 @@
+#!/bin/sh
+partition="$(blkid --uuid "$1")"
+
+if [ -z "$partition" ]; then
+	partition="$(blkid --label "$1")"
+	if [ -z "$partition" ]; then
+		partition="$(blkid --match-token "TYPE=crypto_LUKS" | cut -d ":" -f 1 | head -n 1)"
+	fi
+fi
+
+# partition not found
+if [ -z "$partition" ]; then
+	echo "partition not found!"
+	return 111
+fi
+
+echo "mounting partition $partition"
+type="$(blkid "$partition" | sed 's/^.*\ TYPE="\([a-zA-Z0-9_]*\)".*$/\1/')"
+
+case "$type" in
+	ext4|f2fs|xfs)
+		;;
+	btrfs)
+		btrfs device scan
+		;;
+	*)
+		echo "unknown partition type $type"
+		return 111
+		;;
+esac
+
+if ! mount -t "$type" -o rw "$partition" /sysroot; then
+	echo "root: failed to mount $type partition $partition"
+	return 111
+fi

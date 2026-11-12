@@ -1,0 +1,14 @@
+#!/bin/sh
+modules="$(grep -v ^\# "/lib/modules/initramfs.load")"
+
+# shellcheck disable=SC2086
+if [ -n "$modules" ]; then
+	modprobe -a $modules || return 111
+else
+	echo "WARNING: no modules in initramfs.load"
+fi
+
+for mod in btrfs ext4 f2fs xfs vfat; do
+	# modprobe each separately, maybe not all are available
+	modprobe $mod
+done

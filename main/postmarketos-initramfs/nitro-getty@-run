@@ -1,0 +1,12 @@
+#!/bin/sh
+# Usage: getty@PORT[.BAUDRATE]
+
+port="${1%.*}"
+baud="${1#*.}"
+[ "$baud" = "$1" ] && baud=115200
+
+# shellcheck disable=SC2164
+cd
+
+echo "starting getty (port: $port, baud: $baud)"
+exec /sbin/getty -n -l /sbin/pmos_getty "$port" "$baud" vt100

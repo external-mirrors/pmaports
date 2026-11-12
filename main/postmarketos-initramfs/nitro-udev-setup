@@ -1,0 +1,5 @@
+#!/bin/sh
+
+nitroctl start udevd
+udevadm trigger --type=devices --action=add
+udevadm settle

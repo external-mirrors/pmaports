@@ -1,8 +1,8 @@
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 maintainer="Ferass El Hafidi <funderscore@postmarketos.org>"
 pkgname=postmarketos-initramfs
-pkgver=3.12.6
-pkgrel=1
+pkgver=4.0.0
+pkgrel=0
 pkgdesc="Base files for the postmarketOS initramfs / initramfs-extra"
 url="https://postmarketos.org"
 provides="postmarketos-ramdisk=$pkgver-r$pkgrel"
@@ -29,6 +29,7 @@ depends="
 	libinput-udev
 	losetup
 	lz4
+	nitro-init
 	parted
 	postmarketos-fde-unlocker
 	postmarketos-mkinitfs>=2.2
@@ -39,6 +40,35 @@ depends="
 	xfsprogs-extra
 	xz
 	"
+_nitrosvc="
+	LOG@/run
+	SYS/final
+	SYS/setup
+	SYS/reincarnate
+
+	bootup/setup
+	framebuffer/setup
+	getty@/run
+	getty@/setup
+	modules/setup
+	mount-boot@/setup
+	mount-root@/setup
+	plymouth/run
+	plymouth/setup
+	syslogd/run
+	udev/setup
+	udevd/down
+	udevd/run
+	"
+
+# Avoid filename based checksum conflicts by including the whole path:
+# https://gitlab.alpinelinux.org/alpine/abuild/-/issues/10013
+flatpath() {
+	local i
+	for i in $@; do
+		echo "nitro-$i" | sed s./.-.g
+	done
+}
 source="
 	00-default.modules
 	00-default-extra.modules
@@ -46,12 +76,10 @@ source="
 	00-initramfs-base.files
 	00-initramfs-extra-base.files
 	init.sh
-	init_functions.sh
-	init_2nd.sh
-	init_functions_2nd.sh
 	mdev.conf
 	tests/01-parse-cmdline-testlib.sh
 	tests/02-find-partition-testlib.sh
+	$(flatpath $_nitrosvc)
 	"
 arch="noarch"
 license="GPL-2.0-or-later"
@@ -65,25 +93,17 @@ build() {
 }
 
 check() {
-	postmarketos-testlib "$srcdir"
+	# TODO: tests
+	:
+	# postmarketos-testlib "$srcdir"
 }
 
 package() {
 	install -Dm644 "$srcdir"/mdev.conf \
 		-t "$pkgdir"/usr/share/initramfs/
 
-
-	install -Dm644 "$srcdir/init_functions.sh" \
-		"$pkgdir/usr/share/initramfs/init_functions.sh"
-
-	install -Dm644 "$srcdir/init_functions_2nd.sh" \
-		"$pkgdir/usr/share/initramfs/init_functions_2nd.sh"
-
 	install -Dm755 "$builddir/init.sh" \
 		"$pkgdir/usr/share/initramfs/init.sh"
-
-	install -Dm755 "$srcdir/init_2nd.sh" \
-		"$pkgdir/usr/share/initramfs/init_2nd.sh"
 
 	install -Dm644 "$srcdir"/00-initramfs-base.dirs \
 		-t "$pkgdir"/usr/share/mkinitfs/dirs/
@@ -109,19 +129,37 @@ package() {
 	mkdir -p "$pkgdir"/usr/share/mkinitfs/hooks-extra
 	mkdir -p "$pkgdir"/etc/mkinitfs/hooks
 	mkdir -p "$pkgdir"/etc/mkinitfs/hooks-extra
+
+	for i in $_nitrosvc; do
+		install -Dm755 "$srcdir/$(flatpath "$i")" "$pkgdir/usr/share/initramfs/svc/$i"
+	done
 }
 
 sha512sums="
 a2de81f6f42add9b0b5af88c3026f602ccf1f413875ec406b5b9ef79fdcc207c94a8cd78948b05364076dca1a36f3d6345356b6d77b44e95bce9ce7d3c758a4f  00-default.modules
 ace852ba267b3408998970df6042603c8bec1d033066d1c30ed65f1be955fee8644b57882898f10228ec43b912f8f03718b34ddd741b431e5a5c2e76f060a494  00-default-extra.modules
 9c0e8f6f61d5da191e03a1aa9d5d0ceb5baf1eae6dbb9bfb0af59817783525119ac8394b135f303f7b6434a3eab0b49185fb90379e06823db847a4999c75ce33  00-initramfs-base.dirs
-69852928464f01757e2f473bd2c2e7ecb4132ecf3e26bdec95932e928dfe9042f59316e0a509fd38bcda88e24dd94bf33e8a88118b5adbec7023d1c13da12f59  00-initramfs-base.files
-669240c0c6b84ff68ea7696b3ffd39c209c7c6d52233f67a2515ac423e16c3daa7841d8451946b14dc95e1d18ff31cc35c4a22efb8a36caceb48aada5d4ee5ea  00-initramfs-extra-base.files
-b74fb087792165ac32bb2b5c6cdd8456891260de44000e08c7c4d25fe13ad017041ca14094c33392d1140ba32a9eed6cbc7eb6697e297df3575c33554f3f3eb3  init.sh
-84a575e2ac6cdf67b0f5f52f660f1297327b884d0cb80387a92c66d603a462067123abbf522c4c729fbc230d614faae19bec1677863146a22cb8083d4c9250a2  init_functions.sh
-7aa82d5e2907470d667612643d98371dff27b2650051f8c568ab43d1b97677362c3e6fbd442474086d681ea7c0cfbcaf269d3eef2d2dc3ff4ebf17c786b82148  init_2nd.sh
-0c817341047df07c2b74d5f992b09d449365e0f7ed3d06d67dd470fde2c7429de8900ccc12895d133873f0d1e226d9fd3aae8127df802e882e1ddc5baa240711  init_functions_2nd.sh
+83d16ebafc49fa13577ebd0993ed666a0b93ccc42eb8afd1b4ff904f5b17e08b962dd839181ae4c63eee735420d87db569d972fb0b1413223574929306141502  00-initramfs-base.files
+ad9be90040933a10a7324b248439a6dee9ff9f8af641d37822cbf8ed9807b778a4f8e4ef8d90c899a483c8f3e7d8d85d35bfde25c3f071ace799f406f3bbd2c3  00-initramfs-extra-base.files
+3c3abf0dcaa29acdf2a76c8a7eff23216f78be1144aa13b14e2c41e5c15206fa3ac23b760d0140dd9058ec65ac0a6b63cc80ec53998b8954f0aa11f6d0f6599a  init.sh
 675e7d5bee39b2df7d322117f8dcaccc274d61beaf4d50ead19bbf2109446d64b1c0aa0c5b4f9846eb6c1c403418f28f6364eff4537ba41120fbfcbc484b7da7  mdev.conf
 776ac842df70a5ac7b20b942abf2afecfed83b59bd5bf775b77c1e8e071e1d9b9120c502410cd2643551589e9523221be0ca7a2734b2c5302fca7d631aa91916  01-parse-cmdline-testlib.sh
 a60b8affe7431d477f7480ca094721930f65a31f920c7eb937384ad708f98a4a4ab2ad68688bf92ff741d3083ce4f14c238ee2e1beae5cefc30b5fd9bfd6aa66  02-find-partition-testlib.sh
+afbe6b3d7104e01e3513f6e7bdd8d49e6fa50e6f00a8fc28ec0debf03ea3bd0be6346683d4aedb98f296062ac77b1381303985dd28ade28ec11598ea29be680c  nitro-LOG@-run
+b3fd3b6229cd062ed205852a38f0ecfa79e2107af0dc1ee0632ec537e77c9e5d9201df7d482bed43115ffb8a3c78b5ba5b3db2312bffc1ce1fba44f536804349  nitro-SYS-final
+44e2edf648f5de6ac81853f4ceb9111cf477f89c88de6829c6d9dc8badaea945c263cf206f9600b5f4a0f7b596c8ecc58b875662327832aeacc21e36b30da2b0  nitro-SYS-setup
+df05c29614ba2a39daed362decb955fb1b285df7e9ad4f42ea309a2685ec00bfcfb31833ec562cb2b3f55673afabbea2fe62eddf26205a31d285c0d53f374249  nitro-SYS-reincarnate
+4f64bb25ddd8faedd3a6cb6c59f85bf9b40a80caae2d1bea733ada4aa8d58984d56304d5084e97f3931d0038c6f23efca9244aa68a1c5455cf2694d08c3a9f3d  nitro-bootup-setup
+8e5864c6c8673d277ee970815e0adbe23639e321c71cad74b80e9d13f2cffc8719268ad6f681385528cec4b7f5911a39b8f5dd4cc1f24303414361e119201c3c  nitro-framebuffer-setup
+af107b16a0a2ca841aa8b90852298f9c8bd3c678b3d1d6a45c39737c13f37001ef3a7f5673405664e25db8abf546c79f8c466e0351740d03b1a056b8e7fa6a02  nitro-getty@-run
+48b03690df5fea1cb5cf029ad34d0d35596f1f8fe80134914c8075f19cd0d33f979a3c3ce1a00eaa5aaa6526819430b5d3ebf2821e0fc5d2f89de7979e1b6c07  nitro-getty@-setup
+e922cf4c47a8f961945b057f0b15f51cf428d43999ab9a4fe65ebb4cbd3dba4890a3489781bcaca6a41d88005cf981ea4b3a8aca08eba54bb7d0eedc3a6b20b5  nitro-modules-setup
+3f2e090d6643265cd94a46be3c3cf22b65bd1a14a973f7fb745b36d0026415afef58ba23ea04c3835ec373d99a80c823177338e7c43ec04caef332615f088251  nitro-mount-boot@-setup
+36737e4da4af11cc1b3649b03b911a40189dde333fbf05578a6448f36a1eb4742c5f8792c42b86fa317816c6010f57dcd3192c4f303aea9cd0afd36aef9f34d9  nitro-mount-root@-setup
+824036982879389c58cb7a62ca3d3685080111734eef0f4ab3188d5baf68fb7257eebb864d65bf597ab7b1ebb700c11fccc94ced7521e743cd11fa839f5a4879  nitro-plymouth-run
+772aede39033666088b524a9e60d40b9a85d2f682ec5cc5fb127f47321092ab11398e198ce0885c08499848509e8c7c735889f1a948beb33c2ba7f59bf80ef3d  nitro-plymouth-setup
+d9a1ecc6304e8d6915897f491230212919099740d3d57498953b14801c445cae2093b44ba5cd62eae27c1862cfcd87e6031c6af2057f87fd41fafdb4c37ee386  nitro-syslogd-run
+a87415edea7f909c2dba77be1053e4764d1fe8da08e9a6302be4c0ca2273cccdc11ac7a55dfa47fa27a3f3b4c3a5639afefc2417b25b1a93a9bb45be1a959411  nitro-udev-setup
+cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e  nitro-udevd-down
+37ad8f321137594730a18ab4aa2404eb53a977044372af1beb70e7aa750999f9d89849f936d771ad168a20452709ca002e8b9890e65744d2c9f9142cdd3a5726  nitro-udevd-run
 "

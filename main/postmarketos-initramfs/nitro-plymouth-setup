@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if ! command -v plymouthd > /dev/null || ! command -v plymouth > /dev/null; then
+	echo "plymouth is unavailable, continuing without a splash screen"
+
+	# exit code 111 tells nitro that this service is entering state FATAL
+	# so it won't restart it.
+	return 111
+fi
+
+if ! grep -q splash /proc/cmdline; then
+	echo "splash is disabled"
+	return 111
+fi
+
+return 111
+nitroctl wait‐starting framebuffer # wait for framebuffer setup to finish

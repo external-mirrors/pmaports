@@ -1,0 +1,52 @@
+#!/bin/busybox ash
+# This special service is ran by nitro early on startup, before any other services
+# are brought up.
+
+/bin/busybox --install -s
+/bin/busybox-extras --install -s
+
+# provide a default for os-release's VERSION in case the file doesn't exist
+VERSION="${VERSION:-unknown}"
+
+# This is set during packaging and is used when triaging bug reports
+INITRAMFS_PKG_VERSION="<<INITRAMFS_PKG_VERSION>>"
+
+# Only needed for SYS, while the special LOG@ service isn't used yet
+# other services have their stdout forwarded to LOG@<service> automatically
+# (which interacts with syslogd).
+log() {
+	logger -t "Nura-rd[SYS]" -p daemon.info "$@"
+}
+
+# start syslogd early
+nitroctl start syslogd
+log "welcome to Nura initramfs version: $INITRAMFS_PKG_VERSION"
+
+# mount a few things
+# /dev and /run is already mounted by nitro, we can just mount the rest
+mount -t proc -o nodev,noexec,nosuid proc /proc || log "Couldn't mount /proc"
+mount -t sysfs -o nodev,noexec,nosuid sysfs /sys || log "Couldn't mount /sys"
+
+# load modules early
+nitroctl start modules
+
+# for nitro
+mkdir -p /run/nitro/notify
+
+# /dev/pts (needed for telnet)
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+
+# setting up firmware directory
+sysfs_dir=/sys/module/firmware_class/parameters/path
+if ! [ -e "$sysfs_dir" ]; then
+	log "Kernel does not support setting the firmware image search path. Skipping."
+	return
+fi
+# shellcheck disable=SC3037
+echo -n /lib/firmware/postmarketos >$sysfs_dir
+
+# start udev early
+nitroctl start udev
+
+log "early init completed successfully"
