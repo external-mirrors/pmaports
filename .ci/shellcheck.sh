@@ -20,7 +20,6 @@ sh_files="
 	./main/postmarketos-duranium/rootfs-usr-libexec-duranium-usb-gadget-setup
 	./main/postmarketos-installkernel/installkernel-pmos
 	./main/postmarketos-initramfs/init.sh
-	./main/postmarketos-initramfs/init_functions.sh
 	./main/postmarketos-mkinitfs-hook-netboot/netboot.sh
 	./main/postmarketos-test/*.sh
 	./main/postmarketos-ui-os-installer/rootfs-usr-bin-pmos_setup.sh
@@ -31,6 +30,9 @@ sh_files="
 	./device/testing/device-apple-mac-aarch64/*.sh
 	./extra-repos/systemd/postmarketos-base-systemd/rootfs-usr-libexec-systemd-apk-trigger
 
+	$(find . -path './main/postmarketos-initramfs/nitro-*-setup')
+	$(find . -path './main/postmarketos-initramfs/nitro-*-run')
+	$(find . -path './main/postmarketos-initramfs/nitro-*-finish')
 	$(find . -path './main/postmarketos-ui-*/*.sh')
 	$(find . -path './main/postmarketos-ui-*/*.pre-install')
 	$(find . -path './main/postmarketos-ui-*/*.post-install')
