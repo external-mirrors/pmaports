@@ -9,10 +9,10 @@ if ! [ -e /README ]; then
 	https://nura.eco/debug-shell
 
 	System information:
-	  Device: $deviceinfo_name ($deviceinfo_codename)
+	  Device: ${deviceinfo_name:-"Unknown"} (${deviceinfo_codename:-"unknown"})
 	  Kernel: $(uname -r)
-	  OS ver: $VERSION
-	  Initrd: $initrd_ver
+	  OS ver: ${VERSION:-"Unknown"}
+	  Initrd: ${initrd_ver:-"Unknown"}
 
 	Useful commands:
 	  nitroctl list           -    show status of initramfs services

@@ -1,5 +1,9 @@
 #!/bin/sh
 exec 2>&1
+up=""
+down=""
+
+# shellcheck disable=SC1090
 [ -r ./conf."$1" ] && . ./conf."$1"
 echo "Reaching target $1"
 

@@ -1,7 +1,11 @@
 #!/bin/sh
 exec 2>&1
-[ -r ./conf."$1" ] && ./conf."$1"
-if [ "$1" != 0 ]; then
-	# avoid bringing down e.g. udev if something else within the target fails
+up=""
+
+# shellcheck disable=SC1090
+[ -r ./conf."$3" ] && . ./conf."$3"
+echo "Exiting target $3"
+# avoid bringing down e.g. udev if something else within the target fails
+if [ "$1" = 0 ]; then
 	nitroctl -v down $up
 fi

@@ -41,7 +41,8 @@ mount -t configfs -o nodev,noexec,nosuid configfs /sys/kernel/config | logpipe |
 
 # start syslogd early
 nitroctl -v up syslogd | logpipe
-log "Nura initramfs $(< /usr/share/initramfs/version) is starting"
+read initrd_ver < /usr/share/initramfs/version
+log "Nura initramfs ${initrd_ver:-"Unknown"} is starting"
 
 # /dev/pts (needed for telnet)
 mkdir -p /dev/pts | logpipe
