@@ -1,15 +1,13 @@
 #!/bin/busybox ash
 # This special service is ran by nitro early on startup, before any other services
 # are brought up.
+exec 2>&1
 
-/bin/busybox --install -s
-/bin/busybox-extras --install -s
-
-# provide a default for os-release's VERSION in case the file doesn't exist
-VERSION="${VERSION:-unknown}"
-
-# This is set during packaging and is used when triaging bug reports
-INITRAMFS_PKG_VERSION="<<INITRAMFS_PKG_VERSION>>"
+for b in halt poweroff reboot; do
+	busybox ln -s /usr/bin/nitroctl /usr/bin/"$b"
+done
+/usr/bin/busybox --install -s
+/usr/bin/busybox-extras --install -s
 
 # Only needed for SYS, while the special LOG@ service isn't used yet
 # other services have their stdout forwarded to LOG@<service> automatically
@@ -18,24 +16,36 @@ log() {
 	logger -t "Nura-rd[SYS]" -p daemon.info "$@"
 }
 
-# start syslogd early
-nitroctl start syslogd
-log "welcome to Nura initramfs version: $INITRAMFS_PKG_VERSION"
+logpipe() {
+	logger -t "Nura-rd[SYS]" -p daemon.info
+}
+
+# mark all services down, we will start them in order in target@
+for s in /usr/share/initramfs/svc/*; do
+	# special-case SYS/LOG@/bootup services
+	if [ "$s" != "/usr/share/initramfs/svc/SYS" ] &&
+	   [ "$s" != "/usr/share/initramfs/svc/LOG@" ] &&
+	   [ "$s" != "/usr/share/initramfs/svc/bootup" ]; then
+		touch "$s"/down | logpipe
+	fi
+done
+
+# start modules early
+nitroctl -v start modules | logpipe
 
 # mount a few things
 # /dev and /run is already mounted by nitro, we can just mount the rest
-mount -t proc -o nodev,noexec,nosuid proc /proc || log "Couldn't mount /proc"
-mount -t sysfs -o nodev,noexec,nosuid sysfs /sys || log "Couldn't mount /sys"
+mount -t proc -o nodev,noexec,nosuid proc /proc | logpipe || log "Couldn't mount /proc"
+mount -t sysfs -o nodev,noexec,nosuid sysfs /sys | logpipe || log "Couldn't mount /sys"
+mount -t configfs -o nodev,noexec,nosuid configfs /sys/kernel/config | logpipe || log "Couldn't mount configfs"
 
-# load modules early
-nitroctl start modules
-
-# for nitro
-mkdir -p /run/nitro/notify
+# start syslogd early
+nitroctl -v up syslogd | logpipe
+log "Nura initramfs $(< /usr/share/initramfs/version) is starting"
 
 # /dev/pts (needed for telnet)
-mkdir -p /dev/pts
-mount -t devpts devpts /dev/pts
+mkdir -p /dev/pts | logpipe
+mount -t devpts devpts /dev/pts | logpipe
 
 # setting up firmware directory
 sysfs_dir=/sys/module/firmware_class/parameters/path
@@ -45,8 +55,5 @@ if ! [ -e "$sysfs_dir" ]; then
 fi
 # shellcheck disable=SC3037
 echo -n /lib/firmware/postmarketos >$sysfs_dir
-
-# start udev early
-nitroctl start udev
 
 log "early init completed successfully"

@@ -17,6 +17,11 @@ fi
 echo "mounting partition $partition"
 type="$(blkid "$partition" | sed 's/^.*\ TYPE="\([a-zA-Z0-9_]*\)".*$/\1/')"
 
+# wait for /sysroot to be mounted
+while ! mountpoint -q /sysroot; do
+	sleep 0.1
+done
+
 mount_opts="-o nodev,nosuid,noexec"
 case "$type" in
 	ext*|xfs)

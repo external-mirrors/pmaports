@@ -1,0 +1,12 @@
+#!/bin/sh
+# This special service is ran by nitro on `nitroctl Shutdown`
+
+if mountpoint -q /sysroot && mountpoint -q /sysroot/boot; then
+	exec switch_root /sysroot "/sbin/init"
+	echo "Nura-rd[SYS]: ERROR: switch_root failed!" > /dev/kmsg
+	echo "Nura-rd[SYS]: Enter debug-shell to debug this" > /dev/kmsg
+	echo "Nura-rd[SYS]: For more information, see <https://postmarketos.org/debug-shell>" > /dev/kmsg
+fi
+
+echo "Nura-rd[SYS]: Restarting" > /dev/kmsg
+reboot -f

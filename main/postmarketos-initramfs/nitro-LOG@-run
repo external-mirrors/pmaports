@@ -1,4 +1,12 @@
 #!/bin/sh
 # nitro will forward other services' stdout to this service with $1 as the name
-# of the service
-exec logger -t "Nura-rd[$1]" -p daemon.notice
+# of the service.
+exec 2>&1
+log_targets="/Nura-rd.$1.log"
+
+if [ -e "/dev/pmsg0" ]; then
+	# ramoops
+	log_targets="$log_targets /dev/pmsg0"
+fi
+
+exec tee $log_targets | logger -t "Nura-rd[$1]" -p daemon.notice

@@ -1,20 +1,41 @@
 #!/bin/sh
+. /usr/share/misc/source_deviceinfo
+. /usr/lib/os-release
+read initrd_ver < /usr/share/initramfs/version
 
-cat <<-EOF > /README
-Nura debug shell
-https://nura.eco/debug-shell
+if ! [ -e /README ]; then
+	cat <<-EOF > /README
+	Nura debug shell
+	https://nura.eco/debug-shell
 
-Status of initramfs services:
-EOF
+	System information:
+	  Device: $deviceinfo_name ($deviceinfo_codename)
+	  Kernel: $(uname -r)
+	  OS ver: $VERSION
+	  Initrd: $initrd_ver
 
-# Display some info
-cat <<-EOF > /etc/profile
-cat /README
-nitroctl
-EOF
+	Useful commands:
+	  nitroctl list           -    show status of initramfs services
+	  nitroctl up/down svc    -    bring up/down an initramfs service
+	  dmesg                   -    view kernel and initramfs logs
+	  continue_boot           -    try to continue booting
 
-cat <<-EOF > /sbin/pmos_getty
-#!/bin/sh
-/bin/sh -l
-EOF
-chmod +x /sbin/pmos_getty
+	EOF
+fi
+
+if ! [ -e /etc/profile ]; then
+	# Display some info, aliases
+	cat <<-EOF > /etc/profile
+	cat /README
+
+	alias continue_boot="nitroctl stop target@debug"
+	EOF
+fi
+
+if ! [ -e /sbin/pmos_getty ]; then
+	cat <<-EOF > /sbin/pmos_getty
+	#!/bin/sh
+	/bin/sh -l
+	EOF
+	chmod +x /sbin/pmos_getty
+fi

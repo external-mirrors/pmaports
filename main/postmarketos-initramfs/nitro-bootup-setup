@@ -1,6 +1,17 @@
-#!/bin/sh
+#!/bin/sh -e
 # used to .. well, actually boot to a running system
 
-nitroctl start mount-root@pmOS_root
-nitroctl start mount-boot@pmOS_boot
+exec 2>&1
+
+nitroctl start target@init
+
+echo "press <CTRL> or <Volume Down> to enter debug shell"
+if iskey KEY_LEFTCTRL KEY_VOLUMEDOWN; then
+	nitroctl up target@debug
+	nitroctl wait-down target@debug
+	echo "continuing boot..."
+fi
+nitroctl start target@start
+
+mv /usr/share/initramfs/svc/SYS/reincarnate.disabled /usr/share/initramfs/svc/SYS/reincarnate
 nitroctl Shutdown

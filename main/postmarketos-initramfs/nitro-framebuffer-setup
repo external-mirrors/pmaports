@@ -10,7 +10,7 @@ if ! [ -e "/dev/fb0" ]; then
 	echo "ERROR: /dev/fb0 did not appear after waiting 10 seconds!"
 	echo "If your device does not have a framebuffer, disable this with:"
 	echo "no_framebuffer=true in <https://postmarketos.org/deviceinfo>"
-	return
+	return 111
 fi
 
 [ -e "/sys/class/graphics/fb0/modes" ] || return

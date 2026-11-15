@@ -1,5 +1,6 @@
 #!/bin/sh
 
-nitroctl start udevd
+nitroctl wait-up udevd
+echo "Populating devices"
 udevadm trigger --type=devices --action=add
 udevadm settle

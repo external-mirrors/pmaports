@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# set service state to DOWN on intentional exit so nitro doesn't restart it
+[ "$1" = "222" ] && nitroctl down .

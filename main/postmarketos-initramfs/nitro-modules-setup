@@ -8,7 +8,7 @@ else
 	echo "WARNING: no modules in initramfs.load"
 fi
 
-for mod in btrfs ext4 f2fs xfs vfat; do
+for mod in btrfs ext4 f2fs libcomposite xfs vfat uinput; do
 	# modprobe each separately, maybe not all are available
 	modprobe $mod
 done

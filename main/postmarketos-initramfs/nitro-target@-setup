@@ -1,0 +1,12 @@
+#!/bin/sh
+exec 2>&1
+[ -r ./conf."$1" ] && . ./conf."$1"
+echo "Reaching target $1"
+
+if [ -n "$down" ]; then
+	nitroctl -v stop $down || true
+fi
+
+if [ -n "$up" ]; then
+	nitroctl -v start $up
+fi
