@@ -7,7 +7,7 @@ maintainer="Stefan Hansson <newbyte@postmarketos.org>"
 pkgname=phosh
 _pkgver=0.59.0
 pkgver=9999$_pkgver
-pkgrel=0
+pkgrel=1
 pkgdesc="Wayland shell for GNOME on mobile devices"
 # armhf: blocked by gnome-shell-schemas
 arch="all !armhf"
@@ -79,7 +79,9 @@ subpackages="
 	$pkgname-schemas::noarch
 	$pkgname-systemd
 	"
-source="https://sources.phosh.mobi/releases/phosh/phosh-${_pkgver/_/.}.tar.xz"
+source="https://sources.phosh.mobi/releases/phosh/phosh-${_pkgver/_/.}.tar.xz
+	oo7.patch
+	"
 builddir="$srcdir/$pkgname-${_pkgver/_/.}"
 somask="libphoshsearch.so"
 # crossdirect disabled because the ARMv7 cross compiler crashes internally with LTO
@@ -129,4 +131,5 @@ schemas() {
 
 sha512sums="
 dbbe0149092f350c7eda01c12a4729c7b36e38ae782ed79adcf30825f8a0bf06efc3b7d40ba1d50e039427fc6ef97dd6663538882cb8e3d1ae426a0e3a9aadac  phosh-0.59.0.tar.xz
+718aafcbb2599336a2edbed6b61d9956f371faa14425e2d09f0c753229707466f1630603cfc998901b6609db8522372f27cf9a21990008e5db08261abea18461  oo7.patch
 "
