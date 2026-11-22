@@ -1,5 +1,4 @@
 #!/bin/sh
-
 . /usr/share/misc/source_deviceinfo
 
 # Start buffyboard only if on right device chassis
@@ -8,7 +7,7 @@ if command -v buffyboard >/dev/null; then
 		handset|tablet|convertible)
 			;;
 		*)
-			nitroctl down .
+			return 111
 			;;
 	esac
 fi

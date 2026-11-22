@@ -1,0 +1,4 @@
+up=""
+for h in /usr/share/initramfs/svc/hook@/run.*; do
+	up="$up hook@$(basename $h | cut -d'.' -f 2-)"
+done

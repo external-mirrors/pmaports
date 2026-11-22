@@ -1,0 +1,16 @@
+#!/bin/sh
+# Backwards-compatibility with old hooks system
+# Whenever possible, please try to migrate hooks to nitro hook- service files
+exec 2>&1
+
+if [ "$(echo /hooks/*)" == "/hooks/*" ]; then
+	return
+fi
+
+echo "Legacy hooks detected: consider migrating them to the modern hook system whenever possible."
+cd / || true # These scripts typically expect to run from /
+
+for hook in "/hooks"/*.sh; do
+	echo "Running legacy initramfs hook: $hook"
+	sh "$hook" || exit 111
+done

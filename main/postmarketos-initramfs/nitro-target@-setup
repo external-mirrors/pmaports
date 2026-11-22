@@ -12,5 +12,5 @@ if [ -n "$down" ]; then
 fi
 
 if [ -n "$up" ]; then
-	nitroctl -v start $up
+	nitroctl -v start $up || return 111
 fi

@@ -3,15 +3,19 @@
 
 exec 2>&1
 
-nitroctl start target@init
+nitroctl start target@init || return 111
 
 echo "press <CTRL> or <Volume Down> to enter debug shell"
 if iskey KEY_LEFTCTRL KEY_VOLUMEDOWN; then
-	nitroctl up target@debug
+	nitroctl up target@debug || return 111
 	nitroctl wait-down target@debug
 	echo "continuing boot..."
 fi
-nitroctl start target@start
 
-mv /usr/share/initramfs/svc/SYS/reincarnate.disabled /usr/share/initramfs/svc/SYS/reincarnate
+echo "Hooks..."
+nitroctl start target@hooks || return 111
+echo "OK"
+nitroctl start target@start || return 111
+
+mv /usr/share/initramfs/svc/SYS/reincarnate.disabled /usr/share/initramfs/svc/SYS/reincarnate || return 111
 nitroctl Shutdown
