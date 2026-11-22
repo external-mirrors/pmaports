@@ -1,0 +1,35 @@
+# Contributor: Guy Godfroy <guy.godfroy@gugod.fr>
+# Maintainer: Guy Godfroy <guy.godfroy@gugod.fr>
+pkgname=nitro-init
+_pkgname=nitro
+pkgver=0.8.1_git20261120
+pkgrel=0
+pkgdesc="Tiny but flexible init system and process supervisor"
+url="https://git.vuxu.org/nitro/"
+arch="all"
+license="0BSD"
+subpackages="$pkgname-doc"
+_commit="1385c059ee1cd326d6cb3c0adc2387feedf24114"
+source="$_pkgname-$pkgver.tar.gz::https://git.vuxu.org/nitro/snapshot/nitro-$_commit.tar.gz"
+builddir="$srcdir/$_pkgname-$_commit/"
+checkdepends="reap ruby"
+
+build() {
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	install -Dm755 nitro "$pkgdir"/usr/sbin/nitro
+	install -Dm755 nitroctl "$pkgdir"/usr/bin/nitroctl
+	install -Dm644 nitroctl.1 -t "$pkgdir"/usr/share/man/man1/
+	install -Dm644 nitro.8 -t "$pkgdir"/usr/share/man/man8/
+	install -Dm644 halt.8 -t "$pkgdir"/usr/share/man/man8/
+}
+
+sha512sums="
+2e8127bf27213bac660a4986e5861b5cb17a467b1cd3ae2d54f82bd3a8703f454f11a0e69dc126d1b218c7d5ca9ba29472df6883a0575275305169706e7ad3f6  nitro-0.8.1_git20261120.tar.gz
+"
