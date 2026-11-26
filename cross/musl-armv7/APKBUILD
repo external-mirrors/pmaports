@@ -24,8 +24,8 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	musl-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-$pkgver-r$pkgrel.apk
-	musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch-v3.25.apk::$_mirror/v3.25/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch-v3.25.apk::$_mirror/v3.25/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
@@ -33,7 +33,7 @@ package() {
 	cd "$pkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-v3.25.apk
 	rm .PKGINFO .SIGN.*
 }
 package_dev() {
@@ -41,7 +41,7 @@ package_dev() {
 	cd "$subpkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-v3.25.apk
 	rm .PKGINFO .SIGN.*
 
 	# symlink everything from /usr/$_target/usr/*
@@ -58,6 +58,6 @@ package_dev() {
 }
 
 sha512sums="
-32b865aa426691eaba53a55c7519550fece96e6c6edf607e6f591b405b3b2aa6612f488ae9174b353a692d23a12922e3be59e3330ec380341a0a8bddffb2826c  musl-1.2.6-r6-armv7-edge.apk
-0a59e39e6897af9171b1bbb12f82196a43e48495c0db30244b7d2ce39cc99f4ba037bd50df4289fd58cc8ba2fe29c0c326bb4fcbe01569a98c3669967985cb07  musl-dev-1.2.6-r6-armv7-edge.apk
+28425c2fbe3d2540d03e4594ceaf49061b022ceeba89a2c8b780a2614062e5d271144836239a8952d2852ec485796f34509a0d1038e80d8125a14e0bddbe7b00  musl-1.2.6-r6-armv7-v3.25.apk
+4543997a48c992adc0edea9999db4f6f388b04f90445aaaf40ba0daa01e68b439d64bed413779b0c53180a4b4a2523b35af0b062c9872da3af7153497d48cb96  musl-dev-1.2.6-r6-armv7-v3.25.apk
 "
